@@ -338,8 +338,16 @@ namespace PokemonGoGUI
                 foreach(string account in accounts)
                 {
                     string[] parts = account.Split(':');
-                    
-                    if(parts.Length != 2)
+
+                    /*
+                     * User:Pass = 2
+                     * User:Pass:MaxLevel = 3
+                     * User:Pass:IP:Port = 4
+                     * User:Pass:IP:Port:MaxLevel = 5
+                     * User:Pass:IP:Port:pUsername:pPassword = 6
+                     * User:Pass:IP:Port:pUsername:pPassword:MaxLevel = 7
+                     */
+                    if (parts.Length >= 2 && parts.Length <= 7)
                     {
                         continue;
                     }

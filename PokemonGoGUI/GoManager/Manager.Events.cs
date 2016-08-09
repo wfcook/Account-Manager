@@ -26,7 +26,14 @@ namespace PokemonGoGUI.GoManager
 
         private void LogCaller(LoggerEventArgs args)
         {
-            AddLog(new Log(args.LogType, args.Message, (Exception)args.Exception));
+            string eMessage = String.Empty;
+
+            if(args.Exception != null)
+            {
+                eMessage = args.Exception.Message;
+            }
+
+            AddLog(new Log(args.LogType, args.Message, eMessage));
 
             LoggerHandler caller = OnLog;
 

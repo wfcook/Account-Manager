@@ -6,6 +6,7 @@ using POGOProtos.Inventory.Item;
 using POGOProtos.Settings.Master;
 using PokemonGo.RocketAPI;
 using PokemonGo.RocketAPI.Helpers;
+using PokemonGoGUI.Enums;
 using PokemonGoGUI.GoManager;
 using PokemonGoGUI.GoManager.Models;
 using PokemonGoGUI.Models;
@@ -272,7 +273,10 @@ namespace PokemonGoGUI.UI
             DisplayDetails();
             UpdateListViews();
 
-            await UpdateDetails();
+            if (_manager.State == BotState.Stopped)
+            {
+                await UpdateDetails();
+            }
 
             DisplayDetails();
             UpdateListViews();

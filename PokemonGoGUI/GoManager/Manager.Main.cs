@@ -65,7 +65,7 @@ namespace PokemonGoGUI.GoManager
 
                 return result;
             }
-            catch(TaskCanceledException)
+            catch(TaskCanceledException ex)
             {
                 LogCaller(new LoggerEventArgs("Login request has timed out. Possible bad proxy.", LoggerTypes.Warning));
 
@@ -130,9 +130,10 @@ namespace PokemonGoGUI.GoManager
             }
             catch(InvalidCredentialsException ex)
             {
-                LogCaller(new LoggerEventArgs("Invalid credentials or account lockout. Stopping bot...", LoggerTypes.Warning, ex));
-
+                //Puts stopping log before other log.
                 Stop();
+
+                LogCaller(new LoggerEventArgs("Invalid credentials or account lockout. Stopping bot...", LoggerTypes.Warning, ex));
 
                 return new MethodResult
                 {

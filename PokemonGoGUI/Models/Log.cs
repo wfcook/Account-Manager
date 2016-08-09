@@ -14,8 +14,10 @@ namespace PokemonGoGUI.GoManager.Models
         public LoggerTypes LoggerType { get; private set; }
         public DateTime Date { get; private set; }
         public string Message { get; private set; }
-        public Exception Exception { get; private set; }
+        //public Exception Exception { get; private set; }
+        public string ExceptionMessage { get; private set; }
 
+        /*
         public string ExceptionMessage
         {
             get
@@ -28,14 +30,14 @@ namespace PokemonGoGUI.GoManager.Models
 
                 return Exception.Message;
             }
-        }
+        }*/
 
-        public Log(LoggerTypes type, string message, Exception exception = null)
+        public Log(LoggerTypes type, string message, string exceptionMessage = null)
         {
             this.LoggerType = type;
             this.Message = message;
             this.Date = DateTime.Now;
-            this.Exception = exception;
+            this.ExceptionMessage = exceptionMessage;
         }
     }
 }
