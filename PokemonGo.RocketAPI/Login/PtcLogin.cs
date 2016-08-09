@@ -54,9 +54,31 @@ namespace PokemonGo.RocketAPI.Login
             }
         }
 
-        private static string ExtracktTicketFromResponse(HttpResponseMessage loginResp)
+        private async static Task<string> ExtracktTicketFromResponse(HttpResponseMessage loginResp)
         {
             var location = loginResp.Headers.Location;
+            var contentResponse = await loginResp.Content.ReadAsStringAsync();
+
+            if (!String.IsNullOrEmpty(contentResponse))
+            {
+                dynamic responseObject = JsonConvert.DeserializeObject<dynamic>(contentResponse.Trim());
+
+                if(responseObject["errors"] != null)
+                {
+                    foreach(dynamic error in responseObject["errors"])
+                    {
+                        if(error.Value.Contains("Your username or password is incorrect"))
+                        {
+                            throw new InvalidCredentialsException(error.Value);
+                        }
+                        else if (error.Value.Contains("As a security measure, your account has been disabled"))
+                        {
+                            throw new InvalidCredentialsException(error.Value);
+                        }
+                    }
+                }
+            }
+
             if (location == null)
                 throw new LoginFailedException();
 
@@ -101,7 +123,7 @@ namespace PokemonGo.RocketAPI.Login
                 loginResp = await tempHttpClient.PostAsync(Resources.PtcLoginUrl, formUrlEncodedContent).ConfigureAwait(false);
             }
 
-            var ticketId = ExtracktTicketFromResponse(loginResp);
+            var ticketId = await ExtracktTicketFromResponse(loginResp);
             return ticketId;
         }
 

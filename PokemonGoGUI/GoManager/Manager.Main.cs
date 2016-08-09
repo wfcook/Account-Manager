@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.Device.Location;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -89,6 +90,44 @@ namespace PokemonGoGUI.GoManager
                 return new MethodResult
                 {
                     Message = "Account not verified."
+                };
+            }
+            catch(HttpRequestException ex)
+            {
+                WebException webEx = ex.InnerException as WebException;
+
+                if (webEx != null)
+                {
+                    if (webEx.Status == WebExceptionStatus.ConnectionClosed)
+                    {
+                        if (!String.IsNullOrEmpty(Proxy))
+                        {
+                            LogCaller(new LoggerEventArgs("Potential http proxy detected. Only https proxies will work.", LoggerTypes.Warning));
+
+                            return new MethodResult
+                            {
+                                Message = "Http proxy detected"
+                            };
+                        }
+                    }
+                }
+
+                LogCaller(new LoggerEventArgs("Failed to login due to request error", LoggerTypes.Exception, ex.InnerException));
+
+                return new MethodResult
+                {
+                    Message = "Failed to login due to request error"
+                };
+            }
+            catch(InvalidCredentialsException ex)
+            {
+                LogCaller(new LoggerEventArgs("Invalid credentials or account lockout. Stopping bot...", LoggerTypes.Warning, ex));
+
+                Stop();
+
+                return new MethodResult
+                {
+                    Message = "Username or password incorrect"
                 };
             }
             catch(Exception ex)
