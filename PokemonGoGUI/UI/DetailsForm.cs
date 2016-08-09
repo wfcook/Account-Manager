@@ -370,7 +370,7 @@ namespace PokemonGoGUI.UI
 
             if (_manager.Pokemon != null)
             {
-                labelPokemonCount.Text = String.Format("{0}/{1}", _manager.Pokemon.Count.ToString(), _manager.MaxPokemonStorage);
+                labelPokemonCount.Text = String.Format("{0}/{1}", _manager.Pokemon.Count + _manager.Eggs.Count, _manager.MaxPokemonStorage);
             }
 
             if (_manager.Items != null)
