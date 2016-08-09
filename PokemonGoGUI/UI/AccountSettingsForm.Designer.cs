@@ -111,6 +111,7 @@
             this.editToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.restoreDefaultsToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTipProxy = new System.Windows.Forms.ToolTip(this.components);
+            this.label13 = new System.Windows.Forms.Label();
             this.tabControlMain.SuspendLayout();
             this.tabPageDetails.SuspendLayout();
             this.tabPageRecycling.SuspendLayout();
@@ -166,6 +167,7 @@
             this.tabPageDetails.Controls.Add(this.textBoxPtcPassword);
             this.tabPageDetails.Controls.Add(this.textBoxName);
             this.tabPageDetails.Controls.Add(this.label11);
+            this.tabPageDetails.Controls.Add(this.label13);
             this.tabPageDetails.Controls.Add(this.label12);
             this.tabPageDetails.Controls.Add(this.textBoxPtcUsername);
             this.tabPageDetails.Controls.Add(this.label9);
@@ -330,7 +332,7 @@
             // 
             // textBoxProxy
             // 
-            this.textBoxProxy.Location = new System.Drawing.Point(291, 227);
+            this.textBoxProxy.Location = new System.Drawing.Point(291, 218);
             this.textBoxProxy.Name = "textBoxProxy";
             this.textBoxProxy.Size = new System.Drawing.Size(180, 22);
             this.textBoxProxy.TabIndex = 3;
@@ -398,11 +400,11 @@
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(240, 230);
+            this.label12.Location = new System.Drawing.Point(237, 221);
             this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(45, 16);
+            this.label12.Size = new System.Drawing.Size(50, 16);
             this.label12.TabIndex = 1;
-            this.label12.Text = "Proxy:";
+            this.label12.Text = "Proxy*:";
             // 
             // textBoxPtcUsername
             // 
@@ -466,20 +468,20 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(7, 176);
+            this.label5.Location = new System.Drawing.Point(3, 176);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(70, 16);
+            this.label5.Size = new System.Drawing.Size(75, 16);
             this.label5.TabIndex = 1;
-            this.label5.Text = "Longitude:";
+            this.label5.Text = "Longitude*:";
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(19, 148);
+            this.label4.Location = new System.Drawing.Point(15, 148);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(58, 16);
+            this.label4.Size = new System.Drawing.Size(63, 16);
             this.label4.TabIndex = 1;
-            this.label4.Text = "Latitude:";
+            this.label4.Text = "Latitude*:";
             // 
             // label7
             // 
@@ -493,20 +495,20 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(9, 86);
+            this.label3.Location = new System.Drawing.Point(4, 86);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(71, 16);
+            this.label3.Size = new System.Drawing.Size(76, 16);
             this.label3.TabIndex = 1;
-            this.label3.Text = "Password:";
+            this.label3.Text = "Password*:";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(6, 58);
+            this.label2.Location = new System.Drawing.Point(1, 58);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(74, 16);
+            this.label2.Size = new System.Drawing.Size(79, 16);
             this.label2.TabIndex = 1;
-            this.label2.Text = "Username:";
+            this.label2.Text = "Username*:";
             // 
             // label1
             // 
@@ -546,6 +548,7 @@
             this.olvColumnItemName,
             this.olvColumnItemMax});
             this.fastObjectListViewRecycling.ContextMenuStrip = this.contextMenuStripRecycling;
+            this.fastObjectListViewRecycling.Cursor = System.Windows.Forms.Cursors.Default;
             this.fastObjectListViewRecycling.Dock = System.Windows.Forms.DockStyle.Fill;
             this.fastObjectListViewRecycling.FullRowSelect = true;
             this.fastObjectListViewRecycling.Location = new System.Drawing.Point(0, 0);
@@ -895,6 +898,15 @@
             this.restoreDefaultsToolStripMenuItem2.Text = "Restore Defaults";
             this.restoreDefaultsToolStripMenuItem2.Click += new System.EventHandler(this.restoreDefaultsToolStripMenuItem2_Click);
             // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(326, 292);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(160, 16);
+            this.label13.TabIndex = 1;
+            this.label13.Text = "* = Requires account stop";
+            // 
             // AccountSettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -1009,5 +1021,6 @@
         private System.Windows.Forms.TextBox textBoxProxy;
         private System.Windows.Forms.ToolTip toolTipProxy;
         private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Label label13;
     }
 }

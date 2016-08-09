@@ -134,6 +134,15 @@ namespace PokemonGoGUI.UI
 
         private void buttonSave_Click(object sender, EventArgs e)
         {
+            SaveSettings();
+
+            _saved = true;
+
+            MessageBox.Show("Settings saved.\nSome settings won't take effect until the account stops running.");
+        }
+
+        private bool SaveSettings()
+        {
             Settings userSettings = _manager.UserSettings;
 
             double defaultLat = 0;
@@ -144,49 +153,49 @@ namespace PokemonGoGUI.UI
             int maxLevel = 0;
             ProxyEx proxyEx = null;
 
-            if(!Int32.TryParse(textBoxMaxLevel.Text, out maxLevel) || maxLevel < 0)
+            if (!Int32.TryParse(textBoxMaxLevel.Text, out maxLevel) || maxLevel < 0)
             {
                 MessageBox.Show("Invalid Max level");
-                return;
+                return false;
             }
 
-            if(!Int32.TryParse(textBoxPokemonBeforeEvolve.Text, out minPokemonBeforeEvolve) || minPokemonBeforeEvolve < 0)
+            if (!Int32.TryParse(textBoxPokemonBeforeEvolve.Text, out minPokemonBeforeEvolve) || minPokemonBeforeEvolve < 0)
             {
                 MessageBox.Show("Invalid pokemon before evolve");
-                return;
+                return false;
             }
 
-            if(!Int32.TryParse(textBoxWalkSpeed.Text, out walkingSpeed) || walkingSpeed <= 0)
+            if (!Int32.TryParse(textBoxWalkSpeed.Text, out walkingSpeed) || walkingSpeed <= 0)
             {
                 MessageBox.Show("Invalid walking speed");
-                return;
+                return false;
             }
 
             if (!Int32.TryParse(textBoxMaxTravelDistance.Text, out maxTravelDistance) || maxTravelDistance <= 0)
             {
                 MessageBox.Show("Invalid max travel distance");
-                return;
+                return false;
             }
 
             if (!Double.TryParse(textBoxLat.Text, out defaultLat))
             {
                 MessageBox.Show("Invalid latitude");
-                return;
+                return false;
             }
 
             if (!Double.TryParse(textBoxLong.Text, out defaultLong))
             {
                 MessageBox.Show("Invalid longitude");
-                return;
+                return false;
             }
 
-            if(!String.IsNullOrEmpty(textBoxProxy.Text) && !ProxyEx.TryParse(textBoxProxy.Text, out proxyEx))
+            if (!String.IsNullOrEmpty(textBoxProxy.Text) && !ProxyEx.TryParse(textBoxProxy.Text, out proxyEx))
             {
                 MessageBox.Show("Invalid proxy format");
-                return;
+                return false;
             }
 
-            if(radioButtonPtc.Checked)
+            if (radioButtonPtc.Checked)
             {
                 userSettings.AuthType = AuthType.Ptc;
             }
@@ -228,28 +237,15 @@ namespace PokemonGoGUI.UI
                 userSettings.ProxyPort = 0;
             }
 
-            _saved = true;
-
-            MessageBox.Show("Settings saved.\nSome settings won't take effect until the account stops running.");
+            return true;
         }
 
         private void buttonDone_Click(object sender, EventArgs e)
         {
-            if (!_saved)
+            if (SaveSettings())
             {
-                DialogResult result = MessageBox.Show("Save before exiting?", "Confirmation", MessageBoxButtons.YesNoCancel);
-
-                if (result == DialogResult.Yes)
-                {
-                    buttonSave.PerformClick();
-                }
-                else if (result == DialogResult.Cancel)
-                {
-                    return;
-                }
+                DialogResult = DialogResult.OK;
             }
-
-            DialogResult = DialogResult.OK;
         }
 
         #region Recycling
