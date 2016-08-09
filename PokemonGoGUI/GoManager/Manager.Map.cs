@@ -53,6 +53,11 @@ namespace PokemonGoGUI.GoManager
 
             List<FortData> fortData = new List<FortData>();
 
+            if (allFortsResponse.Data.Count == 0)
+            {
+                LogCaller(new LoggerEventArgs("No pokestop data found. Potential temp IP ban or bad location", LoggerTypes.Warning));
+            }
+
             foreach (FortData fort in allFortsResponse.Data)
             {
                 if(fort.Type != FortType.Checkpoint || fort.CooldownCompleteTimestampMs > DateTime.UtcNow.ToUnixTime())

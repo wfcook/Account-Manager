@@ -188,7 +188,7 @@ namespace PokemonGoGUI.GoManager
         private async void RunningThread()
         {
             int failedWaitTime = 5000;
-            int delayTime = 200;
+            int delayTime = 700;
             int maxFailed = 3;
             int currentFails = 0;
 
