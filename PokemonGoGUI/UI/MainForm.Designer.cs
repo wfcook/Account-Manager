@@ -53,6 +53,7 @@
             this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.timerListViewUpdate = new System.Windows.Forms.Timer(this.components);
             this.olvColumnProxy = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnMaxLevel = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewMain)).BeginInit();
             this.contextMenuStripAccounts.SuspendLayout();
             this.SuspendLayout();
@@ -60,6 +61,7 @@
             // fastObjectListViewMain
             // 
             this.fastObjectListViewMain.AllColumns.Add(this.olvColumnUsername);
+            this.fastObjectListViewMain.AllColumns.Add(this.olvColumnMaxLevel);
             this.fastObjectListViewMain.AllColumns.Add(this.olvColumnLevel);
             this.fastObjectListViewMain.AllColumns.Add(this.olvColumnExp);
             this.fastObjectListViewMain.AllColumns.Add(this.olvColumnExpPerHour);
@@ -168,7 +170,7 @@
             this.exportAccountsToolStripMenuItem,
             this.deleteToolStripMenuItem});
             this.contextMenuStripAccounts.Name = "contextMenuStrip1";
-            this.contextMenuStripAccounts.Size = new System.Drawing.Size(215, 259);
+            this.contextMenuStripAccounts.Size = new System.Drawing.Size(215, 228);
             // 
             // viewDetailsToolStripMenuItem
             // 
@@ -255,6 +257,13 @@
             this.olvColumnProxy.AspectName = "Proxy";
             this.olvColumnProxy.Text = "Proxy";
             // 
+            // olvColumnMaxLevel
+            // 
+            this.olvColumnMaxLevel.AspectName = "MaxLevel";
+            this.olvColumnMaxLevel.DisplayIndex = 1;
+            this.olvColumnMaxLevel.IsVisible = false;
+            this.olvColumnMaxLevel.Text = "Max Level";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -297,6 +306,7 @@
         private System.Windows.Forms.ToolStripMenuItem exportAccountsToolStripMenuItem;
         private BrightIdeasSoftware.OLVColumn olvColumnBotState;
         private BrightIdeasSoftware.OLVColumn olvColumnProxy;
+        private BrightIdeasSoftware.OLVColumn olvColumnMaxLevel;
     }
 }
 

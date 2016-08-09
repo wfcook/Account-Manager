@@ -157,6 +157,20 @@ namespace PokemonGoGUI.GoManager
         }
 
         [JsonIgnore]
+        public int MaxLevel
+        {
+            get
+            {
+                if(UserSettings == null)
+                {
+                    return 0;
+                }
+
+                return UserSettings.MaxLevel;
+            }
+        }
+
+        [JsonIgnore]
         public string TillLevelUp
         {
             get
