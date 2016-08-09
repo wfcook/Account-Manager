@@ -423,6 +423,7 @@ namespace PokemonGoGUI.GoManager
             }
 
             State = BotState.Stopped;
+            _client.Logout();
             LogCaller(new LoggerEventArgs("Bot fully stopped", LoggerTypes.Info));
         }
 
