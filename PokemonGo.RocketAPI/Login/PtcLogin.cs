@@ -75,6 +75,10 @@ namespace PokemonGo.RocketAPI.Login
                         {
                             throw new InvalidCredentialsException(error.Value);
                         }
+                        else if (error.Value.Contains("Account is not yet active"))
+                        {
+                            throw new AccountNotVerifiedException();
+                        }
                     }
                 }
             }
