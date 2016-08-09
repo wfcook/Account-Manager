@@ -52,6 +52,7 @@
             this.exportAccountsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.timerListViewUpdate = new System.Windows.Forms.Timer(this.components);
+            this.olvColumnProxy = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewMain)).BeginInit();
             this.contextMenuStripAccounts.SuspendLayout();
             this.SuspendLayout();
@@ -67,7 +68,9 @@
             this.fastObjectListViewMain.AllColumns.Add(this.olvColumnBotState);
             this.fastObjectListViewMain.AllColumns.Add(this.olvColumnRunningTime);
             this.fastObjectListViewMain.AllColumns.Add(this.olvColumnTotalLogs);
+            this.fastObjectListViewMain.AllColumns.Add(this.olvColumnProxy);
             this.fastObjectListViewMain.AllColumns.Add(this.olvColumnLastLogMessage);
+            this.fastObjectListViewMain.CellEditUseWholeCell = false;
             this.fastObjectListViewMain.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.olvColumnUsername,
             this.olvColumnLevel,
@@ -76,6 +79,7 @@
             this.olvColumnTillRankUp,
             this.olvColumnBotState,
             this.olvColumnRunningTime,
+            this.olvColumnProxy,
             this.olvColumnLastLogMessage});
             this.fastObjectListViewMain.ContextMenuStrip = this.contextMenuStripAccounts;
             this.fastObjectListViewMain.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -243,6 +247,11 @@
             this.timerListViewUpdate.Interval = 1000;
             this.timerListViewUpdate.Tick += new System.EventHandler(this.timerListViewUpdate_Tick);
             // 
+            // olvColumnProxy
+            // 
+            this.olvColumnProxy.AspectName = "Proxy";
+            this.olvColumnProxy.Text = "Proxy";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -284,6 +293,7 @@
         private System.Windows.Forms.Timer timerListViewUpdate;
         private System.Windows.Forms.ToolStripMenuItem exportAccountsToolStripMenuItem;
         private BrightIdeasSoftware.OLVColumn olvColumnBotState;
+        private BrightIdeasSoftware.OLVColumn olvColumnProxy;
     }
 }
 

@@ -6,6 +6,7 @@ using POGOProtos.Inventory;
 using POGOProtos.Inventory.Item;
 using POGOProtos.Networking.Responses;
 using POGOProtos.Settings.Master;
+using PokemonGo.RocketAPI;
 using PokemonGoGUI.Enums;
 using PokemonGoGUI.GoManager.Models;
 using PokemonGoGUI.Models;
@@ -23,6 +24,23 @@ namespace PokemonGoGUI.GoManager
         public Settings UserSettings { get; set; }
 
         public byte[] LogHeaderSettings { get; set; }
+
+        [JsonIgnore]
+        public string Proxy
+        {
+            get
+            {
+                ProxyEx proxyEx = new ProxyEx
+                {
+                    Address = UserSettings.ProxyIP,
+                    Port = UserSettings.ProxyPort,
+                    Username = UserSettings.ProxyUsername,
+                    Password = UserSettings.ProxyPassword
+                };
+
+                return proxyEx.ToString();
+            }
+        }
 
         [JsonIgnore]
         public BotState State { get; set; }
