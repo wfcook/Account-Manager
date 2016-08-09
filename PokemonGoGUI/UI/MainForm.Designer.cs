@@ -82,6 +82,7 @@
             this.olvColumnProxy,
             this.olvColumnLastLogMessage});
             this.fastObjectListViewMain.ContextMenuStrip = this.contextMenuStripAccounts;
+            this.fastObjectListViewMain.Cursor = System.Windows.Forms.Cursors.Default;
             this.fastObjectListViewMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.fastObjectListViewMain.FullRowSelect = true;
             this.fastObjectListViewMain.Location = new System.Drawing.Point(0, 0);
@@ -167,7 +168,7 @@
             this.exportAccountsToolStripMenuItem,
             this.deleteToolStripMenuItem});
             this.contextMenuStripAccounts.Name = "contextMenuStrip1";
-            this.contextMenuStripAccounts.Size = new System.Drawing.Size(215, 228);
+            this.contextMenuStripAccounts.Size = new System.Drawing.Size(215, 259);
             // 
             // viewDetailsToolStripMenuItem
             // 
@@ -188,16 +189,18 @@
             // wConfigToolStripMenuItem
             // 
             this.wConfigToolStripMenuItem.Name = "wConfigToolStripMenuItem";
-            this.wConfigToolStripMenuItem.Size = new System.Drawing.Size(164, 28);
+            this.wConfigToolStripMenuItem.Size = new System.Drawing.Size(198, 28);
+            this.wConfigToolStripMenuItem.Tag = "true";
             this.wConfigToolStripMenuItem.Text = "w/ Config";
             this.wConfigToolStripMenuItem.Click += new System.EventHandler(this.wConfigToolStripMenuItem_Click);
             // 
             // defaultToolStripMenuItem
             // 
             this.defaultToolStripMenuItem.Name = "defaultToolStripMenuItem";
-            this.defaultToolStripMenuItem.Size = new System.Drawing.Size(164, 28);
+            this.defaultToolStripMenuItem.Size = new System.Drawing.Size(198, 28);
+            this.defaultToolStripMenuItem.Tag = "false";
             this.defaultToolStripMenuItem.Text = "Default";
-            this.defaultToolStripMenuItem.Click += new System.EventHandler(this.defaultToolStripMenuItem_Click);
+            this.defaultToolStripMenuItem.Click += new System.EventHandler(this.wConfigToolStripMenuItem_Click);
             // 
             // addNewToolStripMenuItem
             // 

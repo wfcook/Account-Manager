@@ -3,6 +3,7 @@ using PokemonGo.RocketAPI.Helpers;
 using PokemonGoGUI.Enums;
 using PokemonGoGUI.Extensions;
 using PokemonGoGUI.GoManager;
+using PokemonGoGUI.Models;
 using PokemonGoGUI.UI;
 using System;
 using System.Collections.Generic;
@@ -324,16 +325,33 @@ namespace PokemonGoGUI
 
         private async void wConfigToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            ToolStripMenuItem tSMI = sender as ToolStripMenuItem;
+            bool useConfig = false;
+
+            if(tSMI == null || !Boolean.TryParse(tSMI.Tag.ToString(), out useConfig))
+            {
+                return;
+            }
+
             try
             {
                 List<string> accounts = ImportAccounts();
-                string configFile = ImportConfig();
+                string configFile = String.Empty;
+
+                if (useConfig)
+                {
+                    configFile = ImportConfig();
+                }
+
                 HashSet<Manager> tempManagers = new HashSet<Manager>(_managers);
 
-                if(String.IsNullOrEmpty(configFile))
+                if(useConfig && String.IsNullOrEmpty(configFile))
                 {
                     return;
                 }
+
+                int totalSuccess = 0;
+                int total = accounts.Count;
 
                 foreach(string account in accounts)
                 {
@@ -347,68 +365,53 @@ namespace PokemonGoGUI
                      * User:Pass:IP:Port:pUsername:pPassword = 6
                      * User:Pass:IP:Port:pUsername:pPassword:MaxLevel = 7
                      */
-                    if (parts.Length >= 2 && parts.Length <= 7)
+                    if (parts.Length < 2 || parts.Length > 7)
+                    {
+                        continue;
+                    }
+
+                    AccountImport importModel = new AccountImport();
+
+                    if(!importModel.ParseAccount(account))
                     {
                         continue;
                     }
 
                     Manager manager = new Manager();
-                    
-                    MethodResult result = await manager.ImportConfigFromFile(configFile);
 
-                    manager.UserSettings.PtcUsername = parts[0];
-                    manager.UserSettings.AccountName = parts[0];
-                    manager.UserSettings.PtcPassword = parts[1];
-
-
-                    if(!result.Success)
+                    if (useConfig)
                     {
-                        MessageBox.Show("Failed to import configuration file");
+                        MethodResult result = await manager.ImportConfigFromFile(configFile);
 
-                        return;
+                        if (!result.Success)
+                        {
+                            MessageBox.Show("Failed to import configuration file");
+
+                            return;
+                        }
                     }
 
+                    manager.UserSettings.AccountName = importModel.Username;
+                    manager.UserSettings.PtcUsername = importModel.Username;
+                    manager.UserSettings.PtcPassword = importModel.Password;
+                    manager.UserSettings.ProxyIP = importModel.Address;
+                    manager.UserSettings.ProxyPort = importModel.Port;
+                    manager.UserSettings.ProxyUsername = importModel.ProxyUsername;
+                    manager.UserSettings.ProxyPassword = importModel.ProxyPassword;
+                    manager.UserSettings.MaxLevel = importModel.MaxLevel;
 
                     if (tempManagers.Add(manager))
                     {
                         AddManager(manager);
+                        ++totalSuccess;
                     }
                 }
 
                 fastObjectListViewMain.SetObjects(_managers);
+
+                MessageBox.Show(String.Format("Successfully imported {0} out of {1} accounts", totalSuccess, total));
             }
             catch(Exception ex)
-            {
-                MessageBox.Show(String.Format("Failed to import usernames. Ex: {0}", ex.Message));
-            }
-        }
-
-        private void defaultToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                List<string> accounts = ImportAccounts();
-
-                foreach (string account in accounts)
-                {
-                    string[] parts = account.Split(':');
-
-                    if (parts.Length != 2)
-                    {
-                        continue;
-                    }
-
-                    Manager manager = new Manager();
-                    manager.UserSettings.AccountName = parts[0];
-                    manager.UserSettings.PtcUsername = parts[0];
-                    manager.UserSettings.PtcPassword = parts[1];
-
-                    AddManager(manager);
-                }
-
-                fastObjectListViewMain.SetObjects(_managers);
-            }
-            catch (Exception ex)
             {
                 MessageBox.Show(String.Format("Failed to import usernames. Ex: {0}", ex.Message));
             }

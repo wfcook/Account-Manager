@@ -155,7 +155,7 @@ namespace PokemonGoGUI.GoManager
 
         public MethodResult Start()
         {
-            ServicePointManager.DefaultConnectionLimit = 5;
+            ServicePointManager.DefaultConnectionLimit = 100;
 
             if(IsRunning)
             {
