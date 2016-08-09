@@ -48,8 +48,6 @@ namespace PokemonGoGUI.GoManager
             Stats = new PlayerStats();
 
             LoadFarmLocations();
-
-            _client.SetSettings(UserSettings);
         }
 
         public async Task<MethodResult> Login()
@@ -127,6 +125,8 @@ namespace PokemonGoGUI.GoManager
 
             IsRunning = true;
             _totalZeroExpStops = 0;
+            _client.SetSettings(UserSettings);
+
             State = BotState.Starting;
 
             Thread t = new Thread(RunningThread);
