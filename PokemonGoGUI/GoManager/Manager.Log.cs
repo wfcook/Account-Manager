@@ -13,11 +13,14 @@ namespace PokemonGoGUI.GoManager
         {
             lock (Logs)
             {
-                Logs.Add(log);
-
-                if(Logs.Count >= 500)
+                if (log.LoggerType != LoggerTypes.LocationUpdate)
                 {
-                    IEnumerable<Log> tempLogs = Logs.Reverse<Log>().Take(100);
+                    Logs.Add(log);
+                }
+
+                if(Logs.Count >= 100)
+                {
+                    IEnumerable<Log> tempLogs = Logs.Reverse<Log>().Take(50);
 
                     Logs = tempLogs.Reverse<Log>().ToList();
                 }

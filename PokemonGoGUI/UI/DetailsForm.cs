@@ -242,6 +242,8 @@ namespace PokemonGoGUI.UI
 
         private async void DetailsForm_Load(object sender, EventArgs e)
         {
+            _totalLogs = _manager.Logs.Count;
+
             if (_manager.LogHeaderSettings != null)
             {
                 fastObjectListViewLogs.RestoreState(_manager.LogHeaderSettings);

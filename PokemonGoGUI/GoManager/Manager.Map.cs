@@ -55,7 +55,12 @@ namespace PokemonGoGUI.GoManager
 
             if (allFortsResponse.Data.Count == 0)
             {
-                LogCaller(new LoggerEventArgs("No pokestop data found. Potential temp IP ban or bad location", LoggerTypes.Warning));
+                return new MethodResult<List<FortData>>
+                {
+                    Data = fortData,
+                    Message = "No pokestop data found. Potential temp IP ban or bad location",
+                    Success = true
+                };
             }
 
             foreach (FortData fort in allFortsResponse.Data)
@@ -76,6 +81,16 @@ namespace PokemonGoGUI.GoManager
                 }
 
                 fortData.Add(fort);
+            }
+
+            if(fortData.Count == 0)
+            {
+                return new MethodResult<List<FortData>>
+                {
+                    Data = fortData,
+                    Message = "No searchable pokestops found within range",
+                    Success = true
+                };
             }
 
             fortData = fortData.OrderBy(x => CalculateDistanceInMeters(UserSettings.DefaultLatitude, UserSettings.DefaultLongitude, x.Latitude, x.Longitude)).ToList();

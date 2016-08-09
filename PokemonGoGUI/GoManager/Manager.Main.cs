@@ -98,15 +98,24 @@ namespace PokemonGoGUI.GoManager
 
                 if (webEx != null)
                 {
-                    if (webEx.Status == WebExceptionStatus.ConnectionClosed)
+                    if (!String.IsNullOrEmpty(Proxy))
                     {
-                        if (!String.IsNullOrEmpty(Proxy))
+                        if (webEx.Status == WebExceptionStatus.ConnectionClosed)
                         {
                             LogCaller(new LoggerEventArgs("Potential http proxy detected. Only https proxies will work.", LoggerTypes.Warning));
 
                             return new MethodResult
                             {
                                 Message = "Http proxy detected"
+                            };
+                        }
+                        else if (webEx.Status == WebExceptionStatus.ConnectFailure || webEx.Status == WebExceptionStatus.ProtocolError || webEx.Status == WebExceptionStatus.ReceiveFailure)
+                        {
+                            LogCaller(new LoggerEventArgs("Proxy is offline", LoggerTypes.Warning));
+
+                            return new MethodResult
+                            {
+                                Message = "Proxy is offline"
                             };
                         }
                     }
@@ -308,7 +317,7 @@ namespace PokemonGoGUI.GoManager
 
                     if(totalStops == 0)
                     {
-                        LogCaller(new LoggerEventArgs(String.Format("No pokestops found. Failure {0}/{1}", currentFails, maxFailed), LoggerTypes.Warning));
+                        LogCaller(new LoggerEventArgs(String.Format("{0}. Failure {1}/{2}", pokestops.Message, currentFails, maxFailed), LoggerTypes.Warning));
 
                         await Task.Delay(failedWaitTime);
 
