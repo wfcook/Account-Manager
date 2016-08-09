@@ -227,32 +227,18 @@ namespace PokemonGoGUI
             ShowDetails(fastObjectListViewMain.SelectedObjects.Cast<Manager>());
         }
 
-        private void startToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void startToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            int totalStarted = _managers.Count(x => x.IsRunning);
-
-            bool confirmed = false;
+            startToolStripMenuItem.Enabled = false;
 
             foreach(Manager manager in fastObjectListViewMain.SelectedObjects)
             {
-                if(totalStarted > 5 && !confirmed)
-                {
-                    DialogResult result = MessageBox.Show("Starting too many bots can result in a temp IP ban. Continue?", "Confirmation", MessageBoxButtons.YesNo);
-
-                    if(result == DialogResult.Yes)
-                    {
-                        confirmed = true;
-                    }
-                    else
-                    {
-                        return;
-                    }
-                }
-
                 manager.Start();
 
-                ++totalStarted;
+                await Task.Delay(200);
             }
+
+            startToolStripMenuItem.Enabled = true;
 
             //fastObjectListViewMain.SetObjects(_managers);
         }
