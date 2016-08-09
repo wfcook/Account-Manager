@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using PokemonGo.RocketAPI.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
@@ -40,6 +41,8 @@ namespace PokemonGo.RocketAPI.Login
 
             using (var tempHttpClient = new System.Net.Http.HttpClient(handler))
             {
+                tempHttpClient.Timeout = TimeSpan.FromSeconds(10);
+
                 //Get session cookie
                 var sessionData = await GetSessionCookie(tempHttpClient).ConfigureAwait(false);
 

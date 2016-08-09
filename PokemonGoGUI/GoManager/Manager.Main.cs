@@ -66,6 +66,15 @@ namespace PokemonGoGUI.GoManager
 
                 return result;
             }
+            catch(TaskCanceledException)
+            {
+                LogCaller(new LoggerEventArgs("Login request has timed out. Possible bad proxy.", LoggerTypes.Warning));
+
+                return new MethodResult
+                {
+                    Message = "Request has timed out."
+                };
+            }
             catch(PtcOfflineException ex)
             {
                 LogCaller(new LoggerEventArgs("Ptc server offline. Please try again later.", LoggerTypes.Exception, ex));
