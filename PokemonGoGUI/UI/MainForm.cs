@@ -205,7 +205,7 @@ namespace PokemonGoGUI
                 asForm.ShowDialog();
             }
 
-            fastObjectListViewMain.SetObjects(_managers);
+            //fastObjectListViewMain.SetObjects(_managers);
         }
 
         private void fastObjectListViewMain_KeyDown(object sender, KeyEventArgs e)
@@ -253,7 +253,7 @@ namespace PokemonGoGUI
                 ++totalStarted;
             }
 
-            fastObjectListViewMain.SetObjects(_managers);
+            //fastObjectListViewMain.SetObjects(_managers);
         }
 
         private void stopToolStripMenuItem_Click(object sender, EventArgs e)
@@ -263,7 +263,7 @@ namespace PokemonGoGUI
                 manager.Stop();
             }
 
-            fastObjectListViewMain.SetObjects(_managers);
+            //fastObjectListViewMain.SetObjects(_managers);
         }
 
         private List<string> ImportAccounts()
