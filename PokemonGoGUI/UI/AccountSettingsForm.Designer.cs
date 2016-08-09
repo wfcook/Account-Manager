@@ -45,6 +45,7 @@
             this.checkBoxEncounterWhileWalking = new System.Windows.Forms.CheckBox();
             this.checkBoxMimicWalking = new System.Windows.Forms.CheckBox();
             this.textBoxMaxLevel = new System.Windows.Forms.TextBox();
+            this.textBoxProxy = new System.Windows.Forms.TextBox();
             this.textBoxPokemonBeforeEvolve = new System.Windows.Forms.TextBox();
             this.textBoxWalkSpeed = new System.Windows.Forms.TextBox();
             this.textBoxMaxTravelDistance = new System.Windows.Forms.TextBox();
@@ -53,6 +54,7 @@
             this.textBoxPtcPassword = new System.Windows.Forms.TextBox();
             this.textBoxName = new System.Windows.Forms.TextBox();
             this.label11 = new System.Windows.Forms.Label();
+            this.label12 = new System.Windows.Forms.Label();
             this.textBoxPtcUsername = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
             this.radioButtonGoogle = new System.Windows.Forms.RadioButton();
@@ -108,8 +110,6 @@
             this.contextMenuStripTransfer = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.editToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.restoreDefaultsToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
-            this.label12 = new System.Windows.Forms.Label();
-            this.textBoxProxy = new System.Windows.Forms.TextBox();
             this.toolTipProxy = new System.Windows.Forms.ToolTip(this.components);
             this.tabControlMain.SuspendLayout();
             this.tabPageDetails.SuspendLayout();
@@ -328,6 +328,14 @@
             this.textBoxMaxLevel.Size = new System.Drawing.Size(65, 22);
             this.textBoxMaxLevel.TabIndex = 3;
             // 
+            // textBoxProxy
+            // 
+            this.textBoxProxy.Location = new System.Drawing.Point(291, 227);
+            this.textBoxProxy.Name = "textBoxProxy";
+            this.textBoxProxy.Size = new System.Drawing.Size(180, 22);
+            this.textBoxProxy.TabIndex = 3;
+            this.toolTipProxy.SetToolTip(this.textBoxProxy, "Valid Formats:\r\nIP:Port\r\nIP:Port:Username:Password");
+            // 
             // textBoxPokemonBeforeEvolve
             // 
             this.textBoxPokemonBeforeEvolve.Location = new System.Drawing.Point(400, 162);
@@ -386,6 +394,15 @@
             this.label11.Size = new System.Drawing.Size(72, 16);
             this.label11.TabIndex = 1;
             this.label11.Text = "Max Level:";
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(240, 230);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(45, 16);
+            this.label12.TabIndex = 1;
+            this.label12.Text = "Proxy:";
             // 
             // textBoxPtcUsername
             // 
@@ -524,6 +541,7 @@
             // 
             this.fastObjectListViewRecycling.AllColumns.Add(this.olvColumnItemName);
             this.fastObjectListViewRecycling.AllColumns.Add(this.olvColumnItemMax);
+            this.fastObjectListViewRecycling.CellEditUseWholeCell = false;
             this.fastObjectListViewRecycling.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.olvColumnItemName,
             this.olvColumnItemMax});
@@ -582,6 +600,7 @@
             this.fastObjectListViewEvolve.AllColumns.Add(this.olvColumnEvolveName);
             this.fastObjectListViewEvolve.AllColumns.Add(this.olvColumnEvolve);
             this.fastObjectListViewEvolve.AllColumns.Add(this.olvColumnEvolveMinCP);
+            this.fastObjectListViewEvolve.CellEditUseWholeCell = false;
             this.fastObjectListViewEvolve.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.olvColumnEvolveId,
             this.olvColumnEvolveName,
@@ -693,6 +712,7 @@
             this.fastObjectListViewCatch.AllColumns.Add(this.olvColumnCatchId);
             this.fastObjectListViewCatch.AllColumns.Add(this.olvColumnCatchName);
             this.fastObjectListViewCatch.AllColumns.Add(this.olvColumnCatch);
+            this.fastObjectListViewCatch.CellEditUseWholeCell = false;
             this.fastObjectListViewCatch.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.olvColumnCatchId,
             this.olvColumnCatchName,
@@ -795,6 +815,7 @@
             this.fastObjectListViewTransfer.AllColumns.Add(this.olvColumn1);
             this.fastObjectListViewTransfer.AllColumns.Add(this.olvColumn2);
             this.fastObjectListViewTransfer.AllColumns.Add(this.olvColumnCPPercent);
+            this.fastObjectListViewTransfer.CellEditUseWholeCell = false;
             this.fastObjectListViewTransfer.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.olvColumnTransferId,
             this.olvColumnTransferName,
@@ -873,23 +894,6 @@
             this.restoreDefaultsToolStripMenuItem2.Size = new System.Drawing.Size(214, 28);
             this.restoreDefaultsToolStripMenuItem2.Text = "Restore Defaults";
             this.restoreDefaultsToolStripMenuItem2.Click += new System.EventHandler(this.restoreDefaultsToolStripMenuItem2_Click);
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(240, 230);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(45, 16);
-            this.label12.TabIndex = 1;
-            this.label12.Text = "Proxy:";
-            // 
-            // textBoxProxy
-            // 
-            this.textBoxProxy.Location = new System.Drawing.Point(291, 227);
-            this.textBoxProxy.Name = "textBoxProxy";
-            this.textBoxProxy.Size = new System.Drawing.Size(180, 22);
-            this.textBoxProxy.TabIndex = 3;
-            this.toolTipProxy.SetToolTip(this.textBoxProxy, "Valid Formats:\r\nIP:Port\r\nIP:Port:Username\r\nIP:Port:Username:Password");
             // 
             // AccountSettingsForm
             // 
