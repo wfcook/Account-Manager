@@ -428,6 +428,7 @@ namespace PokemonGoGUI.GoManager
             LogCaller(new LoggerEventArgs("Bot stopping. Please wait for actions to complete ...", LoggerTypes.Info));
 
             _runningStopwatch.Stop();
+            _client.Logout();
 
             IsRunning = false;
         }
