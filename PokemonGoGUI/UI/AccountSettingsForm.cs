@@ -20,7 +20,6 @@ namespace PokemonGoGUI.UI
     public partial class AccountSettingsForm : Form
     {
         private Manager _manager;
-        private bool _saved = false;
 
         public AccountSettingsForm(Manager manager)
         {
@@ -110,13 +109,14 @@ namespace PokemonGoGUI.UI
 
         private void radioButtonPtc_CheckedChanged_1(object sender, EventArgs e)
         {
+            labelUsername.Text = "Username*:";
+
             textBoxPtcPassword.Enabled = true;
             textBoxPtcUsername.Enabled = true;
 
             if(radioButtonGoogle.Checked)
             {
-                textBoxPtcPassword.Enabled = false;
-                textBoxPtcUsername.Enabled = false;
+                labelUsername.Text = "Email*:";
             }
         }
 
@@ -135,8 +135,6 @@ namespace PokemonGoGUI.UI
         private void buttonSave_Click(object sender, EventArgs e)
         {
             SaveSettings();
-
-            _saved = true;
 
             MessageBox.Show("Settings saved.\nSome settings won't take effect until the account stops running.");
         }

@@ -19,8 +19,6 @@ namespace PokemonGoGUI.GoManager
     {
         public async Task<MethodResult<List<InventoryItem>>> GetInventory()
         {
-            Exception exception = null;
-
             try
             {
                 if(!_client.LoggedIn)
@@ -69,7 +67,7 @@ namespace PokemonGoGUI.GoManager
             }
             catch(InvalidResponseException ex)
             {
-                LogCaller(new LoggerEventArgs("Inventory request has returned an invalid response", LoggerTypes.Warning, exception));
+                LogCaller(new LoggerEventArgs("Inventory request has returned an invalid response", LoggerTypes.Warning, ex));
 
                 return new MethodResult<List<InventoryItem>>
                 {

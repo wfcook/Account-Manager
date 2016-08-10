@@ -8,5 +8,9 @@ namespace PokemonGo.RocketAPI.Exceptions
 {
     public class GoogleOfflineException : Exception
     {
+        public GoogleOfflineException() : base("Google login servers are offline")
+        {
+
+        }
     }
 }

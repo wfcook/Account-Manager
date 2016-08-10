@@ -67,7 +67,7 @@ namespace PokemonGoGUI.GoManager
             }
             catch(TaskCanceledException ex)
             {
-                LogCaller(new LoggerEventArgs("Login request has timed out. Possible bad proxy.", LoggerTypes.Warning));
+                LogCaller(new LoggerEventArgs("Login request has timed out. Possible bad proxy.", LoggerTypes.Warning, ex));
 
                 return new MethodResult
                 {
@@ -139,6 +139,29 @@ namespace PokemonGoGUI.GoManager
                 {
                     Message = "Username or password incorrect"
                 };
+            }
+            catch(IPBannedException ex)
+            {
+                Stop();
+
+                string message = String.Empty;
+
+                if(!String.IsNullOrEmpty(Proxy))
+                {
+                    message = "Proxy IP is banned. Stopping bot ...";
+                }
+                else
+                {
+                    message = "IP address is banned. Stopping bot ...";
+                }
+                
+                LogCaller(new LoggerEventArgs(message, LoggerTypes.Warning, ex));
+
+                return new MethodResult
+                {
+                    Message = message
+                };
+
             }
             catch(Exception ex)
             {

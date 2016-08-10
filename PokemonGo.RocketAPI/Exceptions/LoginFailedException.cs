@@ -18,4 +18,13 @@ namespace PokemonGo.RocketAPI.Exceptions
 
         }
     }
+
+    public class IPBannedException : Exception
+    {
+        public IPBannedException(string message)
+            : base(message)
+        {
+
+        }
+    }
 }

@@ -54,6 +54,7 @@
             this.textBoxPtcPassword = new System.Windows.Forms.TextBox();
             this.textBoxName = new System.Windows.Forms.TextBox();
             this.label11 = new System.Windows.Forms.Label();
+            this.label13 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
             this.textBoxPtcUsername = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
@@ -65,7 +66,7 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
+            this.labelUsername = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.buttonSave = new System.Windows.Forms.Button();
             this.tabPageRecycling = new System.Windows.Forms.TabPage();
@@ -111,7 +112,6 @@
             this.editToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.restoreDefaultsToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTipProxy = new System.Windows.Forms.ToolTip(this.components);
-            this.label13 = new System.Windows.Forms.Label();
             this.tabControlMain.SuspendLayout();
             this.tabPageDetails.SuspendLayout();
             this.tabPageRecycling.SuspendLayout();
@@ -179,7 +179,7 @@
             this.tabPageDetails.Controls.Add(this.label4);
             this.tabPageDetails.Controls.Add(this.label7);
             this.tabPageDetails.Controls.Add(this.label3);
-            this.tabPageDetails.Controls.Add(this.label2);
+            this.tabPageDetails.Controls.Add(this.labelUsername);
             this.tabPageDetails.Controls.Add(this.label1);
             this.tabPageDetails.Controls.Add(this.buttonSave);
             this.tabPageDetails.Location = new System.Drawing.Point(4, 25);
@@ -397,6 +397,15 @@
             this.label11.TabIndex = 1;
             this.label11.Text = "Max Level:";
             // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(326, 292);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(160, 16);
+            this.label13.TabIndex = 1;
+            this.label13.Text = "* = Requires account stop";
+            // 
             // label12
             // 
             this.label12.AutoSize = true;
@@ -425,7 +434,6 @@
             // radioButtonGoogle
             // 
             this.radioButtonGoogle.AutoSize = true;
-            this.radioButtonGoogle.Enabled = false;
             this.radioButtonGoogle.Location = new System.Drawing.Point(211, 29);
             this.radioButtonGoogle.Name = "radioButtonGoogle";
             this.radioButtonGoogle.Size = new System.Drawing.Size(74, 20);
@@ -501,14 +509,14 @@
             this.label3.TabIndex = 1;
             this.label3.Text = "Password*:";
             // 
-            // label2
+            // labelUsername
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(1, 58);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(79, 16);
-            this.label2.TabIndex = 1;
-            this.label2.Text = "Username*:";
+            this.labelUsername.Location = new System.Drawing.Point(1, 58);
+            this.labelUsername.Name = "labelUsername";
+            this.labelUsername.Size = new System.Drawing.Size(79, 16);
+            this.labelUsername.TabIndex = 1;
+            this.labelUsername.Text = "Username*:";
+            this.labelUsername.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // label1
             // 
@@ -898,15 +906,6 @@
             this.restoreDefaultsToolStripMenuItem2.Text = "Restore Defaults";
             this.restoreDefaultsToolStripMenuItem2.Click += new System.EventHandler(this.restoreDefaultsToolStripMenuItem2_Click);
             // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(326, 292);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(160, 16);
-            this.label13.TabIndex = 1;
-            this.label13.Text = "* = Requires account stop";
-            // 
             // AccountSettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -951,7 +950,7 @@
         private System.Windows.Forms.TextBox textBoxPtcUsername;
         private System.Windows.Forms.TextBox textBoxPtcPassword;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label labelUsername;
         private System.Windows.Forms.TextBox textBoxLong;
         private System.Windows.Forms.TextBox textBoxLat;
         private System.Windows.Forms.Label label5;

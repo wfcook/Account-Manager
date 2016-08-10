@@ -39,18 +39,6 @@ namespace PokemonGo.RocketAPI.Extensions
 
             ResponseEnvelope response = await PostProto<TRequest>(client, url, requestEnvelope);
 
-            /*
-            while ((response = .Returns.Count != responseTypes.Length)
-            {
-                var operation = await strategy.HandleApiFailure(requestEnvelope, response);
-                if (operation == ApiOperation.Abort)
-                {
-                    throw new InvalidResponseException(String.Format("Expected {0} responses, but got {1} responses", responseTypes.Length, response.Returns.Count));
-                }
-            }
-
-            strategy.HandleApiSuccess(requestEnvelope, response);*/
-
             if(response.Returns.Count < responseTypes.Length)
             {
                 throw new InvalidResponseException();
@@ -68,28 +56,11 @@ namespace PokemonGo.RocketAPI.Extensions
             string url, RequestEnvelope requestEnvelope) where TRequest : IMessage<TRequest>
             where TResponsePayload : IMessage<TResponsePayload>, new()
         {
-            //Debug.WriteLine($"Requesting {typeof(TResponsePayload).Name}");
             var response = await PostProto<TRequest>(client, url, requestEnvelope);
-
-            /*
-            while (response.Returns.Count == 0)
-            {
-                var operation = await strategy.HandleApiFailure(requestEnvelope, response);
-                if (operation == ApiOperation.Abort)
-                {
-                    break;
-                }
-
-                response = await PostProto<TRequest>(client, url, requestEnvelope);
-            }*/
 
             if (response.Returns.Count == 0)
                 throw new InvalidResponseException();
 
-            //strategy.HandleApiSuccess(requestEnvelope, response);
-
-            //Decode payload
-            //todo: multi-payload support
             var payload = response.Returns[0];
             var parsedPayload = new TResponsePayload();
             parsedPayload.MergeFrom(payload);
@@ -103,6 +74,11 @@ namespace PokemonGo.RocketAPI.Extensions
             //Encode payload and put in envelop, then send
             var data = requestEnvelope.ToByteString();
             var result = await client.PostAsync(url, new ByteArrayContent(data.ToByteArray()));
+
+            if(result.StatusCode == System.Net.HttpStatusCode.Forbidden)
+            {
+                throw new IPBannedException("IP Address is banned");
+            }
 
             //Decode message
             var responseData = await result.Content.ReadAsByteArrayAsync();
