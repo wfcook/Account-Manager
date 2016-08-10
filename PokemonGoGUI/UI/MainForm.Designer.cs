@@ -83,7 +83,7 @@
             this.fastObjectListViewMain.AllColumns.Add(this.olvColumnTotalLogs);
             this.fastObjectListViewMain.AllColumns.Add(this.olvColumnProxy);
             this.fastObjectListViewMain.AllColumns.Add(this.olvColumnLastLogMessage);
-            this.fastObjectListViewMain.CellEditUseWholeCell = false;
+            //this.fastObjectListViewMain.CellEditUseWholeCell = false;
             this.fastObjectListViewMain.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.olvColumnUsername,
             this.olvColumnLevel,
