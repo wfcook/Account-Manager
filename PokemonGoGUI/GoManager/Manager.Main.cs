@@ -261,7 +261,7 @@ namespace PokemonGoGUI.GoManager
 
                     if(!result.Success)
                     {
-                        LogCaller(new LoggerEventArgs("Echo failed. Logging out before retry.", LoggerTypes.Debug));
+                        //LogCaller(new LoggerEventArgs("Echo failed. Logging out before retry.", LoggerTypes.Debug));
 
                         _client.Logout();
 
@@ -572,8 +572,10 @@ namespace PokemonGoGUI.GoManager
                     Success = true
                 };
             }
-            catch
+            catch(Exception ex)
             {
+                LogCaller(new LoggerEventArgs("Echo failed", LoggerTypes.Warning, ex));
+
                 return new MethodResult
                 {
                     Message = "Echo failed"
