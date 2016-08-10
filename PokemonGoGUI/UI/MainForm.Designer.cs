@@ -49,12 +49,22 @@
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.startToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.exportAccountsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.timerListViewUpdate = new System.Windows.Forms.Timer(this.components);
             this.olvColumnProxy = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnMaxLevel = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportAccountsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.proxiesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.importProxiesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.clearProxiesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.exportStatsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+            this.enableColorsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewMain)).BeginInit();
             this.contextMenuStripAccounts.SuspendLayout();
             this.SuspendLayout();
@@ -97,6 +107,7 @@
             this.fastObjectListViewMain.UseFiltering = true;
             this.fastObjectListViewMain.View = System.Windows.Forms.View.Details;
             this.fastObjectListViewMain.VirtualMode = true;
+            this.fastObjectListViewMain.FormatCell += new System.EventHandler<BrightIdeasSoftware.FormatCellEventArgs>(this.fastObjectListViewMain_FormatCell);
             this.fastObjectListViewMain.KeyDown += new System.Windows.Forms.KeyEventHandler(this.fastObjectListViewMain_KeyDown);
             // 
             // olvColumnUsername
@@ -163,16 +174,21 @@
             this.contextMenuStripAccounts.ImageScalingSize = new System.Drawing.Size(22, 22);
             this.contextMenuStripAccounts.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.viewDetailsToolStripMenuItem,
-            this.importToolStripMenuItem,
-            this.importProxiesToolStripMenuItem,
-            this.addNewToolStripMenuItem,
-            this.editToolStripMenuItem,
+            this.toolStripSeparator3,
             this.startToolStripMenuItem,
             this.stopToolStripMenuItem,
-            this.exportAccountsToolStripMenuItem,
+            this.toolStripSeparator4,
+            this.addNewToolStripMenuItem,
+            this.editToolStripMenuItem,
+            this.importToolStripMenuItem,
+            this.toolStripSeparator5,
+            this.proxiesToolStripMenuItem,
+            this.exportToolStripMenuItem,
+            this.toolStripSeparator1,
+            this.enableColorsToolStripMenuItem,
             this.deleteToolStripMenuItem});
             this.contextMenuStripAccounts.Name = "contextMenuStrip1";
-            this.contextMenuStripAccounts.Size = new System.Drawing.Size(215, 287);
+            this.contextMenuStripAccounts.Size = new System.Drawing.Size(218, 308);
             // 
             // viewDetailsToolStripMenuItem
             // 
@@ -187,8 +203,8 @@
             this.wConfigToolStripMenuItem,
             this.defaultToolStripMenuItem});
             this.importToolStripMenuItem.Name = "importToolStripMenuItem";
-            this.importToolStripMenuItem.Size = new System.Drawing.Size(214, 28);
-            this.importToolStripMenuItem.Text = "Import";
+            this.importToolStripMenuItem.Size = new System.Drawing.Size(217, 28);
+            this.importToolStripMenuItem.Text = "Import Accounts";
             // 
             // wConfigToolStripMenuItem
             // 
@@ -234,13 +250,6 @@
             this.stopToolStripMenuItem.Text = "Stop";
             this.stopToolStripMenuItem.Click += new System.EventHandler(this.stopToolStripMenuItem_Click);
             // 
-            // exportAccountsToolStripMenuItem
-            // 
-            this.exportAccountsToolStripMenuItem.Name = "exportAccountsToolStripMenuItem";
-            this.exportAccountsToolStripMenuItem.Size = new System.Drawing.Size(214, 28);
-            this.exportAccountsToolStripMenuItem.Text = "Export Accounts";
-            this.exportAccountsToolStripMenuItem.Click += new System.EventHandler(this.exportAccountsToolStripMenuItem_Click);
-            // 
             // deleteToolStripMenuItem
             // 
             this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
@@ -266,12 +275,81 @@
             this.olvColumnMaxLevel.IsVisible = false;
             this.olvColumnMaxLevel.Text = "Max Level";
             // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(214, 6);
+            // 
+            // exportToolStripMenuItem
+            // 
+            this.exportToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.exportAccountsToolStripMenuItem,
+            this.exportStatsToolStripMenuItem});
+            this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
+            this.exportToolStripMenuItem.Size = new System.Drawing.Size(217, 28);
+            this.exportToolStripMenuItem.Text = "Export";
+            // 
+            // exportAccountsToolStripMenuItem
+            // 
+            this.exportAccountsToolStripMenuItem.Name = "exportAccountsToolStripMenuItem";
+            this.exportAccountsToolStripMenuItem.Size = new System.Drawing.Size(214, 28);
+            this.exportAccountsToolStripMenuItem.Text = "Export Accounts";
+            // 
+            // proxiesToolStripMenuItem
+            // 
+            this.proxiesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.importProxiesToolStripMenuItem,
+            this.toolStripSeparator2,
+            this.clearProxiesToolStripMenuItem});
+            this.proxiesToolStripMenuItem.Name = "proxiesToolStripMenuItem";
+            this.proxiesToolStripMenuItem.Size = new System.Drawing.Size(217, 28);
+            this.proxiesToolStripMenuItem.Text = "Proxies";
+            // 
             // importProxiesToolStripMenuItem
             // 
             this.importProxiesToolStripMenuItem.Name = "importProxiesToolStripMenuItem";
-            this.importProxiesToolStripMenuItem.Size = new System.Drawing.Size(214, 28);
+            this.importProxiesToolStripMenuItem.Size = new System.Drawing.Size(201, 28);
             this.importProxiesToolStripMenuItem.Text = "Import Proxies";
-            this.importProxiesToolStripMenuItem.Click += new System.EventHandler(this.importProxiesToolStripMenuItem_Click);
+            // 
+            // clearProxiesToolStripMenuItem
+            // 
+            this.clearProxiesToolStripMenuItem.Name = "clearProxiesToolStripMenuItem";
+            this.clearProxiesToolStripMenuItem.Size = new System.Drawing.Size(201, 28);
+            this.clearProxiesToolStripMenuItem.Text = "Clear Proxies";
+            this.clearProxiesToolStripMenuItem.Click += new System.EventHandler(this.clearProxiesToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(198, 6);
+            // 
+            // exportStatsToolStripMenuItem
+            // 
+            this.exportStatsToolStripMenuItem.Name = "exportStatsToolStripMenuItem";
+            this.exportStatsToolStripMenuItem.Size = new System.Drawing.Size(214, 28);
+            this.exportStatsToolStripMenuItem.Text = "Export Stats";
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(214, 6);
+            // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(214, 6);
+            // 
+            // toolStripSeparator5
+            // 
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(214, 6);
+            // 
+            // enableColorsToolStripMenuItem
+            // 
+            this.enableColorsToolStripMenuItem.Name = "enableColorsToolStripMenuItem";
+            this.enableColorsToolStripMenuItem.Size = new System.Drawing.Size(217, 28);
+            this.enableColorsToolStripMenuItem.Text = "Enable Colors";
+            this.enableColorsToolStripMenuItem.Click += new System.EventHandler(this.enableColorsToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -312,11 +390,21 @@
         private BrightIdeasSoftware.OLVColumn olvColumnRunningTime;
         private BrightIdeasSoftware.OLVColumn olvColumnTillRankUp;
         private System.Windows.Forms.Timer timerListViewUpdate;
-        private System.Windows.Forms.ToolStripMenuItem exportAccountsToolStripMenuItem;
         private BrightIdeasSoftware.OLVColumn olvColumnBotState;
         private BrightIdeasSoftware.OLVColumn olvColumnProxy;
         private BrightIdeasSoftware.OLVColumn olvColumnMaxLevel;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
+        private System.Windows.Forms.ToolStripMenuItem proxiesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem importProxiesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripMenuItem clearProxiesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem exportToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem exportAccountsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem exportStatsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem enableColorsToolStripMenuItem;
     }
 }
 

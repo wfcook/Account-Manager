@@ -415,47 +415,7 @@ namespace PokemonGoGUI.UI
                 return;
             }
 
-            //e.Item.BackColor = Color.FromArgb(43, 43, 43);
-
-            switch(log.LoggerType)
-            {
-                case LoggerTypes.Exception:
-                    e.Item.ForeColor = Color.Red;
-                    break;
-                case LoggerTypes.Success:
-                    e.Item.ForeColor = Color.Green;
-                    break;
-                case LoggerTypes.Warning:
-                    e.Item.ForeColor = Color.Yellow;
-                    break;
-                case LoggerTypes.PokemonFlee:
-                    e.Item.ForeColor = Color.Salmon;
-                    break;
-                case LoggerTypes.PokemonEscape:
-                    e.Item.ForeColor = Color.DarkGoldenrod;
-                    break;
-                case LoggerTypes.Transfer:
-                    e.Item.ForeColor = Color.MediumAquamarine;
-                    break;
-                case LoggerTypes.Evolve:
-                    e.Item.ForeColor = Color.MediumAquamarine;
-                    break;
-                case LoggerTypes.Incubate:
-                    e.Item.ForeColor = Color.MediumAquamarine;
-                    break;
-                case LoggerTypes.Recycle:
-                    e.Item.ForeColor = Color.MediumAquamarine;
-                    break;
-                case LoggerTypes.Info:
-                    e.Item.ForeColor = Color.Teal;
-                    break;
-                case LoggerTypes.Debug:
-                    e.Item.ForeColor = Color.DarkGray;
-                    break;
-                case LoggerTypes.LocationUpdate:
-                    e.Item.ForeColor = Color.DarkGray;
-                    break;
-            }
+            e.Item.ForeColor = log.GetLogColor();
         }
 
         private void fastObjectListViewPokemon_FormatCell(object sender, FormatCellEventArgs e)

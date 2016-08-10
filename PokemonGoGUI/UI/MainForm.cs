@@ -3,6 +3,7 @@ using PokemonGo.RocketAPI.Helpers;
 using PokemonGoGUI.Enums;
 using PokemonGoGUI.Extensions;
 using PokemonGoGUI.GoManager;
+using PokemonGoGUI.GoManager.Models;
 using PokemonGoGUI.Models;
 using PokemonGoGUI.UI;
 using System;
@@ -206,7 +207,7 @@ namespace PokemonGoGUI
                 asForm.ShowDialog();
             }
 
-            //fastObjectListViewMain.SetObjects(_managers);
+            fastObjectListViewMain.RefreshSelectedObjects();
         }
 
         private void fastObjectListViewMain_KeyDown(object sender, KeyEventArgs e)
@@ -240,7 +241,7 @@ namespace PokemonGoGUI
 
             startToolStripMenuItem.Enabled = true;
 
-            //fastObjectListViewMain.SetObjects(_managers);
+            fastObjectListViewMain.RefreshSelectedObjects();
         }
 
         private void stopToolStripMenuItem_Click(object sender, EventArgs e)
@@ -250,7 +251,7 @@ namespace PokemonGoGUI
                 manager.Stop();
             }
 
-            //fastObjectListViewMain.SetObjects(_managers);
+            fastObjectListViewMain.RefreshSelectedObjects();
         }
 
         private List<string> ImportAccounts()
@@ -526,6 +527,86 @@ namespace PokemonGoGUI
                 manager.UserSettings.ProxyUsername = proxy.Username;
                 manager.UserSettings.ProxyPassword = proxy.Password;
             }
+        }
+
+        private void clearProxiesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            int totalAccounts = fastObjectListViewMain.SelectedObjects.Count;
+
+            DialogResult result = MessageBox.Show(String.Format("Clear proxies from {0} accounts?", totalAccounts), "Confirmation", MessageBoxButtons.YesNo);
+
+            if (result != DialogResult.Yes)
+            {
+                return;
+            }
+
+            foreach(Manager manager in fastObjectListViewMain.SelectedObjects)
+            {
+                manager.UserSettings.ProxyIP = null;
+                manager.UserSettings.ProxyPort = 0;
+                manager.UserSettings.ProxyUsername = null;
+                manager.UserSettings.ProxyPassword = null;
+            }
+
+            fastObjectListViewMain.RefreshSelectedObjects();
+        }
+
+        private void enableColorsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            enableColorsToolStripMenuItem.Checked = !enableColorsToolStripMenuItem.Checked;
+
+            bool isChecked = enableColorsToolStripMenuItem.Checked;
+
+            if(isChecked)
+            {
+                fastObjectListViewMain.BackColor = Color.FromArgb(43, 43, 43);
+                fastObjectListViewMain.ForeColor = Color.LightGray;
+
+                fastObjectListViewMain.UseCellFormatEvents = true;
+            }
+            else
+            {
+                fastObjectListViewMain.BackColor = SystemColors.Window;
+                fastObjectListViewMain.ForeColor = SystemColors.WindowText;
+
+                fastObjectListViewMain.UseCellFormatEvents = false;
+            }
+        }
+
+        private void fastObjectListViewMain_FormatCell(object sender, BrightIdeasSoftware.FormatCellEventArgs e)
+        {
+            Manager manager = (Manager)e.Model;
+
+            if(e.Column == olvColumnBotState)
+            {
+                switch(manager.State)
+                {
+                    case BotState.Running:
+                        e.SubItem.ForeColor = Color.Green;
+                        break;
+                    case BotState.Starting:
+                        e.SubItem.ForeColor = Color.LightGreen;
+                        break;
+                    case BotState.Stopping:
+                        e.SubItem.ForeColor = Color.OrangeRed;
+                        break;
+                    case BotState.Stopped:
+                        e.SubItem.ForeColor = Color.Red;
+                        break;
+                }
+            }
+            else if (e.Column == olvColumnLastLogMessage)
+            {
+                Log log = manager.Logs.LastOrDefault();
+
+                if(log == null)
+                {
+                    return;
+                }
+
+                e.SubItem.ForeColor = log.GetLogColor();
+            }
+
         }
     }
 }

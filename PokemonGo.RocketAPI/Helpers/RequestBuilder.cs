@@ -134,7 +134,7 @@ namespace PokemonGo.RocketAPI.Helpers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                //Console.WriteLine(ex.Message);
             }
             var output = new byte[outputLength];
             Marshal.Copy(ptrOutput, output, 0, outputLength);

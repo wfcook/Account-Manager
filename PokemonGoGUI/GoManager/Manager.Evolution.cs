@@ -61,8 +61,23 @@ namespace PokemonGoGUI.GoManager
 
         public async Task<MethodResult> EvolvePokemon(IEnumerable<PokemonData> pokemonToEvolve)
         {
+            //Shouldn't happen
+            if(pokemonToEvolve == null)
+            {
+                LogCaller(new LoggerEventArgs("Null value sent to evolve pokemon", LoggerTypes.Debug));
+
+                return new MethodResult();
+            }
+
             foreach (PokemonData pokemon in pokemonToEvolve)
             {
+                if(pokemon == null)
+                {
+                    LogCaller(new LoggerEventArgs("Null pokemon data in IEnumerable", LoggerTypes.Debug));
+
+                    continue;
+                }
+
                 try
                 {
                     EvolvePokemonResponse evolveResponse = await _client.Inventory.EvolvePokemon(pokemon.Id);
@@ -199,6 +214,12 @@ namespace PokemonGoGUI.GoManager
                 Candy pokemonCandy = PokemonCandy.FirstOrDefault(x => x.FamilyId == setting.FamilyId);
                 List<PokemonData> pokemonGroupToEvolve = group.Where(x => x.Cp >= evolveSetting.MinCP).OrderByDescending(x => CalculateIVPerfection(x).Data).ToList();
 
+                if(pokemonCandy == null)
+                {
+                    LogCaller(new LoggerEventArgs(String.Format("No candy found for pokemon {0}", group.Key), LoggerTypes.Info));
+
+                    continue;
+                }
 
                 int candyToEvolve = setting.CandyToEvolve;
                 int totalPokemon = pokemonGroupToEvolve.Count;
@@ -224,8 +245,7 @@ namespace PokemonGoGUI.GoManager
         {
             ItemData data = Items.FirstOrDefault(x => x.ItemId == POGOProtos.Inventory.Item.ItemId.ItemLuckyEgg);
 
-
-            if(data.Count == 0)
+            if(data == null || data.Count == 0)
             {
                 LogCaller(new LoggerEventArgs("No lucky eggs left", LoggerTypes.Info));
 
