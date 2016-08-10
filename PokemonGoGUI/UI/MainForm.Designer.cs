@@ -54,6 +54,7 @@
             this.timerListViewUpdate = new System.Windows.Forms.Timer(this.components);
             this.olvColumnProxy = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnMaxLevel = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.importProxiesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewMain)).BeginInit();
             this.contextMenuStripAccounts.SuspendLayout();
             this.SuspendLayout();
@@ -163,6 +164,7 @@
             this.contextMenuStripAccounts.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.viewDetailsToolStripMenuItem,
             this.importToolStripMenuItem,
+            this.importProxiesToolStripMenuItem,
             this.addNewToolStripMenuItem,
             this.editToolStripMenuItem,
             this.startToolStripMenuItem,
@@ -170,7 +172,7 @@
             this.exportAccountsToolStripMenuItem,
             this.deleteToolStripMenuItem});
             this.contextMenuStripAccounts.Name = "contextMenuStrip1";
-            this.contextMenuStripAccounts.Size = new System.Drawing.Size(215, 228);
+            this.contextMenuStripAccounts.Size = new System.Drawing.Size(215, 287);
             // 
             // viewDetailsToolStripMenuItem
             // 
@@ -264,6 +266,13 @@
             this.olvColumnMaxLevel.IsVisible = false;
             this.olvColumnMaxLevel.Text = "Max Level";
             // 
+            // importProxiesToolStripMenuItem
+            // 
+            this.importProxiesToolStripMenuItem.Name = "importProxiesToolStripMenuItem";
+            this.importProxiesToolStripMenuItem.Size = new System.Drawing.Size(214, 28);
+            this.importProxiesToolStripMenuItem.Text = "Import Proxies";
+            this.importProxiesToolStripMenuItem.Click += new System.EventHandler(this.importProxiesToolStripMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -307,6 +316,7 @@
         private BrightIdeasSoftware.OLVColumn olvColumnBotState;
         private BrightIdeasSoftware.OLVColumn olvColumnProxy;
         private BrightIdeasSoftware.OLVColumn olvColumnMaxLevel;
+        private System.Windows.Forms.ToolStripMenuItem importProxiesToolStripMenuItem;
     }
 }
 
