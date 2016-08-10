@@ -64,14 +64,6 @@ namespace PokemonGo.RocketAPI
             }
 
             result.Address = parts[0];
-
-            IPAddress address = null;
-
-            if(!IPAddress.TryParse(result.Address, out address))
-            {
-                return false;
-            }
-
             result.Port = port;
 
             if (parts.Length == 4)
