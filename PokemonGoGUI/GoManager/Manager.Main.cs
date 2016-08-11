@@ -67,7 +67,14 @@ namespace PokemonGoGUI.GoManager
             }
             catch(TaskCanceledException ex)
             {
-                LogCaller(new LoggerEventArgs("Login request has timed out. Possible bad proxy.", LoggerTypes.Warning, ex));
+                if (String.IsNullOrEmpty(Proxy))
+                {
+                    LogCaller(new LoggerEventArgs("Login request has timed out.", LoggerTypes.Warning, ex));
+                }
+                else
+                {
+                    LogCaller(new LoggerEventArgs("Login request has timed out. Possible bad proxy.", LoggerTypes.Warning, ex));
+                }
 
                 return new MethodResult
                 {
