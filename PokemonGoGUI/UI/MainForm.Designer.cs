@@ -43,6 +43,7 @@
             this.olvColumnProxy = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnLastLogMessage = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.contextMenuStripAccounts = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.updateDetailsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewDetailsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.startToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -67,7 +68,6 @@
             this.devToolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.garbageCollectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.timerListViewUpdate = new System.Windows.Forms.Timer(this.components);
-            this.updateDetailsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewMain)).BeginInit();
             this.contextMenuStripAccounts.SuspendLayout();
             this.SuspendLayout();
@@ -206,6 +206,13 @@
             this.contextMenuStripAccounts.Name = "contextMenuStrip1";
             this.contextMenuStripAccounts.Size = new System.Drawing.Size(218, 395);
             // 
+            // updateDetailsToolStripMenuItem
+            // 
+            this.updateDetailsToolStripMenuItem.Name = "updateDetailsToolStripMenuItem";
+            this.updateDetailsToolStripMenuItem.Size = new System.Drawing.Size(217, 28);
+            this.updateDetailsToolStripMenuItem.Text = "Update Stats";
+            this.updateDetailsToolStripMenuItem.Click += new System.EventHandler(this.updateDetailsToolStripMenuItem_Click);
+            // 
             // viewDetailsToolStripMenuItem
             // 
             this.viewDetailsToolStripMenuItem.Name = "viewDetailsToolStripMenuItem";
@@ -296,6 +303,7 @@
             this.importProxiesToolStripMenuItem.Name = "importProxiesToolStripMenuItem";
             this.importProxiesToolStripMenuItem.Size = new System.Drawing.Size(201, 28);
             this.importProxiesToolStripMenuItem.Text = "Import Proxies";
+            this.importProxiesToolStripMenuItem.Click += new System.EventHandler(this.importProxiesToolStripMenuItem_Click_1);
             // 
             // toolStripSeparator2
             // 
@@ -371,13 +379,6 @@
             this.timerListViewUpdate.Enabled = true;
             this.timerListViewUpdate.Interval = 1000;
             this.timerListViewUpdate.Tick += new System.EventHandler(this.timerListViewUpdate_Tick);
-            // 
-            // updateDetailsToolStripMenuItem
-            // 
-            this.updateDetailsToolStripMenuItem.Name = "updateDetailsToolStripMenuItem";
-            this.updateDetailsToolStripMenuItem.Size = new System.Drawing.Size(217, 28);
-            this.updateDetailsToolStripMenuItem.Text = "Update Stats";
-            this.updateDetailsToolStripMenuItem.Click += new System.EventHandler(this.updateDetailsToolStripMenuItem_Click);
             // 
             // MainForm
             // 

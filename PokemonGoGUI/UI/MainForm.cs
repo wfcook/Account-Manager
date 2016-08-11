@@ -447,98 +447,6 @@ namespace PokemonGoGUI
             }
         }
 
-        private void importProxiesToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            int count = fastObjectListViewMain.SelectedObjects.Count;
-            string fileName = String.Empty;
-            int accountsPerProxy = 0;
-
-            string pPerAccount = Prompt.ShowDialog("Accounts per proxy", "Accounts per proxy", "1");
-
-            if (!Int32.TryParse(pPerAccount, out accountsPerProxy) || accountsPerProxy <= 0)
-            {
-                MessageBox.Show("Invalid input");
-
-                return;
-            }
-
-
-            if(count == 0)
-            {
-                return;
-            }
-
-            using (OpenFileDialog ofd = new OpenFileDialog())
-            {
-                ofd.Title = "Open proxy file";
-                ofd.Filter = "Text Files (*.txt)|*.txt|All Files (*.*)|*.*";
-
-                if (ofd.ShowDialog() == DialogResult.OK)
-                {
-                    fileName = ofd.FileName;
-                }
-            }
-
-            if(String.IsNullOrEmpty(fileName))
-            {
-                return;
-            }
-
-            List<ProxyEx> proxies = new List<ProxyEx>();
-
-            try
-            {
-                string[] tempProxies = File.ReadAllLines(fileName);
-                ProxyEx tempProxyEx = null;
-
-                foreach (string proxyEx in tempProxies)
-                {
-                    if(ProxyEx.TryParse(proxyEx, out tempProxyEx))
-                    {
-                        proxies.Add(tempProxyEx);
-                    }
-                }
-            }
-            catch(Exception ex)
-            {
-                MessageBox.Show(String.Format("Failed to import proxy file. Ex: {0}", ex.Message));
-                return;
-            }
-
-            if(proxies.Count == 0)
-            {
-                MessageBox.Show("No proxies found");
-                return;
-            }
-
-            int proxyIndex = 0;
-            int proxyUsage = 0;
-
-            foreach(Manager manager in fastObjectListViewMain.SelectedObjects)
-            {
-                ++proxyUsage;
-
-                if(proxyUsage > accountsPerProxy)
-                {
-                    ++proxyIndex;
-                    proxyUsage = 1;
-
-                    if(proxyIndex >= proxies.Count)
-                    {
-                        MessageBox.Show("Out of proxies");
-                        return;
-                    }
-                }
-
-                ProxyEx proxy = proxies[proxyIndex];
-
-                manager.UserSettings.ProxyIP = proxy.Address;
-                manager.UserSettings.ProxyPort = proxy.Port;
-                manager.UserSettings.ProxyUsername = proxy.Username;
-                manager.UserSettings.ProxyPassword = proxy.Password;
-            }
-        }
-
         private void clearProxiesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             int totalAccounts = fastObjectListViewMain.SelectedObjects.Count;
@@ -648,6 +556,98 @@ namespace PokemonGoGUI
             }
 
             updateDetailsToolStripMenuItem.Enabled = true;
+        }
+
+        private void importProxiesToolStripMenuItem_Click_1(object sender, EventArgs e)
+        {
+            int count = fastObjectListViewMain.SelectedObjects.Count;
+            string fileName = String.Empty;
+            int accountsPerProxy = 0;
+
+            string pPerAccount = Prompt.ShowDialog("Accounts per proxy", "Accounts per proxy", "1");
+
+            if (!Int32.TryParse(pPerAccount, out accountsPerProxy) || accountsPerProxy <= 0)
+            {
+                MessageBox.Show("Invalid input");
+
+                return;
+            }
+
+
+            if (count == 0)
+            {
+                return;
+            }
+
+            using (OpenFileDialog ofd = new OpenFileDialog())
+            {
+                ofd.Title = "Open proxy file";
+                ofd.Filter = "Text Files (*.txt)|*.txt|All Files (*.*)|*.*";
+
+                if (ofd.ShowDialog() == DialogResult.OK)
+                {
+                    fileName = ofd.FileName;
+                }
+            }
+
+            if (String.IsNullOrEmpty(fileName))
+            {
+                return;
+            }
+
+            List<ProxyEx> proxies = new List<ProxyEx>();
+
+            try
+            {
+                string[] tempProxies = File.ReadAllLines(fileName);
+                ProxyEx tempProxyEx = null;
+
+                foreach (string proxyEx in tempProxies)
+                {
+                    if (ProxyEx.TryParse(proxyEx, out tempProxyEx))
+                    {
+                        proxies.Add(tempProxyEx);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(String.Format("Failed to import proxy file. Ex: {0}", ex.Message));
+                return;
+            }
+
+            if (proxies.Count == 0)
+            {
+                MessageBox.Show("No proxies found");
+                return;
+            }
+
+            int proxyIndex = 0;
+            int proxyUsage = 0;
+
+            foreach (Manager manager in fastObjectListViewMain.SelectedObjects)
+            {
+                ++proxyUsage;
+
+                if (proxyUsage > accountsPerProxy)
+                {
+                    ++proxyIndex;
+                    proxyUsage = 1;
+
+                    if (proxyIndex >= proxies.Count)
+                    {
+                        MessageBox.Show("Out of proxies");
+                        return;
+                    }
+                }
+
+                ProxyEx proxy = proxies[proxyIndex];
+
+                manager.UserSettings.ProxyIP = proxy.Address;
+                manager.UserSettings.ProxyPort = proxy.Port;
+                manager.UserSettings.ProxyUsername = proxy.Username;
+                manager.UserSettings.ProxyPassword = proxy.Password;
+            }
         }
     }
 }

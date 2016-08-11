@@ -18,6 +18,8 @@ namespace PokemonGoGUI.GoManager
     {
         public async Task<MethodResult> UpdateDetails()
         {
+            LogCaller(new LoggerEventArgs("Updating details", LoggerTypes.Debug));
+
             MethodResult echoResult = await SendEcho();
 
             if(!echoResult.Success)
@@ -44,6 +46,8 @@ namespace PokemonGoGUI.GoManager
             await Task.Delay(500);
 
             await GetInventory();
+
+            LogCaller(new LoggerEventArgs("Finished updating details", LoggerTypes.Debug));
 
             return new MethodResult
             {
@@ -91,8 +95,6 @@ namespace PokemonGoGUI.GoManager
 
         public async Task<MethodResult> ExportStats()
         {
-            LogCaller(new LoggerEventArgs("Updating account information ...", LoggerTypes.Info));
-
             MethodResult result = await UpdateDetails();
 
             //Prevent API throttling
