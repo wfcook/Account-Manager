@@ -67,6 +67,7 @@
             this.devToolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.garbageCollectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.timerListViewUpdate = new System.Windows.Forms.Timer(this.components);
+            this.updateDetailsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewMain)).BeginInit();
             this.contextMenuStripAccounts.SuspendLayout();
             this.SuspendLayout();
@@ -186,6 +187,7 @@
             // 
             this.contextMenuStripAccounts.ImageScalingSize = new System.Drawing.Size(22, 22);
             this.contextMenuStripAccounts.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.updateDetailsToolStripMenuItem,
             this.viewDetailsToolStripMenuItem,
             this.toolStripSeparator3,
             this.startToolStripMenuItem,
@@ -202,7 +204,7 @@
             this.deleteToolStripMenuItem,
             this.devToolsToolStripMenuItem});
             this.contextMenuStripAccounts.Name = "contextMenuStrip1";
-            this.contextMenuStripAccounts.Size = new System.Drawing.Size(218, 336);
+            this.contextMenuStripAccounts.Size = new System.Drawing.Size(218, 395);
             // 
             // viewDetailsToolStripMenuItem
             // 
@@ -370,6 +372,13 @@
             this.timerListViewUpdate.Interval = 1000;
             this.timerListViewUpdate.Tick += new System.EventHandler(this.timerListViewUpdate_Tick);
             // 
+            // updateDetailsToolStripMenuItem
+            // 
+            this.updateDetailsToolStripMenuItem.Name = "updateDetailsToolStripMenuItem";
+            this.updateDetailsToolStripMenuItem.Size = new System.Drawing.Size(217, 28);
+            this.updateDetailsToolStripMenuItem.Text = "Update Stats";
+            this.updateDetailsToolStripMenuItem.Click += new System.EventHandler(this.updateDetailsToolStripMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -426,6 +435,7 @@
         private System.Windows.Forms.ToolStripMenuItem enableColorsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem devToolsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem garbageCollectionToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem updateDetailsToolStripMenuItem;
     }
 }
 

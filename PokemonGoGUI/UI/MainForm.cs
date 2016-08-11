@@ -635,5 +635,19 @@ namespace PokemonGoGUI
                 await manager.ExportStats();
             }
         }
+
+        private async void updateDetailsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            updateDetailsToolStripMenuItem.Enabled = false;
+
+            foreach(Manager manager in fastObjectListViewMain.SelectedObjects)
+            {
+                manager.UpdateDetails();
+
+                await Task.Delay(100);
+            }
+
+            updateDetailsToolStripMenuItem.Enabled = true;
+        }
     }
 }
