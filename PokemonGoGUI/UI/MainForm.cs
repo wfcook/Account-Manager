@@ -554,7 +554,6 @@ namespace PokemonGoGUI
         private void enableColorsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             enableColorsToolStripMenuItem.Checked = !enableColorsToolStripMenuItem.Checked;
-
             bool isChecked = enableColorsToolStripMenuItem.Checked;
 
             if(isChecked)

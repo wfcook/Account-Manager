@@ -420,6 +420,8 @@ namespace PokemonGoGUI.GoManager
 
                             await GetInventory();
 
+                            await Task.Delay(delayTime);
+
                             if (UserSettings.RecycleItems)
                             {
                                 secondInventoryUpdate = true;
