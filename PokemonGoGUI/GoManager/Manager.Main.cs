@@ -109,7 +109,8 @@ namespace PokemonGoGUI.GoManager
                                 Message = "Http proxy detected"
                             };
                         }
-                        else if (webEx.Status == WebExceptionStatus.ConnectFailure || webEx.Status == WebExceptionStatus.ProtocolError || webEx.Status == WebExceptionStatus.ReceiveFailure)
+                        else if (webEx.Status == WebExceptionStatus.ConnectFailure || webEx.Status == WebExceptionStatus.ProtocolError || webEx.Status == WebExceptionStatus.ReceiveFailure
+                            || webEx.Status == WebExceptionStatus.ServerProtocolViolation)
                         {
                             LogCaller(new LoggerEventArgs("Proxy is offline", LoggerTypes.Warning));
 

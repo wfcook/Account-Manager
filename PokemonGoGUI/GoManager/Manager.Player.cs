@@ -1,8 +1,13 @@
-﻿using POGOProtos.Networking.Responses;
+﻿using POGOProtos.Data;
+using POGOProtos.Enums;
+using POGOProtos.Inventory;
+using POGOProtos.Networking.Responses;
+using POGOProtos.Settings.Master;
 using PokemonGo.RocketAPI;
 using PokemonGoGUI.GoManager.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -81,6 +86,106 @@ namespace PokemonGoGUI.GoManager
                 {
                     Message = "Failed to get player stats"
                 };
+            }
+        }
+
+        public async Task<MethodResult> ExportStats()
+        {
+            LogCaller(new LoggerEventArgs("Updating account information ...", LoggerTypes.Info));
+
+            MethodResult result = await UpdateDetails();
+
+            //Prevent API throttling
+            await Task.Delay(500);
+
+            if (!result.Success)
+            {
+                return result;
+            }
+
+            //Possible some objects were empty.
+            StringBuilder builder = new StringBuilder();
+            builder.AppendLine("=== Trainer Stats ===");
+
+            if (Stats != null && PlayerData != null)
+            {
+                builder.AppendLine(String.Format("Username: {0}", UserSettings.PtcUsername));
+                builder.AppendLine(String.Format("Password: {0}", UserSettings.PtcPassword));
+                builder.AppendLine(String.Format("Level: {0}", Stats.Level));
+                builder.AppendLine(String.Format("Current Trainer Name: {0}", PlayerData.Username));
+                builder.AppendLine(String.Format("Team: {0}", PlayerData.Team));
+                builder.AppendLine(String.Format("Stardust: {0:N0}", TotalStardust));
+                builder.AppendLine(String.Format("Unique Pokedex Entries: {0}", Stats.UniquePokedexEntries));
+            }
+            else
+            {
+                builder.AppendLine("Failed to grab stats");
+            }
+
+            builder.AppendLine();
+
+            builder.AppendLine("=== Pokemon ===");
+
+            if (Pokemon != null)
+            {
+                foreach (PokemonData pokemon in Pokemon.OrderByDescending(x => x.Cp))
+                {
+                    string candy = "Unknown";
+
+                    MethodResult<PokemonSettings> pSettings = GetPokemonSetting(pokemon.PokemonId);
+
+                    if (pSettings.Success)
+                    {
+                        Candy pCandy = PokemonCandy.FirstOrDefault(x => x.FamilyId == pSettings.Data.FamilyId);
+
+                        if (pCandy != null)
+                        {
+                            candy = pCandy.Candy_.ToString("N0");
+                        }
+                    }
+
+
+                    MethodResult<double> perfectResult = CalculateIVPerfection(pokemon);
+                    string iv = "Unknown";
+
+                    if (perfectResult.Success)
+                    {
+                        iv = Math.Round(perfectResult.Data, 2).ToString() + "%";
+                    }
+
+                    builder.AppendLine(String.Format("Pokemon: {0,-10} CP: {1, -5} IV: {2,-7} Primary: {3, -14} Secondary: {4, -14} Candy: {5}", pokemon.PokemonId, pokemon.Cp, iv, pokemon.Move1.ToString().Replace("Fast", ""), pokemon.Move2, candy));
+                }
+            }
+
+            //Remove the hardcoded directory later
+            try
+            {
+                string directoryName = "AccountStats";
+
+                if (!Directory.Exists(directoryName))
+                {
+                    Directory.CreateDirectory(directoryName);
+                }
+
+                string fileName = UserSettings.PtcUsername.Split('@').First();
+
+                string filePath = Path.Combine(directoryName, fileName) + ".txt";
+
+                File.WriteAllText(filePath, builder.ToString());
+
+                LogCaller(new LoggerEventArgs(String.Format("Finished exporting stats to file {0}", filePath), LoggerTypes.Info));
+
+                return new MethodResult
+                {
+                    Message = "Success",
+                    Success = true
+                };
+            }
+            catch(Exception ex)
+            {
+                LogCaller(new LoggerEventArgs("Failed to export stats due to exception", LoggerTypes.Warning, ex));
+
+                return new MethodResult();
             }
         }
     }

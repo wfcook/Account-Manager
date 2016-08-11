@@ -333,18 +333,14 @@ namespace PokemonGoGUI.UI
         {
             buttonUpdateStats.Enabled = false;
 
-            if (!_manager.StartingUp)
-            {
-                MethodResult result = await _manager.UpdateDetails();
+            MethodResult result = await _manager.UpdateDetails();
 
-                if(!result.Success)
-                {
-                    MessageBox.Show("Failed to login");
-                }
+            if (!result.Success)
+            {
+                MessageBox.Show("Failed to login");
             }
 
             buttonUpdateStats.Enabled = true;
-
         }
 
         private void DisplayDetails()

@@ -212,6 +212,16 @@ namespace PokemonGoGUI
 
         private void fastObjectListViewMain_KeyDown(object sender, KeyEventArgs e)
         {
+            if(e.Control && e.Alt && e.KeyCode == Keys.U)
+            {
+                DialogResult result = MessageBox.Show("Show developer tools?", "Confirmation", MessageBoxButtons.YesNo);
+
+                if (result == DialogResult.Yes)
+                {
+                    devToolsToolStripMenuItem.Visible = true;
+                }
+            }
+
             if(e.KeyCode != Keys.Enter)
             {
                 return;
@@ -606,6 +616,24 @@ namespace PokemonGoGUI
                 e.SubItem.ForeColor = log.GetLogColor();
             }
 
+        }
+
+        private void garbageCollectionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DialogResult result = MessageBox.Show("This should not be called outside testing purposes. Continue?", "Confirmation", MessageBoxButtons.YesNo);
+
+            if (result == DialogResult.Yes)
+            {
+                GC.Collect();
+            }
+        }
+
+        private async void exportStatsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach(Manager manager in fastObjectListViewMain.SelectedObjects)
+            {
+                await manager.ExportStats();
+            }
         }
     }
 }
