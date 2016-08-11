@@ -100,7 +100,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.numericUpDownKeepMax.Location = new System.Drawing.Point(114, 76);
             this.numericUpDownKeepMax.Maximum = new decimal(new int[] {
-            1000,
+            999999,
             0,
             0,
             0});
@@ -123,7 +123,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.numericUpDownMinCP.Location = new System.Drawing.Point(115, 104);
             this.numericUpDownMinCP.Maximum = new decimal(new int[] {
-            1000,
+            999999,
             0,
             0,
             0});

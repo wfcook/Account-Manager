@@ -424,29 +424,6 @@ namespace PokemonGoGUI
             fastObjectListViewMain.RefreshObject(_managers[0]);
         }
 
-        private void exportAccountsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            string filename = GetSaveFileName();
-
-            if(String.IsNullOrEmpty(filename))
-            {
-                return;
-            }
-
-            try
-            {
-                IEnumerable<string> accounts = fastObjectListViewMain.SelectedObjects.Cast<Manager>().Select(x => String.Format("{0}:{1}", x.UserSettings.PtcUsername, x.UserSettings.PtcPassword));
-
-                File.WriteAllLines(filename, accounts);
-
-                MessageBox.Show(String.Format("Exported {0} accounts", accounts.Count()));
-            }
-            catch(Exception ex)
-            {
-                MessageBox.Show(String.Format("Failed to export accounts. Ex: {0}", ex.Message));
-            }
-        }
-
         private void clearProxiesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             int totalAccounts = fastObjectListViewMain.SelectedObjects.Count;
@@ -647,6 +624,29 @@ namespace PokemonGoGUI
                 manager.UserSettings.ProxyPort = proxy.Port;
                 manager.UserSettings.ProxyUsername = proxy.Username;
                 manager.UserSettings.ProxyPassword = proxy.Password;
+            }
+        }
+
+        private void exportAccountsToolStripMenuItem_Click_1(object sender, EventArgs e)
+        {
+            string filename = GetSaveFileName();
+
+            if (String.IsNullOrEmpty(filename))
+            {
+                return;
+            }
+
+            try
+            {
+                IEnumerable<string> accounts = fastObjectListViewMain.SelectedObjects.Cast<Manager>().Select(x => String.Format("{0}:{1}", x.UserSettings.PtcUsername, x.UserSettings.PtcPassword));
+
+                File.WriteAllLines(filename, accounts);
+
+                MessageBox.Show(String.Format("Exported {0} accounts", accounts.Count()));
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(String.Format("Failed to export accounts. Ex: {0}", ex.Message));
             }
         }
     }

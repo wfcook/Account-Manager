@@ -2,8 +2,10 @@
 using PokemonGo.RocketAPI.Exceptions;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Net;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 
@@ -14,51 +16,39 @@ namespace PokemonGo.RocketAPI.Login
         readonly string password;
         readonly string username;
         readonly ISettings settings;
+        readonly CookieContainer cookies = new CookieContainer();
+        readonly int defaultTimeout = 10000;
+        readonly ProxyEx defaultProxy;
 
         public PtcLogin(string username, string password, ISettings settings)
         {
             this.username = username;
             this.password = password;
             this.settings = settings;
-        }
-        public async Task<string> GetAccessToken()
-        {
-            ProxyEx proxy = new ProxyEx
+
+            defaultProxy = new ProxyEx
             {
                 Address = settings.ProxyIP,
                 Port = settings.ProxyPort,
                 Username = settings.ProxyUsername,
                 Password = settings.ProxyPassword
             };
-
-            var handler = new HttpClientHandler
-            {
-                AutomaticDecompression = DecompressionMethods.GZip,
-                AllowAutoRedirect = false,
-                Proxy = proxy.AsWebProxy(),
-                UseProxy = true
-            };
-
-            using (var tempHttpClient = new System.Net.Http.HttpClient(handler))
-            {
-                tempHttpClient.Timeout = TimeSpan.FromSeconds(10);
-
-                //Get session cookie
-                var sessionData = await GetSessionCookie(tempHttpClient).ConfigureAwait(false);
-
-                //Login
-                var ticketId = await GetLoginTicket(username, password, tempHttpClient, sessionData).ConfigureAwait(false);
-
-                //Get tokenvar
-                return await GetToken(tempHttpClient, ticketId).ConfigureAwait(false);
-            }
         }
 
-        private async static Task<string> ExtracktTicketFromResponse(HttpResponseMessage loginResp)
+        public async Task<string> GetAccessToken()
         {
-            var location = loginResp.Headers.Location;
-            var contentResponse = await loginResp.Content.ReadAsStringAsync();
+            //Get session cookie
+            var sessionData = await GetSessionCookie();//.ConfigureAwait(false);
 
+            //Login
+            var ticketId = await GetLoginTicket(username, password, sessionData);//.ConfigureAwait(false);
+
+            //Get tokenvar
+            return await GetToken(ticketId);//.ConfigureAwait(false);
+        }
+
+        private string ExtractTicketFromResponse(string contentResponse, WebHeaderCollection headers)
+        {
             if (!String.IsNullOrEmpty(contentResponse))
             {
                 dynamic responseObject = JsonConvert.DeserializeObject<dynamic>(contentResponse.Trim());
@@ -91,6 +81,18 @@ namespace PokemonGo.RocketAPI.Login
                 }
             }
 
+            Uri location = null;
+
+            for (int i = 0; i < headers.Count; ++i)
+            {
+                string header = headers.GetKey(i);
+
+                if(header == "Location")
+                {
+                    location = new Uri(headers.GetValues(i)[0]);
+                }
+            }
+
             if (location == null)
                 throw new LoginFailedException();
 
@@ -102,9 +104,9 @@ namespace PokemonGo.RocketAPI.Login
             return ticketId;
         }
 
-        private static IDictionary<string, string> GenerateLoginRequest(SessionData sessionData, string user, string pass)
+        private static NameValueCollection GenerateLoginRequest(SessionData sessionData, string user, string pass)
         {
-            return new Dictionary<string, string>
+            return new NameValueCollection
             {
                 { "lt", sessionData.Lt },
                 { "execution", sessionData.Execution },
@@ -114,9 +116,9 @@ namespace PokemonGo.RocketAPI.Login
             };
         }
 
-        private static IDictionary<string, string> GenerateTokenVarRequest(string ticketId)
+        private static NameValueCollection GenerateTokenVarRequest(string ticketId)
         {
-            return new Dictionary<string, string>
+            return new NameValueCollection
             {
                 {"client_id", "mobile-app_pokemon-go"},
                 {"redirect_uri", "https://www.nianticlabs.com/pokemongo/error"},
@@ -126,38 +128,53 @@ namespace PokemonGo.RocketAPI.Login
             };
         }
 
-        private static async Task<string> GetLoginTicket(string username, string password, System.Net.Http.HttpClient tempHttpClient, SessionData sessionData)
+        private async Task<string> GetLoginTicket(string username, string password, SessionData sessionData)
         {
-            HttpResponseMessage loginResp;
             var loginRequest = GenerateLoginRequest(sessionData, username, password);
-            using (var formUrlEncodedContent = new FormUrlEncodedContent(loginRequest))
+
+            using(WebClientEx wc = new WebClientEx())
             {
-                loginResp = await tempHttpClient.PostAsync(Resources.PtcLoginUrl, formUrlEncodedContent).ConfigureAwait(false);
+                wc.CookieContainer = cookies;
+                wc.Proxy = defaultProxy.AsWebProxy();
+                wc.Timeout = defaultTimeout;
+
+                string response = Encoding.UTF8.GetString(await wc.UploadValuesTaskAsync(Resources.PtcLoginUrl, loginRequest));
+
+                var ticketId = ExtractTicketFromResponse(response, wc.ResponseHeaders);
+
+                return ticketId;
             }
-
-            var ticketId = await ExtracktTicketFromResponse(loginResp);
-            return ticketId;
         }
 
-        private static async Task<SessionData> GetSessionCookie(System.Net.Http.HttpClient tempHttpClient)
+        private async Task<SessionData> GetSessionCookie()
         {
-            var sessionResp = await tempHttpClient.GetAsync(Resources.PtcLoginUrl).ConfigureAwait(false);
-            var data = await sessionResp.Content.ReadAsStringAsync().ConfigureAwait(false);
-            var sessionData = JsonConvert.DeserializeObject<SessionData>(data);
-            return sessionData;
+            using(WebClientEx wc = new WebClientEx())
+            {
+                wc.CookieContainer = cookies;
+                wc.Proxy = defaultProxy.AsWebProxy();
+                wc.Timeout = defaultTimeout;
+
+                string response = await wc.DownloadStringTaskAsync(Resources.PtcLoginUrl);
+                SessionData sessionData = JsonConvert.DeserializeObject<SessionData>(response);
+
+                return sessionData;
+            }
         }
 
-        private static async Task<string> GetToken(System.Net.Http.HttpClient tempHttpClient, string ticketId)
+        private async Task<string> GetToken(string ticketId)
         {
-            HttpResponseMessage tokenResp;
             var tokenRequest = GenerateTokenVarRequest(ticketId);
-            using (var formUrlEncodedContent = new FormUrlEncodedContent(tokenRequest))
-            {
-                tokenResp = await tempHttpClient.PostAsync(Resources.PtcLoginOauth, formUrlEncodedContent).ConfigureAwait(false);
-            }
 
-            var tokenData = await tokenResp.Content.ReadAsStringAsync().ConfigureAwait(false);
-            return HttpUtility.ParseQueryString(tokenData)["access_token"];
+            using(WebClientEx wc = new WebClientEx())
+            {
+                wc.CookieContainer = cookies;
+                wc.Proxy = defaultProxy.AsWebProxy();
+                wc.Timeout = defaultTimeout;
+
+                string tokenData = Encoding.UTF8.GetString(await wc.UploadValuesTaskAsync(Resources.PtcLoginOauth, tokenRequest));
+
+                return HttpUtility.ParseQueryString(tokenData)["access_token"];
+            }
         }
 
         private class SessionData

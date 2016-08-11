@@ -240,6 +240,12 @@ namespace PokemonGoGUI.GoManager
             UserSettings.LoadTransferSettings();
         }
 
+        /*
+        public void RestoreSniperDefaults()
+        {
+            UserSettings.LoadSniperSettings();
+        }*/
+
         public override bool Equals(object obj)
         {
             Manager tempManager = obj as Manager;

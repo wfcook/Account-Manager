@@ -96,6 +96,7 @@
     <Compile Include="GoManager\Manager.Pokemon.cs" />
     <Compile Include="GoManager\Manager.Properties.cs" />
     <Compile Include="GoManager\Manager.Settings.cs" />
+    <Compile Include="GoManager\Manager.Sniper.cs" />
     <Compile Include="Models\AccountImport.cs" />
     <Compile Include="Models\CatchSetting.cs" />
     <Compile Include="Models\EvolveSetting.cs" />
@@ -105,6 +106,7 @@
     <Compile Include="GoManager\Manager.Events.cs" />
     <Compile Include="GoManager\Manager.Inventory.cs" />
     <Compile Include="GoManager\Manager.Log.cs" />
+    <Compile Include="Models\PokeSniperResult.cs" />
     <Compile Include="Models\TransferSettings.cs" />
     <Compile Include="UI\AccountSettingsForm.cs">
       <SubType>Form</SubType>

@@ -111,6 +111,7 @@
     <Compile Include="Exceptions\GoogleException.cs" />
     <Compile Include="Exceptions\GoogleOfflineException.cs" />
     <Compile Include="Exceptions\LoginFailedException.cs" />
+    <Compile Include="Login\PtcLogin.cs" />
     <Compile Include="MethodResult.cs" />
     <Compile Include="HttpClient\PokemonClient.cs" />
     <Compile Include="Enums\AuthType.cs" />
@@ -127,7 +128,6 @@
     <Compile Include="ISettings.cs" />
     <Compile Include="Login\GoogleLogin.cs" />
     <Compile Include="Login\ILoginType.cs" />
-    <Compile Include="Login\PtcLogin.cs" />
     <Compile Include="ProxyEx.cs" />
     <Compile Include="Rpc\BaseRpc.cs" />
     <Compile Include="Rpc\Download.cs" />
@@ -138,6 +138,9 @@
     <Compile Include="Rpc\Map.cs" />
     <Compile Include="Rpc\Misc.cs" />
     <Compile Include="Rpc\Player.cs" />
+    <Compile Include="WebClientEx.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <None Include="app.config" />
     <Compile Include="Client.cs" />
     <Compile Include="Extensions\HttpClientExtensions.cs" />

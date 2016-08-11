@@ -331,6 +331,7 @@
             this.exportAccountsToolStripMenuItem.Name = "exportAccountsToolStripMenuItem";
             this.exportAccountsToolStripMenuItem.Size = new System.Drawing.Size(214, 28);
             this.exportAccountsToolStripMenuItem.Text = "Export Accounts";
+            this.exportAccountsToolStripMenuItem.Click += new System.EventHandler(this.exportAccountsToolStripMenuItem_Click_1);
             // 
             // exportStatsToolStripMenuItem
             // 

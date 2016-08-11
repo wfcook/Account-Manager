@@ -228,6 +228,8 @@ namespace PokemonGoGUI.GoManager
 
         private async void RunningThread()
         {
+            //RequestPokeSniperRares();
+
             int failedWaitTime = 5000;
             int delayTime = 700;
             int maxFailed = 3;

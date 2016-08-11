@@ -59,6 +59,7 @@ namespace PokemonGoGUI.UI
             };
 
             #endregion
+
         }
 
         private void AccountSettingsForm_Load(object sender, EventArgs e)

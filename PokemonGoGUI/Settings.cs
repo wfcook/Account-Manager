@@ -76,6 +76,7 @@ namespace PokemonGoGUI
         public List<CatchSetting> CatchSettings { get; set; }
         public List<EvolveSetting> EvolveSettings { get; set; }
         public List<TransferSetting> TransferSettings { get; set; }
+        //public List<CatchSetting> SniperSettings { get; set; }
 
         [JsonConstructor]
         public Settings(bool jsonConstructor = true)
@@ -208,6 +209,29 @@ namespace PokemonGoGUI
                 TransferSettings.Add(setting);
             }
         }
+
+        /*
+        public void LoadSniperSettings()
+        {
+            SniperSettings = new List<CatchSetting>();
+
+            foreach (PokemonId pokemon in Enum.GetValues(typeof(PokemonId)))
+            {
+                if (pokemon == PokemonId.Missingno)
+                {
+                    continue;
+                }
+
+                CatchSetting setting = new CatchSetting
+                {
+                    Id = pokemon,
+                    Catch = true
+                };
+
+                SniperSettings.Add(setting);
+            }
+        }
+        */
 
         private string RandomString(int length, string alphabet = "abcdefghijklmnopqrstuvwxyz0123456789")
         {
