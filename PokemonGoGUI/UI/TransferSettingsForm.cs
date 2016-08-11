@@ -31,7 +31,7 @@ namespace PokemonGoGUI.UI
                 setting.MinCP = (int)numericUpDownMinCP.Value;
                 setting.KeepMax = (int)numericUpDownKeepMax.Value;
                 setting.Type = (TransferType)comboBoxTransferType.SelectedItem;
-                setting.CPPercent = (int)numericUpDownCPPercent.Value;
+                setting.CPPercent = (int)numericUpDownIVPercent.Value;
             }
         }
         
@@ -61,7 +61,7 @@ namespace PokemonGoGUI.UI
 
             numericUpDownKeepMax.Value = setting.KeepMax;
             numericUpDownMinCP.Value = setting.MinCP;
-            numericUpDownCPPercent.Value = setting.CPPercent;
+            numericUpDownIVPercent.Value = setting.CPPercent;
             checkBoxTransfer.Checked = setting.Transfer;
         }
 
@@ -76,7 +76,7 @@ namespace PokemonGoGUI.UI
         {
             numericUpDownMinCP.Enabled = false;
             numericUpDownKeepMax.Enabled = false;
-            numericUpDownCPPercent.Enabled = false;
+            numericUpDownIVPercent.Enabled = false;
 
             TransferType type = (TransferType)comboBoxTransferType.SelectedItem;
 
@@ -92,7 +92,14 @@ namespace PokemonGoGUI.UI
                     numericUpDownMinCP.Enabled = true;
                     break;
                 case TransferType.BelowIVPercentage:
-                    numericUpDownCPPercent.Enabled = true;
+                    numericUpDownIVPercent.Enabled = true;
+                    break;
+                case TransferType.BelowCPOrIVAmount:
+                    numericUpDownIVPercent.Enabled = true;
+                    numericUpDownMinCP.Enabled = true;
+                    break;
+                case TransferType.KeepXHighestIV:
+                    numericUpDownKeepMax.Enabled = true;
                     break;
             }
         }

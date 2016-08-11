@@ -12,6 +12,8 @@ namespace PokemonGoGUI.Enums
         KeepStrongestX,
         KeepPossibleEvolves,
         BelowIVPercentage,
-        BelowCP
+        BelowCP,
+        KeepXHighestIV,
+        BelowCPOrIVAmount
     };
 }

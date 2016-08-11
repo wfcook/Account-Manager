@@ -6,6 +6,7 @@ using POGOProtos.Settings.Master;
 using PokemonGo.RocketAPI;
 using PokemonGo.RocketAPI.Helpers;
 using PokemonGoGUI.Enums;
+using PokemonGoGUI.Extensions;
 using PokemonGoGUI.GoManager.Models;
 using PokemonGoGUI.Models;
 using System;
@@ -140,6 +141,14 @@ namespace PokemonGoGUI.GoManager
                     case TransferType.KeepStrongestX:
                         pokemonToTransfer.AddRange(GetPokemonByStrongest(group, settings.KeepMax));
                         break;
+                    case TransferType.KeepXHighestIV:
+                        pokemonToTransfer.AddRange(GetPokemonByIV(group, settings.KeepMax));
+                        break;
+                    case TransferType.BelowCPOrIVAmount:
+                        pokemonToTransfer.AddRange(GetPokemonBelowIVPercent(group, settings.CPPercent));
+                        pokemonToTransfer.AddRange(GetPokemonBelowCP(group, settings.MinCP));
+                        pokemonToTransfer = pokemonToTransfer.DistinctBy(x => x.Id).ToList();
+                        break;
                 }
             }
 
@@ -182,6 +191,26 @@ namespace PokemonGoGUI.GoManager
         {
             return pokemon.OrderByDescending(x => x.Cp).Skip(amount).ToList();
         }
+
+        private List<PokemonData> GetPokemonByIV(IGrouping<PokemonId, PokemonData> pokemon, int amount)
+        {
+            if(pokemon.Count() == 0)
+            {
+                return new List<PokemonData>();
+            }
+
+            //Test out first one to make sure things are correct
+            MethodResult<double> perfectResult = CalculateIVPerfection(pokemon.First());
+
+            if (!perfectResult.Success)
+            {
+                //Failed
+                return new List<PokemonData>();
+            }
+
+            return pokemon.OrderByDescending(x => CalculateIVPerfection(x).Data).ThenByDescending(x => x.Cp).Skip(amount).ToList();
+        }
+
 
         private List<PokemonData> GetPokemonByPossibleEvolve(IGrouping<PokemonId, PokemonData> pokemon, int limit)
         {

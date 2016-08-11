@@ -101,7 +101,7 @@ namespace PokemonGoGUI.GoManager
                                         LoggerTypes.Evolve));
                     }
 
-                    await Task.Delay(200);
+                    await Task.Delay(500);
                 }
                 catch(Exception ex)
                 {

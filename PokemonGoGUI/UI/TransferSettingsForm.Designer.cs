@@ -37,10 +37,10 @@
             this.label3 = new System.Windows.Forms.Label();
             this.numericUpDownMinCP = new System.Windows.Forms.NumericUpDown();
             this.label4 = new System.Windows.Forms.Label();
-            this.numericUpDownCPPercent = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDownIVPercent = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownKeepMax)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownMinCP)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownCPPercent)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownIVPercent)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -134,21 +134,21 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(13, 134);
+            this.label4.Location = new System.Drawing.Point(70, 134);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(96, 16);
+            this.label4.Size = new System.Drawing.Size(38, 16);
             this.label4.TabIndex = 0;
-            this.label4.Text = "IV Percentage:";
+            this.label4.Text = "IV %:";
             // 
-            // numericUpDownCPPercent
+            // numericUpDownIVPercent
             // 
-            this.numericUpDownCPPercent.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.numericUpDownIVPercent.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.numericUpDownCPPercent.Location = new System.Drawing.Point(115, 132);
-            this.numericUpDownCPPercent.Name = "numericUpDownCPPercent";
-            this.numericUpDownCPPercent.Size = new System.Drawing.Size(208, 22);
-            this.numericUpDownCPPercent.TabIndex = 4;
-            this.numericUpDownCPPercent.Value = new decimal(new int[] {
+            this.numericUpDownIVPercent.Location = new System.Drawing.Point(115, 132);
+            this.numericUpDownIVPercent.Name = "numericUpDownIVPercent";
+            this.numericUpDownIVPercent.Size = new System.Drawing.Size(208, 22);
+            this.numericUpDownIVPercent.TabIndex = 4;
+            this.numericUpDownIVPercent.Value = new decimal(new int[] {
             90,
             0,
             0,
@@ -159,7 +159,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(335, 338);
-            this.Controls.Add(this.numericUpDownCPPercent);
+            this.Controls.Add(this.numericUpDownIVPercent);
             this.Controls.Add(this.numericUpDownMinCP);
             this.Controls.Add(this.numericUpDownKeepMax);
             this.Controls.Add(this.comboBoxTransferType);
@@ -175,7 +175,7 @@
             this.Load += new System.EventHandler(this.TransferSettingsForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownKeepMax)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownMinCP)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownCPPercent)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownIVPercent)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -192,6 +192,6 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.NumericUpDown numericUpDownMinCP;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.NumericUpDown numericUpDownCPPercent;
+        private System.Windows.Forms.NumericUpDown numericUpDownIVPercent;
     }
 }

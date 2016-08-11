@@ -81,6 +81,7 @@
     <Compile Include="Enums\BotState.cs" />
     <Compile Include="Enums\CheckType.cs" />
     <Compile Include="Enums\TransferType.cs" />
+    <Compile Include="Extensions\LinqEx.cs" />
     <Compile Include="Extensions\ObjectEx.cs" />
     <Compile Include="Extensions\Prompt.cs" />
     <Compile Include="Extensions\Serializer.cs" />

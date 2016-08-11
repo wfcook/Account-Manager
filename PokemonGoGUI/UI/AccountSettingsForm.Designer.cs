@@ -551,7 +551,6 @@
             // 
             this.fastObjectListViewRecycling.AllColumns.Add(this.olvColumnItemName);
             this.fastObjectListViewRecycling.AllColumns.Add(this.olvColumnItemMax);
-            //this.fastObjectListViewRecycling.CellEditUseWholeCell = false;
             this.fastObjectListViewRecycling.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.olvColumnItemName,
             this.olvColumnItemMax});
@@ -611,7 +610,6 @@
             this.fastObjectListViewEvolve.AllColumns.Add(this.olvColumnEvolveName);
             this.fastObjectListViewEvolve.AllColumns.Add(this.olvColumnEvolve);
             this.fastObjectListViewEvolve.AllColumns.Add(this.olvColumnEvolveMinCP);
-            //this.fastObjectListViewEvolve.CellEditUseWholeCell = false;
             this.fastObjectListViewEvolve.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.olvColumnEvolveId,
             this.olvColumnEvolveName,
@@ -723,7 +721,6 @@
             this.fastObjectListViewCatch.AllColumns.Add(this.olvColumnCatchId);
             this.fastObjectListViewCatch.AllColumns.Add(this.olvColumnCatchName);
             this.fastObjectListViewCatch.AllColumns.Add(this.olvColumnCatch);
-            //this.fastObjectListViewCatch.CellEditUseWholeCell = false;
             this.fastObjectListViewCatch.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.olvColumnCatchId,
             this.olvColumnCatchName,
@@ -826,7 +823,6 @@
             this.fastObjectListViewTransfer.AllColumns.Add(this.olvColumn1);
             this.fastObjectListViewTransfer.AllColumns.Add(this.olvColumn2);
             this.fastObjectListViewTransfer.AllColumns.Add(this.olvColumnCPPercent);
-            //this.fastObjectListViewTransfer.CellEditUseWholeCell = false;
             this.fastObjectListViewTransfer.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.olvColumnTransferId,
             this.olvColumnTransferName,
@@ -844,6 +840,7 @@
             this.fastObjectListViewTransfer.Size = new System.Drawing.Size(488, 346);
             this.fastObjectListViewTransfer.TabIndex = 2;
             this.fastObjectListViewTransfer.UseCompatibleStateImageBehavior = false;
+            this.fastObjectListViewTransfer.UseFiltering = true;
             this.fastObjectListViewTransfer.View = System.Windows.Forms.View.Details;
             this.fastObjectListViewTransfer.VirtualMode = true;
             // 
