@@ -200,6 +200,11 @@ namespace PokemonGoGUI.GoManager
                     return String.Format("{0:0}m {1:00}s", time.Minutes, time.Seconds);
                 }
 
+                if(time.TotalHours >= 24)
+                {
+                    return String.Format("{0:0}d {1:0}h {2:00}m", time.Days, time.Hours, time.Seconds);
+                }
+
                 return String.Format("{0:0}h {1:00}m {2:00}s", time.Hours, time.Minutes, time.Seconds);
             }
         }
