@@ -188,12 +188,24 @@ namespace PokemonGoGUI
                 return;
             }
 
+            bool messageShown = false;
+
             foreach(Manager manager in fastObjectListViewMain.SelectedObjects)
             {
-                manager.OnLog -= manager_OnLog;
-                manager.OnInventoryUpdate -= manager_OnInventoryUpdate;
+                if(manager.IsRunning && !messageShown)
+                {
+                    messageShown = true;
 
-                _managers.Remove(manager);
+                    MessageBox.Show("Only accounts that are not running will be deleted");
+                }
+
+                if (!manager.IsRunning)
+                {
+                    manager.OnLog -= manager_OnLog;
+                    manager.OnInventoryUpdate -= manager_OnInventoryUpdate;
+
+                    _managers.Remove(manager);
+                }
             }
 
             fastObjectListViewMain.SetObjects(_managers);
