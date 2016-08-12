@@ -37,7 +37,9 @@ namespace PokemonGoGUI
         public bool EvolvePokemon { get; set; }
         public bool CatchPokemon { get; set; }
         public bool IncubateEggs { get; set; }
+        public bool SnipePokemon { get; set; }
         public int MaxLevel { get; set; }
+        public int SnipeAfterPokestops { get; set; }
 
         public string DeviceId { get; set; }
         public string AndroidBoardName { get; set; }
@@ -107,10 +109,12 @@ namespace PokemonGoGUI
             DefaultLongitude = 151.208343;
             MimicWalking = true;
             CatchPokemon = true;
+            SnipePokemon = true;
             WalkingSpeed = 7;
             MaxTravelDistance = 1000;
             EncounterWhileWalking = false;
             MinPokemonBeforeEvolve = 100;
+            SnipeAfterPokestops = 5;
         }
 
         public void LoadDeviceSettings()

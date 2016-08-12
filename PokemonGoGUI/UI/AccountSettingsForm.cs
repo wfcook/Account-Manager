@@ -105,7 +105,8 @@ namespace PokemonGoGUI.UI
             checkBoxUseLuckyEgg.Checked = settings.UseLuckyEgg;
             checkBoxIncubateEggs.Checked = settings.IncubateEggs;
             checkBoxCatchPokemon.Checked = settings.CatchPokemon;
-
+            checkBoxSnipePokemon.Checked = settings.SnipePokemon;
+            numericUpDownSnipeAfterStops.Value = settings.SnipeAfterPokestops;
         }
 
         private void radioButtonPtc_CheckedChanged_1(object sender, EventArgs e)
@@ -220,6 +221,8 @@ namespace PokemonGoGUI.UI
             userSettings.IncubateEggs = checkBoxIncubateEggs.Checked;
             userSettings.MaxLevel = maxLevel;
             userSettings.CatchPokemon = checkBoxCatchPokemon.Checked;
+            userSettings.SnipePokemon = checkBoxSnipePokemon.Checked;
+            userSettings.SnipeAfterPokestops = (int)numericUpDownSnipeAfterStops.Value;
 
             if (proxyEx != null)
             {
@@ -291,6 +294,38 @@ namespace PokemonGoGUI.UI
 
         #region CatchPokemon
 
+
+        private void falseToolStripMenuItem2_Click(object sender, EventArgs e)
+        {
+            ToolStripMenuItem tSMI = sender as ToolStripMenuItem;
+
+            if (tSMI == null)
+            {
+                return;
+            }
+
+            CheckType checkType = (CheckType)Int32.Parse(tSMI.Tag.ToString());
+
+            foreach (CatchSetting cSetting in fastObjectListViewCatch.SelectedObjects)
+            {
+                if (checkType == CheckType.Toggle)
+                {
+                    cSetting.Snipe = !cSetting.Snipe;
+                }
+                else if (checkType == CheckType.True)
+                {
+                    cSetting.Snipe = true;
+                }
+                else
+                {
+                    cSetting.Snipe = false;
+                }
+            }
+
+            fastObjectListViewCatch.RefreshSelectedObjects();
+        }
+
+
         private void trueToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ToolStripMenuItem tSMI = sender as ToolStripMenuItem;
@@ -318,7 +353,7 @@ namespace PokemonGoGUI.UI
                 }
             }
 
-            fastObjectListViewCatch.SetObjects(_manager.UserSettings.CatchSettings);
+            fastObjectListViewCatch.RefreshSelectedObjects();
         }
 
         private void restoreDefaultsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -519,5 +554,9 @@ namespace PokemonGoGUI.UI
             }
         }
 
+        private void checkBoxSnipePokemon_CheckedChanged(object sender, EventArgs e)
+        {
+            numericUpDownSnipeAfterStops.Enabled = checkBoxSnipePokemon.Checked;
+        }
     }
 }

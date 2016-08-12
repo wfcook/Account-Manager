@@ -41,7 +41,18 @@ namespace PokemonGoGUI.GoManager
                     continue;
                 }
 
-                MethodResult catchResult = await CatchPokemon(pokemon);
+
+                MethodResult<EncounterResponse> result = await EncounterPokemon(pokemon);
+
+                if (!result.Success)
+                {
+                    await Task.Delay(1000);
+
+                    continue;
+                }
+
+
+                MethodResult catchResult = await CatchPokemon(result.Data, pokemon);
 
                 await Task.Delay(500);
             }
@@ -216,31 +227,53 @@ namespace PokemonGoGUI.GoManager
             };
         }
 
-        private async Task<MethodResult> CatchPokemon(MapPokemon mapPokemon)
+        private async Task<MethodResult<EncounterResponse>> EncounterPokemon(MapPokemon mapPokemon)
         {
             try
             {
                 EncounterResponse eResponse = await _client.Encounter.EncounterPokemon(mapPokemon.EncounterId, mapPokemon.SpawnPointId);
 
-                if(eResponse.Status == EncounterResponse.Types.Status.PokemonInventoryFull)
+                if (eResponse.Status == EncounterResponse.Types.Status.PokemonInventoryFull)
                 {
                     LogCaller(new LoggerEventArgs("Encounter failed. Pokemon inventory full", LoggerTypes.Warning));
 
-                    return new MethodResult
+                    return new MethodResult<EncounterResponse>
                     {
                         Message = "Encounter failed. Pokemon inventory full"
                     };
                 }
-                else if(eResponse.Status != EncounterResponse.Types.Status.EncounterSuccess)
+                else if (eResponse.Status != EncounterResponse.Types.Status.EncounterSuccess)
                 {
                     LogCaller(new LoggerEventArgs(String.Format("Encounter failed with response {0}", eResponse.Status), LoggerTypes.Warning));
 
-                    return new MethodResult
+                    return new MethodResult<EncounterResponse>
                     {
                         Message = "Encounter failed"
                     };
                 }
 
+                return new MethodResult<EncounterResponse>
+                {
+                    Data = eResponse,
+                    Success = true,
+                    Message = "Success"
+                };
+            }
+            catch(Exception ex)
+            {
+                LogCaller(new LoggerEventArgs("Failed to encounter pokemon due to error", LoggerTypes.Exception, ex));
+
+                return new MethodResult<EncounterResponse>
+                {
+                    Message = "Failed to encounter pokemon"
+                };
+            }
+        }
+
+        private async Task<MethodResult> CatchPokemon(EncounterResponse eResponse, MapPokemon mapPokemon)
+        {
+            try
+            {
                 CatchPokemonResponse catchPokemonResponse = null;
                 int attemptCount = 1;
 
@@ -276,6 +309,7 @@ namespace PokemonGoGUI.GoManager
                     catchPokemonResponse = await _client.Encounter.CatchPokemon(mapPokemon.EncounterId, mapPokemon.SpawnPointId, pokeBall);
 
                     string pokemon = String.Format("Name: {0}, CP: {1}, IV: {2:0.00}%", mapPokemon.PokemonId, eResponse.WildPokemon.PokemonData.Cp, CalculateIVPerfection(eResponse.WildPokemon.PokemonData).Data);
+                    string pokeBallName = pokeBall.ToString().Replace("Item", "");
 
                     if(catchPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchSuccess)
                     {
@@ -285,7 +319,7 @@ namespace PokemonGoGUI.GoManager
 
                         //_expGained += expGained;
 
-                        LogCaller(new LoggerEventArgs(String.Format("Caught. {0}. Exp {1}. Attempt #{2}", pokemon, expGained, attemptCount), LoggerTypes.Success));
+                        LogCaller(new LoggerEventArgs(String.Format("Caught. {0}. Exp {1}. Attempt #{2}. Ball: {3}", pokemon, expGained, attemptCount, pokeBallName), LoggerTypes.Success));
 
                         return new MethodResult
                         {
@@ -295,11 +329,11 @@ namespace PokemonGoGUI.GoManager
                     }
                     else if (catchPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchFlee)
                     {
-                        LogCaller(new LoggerEventArgs(String.Format("Pokemon fled. {0}. Attempt #{1}.", pokemon, attemptCount), LoggerTypes.PokemonFlee));
+                        LogCaller(new LoggerEventArgs(String.Format("Pokemon fled. {0}. Attempt #{1}. Ball: {2}", pokemon, attemptCount, pokeBallName), LoggerTypes.PokemonFlee));
                     }
                     else if(catchPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchEscape)
                     {
-                        LogCaller(new LoggerEventArgs(String.Format("Escaped ball. {0}. Attempt #{1}.", pokemon, attemptCount), LoggerTypes.PokemonEscape));
+                        LogCaller(new LoggerEventArgs(String.Format("Escaped ball. {0}. Attempt #{1}. Ball: {2}", pokemon, attemptCount, pokeBallName), LoggerTypes.PokemonEscape));
                     }
                     else
                     {
@@ -329,7 +363,7 @@ namespace PokemonGoGUI.GoManager
             };
         }
 
-        private bool PokemonWithinCatchSettings(PokemonId pokemondId)
+        private bool PokemonWithinCatchSettings(PokemonId pokemondId, bool isSnipe = false)
         {
             CatchSetting catchSettings = UserSettings.CatchSettings.FirstOrDefault(x => x.Id == pokemondId);
 
@@ -340,7 +374,12 @@ namespace PokemonGoGUI.GoManager
                 return true;
             }
 
-            if(!catchSettings.Catch)
+            if (isSnipe)
+            {
+                return catchSettings.Snipe;
+            }
+
+            if (!catchSettings.Catch)
             {
                 LogCaller(new LoggerEventArgs(String.Format("Skipping catching {0}", pokemondId), LoggerTypes.Info));
             }

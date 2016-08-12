@@ -105,13 +105,22 @@
             this.olvColumnTransferName = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnTransfer = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnTransferType = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.olvColumn1 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.olvColumn2 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnTransferKeepMax = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnTransferMinCP = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnCPPercent = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.contextMenuStripTransfer = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.editToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.restoreDefaultsToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTipProxy = new System.Windows.Forms.ToolTip(this.components);
+            this.checkBoxSnipePokemon = new System.Windows.Forms.CheckBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.numericUpDownSnipeAfterStops = new System.Windows.Forms.NumericUpDown();
+            this.label14 = new System.Windows.Forms.Label();
+            this.olvColumnSnipe = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.setSnipeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.trueToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.falseToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toggleToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControlMain.SuspendLayout();
             this.tabPageDetails.SuspendLayout();
             this.tabPageRecycling.SuspendLayout();
@@ -126,6 +135,7 @@
             this.tabPageTransfer.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewTransfer)).BeginInit();
             this.contextMenuStripTransfer.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSnipeAfterStops)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControlMain
@@ -139,11 +149,13 @@
             this.tabControlMain.Location = new System.Drawing.Point(0, 0);
             this.tabControlMain.Name = "tabControlMain";
             this.tabControlMain.SelectedIndex = 0;
-            this.tabControlMain.Size = new System.Drawing.Size(502, 381);
+            this.tabControlMain.Size = new System.Drawing.Size(502, 449);
             this.tabControlMain.TabIndex = 0;
             // 
             // tabPageDetails
             // 
+            this.tabPageDetails.Controls.Add(this.numericUpDownSnipeAfterStops);
+            this.tabPageDetails.Controls.Add(this.checkBoxSnipePokemon);
             this.tabPageDetails.Controls.Add(this.buttonImportConfig);
             this.tabPageDetails.Controls.Add(this.buttonExportConfig);
             this.tabPageDetails.Controls.Add(this.comboBoxLocationPresets);
@@ -171,6 +183,8 @@
             this.tabPageDetails.Controls.Add(this.label12);
             this.tabPageDetails.Controls.Add(this.textBoxPtcUsername);
             this.tabPageDetails.Controls.Add(this.label9);
+            this.tabPageDetails.Controls.Add(this.label14);
+            this.tabPageDetails.Controls.Add(this.label2);
             this.tabPageDetails.Controls.Add(this.radioButtonGoogle);
             this.tabPageDetails.Controls.Add(this.label6);
             this.tabPageDetails.Controls.Add(this.label8);
@@ -185,14 +199,14 @@
             this.tabPageDetails.Location = new System.Drawing.Point(4, 25);
             this.tabPageDetails.Name = "tabPageDetails";
             this.tabPageDetails.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageDetails.Size = new System.Drawing.Size(494, 352);
+            this.tabPageDetails.Size = new System.Drawing.Size(494, 420);
             this.tabPageDetails.TabIndex = 1;
             this.tabPageDetails.Text = "Details";
             this.tabPageDetails.UseVisualStyleBackColor = true;
             // 
             // buttonImportConfig
             // 
-            this.buttonImportConfig.Location = new System.Drawing.Point(93, 321);
+            this.buttonImportConfig.Location = new System.Drawing.Point(93, 389);
             this.buttonImportConfig.Name = "buttonImportConfig";
             this.buttonImportConfig.Size = new System.Drawing.Size(128, 23);
             this.buttonImportConfig.TabIndex = 11;
@@ -202,7 +216,7 @@
             // 
             // buttonExportConfig
             // 
-            this.buttonExportConfig.Location = new System.Drawing.Point(227, 321);
+            this.buttonExportConfig.Location = new System.Drawing.Point(227, 389);
             this.buttonExportConfig.Name = "buttonExportConfig";
             this.buttonExportConfig.Size = new System.Drawing.Size(128, 23);
             this.buttonExportConfig.TabIndex = 10;
@@ -291,7 +305,7 @@
             // buttonDone
             // 
             this.buttonDone.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonDone.Location = new System.Drawing.Point(411, 321);
+            this.buttonDone.Location = new System.Drawing.Point(411, 389);
             this.buttonDone.Name = "buttonDone";
             this.buttonDone.Size = new System.Drawing.Size(75, 23);
             this.buttonDone.TabIndex = 6;
@@ -400,7 +414,7 @@
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(326, 292);
+            this.label13.Location = new System.Drawing.Point(326, 370);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(160, 16);
             this.label13.TabIndex = 1;
@@ -529,7 +543,7 @@
             // 
             // buttonSave
             // 
-            this.buttonSave.Location = new System.Drawing.Point(12, 321);
+            this.buttonSave.Location = new System.Drawing.Point(12, 389);
             this.buttonSave.Name = "buttonSave";
             this.buttonSave.Size = new System.Drawing.Size(75, 23);
             this.buttonSave.TabIndex = 0;
@@ -711,7 +725,7 @@
             this.tabPageCatching.Controls.Add(this.fastObjectListViewCatch);
             this.tabPageCatching.Location = new System.Drawing.Point(4, 25);
             this.tabPageCatching.Name = "tabPageCatching";
-            this.tabPageCatching.Size = new System.Drawing.Size(494, 352);
+            this.tabPageCatching.Size = new System.Drawing.Size(494, 420);
             this.tabPageCatching.TabIndex = 4;
             this.tabPageCatching.Text = "Catching";
             this.tabPageCatching.UseVisualStyleBackColor = true;
@@ -721,17 +735,19 @@
             this.fastObjectListViewCatch.AllColumns.Add(this.olvColumnCatchId);
             this.fastObjectListViewCatch.AllColumns.Add(this.olvColumnCatchName);
             this.fastObjectListViewCatch.AllColumns.Add(this.olvColumnCatch);
+            this.fastObjectListViewCatch.AllColumns.Add(this.olvColumnSnipe);
             this.fastObjectListViewCatch.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.olvColumnCatchId,
             this.olvColumnCatchName,
-            this.olvColumnCatch});
+            this.olvColumnCatch,
+            this.olvColumnSnipe});
             this.fastObjectListViewCatch.ContextMenuStrip = this.contextMenuStripCatching;
             this.fastObjectListViewCatch.Dock = System.Windows.Forms.DockStyle.Fill;
             this.fastObjectListViewCatch.FullRowSelect = true;
             this.fastObjectListViewCatch.Location = new System.Drawing.Point(0, 0);
             this.fastObjectListViewCatch.Name = "fastObjectListViewCatch";
             this.fastObjectListViewCatch.ShowGroups = false;
-            this.fastObjectListViewCatch.Size = new System.Drawing.Size(494, 352);
+            this.fastObjectListViewCatch.Size = new System.Drawing.Size(494, 420);
             this.fastObjectListViewCatch.TabIndex = 1;
             this.fastObjectListViewCatch.UseCompatibleStateImageBehavior = false;
             this.fastObjectListViewCatch.View = System.Windows.Forms.View.Details;
@@ -751,16 +767,16 @@
             // 
             this.olvColumnCatch.AspectName = "Catch";
             this.olvColumnCatch.Text = "Catch";
-            this.olvColumnCatch.Width = 129;
             // 
             // contextMenuStripCatching
             // 
             this.contextMenuStripCatching.ImageScalingSize = new System.Drawing.Size(22, 22);
             this.contextMenuStripCatching.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.setCatchToolStripMenuItem,
+            this.setSnipeToolStripMenuItem,
             this.restoreDefaultsToolStripMenuItem});
             this.contextMenuStripCatching.Name = "contextMenuStripCatching";
-            this.contextMenuStripCatching.Size = new System.Drawing.Size(215, 60);
+            this.contextMenuStripCatching.Size = new System.Drawing.Size(215, 88);
             // 
             // setCatchToolStripMenuItem
             // 
@@ -820,16 +836,16 @@
             this.fastObjectListViewTransfer.AllColumns.Add(this.olvColumnTransferName);
             this.fastObjectListViewTransfer.AllColumns.Add(this.olvColumnTransfer);
             this.fastObjectListViewTransfer.AllColumns.Add(this.olvColumnTransferType);
-            this.fastObjectListViewTransfer.AllColumns.Add(this.olvColumn1);
-            this.fastObjectListViewTransfer.AllColumns.Add(this.olvColumn2);
+            this.fastObjectListViewTransfer.AllColumns.Add(this.olvColumnTransferKeepMax);
+            this.fastObjectListViewTransfer.AllColumns.Add(this.olvColumnTransferMinCP);
             this.fastObjectListViewTransfer.AllColumns.Add(this.olvColumnCPPercent);
             this.fastObjectListViewTransfer.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.olvColumnTransferId,
             this.olvColumnTransferName,
             this.olvColumnTransfer,
             this.olvColumnTransferType,
-            this.olvColumn1,
-            this.olvColumn2,
+            this.olvColumnTransferKeepMax,
+            this.olvColumnTransferMinCP,
             this.olvColumnCPPercent});
             this.fastObjectListViewTransfer.ContextMenuStrip = this.contextMenuStripTransfer;
             this.fastObjectListViewTransfer.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -865,20 +881,20 @@
             this.olvColumnTransferType.AspectName = "Type";
             this.olvColumnTransferType.Text = "Type";
             // 
-            // olvColumn1
+            // olvColumnTransferKeepMax
             // 
-            this.olvColumn1.AspectName = "KeepMax";
-            this.olvColumn1.Text = "Max";
+            this.olvColumnTransferKeepMax.AspectName = "KeepMax";
+            this.olvColumnTransferKeepMax.Text = "Max";
             // 
-            // olvColumn2
+            // olvColumnTransferMinCP
             // 
-            this.olvColumn2.AspectName = "MinCP";
-            this.olvColumn2.Text = "Min CP";
+            this.olvColumnTransferMinCP.AspectName = "MinCP";
+            this.olvColumnTransferMinCP.Text = "Min CP";
             // 
             // olvColumnCPPercent
             // 
             this.olvColumnCPPercent.AspectName = "CPPercent";
-            this.olvColumnCPPercent.Text = "Min CP %";
+            this.olvColumnCPPercent.Text = "Min IV %";
             // 
             // contextMenuStripTransfer
             // 
@@ -903,11 +919,98 @@
             this.restoreDefaultsToolStripMenuItem2.Text = "Restore Defaults";
             this.restoreDefaultsToolStripMenuItem2.Click += new System.EventHandler(this.restoreDefaultsToolStripMenuItem2_Click);
             // 
+            // checkBoxSnipePokemon
+            // 
+            this.checkBoxSnipePokemon.AutoSize = true;
+            this.checkBoxSnipePokemon.Location = new System.Drawing.Point(10, 318);
+            this.checkBoxSnipePokemon.Name = "checkBoxSnipePokemon";
+            this.checkBoxSnipePokemon.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.checkBoxSnipePokemon.Size = new System.Drawing.Size(126, 20);
+            this.checkBoxSnipePokemon.TabIndex = 12;
+            this.checkBoxSnipePokemon.Text = "Snipe Pokemon";
+            this.checkBoxSnipePokemon.UseVisualStyleBackColor = true;
+            this.checkBoxSnipePokemon.CheckedChanged += new System.EventHandler(this.checkBoxSnipePokemon_CheckedChanged);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(151, 319);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(35, 16);
+            this.label2.TabIndex = 1;
+            this.label2.Text = "After";
+            // 
+            // numericUpDownSnipeAfterStops
+            // 
+            this.numericUpDownSnipeAfterStops.Enabled = false;
+            this.numericUpDownSnipeAfterStops.Location = new System.Drawing.Point(192, 317);
+            this.numericUpDownSnipeAfterStops.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numericUpDownSnipeAfterStops.Name = "numericUpDownSnipeAfterStops";
+            this.numericUpDownSnipeAfterStops.Size = new System.Drawing.Size(62, 22);
+            this.numericUpDownSnipeAfterStops.TabIndex = 13;
+            this.numericUpDownSnipeAfterStops.Value = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(260, 319);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(73, 16);
+            this.label14.TabIndex = 1;
+            this.label14.Text = "Pokestops";
+            // 
+            // olvColumnSnipe
+            // 
+            this.olvColumnSnipe.AspectName = "Snipe";
+            this.olvColumnSnipe.Text = "Snipe";
+            // 
+            // setSnipeToolStripMenuItem
+            // 
+            this.setSnipeToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.trueToolStripMenuItem2,
+            this.falseToolStripMenuItem2,
+            this.toggleToolStripMenuItem2});
+            this.setSnipeToolStripMenuItem.Name = "setSnipeToolStripMenuItem";
+            this.setSnipeToolStripMenuItem.Size = new System.Drawing.Size(214, 28);
+            this.setSnipeToolStripMenuItem.Text = "Set Snipe";
+            // 
+            // trueToolStripMenuItem2
+            // 
+            this.trueToolStripMenuItem2.Name = "trueToolStripMenuItem2";
+            this.trueToolStripMenuItem2.Size = new System.Drawing.Size(198, 28);
+            this.trueToolStripMenuItem2.Tag = "1";
+            this.trueToolStripMenuItem2.Text = "True";
+            this.trueToolStripMenuItem2.Click += new System.EventHandler(this.falseToolStripMenuItem2_Click);
+            // 
+            // falseToolStripMenuItem2
+            // 
+            this.falseToolStripMenuItem2.Name = "falseToolStripMenuItem2";
+            this.falseToolStripMenuItem2.Size = new System.Drawing.Size(198, 28);
+            this.falseToolStripMenuItem2.Tag = "0";
+            this.falseToolStripMenuItem2.Text = "False";
+            this.falseToolStripMenuItem2.Click += new System.EventHandler(this.falseToolStripMenuItem2_Click);
+            // 
+            // toggleToolStripMenuItem2
+            // 
+            this.toggleToolStripMenuItem2.Name = "toggleToolStripMenuItem2";
+            this.toggleToolStripMenuItem2.Size = new System.Drawing.Size(198, 28);
+            this.toggleToolStripMenuItem2.Tag = "2";
+            this.toggleToolStripMenuItem2.Text = "Toggle";
+            this.toggleToolStripMenuItem2.Click += new System.EventHandler(this.falseToolStripMenuItem2_Click);
+            // 
             // AccountSettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(502, 381);
+            this.ClientSize = new System.Drawing.Size(502, 449);
             this.Controls.Add(this.tabControlMain);
             this.MinimumSize = new System.Drawing.Size(522, 433);
             this.Name = "AccountSettingsForm";
@@ -929,6 +1032,7 @@
             this.tabPageTransfer.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewTransfer)).EndInit();
             this.contextMenuStripTransfer.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSnipeAfterStops)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -997,8 +1101,8 @@
         private System.Windows.Forms.ContextMenuStrip contextMenuStripTransfer;
         private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem1;
         private BrightIdeasSoftware.OLVColumn olvColumnTransferType;
-        private BrightIdeasSoftware.OLVColumn olvColumn1;
-        private BrightIdeasSoftware.OLVColumn olvColumn2;
+        private BrightIdeasSoftware.OLVColumn olvColumnTransferKeepMax;
+        private BrightIdeasSoftware.OLVColumn olvColumnTransferMinCP;
         private System.Windows.Forms.ToolStripMenuItem restoreDefaultsToolStripMenuItem2;
         private BrightIdeasSoftware.OLVColumn olvColumnCPPercent;
         private System.Windows.Forms.TextBox textBoxMaxTravelDistance;
@@ -1018,5 +1122,14 @@
         private System.Windows.Forms.ToolTip toolTipProxy;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.NumericUpDown numericUpDownSnipeAfterStops;
+        private System.Windows.Forms.CheckBox checkBoxSnipePokemon;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.Label label2;
+        private BrightIdeasSoftware.OLVColumn olvColumnSnipe;
+        private System.Windows.Forms.ToolStripMenuItem setSnipeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem trueToolStripMenuItem2;
+        private System.Windows.Forms.ToolStripMenuItem falseToolStripMenuItem2;
+        private System.Windows.Forms.ToolStripMenuItem toggleToolStripMenuItem2;
     }
 }

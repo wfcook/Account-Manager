@@ -106,6 +106,7 @@
             this.olvColumnStatus = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnMessage = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnException = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnPokemonBall = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.tabControlMain.SuspendLayout();
             this.tabPageStats.SuspendLayout();
             this.tabPagePokedex.SuspendLayout();
@@ -525,6 +526,7 @@
             this.fastObjectListViewPokemon.AllColumns.Add(this.olvColumnCpMultiplier);
             this.fastObjectListViewPokemon.AllColumns.Add(this.olvColumnAdditionalCpMult);
             this.fastObjectListViewPokemon.AllColumns.Add(this.olvColumnPokemonRarity);
+            this.fastObjectListViewPokemon.AllColumns.Add(this.olvColumnPokemonBall);
             this.fastObjectListViewPokemon.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.fastObjectListViewPokemon.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.olvColumnPokemonId,
@@ -860,6 +862,13 @@
             this.olvColumnException.UseFiltering = false;
             this.olvColumnException.Width = 97;
             // 
+            // olvColumnPokemonBall
+            // 
+            this.olvColumnPokemonBall.AspectName = "Pokeball";
+            this.olvColumnPokemonBall.DisplayIndex = 12;
+            this.olvColumnPokemonBall.IsVisible = false;
+            this.olvColumnPokemonBall.Text = "Ball";
+            // 
             // DetailsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -970,5 +979,6 @@
         private System.Windows.Forms.Label labelPlayerUsername;
         private System.Windows.Forms.Label label6;
         private BrightIdeasSoftware.OLVColumn olvColumnPokemonId;
+        private BrightIdeasSoftware.OLVColumn olvColumnPokemonBall;
     }
 }

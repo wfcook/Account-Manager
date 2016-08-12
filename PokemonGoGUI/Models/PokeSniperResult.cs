@@ -58,6 +58,18 @@ namespace PokemonGoGUI.Models
                 return (PokemonId)Enum.Parse(typeof(PokemonId), name);
             }
         }
+
+        public DateTime DespawnTime
+        {
+            get
+            {
+                DateTime despawn = new DateTime();
+
+                DateTime.TryParse(until, out despawn);
+
+                return despawn;
+            }
+        }
     }
 
     public class PokeSniperObject

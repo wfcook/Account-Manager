@@ -228,8 +228,6 @@ namespace PokemonGoGUI.GoManager
 
         private async void RunningThread()
         {
-            //RequestPokeSniperRares();
-
             int failedWaitTime = 5000;
             int delayTime = 700;
             int maxFailed = 3;
@@ -422,6 +420,16 @@ namespace PokemonGoGUI.GoManager
 
                         //Get nearby lured pokemon
                         MethodResult luredPokemonResponse = await RepeatAction(() => CatchLuredPokemon(pokestop), 2);
+
+                        await Task.Delay(delayTime);
+
+                        //Check sniping
+                        if(IsRunning && pokeStopNumber >= UserSettings.SnipeAfterPokestops && pokeStopNumber % UserSettings.SnipeAfterPokestops == 0)
+                        {
+                            await SnipeAllPokemon();
+                        }
+
+                        await Task.Delay(delayTime);
 
                         //Clean inventory, evolve, transfer, etc on first and every 10 stops
                         if(IsRunning && ((pokeStopNumber > 4 && pokeStopNumber % 10 == 0) || pokeStopNumber == 1))

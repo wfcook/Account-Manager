@@ -661,5 +661,10 @@ namespace PokemonGoGUI
                 MessageBox.Show(String.Format("Failed to export accounts. Ex: {0}", ex.Message));
             }
         }
+
+        private void exportProxiesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

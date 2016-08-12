@@ -68,6 +68,7 @@
             this.devToolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.garbageCollectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.timerListViewUpdate = new System.Windows.Forms.Timer(this.components);
+            this.exportProxiesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewMain)).BeginInit();
             this.contextMenuStripAccounts.SuspendLayout();
             this.SuspendLayout();
@@ -204,7 +205,7 @@
             this.deleteToolStripMenuItem,
             this.devToolsToolStripMenuItem});
             this.contextMenuStripAccounts.Name = "contextMenuStrip1";
-            this.contextMenuStripAccounts.Size = new System.Drawing.Size(218, 395);
+            this.contextMenuStripAccounts.Size = new System.Drawing.Size(218, 364);
             // 
             // updateDetailsToolStripMenuItem
             // 
@@ -320,6 +321,7 @@
             // exportToolStripMenuItem
             // 
             this.exportToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.exportProxiesToolStripMenuItem,
             this.exportAccountsToolStripMenuItem,
             this.exportStatsToolStripMenuItem});
             this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
@@ -381,6 +383,13 @@
             this.timerListViewUpdate.Interval = 1000;
             this.timerListViewUpdate.Tick += new System.EventHandler(this.timerListViewUpdate_Tick);
             // 
+            // exportProxiesToolStripMenuItem
+            // 
+            this.exportProxiesToolStripMenuItem.Name = "exportProxiesToolStripMenuItem";
+            this.exportProxiesToolStripMenuItem.Size = new System.Drawing.Size(214, 28);
+            this.exportProxiesToolStripMenuItem.Text = "Export Proxies";
+            this.exportProxiesToolStripMenuItem.Click += new System.EventHandler(this.exportProxiesToolStripMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -438,6 +447,7 @@
         private System.Windows.Forms.ToolStripMenuItem devToolsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem garbageCollectionToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem updateDetailsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem exportProxiesToolStripMenuItem;
     }
 }
 
