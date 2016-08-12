@@ -320,7 +320,7 @@ namespace PokemonGoGUI
         {
             using(SaveFileDialog sfd = new SaveFileDialog())
             {
-                sfd.Title = "Save Accounts";
+                sfd.Title = "Save File";
                 sfd.Filter = "Text Files (*.txt)|*.txt|All Files (*.*)|*.*";
 
                 if(sfd.ShowDialog() == DialogResult.OK)
@@ -641,6 +641,11 @@ namespace PokemonGoGUI
 
         private void exportAccountsToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
+            if (fastObjectListViewMain.SelectedObjects.Count == 0)
+            {
+                return;
+            }
+
             string filename = GetSaveFileName();
 
             if (String.IsNullOrEmpty(filename))
@@ -664,7 +669,30 @@ namespace PokemonGoGUI
 
         private void exportProxiesToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if(fastObjectListViewMain.SelectedObjects.Count == 0)
+            {
+                return;
+            }
 
+            string filename = GetSaveFileName();
+
+            if (String.IsNullOrEmpty(filename))
+            {
+                return;
+            }
+
+            try
+            {
+                IEnumerable<string> proxies = fastObjectListViewMain.SelectedObjects.Cast<Manager>().Select(x => x.Proxy.ToString());
+
+                File.WriteAllLines(filename, proxies);
+
+                MessageBox.Show(String.Format("Exported {0} proxies", proxies.Count()));
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(String.Format("Failed to export proxies. Ex: {0}", ex.Message));
+            }
         }
     }
 }
