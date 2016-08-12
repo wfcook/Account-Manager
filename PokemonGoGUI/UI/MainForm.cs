@@ -553,7 +553,18 @@ namespace PokemonGoGUI
             string fileName = String.Empty;
             int accountsPerProxy = 0;
 
+            if(count == 0)
+            {
+                MessageBox.Show("Please select 1 or more accounts");
+                return;
+            }
+
             string pPerAccount = Prompt.ShowDialog("Accounts per proxy", "Accounts per proxy", "1");
+
+            if(String.IsNullOrEmpty(pPerAccount))
+            {
+                return;
+            }
 
             if (!Int32.TryParse(pPerAccount, out accountsPerProxy) || accountsPerProxy <= 0)
             {

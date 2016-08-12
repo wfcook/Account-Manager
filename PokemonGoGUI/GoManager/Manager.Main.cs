@@ -65,7 +65,7 @@ namespace PokemonGoGUI.GoManager
 
                 return result;
             }
-            catch(TaskCanceledException ex)
+            catch(TimeoutException ex)
             {
                 if (String.IsNullOrEmpty(Proxy))
                 {
@@ -99,33 +99,28 @@ namespace PokemonGoGUI.GoManager
                     Message = "Account not verified."
                 };
             }
-            catch(HttpRequestException ex)
+            catch(WebException ex)
             {
-                WebException webEx = ex.InnerException as WebException;
-
-                if (webEx != null)
+                if (!String.IsNullOrEmpty(Proxy))
                 {
-                    if (!String.IsNullOrEmpty(Proxy))
+                    if (ex.Status == WebExceptionStatus.ConnectionClosed)
                     {
-                        if (webEx.Status == WebExceptionStatus.ConnectionClosed)
-                        {
-                            LogCaller(new LoggerEventArgs("Potential http proxy detected. Only https proxies will work.", LoggerTypes.Warning));
+                        LogCaller(new LoggerEventArgs("Potential http proxy detected. Only https proxies will work.", LoggerTypes.Warning));
 
-                            return new MethodResult
-                            {
-                                Message = "Http proxy detected"
-                            };
-                        }
-                        else if (webEx.Status == WebExceptionStatus.ConnectFailure || webEx.Status == WebExceptionStatus.ProtocolError || webEx.Status == WebExceptionStatus.ReceiveFailure
-                            || webEx.Status == WebExceptionStatus.ServerProtocolViolation)
+                        return new MethodResult
                         {
-                            LogCaller(new LoggerEventArgs("Proxy is offline", LoggerTypes.Warning));
+                            Message = "Http proxy detected"
+                        };
+                    }
+                    else if (ex.Status == WebExceptionStatus.ConnectFailure || ex.Status == WebExceptionStatus.ProtocolError || ex.Status == WebExceptionStatus.ReceiveFailure
+                        || ex.Status == WebExceptionStatus.ServerProtocolViolation)
+                    {
+                        LogCaller(new LoggerEventArgs("Proxy is offline", LoggerTypes.Warning));
 
-                            return new MethodResult
-                            {
-                                Message = "Proxy is offline"
-                            };
-                        }
+                        return new MethodResult
+                        {
+                            Message = "Proxy is offline"
+                        };
                     }
                 }
 

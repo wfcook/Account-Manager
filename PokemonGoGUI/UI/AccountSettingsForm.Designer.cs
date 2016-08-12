@@ -825,7 +825,7 @@
             this.tabPageTransfer.Location = new System.Drawing.Point(4, 25);
             this.tabPageTransfer.Name = "tabPageTransfer";
             this.tabPageTransfer.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageTransfer.Size = new System.Drawing.Size(494, 352);
+            this.tabPageTransfer.Size = new System.Drawing.Size(494, 420);
             this.tabPageTransfer.TabIndex = 5;
             this.tabPageTransfer.Text = "Transfer";
             this.tabPageTransfer.UseVisualStyleBackColor = true;
@@ -853,7 +853,7 @@
             this.fastObjectListViewTransfer.Location = new System.Drawing.Point(3, 3);
             this.fastObjectListViewTransfer.Name = "fastObjectListViewTransfer";
             this.fastObjectListViewTransfer.ShowGroups = false;
-            this.fastObjectListViewTransfer.Size = new System.Drawing.Size(488, 346);
+            this.fastObjectListViewTransfer.Size = new System.Drawing.Size(488, 414);
             this.fastObjectListViewTransfer.TabIndex = 2;
             this.fastObjectListViewTransfer.UseCompatibleStateImageBehavior = false;
             this.fastObjectListViewTransfer.UseFiltering = true;
@@ -893,7 +893,7 @@
             // 
             // olvColumnCPPercent
             // 
-            this.olvColumnCPPercent.AspectName = "CPPercent";
+            this.olvColumnCPPercent.AspectName = "IVPercent";
             this.olvColumnCPPercent.Text = "Min IV %";
             // 
             // contextMenuStripTransfer

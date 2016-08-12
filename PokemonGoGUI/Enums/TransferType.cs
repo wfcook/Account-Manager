@@ -14,6 +14,7 @@ namespace PokemonGoGUI.Enums
         BelowIVPercentage,
         BelowCP,
         KeepXHighestIV,
-        BelowCPOrIVAmount
+        BelowCPOrIVAmount,
+        BelowCPAndIVAmount
     };
 }

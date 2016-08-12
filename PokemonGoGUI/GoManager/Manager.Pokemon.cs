@@ -133,7 +133,7 @@ namespace PokemonGoGUI.GoManager
                         pokemonToTransfer.AddRange(GetPokemonBelowCP(group, settings.MinCP));
                         break;
                     case TransferType.BelowIVPercentage:
-                        pokemonToTransfer.AddRange(GetPokemonBelowIVPercent(group, settings.CPPercent));
+                        pokemonToTransfer.AddRange(GetPokemonBelowIVPercent(group, settings.IVPercent));
                         break;
                     case TransferType.KeepPossibleEvolves:
                         pokemonToTransfer.AddRange(GetPokemonByPossibleEvolve(group, settings.KeepMax));
@@ -144,8 +144,11 @@ namespace PokemonGoGUI.GoManager
                     case TransferType.KeepXHighestIV:
                         pokemonToTransfer.AddRange(GetPokemonByIV(group, settings.KeepMax));
                         break;
+                    case TransferType.BelowCPAndIVAmount:
+                        pokemonToTransfer.AddRange(GetPokemonBelowCPIVAmount(group, settings.MinCP, settings.IVPercent));
+                        break;
                     case TransferType.BelowCPOrIVAmount:
-                        pokemonToTransfer.AddRange(GetPokemonBelowIVPercent(group, settings.CPPercent));
+                        pokemonToTransfer.AddRange(GetPokemonBelowIVPercent(group, settings.IVPercent));
                         pokemonToTransfer.AddRange(GetPokemonBelowCP(group, settings.MinCP));
                         pokemonToTransfer = pokemonToTransfer.DistinctBy(x => x.Id).ToList();
                         break;
@@ -158,6 +161,28 @@ namespace PokemonGoGUI.GoManager
                 Message = String.Format("Found {0} pokemon to transfer", pokemonToTransfer.Count),
                 Success = true
             };
+        }
+
+        private List<PokemonData> GetPokemonBelowCPIVAmount(IGrouping<PokemonId, PokemonData> pokemon, int minCp, double percent)
+        {
+            List<PokemonData> toTransfer = new List<PokemonData>();
+
+            foreach (PokemonData pData in pokemon)
+            {
+                MethodResult<double> perfectResult = CalculateIVPerfection(pData);
+
+                if (!perfectResult.Success)
+                {
+                    continue;
+                }
+
+                if (perfectResult.Data >= 0 && perfectResult.Data < percent && pData.Cp < minCp)
+                {
+                    toTransfer.Add(pData);
+                }
+            }
+
+            return toTransfer;
         }
 
         private List<PokemonData> GetPokemonBelowCP(IGrouping<PokemonId, PokemonData> pokemon, int minCp)
