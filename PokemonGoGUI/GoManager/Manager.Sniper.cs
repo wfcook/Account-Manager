@@ -94,6 +94,14 @@ namespace PokemonGoGUI.GoManager
                 PokeSniperResult pokemon = pokemonToSnipe.First();
                 pokemonToSnipe.Remove(pokemon);
 
+                if(pokemon.Latitude < -90 || pokemon.Latitude > 90 || pokemon.Longitude < -180 || pokemon.Longitude > 180)
+                {
+                    LogCaller(new LoggerEventArgs(String.Format("Invalid location {0}, {1} given for {2}. Skipping", pokemon.Latitude, pokemon.Longitude, pokemon.name), LoggerTypes.Info));
+
+                    continue;
+                }
+
+
                 MethodResult<bool> captureResult = await CaptureSnipePokemon(pokemon.Latitude, pokemon.Longitude, pokemon.PokemonId);
 
                 await Task.Delay(7000);

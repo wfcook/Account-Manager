@@ -234,11 +234,7 @@ namespace PokemonGoGUI.GoManager
             _runningStopwatch.Reset();
             _runningStopwatch.Start();
             _expGained = 0;
-            _fleeingPokemonResponses = 0;
             _potentialPokemonBan = false;
-            _failedInventoryReponses = 0;
-            PokemonCaught = 0;
-            PokestopsFarmed = 0;
 
             t.Start();
 
@@ -686,6 +682,14 @@ namespace PokemonGoGUI.GoManager
                     Longitude = 4.903985,  
                     Name = "Amsterdam, Netherlands"
                 });
+        }
+
+        public void ClearStats()
+        {
+            _fleeingPokemonResponses = 0;
+            _failedInventoryReponses = 0;
+            PokemonCaught = 0;
+            PokestopsFarmed = 0;
         }
     }
 }
