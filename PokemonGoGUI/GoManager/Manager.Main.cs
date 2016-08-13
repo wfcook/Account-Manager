@@ -37,6 +37,7 @@ namespace PokemonGoGUI.GoManager
         private int _fleeingPokemonResponses = 0;
         private bool _potentialPokemonBan = false;
         private const int _fleeingPokemonUntilBan = 3;
+        private bool _potentialPokeStopBan = false;
         /*private int _failedPokestopResponse = 0;*/
 
         [JsonConstructor]
@@ -385,11 +386,41 @@ namespace PokemonGoGUI.GoManager
 
                     if(totalStops == 0)
                     {
+                        _potentialPokeStopBan = false;
+
                         LogCaller(new LoggerEventArgs(String.Format("{0}. Failure {1}/{2}", pokestops.Message, currentFails, maxFailed), LoggerTypes.Warning));
 
                         await Task.Delay(failedWaitTime);
 
                         continue;
+                    }
+
+                    if(_potentialPokeStopBan)
+                    {
+                        if (AccountState != Enums.AccountState.PokestopBanTemp && AccountState != Enums.AccountState.PokemonBanAndPokestopBanTemp)
+                        {
+                            LogCaller(new LoggerEventArgs("Pokestop ban detected. Marking state", LoggerTypes.Warning));
+                        }
+
+                        //Already pokemon banned
+                        if (AccountState == Enums.AccountState.PokemonBanTemp || AccountState == Enums.AccountState.PokemonBanAndPokestopBanTemp)
+                        {
+                            AccountState = Enums.AccountState.PokemonBanAndPokestopBanTemp;
+                        }
+                        else
+                        {
+                            AccountState = Enums.AccountState.PokestopBanTemp;
+                        }
+
+                        //Check for auto stop bot
+                        if ((UserSettings.StopAtMinAccountState == Enums.AccountState.PokestopBanTemp ||
+                            UserSettings.StopAtMinAccountState == Enums.AccountState.PokemonBanOrPokestopBanTemp) ||
+                            (UserSettings.StopAtMinAccountState == Enums.AccountState.PokemonBanAndPokestopBanTemp && AccountState == Enums.AccountState.PokemonBanAndPokestopBanTemp))
+                        {
+                            LogCaller(new LoggerEventArgs("Auto stopping bot ...", LoggerTypes.Info));
+
+                            Stop();
+                        }
                     }
 
                     GeoCoordinate defaultLocation = new GeoCoordinate(UserSettings.DefaultLatitude, UserSettings.DefaultLongitude);
@@ -545,6 +576,12 @@ namespace PokemonGoGUI.GoManager
                             LogCaller(new LoggerEventArgs(String.Format("Max level of {0} reached.", UserSettings.MaxLevel), LoggerTypes.Info));
 
                             Stop();
+                        }
+
+                        if (_potentialPokeStopBan)
+                        {
+                            //Break out of pokestop loop to test for ip ban
+                            break;
                         }
                     }
                 }

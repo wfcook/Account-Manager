@@ -29,30 +29,12 @@ namespace PokemonGoGUI.GoManager
                     if (fortResponse.Result == FortSearchResponse.Types.Result.OutOfRange)
                     {
                         //This error should never happen normally, so assume temp ban
-
-                        //Display error only on first notice
-                        LogCaller(new LoggerEventArgs("Pokestop out of range. Potential temp pokestop ban", LoggerTypes.Warning));
-
-                        //Already pokemon banned
-                        if(AccountState == Enums.AccountState.PokemonBanTemp || AccountState == Enums.AccountState.PokemonBanAndPokestopBanTemp)
+                        if (!_potentialPokeStopBan)
                         {
-                            AccountState = Enums.AccountState.PokemonBanAndPokestopBanTemp;
+                            _potentialPokeStopBan = true;
+                            //Display error only on first notice
+                            LogCaller(new LoggerEventArgs("Pokestop out of range. Potential temp pokestop ban or IP ban", LoggerTypes.Warning));
                         }
-                        else
-                        {
-                            AccountState = Enums.AccountState.PokestopBanTemp;
-                        }
-
-                        //Check for auto stop bot
-                        if ((UserSettings.StopAtMinAccountState == Enums.AccountState.PokestopBanTemp || 
-                            UserSettings.StopAtMinAccountState == Enums.AccountState.PokemonBanOrPokestopBanTemp) ||
-                            (UserSettings.StopAtMinAccountState == Enums.AccountState.PokemonBanAndPokestopBanTemp && AccountState == Enums.AccountState.PokemonBanAndPokestopBanTemp))
-                        {
-                            LogCaller(new LoggerEventArgs("Auto stopping bot ...", LoggerTypes.Info));
-
-                            Stop();
-                        }
-
                         //Let it continue down
 
                         /*return new MethodResult
