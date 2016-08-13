@@ -734,5 +734,25 @@ namespace PokemonGoGUI
                 MessageBox.Show(String.Format("Failed to export proxies. Ex: {0}", ex.Message));
             }
         }
+
+        private void clearCountsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach(Manager manager in fastObjectListViewMain.SelectedObjects)
+            {
+                manager.ClearStats();
+            }
+
+            fastObjectListViewMain.RefreshSelectedObjects();
+        }
+
+        private void logsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (Manager manager in fastObjectListViewMain.SelectedObjects)
+            {
+                manager.ClearLog();
+            }
+
+            fastObjectListViewMain.RefreshSelectedObjects();
+        }
     }
 }

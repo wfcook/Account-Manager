@@ -34,6 +34,8 @@
             this.olvColumnAccountState = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnMaxLevel = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnLevel = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnPokestopsFarmed = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnPokemonCaught = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnExp = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnExpPerHour = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnTillRankUp = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
@@ -50,6 +52,7 @@
             this.startToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.clearCountsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addNewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.importToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -70,8 +73,8 @@
             this.devToolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.garbageCollectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.timerListViewUpdate = new System.Windows.Forms.Timer(this.components);
-            this.olvColumnPokemonCaught = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.olvColumnPokestopsFarmed = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.countsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.logsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewMain)).BeginInit();
             this.contextMenuStripAccounts.SuspendLayout();
             this.SuspendLayout();
@@ -146,6 +149,16 @@
             this.olvColumnLevel.AspectName = "Level";
             this.olvColumnLevel.Text = "Level";
             // 
+            // olvColumnPokestopsFarmed
+            // 
+            this.olvColumnPokestopsFarmed.AspectName = "PokestopsFarmed";
+            this.olvColumnPokestopsFarmed.Text = "Pokestops";
+            // 
+            // olvColumnPokemonCaught
+            // 
+            this.olvColumnPokemonCaught.AspectName = "PokemonCaught";
+            this.olvColumnPokemonCaught.Text = "Pokemon";
+            // 
             // olvColumnExp
             // 
             this.olvColumnExp.AspectName = "ExpRatio";
@@ -211,6 +224,7 @@
             this.startToolStripMenuItem,
             this.stopToolStripMenuItem,
             this.toolStripSeparator4,
+            this.clearCountsToolStripMenuItem,
             this.addNewToolStripMenuItem,
             this.editToolStripMenuItem,
             this.importToolStripMenuItem,
@@ -222,7 +236,7 @@
             this.deleteToolStripMenuItem,
             this.devToolsToolStripMenuItem});
             this.contextMenuStripAccounts.Name = "contextMenuStrip1";
-            this.contextMenuStripAccounts.Size = new System.Drawing.Size(218, 364);
+            this.contextMenuStripAccounts.Size = new System.Drawing.Size(218, 423);
             // 
             // updateDetailsToolStripMenuItem
             // 
@@ -261,6 +275,15 @@
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
             this.toolStripSeparator4.Size = new System.Drawing.Size(214, 6);
+            // 
+            // clearCountsToolStripMenuItem
+            // 
+            this.clearCountsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.countsToolStripMenuItem,
+            this.logsToolStripMenuItem});
+            this.clearCountsToolStripMenuItem.Name = "clearCountsToolStripMenuItem";
+            this.clearCountsToolStripMenuItem.Size = new System.Drawing.Size(217, 28);
+            this.clearCountsToolStripMenuItem.Text = "Clear ";
             // 
             // addNewToolStripMenuItem
             // 
@@ -409,15 +432,19 @@
             this.timerListViewUpdate.Interval = 1000;
             this.timerListViewUpdate.Tick += new System.EventHandler(this.timerListViewUpdate_Tick);
             // 
-            // olvColumnPokemonCaught
+            // countsToolStripMenuItem
             // 
-            this.olvColumnPokemonCaught.AspectName = "PokemonCaught";
-            this.olvColumnPokemonCaught.Text = "Pokemon";
+            this.countsToolStripMenuItem.Name = "countsToolStripMenuItem";
+            this.countsToolStripMenuItem.Size = new System.Drawing.Size(198, 28);
+            this.countsToolStripMenuItem.Text = "Counts";
+            this.countsToolStripMenuItem.Click += new System.EventHandler(this.clearCountsToolStripMenuItem_Click);
             // 
-            // olvColumnPokestopsFarmed
+            // logsToolStripMenuItem
             // 
-            this.olvColumnPokestopsFarmed.AspectName = "PokestopsFarmed";
-            this.olvColumnPokestopsFarmed.Text = "Pokestops";
+            this.logsToolStripMenuItem.Name = "logsToolStripMenuItem";
+            this.logsToolStripMenuItem.Size = new System.Drawing.Size(198, 28);
+            this.logsToolStripMenuItem.Text = "Logs";
+            this.logsToolStripMenuItem.Click += new System.EventHandler(this.logsToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -480,6 +507,9 @@
         private BrightIdeasSoftware.OLVColumn olvColumnAccountState;
         private BrightIdeasSoftware.OLVColumn olvColumnPokemonCaught;
         private BrightIdeasSoftware.OLVColumn olvColumnPokestopsFarmed;
+        private System.Windows.Forms.ToolStripMenuItem clearCountsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem countsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem logsToolStripMenuItem;
     }
 }
 
