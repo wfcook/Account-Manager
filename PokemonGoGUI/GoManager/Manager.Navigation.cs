@@ -97,7 +97,7 @@ namespace PokemonGoGUI.GoManager
 
             while (CalculateDistanceInMeters(sourceLocation, location) >= 30)
             {
-                await Task.Delay(1000);
+                await Task.Delay(UserSettings.DelayBetweenLocationUpdates);
 
                 double millisecondsUntilGetUpdatePlayerLocationResponse = (DateTime.Now - requestSendDateTime).TotalMilliseconds;
 

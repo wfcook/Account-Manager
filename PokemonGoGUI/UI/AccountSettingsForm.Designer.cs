@@ -1063,11 +1063,11 @@
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(3, 226);
+            this.label15.Location = new System.Drawing.Point(0, 226);
             this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(117, 16);
+            this.label15.Size = new System.Drawing.Size(123, 16);
             this.label15.TabIndex = 15;
-            this.label15.Text = "Min Account State:";
+            this.label15.Text = "Auto Stop On State:";
             // 
             // comboBoxMinAccountState
             // 

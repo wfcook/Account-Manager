@@ -77,11 +77,16 @@ namespace PokemonGoGUI
             }
         }
 
+        //Proxy
         public List<InventoryItemSetting> ItemSettings { get; set; }
         public List<CatchSetting> CatchSettings { get; set; }
         public List<EvolveSetting> EvolveSettings { get; set; }
         public List<TransferSetting> TransferSettings { get; set; }
         //public List<CatchSetting> SniperSettings { get; set; }
+
+        //Delays
+        public int DelayBetweenPlayerActions { get; set; }
+        public int DelayBetweenLocationUpdates { get; set; }
 
         [JsonConstructor]
         public Settings(bool jsonConstructor = true)
@@ -118,6 +123,8 @@ namespace PokemonGoGUI
             MinPokemonBeforeEvolve = 100;
             SnipeAfterPokestops = 5;
             StopAtMinAccountState = AccountState.PokemonBanOrPokestopBanTemp;
+            DelayBetweenPlayerActions = 500;
+            DelayBetweenLocationUpdates = 1000;
         }
 
         public void LoadDeviceSettings()

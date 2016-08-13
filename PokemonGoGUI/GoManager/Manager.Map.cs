@@ -164,11 +164,24 @@ namespace PokemonGoGUI.GoManager
 
         private async Task<MethodResult<List<MapCell>>> GetMapObjects()
         {
+            TimeSpan secondsSinceLastRequest = DateTime.Now - _lastMapRequest;
+
+            if(secondsSinceLastRequest < TimeSpan.FromSeconds(6))
+            {
+                return new MethodResult<List<MapCell>>
+                {
+                    Data = new List<MapCell>(),
+                    Success = true
+                };
+            }
+
             try
             {
                 //Only mapobject returns objects
                 var checkAllReponse = await _client.Map.GetMapObjects();
                 GetMapObjectsResponse mapObjectResponse = checkAllReponse.Item1;
+
+                _lastMapRequest = DateTime.Now;
 
                 return new MethodResult<List<MapCell>>
                 {

@@ -85,16 +85,23 @@ namespace PokemonGoGUI.GoManager
             await Task.Delay(7000);
 
             bool hasPokeballs = HasPokeballsLeft();
+            int failedAttempts = 0;
+            int maxFailedAttempted = 3;
 
             //Long running, so can't let this continue
-            while(pokemonToSnipe.Any() && hasPokeballs && IsRunning)
+            while(pokemonToSnipe.Any() && hasPokeballs && failedAttempts < maxFailedAttempted && IsRunning)
             {
                 PokeSniperResult pokemon = pokemonToSnipe.First();
                 pokemonToSnipe.Remove(pokemon);
 
-                await CaptureSnipePokemon(pokemon.Latitude, pokemon.Longitude, pokemon.PokemonId);
+                MethodResult<bool> captureResult = await CaptureSnipePokemon(pokemon.Latitude, pokemon.Longitude, pokemon.PokemonId);
 
                 await Task.Delay(7000);
+                
+                if(!captureResult.Success)
+                {
+                    ++failedAttempts;
+                }
 
                 pokemonToSnipe = pokemonToSnipe.Where(x => PokemonWithinCatchSettings(x.PokemonId) && x.DespawnTime >= DateTime.Now.AddSeconds(30)).ToList();
 
@@ -118,7 +125,7 @@ namespace PokemonGoGUI.GoManager
             };
         }
 
-        private async Task<MethodResult> CaptureSnipePokemon(double latitude, double longitude, PokemonId pokemon)
+        private async Task<MethodResult<bool>> CaptureSnipePokemon(double latitude, double longitude, PokemonId pokemon)
         {
             LogCaller(new LoggerEventArgs(String.Format("Sniping {0} at location {1}, {2}", pokemon, latitude, longitude), LoggerTypes.Info));
 
@@ -134,7 +141,7 @@ namespace PokemonGoGUI.GoManager
                 //Just attempt it to prevent anything bad.
                 await UpdateLocation(originalLocation);
 
-                return result;
+                return new MethodResult<bool>();
             }
 
             //Get catchable pokemon
@@ -144,7 +151,7 @@ namespace PokemonGoGUI.GoManager
             {
                 await UpdateLocation(originalLocation);
 
-                return new MethodResult
+                return new MethodResult<bool>
                 {
                     Message = pokemonResult.Message
                 };
@@ -160,7 +167,7 @@ namespace PokemonGoGUI.GoManager
 
                 await UpdateLocation(originalLocation);
 
-                return new MethodResult
+                return new MethodResult<bool>
                 {
                     Message = "Pokemon not found"
                 };
@@ -178,7 +185,7 @@ namespace PokemonGoGUI.GoManager
                 //Failed, update location back
                 await UpdateLocation(originalLocation);
 
-                return new MethodResult
+                return new MethodResult<bool>
                 {
                     Message = eResponseResult.Message
                 };
@@ -189,14 +196,22 @@ namespace PokemonGoGUI.GoManager
 
             if(!locationResult.Success)
             {
-                return locationResult;
+                return new MethodResult<bool>();
             }
 
             //Catch pokemon
             MethodResult catchResult = await CatchPokemon(eResponseResult.Data, pokemonToSnipe); //Handles logging
 
 
-            return catchResult;
+            if(catchResult.Success)
+            {
+                return new MethodResult<bool>
+                {
+                    Success = true
+                };
+            }
+
+            return new MethodResult<bool>();
         }
     }
 }

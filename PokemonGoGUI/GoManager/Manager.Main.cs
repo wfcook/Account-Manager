@@ -29,6 +29,7 @@ namespace PokemonGoGUI.GoManager
     public partial class Manager
     {
         private Client _client = new Client();
+        private DateTime _lastMapRequest = new DateTime();
         private int _totalZeroExpStops = 0;
         private bool _firstRun = true;
         private int _failedInventoryReponses = 0;
