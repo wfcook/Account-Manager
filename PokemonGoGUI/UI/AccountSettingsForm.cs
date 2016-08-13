@@ -64,6 +64,16 @@ namespace PokemonGoGUI.UI
 
         private void AccountSettingsForm_Load(object sender, EventArgs e)
         {
+            foreach (AccountState state in Enum.GetValues(typeof(AccountState)))
+            {
+                if(state == AccountState.Good)
+                {
+                    continue;
+                }
+
+                comboBoxMinAccountState.Items.Add(state);
+            }
+
             UpdateDetails(_manager.UserSettings);
 
             UpdateListViews();
@@ -107,6 +117,15 @@ namespace PokemonGoGUI.UI
             checkBoxCatchPokemon.Checked = settings.CatchPokemon;
             checkBoxSnipePokemon.Checked = settings.SnipePokemon;
             numericUpDownSnipeAfterStops.Value = settings.SnipeAfterPokestops;
+
+            for(int i = 0; i < comboBoxMinAccountState.Items.Count; i++)
+            {
+                if((AccountState)comboBoxMinAccountState.Items[i] == settings.StopAtMinAccountState)
+                {
+                    comboBoxMinAccountState.SelectedIndex = i;
+                    break;
+                }
+            }
         }
 
         private void radioButtonPtc_CheckedChanged_1(object sender, EventArgs e)
@@ -136,9 +155,10 @@ namespace PokemonGoGUI.UI
 
         private void buttonSave_Click(object sender, EventArgs e)
         {
-            SaveSettings();
-
-            MessageBox.Show("Settings saved.\nSome settings won't take effect until the account stops running.");
+            if (SaveSettings())
+            {
+                MessageBox.Show("Settings saved.\nSome settings won't take effect until the account stops running.");
+            }
         }
 
         private bool SaveSettings()
@@ -195,6 +215,12 @@ namespace PokemonGoGUI.UI
                 return false;
             }
 
+            if (comboBoxMinAccountState.SelectedItem == null)
+            {
+                MessageBox.Show("Please select a valid min account state");
+                return false;
+            }
+
             if (radioButtonPtc.Checked)
             {
                 userSettings.AuthType = AuthType.Ptc;
@@ -223,6 +249,7 @@ namespace PokemonGoGUI.UI
             userSettings.CatchPokemon = checkBoxCatchPokemon.Checked;
             userSettings.SnipePokemon = checkBoxSnipePokemon.Checked;
             userSettings.SnipeAfterPokestops = (int)numericUpDownSnipeAfterStops.Value;
+            userSettings.StopAtMinAccountState = (AccountState)comboBoxMinAccountState.SelectedItem;
 
             if (proxyEx != null)
             {

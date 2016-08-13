@@ -3,6 +3,7 @@ using POGOProtos.Enums;
 using POGOProtos.Inventory.Item;
 using PokemonGo.RocketAPI;
 using PokemonGo.RocketAPI.Enums;
+using PokemonGoGUI.Enums;
 using PokemonGoGUI.Models;
 using System;
 using System.Collections.Generic;
@@ -60,6 +61,8 @@ namespace PokemonGoGUI
         public string ProxyUsername { get; set; }
         public string ProxyPassword { get; set; }
 
+        public AccountState StopAtMinAccountState { get; set; }
+
         public ProxyEx Proxy
         {
             get
@@ -109,12 +112,12 @@ namespace PokemonGoGUI
             DefaultLongitude = 151.208343;
             MimicWalking = true;
             CatchPokemon = true;
-            SnipePokemon = true;
             WalkingSpeed = 7;
             MaxTravelDistance = 1000;
             EncounterWhileWalking = false;
             MinPokemonBeforeEvolve = 100;
             SnipeAfterPokestops = 5;
+            StopAtMinAccountState = AccountState.PokemonBanOrPokestopBanTemp;
         }
 
         public void LoadDeviceSettings()

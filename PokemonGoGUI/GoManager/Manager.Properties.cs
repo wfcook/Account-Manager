@@ -25,6 +25,8 @@ namespace PokemonGoGUI.GoManager
 
         public byte[] LogHeaderSettings { get; set; }
 
+        public AccountState AccountState { get; set; }
+
         [JsonIgnore]
         public string Proxy
         {
@@ -282,6 +284,7 @@ namespace PokemonGoGUI.GoManager
             }
         }
 
+        [JsonIgnore]
         public int ExpPerHour
         {
             get
@@ -299,6 +302,7 @@ namespace PokemonGoGUI.GoManager
             }
         }
 
+        [JsonIgnore]
         public string RunningTime
         {
             get
@@ -308,6 +312,7 @@ namespace PokemonGoGUI.GoManager
             }
         }
 
+        [JsonIgnore]
         public int ExpGained
         {
             get
@@ -316,6 +321,12 @@ namespace PokemonGoGUI.GoManager
             }
         }
 
+        [JsonIgnore]
+        public int PokemonCaught { get; set; }
+
+        [JsonIgnore]
+        public int PokestopsFarmed { get; set; }
+
         private Stopwatch _runningStopwatch = new Stopwatch();
         private int _expGained = 0;
 
@@ -323,6 +334,39 @@ namespace PokemonGoGUI.GoManager
         {
             _expGained += amount;
             Stats.Experience += amount;
+        }
+
+        private bool HasPokeballsLeft()
+        {
+            ItemData pokeBalls = Items.FirstOrDefault(x => x.ItemId == ItemId.ItemPokeBall);
+
+            if (pokeBalls.Count > 0)
+            {
+                return true;
+            }
+
+            ItemData greatBalls = Items.FirstOrDefault(x => x.ItemId == ItemId.ItemGreatBall);
+
+            if (greatBalls.Count > 0)
+            {
+                return true;
+            }
+
+            ItemData ultraBalls = Items.FirstOrDefault(x => x.ItemId == ItemId.ItemUltraBall);
+
+            if (ultraBalls.Count > 0)
+            {
+                return true;
+            }
+
+            ItemData masterBalls = Items.FirstOrDefault(x => x.ItemId == ItemId.ItemMasterBall);
+
+            if (masterBalls.Count > 0)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

@@ -236,7 +236,6 @@ namespace PokemonGoGUI.GoManager
             return pokemon.OrderByDescending(x => CalculateIVPerfection(x).Data).ThenByDescending(x => x.Cp).Skip(amount).ToList();
         }
 
-
         private List<PokemonData> GetPokemonByPossibleEvolve(IGrouping<PokemonId, PokemonData> pokemon, int limit)
         {
             PokemonSettings setting = null;

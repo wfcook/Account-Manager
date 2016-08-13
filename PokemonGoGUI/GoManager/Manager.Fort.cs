@@ -26,7 +26,41 @@ namespace PokemonGoGUI.GoManager
                 {
                     fortResponse = await _client.Fort.SearchFort(pokestop.Id, pokestop.Latitude, pokestop.Longitude);
 
-                    if (fortResponse.Result != FortSearchResponse.Types.Result.Success && fortResponse.Result != FortSearchResponse.Types.Result.InventoryFull)
+                    if (fortResponse.Result == FortSearchResponse.Types.Result.OutOfRange)
+                    {
+                        //This error should never happen normally, so assume temp ban
+
+                        //Display error only on first notice
+                        LogCaller(new LoggerEventArgs("Pokestop out of range. Potential temp pokestop ban", LoggerTypes.Warning));
+
+                        //Already pokemon banned
+                        if(AccountState == Enums.AccountState.PokemonBanTemp || AccountState == Enums.AccountState.PokemonBanAndPokestopBanTemp)
+                        {
+                            AccountState = Enums.AccountState.PokemonBanAndPokestopBanTemp;
+                        }
+                        else
+                        {
+                            AccountState = Enums.AccountState.PokestopBanTemp;
+                        }
+
+                        //Check for auto stop bot
+                        if ((UserSettings.StopAtMinAccountState == Enums.AccountState.PokestopBanTemp || 
+                            UserSettings.StopAtMinAccountState == Enums.AccountState.PokemonBanOrPokestopBanTemp) ||
+                            (UserSettings.StopAtMinAccountState == Enums.AccountState.PokemonBanAndPokestopBanTemp && AccountState == Enums.AccountState.PokemonBanAndPokestopBanTemp))
+                        {
+                            LogCaller(new LoggerEventArgs("Auto stopping bot ...", LoggerTypes.Info));
+
+                            Stop();
+                        }
+
+                        //Let it continue down
+
+                        /*return new MethodResult
+                        {
+                            Message = "Pokestop out of range"
+                        };*/
+                    }
+                    else if (fortResponse.Result != FortSearchResponse.Types.Result.Success && fortResponse.Result != FortSearchResponse.Types.Result.InventoryFull)
                     {
                         LogCaller(new LoggerEventArgs(String.Format("Failed to search fort. Response: {0}", fortResponse.Result), LoggerTypes.Warning));
 
@@ -40,20 +74,85 @@ namespace PokemonGoGUI.GoManager
                         fortResponse.ExperienceAwarded,
                         StringUtil.GetSummedFriendlyNameOfItemAwardList(fortResponse.ItemsAwarded.ToList()));
 
-
-                    ExpIncrease(fortResponse.ExperienceAwarded);
-                    //_expGained += fortResponse.ExperienceAwarded;
-
-                    if(fortResponse.ExperienceAwarded == 0)
+                    if (fortResponse.Result != FortSearchResponse.Types.Result.OutOfRange)
                     {
-                        ++_totalZeroExpStops;
-                        message += String.Format(" No exp gained. Attempt {0} of {1}", i + 1, maxFortAttempts);
+                        //Successfully grabbed stop
+                        if(AccountState == Enums.AccountState.PokemonBanAndPokestopBanTemp || AccountState == Enums.AccountState.PokestopBanTemp)
+                        {
+                            if(AccountState == Enums.AccountState.PokemonBanAndPokestopBanTemp)
+                            {
+                                AccountState = Enums.AccountState.PokemonBanTemp;
+                            }
+                            else
+                            {
+                                AccountState = Enums.AccountState.Good;
+                            }
+
+                            LogCaller(new LoggerEventArgs("Pokestop ban was removed", LoggerTypes.Info));
+                        }
+
+                        ExpIncrease(fortResponse.ExperienceAwarded);
+                        ++PokestopsFarmed;
+
+                        if (fortResponse.ExperienceAwarded == 0)
+                        {
+                            //Softban on the fleeing pokemon. Reset.
+                            _fleeingPokemonResponses = 0;
+                            _potentialPokemonBan = false;
+
+                            ++_totalZeroExpStops;
+                            message += String.Format(" No exp gained. Attempt {0} of {1}", i + 1, maxFortAttempts);
+                        }
+
+                        LogCaller(new LoggerEventArgs(message, LoggerTypes.Success));
                     }
 
-                    LogCaller(new LoggerEventArgs(message, LoggerTypes.Success));
-
-                    if(fortResponse.ExperienceAwarded != 0)
+                    if(fortResponse.ExperienceAwarded != 0 || fortResponse.Result == FortSearchResponse.Types.Result.OutOfRange)
                     {
+                        if (!_potentialPokemonBan && _fleeingPokemonResponses >= _fleeingPokemonUntilBan)
+                        {
+                            LogCaller(new LoggerEventArgs("Potential pokemon ban detected. Waiting for 1 more flee to avoid false positives", LoggerTypes.Warning));
+
+                            _potentialPokemonBan = true;
+                            --_fleeingPokemonResponses;
+                        }
+                        else if (_fleeingPokemonResponses >= _fleeingPokemonUntilBan)
+                        {
+                            //Only occurs when out of range is found
+                            if(fortResponse.ExperienceAwarded == 0)
+                            {
+                                LogCaller(new LoggerEventArgs("Pokemon fleeing and failing to grab stops. Potential pokemon & pokestop ban.", LoggerTypes.Warning));
+                            }
+                            else
+                            {
+                                LogCaller(new LoggerEventArgs("Pokemon fleeing, yet grabbing stops. Potential pokemon ban.", LoggerTypes.Warning));
+                            }
+
+                            //Already pokestop banned
+                            if(AccountState == Enums.AccountState.PokestopBanTemp || AccountState == Enums.AccountState.PokemonBanAndPokestopBanTemp)
+                            {
+                                AccountState = Enums.AccountState.PokemonBanAndPokestopBanTemp;
+                            }
+                            else
+                            {
+                                AccountState = Enums.AccountState.PokemonBanTemp;
+                            }
+
+                            if(UserSettings.StopAtMinAccountState == Enums.AccountState.PokemonBanTemp || 
+                                UserSettings.StopAtMinAccountState == Enums.AccountState.PokemonBanOrPokestopBanTemp || 
+                                (UserSettings.StopAtMinAccountState == Enums.AccountState.PokemonBanAndPokestopBanTemp && AccountState == Enums.AccountState.PokemonBanAndPokestopBanTemp))
+                            {
+                                LogCaller(new LoggerEventArgs("Auto stopping bot ...", LoggerTypes.Info));
+
+                                Stop();
+                            }
+
+                            return new MethodResult
+                            {
+                                Message = "Bans detected"
+                            };
+                        }
+
                         break;
                     }
 
@@ -64,7 +163,7 @@ namespace PokemonGoGUI.GoManager
                 {
                     ++_totalZeroExpStops;
 
-                    if(_totalZeroExpStops >= 15)
+                    if(_totalZeroExpStops >= 15 || _fleeingPokemonResponses >= _fleeingPokemonUntilBan)
                     {
                         _totalZeroExpStops = 0;
 
@@ -91,11 +190,16 @@ namespace PokemonGoGUI.GoManager
 
                         if(bypassResponse.ExperienceAwarded != 0)
                         {
+                            //Fleeing pokemon was a softban, reset count
+                            _fleeingPokemonResponses = 0;
+                            _potentialPokemonBan = false;
+
                             string message = String.Format("Searched Fort. Exp: {0}. Items: {1}.",
                                                     bypassResponse.ExperienceAwarded,
                                                     StringUtil.GetSummedFriendlyNameOfItemAwardList(bypassResponse.ItemsAwarded.ToList()));
 
                             ExpIncrease(fortResponse.ExperienceAwarded);
+                            PokestopsFarmed++;
 
                             //_expGained += fortResponse.ExperienceAwarded;
 

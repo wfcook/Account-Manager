@@ -84,8 +84,10 @@ namespace PokemonGoGUI.GoManager
 
             await Task.Delay(7000);
 
+            bool hasPokeballs = HasPokeballsLeft();
+
             //Long running, so can't let this continue
-            while(pokemonToSnipe.Any() && IsRunning)
+            while(pokemonToSnipe.Any() && hasPokeballs && IsRunning)
             {
                 PokeSniperResult pokemon = pokemonToSnipe.First();
                 pokemonToSnipe.Remove(pokemon);
@@ -95,6 +97,19 @@ namespace PokemonGoGUI.GoManager
                 await Task.Delay(7000);
 
                 pokemonToSnipe = pokemonToSnipe.Where(x => PokemonWithinCatchSettings(x.PokemonId) && x.DespawnTime >= DateTime.Now.AddSeconds(30)).ToList();
+
+                if(_fleeingPokemonResponses >= _fleeingPokemonUntilBan)
+                {
+                    LogCaller(new LoggerEventArgs("Too many fleeing pokemon. Will stop sniping ...", LoggerTypes.Warning));
+                    break;
+                }
+
+                hasPokeballs = HasPokeballsLeft();
+
+                if(!hasPokeballs)
+                {
+                    LogCaller(new LoggerEventArgs("No pokeballs remaining. Done sniping", LoggerTypes.Warning));
+                }
             }
 
             return new MethodResult
@@ -116,6 +131,9 @@ namespace PokemonGoGUI.GoManager
 
             if(!result.Success)
             {
+                //Just attempt it to prevent anything bad.
+                await UpdateLocation(originalLocation);
+
                 return result;
             }
 
@@ -124,6 +142,8 @@ namespace PokemonGoGUI.GoManager
 
             if(!pokemonResult.Success)
             {
+                await UpdateLocation(originalLocation);
+
                 return new MethodResult
                 {
                     Message = pokemonResult.Message

@@ -109,6 +109,7 @@ namespace PokemonGoGUI.GoManager
             };
         }
 
+        //Catch lured pokemon
         private async Task<MethodResult> CatchPokemon(FortData fortData)
         {
             try
@@ -178,6 +179,7 @@ namespace PokemonGoGUI.GoManager
                     if (catchPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchSuccess)
                     {
                         int expGained = catchPokemonResponse.CaptureAward.Xp.Sum();
+                        ++PokemonCaught;
 
                         ExpIncrease(expGained);
 
@@ -270,6 +272,7 @@ namespace PokemonGoGUI.GoManager
             }
         }
 
+        //Catch encountered pokemon
         private async Task<MethodResult> CatchPokemon(EncounterResponse eResponse, MapPokemon mapPokemon)
         {
             try
@@ -313,6 +316,10 @@ namespace PokemonGoGUI.GoManager
 
                     if(catchPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchSuccess)
                     {
+                        //Reset data
+                        _fleeingPokemonResponses = 0;
+                        ++PokemonCaught;
+
                         int expGained = catchPokemonResponse.CaptureAward.Xp.Sum();
 
                         ExpIncrease(expGained);
@@ -329,10 +336,29 @@ namespace PokemonGoGUI.GoManager
                     }
                     else if (catchPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchFlee)
                     {
+                        ++_fleeingPokemonResponses;
+
                         LogCaller(new LoggerEventArgs(String.Format("Pokemon fled. {0}. Attempt #{1}. Ball: {2}", pokemon, attemptCount, pokeBallName), LoggerTypes.PokemonFlee));
                     }
                     else if(catchPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchEscape)
                     {
+                        //If we get this response, means we're good
+                        _fleeingPokemonResponses = 0;
+
+                        if(AccountState == Enums.AccountState.PokemonBanAndPokestopBanTemp || AccountState == Enums.AccountState.PokemonBanTemp)
+                        {
+                            if(AccountState == Enums.AccountState.PokemonBanAndPokestopBanTemp)
+                            {
+                                AccountState = Enums.AccountState.PokestopBanTemp;
+                            }
+                            else
+                            {
+                                AccountState = Enums.AccountState.Good;
+                            }
+
+                            LogCaller(new LoggerEventArgs("Pokemon ban was lifted", LoggerTypes.Info));
+                        }
+
                         LogCaller(new LoggerEventArgs(String.Format("Escaped ball. {0}. Attempt #{1}. Ball: {2}", pokemon, attemptCount, pokeBallName), LoggerTypes.PokemonEscape));
                     }
                     else

@@ -31,6 +31,12 @@ namespace PokemonGoGUI.GoManager
         private Client _client = new Client();
         private int _totalZeroExpStops = 0;
         private bool _firstRun = true;
+        private int _failedInventoryReponses = 0;
+        private const int _failedInventoryUntilBan = 3;
+        private int _fleeingPokemonResponses = 0;
+        private bool _potentialPokemonBan = false;
+        private const int _fleeingPokemonUntilBan = 1;
+        /*private int _failedPokestopResponse = 0;*/
 
         [JsonConstructor]
         public Manager(bool jsonConstructor = true)
@@ -212,6 +218,11 @@ namespace PokemonGoGUI.GoManager
             _runningStopwatch.Reset();
             _runningStopwatch.Start();
             _expGained = 0;
+            _fleeingPokemonResponses = 0;
+            _potentialPokemonBan = false;
+            _failedInventoryReponses = 0;
+            PokemonCaught = 0;
+            PokestopsFarmed = 0;
 
             t.Start();
 
@@ -228,6 +239,9 @@ namespace PokemonGoGUI.GoManager
             int maxFailed = 3;
             int currentFails = 0;
 
+            //Reset account state
+            AccountState = Enums.AccountState.Good;
+
             while(IsRunning)
             {
                 StartingUp = true;
@@ -236,6 +250,17 @@ namespace PokemonGoGUI.GoManager
                 {
                     currentFails = 0;
                     _client.Logout();
+                }
+
+                if (_failedInventoryReponses >= _failedInventoryUntilBan)
+                {
+                    AccountState = AccountState.AccountBan;
+
+                    LogCaller(new LoggerEventArgs("Potential account ban/deletion or server issues detected. Note: This is NOT confirmed, but we can't run it anyways. Stopping ...", LoggerTypes.Warning));
+
+                    Stop();
+
+                    continue;
                 }
 
                 ++currentFails;
@@ -295,16 +320,20 @@ namespace PokemonGoGUI.GoManager
                     //Update inventory
                     LogCaller(new LoggerEventArgs("Updating inventory items ...", LoggerTypes.Debug));
 
-                    result = await RepeatAction<List<InventoryItem>>(GetInventory, 2);
+                    result = await RepeatAction<List<InventoryItem>>(GetInventory, 1);
 
                     await Task.Delay(delayTime);
 
                     if(!result.Success)
                     {
+                        ++_failedInventoryReponses;
+
                         await Task.Delay(failedWaitTime);
 
                         continue;
                     }
+
+                    _failedInventoryReponses = 0;
 
                     //End startup phase
                     StartingUp = false;
@@ -400,6 +429,7 @@ namespace PokemonGoGUI.GoManager
                         //Search
                         MethodResult searchResult = await SearchPokestop(pokestop);
 
+                        //OutOfRange will show up as a success
                         if(searchResult.Success)
                         {
                             currentFailedStops = 0;
@@ -407,6 +437,12 @@ namespace PokemonGoGUI.GoManager
                         else
                         {
                             ++currentFailedStops;
+                        }
+
+                        //Stop bot instantly
+                        if(!IsRunning)
+                        {
+                            continue;
                         }
 
                         //Catch nearby pokemon
@@ -419,7 +455,7 @@ namespace PokemonGoGUI.GoManager
                         await Task.Delay(delayTime);
 
                         //Check sniping
-                        if(IsRunning && pokeStopNumber >= UserSettings.SnipeAfterPokestops && pokeStopNumber % UserSettings.SnipeAfterPokestops == 0)
+                        if(UserSettings.SnipePokemon && IsRunning && pokeStopNumber >= UserSettings.SnipeAfterPokestops && pokeStopNumber % UserSettings.SnipeAfterPokestops == 0)
                         {
                             await SnipeAllPokemon();
                         }

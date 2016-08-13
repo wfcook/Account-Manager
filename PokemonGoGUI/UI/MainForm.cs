@@ -483,7 +483,25 @@ namespace PokemonGoGUI
         {
             Manager manager = (Manager)e.Model;
 
-            if(e.Column == olvColumnBotState)
+            if(e.Column == olvColumnAccountState)
+            {
+                switch(manager.AccountState)
+                {
+                    case AccountState.AccountBan:
+                        e.SubItem.ForeColor = Color.Red;
+                        break;
+                    case AccountState.PokemonBanTemp:
+                        e.SubItem.ForeColor = Color.Yellow;
+                        break;
+                    case AccountState.PokestopBanTemp:
+                        e.SubItem.ForeColor = Color.Yellow;
+                        break;
+                    case AccountState.Good:
+                        e.SubItem.ForeColor = Color.Green;
+                        break;
+                }
+            }
+            else if(e.Column == olvColumnBotState)
             {
                 switch(manager.State)
                 {

@@ -31,6 +31,7 @@
             this.components = new System.ComponentModel.Container();
             this.fastObjectListViewMain = new BrightIdeasSoftware.FastObjectListView();
             this.olvColumnUsername = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnAccountState = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnMaxLevel = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnLevel = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnExp = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
@@ -60,6 +61,7 @@
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.clearProxiesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportProxiesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportAccountsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportStatsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -68,7 +70,8 @@
             this.devToolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.garbageCollectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.timerListViewUpdate = new System.Windows.Forms.Timer(this.components);
-            this.exportProxiesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.olvColumnPokemonCaught = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnPokestopsFarmed = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewMain)).BeginInit();
             this.contextMenuStripAccounts.SuspendLayout();
             this.SuspendLayout();
@@ -76,8 +79,11 @@
             // fastObjectListViewMain
             // 
             this.fastObjectListViewMain.AllColumns.Add(this.olvColumnUsername);
+            this.fastObjectListViewMain.AllColumns.Add(this.olvColumnAccountState);
             this.fastObjectListViewMain.AllColumns.Add(this.olvColumnMaxLevel);
             this.fastObjectListViewMain.AllColumns.Add(this.olvColumnLevel);
+            this.fastObjectListViewMain.AllColumns.Add(this.olvColumnPokestopsFarmed);
+            this.fastObjectListViewMain.AllColumns.Add(this.olvColumnPokemonCaught);
             this.fastObjectListViewMain.AllColumns.Add(this.olvColumnExp);
             this.fastObjectListViewMain.AllColumns.Add(this.olvColumnExpPerHour);
             this.fastObjectListViewMain.AllColumns.Add(this.olvColumnTillRankUp);
@@ -89,7 +95,10 @@
             this.fastObjectListViewMain.AllColumns.Add(this.olvColumnLastLogMessage);
             this.fastObjectListViewMain.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.olvColumnUsername,
+            this.olvColumnAccountState,
             this.olvColumnLevel,
+            this.olvColumnPokestopsFarmed,
+            this.olvColumnPokemonCaught,
             this.olvColumnExp,
             this.olvColumnExpPerHour,
             this.olvColumnTillRankUp,
@@ -106,6 +115,7 @@
             this.fastObjectListViewMain.ShowGroups = false;
             this.fastObjectListViewMain.Size = new System.Drawing.Size(1041, 482);
             this.fastObjectListViewMain.TabIndex = 0;
+            this.fastObjectListViewMain.UseCellFormatEvents = true;
             this.fastObjectListViewMain.UseCompatibleStateImageBehavior = false;
             this.fastObjectListViewMain.UseFiltering = true;
             this.fastObjectListViewMain.View = System.Windows.Forms.View.Details;
@@ -118,6 +128,11 @@
             this.olvColumnUsername.AspectName = "AccountName";
             this.olvColumnUsername.Text = "Name";
             this.olvColumnUsername.Width = 108;
+            // 
+            // olvColumnAccountState
+            // 
+            this.olvColumnAccountState.AspectName = "AccountState";
+            this.olvColumnAccountState.Text = "Account State";
             // 
             // olvColumnMaxLevel
             // 
@@ -150,7 +165,7 @@
             // olvColumnRunning
             // 
             this.olvColumnRunning.AspectName = "IsRunning";
-            this.olvColumnRunning.DisplayIndex = 5;
+            this.olvColumnRunning.DisplayIndex = 8;
             this.olvColumnRunning.IsVisible = false;
             this.olvColumnRunning.Text = "Running";
             this.olvColumnRunning.Width = 84;
@@ -163,12 +178,13 @@
             // olvColumnRunningTime
             // 
             this.olvColumnRunningTime.AspectName = "RunningTime";
+            this.olvColumnRunningTime.DisplayIndex = 10;
             this.olvColumnRunningTime.Text = "Time";
             // 
             // olvColumnTotalLogs
             // 
             this.olvColumnTotalLogs.AspectName = "TotalLogs";
-            this.olvColumnTotalLogs.DisplayIndex = 4;
+            this.olvColumnTotalLogs.DisplayIndex = 11;
             this.olvColumnTotalLogs.IsVisible = false;
             this.olvColumnTotalLogs.Text = "Total Logs";
             this.olvColumnTotalLogs.Width = 86;
@@ -176,6 +192,7 @@
             // olvColumnProxy
             // 
             this.olvColumnProxy.AspectName = "Proxy";
+            this.olvColumnProxy.DisplayIndex = 9;
             this.olvColumnProxy.Text = "Proxy";
             // 
             // olvColumnLastLogMessage
@@ -328,6 +345,13 @@
             this.exportToolStripMenuItem.Size = new System.Drawing.Size(217, 28);
             this.exportToolStripMenuItem.Text = "Export";
             // 
+            // exportProxiesToolStripMenuItem
+            // 
+            this.exportProxiesToolStripMenuItem.Name = "exportProxiesToolStripMenuItem";
+            this.exportProxiesToolStripMenuItem.Size = new System.Drawing.Size(214, 28);
+            this.exportProxiesToolStripMenuItem.Text = "Export Proxies";
+            this.exportProxiesToolStripMenuItem.Click += new System.EventHandler(this.exportProxiesToolStripMenuItem_Click);
+            // 
             // exportAccountsToolStripMenuItem
             // 
             this.exportAccountsToolStripMenuItem.Name = "exportAccountsToolStripMenuItem";
@@ -349,6 +373,8 @@
             // 
             // enableColorsToolStripMenuItem
             // 
+            this.enableColorsToolStripMenuItem.Checked = true;
+            this.enableColorsToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.enableColorsToolStripMenuItem.Name = "enableColorsToolStripMenuItem";
             this.enableColorsToolStripMenuItem.Size = new System.Drawing.Size(217, 28);
             this.enableColorsToolStripMenuItem.Text = "Enable Colors";
@@ -383,12 +409,15 @@
             this.timerListViewUpdate.Interval = 1000;
             this.timerListViewUpdate.Tick += new System.EventHandler(this.timerListViewUpdate_Tick);
             // 
-            // exportProxiesToolStripMenuItem
+            // olvColumnPokemonCaught
             // 
-            this.exportProxiesToolStripMenuItem.Name = "exportProxiesToolStripMenuItem";
-            this.exportProxiesToolStripMenuItem.Size = new System.Drawing.Size(214, 28);
-            this.exportProxiesToolStripMenuItem.Text = "Export Proxies";
-            this.exportProxiesToolStripMenuItem.Click += new System.EventHandler(this.exportProxiesToolStripMenuItem_Click);
+            this.olvColumnPokemonCaught.AspectName = "PokemonCaught";
+            this.olvColumnPokemonCaught.Text = "Pokemon";
+            // 
+            // olvColumnPokestopsFarmed
+            // 
+            this.olvColumnPokestopsFarmed.AspectName = "PokestopsFarmed";
+            this.olvColumnPokestopsFarmed.Text = "Pokestops";
             // 
             // MainForm
             // 
@@ -448,6 +477,9 @@
         private System.Windows.Forms.ToolStripMenuItem garbageCollectionToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem updateDetailsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exportProxiesToolStripMenuItem;
+        private BrightIdeasSoftware.OLVColumn olvColumnAccountState;
+        private BrightIdeasSoftware.OLVColumn olvColumnPokemonCaught;
+        private BrightIdeasSoftware.OLVColumn olvColumnPokestopsFarmed;
     }
 }
 
