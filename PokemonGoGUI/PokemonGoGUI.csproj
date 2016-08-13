@@ -98,6 +98,7 @@
     <Compile Include="GoManager\Manager.Properties.cs" />
     <Compile Include="GoManager\Manager.Settings.cs" />
     <Compile Include="GoManager\Manager.Sniper.cs" />
+    <Compile Include="Models\AccountExportModel.cs" />
     <Compile Include="Models\AccountImport.cs" />
     <Compile Include="Models\CatchSetting.cs" />
     <Compile Include="Models\EvolveSetting.cs" />

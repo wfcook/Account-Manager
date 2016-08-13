@@ -319,6 +319,7 @@ namespace PokemonGoGUI.GoManager
                         //Reset data
                         _fleeingPokemonResponses = 0;
                         ++PokemonCaught;
+                        _potentialPokemonBan = false;
 
                         int expGained = catchPokemonResponse.CaptureAward.Xp.Sum();
 
@@ -344,6 +345,7 @@ namespace PokemonGoGUI.GoManager
                     {
                         //If we get this response, means we're good
                         _fleeingPokemonResponses = 0;
+                        _potentialPokemonBan = false;
 
                         if(AccountState == Enums.AccountState.PokemonBanAndPokestopBanTemp || AccountState == Enums.AccountState.PokemonBanTemp)
                         {

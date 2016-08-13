@@ -36,7 +36,7 @@ namespace PokemonGoGUI.GoManager
         private const int _failedInventoryUntilBan = 3;
         private int _fleeingPokemonResponses = 0;
         private bool _potentialPokemonBan = false;
-        private const int _fleeingPokemonUntilBan = 1;
+        private const int _fleeingPokemonUntilBan = 3;
         /*private int _failedPokestopResponse = 0;*/
 
         [JsonConstructor]
@@ -60,8 +60,6 @@ namespace PokemonGoGUI.GoManager
 
         public async Task<MethodResult> Login()
         {
-            UserSettings.LoadDeviceSettings();
-
             LogCaller(new LoggerEventArgs("Attempting to login ...", LoggerTypes.Debug));
 
             try
@@ -71,22 +69,6 @@ namespace PokemonGoGUI.GoManager
                 LogCaller(new LoggerEventArgs(result.Message, LoggerTypes.Debug));
 
                 return result;
-            }
-            catch(TimeoutException ex)
-            {
-                if (String.IsNullOrEmpty(Proxy))
-                {
-                    LogCaller(new LoggerEventArgs("Login request has timed out.", LoggerTypes.Warning, ex));
-                }
-                else
-                {
-                    LogCaller(new LoggerEventArgs("Login request has timed out. Possible bad proxy.", LoggerTypes.Warning, ex));
-                }
-
-                return new MethodResult
-                {
-                    Message = "Request has timed out."
-                };
             }
             catch(PtcOfflineException ex)
             {
@@ -108,6 +90,23 @@ namespace PokemonGoGUI.GoManager
             }
             catch(WebException ex)
             {
+                if (ex.Status == WebExceptionStatus.Timeout)
+                {
+                    if (String.IsNullOrEmpty(Proxy))
+                    {
+                        LogCaller(new LoggerEventArgs("Login request has timed out.", LoggerTypes.Warning, ex));
+                    }
+                    else
+                    {
+                        LogCaller(new LoggerEventArgs("Login request has timed out. Possible bad proxy.", LoggerTypes.Warning, ex));
+                    }
+
+                    return new MethodResult
+                    {
+                        Message = "Request has timed out."
+                    };
+                }
+
                 if (!String.IsNullOrEmpty(Proxy))
                 {
                     if (ex.Status == WebExceptionStatus.ConnectionClosed)
@@ -137,6 +136,22 @@ namespace PokemonGoGUI.GoManager
                 {
                     Message = "Failed to login due to request error"
                 };
+            }
+            catch(TaskCanceledException)
+            {
+                    if(String.IsNullOrEmpty(Proxy))
+                    {
+                        LogCaller(new LoggerEventArgs("Login request has timed out", LoggerTypes.Warning));
+                    }
+                    else
+                    {
+                        LogCaller(new LoggerEventArgs("Login request has timed out. Possible bad proxy", LoggerTypes.Warning));
+                    }
+
+                    return new MethodResult
+                    {
+                        Message = "Login request has timed out"
+                    };
             }
             catch(InvalidCredentialsException ex)
             {

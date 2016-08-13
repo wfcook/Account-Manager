@@ -170,6 +170,8 @@ namespace PokemonGoGUI.GoManager
 
                 UserSettings = settings;
 
+                UserSettings.LoadDeviceSettings();
+
                 LogCaller(new LoggerEventArgs("Successfully imported config file", LoggerTypes.Info));
 
                 return new MethodResult

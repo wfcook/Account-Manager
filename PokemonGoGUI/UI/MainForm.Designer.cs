@@ -132,7 +132,7 @@
             // olvColumnAccountState
             // 
             this.olvColumnAccountState.AspectName = "AccountState";
-            this.olvColumnAccountState.Text = "Account State";
+            this.olvColumnAccountState.Text = "Account Status";
             // 
             // olvColumnMaxLevel
             // 

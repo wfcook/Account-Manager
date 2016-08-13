@@ -13,6 +13,7 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -25,10 +26,17 @@ namespace PokemonGoGUI
         List<Manager> _managers = new List<Manager>();
 
         private readonly string _saveFile = "data";
+        private const string _versionNumber = "1.1.3";
 
         public MainForm()
         {
             InitializeComponent();
+
+            fastObjectListViewMain.BackColor = Color.FromArgb(43, 43, 43);
+            fastObjectListViewMain.ForeColor = Color.LightGray;
+
+            Text = "GoManager - v" + _versionNumber;
+
         }
 
         private void ShowDetails(IEnumerable<Manager> managers)
@@ -494,6 +502,9 @@ namespace PokemonGoGUI
                         e.SubItem.ForeColor = Color.Yellow;
                         break;
                     case AccountState.PokestopBanTemp:
+                        e.SubItem.ForeColor = Color.Yellow;
+                        break;
+                    case AccountState.PokemonBanAndPokestopBanTemp:
                         e.SubItem.ForeColor = Color.Yellow;
                         break;
                     case AccountState.Good:
