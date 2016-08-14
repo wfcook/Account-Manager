@@ -120,6 +120,7 @@ namespace PokemonGoGUI.UI
             numericUpDownSnipeAfterStops.Value = settings.SnipeAfterPokestops;
             numericUpDownMinBallsToSnipe.Value = settings.MinBallsToSnipe;
             numericUpDownMaxPokemonPerSnipe.Value = settings.MaxPokemonPerSnipe;
+            numericUpDownSnipeAfterLevel.Value = settings.SnipeAfterLevel;
 
             //Device settings
             textBoxDeviceId.Text = settings.DeviceId;
@@ -270,6 +271,7 @@ namespace PokemonGoGUI.UI
             userSettings.SnipeAfterPokestops = (int)numericUpDownSnipeAfterStops.Value;
             userSettings.MinBallsToSnipe = (int)numericUpDownMinBallsToSnipe.Value;
             userSettings.MaxPokemonPerSnipe = (int)numericUpDownMaxPokemonPerSnipe.Value;
+            userSettings.SnipeAfterLevel = (int)numericUpDownSnipeAfterLevel.Value;
             userSettings.StopAtMinAccountState = (AccountState)comboBoxMinAccountState.SelectedItem;
 
             //Device settings
@@ -623,6 +625,7 @@ namespace PokemonGoGUI.UI
             numericUpDownSnipeAfterStops.Enabled = checkBoxSnipePokemon.Checked;
             numericUpDownMinBallsToSnipe.Enabled = checkBoxSnipePokemon.Checked;
             numericUpDownMaxPokemonPerSnipe.Enabled = checkBoxSnipePokemon.Checked;
+            numericUpDownSnipeAfterLevel.Enabled = checkBoxSnipePokemon.Checked;
         }
 
         private void buttonDeviceRandom_Click(object sender, EventArgs e)

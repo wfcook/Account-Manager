@@ -98,6 +98,7 @@
             this.logViewerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.garbageCollectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.timerListViewUpdate = new System.Windows.Forms.Timer(this.components);
+            this.afterLevelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewMain)).BeginInit();
             this.contextMenuStripAccounts.SuspendLayout();
             this.SuspendLayout();
@@ -262,7 +263,7 @@
             this.deleteToolStripMenuItem,
             this.devToolsToolStripMenuItem});
             this.contextMenuStripAccounts.Name = "contextMenuStrip1";
-            this.contextMenuStripAccounts.Size = new System.Drawing.Size(218, 476);
+            this.contextMenuStripAccounts.Size = new System.Drawing.Size(218, 507);
             this.contextMenuStripAccounts.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStripAccounts_Opening);
             // 
             // updateDetailsToolStripMenuItem
@@ -388,7 +389,7 @@
             // enableRecycleToolStripMenuItem4
             // 
             this.enableRecycleToolStripMenuItem4.Name = "enableRecycleToolStripMenuItem4";
-            this.enableRecycleToolStripMenuItem4.Size = new System.Drawing.Size(198, 28);
+            this.enableRecycleToolStripMenuItem4.Size = new System.Drawing.Size(141, 28);
             this.enableRecycleToolStripMenuItem4.Text = "Enable";
             this.enableRecycleToolStripMenuItem4.Click += new System.EventHandler(this.enableRecycleToolStripMenuItem4_Click);
             // 
@@ -403,7 +404,7 @@
             // enableIncubateEggsToolStripMenuItem5
             // 
             this.enableIncubateEggsToolStripMenuItem5.Name = "enableIncubateEggsToolStripMenuItem5";
-            this.enableIncubateEggsToolStripMenuItem5.Size = new System.Drawing.Size(198, 28);
+            this.enableIncubateEggsToolStripMenuItem5.Size = new System.Drawing.Size(141, 28);
             this.enableIncubateEggsToolStripMenuItem5.Text = "Enable";
             this.enableIncubateEggsToolStripMenuItem5.Click += new System.EventHandler(this.enableIncubateEggsToolStripMenuItem5_Click);
             // 
@@ -418,7 +419,7 @@
             // enableLuckyEggsToolStripMenuItem6
             // 
             this.enableLuckyEggsToolStripMenuItem6.Name = "enableLuckyEggsToolStripMenuItem6";
-            this.enableLuckyEggsToolStripMenuItem6.Size = new System.Drawing.Size(198, 28);
+            this.enableLuckyEggsToolStripMenuItem6.Size = new System.Drawing.Size(141, 28);
             this.enableLuckyEggsToolStripMenuItem6.Text = "Enable";
             this.enableLuckyEggsToolStripMenuItem6.Click += new System.EventHandler(this.enableLuckyEggsToolStripMenuItem6_Click);
             // 
@@ -433,7 +434,7 @@
             // enableCatchPokemonToolStripMenuItem2
             // 
             this.enableCatchPokemonToolStripMenuItem2.Name = "enableCatchPokemonToolStripMenuItem2";
-            this.enableCatchPokemonToolStripMenuItem2.Size = new System.Drawing.Size(198, 28);
+            this.enableCatchPokemonToolStripMenuItem2.Size = new System.Drawing.Size(141, 28);
             this.enableCatchPokemonToolStripMenuItem2.Text = "Enable";
             this.enableCatchPokemonToolStripMenuItem2.Click += new System.EventHandler(this.enableCatchPokemonToolStripMenuItem2_Click);
             // 
@@ -443,7 +444,8 @@
             this.enableSnipePokemonToolStripMenuItem3,
             this.setPokestopRateToolStripMenuItem,
             this.setMinBallsToolStripMenuItem,
-            this.setMaxPokemonToolStripMenuItem});
+            this.setMaxPokemonToolStripMenuItem,
+            this.afterLevelToolStripMenuItem});
             this.snipePokemonToolStripMenuItem.Name = "snipePokemonToolStripMenuItem";
             this.snipePokemonToolStripMenuItem.Size = new System.Drawing.Size(210, 28);
             this.snipePokemonToolStripMenuItem.Text = "Snipe Pokemon";
@@ -654,6 +656,13 @@
             this.timerListViewUpdate.Interval = 1000;
             this.timerListViewUpdate.Tick += new System.EventHandler(this.timerListViewUpdate_Tick);
             // 
+            // afterLevelToolStripMenuItem
+            // 
+            this.afterLevelToolStripMenuItem.Name = "afterLevelToolStripMenuItem";
+            this.afterLevelToolStripMenuItem.Size = new System.Drawing.Size(227, 28);
+            this.afterLevelToolStripMenuItem.Text = "After Level";
+            this.afterLevelToolStripMenuItem.Click += new System.EventHandler(this.afterLevelToolStripMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -741,6 +750,7 @@
         private System.Windows.Forms.ToolStripMenuItem luckyEggToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem enableLuckyEggsToolStripMenuItem6;
         private System.Windows.Forms.ToolStripMenuItem setRequiredPokemonToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem afterLevelToolStripMenuItem;
     }
 }
 

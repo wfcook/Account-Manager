@@ -26,7 +26,7 @@ namespace PokemonGoGUI
         List<Manager> _managers = new List<Manager>();
 
         private readonly string _saveFile = "data";
-        private const string _versionNumber = "1.1.5";
+        private const string _versionNumber = "1.2.0";
 
         public MainForm()
         {
@@ -917,7 +917,7 @@ namespace PokemonGoGUI
 
             int value = 0;
 
-            if (!Int32.TryParse(data, out value) || value >= 500)
+            if (!Int32.TryParse(data, out value) || value >= 500 || value < 0)
             {
                 MessageBox.Show("Invalid value");
                 return;
@@ -942,7 +942,7 @@ namespace PokemonGoGUI
 
             int value = 0;
 
-            if (!Int32.TryParse(data, out value) || value >= 1000)
+            if (!Int32.TryParse(data, out value) || value >= 1000 || value < 0)
             {
                 MessageBox.Show("Invalid value");
                 return;
@@ -967,7 +967,7 @@ namespace PokemonGoGUI
 
             int value = 0;
 
-            if (!Int32.TryParse(data, out value) || value >= 1000)
+            if (!Int32.TryParse(data, out value) || value >= 1000 || value < 0)
             {
                 MessageBox.Show("Invalid value");
                 return;
@@ -992,7 +992,7 @@ namespace PokemonGoGUI
 
             int value = 0;
 
-            if (!Int32.TryParse(data, out value) || value >= 500)
+            if (!Int32.TryParse(data, out value) || value >= 500 || value < 0)
             {
                 MessageBox.Show("Invalid value");
                 return;
@@ -1001,6 +1001,31 @@ namespace PokemonGoGUI
             foreach (Manager manager in fastObjectListViewMain.SelectedObjects)
             {
                 manager.UserSettings.MaxPokemonPerSnipe = value;
+            }
+
+            fastObjectListViewMain.RefreshSelectedObjects();
+        }
+
+        private void afterLevelToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string data = Prompt.ShowDialog("Snipe after level:", "Set Snipe After Level");
+
+            if (String.IsNullOrEmpty(data))
+            {
+                return;
+            }
+
+            int value = 0;
+
+            if (!Int32.TryParse(data, out value) || value >= 40 || value < 0)
+            {
+                MessageBox.Show("Invalid value");
+                return;
+            }
+
+            foreach (Manager manager in fastObjectListViewMain.SelectedObjects)
+            {
+                manager.UserSettings.SnipeAfterLevel = value;
             }
 
             fastObjectListViewMain.RefreshSelectedObjects();

@@ -43,6 +43,7 @@ namespace PokemonGoGUI
         public int SnipeAfterPokestops { get; set; }
         public int MinBallsToSnipe { get; set; }
         public int MaxPokemonPerSnipe { get; set; }
+        public int SnipeAfterLevel { get; set; }
 
         public string DeviceId { get; set; }
         public string AndroidBoardName { get; set; }
@@ -130,6 +131,7 @@ namespace PokemonGoGUI
             DelayBetweenLocationUpdates = 1000;
             MinBallsToSnipe = 20;
             MaxPokemonPerSnipe = 100;
+            SnipeAfterLevel = 0;
         }
 
         public void LoadDeviceSettings()
