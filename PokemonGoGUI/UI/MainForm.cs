@@ -26,7 +26,7 @@ namespace PokemonGoGUI
         List<Manager> _managers = new List<Manager>();
 
         private readonly string _saveFile = "data";
-        private const string _versionNumber = "1.1.4";
+        private const string _versionNumber = "1.1.5";
 
         public MainForm()
         {
@@ -528,6 +528,12 @@ namespace PokemonGoGUI
                     case BotState.Stopped:
                         e.SubItem.ForeColor = Color.Red;
                         break;
+                    case BotState.Paused:
+                        e.SubItem.ForeColor = Color.MediumAquamarine;
+                        break;
+                    case BotState.Pausing:
+                        e.SubItem.ForeColor = Color.MediumAquamarine;
+                        break;
                 }
             }
             else if (e.Column == olvColumnLastLogMessage)
@@ -753,6 +759,22 @@ namespace PokemonGoGUI
             }
 
             fastObjectListViewMain.RefreshSelectedObjects();
+        }
+
+        private void pauseUnPauseToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach(Manager manager in fastObjectListViewMain.SelectedObjects)
+            {
+                manager.TogglePause();
+            }
+        }
+
+        private void restartToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach(Manager manager in fastObjectListViewMain.SelectedObjects)
+            {
+                manager.Restart();
+            }
         }
     }
 }

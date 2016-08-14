@@ -39,6 +39,11 @@ namespace PokemonGoGUI.GoManager
         private const int _fleeingPokemonUntilBan = 3;
         private bool _potentialPokeStopBan = false;
         /*private int _failedPokestopResponse = 0;*/
+        private bool _autoRestart = false;
+
+        private ManualResetEvent _pauser = new ManualResetEvent(true);
+
+        private bool _isPaused { get { return !_pauser.WaitOne(0); } }
 
         [JsonConstructor]
         public Manager(bool jsonConstructor = true)
@@ -189,6 +194,17 @@ namespace PokemonGoGUI.GoManager
                 };
 
             }
+            catch(GoogleException ex)
+            {
+                Stop();
+
+                LogCaller(new LoggerEventArgs(ex.Message, LoggerTypes.Warning, ex));
+
+                return new MethodResult
+                {
+                    Message = "Failed to login"
+                };
+            }
             catch(Exception ex)
             {
                 _client.Logout();
@@ -224,6 +240,8 @@ namespace PokemonGoGUI.GoManager
             IsRunning = true;
             _totalZeroExpStops = 0;
             _client.SetSettings(UserSettings);
+            _pauser.Set();
+            _autoRestart = false;
 
             State = BotState.Starting;
 
@@ -232,7 +250,6 @@ namespace PokemonGoGUI.GoManager
 
             LogCaller(new LoggerEventArgs("Bot started", LoggerTypes.Info));
 
-            _runningStopwatch.Reset();
             _runningStopwatch.Start();
             _expGained = 0;
             _potentialPokemonBan = false;
@@ -243,6 +260,77 @@ namespace PokemonGoGUI.GoManager
             {
                 Message = "Bot started"
             };
+        }
+
+        public void Restart()
+        {
+            if(!IsRunning)
+            {
+                return;
+            }
+
+            LogCaller(new LoggerEventArgs("Restarting bot", LoggerTypes.Info));
+
+            _autoRestart = true;
+
+            Stop();
+        }
+
+        public void Pause()
+        {
+            if(!IsRunning)
+            {
+                return;
+            }
+
+            _pauser.Reset();
+            _runningStopwatch.Stop();
+
+            LogCaller(new LoggerEventArgs("Pausing bot ...", LoggerTypes.Info));
+
+            State = BotState.Pausing;
+        }
+
+        public void UnPause()
+        {
+            if (!IsRunning)
+            {
+                return;
+            }
+
+            _pauser.Set();
+            _runningStopwatch.Start();
+
+            LogCaller(new LoggerEventArgs("Unpausing bot ...", LoggerTypes.Info));
+
+            State = BotState.Running;
+        }
+
+        public void TogglePause()
+        {
+            if(State == BotState.Paused || State == BotState.Pausing)
+            {
+                UnPause();
+            }
+            else
+            {
+                Pause();
+            }
+        }
+
+        private bool WaitPaused()
+        {
+            if (_isPaused)
+            {
+                LogCaller(new LoggerEventArgs("Bot paused", LoggerTypes.Info));
+
+                State = BotState.Paused;
+                _pauser.WaitOne();
+
+                return true;
+            }
+
+            return false;
         }
 
         private async void RunningThread()
@@ -257,6 +345,8 @@ namespace PokemonGoGUI.GoManager
 
             while(IsRunning)
             {
+                WaitPaused();
+
                 StartingUp = true;
 
                 if(currentFails >= maxFailed)
@@ -348,6 +438,11 @@ namespace PokemonGoGUI.GoManager
 
                     _failedInventoryReponses = 0;
 
+                    if(WaitPaused())
+                    {
+                        continue;
+                    }
+
                     //End startup phase
                     StartingUp = false;
                     State = BotState.Running;
@@ -436,6 +531,8 @@ namespace PokemonGoGUI.GoManager
                         {
                             break;
                         }
+
+                        WaitPaused();
 
                         pokestopsToFarm = pokestopsToFarm.OrderBy(x => CalculateDistanceInMeters(_client.CurrentLatitude, _client.CurrentLongitude, x.Latitude, x.Longitude)).ToList();
 
@@ -597,6 +694,11 @@ namespace PokemonGoGUI.GoManager
             State = BotState.Stopped;
             _client.Logout();
             LogCaller(new LoggerEventArgs("Bot fully stopped", LoggerTypes.Info));
+
+            if(_autoRestart)
+            {
+                Start();
+            }
         }
 
         public void Stop()
@@ -609,7 +711,13 @@ namespace PokemonGoGUI.GoManager
             State = BotState.Stopping;
             LogCaller(new LoggerEventArgs("Bot stopping. Please wait for actions to complete ...", LoggerTypes.Info));
 
+            _pauser.Set();
             _runningStopwatch.Stop();
+
+            if(!_autoRestart)
+            {
+                _runningStopwatch.Reset();
+            }
 
             IsRunning = false;
         }

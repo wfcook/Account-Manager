@@ -167,6 +167,7 @@ namespace PokemonGoGUI.GoManager
                 settings.AccountName = UserSettings.AccountName;
                 settings.PtcPassword = UserSettings.PtcPassword;
                 settings.PtcUsername = UserSettings.PtcUsername;
+                settings.AuthType = UserSettings.AuthType;
 
                 UserSettings = settings;
 

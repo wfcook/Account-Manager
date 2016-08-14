@@ -34,7 +34,14 @@ namespace PokemonGo.RocketAPI.Login
             var response = client.PerformMasterLogin();
 
             if (response.ContainsKey("Error"))
+            {
+                if(response["Error"] == "BadAuthentication")
+                {
+                    throw new GoogleException("Invalid Google credentials");
+                }
+
                 throw new GoogleException(response["Error"]);
+            }
 
             //Todo: captcha/2fa implementation
 

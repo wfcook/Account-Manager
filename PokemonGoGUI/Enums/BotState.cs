@@ -12,6 +12,8 @@ namespace PokemonGoGUI.Enums
         Stopping,
         Starting,
         Running,
-        Waiting
+        Waiting,
+        Pausing,
+        Paused
     };
 }

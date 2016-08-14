@@ -50,9 +50,12 @@
             this.viewDetailsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.startToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.pauseUnPauseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.clearCountsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.countsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.logsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addNewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.importToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -73,8 +76,7 @@
             this.devToolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.garbageCollectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.timerListViewUpdate = new System.Windows.Forms.Timer(this.components);
-            this.countsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.logsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.restartToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewMain)).BeginInit();
             this.contextMenuStripAccounts.SuspendLayout();
             this.SuspendLayout();
@@ -222,6 +224,8 @@
             this.viewDetailsToolStripMenuItem,
             this.toolStripSeparator3,
             this.startToolStripMenuItem,
+            this.restartToolStripMenuItem,
+            this.pauseUnPauseToolStripMenuItem,
             this.stopToolStripMenuItem,
             this.toolStripSeparator4,
             this.clearCountsToolStripMenuItem,
@@ -236,7 +240,7 @@
             this.deleteToolStripMenuItem,
             this.devToolsToolStripMenuItem});
             this.contextMenuStripAccounts.Name = "contextMenuStrip1";
-            this.contextMenuStripAccounts.Size = new System.Drawing.Size(218, 423);
+            this.contextMenuStripAccounts.Size = new System.Drawing.Size(218, 479);
             // 
             // updateDetailsToolStripMenuItem
             // 
@@ -264,6 +268,13 @@
             this.startToolStripMenuItem.Text = "Start";
             this.startToolStripMenuItem.Click += new System.EventHandler(this.startToolStripMenuItem_Click);
             // 
+            // pauseUnPauseToolStripMenuItem
+            // 
+            this.pauseUnPauseToolStripMenuItem.Name = "pauseUnPauseToolStripMenuItem";
+            this.pauseUnPauseToolStripMenuItem.Size = new System.Drawing.Size(217, 28);
+            this.pauseUnPauseToolStripMenuItem.Text = "Toggle Pause";
+            this.pauseUnPauseToolStripMenuItem.Click += new System.EventHandler(this.pauseUnPauseToolStripMenuItem_Click);
+            // 
             // stopToolStripMenuItem
             // 
             this.stopToolStripMenuItem.Name = "stopToolStripMenuItem";
@@ -284,6 +295,20 @@
             this.clearCountsToolStripMenuItem.Name = "clearCountsToolStripMenuItem";
             this.clearCountsToolStripMenuItem.Size = new System.Drawing.Size(217, 28);
             this.clearCountsToolStripMenuItem.Text = "Clear ";
+            // 
+            // countsToolStripMenuItem
+            // 
+            this.countsToolStripMenuItem.Name = "countsToolStripMenuItem";
+            this.countsToolStripMenuItem.Size = new System.Drawing.Size(144, 28);
+            this.countsToolStripMenuItem.Text = "Counts";
+            this.countsToolStripMenuItem.Click += new System.EventHandler(this.clearCountsToolStripMenuItem_Click);
+            // 
+            // logsToolStripMenuItem
+            // 
+            this.logsToolStripMenuItem.Name = "logsToolStripMenuItem";
+            this.logsToolStripMenuItem.Size = new System.Drawing.Size(144, 28);
+            this.logsToolStripMenuItem.Text = "Logs";
+            this.logsToolStripMenuItem.Click += new System.EventHandler(this.logsToolStripMenuItem_Click);
             // 
             // addNewToolStripMenuItem
             // 
@@ -432,19 +457,12 @@
             this.timerListViewUpdate.Interval = 1000;
             this.timerListViewUpdate.Tick += new System.EventHandler(this.timerListViewUpdate_Tick);
             // 
-            // countsToolStripMenuItem
+            // restartToolStripMenuItem
             // 
-            this.countsToolStripMenuItem.Name = "countsToolStripMenuItem";
-            this.countsToolStripMenuItem.Size = new System.Drawing.Size(198, 28);
-            this.countsToolStripMenuItem.Text = "Counts";
-            this.countsToolStripMenuItem.Click += new System.EventHandler(this.clearCountsToolStripMenuItem_Click);
-            // 
-            // logsToolStripMenuItem
-            // 
-            this.logsToolStripMenuItem.Name = "logsToolStripMenuItem";
-            this.logsToolStripMenuItem.Size = new System.Drawing.Size(198, 28);
-            this.logsToolStripMenuItem.Text = "Logs";
-            this.logsToolStripMenuItem.Click += new System.EventHandler(this.logsToolStripMenuItem_Click);
+            this.restartToolStripMenuItem.Name = "restartToolStripMenuItem";
+            this.restartToolStripMenuItem.Size = new System.Drawing.Size(217, 28);
+            this.restartToolStripMenuItem.Text = "Restart";
+            this.restartToolStripMenuItem.Click += new System.EventHandler(this.restartToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -510,6 +528,8 @@
         private System.Windows.Forms.ToolStripMenuItem clearCountsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem countsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem logsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem pauseUnPauseToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem restartToolStripMenuItem;
     }
 }
 
