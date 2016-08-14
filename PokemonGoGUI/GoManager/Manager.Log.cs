@@ -1,6 +1,9 @@
-﻿using PokemonGoGUI.GoManager.Models;
+﻿using PokemonGo.RocketAPI;
+using PokemonGoGUI.Extensions;
+using PokemonGoGUI.GoManager.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -33,6 +36,37 @@ namespace PokemonGoGUI.GoManager
             {
                 Logs.Clear();
             }
+        }
+
+        public async Task<MethodResult> ExportLogs(string filename)
+        {
+            try
+            {
+                string data = String.Empty;
+
+                lock(Logs)
+                {
+                    data = Serializer.ToJson<List<Log>>(Logs);
+                }
+
+                await Task.Run(() => File.WriteAllText(filename, data));
+
+                return new MethodResult
+                {
+                    Message = "Success",
+                    Success = true
+                };
+            }
+            catch(Exception ex)
+            {
+                LogCaller(new LoggerEventArgs("Failed to export logs", LoggerTypes.Exception, ex));
+
+                return new MethodResult
+                {
+                    Message = ex.Message
+                };
+            }
+
         }
     }
 }

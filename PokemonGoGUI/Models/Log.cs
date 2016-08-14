@@ -73,5 +73,15 @@ namespace PokemonGoGUI.GoManager.Models
 
             return SystemColors.WindowText;
         }
+
+        public override string ToString()
+        {
+            if (!String.IsNullOrEmpty(ExceptionMessage))
+            {
+                return String.Format("Date: {0} Type: {1} Message: {2} Exception: {3}", Date, LoggerType, Message, ExceptionMessage);
+            }
+
+            return String.Format("Date: {0} Type: {1} Message: {2}", Date, LoggerType, Message);
+        }
     }
 }

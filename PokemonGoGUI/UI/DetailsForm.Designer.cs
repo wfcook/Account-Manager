@@ -82,6 +82,7 @@
             this.olvColumnCpMultiplier = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnAdditionalCpMult = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnPokemonRarity = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnPokemonBall = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.contextMenuStripPokemonDetails = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.upgradeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.evolveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -106,7 +107,9 @@
             this.olvColumnStatus = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnMessage = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnException = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.olvColumnPokemonBall = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.contextMenuStripLog = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControlMain.SuspendLayout();
             this.tabPageStats.SuspendLayout();
             this.tabPagePokedex.SuspendLayout();
@@ -122,6 +125,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewCandy)).BeginInit();
             this.tabPageLogs.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewLogs)).BeginInit();
+            this.contextMenuStripLog.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControlMain
@@ -634,6 +638,13 @@
             // 
             this.olvColumnPokemonRarity.Text = "Rarity";
             // 
+            // olvColumnPokemonBall
+            // 
+            this.olvColumnPokemonBall.AspectName = "Pokeball";
+            this.olvColumnPokemonBall.DisplayIndex = 12;
+            this.olvColumnPokemonBall.IsVisible = false;
+            this.olvColumnPokemonBall.Text = "Ball";
+            // 
             // contextMenuStripPokemonDetails
             // 
             this.contextMenuStripPokemonDetails.ImageScalingSize = new System.Drawing.Size(22, 22);
@@ -821,6 +832,7 @@
             this.olvColumnStatus,
             this.olvColumnMessage,
             this.olvColumnException});
+            this.fastObjectListViewLogs.ContextMenuStrip = this.contextMenuStripLog;
             this.fastObjectListViewLogs.Dock = System.Windows.Forms.DockStyle.Fill;
             this.fastObjectListViewLogs.FullRowSelect = true;
             this.fastObjectListViewLogs.Location = new System.Drawing.Point(0, 0);
@@ -862,12 +874,28 @@
             this.olvColumnException.UseFiltering = false;
             this.olvColumnException.Width = 97;
             // 
-            // olvColumnPokemonBall
+            // contextMenuStripLog
             // 
-            this.olvColumnPokemonBall.AspectName = "Pokeball";
-            this.olvColumnPokemonBall.DisplayIndex = 12;
-            this.olvColumnPokemonBall.IsVisible = false;
-            this.olvColumnPokemonBall.Text = "Ball";
+            this.contextMenuStripLog.ImageScalingSize = new System.Drawing.Size(22, 22);
+            this.contextMenuStripLog.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.copyToolStripMenuItem,
+            this.exportToolStripMenuItem});
+            this.contextMenuStripLog.Name = "contextMenuStripLog";
+            this.contextMenuStripLog.Size = new System.Drawing.Size(199, 91);
+            // 
+            // copyToolStripMenuItem
+            // 
+            this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
+            this.copyToolStripMenuItem.Size = new System.Drawing.Size(198, 28);
+            this.copyToolStripMenuItem.Text = "Copy";
+            this.copyToolStripMenuItem.Click += new System.EventHandler(this.copyToolStripMenuItem_Click);
+            // 
+            // exportToolStripMenuItem
+            // 
+            this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
+            this.exportToolStripMenuItem.Size = new System.Drawing.Size(198, 28);
+            this.exportToolStripMenuItem.Text = "Export";
+            this.exportToolStripMenuItem.Click += new System.EventHandler(this.exportToolStripMenuItem_Click);
             // 
             // DetailsForm
             // 
@@ -896,6 +924,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewCandy)).EndInit();
             this.tabPageLogs.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewLogs)).EndInit();
+            this.contextMenuStripLog.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -980,5 +1009,8 @@
         private System.Windows.Forms.Label label6;
         private BrightIdeasSoftware.OLVColumn olvColumnPokemonId;
         private BrightIdeasSoftware.OLVColumn olvColumnPokemonBall;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStripLog;
+        private System.Windows.Forms.ToolStripMenuItem copyToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem exportToolStripMenuItem;
     }
 }

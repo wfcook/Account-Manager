@@ -594,5 +594,37 @@ namespace PokemonGoGUI.UI
                 fastObjectListViewPokemon.SetObjects(_manager.Pokemon);
             }
         }
+
+        private void copyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            int total = fastObjectListViewLogs.SelectedObjects.Count;
+
+            if(total == 0)
+            {
+                return;
+            }
+
+            string copiedMessage = String.Join(Environment.NewLine, fastObjectListViewLogs.SelectedObjects.Cast<Log>().Select(x => x.ToString()));
+
+            Clipboard.SetText(copiedMessage);
+        }
+
+        private async void exportToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using(SaveFileDialog sfd = new SaveFileDialog())
+            {
+                sfd.Filter = "Json Files (*.json)|*.json|All Files (*.*)|*.*";
+
+                if(sfd.ShowDialog() == DialogResult.OK)
+                {
+                    MethodResult result = await _manager.ExportLogs(sfd.FileName);
+
+                    if(result.Success)
+                    {
+                        MessageBox.Show("Logs exported");
+                    }
+                }
+            }
+        }
     }
 }
