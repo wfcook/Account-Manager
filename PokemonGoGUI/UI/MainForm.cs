@@ -415,7 +415,11 @@ namespace PokemonGoGUI
                     manager.UserSettings.ProxyPort = importModel.Port;
                     manager.UserSettings.ProxyUsername = importModel.ProxyUsername;
                     manager.UserSettings.ProxyPassword = importModel.ProxyPassword;
-                    manager.UserSettings.MaxLevel = importModel.MaxLevel;
+
+                    if (parts.Length % 2 == 1)
+                    {
+                        manager.UserSettings.MaxLevel = importModel.MaxLevel;
+                    }
 
                     if (tempManagers.Add(manager))
                     {
