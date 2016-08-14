@@ -119,6 +119,7 @@ namespace PokemonGoGUI.UI
             checkBoxSnipePokemon.Checked = settings.SnipePokemon;
             numericUpDownSnipeAfterStops.Value = settings.SnipeAfterPokestops;
             numericUpDownMinBallsToSnipe.Value = settings.MinBallsToSnipe;
+            numericUpDownMaxPokemonPerSnipe.Value = settings.MaxPokemonPerSnipe;
 
             for(int i = 0; i < comboBoxMinAccountState.Items.Count; i++)
             {
@@ -252,6 +253,7 @@ namespace PokemonGoGUI.UI
             userSettings.SnipePokemon = checkBoxSnipePokemon.Checked;
             userSettings.SnipeAfterPokestops = (int)numericUpDownSnipeAfterStops.Value;
             userSettings.MinBallsToSnipe = (int)numericUpDownMinBallsToSnipe.Value;
+            userSettings.MaxPokemonPerSnipe = (int)numericUpDownMaxPokemonPerSnipe.Value;
             userSettings.StopAtMinAccountState = (AccountState)comboBoxMinAccountState.SelectedItem;
 
             if (proxyEx != null)
@@ -588,6 +590,7 @@ namespace PokemonGoGUI.UI
         {
             numericUpDownSnipeAfterStops.Enabled = checkBoxSnipePokemon.Checked;
             numericUpDownMinBallsToSnipe.Enabled = checkBoxSnipePokemon.Checked;
+            numericUpDownMaxPokemonPerSnipe.Enabled = checkBoxSnipePokemon.Checked;
         }
     }
 }

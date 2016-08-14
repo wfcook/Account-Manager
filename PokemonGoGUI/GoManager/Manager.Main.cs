@@ -431,7 +431,10 @@ namespace PokemonGoGUI.GoManager
 
                     if(!result.Success)
                     {
-                        ++_failedInventoryReponses;
+                        if (result.Message == "Failed to get inventory.")
+                        {
+                            ++_failedInventoryReponses;
+                        }
 
                         await Task.Delay(failedWaitTime);
 
@@ -702,7 +705,7 @@ namespace PokemonGoGUI.GoManager
 
             State = BotState.Stopped;
             _client.Logout();
-            LogCaller(new LoggerEventArgs("Bot fully stopped", LoggerTypes.Info));
+            LogCaller(new LoggerEventArgs(String.Format("Bot fully stopped at {0}", DateTime.Now), LoggerTypes.Info));
 
             if(_autoRestart)
             {

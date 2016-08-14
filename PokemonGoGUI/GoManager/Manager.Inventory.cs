@@ -42,7 +42,7 @@ namespace PokemonGoGUI.GoManager
 
                     return new MethodResult<List<InventoryItem>>
                     {
-                        Message = "GetInventory request failed to return valid response data."
+                        Message = "Failed to get inventory."
                     };
                 }
 
@@ -71,7 +71,7 @@ namespace PokemonGoGUI.GoManager
 
                 return new MethodResult<List<InventoryItem>>
                 {
-                    Message = "Failed to get inventory. Please try again."
+                    Message = "Failed to get inventory."
                 };
             }
             catch (Exception ex)

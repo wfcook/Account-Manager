@@ -66,7 +66,7 @@ namespace PokemonGoGUI.GoManager
                 };
             }
 
-            List<PokeSniperResult> pokemonToSnipe = pokeSniperResult.Data.results.Where(x => x.id > _lastPokeSniperId && PokemonWithinCatchSettings(x.PokemonId, true) && x.DespawnTime >= DateTime.Now.AddSeconds(30)).ToList();
+            List<PokeSniperResult> pokemonToSnipe = pokeSniperResult.Data.results.Where(x => x.id > _lastPokeSniperId && PokemonWithinCatchSettings(x.PokemonId, true) && x.DespawnTime >= DateTime.Now.AddSeconds(30)).TakeLast(UserSettings.MaxPokemonPerSnipe).ToList();
 
             _lastPokeSniperId = pokeSniperResult.Data.results.OrderByDescending(x => x.id).First().id;
 

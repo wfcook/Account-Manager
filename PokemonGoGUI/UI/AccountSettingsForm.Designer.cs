@@ -129,6 +129,8 @@
             this.toolTipMinAccountState = new System.Windows.Forms.ToolTip(this.components);
             this.numericUpDownMinBallsToSnipe = new System.Windows.Forms.NumericUpDown();
             this.label16 = new System.Windows.Forms.Label();
+            this.label17 = new System.Windows.Forms.Label();
+            this.numericUpDownMaxPokemonPerSnipe = new System.Windows.Forms.NumericUpDown();
             this.tabControlMain.SuspendLayout();
             this.tabPageDetails.SuspendLayout();
             this.tabControlSettings.SuspendLayout();
@@ -148,6 +150,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewTransfer)).BeginInit();
             this.contextMenuStripTransfer.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownMinBallsToSnipe)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownMaxPokemonPerSnipe)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControlMain
@@ -161,7 +164,7 @@
             this.tabControlMain.Location = new System.Drawing.Point(0, 0);
             this.tabControlMain.Name = "tabControlMain";
             this.tabControlMain.SelectedIndex = 0;
-            this.tabControlMain.Size = new System.Drawing.Size(502, 402);
+            this.tabControlMain.Size = new System.Drawing.Size(502, 423);
             this.tabControlMain.TabIndex = 0;
             // 
             // tabPageDetails
@@ -175,7 +178,7 @@
             this.tabPageDetails.Location = new System.Drawing.Point(4, 25);
             this.tabPageDetails.Name = "tabPageDetails";
             this.tabPageDetails.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageDetails.Size = new System.Drawing.Size(494, 373);
+            this.tabPageDetails.Size = new System.Drawing.Size(494, 394);
             this.tabPageDetails.TabIndex = 1;
             this.tabPageDetails.Text = "Details";
             this.tabPageDetails.UseVisualStyleBackColor = true;
@@ -190,7 +193,7 @@
             this.tabControlSettings.Location = new System.Drawing.Point(-4, 0);
             this.tabControlSettings.Name = "tabControlSettings";
             this.tabControlSettings.SelectedIndex = 0;
-            this.tabControlSettings.Size = new System.Drawing.Size(502, 320);
+            this.tabControlSettings.Size = new System.Drawing.Size(502, 341);
             this.tabControlSettings.TabIndex = 14;
             // 
             // tabPageSettingsGeneral
@@ -199,6 +202,7 @@
             this.tabPageSettingsGeneral.Controls.Add(this.textBoxProxy);
             this.tabPageSettingsGeneral.Controls.Add(this.label12);
             this.tabPageSettingsGeneral.Controls.Add(this.label9);
+            this.tabPageSettingsGeneral.Controls.Add(this.numericUpDownMaxPokemonPerSnipe);
             this.tabPageSettingsGeneral.Controls.Add(this.numericUpDownMinBallsToSnipe);
             this.tabPageSettingsGeneral.Controls.Add(this.numericUpDownSnipeAfterStops);
             this.tabPageSettingsGeneral.Controls.Add(this.checkBoxSnipePokemon);
@@ -216,6 +220,7 @@
             this.tabPageSettingsGeneral.Controls.Add(this.label11);
             this.tabPageSettingsGeneral.Controls.Add(this.textBoxPtcUsername);
             this.tabPageSettingsGeneral.Controls.Add(this.label14);
+            this.tabPageSettingsGeneral.Controls.Add(this.label17);
             this.tabPageSettingsGeneral.Controls.Add(this.label16);
             this.tabPageSettingsGeneral.Controls.Add(this.label2);
             this.tabPageSettingsGeneral.Controls.Add(this.radioButtonGoogle);
@@ -227,7 +232,7 @@
             this.tabPageSettingsGeneral.Location = new System.Drawing.Point(4, 25);
             this.tabPageSettingsGeneral.Name = "tabPageSettingsGeneral";
             this.tabPageSettingsGeneral.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageSettingsGeneral.Size = new System.Drawing.Size(494, 291);
+            this.tabPageSettingsGeneral.Size = new System.Drawing.Size(494, 312);
             this.tabPageSettingsGeneral.TabIndex = 0;
             this.tabPageSettingsGeneral.Text = "General";
             this.tabPageSettingsGeneral.UseVisualStyleBackColor = true;
@@ -235,7 +240,7 @@
             // comboBoxMinAccountState
             // 
             this.comboBoxMinAccountState.FormattingEnabled = true;
-            this.comboBoxMinAccountState.Location = new System.Drawing.Point(130, 251);
+            this.comboBoxMinAccountState.Location = new System.Drawing.Point(130, 279);
             this.comboBoxMinAccountState.Name = "comboBoxMinAccountState";
             this.comboBoxMinAccountState.Size = new System.Drawing.Size(232, 24);
             this.comboBoxMinAccountState.TabIndex = 56;
@@ -243,7 +248,7 @@
             // 
             // textBoxProxy
             // 
-            this.textBoxProxy.Location = new System.Drawing.Point(67, 167);
+            this.textBoxProxy.Location = new System.Drawing.Point(67, 195);
             this.textBoxProxy.Name = "textBoxProxy";
             this.textBoxProxy.Size = new System.Drawing.Size(180, 22);
             this.textBoxProxy.TabIndex = 55;
@@ -252,7 +257,7 @@
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(11, 170);
+            this.label12.Location = new System.Drawing.Point(11, 198);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(50, 16);
             this.label12.TabIndex = 54;
@@ -261,7 +266,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(22, 198);
+            this.label9.Location = new System.Drawing.Point(22, 226);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(157, 16);
             this.label9.TabIndex = 51;
@@ -359,14 +364,14 @@
             // 
             // textBoxMaxLevel
             // 
-            this.textBoxMaxLevel.Location = new System.Drawing.Point(185, 223);
+            this.textBoxMaxLevel.Location = new System.Drawing.Point(185, 251);
             this.textBoxMaxLevel.Name = "textBoxMaxLevel";
             this.textBoxMaxLevel.Size = new System.Drawing.Size(65, 22);
             this.textBoxMaxLevel.TabIndex = 37;
             // 
             // textBoxPokemonBeforeEvolve
             // 
-            this.textBoxPokemonBeforeEvolve.Location = new System.Drawing.Point(185, 195);
+            this.textBoxPokemonBeforeEvolve.Location = new System.Drawing.Point(185, 223);
             this.textBoxPokemonBeforeEvolve.Name = "textBoxPokemonBeforeEvolve";
             this.textBoxPokemonBeforeEvolve.Size = new System.Drawing.Size(65, 22);
             this.textBoxPokemonBeforeEvolve.TabIndex = 35;
@@ -388,7 +393,7 @@
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(0, 254);
+            this.label15.Location = new System.Drawing.Point(0, 282);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(123, 16);
             this.label15.TabIndex = 15;
@@ -397,7 +402,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(107, 226);
+            this.label11.Location = new System.Drawing.Point(107, 254);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(72, 16);
             this.label11.TabIndex = 15;
@@ -505,7 +510,7 @@
             this.tabPageSettingsNavigation.Location = new System.Drawing.Point(4, 25);
             this.tabPageSettingsNavigation.Name = "tabPageSettingsNavigation";
             this.tabPageSettingsNavigation.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageSettingsNavigation.Size = new System.Drawing.Size(494, 291);
+            this.tabPageSettingsNavigation.Size = new System.Drawing.Size(494, 312);
             this.tabPageSettingsNavigation.TabIndex = 1;
             this.tabPageSettingsNavigation.Text = "Navigation";
             this.tabPageSettingsNavigation.UseVisualStyleBackColor = true;
@@ -620,7 +625,7 @@
             // buttonImportConfig
             // 
             this.buttonImportConfig.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.buttonImportConfig.Location = new System.Drawing.Point(93, 348);
+            this.buttonImportConfig.Location = new System.Drawing.Point(93, 369);
             this.buttonImportConfig.Name = "buttonImportConfig";
             this.buttonImportConfig.Size = new System.Drawing.Size(128, 23);
             this.buttonImportConfig.TabIndex = 11;
@@ -631,7 +636,7 @@
             // buttonExportConfig
             // 
             this.buttonExportConfig.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.buttonExportConfig.Location = new System.Drawing.Point(227, 348);
+            this.buttonExportConfig.Location = new System.Drawing.Point(227, 369);
             this.buttonExportConfig.Name = "buttonExportConfig";
             this.buttonExportConfig.Size = new System.Drawing.Size(128, 23);
             this.buttonExportConfig.TabIndex = 10;
@@ -643,7 +648,7 @@
             // 
             this.buttonDone.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonDone.Location = new System.Drawing.Point(411, 348);
+            this.buttonDone.Location = new System.Drawing.Point(411, 369);
             this.buttonDone.Name = "buttonDone";
             this.buttonDone.Size = new System.Drawing.Size(75, 23);
             this.buttonDone.TabIndex = 6;
@@ -656,7 +661,7 @@
             this.label13.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(326, 329);
+            this.label13.Location = new System.Drawing.Point(326, 350);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(160, 16);
             this.label13.TabIndex = 1;
@@ -665,7 +670,7 @@
             // buttonSave
             // 
             this.buttonSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.buttonSave.Location = new System.Drawing.Point(12, 348);
+            this.buttonSave.Location = new System.Drawing.Point(12, 369);
             this.buttonSave.Name = "buttonSave";
             this.buttonSave.Size = new System.Drawing.Size(75, 23);
             this.buttonSave.TabIndex = 0;
@@ -678,7 +683,7 @@
             this.tabPageRecycling.Controls.Add(this.fastObjectListViewRecycling);
             this.tabPageRecycling.Location = new System.Drawing.Point(4, 25);
             this.tabPageRecycling.Name = "tabPageRecycling";
-            this.tabPageRecycling.Size = new System.Drawing.Size(494, 373);
+            this.tabPageRecycling.Size = new System.Drawing.Size(494, 394);
             this.tabPageRecycling.TabIndex = 2;
             this.tabPageRecycling.Text = "Recycling";
             this.tabPageRecycling.UseVisualStyleBackColor = true;
@@ -697,7 +702,7 @@
             this.fastObjectListViewRecycling.Location = new System.Drawing.Point(0, 0);
             this.fastObjectListViewRecycling.Name = "fastObjectListViewRecycling";
             this.fastObjectListViewRecycling.ShowGroups = false;
-            this.fastObjectListViewRecycling.Size = new System.Drawing.Size(494, 373);
+            this.fastObjectListViewRecycling.Size = new System.Drawing.Size(494, 394);
             this.fastObjectListViewRecycling.TabIndex = 0;
             this.fastObjectListViewRecycling.UseCompatibleStateImageBehavior = false;
             this.fastObjectListViewRecycling.View = System.Windows.Forms.View.Details;
@@ -735,7 +740,7 @@
             this.tabPageEvolving.Controls.Add(this.fastObjectListViewEvolve);
             this.tabPageEvolving.Location = new System.Drawing.Point(4, 25);
             this.tabPageEvolving.Name = "tabPageEvolving";
-            this.tabPageEvolving.Size = new System.Drawing.Size(494, 373);
+            this.tabPageEvolving.Size = new System.Drawing.Size(494, 394);
             this.tabPageEvolving.TabIndex = 3;
             this.tabPageEvolving.Text = "Evolving";
             this.tabPageEvolving.UseVisualStyleBackColor = true;
@@ -757,7 +762,7 @@
             this.fastObjectListViewEvolve.Location = new System.Drawing.Point(0, 0);
             this.fastObjectListViewEvolve.Name = "fastObjectListViewEvolve";
             this.fastObjectListViewEvolve.ShowGroups = false;
-            this.fastObjectListViewEvolve.Size = new System.Drawing.Size(494, 373);
+            this.fastObjectListViewEvolve.Size = new System.Drawing.Size(494, 394);
             this.fastObjectListViewEvolve.TabIndex = 2;
             this.fastObjectListViewEvolve.UseCompatibleStateImageBehavior = false;
             this.fastObjectListViewEvolve.View = System.Windows.Forms.View.Details;
@@ -1112,11 +1117,43 @@
             this.label16.TabIndex = 19;
             this.label16.Text = "Min balls to snipe:";
             // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(24, 169);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(155, 16);
+            this.label17.TabIndex = 19;
+            this.label17.Text = "Max pokemon per snipe:";
+            // 
+            // numericUpDownMaxPokemonPerSnipe
+            // 
+            this.numericUpDownMaxPokemonPerSnipe.Enabled = false;
+            this.numericUpDownMaxPokemonPerSnipe.Location = new System.Drawing.Point(184, 167);
+            this.numericUpDownMaxPokemonPerSnipe.Maximum = new decimal(new int[] {
+            9000,
+            0,
+            0,
+            0});
+            this.numericUpDownMaxPokemonPerSnipe.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numericUpDownMaxPokemonPerSnipe.Name = "numericUpDownMaxPokemonPerSnipe";
+            this.numericUpDownMaxPokemonPerSnipe.Size = new System.Drawing.Size(62, 22);
+            this.numericUpDownMaxPokemonPerSnipe.TabIndex = 50;
+            this.numericUpDownMaxPokemonPerSnipe.Value = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            // 
             // AccountSettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(502, 402);
+            this.ClientSize = new System.Drawing.Size(502, 423);
             this.Controls.Add(this.tabControlMain);
             this.MinimumSize = new System.Drawing.Size(522, 433);
             this.Name = "AccountSettingsForm";
@@ -1145,6 +1182,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewTransfer)).EndInit();
             this.contextMenuStripTransfer.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownMinBallsToSnipe)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownMaxPokemonPerSnipe)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1251,5 +1289,7 @@
         private System.Windows.Forms.ToolTip toolTipMinAccountState;
         private System.Windows.Forms.NumericUpDown numericUpDownMinBallsToSnipe;
         private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.NumericUpDown numericUpDownMaxPokemonPerSnipe;
+        private System.Windows.Forms.Label label17;
     }
 }
