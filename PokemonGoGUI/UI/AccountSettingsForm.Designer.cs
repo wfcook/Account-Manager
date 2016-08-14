@@ -127,6 +127,8 @@
             this.restoreDefaultsToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTipProxy = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipMinAccountState = new System.Windows.Forms.ToolTip(this.components);
+            this.numericUpDownMinBallsToSnipe = new System.Windows.Forms.NumericUpDown();
+            this.label16 = new System.Windows.Forms.Label();
             this.tabControlMain.SuspendLayout();
             this.tabPageDetails.SuspendLayout();
             this.tabControlSettings.SuspendLayout();
@@ -145,6 +147,7 @@
             this.tabPageTransfer.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewTransfer)).BeginInit();
             this.contextMenuStripTransfer.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownMinBallsToSnipe)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControlMain
@@ -196,6 +199,7 @@
             this.tabPageSettingsGeneral.Controls.Add(this.textBoxProxy);
             this.tabPageSettingsGeneral.Controls.Add(this.label12);
             this.tabPageSettingsGeneral.Controls.Add(this.label9);
+            this.tabPageSettingsGeneral.Controls.Add(this.numericUpDownMinBallsToSnipe);
             this.tabPageSettingsGeneral.Controls.Add(this.numericUpDownSnipeAfterStops);
             this.tabPageSettingsGeneral.Controls.Add(this.checkBoxSnipePokemon);
             this.tabPageSettingsGeneral.Controls.Add(this.checkBoxIncubateEggs);
@@ -212,6 +216,7 @@
             this.tabPageSettingsGeneral.Controls.Add(this.label11);
             this.tabPageSettingsGeneral.Controls.Add(this.textBoxPtcUsername);
             this.tabPageSettingsGeneral.Controls.Add(this.label14);
+            this.tabPageSettingsGeneral.Controls.Add(this.label16);
             this.tabPageSettingsGeneral.Controls.Add(this.label2);
             this.tabPageSettingsGeneral.Controls.Add(this.radioButtonGoogle);
             this.tabPageSettingsGeneral.Controls.Add(this.radioButtonPtc);
@@ -230,7 +235,7 @@
             // comboBoxMinAccountState
             // 
             this.comboBoxMinAccountState.FormattingEnabled = true;
-            this.comboBoxMinAccountState.Location = new System.Drawing.Point(130, 223);
+            this.comboBoxMinAccountState.Location = new System.Drawing.Point(130, 251);
             this.comboBoxMinAccountState.Name = "comboBoxMinAccountState";
             this.comboBoxMinAccountState.Size = new System.Drawing.Size(232, 24);
             this.comboBoxMinAccountState.TabIndex = 56;
@@ -238,7 +243,7 @@
             // 
             // textBoxProxy
             // 
-            this.textBoxProxy.Location = new System.Drawing.Point(67, 139);
+            this.textBoxProxy.Location = new System.Drawing.Point(67, 167);
             this.textBoxProxy.Name = "textBoxProxy";
             this.textBoxProxy.Size = new System.Drawing.Size(180, 22);
             this.textBoxProxy.TabIndex = 55;
@@ -247,7 +252,7 @@
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(11, 142);
+            this.label12.Location = new System.Drawing.Point(11, 170);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(50, 16);
             this.label12.TabIndex = 54;
@@ -256,7 +261,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(22, 170);
+            this.label9.Location = new System.Drawing.Point(22, 198);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(157, 16);
             this.label9.TabIndex = 51;
@@ -354,14 +359,14 @@
             // 
             // textBoxMaxLevel
             // 
-            this.textBoxMaxLevel.Location = new System.Drawing.Point(185, 195);
+            this.textBoxMaxLevel.Location = new System.Drawing.Point(185, 223);
             this.textBoxMaxLevel.Name = "textBoxMaxLevel";
             this.textBoxMaxLevel.Size = new System.Drawing.Size(65, 22);
             this.textBoxMaxLevel.TabIndex = 37;
             // 
             // textBoxPokemonBeforeEvolve
             // 
-            this.textBoxPokemonBeforeEvolve.Location = new System.Drawing.Point(185, 167);
+            this.textBoxPokemonBeforeEvolve.Location = new System.Drawing.Point(185, 195);
             this.textBoxPokemonBeforeEvolve.Name = "textBoxPokemonBeforeEvolve";
             this.textBoxPokemonBeforeEvolve.Size = new System.Drawing.Size(65, 22);
             this.textBoxPokemonBeforeEvolve.TabIndex = 35;
@@ -383,7 +388,7 @@
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(0, 226);
+            this.label15.Location = new System.Drawing.Point(0, 254);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(123, 16);
             this.label15.TabIndex = 15;
@@ -392,7 +397,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(107, 198);
+            this.label11.Location = new System.Drawing.Point(107, 226);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(72, 16);
             this.label11.TabIndex = 15;
@@ -1075,6 +1080,38 @@
             this.restoreDefaultsToolStripMenuItem2.Text = "Restore Defaults";
             this.restoreDefaultsToolStripMenuItem2.Click += new System.EventHandler(this.restoreDefaultsToolStripMenuItem2_Click);
             // 
+            // numericUpDownMinBallsToSnipe
+            // 
+            this.numericUpDownMinBallsToSnipe.Enabled = false;
+            this.numericUpDownMinBallsToSnipe.Location = new System.Drawing.Point(184, 139);
+            this.numericUpDownMinBallsToSnipe.Maximum = new decimal(new int[] {
+            9000,
+            0,
+            0,
+            0});
+            this.numericUpDownMinBallsToSnipe.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numericUpDownMinBallsToSnipe.Name = "numericUpDownMinBallsToSnipe";
+            this.numericUpDownMinBallsToSnipe.Size = new System.Drawing.Size(62, 22);
+            this.numericUpDownMinBallsToSnipe.TabIndex = 50;
+            this.numericUpDownMinBallsToSnipe.Value = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(64, 141);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(114, 16);
+            this.label16.TabIndex = 19;
+            this.label16.Text = "Min balls to snipe:";
+            // 
             // AccountSettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -1107,6 +1144,7 @@
             this.tabPageTransfer.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewTransfer)).EndInit();
             this.contextMenuStripTransfer.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownMinBallsToSnipe)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1211,5 +1249,7 @@
         private System.Windows.Forms.ComboBox comboBoxMinAccountState;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.ToolTip toolTipMinAccountState;
+        private System.Windows.Forms.NumericUpDown numericUpDownMinBallsToSnipe;
+        private System.Windows.Forms.Label label16;
     }
 }

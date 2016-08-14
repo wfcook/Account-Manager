@@ -336,37 +336,21 @@ namespace PokemonGoGUI.GoManager
             Stats.Experience += amount;
         }
 
+        private int RemainingPokeballs()
+        {
+            int total = 0;
+
+            total += Items.FirstOrDefault(x => x.ItemId == ItemId.ItemPokeBall).Count;
+            total += Items.FirstOrDefault(x => x.ItemId == ItemId.ItemGreatBall).Count;
+            total += Items.FirstOrDefault(x => x.ItemId == ItemId.ItemUltraBall).Count;
+            total += Items.FirstOrDefault(x => x.ItemId == ItemId.ItemMasterBall).Count;
+
+            return total;
+        }
+
         private bool HasPokeballsLeft()
         {
-            ItemData pokeBalls = Items.FirstOrDefault(x => x.ItemId == ItemId.ItemPokeBall);
-
-            if (pokeBalls.Count > 0)
-            {
-                return true;
-            }
-
-            ItemData greatBalls = Items.FirstOrDefault(x => x.ItemId == ItemId.ItemGreatBall);
-
-            if (greatBalls.Count > 0)
-            {
-                return true;
-            }
-
-            ItemData ultraBalls = Items.FirstOrDefault(x => x.ItemId == ItemId.ItemUltraBall);
-
-            if (ultraBalls.Count > 0)
-            {
-                return true;
-            }
-
-            ItemData masterBalls = Items.FirstOrDefault(x => x.ItemId == ItemId.ItemMasterBall);
-
-            if (masterBalls.Count > 0)
-            {
-                return true;
-            }
-
-            return false;
+            return RemainingPokeballs() > 0;
         }
     }
 }

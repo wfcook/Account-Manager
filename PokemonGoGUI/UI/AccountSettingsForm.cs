@@ -118,6 +118,7 @@ namespace PokemonGoGUI.UI
             checkBoxCatchPokemon.Checked = settings.CatchPokemon;
             checkBoxSnipePokemon.Checked = settings.SnipePokemon;
             numericUpDownSnipeAfterStops.Value = settings.SnipeAfterPokestops;
+            numericUpDownMinBallsToSnipe.Value = settings.MinBallsToSnipe;
 
             for(int i = 0; i < comboBoxMinAccountState.Items.Count; i++)
             {
@@ -250,6 +251,7 @@ namespace PokemonGoGUI.UI
             userSettings.CatchPokemon = checkBoxCatchPokemon.Checked;
             userSettings.SnipePokemon = checkBoxSnipePokemon.Checked;
             userSettings.SnipeAfterPokestops = (int)numericUpDownSnipeAfterStops.Value;
+            userSettings.MinBallsToSnipe = (int)numericUpDownMinBallsToSnipe.Value;
             userSettings.StopAtMinAccountState = (AccountState)comboBoxMinAccountState.SelectedItem;
 
             if (proxyEx != null)
@@ -585,6 +587,7 @@ namespace PokemonGoGUI.UI
         private void checkBoxSnipePokemon_CheckedChanged(object sender, EventArgs e)
         {
             numericUpDownSnipeAfterStops.Enabled = checkBoxSnipePokemon.Checked;
+            numericUpDownMinBallsToSnipe.Enabled = checkBoxSnipePokemon.Checked;
         }
     }
 }

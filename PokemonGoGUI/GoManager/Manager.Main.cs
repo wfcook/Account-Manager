@@ -372,6 +372,8 @@ namespace PokemonGoGUI.GoManager
 
                 try
                 {
+                    #region Startup
+
                     if (!_client.LoggedIn)
                     {
                         //Login
@@ -464,6 +466,10 @@ namespace PokemonGoGUI.GoManager
 
                     await Task.Delay(delayTime);
 
+                    #endregion
+
+                    #region PokeStopTask
+
                     //Get pokestops
                     LogCaller(new LoggerEventArgs("Grabbing pokestops...", LoggerTypes.Debug));
 
@@ -544,14 +550,6 @@ namespace PokemonGoGUI.GoManager
 
                         double distance = CalculateDistanceInMeters(currentLocation, fortLocation);
 
-                        /*
-                        if(distance >= 250)
-                        {
-                            LogCaller(new LoggerEventArgs(String.Format("Stop {0} of {1} over 250m away. Done farming stops. Distance {2:0.00}m", pokeStopNumber, totalStops, distance), LoggerTypes.Info));
-
-                            break;
-                        }*/
-
                         LogCaller(new LoggerEventArgs(String.Format("Going to stop {0} of {1}. Distance {2:0.00}m", pokeStopNumber, totalStops, distance), LoggerTypes.Info));
 
                         //Go to stops
@@ -595,9 +593,18 @@ namespace PokemonGoGUI.GoManager
                         await Task.Delay(delayTime);
 
                         //Check sniping
-                        if(UserSettings.SnipePokemon && IsRunning && pokeStopNumber >= UserSettings.SnipeAfterPokestops && pokeStopNumber % UserSettings.SnipeAfterPokestops == 0)
+                        int remainingBalls = RemainingPokeballs();
+
+                        if (remainingBalls >= UserSettings.MinBallsToSnipe)
                         {
-                            await SnipeAllPokemon();
+                            if (UserSettings.SnipePokemon && IsRunning && pokeStopNumber >= UserSettings.SnipeAfterPokestops && pokeStopNumber % UserSettings.SnipeAfterPokestops == 0)
+                            {
+                                await SnipeAllPokemon();
+                            }
+                        }
+                        else
+                        {
+                            LogCaller(new LoggerEventArgs(String.Format("Not enough pokeballs to snipe. Need {0} have {1}", UserSettings.MinBallsToSnipe, remainingBalls), LoggerTypes.Info));
                         }
 
                         await Task.Delay(delayTime);
@@ -681,6 +688,8 @@ namespace PokemonGoGUI.GoManager
                             break;
                         }
                     }
+
+                    #endregion
                 }
                 catch(Exception ex)
                 {

@@ -21,7 +21,7 @@ namespace PokemonGoGUI.GoManager
     {
         public async Task<MethodResult> TransferPokemon(IEnumerable<PokemonData> pokemonToTransfer)
         {
-            foreach (PokemonData pokemon in pokemonToTransfer)
+            foreach (PokemonData pokemon in pokemonToTransfer.Where(x => x.Favorite == 0))
             {
                 try
                 {

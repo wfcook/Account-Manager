@@ -41,6 +41,7 @@ namespace PokemonGoGUI
         public bool SnipePokemon { get; set; }
         public int MaxLevel { get; set; }
         public int SnipeAfterPokestops { get; set; }
+        public int MinBallsToSnipe { get; set; }
 
         public string DeviceId { get; set; }
         public string AndroidBoardName { get; set; }
@@ -125,6 +126,7 @@ namespace PokemonGoGUI
             StopAtMinAccountState = AccountState.PokemonBanOrPokestopBanTemp;
             DelayBetweenPlayerActions = 500;
             DelayBetweenLocationUpdates = 1000;
+            MinBallsToSnipe = 20;
         }
 
         public void LoadDeviceSettings()
