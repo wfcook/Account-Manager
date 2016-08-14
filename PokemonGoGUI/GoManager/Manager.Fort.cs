@@ -93,10 +93,10 @@ namespace PokemonGoGUI.GoManager
                     {
                         if (!_potentialPokemonBan && _fleeingPokemonResponses >= _fleeingPokemonUntilBan)
                         {
-                            LogCaller(new LoggerEventArgs("Potential pokemon ban detected. Waiting for 1 more flee to avoid false positives", LoggerTypes.Warning));
+                            LogCaller(new LoggerEventArgs("Potential pokemon ban detected. Setting flee count to 0 avoid false positives", LoggerTypes.Warning));
 
                             _potentialPokemonBan = true;
-                            --_fleeingPokemonResponses;
+                            _fleeingPokemonResponses = 0;
                         }
                         else if (_fleeingPokemonResponses >= _fleeingPokemonUntilBan)
                         {
