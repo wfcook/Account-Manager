@@ -167,7 +167,7 @@ namespace PokemonGoGUI.GoManager
 
                             bypassResponse = await _client.Fort.SearchFort(pokestop.Id, pokestop.Latitude, pokestop.Longitude);
 
-                            await Task.Delay(300);
+                            await Task.Delay(UserSettings.DelayBetweenPlayerActions);
                         } while (bypassResponse.ExperienceAwarded == 0 && totalAttempts <= maxAttempts);
 
                         if(bypassResponse.ExperienceAwarded != 0)
