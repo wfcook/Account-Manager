@@ -776,5 +776,20 @@ namespace PokemonGoGUI
                 manager.Restart();
             }
         }
+
+        private void logViewerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using(OpenFileDialog ofd = new OpenFileDialog())
+            {
+                ofd.Filter = "Json Files (*.json)|*.json|All Files (*.*)|*.*";
+                
+                if(ofd.ShowDialog() == DialogResult.OK)
+                {
+                    LogViewerForm lvForm = new LogViewerForm(ofd.FileName);
+
+                    lvForm.ShowDialog();
+                }
+            }
+        }
     }
 }
