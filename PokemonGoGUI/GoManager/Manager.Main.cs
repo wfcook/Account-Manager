@@ -595,7 +595,7 @@ namespace PokemonGoGUI.GoManager
                         await Task.Delay(delayTime);
 
                         //Check sniping
-                        if (Stats.Level > UserSettings.SnipeAfterLevel)
+                        if (Stats.Level >= UserSettings.SnipeAfterLevel)
                         {
                             int remainingBalls = RemainingPokeballs();
 

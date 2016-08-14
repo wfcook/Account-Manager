@@ -37,6 +37,7 @@
             this.textBoxProxy = new System.Windows.Forms.TextBox();
             this.label12 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
+            this.numericUpDownSnipeAfterLevel = new System.Windows.Forms.NumericUpDown();
             this.numericUpDownMaxPokemonPerSnipe = new System.Windows.Forms.NumericUpDown();
             this.numericUpDownMinBallsToSnipe = new System.Windows.Forms.NumericUpDown();
             this.numericUpDownSnipeAfterStops = new System.Windows.Forms.NumericUpDown();
@@ -54,6 +55,7 @@
             this.label15 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
             this.textBoxPtcUsername = new System.Windows.Forms.TextBox();
+            this.label31 = new System.Windows.Forms.Label();
             this.label14 = new System.Windows.Forms.Label();
             this.label17 = new System.Windows.Forms.Label();
             this.label16 = new System.Windows.Forms.Label();
@@ -160,12 +162,11 @@
             this.restoreDefaultsToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTipProxy = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipMinAccountState = new System.Windows.Forms.ToolTip(this.components);
-            this.label31 = new System.Windows.Forms.Label();
-            this.numericUpDownSnipeAfterLevel = new System.Windows.Forms.NumericUpDown();
             this.tabControlMain.SuspendLayout();
             this.tabPageDetails.SuspendLayout();
             this.tabControlSettings.SuspendLayout();
             this.tabPageSettingsGeneral.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSnipeAfterLevel)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownMaxPokemonPerSnipe)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownMinBallsToSnipe)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSnipeAfterStops)).BeginInit();
@@ -183,7 +184,6 @@
             this.tabPageTransfer.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewTransfer)).BeginInit();
             this.contextMenuStripTransfer.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSnipeAfterLevel)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControlMain
@@ -307,6 +307,19 @@
             this.label9.Size = new System.Drawing.Size(157, 16);
             this.label9.TabIndex = 51;
             this.label9.Text = "Pokemon Before Evolve:";
+            // 
+            // numericUpDownSnipeAfterLevel
+            // 
+            this.numericUpDownSnipeAfterLevel.Enabled = false;
+            this.numericUpDownSnipeAfterLevel.Location = new System.Drawing.Point(188, 195);
+            this.numericUpDownSnipeAfterLevel.Maximum = new decimal(new int[] {
+            39,
+            0,
+            0,
+            0});
+            this.numericUpDownSnipeAfterLevel.Name = "numericUpDownSnipeAfterLevel";
+            this.numericUpDownSnipeAfterLevel.Size = new System.Drawing.Size(62, 22);
+            this.numericUpDownSnipeAfterLevel.TabIndex = 50;
             // 
             // numericUpDownMaxPokemonPerSnipe
             // 
@@ -496,6 +509,15 @@
             this.textBoxPtcUsername.Name = "textBoxPtcUsername";
             this.textBoxPtcUsername.Size = new System.Drawing.Size(146, 22);
             this.textBoxPtcUsername.TabIndex = 30;
+            // 
+            // label31
+            // 
+            this.label31.AutoSize = true;
+            this.label31.Location = new System.Drawing.Point(49, 197);
+            this.label31.Name = "label31";
+            this.label31.Size = new System.Drawing.Size(130, 16);
+            this.label31.TabIndex = 19;
+            this.label31.Text = "Start sniping at level:";
             // 
             // label14
             // 
@@ -1479,28 +1501,6 @@
             this.restoreDefaultsToolStripMenuItem2.Text = "Restore Defaults";
             this.restoreDefaultsToolStripMenuItem2.Click += new System.EventHandler(this.restoreDefaultsToolStripMenuItem2_Click);
             // 
-            // label31
-            // 
-            this.label31.AutoSize = true;
-            this.label31.Location = new System.Drawing.Point(36, 197);
-            this.label31.Name = "label31";
-            this.label31.Size = new System.Drawing.Size(142, 16);
-            this.label31.TabIndex = 19;
-            this.label31.Text = "Only Snipe After Level:";
-            // 
-            // numericUpDownSnipeAfterLevel
-            // 
-            this.numericUpDownSnipeAfterLevel.Enabled = false;
-            this.numericUpDownSnipeAfterLevel.Location = new System.Drawing.Point(188, 195);
-            this.numericUpDownSnipeAfterLevel.Maximum = new decimal(new int[] {
-            39,
-            0,
-            0,
-            0});
-            this.numericUpDownSnipeAfterLevel.Name = "numericUpDownSnipeAfterLevel";
-            this.numericUpDownSnipeAfterLevel.Size = new System.Drawing.Size(62, 22);
-            this.numericUpDownSnipeAfterLevel.TabIndex = 50;
-            // 
             // AccountSettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -1518,6 +1518,7 @@
             this.tabControlSettings.ResumeLayout(false);
             this.tabPageSettingsGeneral.ResumeLayout(false);
             this.tabPageSettingsGeneral.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSnipeAfterLevel)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownMaxPokemonPerSnipe)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownMinBallsToSnipe)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSnipeAfterStops)).EndInit();
@@ -1537,7 +1538,6 @@
             this.tabPageTransfer.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewTransfer)).EndInit();
             this.contextMenuStripTransfer.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSnipeAfterLevel)).EndInit();
             this.ResumeLayout(false);
 
         }
