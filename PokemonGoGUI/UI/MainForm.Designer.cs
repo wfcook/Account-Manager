@@ -75,9 +75,11 @@
             this.enableColorsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.devToolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.logViewerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.garbageCollectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.timerListViewUpdate = new System.Windows.Forms.Timer(this.components);
-            this.logViewerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.setMaxLevelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewMain)).BeginInit();
             this.contextMenuStripAccounts.SuspendLayout();
             this.SuspendLayout();
@@ -229,6 +231,7 @@
             this.pauseUnPauseToolStripMenuItem,
             this.stopToolStripMenuItem,
             this.toolStripSeparator4,
+            this.settingsToolStripMenuItem,
             this.clearCountsToolStripMenuItem,
             this.addNewToolStripMenuItem,
             this.editToolStripMenuItem,
@@ -241,7 +244,7 @@
             this.deleteToolStripMenuItem,
             this.devToolsToolStripMenuItem});
             this.contextMenuStripAccounts.Name = "contextMenuStrip1";
-            this.contextMenuStripAccounts.Size = new System.Drawing.Size(218, 479);
+            this.contextMenuStripAccounts.Size = new System.Drawing.Size(218, 507);
             // 
             // updateDetailsToolStripMenuItem
             // 
@@ -453,6 +456,13 @@
             this.devToolsToolStripMenuItem.Text = "Dev Tools";
             this.devToolsToolStripMenuItem.Visible = false;
             // 
+            // logViewerToolStripMenuItem
+            // 
+            this.logViewerToolStripMenuItem.Name = "logViewerToolStripMenuItem";
+            this.logViewerToolStripMenuItem.Size = new System.Drawing.Size(236, 28);
+            this.logViewerToolStripMenuItem.Text = "Log Viewer";
+            this.logViewerToolStripMenuItem.Click += new System.EventHandler(this.logViewerToolStripMenuItem_Click);
+            // 
             // garbageCollectionToolStripMenuItem
             // 
             this.garbageCollectionToolStripMenuItem.Name = "garbageCollectionToolStripMenuItem";
@@ -466,12 +476,20 @@
             this.timerListViewUpdate.Interval = 1000;
             this.timerListViewUpdate.Tick += new System.EventHandler(this.timerListViewUpdate_Tick);
             // 
-            // logViewerToolStripMenuItem
+            // settingsToolStripMenuItem
             // 
-            this.logViewerToolStripMenuItem.Name = "logViewerToolStripMenuItem";
-            this.logViewerToolStripMenuItem.Size = new System.Drawing.Size(236, 28);
-            this.logViewerToolStripMenuItem.Text = "Log Viewer";
-            this.logViewerToolStripMenuItem.Click += new System.EventHandler(this.logViewerToolStripMenuItem_Click);
+            this.settingsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.setMaxLevelToolStripMenuItem});
+            this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(217, 28);
+            this.settingsToolStripMenuItem.Text = "Settings";
+            // 
+            // setMaxLevelToolStripMenuItem
+            // 
+            this.setMaxLevelToolStripMenuItem.Name = "setMaxLevelToolStripMenuItem";
+            this.setMaxLevelToolStripMenuItem.Size = new System.Drawing.Size(198, 28);
+            this.setMaxLevelToolStripMenuItem.Text = "Set Max Level";
+            this.setMaxLevelToolStripMenuItem.Click += new System.EventHandler(this.setMaxLevelToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -540,6 +558,8 @@
         private System.Windows.Forms.ToolStripMenuItem pauseUnPauseToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem restartToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem logViewerToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem setMaxLevelToolStripMenuItem;
     }
 }
 

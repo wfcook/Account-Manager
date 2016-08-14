@@ -133,7 +133,7 @@ namespace PokemonGoGUI
 
         public void LoadDeviceSettings()
         {
-            DeviceId = RandomString(16);
+            RandomizeDeviceId();
             AndroidBoardName = "universal7420";
             AndroidBootloader = "universal7420";
             DeviceBrand = "universal7420";
@@ -250,6 +250,11 @@ namespace PokemonGoGUI
             }
         }
         */
+
+        public void RandomizeDeviceId()
+        {
+            DeviceId = RandomString(16);
+        }
 
         private string RandomString(int length, string alphabet = "abcdefghijklmnopqrstuvwxyz0123456789")
         {

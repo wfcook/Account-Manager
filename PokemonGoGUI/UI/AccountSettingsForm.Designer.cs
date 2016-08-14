@@ -131,6 +131,33 @@
             this.label16 = new System.Windows.Forms.Label();
             this.label17 = new System.Windows.Forms.Label();
             this.numericUpDownMaxPokemonPerSnipe = new System.Windows.Forms.NumericUpDown();
+            this.tabPageDevice = new System.Windows.Forms.TabPage();
+            this.label18 = new System.Windows.Forms.Label();
+            this.textBoxDeviceId = new System.Windows.Forms.TextBox();
+            this.buttonDeviceRandom = new System.Windows.Forms.Button();
+            this.label19 = new System.Windows.Forms.Label();
+            this.label20 = new System.Windows.Forms.Label();
+            this.label21 = new System.Windows.Forms.Label();
+            this.label22 = new System.Windows.Forms.Label();
+            this.label23 = new System.Windows.Forms.Label();
+            this.label24 = new System.Windows.Forms.Label();
+            this.label25 = new System.Windows.Forms.Label();
+            this.label27 = new System.Windows.Forms.Label();
+            this.label29 = new System.Windows.Forms.Label();
+            this.label30 = new System.Windows.Forms.Label();
+            this.label28 = new System.Windows.Forms.Label();
+            this.textBoxAnroidBoardName = new System.Windows.Forms.TextBox();
+            this.textBoxAndroidBootLoader = new System.Windows.Forms.TextBox();
+            this.textBoxDeviceBrand = new System.Windows.Forms.TextBox();
+            this.textBoxDeviceModelBoot = new System.Windows.Forms.TextBox();
+            this.textBoxDeviceModelIdentifier = new System.Windows.Forms.TextBox();
+            this.textBoxDeviceModelManufacturer = new System.Windows.Forms.TextBox();
+            this.textBoxHardwareModel = new System.Windows.Forms.TextBox();
+            this.textBoxFirmwareTags = new System.Windows.Forms.TextBox();
+            this.textBoxFirmwareBrand = new System.Windows.Forms.TextBox();
+            this.textBoxFirmwareFingerprint = new System.Windows.Forms.TextBox();
+            this.textBoxFirmwareType = new System.Windows.Forms.TextBox();
+            this.button1 = new System.Windows.Forms.Button();
             this.tabControlMain.SuspendLayout();
             this.tabPageDetails.SuspendLayout();
             this.tabControlSettings.SuspendLayout();
@@ -151,6 +178,7 @@
             this.contextMenuStripTransfer.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownMinBallsToSnipe)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownMaxPokemonPerSnipe)).BeginInit();
+            this.tabPageDevice.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControlMain
@@ -164,7 +192,7 @@
             this.tabControlMain.Location = new System.Drawing.Point(0, 0);
             this.tabControlMain.Name = "tabControlMain";
             this.tabControlMain.SelectedIndex = 0;
-            this.tabControlMain.Size = new System.Drawing.Size(502, 423);
+            this.tabControlMain.Size = new System.Drawing.Size(502, 498);
             this.tabControlMain.TabIndex = 0;
             // 
             // tabPageDetails
@@ -178,7 +206,7 @@
             this.tabPageDetails.Location = new System.Drawing.Point(4, 25);
             this.tabPageDetails.Name = "tabPageDetails";
             this.tabPageDetails.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageDetails.Size = new System.Drawing.Size(494, 394);
+            this.tabPageDetails.Size = new System.Drawing.Size(494, 469);
             this.tabPageDetails.TabIndex = 1;
             this.tabPageDetails.Text = "Details";
             this.tabPageDetails.UseVisualStyleBackColor = true;
@@ -190,10 +218,11 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControlSettings.Controls.Add(this.tabPageSettingsGeneral);
             this.tabControlSettings.Controls.Add(this.tabPageSettingsNavigation);
+            this.tabControlSettings.Controls.Add(this.tabPageDevice);
             this.tabControlSettings.Location = new System.Drawing.Point(-4, 0);
             this.tabControlSettings.Name = "tabControlSettings";
             this.tabControlSettings.SelectedIndex = 0;
-            this.tabControlSettings.Size = new System.Drawing.Size(502, 341);
+            this.tabControlSettings.Size = new System.Drawing.Size(502, 416);
             this.tabControlSettings.TabIndex = 14;
             // 
             // tabPageSettingsGeneral
@@ -232,7 +261,7 @@
             this.tabPageSettingsGeneral.Location = new System.Drawing.Point(4, 25);
             this.tabPageSettingsGeneral.Name = "tabPageSettingsGeneral";
             this.tabPageSettingsGeneral.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageSettingsGeneral.Size = new System.Drawing.Size(494, 312);
+            this.tabPageSettingsGeneral.Size = new System.Drawing.Size(494, 387);
             this.tabPageSettingsGeneral.TabIndex = 0;
             this.tabPageSettingsGeneral.Text = "General";
             this.tabPageSettingsGeneral.UseVisualStyleBackColor = true;
@@ -510,7 +539,7 @@
             this.tabPageSettingsNavigation.Location = new System.Drawing.Point(4, 25);
             this.tabPageSettingsNavigation.Name = "tabPageSettingsNavigation";
             this.tabPageSettingsNavigation.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageSettingsNavigation.Size = new System.Drawing.Size(494, 312);
+            this.tabPageSettingsNavigation.Size = new System.Drawing.Size(494, 387);
             this.tabPageSettingsNavigation.TabIndex = 1;
             this.tabPageSettingsNavigation.Text = "Navigation";
             this.tabPageSettingsNavigation.UseVisualStyleBackColor = true;
@@ -625,7 +654,7 @@
             // buttonImportConfig
             // 
             this.buttonImportConfig.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.buttonImportConfig.Location = new System.Drawing.Point(93, 369);
+            this.buttonImportConfig.Location = new System.Drawing.Point(93, 444);
             this.buttonImportConfig.Name = "buttonImportConfig";
             this.buttonImportConfig.Size = new System.Drawing.Size(128, 23);
             this.buttonImportConfig.TabIndex = 11;
@@ -636,7 +665,7 @@
             // buttonExportConfig
             // 
             this.buttonExportConfig.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.buttonExportConfig.Location = new System.Drawing.Point(227, 369);
+            this.buttonExportConfig.Location = new System.Drawing.Point(227, 444);
             this.buttonExportConfig.Name = "buttonExportConfig";
             this.buttonExportConfig.Size = new System.Drawing.Size(128, 23);
             this.buttonExportConfig.TabIndex = 10;
@@ -648,7 +677,7 @@
             // 
             this.buttonDone.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonDone.Location = new System.Drawing.Point(411, 369);
+            this.buttonDone.Location = new System.Drawing.Point(411, 444);
             this.buttonDone.Name = "buttonDone";
             this.buttonDone.Size = new System.Drawing.Size(75, 23);
             this.buttonDone.TabIndex = 6;
@@ -661,7 +690,7 @@
             this.label13.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(326, 350);
+            this.label13.Location = new System.Drawing.Point(326, 425);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(160, 16);
             this.label13.TabIndex = 1;
@@ -670,7 +699,7 @@
             // buttonSave
             // 
             this.buttonSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.buttonSave.Location = new System.Drawing.Point(12, 369);
+            this.buttonSave.Location = new System.Drawing.Point(12, 444);
             this.buttonSave.Name = "buttonSave";
             this.buttonSave.Size = new System.Drawing.Size(75, 23);
             this.buttonSave.TabIndex = 0;
@@ -1149,11 +1178,258 @@
             0,
             0});
             // 
+            // tabPageDevice
+            // 
+            this.tabPageDevice.Controls.Add(this.button1);
+            this.tabPageDevice.Controls.Add(this.buttonDeviceRandom);
+            this.tabPageDevice.Controls.Add(this.textBoxFirmwareType);
+            this.tabPageDevice.Controls.Add(this.textBoxFirmwareFingerprint);
+            this.tabPageDevice.Controls.Add(this.textBoxFirmwareBrand);
+            this.tabPageDevice.Controls.Add(this.textBoxFirmwareTags);
+            this.tabPageDevice.Controls.Add(this.textBoxHardwareModel);
+            this.tabPageDevice.Controls.Add(this.textBoxDeviceModelManufacturer);
+            this.tabPageDevice.Controls.Add(this.textBoxDeviceModelIdentifier);
+            this.tabPageDevice.Controls.Add(this.textBoxDeviceModelBoot);
+            this.tabPageDevice.Controls.Add(this.textBoxDeviceBrand);
+            this.tabPageDevice.Controls.Add(this.textBoxAndroidBootLoader);
+            this.tabPageDevice.Controls.Add(this.textBoxAnroidBoardName);
+            this.tabPageDevice.Controls.Add(this.textBoxDeviceId);
+            this.tabPageDevice.Controls.Add(this.label27);
+            this.tabPageDevice.Controls.Add(this.label30);
+            this.tabPageDevice.Controls.Add(this.label29);
+            this.tabPageDevice.Controls.Add(this.label28);
+            this.tabPageDevice.Controls.Add(this.label25);
+            this.tabPageDevice.Controls.Add(this.label24);
+            this.tabPageDevice.Controls.Add(this.label23);
+            this.tabPageDevice.Controls.Add(this.label22);
+            this.tabPageDevice.Controls.Add(this.label21);
+            this.tabPageDevice.Controls.Add(this.label20);
+            this.tabPageDevice.Controls.Add(this.label19);
+            this.tabPageDevice.Controls.Add(this.label18);
+            this.tabPageDevice.Location = new System.Drawing.Point(4, 25);
+            this.tabPageDevice.Name = "tabPageDevice";
+            this.tabPageDevice.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageDevice.Size = new System.Drawing.Size(494, 387);
+            this.tabPageDevice.TabIndex = 2;
+            this.tabPageDevice.Text = "Device*";
+            this.tabPageDevice.UseVisualStyleBackColor = true;
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(94, 18);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(68, 16);
+            this.label18.TabIndex = 0;
+            this.label18.Text = "Device Id:";
+            // 
+            // textBoxDeviceId
+            // 
+            this.textBoxDeviceId.Location = new System.Drawing.Point(168, 16);
+            this.textBoxDeviceId.Name = "textBoxDeviceId";
+            this.textBoxDeviceId.Size = new System.Drawing.Size(179, 22);
+            this.textBoxDeviceId.TabIndex = 1;
+            // 
+            // buttonDeviceRandom
+            // 
+            this.buttonDeviceRandom.Location = new System.Drawing.Point(353, 15);
+            this.buttonDeviceRandom.Name = "buttonDeviceRandom";
+            this.buttonDeviceRandom.Size = new System.Drawing.Size(133, 23);
+            this.buttonDeviceRandom.TabIndex = 2;
+            this.buttonDeviceRandom.Text = "Randomize";
+            this.buttonDeviceRandom.UseVisualStyleBackColor = true;
+            this.buttonDeviceRandom.Click += new System.EventHandler(this.buttonDeviceRandom_Click);
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(24, 45);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(138, 16);
+            this.label19.TabIndex = 0;
+            this.label19.Text = "Android Board Name:";
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Location = new System.Drawing.Point(27, 73);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(135, 16);
+            this.label20.TabIndex = 0;
+            this.label20.Text = "Android Boot Loader:";
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Location = new System.Drawing.Point(69, 101);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(93, 16);
+            this.label21.TabIndex = 0;
+            this.label21.Text = "Device Brand:";
+            // 
+            // label22
+            // 
+            this.label22.AutoSize = true;
+            this.label22.Location = new System.Drawing.Point(14, 155);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(148, 16);
+            this.label22.TabIndex = 0;
+            this.label22.Text = "Device Model Identifier:";
+            // 
+            // label23
+            // 
+            this.label23.AutoSize = true;
+            this.label23.Location = new System.Drawing.Point(36, 127);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(126, 16);
+            this.label23.TabIndex = 0;
+            this.label23.Text = "Device Model Boot:";
+            // 
+            // label24
+            // 
+            this.label24.AutoSize = true;
+            this.label24.Location = new System.Drawing.Point(12, 183);
+            this.label24.Name = "label24";
+            this.label24.Size = new System.Drawing.Size(150, 16);
+            this.label24.TabIndex = 0;
+            this.label24.Text = "Hardware Manufacturer:";
+            // 
+            // label25
+            // 
+            this.label25.AutoSize = true;
+            this.label25.Location = new System.Drawing.Point(51, 211);
+            this.label25.Name = "label25";
+            this.label25.Size = new System.Drawing.Size(111, 16);
+            this.label25.TabIndex = 0;
+            this.label25.Text = "Hardware Model:";
+            // 
+            // label27
+            // 
+            this.label27.AutoSize = true;
+            this.label27.Location = new System.Drawing.Point(57, 267);
+            this.label27.Name = "label27";
+            this.label27.Size = new System.Drawing.Size(105, 16);
+            this.label27.TabIndex = 0;
+            this.label27.Text = "Firmware Brand:";
+            // 
+            // label29
+            // 
+            this.label29.AutoSize = true;
+            this.label29.Location = new System.Drawing.Point(30, 295);
+            this.label29.Name = "label29";
+            this.label29.Size = new System.Drawing.Size(132, 16);
+            this.label29.TabIndex = 0;
+            this.label29.Text = "Firmware Fingerprint:";
+            // 
+            // label30
+            // 
+            this.label30.AutoSize = true;
+            this.label30.Location = new System.Drawing.Point(61, 323);
+            this.label30.Name = "label30";
+            this.label30.Size = new System.Drawing.Size(101, 16);
+            this.label30.TabIndex = 0;
+            this.label30.Text = "Firmware Type:";
+            // 
+            // label28
+            // 
+            this.label28.AutoSize = true;
+            this.label28.Location = new System.Drawing.Point(61, 239);
+            this.label28.Name = "label28";
+            this.label28.Size = new System.Drawing.Size(101, 16);
+            this.label28.TabIndex = 0;
+            this.label28.Text = "Firmware Tags:";
+            // 
+            // textBoxAnroidBoardName
+            // 
+            this.textBoxAnroidBoardName.Location = new System.Drawing.Point(168, 42);
+            this.textBoxAnroidBoardName.Name = "textBoxAnroidBoardName";
+            this.textBoxAnroidBoardName.Size = new System.Drawing.Size(318, 22);
+            this.textBoxAnroidBoardName.TabIndex = 1;
+            // 
+            // textBoxAndroidBootLoader
+            // 
+            this.textBoxAndroidBootLoader.Location = new System.Drawing.Point(168, 70);
+            this.textBoxAndroidBootLoader.Name = "textBoxAndroidBootLoader";
+            this.textBoxAndroidBootLoader.Size = new System.Drawing.Size(318, 22);
+            this.textBoxAndroidBootLoader.TabIndex = 1;
+            // 
+            // textBoxDeviceBrand
+            // 
+            this.textBoxDeviceBrand.Location = new System.Drawing.Point(168, 98);
+            this.textBoxDeviceBrand.Name = "textBoxDeviceBrand";
+            this.textBoxDeviceBrand.Size = new System.Drawing.Size(318, 22);
+            this.textBoxDeviceBrand.TabIndex = 1;
+            // 
+            // textBoxDeviceModelBoot
+            // 
+            this.textBoxDeviceModelBoot.Location = new System.Drawing.Point(168, 124);
+            this.textBoxDeviceModelBoot.Name = "textBoxDeviceModelBoot";
+            this.textBoxDeviceModelBoot.Size = new System.Drawing.Size(318, 22);
+            this.textBoxDeviceModelBoot.TabIndex = 1;
+            // 
+            // textBoxDeviceModelIdentifier
+            // 
+            this.textBoxDeviceModelIdentifier.Location = new System.Drawing.Point(168, 152);
+            this.textBoxDeviceModelIdentifier.Name = "textBoxDeviceModelIdentifier";
+            this.textBoxDeviceModelIdentifier.Size = new System.Drawing.Size(318, 22);
+            this.textBoxDeviceModelIdentifier.TabIndex = 1;
+            // 
+            // textBoxDeviceModelManufacturer
+            // 
+            this.textBoxDeviceModelManufacturer.Location = new System.Drawing.Point(168, 180);
+            this.textBoxDeviceModelManufacturer.Name = "textBoxDeviceModelManufacturer";
+            this.textBoxDeviceModelManufacturer.Size = new System.Drawing.Size(318, 22);
+            this.textBoxDeviceModelManufacturer.TabIndex = 1;
+            // 
+            // textBoxHardwareModel
+            // 
+            this.textBoxHardwareModel.Location = new System.Drawing.Point(168, 208);
+            this.textBoxHardwareModel.Name = "textBoxHardwareModel";
+            this.textBoxHardwareModel.Size = new System.Drawing.Size(318, 22);
+            this.textBoxHardwareModel.TabIndex = 1;
+            // 
+            // textBoxFirmwareTags
+            // 
+            this.textBoxFirmwareTags.Location = new System.Drawing.Point(168, 236);
+            this.textBoxFirmwareTags.Name = "textBoxFirmwareTags";
+            this.textBoxFirmwareTags.Size = new System.Drawing.Size(318, 22);
+            this.textBoxFirmwareTags.TabIndex = 1;
+            // 
+            // textBoxFirmwareBrand
+            // 
+            this.textBoxFirmwareBrand.Location = new System.Drawing.Point(168, 264);
+            this.textBoxFirmwareBrand.Name = "textBoxFirmwareBrand";
+            this.textBoxFirmwareBrand.Size = new System.Drawing.Size(318, 22);
+            this.textBoxFirmwareBrand.TabIndex = 1;
+            // 
+            // textBoxFirmwareFingerprint
+            // 
+            this.textBoxFirmwareFingerprint.Location = new System.Drawing.Point(168, 292);
+            this.textBoxFirmwareFingerprint.Name = "textBoxFirmwareFingerprint";
+            this.textBoxFirmwareFingerprint.Size = new System.Drawing.Size(318, 22);
+            this.textBoxFirmwareFingerprint.TabIndex = 1;
+            // 
+            // textBoxFirmwareType
+            // 
+            this.textBoxFirmwareType.Location = new System.Drawing.Point(168, 320);
+            this.textBoxFirmwareType.Name = "textBoxFirmwareType";
+            this.textBoxFirmwareType.Size = new System.Drawing.Size(318, 22);
+            this.textBoxFirmwareType.TabIndex = 1;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(353, 348);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(133, 23);
+            this.button1.TabIndex = 2;
+            this.button1.Text = "Reset Defaults";
+            this.button1.UseVisualStyleBackColor = true;
+            // 
             // AccountSettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(502, 423);
+            this.ClientSize = new System.Drawing.Size(502, 498);
             this.Controls.Add(this.tabControlMain);
             this.MinimumSize = new System.Drawing.Size(522, 433);
             this.Name = "AccountSettingsForm";
@@ -1183,6 +1459,8 @@
             this.contextMenuStripTransfer.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownMinBallsToSnipe)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownMaxPokemonPerSnipe)).EndInit();
+            this.tabPageDevice.ResumeLayout(false);
+            this.tabPageDevice.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -1291,5 +1569,32 @@
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.NumericUpDown numericUpDownMaxPokemonPerSnipe;
         private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.TabPage tabPageDevice;
+        private System.Windows.Forms.Button buttonDeviceRandom;
+        private System.Windows.Forms.TextBox textBoxDeviceId;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.TextBox textBoxFirmwareType;
+        private System.Windows.Forms.TextBox textBoxFirmwareFingerprint;
+        private System.Windows.Forms.TextBox textBoxFirmwareBrand;
+        private System.Windows.Forms.TextBox textBoxFirmwareTags;
+        private System.Windows.Forms.TextBox textBoxHardwareModel;
+        private System.Windows.Forms.TextBox textBoxDeviceModelManufacturer;
+        private System.Windows.Forms.TextBox textBoxDeviceModelIdentifier;
+        private System.Windows.Forms.TextBox textBoxDeviceModelBoot;
+        private System.Windows.Forms.TextBox textBoxDeviceBrand;
+        private System.Windows.Forms.TextBox textBoxAndroidBootLoader;
+        private System.Windows.Forms.TextBox textBoxAnroidBoardName;
+        private System.Windows.Forms.Label label27;
+        private System.Windows.Forms.Label label30;
+        private System.Windows.Forms.Label label29;
+        private System.Windows.Forms.Label label28;
+        private System.Windows.Forms.Label label25;
+        private System.Windows.Forms.Label label24;
+        private System.Windows.Forms.Label label23;
+        private System.Windows.Forms.Label label22;
+        private System.Windows.Forms.Label label21;
+        private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.Button button1;
     }
 }

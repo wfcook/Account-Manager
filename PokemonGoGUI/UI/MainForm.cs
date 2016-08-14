@@ -791,5 +791,30 @@ namespace PokemonGoGUI
                 }
             }
         }
+
+        private void setMaxLevelToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string data = Prompt.ShowDialog("Max Level:", "Set Max Level");
+
+            if(String.IsNullOrEmpty(data))
+            {
+                return;
+            }
+
+            int level = 0;
+
+            if(!Int32.TryParse(data, out level) && level >= 0)
+            {
+                MessageBox.Show("Invalid max level value");
+                return;
+            }
+
+            foreach(Manager manager in fastObjectListViewMain.SelectedObjects)
+            {
+                manager.UserSettings.MaxLevel = level;
+            }
+
+            fastObjectListViewMain.RefreshSelectedObjects();
+        }
     }
 }

@@ -592,5 +592,10 @@ namespace PokemonGoGUI.UI
             numericUpDownMinBallsToSnipe.Enabled = checkBoxSnipePokemon.Checked;
             numericUpDownMaxPokemonPerSnipe.Enabled = checkBoxSnipePokemon.Checked;
         }
+
+        private void buttonDeviceRandom_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

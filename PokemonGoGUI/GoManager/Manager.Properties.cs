@@ -340,10 +340,32 @@ namespace PokemonGoGUI.GoManager
         {
             int total = 0;
 
-            total += Items.FirstOrDefault(x => x.ItemId == ItemId.ItemPokeBall).Count;
-            total += Items.FirstOrDefault(x => x.ItemId == ItemId.ItemGreatBall).Count;
-            total += Items.FirstOrDefault(x => x.ItemId == ItemId.ItemUltraBall).Count;
-            total += Items.FirstOrDefault(x => x.ItemId == ItemId.ItemMasterBall).Count;
+            ItemData data = Items.FirstOrDefault(x => x.ItemId == ItemId.ItemPokeBall);
+
+            if(data != null)
+            {
+                total += data.Count;
+            }
+
+            data = Items.FirstOrDefault(x => x.ItemId == ItemId.ItemGreatBall);
+
+            if (data != null)
+            {
+                total += data.Count;
+            }
+            data = Items.FirstOrDefault(x => x.ItemId == ItemId.ItemUltraBall);
+
+            if (data != null)
+            {
+                total += data.Count;
+            }
+
+            data = Items.FirstOrDefault(x => x.ItemId == ItemId.ItemMasterBall);
+
+            if (data != null)
+            {
+                total += data.Count;
+            }
 
             return total;
         }
