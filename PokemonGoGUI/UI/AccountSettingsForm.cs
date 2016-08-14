@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -197,13 +198,13 @@ namespace PokemonGoGUI.UI
                 return false;
             }
 
-            if (!Double.TryParse(textBoxLat.Text, out defaultLat))
+            if (!Double.TryParse(textBoxLat.Text.Replace(",", "."), NumberStyles.Any, CultureInfo.InvariantCulture, out defaultLat))
             {
                 MessageBox.Show("Invalid latitude");
                 return false;
             }
 
-            if (!Double.TryParse(textBoxLong.Text, out defaultLong))
+            if (!Double.TryParse(textBoxLong.Text.Replace(",", "."), NumberStyles.Any, CultureInfo.InvariantCulture, out defaultLong))
             {
                 MessageBox.Show("Invalid longitude");
                 return false;
