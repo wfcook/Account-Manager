@@ -31,6 +31,48 @@
             this.components = new System.ComponentModel.Container();
             this.tabControlMain = new System.Windows.Forms.TabControl();
             this.tabPageDetails = new System.Windows.Forms.TabPage();
+            this.tabControlSettings = new System.Windows.Forms.TabControl();
+            this.tabPageSettingsGeneral = new System.Windows.Forms.TabPage();
+            this.comboBoxMinAccountState = new System.Windows.Forms.ComboBox();
+            this.textBoxProxy = new System.Windows.Forms.TextBox();
+            this.label12 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
+            this.numericUpDownSnipeAfterStops = new System.Windows.Forms.NumericUpDown();
+            this.checkBoxSnipePokemon = new System.Windows.Forms.CheckBox();
+            this.checkBoxIncubateEggs = new System.Windows.Forms.CheckBox();
+            this.checkBoxUseLuckyEgg = new System.Windows.Forms.CheckBox();
+            this.checkBoxRecycle = new System.Windows.Forms.CheckBox();
+            this.checkBoxEvolve = new System.Windows.Forms.CheckBox();
+            this.checkBoxCatchPokemon = new System.Windows.Forms.CheckBox();
+            this.checkBoxTransfers = new System.Windows.Forms.CheckBox();
+            this.textBoxMaxLevel = new System.Windows.Forms.TextBox();
+            this.textBoxPokemonBeforeEvolve = new System.Windows.Forms.TextBox();
+            this.textBoxPtcPassword = new System.Windows.Forms.TextBox();
+            this.textBoxName = new System.Windows.Forms.TextBox();
+            this.label15 = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
+            this.textBoxPtcUsername = new System.Windows.Forms.TextBox();
+            this.label14 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.radioButtonGoogle = new System.Windows.Forms.RadioButton();
+            this.radioButtonPtc = new System.Windows.Forms.RadioButton();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.labelUsername = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.tabPageSettingsNavigation = new System.Windows.Forms.TabPage();
+            this.comboBoxLocationPresets = new System.Windows.Forms.ComboBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.checkBoxEncounterWhileWalking = new System.Windows.Forms.CheckBox();
+            this.checkBoxMimicWalking = new System.Windows.Forms.CheckBox();
+            this.textBoxWalkSpeed = new System.Windows.Forms.TextBox();
+            this.textBoxMaxTravelDistance = new System.Windows.Forms.TextBox();
+            this.textBoxLong = new System.Windows.Forms.TextBox();
+            this.textBoxLat = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
             this.buttonImportConfig = new System.Windows.Forms.Button();
             this.buttonExportConfig = new System.Windows.Forms.Button();
             this.buttonDone = new System.Windows.Forms.Button();
@@ -60,11 +102,16 @@
             this.olvColumnCatchId = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnCatchName = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnCatch = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnSnipe = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.contextMenuStripCatching = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.setCatchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.trueToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.falseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toggleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.setSnipeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.trueToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.falseToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toggleToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.restoreDefaultsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabPageTransfer = new System.Windows.Forms.TabPage();
             this.fastObjectListViewTransfer = new BrightIdeasSoftware.FastObjectListView();
@@ -79,56 +126,13 @@
             this.editToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.restoreDefaultsToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTipProxy = new System.Windows.Forms.ToolTip(this.components);
-            this.olvColumnSnipe = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.setSnipeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.trueToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
-            this.falseToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toggleToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
-            this.tabControlSettings = new System.Windows.Forms.TabControl();
-            this.tabPageSettingsGeneral = new System.Windows.Forms.TabPage();
-            this.tabPageSettingsNavigation = new System.Windows.Forms.TabPage();
-            this.numericUpDownSnipeAfterStops = new System.Windows.Forms.NumericUpDown();
-            this.checkBoxSnipePokemon = new System.Windows.Forms.CheckBox();
-            this.checkBoxIncubateEggs = new System.Windows.Forms.CheckBox();
-            this.checkBoxUseLuckyEgg = new System.Windows.Forms.CheckBox();
-            this.checkBoxRecycle = new System.Windows.Forms.CheckBox();
-            this.checkBoxEvolve = new System.Windows.Forms.CheckBox();
-            this.checkBoxCatchPokemon = new System.Windows.Forms.CheckBox();
-            this.checkBoxTransfers = new System.Windows.Forms.CheckBox();
-            this.textBoxMaxLevel = new System.Windows.Forms.TextBox();
-            this.textBoxPokemonBeforeEvolve = new System.Windows.Forms.TextBox();
-            this.textBoxPtcPassword = new System.Windows.Forms.TextBox();
-            this.textBoxName = new System.Windows.Forms.TextBox();
-            this.label11 = new System.Windows.Forms.Label();
-            this.textBoxPtcUsername = new System.Windows.Forms.TextBox();
-            this.label14 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.radioButtonGoogle = new System.Windows.Forms.RadioButton();
-            this.radioButtonPtc = new System.Windows.Forms.RadioButton();
-            this.label7 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.labelUsername = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
-            this.checkBoxEncounterWhileWalking = new System.Windows.Forms.CheckBox();
-            this.checkBoxMimicWalking = new System.Windows.Forms.CheckBox();
-            this.textBoxWalkSpeed = new System.Windows.Forms.TextBox();
-            this.textBoxMaxTravelDistance = new System.Windows.Forms.TextBox();
-            this.textBoxLong = new System.Windows.Forms.TextBox();
-            this.textBoxLat = new System.Windows.Forms.TextBox();
-            this.label6 = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label9 = new System.Windows.Forms.Label();
-            this.comboBoxLocationPresets = new System.Windows.Forms.ComboBox();
-            this.label10 = new System.Windows.Forms.Label();
-            this.textBoxProxy = new System.Windows.Forms.TextBox();
-            this.label12 = new System.Windows.Forms.Label();
-            this.label15 = new System.Windows.Forms.Label();
-            this.comboBoxMinAccountState = new System.Windows.Forms.ComboBox();
             this.toolTipMinAccountState = new System.Windows.Forms.ToolTip(this.components);
             this.tabControlMain.SuspendLayout();
             this.tabPageDetails.SuspendLayout();
+            this.tabControlSettings.SuspendLayout();
+            this.tabPageSettingsGeneral.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSnipeAfterStops)).BeginInit();
+            this.tabPageSettingsNavigation.SuspendLayout();
             this.tabPageRecycling.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewRecycling)).BeginInit();
             this.contextMenuStripRecycling.SuspendLayout();
@@ -141,10 +145,6 @@
             this.tabPageTransfer.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewTransfer)).BeginInit();
             this.contextMenuStripTransfer.SuspendLayout();
-            this.tabControlSettings.SuspendLayout();
-            this.tabPageSettingsGeneral.SuspendLayout();
-            this.tabPageSettingsNavigation.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSnipeAfterStops)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControlMain
@@ -176,472 +176,6 @@
             this.tabPageDetails.TabIndex = 1;
             this.tabPageDetails.Text = "Details";
             this.tabPageDetails.UseVisualStyleBackColor = true;
-            // 
-            // buttonImportConfig
-            // 
-            this.buttonImportConfig.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonImportConfig.Location = new System.Drawing.Point(93, 348);
-            this.buttonImportConfig.Name = "buttonImportConfig";
-            this.buttonImportConfig.Size = new System.Drawing.Size(128, 23);
-            this.buttonImportConfig.TabIndex = 11;
-            this.buttonImportConfig.Text = "Import Config";
-            this.buttonImportConfig.UseVisualStyleBackColor = true;
-            this.buttonImportConfig.Click += new System.EventHandler(this.buttonImportConfig_Click);
-            // 
-            // buttonExportConfig
-            // 
-            this.buttonExportConfig.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonExportConfig.Location = new System.Drawing.Point(227, 348);
-            this.buttonExportConfig.Name = "buttonExportConfig";
-            this.buttonExportConfig.Size = new System.Drawing.Size(128, 23);
-            this.buttonExportConfig.TabIndex = 10;
-            this.buttonExportConfig.Text = "Export Config";
-            this.buttonExportConfig.UseVisualStyleBackColor = true;
-            this.buttonExportConfig.Click += new System.EventHandler(this.buttonExportConfig_Click);
-            // 
-            // buttonDone
-            // 
-            this.buttonDone.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonDone.Location = new System.Drawing.Point(411, 348);
-            this.buttonDone.Name = "buttonDone";
-            this.buttonDone.Size = new System.Drawing.Size(75, 23);
-            this.buttonDone.TabIndex = 6;
-            this.buttonDone.Text = "Done";
-            this.buttonDone.UseVisualStyleBackColor = true;
-            this.buttonDone.Click += new System.EventHandler(this.buttonDone_Click);
-            // 
-            // label13
-            // 
-            this.label13.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(326, 329);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(160, 16);
-            this.label13.TabIndex = 1;
-            this.label13.Text = "* = Requires account stop";
-            // 
-            // buttonSave
-            // 
-            this.buttonSave.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonSave.Location = new System.Drawing.Point(12, 348);
-            this.buttonSave.Name = "buttonSave";
-            this.buttonSave.Size = new System.Drawing.Size(75, 23);
-            this.buttonSave.TabIndex = 0;
-            this.buttonSave.Text = "Save";
-            this.buttonSave.UseVisualStyleBackColor = true;
-            this.buttonSave.Click += new System.EventHandler(this.buttonSave_Click);
-            // 
-            // tabPageRecycling
-            // 
-            this.tabPageRecycling.Controls.Add(this.fastObjectListViewRecycling);
-            this.tabPageRecycling.Location = new System.Drawing.Point(4, 25);
-            this.tabPageRecycling.Name = "tabPageRecycling";
-            this.tabPageRecycling.Size = new System.Drawing.Size(494, 352);
-            this.tabPageRecycling.TabIndex = 2;
-            this.tabPageRecycling.Text = "Recycling";
-            this.tabPageRecycling.UseVisualStyleBackColor = true;
-            // 
-            // fastObjectListViewRecycling
-            // 
-            this.fastObjectListViewRecycling.AllColumns.Add(this.olvColumnItemName);
-            this.fastObjectListViewRecycling.AllColumns.Add(this.olvColumnItemMax);
-            this.fastObjectListViewRecycling.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.olvColumnItemName,
-            this.olvColumnItemMax});
-            this.fastObjectListViewRecycling.ContextMenuStrip = this.contextMenuStripRecycling;
-            this.fastObjectListViewRecycling.Cursor = System.Windows.Forms.Cursors.Default;
-            this.fastObjectListViewRecycling.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.fastObjectListViewRecycling.FullRowSelect = true;
-            this.fastObjectListViewRecycling.Location = new System.Drawing.Point(0, 0);
-            this.fastObjectListViewRecycling.Name = "fastObjectListViewRecycling";
-            this.fastObjectListViewRecycling.ShowGroups = false;
-            this.fastObjectListViewRecycling.Size = new System.Drawing.Size(494, 352);
-            this.fastObjectListViewRecycling.TabIndex = 0;
-            this.fastObjectListViewRecycling.UseCompatibleStateImageBehavior = false;
-            this.fastObjectListViewRecycling.View = System.Windows.Forms.View.Details;
-            this.fastObjectListViewRecycling.VirtualMode = true;
-            // 
-            // olvColumnItemName
-            // 
-            this.olvColumnItemName.AspectName = "FriendlyName";
-            this.olvColumnItemName.Text = "Name";
-            this.olvColumnItemName.Width = 146;
-            // 
-            // olvColumnItemMax
-            // 
-            this.olvColumnItemMax.AspectName = "MaxInventory";
-            this.olvColumnItemMax.Text = "Max Inventory";
-            this.olvColumnItemMax.Width = 129;
-            // 
-            // contextMenuStripRecycling
-            // 
-            this.contextMenuStripRecycling.ImageScalingSize = new System.Drawing.Size(22, 22);
-            this.contextMenuStripRecycling.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.editToolStripMenuItem});
-            this.contextMenuStripRecycling.Name = "contextMenuStripRecycling";
-            this.contextMenuStripRecycling.Size = new System.Drawing.Size(120, 32);
-            // 
-            // editToolStripMenuItem
-            // 
-            this.editToolStripMenuItem.Name = "editToolStripMenuItem";
-            this.editToolStripMenuItem.Size = new System.Drawing.Size(119, 28);
-            this.editToolStripMenuItem.Text = "Edit";
-            this.editToolStripMenuItem.Click += new System.EventHandler(this.editToolStripMenuItem_Click);
-            // 
-            // tabPageEvolving
-            // 
-            this.tabPageEvolving.Controls.Add(this.fastObjectListViewEvolve);
-            this.tabPageEvolving.Location = new System.Drawing.Point(4, 25);
-            this.tabPageEvolving.Name = "tabPageEvolving";
-            this.tabPageEvolving.Size = new System.Drawing.Size(494, 352);
-            this.tabPageEvolving.TabIndex = 3;
-            this.tabPageEvolving.Text = "Evolving";
-            this.tabPageEvolving.UseVisualStyleBackColor = true;
-            // 
-            // fastObjectListViewEvolve
-            // 
-            this.fastObjectListViewEvolve.AllColumns.Add(this.olvColumnEvolveId);
-            this.fastObjectListViewEvolve.AllColumns.Add(this.olvColumnEvolveName);
-            this.fastObjectListViewEvolve.AllColumns.Add(this.olvColumnEvolve);
-            this.fastObjectListViewEvolve.AllColumns.Add(this.olvColumnEvolveMinCP);
-            this.fastObjectListViewEvolve.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.olvColumnEvolveId,
-            this.olvColumnEvolveName,
-            this.olvColumnEvolve,
-            this.olvColumnEvolveMinCP});
-            this.fastObjectListViewEvolve.ContextMenuStrip = this.contextMenuStripEvolve;
-            this.fastObjectListViewEvolve.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.fastObjectListViewEvolve.FullRowSelect = true;
-            this.fastObjectListViewEvolve.Location = new System.Drawing.Point(0, 0);
-            this.fastObjectListViewEvolve.Name = "fastObjectListViewEvolve";
-            this.fastObjectListViewEvolve.ShowGroups = false;
-            this.fastObjectListViewEvolve.Size = new System.Drawing.Size(494, 352);
-            this.fastObjectListViewEvolve.TabIndex = 2;
-            this.fastObjectListViewEvolve.UseCompatibleStateImageBehavior = false;
-            this.fastObjectListViewEvolve.View = System.Windows.Forms.View.Details;
-            this.fastObjectListViewEvolve.VirtualMode = true;
-            // 
-            // olvColumnEvolveId
-            // 
-            this.olvColumnEvolveId.Text = "Id";
-            // 
-            // olvColumnEvolveName
-            // 
-            this.olvColumnEvolveName.AspectName = "Name";
-            this.olvColumnEvolveName.Text = "Name";
-            this.olvColumnEvolveName.Width = 128;
-            // 
-            // olvColumnEvolve
-            // 
-            this.olvColumnEvolve.AspectName = "Evolve";
-            this.olvColumnEvolve.Text = "Evolve";
-            this.olvColumnEvolve.Width = 74;
-            // 
-            // olvColumnEvolveMinCP
-            // 
-            this.olvColumnEvolveMinCP.AspectName = "MinCP";
-            this.olvColumnEvolveMinCP.Text = "Min CP";
-            // 
-            // contextMenuStripEvolve
-            // 
-            this.contextMenuStripEvolve.ImageScalingSize = new System.Drawing.Size(22, 22);
-            this.contextMenuStripEvolve.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.setEvolveToolStripMenuItem,
-            this.editCPToolStripMenuItem,
-            this.restoreDefaultsToolStripMenuItem1});
-            this.contextMenuStripEvolve.Name = "contextMenuStripEvolve";
-            this.contextMenuStripEvolve.Size = new System.Drawing.Size(215, 88);
-            // 
-            // setEvolveToolStripMenuItem
-            // 
-            this.setEvolveToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.trueToolStripMenuItem1,
-            this.falseToolStripMenuItem1,
-            this.toggleToolStripMenuItem1});
-            this.setEvolveToolStripMenuItem.Name = "setEvolveToolStripMenuItem";
-            this.setEvolveToolStripMenuItem.Size = new System.Drawing.Size(214, 28);
-            this.setEvolveToolStripMenuItem.Text = "Set Evolve";
-            // 
-            // trueToolStripMenuItem1
-            // 
-            this.trueToolStripMenuItem1.Name = "trueToolStripMenuItem1";
-            this.trueToolStripMenuItem1.Size = new System.Drawing.Size(140, 28);
-            this.trueToolStripMenuItem1.Tag = "1";
-            this.trueToolStripMenuItem1.Text = "True";
-            this.trueToolStripMenuItem1.Click += new System.EventHandler(this.trueToolStripMenuItem1_Click);
-            // 
-            // falseToolStripMenuItem1
-            // 
-            this.falseToolStripMenuItem1.Name = "falseToolStripMenuItem1";
-            this.falseToolStripMenuItem1.Size = new System.Drawing.Size(140, 28);
-            this.falseToolStripMenuItem1.Tag = "0";
-            this.falseToolStripMenuItem1.Text = "False";
-            this.falseToolStripMenuItem1.Click += new System.EventHandler(this.trueToolStripMenuItem1_Click);
-            // 
-            // toggleToolStripMenuItem1
-            // 
-            this.toggleToolStripMenuItem1.Name = "toggleToolStripMenuItem1";
-            this.toggleToolStripMenuItem1.Size = new System.Drawing.Size(140, 28);
-            this.toggleToolStripMenuItem1.Tag = "2";
-            this.toggleToolStripMenuItem1.Text = "Toggle";
-            this.toggleToolStripMenuItem1.Click += new System.EventHandler(this.trueToolStripMenuItem1_Click);
-            // 
-            // editCPToolStripMenuItem
-            // 
-            this.editCPToolStripMenuItem.Name = "editCPToolStripMenuItem";
-            this.editCPToolStripMenuItem.Size = new System.Drawing.Size(214, 28);
-            this.editCPToolStripMenuItem.Text = "Edit CP";
-            this.editCPToolStripMenuItem.Click += new System.EventHandler(this.editCPToolStripMenuItem_Click);
-            // 
-            // restoreDefaultsToolStripMenuItem1
-            // 
-            this.restoreDefaultsToolStripMenuItem1.Name = "restoreDefaultsToolStripMenuItem1";
-            this.restoreDefaultsToolStripMenuItem1.Size = new System.Drawing.Size(214, 28);
-            this.restoreDefaultsToolStripMenuItem1.Text = "Restore Defaults";
-            this.restoreDefaultsToolStripMenuItem1.Click += new System.EventHandler(this.restoreDefaultsToolStripMenuItem1_Click);
-            // 
-            // tabPageCatching
-            // 
-            this.tabPageCatching.Controls.Add(this.fastObjectListViewCatch);
-            this.tabPageCatching.Location = new System.Drawing.Point(4, 25);
-            this.tabPageCatching.Name = "tabPageCatching";
-            this.tabPageCatching.Size = new System.Drawing.Size(494, 420);
-            this.tabPageCatching.TabIndex = 4;
-            this.tabPageCatching.Text = "Catching";
-            this.tabPageCatching.UseVisualStyleBackColor = true;
-            // 
-            // fastObjectListViewCatch
-            // 
-            this.fastObjectListViewCatch.AllColumns.Add(this.olvColumnCatchId);
-            this.fastObjectListViewCatch.AllColumns.Add(this.olvColumnCatchName);
-            this.fastObjectListViewCatch.AllColumns.Add(this.olvColumnCatch);
-            this.fastObjectListViewCatch.AllColumns.Add(this.olvColumnSnipe);
-            this.fastObjectListViewCatch.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.olvColumnCatchId,
-            this.olvColumnCatchName,
-            this.olvColumnCatch,
-            this.olvColumnSnipe});
-            this.fastObjectListViewCatch.ContextMenuStrip = this.contextMenuStripCatching;
-            this.fastObjectListViewCatch.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.fastObjectListViewCatch.FullRowSelect = true;
-            this.fastObjectListViewCatch.Location = new System.Drawing.Point(0, 0);
-            this.fastObjectListViewCatch.Name = "fastObjectListViewCatch";
-            this.fastObjectListViewCatch.ShowGroups = false;
-            this.fastObjectListViewCatch.Size = new System.Drawing.Size(494, 420);
-            this.fastObjectListViewCatch.TabIndex = 1;
-            this.fastObjectListViewCatch.UseCompatibleStateImageBehavior = false;
-            this.fastObjectListViewCatch.View = System.Windows.Forms.View.Details;
-            this.fastObjectListViewCatch.VirtualMode = true;
-            // 
-            // olvColumnCatchId
-            // 
-            this.olvColumnCatchId.Text = "Id";
-            // 
-            // olvColumnCatchName
-            // 
-            this.olvColumnCatchName.AspectName = "Name";
-            this.olvColumnCatchName.Text = "Name";
-            this.olvColumnCatchName.Width = 121;
-            // 
-            // olvColumnCatch
-            // 
-            this.olvColumnCatch.AspectName = "Catch";
-            this.olvColumnCatch.Text = "Catch";
-            // 
-            // contextMenuStripCatching
-            // 
-            this.contextMenuStripCatching.ImageScalingSize = new System.Drawing.Size(22, 22);
-            this.contextMenuStripCatching.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.setCatchToolStripMenuItem,
-            this.setSnipeToolStripMenuItem,
-            this.restoreDefaultsToolStripMenuItem});
-            this.contextMenuStripCatching.Name = "contextMenuStripCatching";
-            this.contextMenuStripCatching.Size = new System.Drawing.Size(215, 88);
-            // 
-            // setCatchToolStripMenuItem
-            // 
-            this.setCatchToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.trueToolStripMenuItem,
-            this.falseToolStripMenuItem,
-            this.toggleToolStripMenuItem});
-            this.setCatchToolStripMenuItem.Name = "setCatchToolStripMenuItem";
-            this.setCatchToolStripMenuItem.Size = new System.Drawing.Size(214, 28);
-            this.setCatchToolStripMenuItem.Text = "Set Catch";
-            // 
-            // trueToolStripMenuItem
-            // 
-            this.trueToolStripMenuItem.Name = "trueToolStripMenuItem";
-            this.trueToolStripMenuItem.Size = new System.Drawing.Size(198, 28);
-            this.trueToolStripMenuItem.Tag = "1";
-            this.trueToolStripMenuItem.Text = "True";
-            this.trueToolStripMenuItem.Click += new System.EventHandler(this.trueToolStripMenuItem_Click);
-            // 
-            // falseToolStripMenuItem
-            // 
-            this.falseToolStripMenuItem.Name = "falseToolStripMenuItem";
-            this.falseToolStripMenuItem.Size = new System.Drawing.Size(198, 28);
-            this.falseToolStripMenuItem.Tag = "0";
-            this.falseToolStripMenuItem.Text = "False";
-            this.falseToolStripMenuItem.Click += new System.EventHandler(this.trueToolStripMenuItem_Click);
-            // 
-            // toggleToolStripMenuItem
-            // 
-            this.toggleToolStripMenuItem.Name = "toggleToolStripMenuItem";
-            this.toggleToolStripMenuItem.Size = new System.Drawing.Size(198, 28);
-            this.toggleToolStripMenuItem.Tag = "2";
-            this.toggleToolStripMenuItem.Text = "Toggle";
-            this.toggleToolStripMenuItem.Click += new System.EventHandler(this.trueToolStripMenuItem_Click);
-            // 
-            // restoreDefaultsToolStripMenuItem
-            // 
-            this.restoreDefaultsToolStripMenuItem.Name = "restoreDefaultsToolStripMenuItem";
-            this.restoreDefaultsToolStripMenuItem.Size = new System.Drawing.Size(214, 28);
-            this.restoreDefaultsToolStripMenuItem.Text = "Restore Defaults";
-            this.restoreDefaultsToolStripMenuItem.Click += new System.EventHandler(this.restoreDefaultsToolStripMenuItem_Click);
-            // 
-            // tabPageTransfer
-            // 
-            this.tabPageTransfer.Controls.Add(this.fastObjectListViewTransfer);
-            this.tabPageTransfer.Location = new System.Drawing.Point(4, 25);
-            this.tabPageTransfer.Name = "tabPageTransfer";
-            this.tabPageTransfer.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageTransfer.Size = new System.Drawing.Size(494, 420);
-            this.tabPageTransfer.TabIndex = 5;
-            this.tabPageTransfer.Text = "Transfer";
-            this.tabPageTransfer.UseVisualStyleBackColor = true;
-            // 
-            // fastObjectListViewTransfer
-            // 
-            this.fastObjectListViewTransfer.AllColumns.Add(this.olvColumnTransferId);
-            this.fastObjectListViewTransfer.AllColumns.Add(this.olvColumnTransferName);
-            this.fastObjectListViewTransfer.AllColumns.Add(this.olvColumnTransfer);
-            this.fastObjectListViewTransfer.AllColumns.Add(this.olvColumnTransferType);
-            this.fastObjectListViewTransfer.AllColumns.Add(this.olvColumnTransferKeepMax);
-            this.fastObjectListViewTransfer.AllColumns.Add(this.olvColumnTransferMinCP);
-            this.fastObjectListViewTransfer.AllColumns.Add(this.olvColumnCPPercent);
-            this.fastObjectListViewTransfer.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.olvColumnTransferId,
-            this.olvColumnTransferName,
-            this.olvColumnTransfer,
-            this.olvColumnTransferType,
-            this.olvColumnTransferKeepMax,
-            this.olvColumnTransferMinCP,
-            this.olvColumnCPPercent});
-            this.fastObjectListViewTransfer.ContextMenuStrip = this.contextMenuStripTransfer;
-            this.fastObjectListViewTransfer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.fastObjectListViewTransfer.FullRowSelect = true;
-            this.fastObjectListViewTransfer.Location = new System.Drawing.Point(3, 3);
-            this.fastObjectListViewTransfer.Name = "fastObjectListViewTransfer";
-            this.fastObjectListViewTransfer.ShowGroups = false;
-            this.fastObjectListViewTransfer.Size = new System.Drawing.Size(488, 414);
-            this.fastObjectListViewTransfer.TabIndex = 2;
-            this.fastObjectListViewTransfer.UseCompatibleStateImageBehavior = false;
-            this.fastObjectListViewTransfer.UseFiltering = true;
-            this.fastObjectListViewTransfer.View = System.Windows.Forms.View.Details;
-            this.fastObjectListViewTransfer.VirtualMode = true;
-            // 
-            // olvColumnTransferId
-            // 
-            this.olvColumnTransferId.Text = "Id";
-            // 
-            // olvColumnTransferName
-            // 
-            this.olvColumnTransferName.AspectName = "Name";
-            this.olvColumnTransferName.Text = "Name";
-            this.olvColumnTransferName.Width = 146;
-            // 
-            // olvColumnTransfer
-            // 
-            this.olvColumnTransfer.AspectName = "Transfer";
-            this.olvColumnTransfer.Text = "Transfer";
-            this.olvColumnTransfer.Width = 129;
-            // 
-            // olvColumnTransferType
-            // 
-            this.olvColumnTransferType.AspectName = "Type";
-            this.olvColumnTransferType.Text = "Type";
-            // 
-            // olvColumnTransferKeepMax
-            // 
-            this.olvColumnTransferKeepMax.AspectName = "KeepMax";
-            this.olvColumnTransferKeepMax.Text = "Max";
-            // 
-            // olvColumnTransferMinCP
-            // 
-            this.olvColumnTransferMinCP.AspectName = "MinCP";
-            this.olvColumnTransferMinCP.Text = "Min CP";
-            // 
-            // olvColumnCPPercent
-            // 
-            this.olvColumnCPPercent.AspectName = "IVPercent";
-            this.olvColumnCPPercent.Text = "Min IV %";
-            // 
-            // contextMenuStripTransfer
-            // 
-            this.contextMenuStripTransfer.ImageScalingSize = new System.Drawing.Size(22, 22);
-            this.contextMenuStripTransfer.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.editToolStripMenuItem1,
-            this.restoreDefaultsToolStripMenuItem2});
-            this.contextMenuStripTransfer.Name = "contextMenuStripTransfer";
-            this.contextMenuStripTransfer.Size = new System.Drawing.Size(215, 60);
-            // 
-            // editToolStripMenuItem1
-            // 
-            this.editToolStripMenuItem1.Name = "editToolStripMenuItem1";
-            this.editToolStripMenuItem1.Size = new System.Drawing.Size(214, 28);
-            this.editToolStripMenuItem1.Text = "Edit";
-            this.editToolStripMenuItem1.Click += new System.EventHandler(this.editToolStripMenuItem1_Click);
-            // 
-            // restoreDefaultsToolStripMenuItem2
-            // 
-            this.restoreDefaultsToolStripMenuItem2.Name = "restoreDefaultsToolStripMenuItem2";
-            this.restoreDefaultsToolStripMenuItem2.Size = new System.Drawing.Size(214, 28);
-            this.restoreDefaultsToolStripMenuItem2.Text = "Restore Defaults";
-            this.restoreDefaultsToolStripMenuItem2.Click += new System.EventHandler(this.restoreDefaultsToolStripMenuItem2_Click);
-            // 
-            // olvColumnSnipe
-            // 
-            this.olvColumnSnipe.AspectName = "Snipe";
-            this.olvColumnSnipe.Text = "Snipe";
-            // 
-            // setSnipeToolStripMenuItem
-            // 
-            this.setSnipeToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.trueToolStripMenuItem2,
-            this.falseToolStripMenuItem2,
-            this.toggleToolStripMenuItem2});
-            this.setSnipeToolStripMenuItem.Name = "setSnipeToolStripMenuItem";
-            this.setSnipeToolStripMenuItem.Size = new System.Drawing.Size(214, 28);
-            this.setSnipeToolStripMenuItem.Text = "Set Snipe";
-            // 
-            // trueToolStripMenuItem2
-            // 
-            this.trueToolStripMenuItem2.Name = "trueToolStripMenuItem2";
-            this.trueToolStripMenuItem2.Size = new System.Drawing.Size(198, 28);
-            this.trueToolStripMenuItem2.Tag = "1";
-            this.trueToolStripMenuItem2.Text = "True";
-            this.trueToolStripMenuItem2.Click += new System.EventHandler(this.falseToolStripMenuItem2_Click);
-            // 
-            // falseToolStripMenuItem2
-            // 
-            this.falseToolStripMenuItem2.Name = "falseToolStripMenuItem2";
-            this.falseToolStripMenuItem2.Size = new System.Drawing.Size(198, 28);
-            this.falseToolStripMenuItem2.Tag = "0";
-            this.falseToolStripMenuItem2.Text = "False";
-            this.falseToolStripMenuItem2.Click += new System.EventHandler(this.falseToolStripMenuItem2_Click);
-            // 
-            // toggleToolStripMenuItem2
-            // 
-            this.toggleToolStripMenuItem2.Name = "toggleToolStripMenuItem2";
-            this.toggleToolStripMenuItem2.Size = new System.Drawing.Size(198, 28);
-            this.toggleToolStripMenuItem2.Tag = "2";
-            this.toggleToolStripMenuItem2.Text = "Toggle";
-            this.toggleToolStripMenuItem2.Click += new System.EventHandler(this.falseToolStripMenuItem2_Click);
             // 
             // tabControlSettings
             // 
@@ -693,27 +227,40 @@
             this.tabPageSettingsGeneral.Text = "General";
             this.tabPageSettingsGeneral.UseVisualStyleBackColor = true;
             // 
-            // tabPageSettingsNavigation
+            // comboBoxMinAccountState
             // 
-            this.tabPageSettingsNavigation.Controls.Add(this.comboBoxLocationPresets);
-            this.tabPageSettingsNavigation.Controls.Add(this.label10);
-            this.tabPageSettingsNavigation.Controls.Add(this.checkBoxEncounterWhileWalking);
-            this.tabPageSettingsNavigation.Controls.Add(this.checkBoxMimicWalking);
-            this.tabPageSettingsNavigation.Controls.Add(this.textBoxWalkSpeed);
-            this.tabPageSettingsNavigation.Controls.Add(this.textBoxMaxTravelDistance);
-            this.tabPageSettingsNavigation.Controls.Add(this.textBoxLong);
-            this.tabPageSettingsNavigation.Controls.Add(this.textBoxLat);
-            this.tabPageSettingsNavigation.Controls.Add(this.label6);
-            this.tabPageSettingsNavigation.Controls.Add(this.label8);
-            this.tabPageSettingsNavigation.Controls.Add(this.label5);
-            this.tabPageSettingsNavigation.Controls.Add(this.label4);
-            this.tabPageSettingsNavigation.Location = new System.Drawing.Point(4, 25);
-            this.tabPageSettingsNavigation.Name = "tabPageSettingsNavigation";
-            this.tabPageSettingsNavigation.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageSettingsNavigation.Size = new System.Drawing.Size(494, 291);
-            this.tabPageSettingsNavigation.TabIndex = 1;
-            this.tabPageSettingsNavigation.Text = "Navigation";
-            this.tabPageSettingsNavigation.UseVisualStyleBackColor = true;
+            this.comboBoxMinAccountState.FormattingEnabled = true;
+            this.comboBoxMinAccountState.Location = new System.Drawing.Point(130, 223);
+            this.comboBoxMinAccountState.Name = "comboBoxMinAccountState";
+            this.comboBoxMinAccountState.Size = new System.Drawing.Size(232, 24);
+            this.comboBoxMinAccountState.TabIndex = 56;
+            this.toolTipMinAccountState.SetToolTip(this.comboBoxMinAccountState, "This setting will auto stop the bot when the specific state is reached");
+            // 
+            // textBoxProxy
+            // 
+            this.textBoxProxy.Location = new System.Drawing.Point(67, 139);
+            this.textBoxProxy.Name = "textBoxProxy";
+            this.textBoxProxy.Size = new System.Drawing.Size(180, 22);
+            this.textBoxProxy.TabIndex = 55;
+            this.toolTipProxy.SetToolTip(this.textBoxProxy, "Valid Formats:\r\nIP:Port\r\nIP:Port:Username:Password");
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(11, 142);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(50, 16);
+            this.label12.TabIndex = 54;
+            this.label12.Text = "Proxy*:";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(22, 170);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(157, 16);
+            this.label9.TabIndex = 51;
+            this.label9.Text = "Pokemon Before Evolve:";
             // 
             // numericUpDownSnipeAfterStops
             // 
@@ -833,6 +380,15 @@
             this.textBoxName.Size = new System.Drawing.Size(128, 22);
             this.textBoxName.TabIndex = 31;
             // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(0, 226);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(123, 16);
+            this.label15.TabIndex = 15;
+            this.label15.Text = "Auto Stop On State:";
+            // 
             // label11
             // 
             this.label11.AutoSize = true;
@@ -927,6 +483,46 @@
             this.label1.TabIndex = 14;
             this.label1.Text = "Authentication Type:";
             // 
+            // tabPageSettingsNavigation
+            // 
+            this.tabPageSettingsNavigation.Controls.Add(this.comboBoxLocationPresets);
+            this.tabPageSettingsNavigation.Controls.Add(this.label10);
+            this.tabPageSettingsNavigation.Controls.Add(this.checkBoxEncounterWhileWalking);
+            this.tabPageSettingsNavigation.Controls.Add(this.checkBoxMimicWalking);
+            this.tabPageSettingsNavigation.Controls.Add(this.textBoxWalkSpeed);
+            this.tabPageSettingsNavigation.Controls.Add(this.textBoxMaxTravelDistance);
+            this.tabPageSettingsNavigation.Controls.Add(this.textBoxLong);
+            this.tabPageSettingsNavigation.Controls.Add(this.textBoxLat);
+            this.tabPageSettingsNavigation.Controls.Add(this.label6);
+            this.tabPageSettingsNavigation.Controls.Add(this.label8);
+            this.tabPageSettingsNavigation.Controls.Add(this.label5);
+            this.tabPageSettingsNavigation.Controls.Add(this.label4);
+            this.tabPageSettingsNavigation.Location = new System.Drawing.Point(4, 25);
+            this.tabPageSettingsNavigation.Name = "tabPageSettingsNavigation";
+            this.tabPageSettingsNavigation.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageSettingsNavigation.Size = new System.Drawing.Size(494, 291);
+            this.tabPageSettingsNavigation.TabIndex = 1;
+            this.tabPageSettingsNavigation.Text = "Navigation";
+            this.tabPageSettingsNavigation.UseVisualStyleBackColor = true;
+            // 
+            // comboBoxLocationPresets
+            // 
+            this.comboBoxLocationPresets.FormattingEnabled = true;
+            this.comboBoxLocationPresets.Location = new System.Drawing.Point(93, 6);
+            this.comboBoxLocationPresets.Name = "comboBoxLocationPresets";
+            this.comboBoxLocationPresets.Size = new System.Drawing.Size(146, 24);
+            this.comboBoxLocationPresets.TabIndex = 55;
+            this.comboBoxLocationPresets.SelectedIndexChanged += new System.EventHandler(this.comboBoxLocationPresets_SelectedIndexChanged);
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(36, 9);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(50, 16);
+            this.label10.TabIndex = 54;
+            this.label10.Text = "Preset:";
+            // 
             // checkBoxEncounterWhileWalking
             // 
             this.checkBoxEncounterWhileWalking.AutoSize = true;
@@ -1016,67 +612,468 @@
             this.label4.TabIndex = 45;
             this.label4.Text = "Latitude*:";
             // 
-            // label9
+            // buttonImportConfig
             // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(22, 170);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(157, 16);
-            this.label9.TabIndex = 51;
-            this.label9.Text = "Pokemon Before Evolve:";
+            this.buttonImportConfig.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.buttonImportConfig.Location = new System.Drawing.Point(93, 348);
+            this.buttonImportConfig.Name = "buttonImportConfig";
+            this.buttonImportConfig.Size = new System.Drawing.Size(128, 23);
+            this.buttonImportConfig.TabIndex = 11;
+            this.buttonImportConfig.Text = "Import Config";
+            this.buttonImportConfig.UseVisualStyleBackColor = true;
+            this.buttonImportConfig.Click += new System.EventHandler(this.buttonImportConfig_Click);
             // 
-            // comboBoxLocationPresets
+            // buttonExportConfig
             // 
-            this.comboBoxLocationPresets.FormattingEnabled = true;
-            this.comboBoxLocationPresets.Location = new System.Drawing.Point(93, 6);
-            this.comboBoxLocationPresets.Name = "comboBoxLocationPresets";
-            this.comboBoxLocationPresets.Size = new System.Drawing.Size(146, 24);
-            this.comboBoxLocationPresets.TabIndex = 55;
-            this.comboBoxLocationPresets.SelectedIndexChanged += new System.EventHandler(this.comboBoxLocationPresets_SelectedIndexChanged);
+            this.buttonExportConfig.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.buttonExportConfig.Location = new System.Drawing.Point(227, 348);
+            this.buttonExportConfig.Name = "buttonExportConfig";
+            this.buttonExportConfig.Size = new System.Drawing.Size(128, 23);
+            this.buttonExportConfig.TabIndex = 10;
+            this.buttonExportConfig.Text = "Export Config";
+            this.buttonExportConfig.UseVisualStyleBackColor = true;
+            this.buttonExportConfig.Click += new System.EventHandler(this.buttonExportConfig_Click);
             // 
-            // label10
+            // buttonDone
             // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(36, 9);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(50, 16);
-            this.label10.TabIndex = 54;
-            this.label10.Text = "Preset:";
+            this.buttonDone.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonDone.Location = new System.Drawing.Point(411, 348);
+            this.buttonDone.Name = "buttonDone";
+            this.buttonDone.Size = new System.Drawing.Size(75, 23);
+            this.buttonDone.TabIndex = 6;
+            this.buttonDone.Text = "Done";
+            this.buttonDone.UseVisualStyleBackColor = true;
+            this.buttonDone.Click += new System.EventHandler(this.buttonDone_Click);
             // 
-            // textBoxProxy
+            // label13
             // 
-            this.textBoxProxy.Location = new System.Drawing.Point(67, 139);
-            this.textBoxProxy.Name = "textBoxProxy";
-            this.textBoxProxy.Size = new System.Drawing.Size(180, 22);
-            this.textBoxProxy.TabIndex = 55;
-            this.toolTipProxy.SetToolTip(this.textBoxProxy, "Valid Formats:\r\nIP:Port\r\nIP:Port:Username:Password");
+            this.label13.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(326, 329);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(160, 16);
+            this.label13.TabIndex = 1;
+            this.label13.Text = "* = Requires account stop";
             // 
-            // label12
+            // buttonSave
             // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(11, 142);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(50, 16);
-            this.label12.TabIndex = 54;
-            this.label12.Text = "Proxy*:";
+            this.buttonSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.buttonSave.Location = new System.Drawing.Point(12, 348);
+            this.buttonSave.Name = "buttonSave";
+            this.buttonSave.Size = new System.Drawing.Size(75, 23);
+            this.buttonSave.TabIndex = 0;
+            this.buttonSave.Text = "Save";
+            this.buttonSave.UseVisualStyleBackColor = true;
+            this.buttonSave.Click += new System.EventHandler(this.buttonSave_Click);
             // 
-            // label15
+            // tabPageRecycling
             // 
-            this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(0, 226);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(123, 16);
-            this.label15.TabIndex = 15;
-            this.label15.Text = "Auto Stop On State:";
+            this.tabPageRecycling.Controls.Add(this.fastObjectListViewRecycling);
+            this.tabPageRecycling.Location = new System.Drawing.Point(4, 25);
+            this.tabPageRecycling.Name = "tabPageRecycling";
+            this.tabPageRecycling.Size = new System.Drawing.Size(494, 373);
+            this.tabPageRecycling.TabIndex = 2;
+            this.tabPageRecycling.Text = "Recycling";
+            this.tabPageRecycling.UseVisualStyleBackColor = true;
             // 
-            // comboBoxMinAccountState
+            // fastObjectListViewRecycling
             // 
-            this.comboBoxMinAccountState.FormattingEnabled = true;
-            this.comboBoxMinAccountState.Location = new System.Drawing.Point(130, 223);
-            this.comboBoxMinAccountState.Name = "comboBoxMinAccountState";
-            this.comboBoxMinAccountState.Size = new System.Drawing.Size(232, 24);
-            this.comboBoxMinAccountState.TabIndex = 56;
-            this.toolTipMinAccountState.SetToolTip(this.comboBoxMinAccountState, "This setting will auto stop the bot when the specific state is reached");
+            this.fastObjectListViewRecycling.AllColumns.Add(this.olvColumnItemName);
+            this.fastObjectListViewRecycling.AllColumns.Add(this.olvColumnItemMax);
+            this.fastObjectListViewRecycling.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.olvColumnItemName,
+            this.olvColumnItemMax});
+            this.fastObjectListViewRecycling.ContextMenuStrip = this.contextMenuStripRecycling;
+            this.fastObjectListViewRecycling.Cursor = System.Windows.Forms.Cursors.Default;
+            this.fastObjectListViewRecycling.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.fastObjectListViewRecycling.FullRowSelect = true;
+            this.fastObjectListViewRecycling.Location = new System.Drawing.Point(0, 0);
+            this.fastObjectListViewRecycling.Name = "fastObjectListViewRecycling";
+            this.fastObjectListViewRecycling.ShowGroups = false;
+            this.fastObjectListViewRecycling.Size = new System.Drawing.Size(494, 373);
+            this.fastObjectListViewRecycling.TabIndex = 0;
+            this.fastObjectListViewRecycling.UseCompatibleStateImageBehavior = false;
+            this.fastObjectListViewRecycling.View = System.Windows.Forms.View.Details;
+            this.fastObjectListViewRecycling.VirtualMode = true;
+            // 
+            // olvColumnItemName
+            // 
+            this.olvColumnItemName.AspectName = "FriendlyName";
+            this.olvColumnItemName.Text = "Name";
+            this.olvColumnItemName.Width = 146;
+            // 
+            // olvColumnItemMax
+            // 
+            this.olvColumnItemMax.AspectName = "MaxInventory";
+            this.olvColumnItemMax.Text = "Max Inventory";
+            this.olvColumnItemMax.Width = 129;
+            // 
+            // contextMenuStripRecycling
+            // 
+            this.contextMenuStripRecycling.ImageScalingSize = new System.Drawing.Size(22, 22);
+            this.contextMenuStripRecycling.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.editToolStripMenuItem});
+            this.contextMenuStripRecycling.Name = "contextMenuStripRecycling";
+            this.contextMenuStripRecycling.Size = new System.Drawing.Size(120, 32);
+            // 
+            // editToolStripMenuItem
+            // 
+            this.editToolStripMenuItem.Name = "editToolStripMenuItem";
+            this.editToolStripMenuItem.Size = new System.Drawing.Size(119, 28);
+            this.editToolStripMenuItem.Text = "Edit";
+            this.editToolStripMenuItem.Click += new System.EventHandler(this.editToolStripMenuItem_Click);
+            // 
+            // tabPageEvolving
+            // 
+            this.tabPageEvolving.Controls.Add(this.fastObjectListViewEvolve);
+            this.tabPageEvolving.Location = new System.Drawing.Point(4, 25);
+            this.tabPageEvolving.Name = "tabPageEvolving";
+            this.tabPageEvolving.Size = new System.Drawing.Size(494, 373);
+            this.tabPageEvolving.TabIndex = 3;
+            this.tabPageEvolving.Text = "Evolving";
+            this.tabPageEvolving.UseVisualStyleBackColor = true;
+            // 
+            // fastObjectListViewEvolve
+            // 
+            this.fastObjectListViewEvolve.AllColumns.Add(this.olvColumnEvolveId);
+            this.fastObjectListViewEvolve.AllColumns.Add(this.olvColumnEvolveName);
+            this.fastObjectListViewEvolve.AllColumns.Add(this.olvColumnEvolve);
+            this.fastObjectListViewEvolve.AllColumns.Add(this.olvColumnEvolveMinCP);
+            this.fastObjectListViewEvolve.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.olvColumnEvolveId,
+            this.olvColumnEvolveName,
+            this.olvColumnEvolve,
+            this.olvColumnEvolveMinCP});
+            this.fastObjectListViewEvolve.ContextMenuStrip = this.contextMenuStripEvolve;
+            this.fastObjectListViewEvolve.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.fastObjectListViewEvolve.FullRowSelect = true;
+            this.fastObjectListViewEvolve.Location = new System.Drawing.Point(0, 0);
+            this.fastObjectListViewEvolve.Name = "fastObjectListViewEvolve";
+            this.fastObjectListViewEvolve.ShowGroups = false;
+            this.fastObjectListViewEvolve.Size = new System.Drawing.Size(494, 373);
+            this.fastObjectListViewEvolve.TabIndex = 2;
+            this.fastObjectListViewEvolve.UseCompatibleStateImageBehavior = false;
+            this.fastObjectListViewEvolve.View = System.Windows.Forms.View.Details;
+            this.fastObjectListViewEvolve.VirtualMode = true;
+            // 
+            // olvColumnEvolveId
+            // 
+            this.olvColumnEvolveId.Text = "Id";
+            // 
+            // olvColumnEvolveName
+            // 
+            this.olvColumnEvolveName.AspectName = "Name";
+            this.olvColumnEvolveName.Text = "Name";
+            this.olvColumnEvolveName.Width = 128;
+            // 
+            // olvColumnEvolve
+            // 
+            this.olvColumnEvolve.AspectName = "Evolve";
+            this.olvColumnEvolve.Text = "Evolve";
+            this.olvColumnEvolve.Width = 74;
+            // 
+            // olvColumnEvolveMinCP
+            // 
+            this.olvColumnEvolveMinCP.AspectName = "MinCP";
+            this.olvColumnEvolveMinCP.Text = "Min CP";
+            // 
+            // contextMenuStripEvolve
+            // 
+            this.contextMenuStripEvolve.ImageScalingSize = new System.Drawing.Size(22, 22);
+            this.contextMenuStripEvolve.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.setEvolveToolStripMenuItem,
+            this.editCPToolStripMenuItem,
+            this.restoreDefaultsToolStripMenuItem1});
+            this.contextMenuStripEvolve.Name = "contextMenuStripEvolve";
+            this.contextMenuStripEvolve.Size = new System.Drawing.Size(215, 88);
+            // 
+            // setEvolveToolStripMenuItem
+            // 
+            this.setEvolveToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.trueToolStripMenuItem1,
+            this.falseToolStripMenuItem1,
+            this.toggleToolStripMenuItem1});
+            this.setEvolveToolStripMenuItem.Name = "setEvolveToolStripMenuItem";
+            this.setEvolveToolStripMenuItem.Size = new System.Drawing.Size(214, 28);
+            this.setEvolveToolStripMenuItem.Text = "Set Evolve";
+            // 
+            // trueToolStripMenuItem1
+            // 
+            this.trueToolStripMenuItem1.Name = "trueToolStripMenuItem1";
+            this.trueToolStripMenuItem1.Size = new System.Drawing.Size(140, 28);
+            this.trueToolStripMenuItem1.Tag = "1";
+            this.trueToolStripMenuItem1.Text = "True";
+            this.trueToolStripMenuItem1.Click += new System.EventHandler(this.trueToolStripMenuItem1_Click);
+            // 
+            // falseToolStripMenuItem1
+            // 
+            this.falseToolStripMenuItem1.Name = "falseToolStripMenuItem1";
+            this.falseToolStripMenuItem1.Size = new System.Drawing.Size(140, 28);
+            this.falseToolStripMenuItem1.Tag = "0";
+            this.falseToolStripMenuItem1.Text = "False";
+            this.falseToolStripMenuItem1.Click += new System.EventHandler(this.trueToolStripMenuItem1_Click);
+            // 
+            // toggleToolStripMenuItem1
+            // 
+            this.toggleToolStripMenuItem1.Name = "toggleToolStripMenuItem1";
+            this.toggleToolStripMenuItem1.Size = new System.Drawing.Size(140, 28);
+            this.toggleToolStripMenuItem1.Tag = "2";
+            this.toggleToolStripMenuItem1.Text = "Toggle";
+            this.toggleToolStripMenuItem1.Click += new System.EventHandler(this.trueToolStripMenuItem1_Click);
+            // 
+            // editCPToolStripMenuItem
+            // 
+            this.editCPToolStripMenuItem.Name = "editCPToolStripMenuItem";
+            this.editCPToolStripMenuItem.Size = new System.Drawing.Size(214, 28);
+            this.editCPToolStripMenuItem.Text = "Edit CP";
+            this.editCPToolStripMenuItem.Click += new System.EventHandler(this.editCPToolStripMenuItem_Click);
+            // 
+            // restoreDefaultsToolStripMenuItem1
+            // 
+            this.restoreDefaultsToolStripMenuItem1.Name = "restoreDefaultsToolStripMenuItem1";
+            this.restoreDefaultsToolStripMenuItem1.Size = new System.Drawing.Size(214, 28);
+            this.restoreDefaultsToolStripMenuItem1.Text = "Restore Defaults";
+            this.restoreDefaultsToolStripMenuItem1.Click += new System.EventHandler(this.restoreDefaultsToolStripMenuItem1_Click);
+            // 
+            // tabPageCatching
+            // 
+            this.tabPageCatching.Controls.Add(this.fastObjectListViewCatch);
+            this.tabPageCatching.Location = new System.Drawing.Point(4, 25);
+            this.tabPageCatching.Name = "tabPageCatching";
+            this.tabPageCatching.Size = new System.Drawing.Size(494, 373);
+            this.tabPageCatching.TabIndex = 4;
+            this.tabPageCatching.Text = "Catching";
+            this.tabPageCatching.UseVisualStyleBackColor = true;
+            // 
+            // fastObjectListViewCatch
+            // 
+            this.fastObjectListViewCatch.AllColumns.Add(this.olvColumnCatchId);
+            this.fastObjectListViewCatch.AllColumns.Add(this.olvColumnCatchName);
+            this.fastObjectListViewCatch.AllColumns.Add(this.olvColumnCatch);
+            this.fastObjectListViewCatch.AllColumns.Add(this.olvColumnSnipe);
+            this.fastObjectListViewCatch.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.olvColumnCatchId,
+            this.olvColumnCatchName,
+            this.olvColumnCatch,
+            this.olvColumnSnipe});
+            this.fastObjectListViewCatch.ContextMenuStrip = this.contextMenuStripCatching;
+            this.fastObjectListViewCatch.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.fastObjectListViewCatch.FullRowSelect = true;
+            this.fastObjectListViewCatch.Location = new System.Drawing.Point(0, 0);
+            this.fastObjectListViewCatch.Name = "fastObjectListViewCatch";
+            this.fastObjectListViewCatch.ShowGroups = false;
+            this.fastObjectListViewCatch.Size = new System.Drawing.Size(494, 373);
+            this.fastObjectListViewCatch.TabIndex = 1;
+            this.fastObjectListViewCatch.UseCompatibleStateImageBehavior = false;
+            this.fastObjectListViewCatch.View = System.Windows.Forms.View.Details;
+            this.fastObjectListViewCatch.VirtualMode = true;
+            // 
+            // olvColumnCatchId
+            // 
+            this.olvColumnCatchId.Text = "Id";
+            // 
+            // olvColumnCatchName
+            // 
+            this.olvColumnCatchName.AspectName = "Name";
+            this.olvColumnCatchName.Text = "Name";
+            this.olvColumnCatchName.Width = 121;
+            // 
+            // olvColumnCatch
+            // 
+            this.olvColumnCatch.AspectName = "Catch";
+            this.olvColumnCatch.Text = "Catch";
+            // 
+            // olvColumnSnipe
+            // 
+            this.olvColumnSnipe.AspectName = "Snipe";
+            this.olvColumnSnipe.Text = "Snipe";
+            // 
+            // contextMenuStripCatching
+            // 
+            this.contextMenuStripCatching.ImageScalingSize = new System.Drawing.Size(22, 22);
+            this.contextMenuStripCatching.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.setCatchToolStripMenuItem,
+            this.setSnipeToolStripMenuItem,
+            this.restoreDefaultsToolStripMenuItem});
+            this.contextMenuStripCatching.Name = "contextMenuStripCatching";
+            this.contextMenuStripCatching.Size = new System.Drawing.Size(215, 88);
+            // 
+            // setCatchToolStripMenuItem
+            // 
+            this.setCatchToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.trueToolStripMenuItem,
+            this.falseToolStripMenuItem,
+            this.toggleToolStripMenuItem});
+            this.setCatchToolStripMenuItem.Name = "setCatchToolStripMenuItem";
+            this.setCatchToolStripMenuItem.Size = new System.Drawing.Size(214, 28);
+            this.setCatchToolStripMenuItem.Text = "Set Catch";
+            // 
+            // trueToolStripMenuItem
+            // 
+            this.trueToolStripMenuItem.Name = "trueToolStripMenuItem";
+            this.trueToolStripMenuItem.Size = new System.Drawing.Size(140, 28);
+            this.trueToolStripMenuItem.Tag = "1";
+            this.trueToolStripMenuItem.Text = "True";
+            this.trueToolStripMenuItem.Click += new System.EventHandler(this.trueToolStripMenuItem_Click);
+            // 
+            // falseToolStripMenuItem
+            // 
+            this.falseToolStripMenuItem.Name = "falseToolStripMenuItem";
+            this.falseToolStripMenuItem.Size = new System.Drawing.Size(140, 28);
+            this.falseToolStripMenuItem.Tag = "0";
+            this.falseToolStripMenuItem.Text = "False";
+            this.falseToolStripMenuItem.Click += new System.EventHandler(this.trueToolStripMenuItem_Click);
+            // 
+            // toggleToolStripMenuItem
+            // 
+            this.toggleToolStripMenuItem.Name = "toggleToolStripMenuItem";
+            this.toggleToolStripMenuItem.Size = new System.Drawing.Size(140, 28);
+            this.toggleToolStripMenuItem.Tag = "2";
+            this.toggleToolStripMenuItem.Text = "Toggle";
+            this.toggleToolStripMenuItem.Click += new System.EventHandler(this.trueToolStripMenuItem_Click);
+            // 
+            // setSnipeToolStripMenuItem
+            // 
+            this.setSnipeToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.trueToolStripMenuItem2,
+            this.falseToolStripMenuItem2,
+            this.toggleToolStripMenuItem2});
+            this.setSnipeToolStripMenuItem.Name = "setSnipeToolStripMenuItem";
+            this.setSnipeToolStripMenuItem.Size = new System.Drawing.Size(214, 28);
+            this.setSnipeToolStripMenuItem.Text = "Set Snipe";
+            // 
+            // trueToolStripMenuItem2
+            // 
+            this.trueToolStripMenuItem2.Name = "trueToolStripMenuItem2";
+            this.trueToolStripMenuItem2.Size = new System.Drawing.Size(140, 28);
+            this.trueToolStripMenuItem2.Tag = "1";
+            this.trueToolStripMenuItem2.Text = "True";
+            this.trueToolStripMenuItem2.Click += new System.EventHandler(this.falseToolStripMenuItem2_Click);
+            // 
+            // falseToolStripMenuItem2
+            // 
+            this.falseToolStripMenuItem2.Name = "falseToolStripMenuItem2";
+            this.falseToolStripMenuItem2.Size = new System.Drawing.Size(140, 28);
+            this.falseToolStripMenuItem2.Tag = "0";
+            this.falseToolStripMenuItem2.Text = "False";
+            this.falseToolStripMenuItem2.Click += new System.EventHandler(this.falseToolStripMenuItem2_Click);
+            // 
+            // toggleToolStripMenuItem2
+            // 
+            this.toggleToolStripMenuItem2.Name = "toggleToolStripMenuItem2";
+            this.toggleToolStripMenuItem2.Size = new System.Drawing.Size(140, 28);
+            this.toggleToolStripMenuItem2.Tag = "2";
+            this.toggleToolStripMenuItem2.Text = "Toggle";
+            this.toggleToolStripMenuItem2.Click += new System.EventHandler(this.falseToolStripMenuItem2_Click);
+            // 
+            // restoreDefaultsToolStripMenuItem
+            // 
+            this.restoreDefaultsToolStripMenuItem.Name = "restoreDefaultsToolStripMenuItem";
+            this.restoreDefaultsToolStripMenuItem.Size = new System.Drawing.Size(214, 28);
+            this.restoreDefaultsToolStripMenuItem.Text = "Restore Defaults";
+            this.restoreDefaultsToolStripMenuItem.Click += new System.EventHandler(this.restoreDefaultsToolStripMenuItem_Click);
+            // 
+            // tabPageTransfer
+            // 
+            this.tabPageTransfer.Controls.Add(this.fastObjectListViewTransfer);
+            this.tabPageTransfer.Location = new System.Drawing.Point(4, 25);
+            this.tabPageTransfer.Name = "tabPageTransfer";
+            this.tabPageTransfer.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageTransfer.Size = new System.Drawing.Size(494, 373);
+            this.tabPageTransfer.TabIndex = 5;
+            this.tabPageTransfer.Text = "Transfer";
+            this.tabPageTransfer.UseVisualStyleBackColor = true;
+            // 
+            // fastObjectListViewTransfer
+            // 
+            this.fastObjectListViewTransfer.AllColumns.Add(this.olvColumnTransferId);
+            this.fastObjectListViewTransfer.AllColumns.Add(this.olvColumnTransferName);
+            this.fastObjectListViewTransfer.AllColumns.Add(this.olvColumnTransfer);
+            this.fastObjectListViewTransfer.AllColumns.Add(this.olvColumnTransferType);
+            this.fastObjectListViewTransfer.AllColumns.Add(this.olvColumnTransferKeepMax);
+            this.fastObjectListViewTransfer.AllColumns.Add(this.olvColumnTransferMinCP);
+            this.fastObjectListViewTransfer.AllColumns.Add(this.olvColumnCPPercent);
+            this.fastObjectListViewTransfer.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.olvColumnTransferId,
+            this.olvColumnTransferName,
+            this.olvColumnTransfer,
+            this.olvColumnTransferType,
+            this.olvColumnTransferKeepMax,
+            this.olvColumnTransferMinCP,
+            this.olvColumnCPPercent});
+            this.fastObjectListViewTransfer.ContextMenuStrip = this.contextMenuStripTransfer;
+            this.fastObjectListViewTransfer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.fastObjectListViewTransfer.FullRowSelect = true;
+            this.fastObjectListViewTransfer.Location = new System.Drawing.Point(3, 3);
+            this.fastObjectListViewTransfer.Name = "fastObjectListViewTransfer";
+            this.fastObjectListViewTransfer.ShowGroups = false;
+            this.fastObjectListViewTransfer.Size = new System.Drawing.Size(488, 367);
+            this.fastObjectListViewTransfer.TabIndex = 2;
+            this.fastObjectListViewTransfer.UseCompatibleStateImageBehavior = false;
+            this.fastObjectListViewTransfer.UseFiltering = true;
+            this.fastObjectListViewTransfer.View = System.Windows.Forms.View.Details;
+            this.fastObjectListViewTransfer.VirtualMode = true;
+            // 
+            // olvColumnTransferId
+            // 
+            this.olvColumnTransferId.Text = "Id";
+            // 
+            // olvColumnTransferName
+            // 
+            this.olvColumnTransferName.AspectName = "Name";
+            this.olvColumnTransferName.Text = "Name";
+            this.olvColumnTransferName.Width = 146;
+            // 
+            // olvColumnTransfer
+            // 
+            this.olvColumnTransfer.AspectName = "Transfer";
+            this.olvColumnTransfer.Text = "Transfer";
+            this.olvColumnTransfer.Width = 129;
+            // 
+            // olvColumnTransferType
+            // 
+            this.olvColumnTransferType.AspectName = "Type";
+            this.olvColumnTransferType.Text = "Type";
+            // 
+            // olvColumnTransferKeepMax
+            // 
+            this.olvColumnTransferKeepMax.AspectName = "KeepMax";
+            this.olvColumnTransferKeepMax.Text = "Max";
+            // 
+            // olvColumnTransferMinCP
+            // 
+            this.olvColumnTransferMinCP.AspectName = "MinCP";
+            this.olvColumnTransferMinCP.Text = "Min CP";
+            // 
+            // olvColumnCPPercent
+            // 
+            this.olvColumnCPPercent.AspectName = "IVPercent";
+            this.olvColumnCPPercent.Text = "Min IV %";
+            // 
+            // contextMenuStripTransfer
+            // 
+            this.contextMenuStripTransfer.ImageScalingSize = new System.Drawing.Size(22, 22);
+            this.contextMenuStripTransfer.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.editToolStripMenuItem1,
+            this.restoreDefaultsToolStripMenuItem2});
+            this.contextMenuStripTransfer.Name = "contextMenuStripTransfer";
+            this.contextMenuStripTransfer.Size = new System.Drawing.Size(215, 60);
+            // 
+            // editToolStripMenuItem1
+            // 
+            this.editToolStripMenuItem1.Name = "editToolStripMenuItem1";
+            this.editToolStripMenuItem1.Size = new System.Drawing.Size(214, 28);
+            this.editToolStripMenuItem1.Text = "Edit";
+            this.editToolStripMenuItem1.Click += new System.EventHandler(this.editToolStripMenuItem1_Click);
+            // 
+            // restoreDefaultsToolStripMenuItem2
+            // 
+            this.restoreDefaultsToolStripMenuItem2.Name = "restoreDefaultsToolStripMenuItem2";
+            this.restoreDefaultsToolStripMenuItem2.Size = new System.Drawing.Size(214, 28);
+            this.restoreDefaultsToolStripMenuItem2.Text = "Restore Defaults";
+            this.restoreDefaultsToolStripMenuItem2.Click += new System.EventHandler(this.restoreDefaultsToolStripMenuItem2_Click);
             // 
             // AccountSettingsForm
             // 
@@ -1092,6 +1089,12 @@
             this.tabControlMain.ResumeLayout(false);
             this.tabPageDetails.ResumeLayout(false);
             this.tabPageDetails.PerformLayout();
+            this.tabControlSettings.ResumeLayout(false);
+            this.tabPageSettingsGeneral.ResumeLayout(false);
+            this.tabPageSettingsGeneral.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSnipeAfterStops)).EndInit();
+            this.tabPageSettingsNavigation.ResumeLayout(false);
+            this.tabPageSettingsNavigation.PerformLayout();
             this.tabPageRecycling.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewRecycling)).EndInit();
             this.contextMenuStripRecycling.ResumeLayout(false);
@@ -1104,12 +1107,6 @@
             this.tabPageTransfer.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewTransfer)).EndInit();
             this.contextMenuStripTransfer.ResumeLayout(false);
-            this.tabControlSettings.ResumeLayout(false);
-            this.tabPageSettingsGeneral.ResumeLayout(false);
-            this.tabPageSettingsGeneral.PerformLayout();
-            this.tabPageSettingsNavigation.ResumeLayout(false);
-            this.tabPageSettingsNavigation.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSnipeAfterStops)).EndInit();
             this.ResumeLayout(false);
 
         }
