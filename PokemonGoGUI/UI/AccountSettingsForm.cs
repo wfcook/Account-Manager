@@ -121,6 +121,22 @@ namespace PokemonGoGUI.UI
             numericUpDownMinBallsToSnipe.Value = settings.MinBallsToSnipe;
             numericUpDownMaxPokemonPerSnipe.Value = settings.MaxPokemonPerSnipe;
 
+            //Device settings
+            textBoxDeviceId.Text = settings.DeviceId;
+            textBoxDeviceModel.Text = settings.DeviceModel;
+            textBoxDeviceBrand.Text = settings.DeviceBrand;
+            textBoxDeviceModelBoot.Text = settings.DeviceModelBoot;
+            textBoxDeviceModelIdentifier.Text = settings.DeviceModelIdentifier;
+            textBoxFirmwareBrand.Text = settings.FirmwareBrand;
+            textBoxFirmwareFingerprint.Text = settings.FirmwareFingerprint;
+            textBoxFirmwareTags.Text = settings.FirmwareTags;
+            textBoxFirmwareType.Text = settings.FirmwareType;
+            textBoxAnroidBoardName.Text = settings.AndroidBoardName;
+            textBoxAndroidBootLoader.Text = settings.AndroidBootloader;
+            textBoxHardwareManufacturer.Text = settings.HardwareManufacturer;
+            textBoxHardwareModel.Text = settings.HardwareModel;
+            //End device settings
+
             for(int i = 0; i < comboBoxMinAccountState.Items.Count; i++)
             {
                 if((AccountState)comboBoxMinAccountState.Items[i] == settings.StopAtMinAccountState)
@@ -255,6 +271,22 @@ namespace PokemonGoGUI.UI
             userSettings.MinBallsToSnipe = (int)numericUpDownMinBallsToSnipe.Value;
             userSettings.MaxPokemonPerSnipe = (int)numericUpDownMaxPokemonPerSnipe.Value;
             userSettings.StopAtMinAccountState = (AccountState)comboBoxMinAccountState.SelectedItem;
+
+            //Device settings
+            userSettings.DeviceId = textBoxDeviceId.Text;
+            userSettings.DeviceModel = textBoxDeviceModel.Text;
+            userSettings.DeviceBrand = textBoxDeviceBrand.Text;
+            userSettings.DeviceModelBoot = textBoxDeviceModelBoot.Text;
+            userSettings.DeviceModelIdentifier = textBoxDeviceModelIdentifier.Text;
+            userSettings.FirmwareBrand = textBoxFirmwareBrand.Text;
+            userSettings.FirmwareFingerprint = textBoxFirmwareFingerprint.Text;
+            userSettings.FirmwareTags = textBoxFirmwareTags.Text;
+            userSettings.FirmwareType = textBoxFirmwareType.Text;
+            userSettings.AndroidBoardName = textBoxAnroidBoardName.Text;
+            userSettings.AndroidBootloader = textBoxAndroidBootLoader.Text;
+            userSettings.HardwareManufacturer = textBoxHardwareManufacturer.Text;
+            userSettings.HardwareModel = textBoxHardwareModel.Text;
+            //End device settings
 
             if (proxyEx != null)
             {
@@ -595,7 +627,17 @@ namespace PokemonGoGUI.UI
 
         private void buttonDeviceRandom_Click(object sender, EventArgs e)
         {
+            _manager.RandomDeviceId();
 
+            UpdateDetails(_manager.UserSettings);
         }
+
+        private void buttonResetDefaults_Click(object sender, EventArgs e)
+        {
+            _manager.RestoreDeviceDefaults();
+
+            UpdateDetails(_manager.UserSettings);
+        }
+
     }
 }

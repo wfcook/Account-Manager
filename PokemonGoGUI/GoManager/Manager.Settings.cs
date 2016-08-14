@@ -243,6 +243,16 @@ namespace PokemonGoGUI.GoManager
             UserSettings.LoadTransferSettings();
         }
 
+        public void RestoreDeviceDefaults()
+        {
+            UserSettings.LoadDeviceSettings();
+        }
+
+        public void RandomDeviceId()
+        {
+            UserSettings.RandomizeDeviceId();
+        }
+
         /*
         public void RestoreSniperDefaults()
         {

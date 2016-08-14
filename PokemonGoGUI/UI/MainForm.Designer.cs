@@ -54,6 +54,26 @@
             this.pauseUnPauseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.setMaxLevelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.transferToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.enableTransferToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.evolveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.enableEvolveToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.setRequiredPokemonToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.recycleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.enableRecycleToolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
+            this.incubateEggsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.enableIncubateEggsToolStripMenuItem5 = new System.Windows.Forms.ToolStripMenuItem();
+            this.luckyEggToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.enableLuckyEggsToolStripMenuItem6 = new System.Windows.Forms.ToolStripMenuItem();
+            this.catchPokemonToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.enableCatchPokemonToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.snipePokemonToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.enableSnipePokemonToolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
+            this.setPokestopRateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.setMinBallsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.setMaxPokemonToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clearCountsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.countsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.logsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -78,8 +98,6 @@
             this.logViewerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.garbageCollectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.timerListViewUpdate = new System.Windows.Forms.Timer(this.components);
-            this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.setMaxLevelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewMain)).BeginInit();
             this.contextMenuStripAccounts.SuspendLayout();
             this.SuspendLayout();
@@ -244,7 +262,8 @@
             this.deleteToolStripMenuItem,
             this.devToolsToolStripMenuItem});
             this.contextMenuStripAccounts.Name = "contextMenuStrip1";
-            this.contextMenuStripAccounts.Size = new System.Drawing.Size(218, 507);
+            this.contextMenuStripAccounts.Size = new System.Drawing.Size(218, 476);
+            this.contextMenuStripAccounts.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStripAccounts_Opening);
             // 
             // updateDetailsToolStripMenuItem
             // 
@@ -297,6 +316,165 @@
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
             this.toolStripSeparator4.Size = new System.Drawing.Size(214, 6);
+            // 
+            // settingsToolStripMenuItem
+            // 
+            this.settingsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.setMaxLevelToolStripMenuItem,
+            this.transferToolStripMenuItem,
+            this.evolveToolStripMenuItem,
+            this.recycleToolStripMenuItem,
+            this.incubateEggsToolStripMenuItem,
+            this.luckyEggToolStripMenuItem,
+            this.catchPokemonToolStripMenuItem,
+            this.snipePokemonToolStripMenuItem});
+            this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(217, 28);
+            this.settingsToolStripMenuItem.Text = "Settings";
+            // 
+            // setMaxLevelToolStripMenuItem
+            // 
+            this.setMaxLevelToolStripMenuItem.Name = "setMaxLevelToolStripMenuItem";
+            this.setMaxLevelToolStripMenuItem.Size = new System.Drawing.Size(210, 28);
+            this.setMaxLevelToolStripMenuItem.Text = "Set Max Level";
+            this.setMaxLevelToolStripMenuItem.Click += new System.EventHandler(this.setMaxLevelToolStripMenuItem_Click);
+            // 
+            // transferToolStripMenuItem
+            // 
+            this.transferToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.enableTransferToolStripMenuItem});
+            this.transferToolStripMenuItem.Name = "transferToolStripMenuItem";
+            this.transferToolStripMenuItem.Size = new System.Drawing.Size(210, 28);
+            this.transferToolStripMenuItem.Text = "Transfer";
+            // 
+            // enableTransferToolStripMenuItem
+            // 
+            this.enableTransferToolStripMenuItem.Name = "enableTransferToolStripMenuItem";
+            this.enableTransferToolStripMenuItem.Size = new System.Drawing.Size(141, 28);
+            this.enableTransferToolStripMenuItem.Text = "Enable";
+            this.enableTransferToolStripMenuItem.Click += new System.EventHandler(this.enableTransferToolStripMenuItem_Click);
+            // 
+            // evolveToolStripMenuItem
+            // 
+            this.evolveToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.enableEvolveToolStripMenuItem1,
+            this.setRequiredPokemonToolStripMenuItem});
+            this.evolveToolStripMenuItem.Name = "evolveToolStripMenuItem";
+            this.evolveToolStripMenuItem.Size = new System.Drawing.Size(210, 28);
+            this.evolveToolStripMenuItem.Text = "Evolve";
+            // 
+            // enableEvolveToolStripMenuItem1
+            // 
+            this.enableEvolveToolStripMenuItem1.Name = "enableEvolveToolStripMenuItem1";
+            this.enableEvolveToolStripMenuItem1.Size = new System.Drawing.Size(263, 28);
+            this.enableEvolveToolStripMenuItem1.Text = "Enable";
+            this.enableEvolveToolStripMenuItem1.Click += new System.EventHandler(this.enableEvolveToolStripMenuItem1_Click);
+            // 
+            // setRequiredPokemonToolStripMenuItem
+            // 
+            this.setRequiredPokemonToolStripMenuItem.Name = "setRequiredPokemonToolStripMenuItem";
+            this.setRequiredPokemonToolStripMenuItem.Size = new System.Drawing.Size(263, 28);
+            this.setRequiredPokemonToolStripMenuItem.Text = "Set Required Pokemon";
+            this.setRequiredPokemonToolStripMenuItem.Click += new System.EventHandler(this.setRequiredPokemonToolStripMenuItem_Click);
+            // 
+            // recycleToolStripMenuItem
+            // 
+            this.recycleToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.enableRecycleToolStripMenuItem4});
+            this.recycleToolStripMenuItem.Name = "recycleToolStripMenuItem";
+            this.recycleToolStripMenuItem.Size = new System.Drawing.Size(210, 28);
+            this.recycleToolStripMenuItem.Text = "Recycle";
+            // 
+            // enableRecycleToolStripMenuItem4
+            // 
+            this.enableRecycleToolStripMenuItem4.Name = "enableRecycleToolStripMenuItem4";
+            this.enableRecycleToolStripMenuItem4.Size = new System.Drawing.Size(198, 28);
+            this.enableRecycleToolStripMenuItem4.Text = "Enable";
+            this.enableRecycleToolStripMenuItem4.Click += new System.EventHandler(this.enableRecycleToolStripMenuItem4_Click);
+            // 
+            // incubateEggsToolStripMenuItem
+            // 
+            this.incubateEggsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.enableIncubateEggsToolStripMenuItem5});
+            this.incubateEggsToolStripMenuItem.Name = "incubateEggsToolStripMenuItem";
+            this.incubateEggsToolStripMenuItem.Size = new System.Drawing.Size(210, 28);
+            this.incubateEggsToolStripMenuItem.Text = "Incubate Eggs";
+            // 
+            // enableIncubateEggsToolStripMenuItem5
+            // 
+            this.enableIncubateEggsToolStripMenuItem5.Name = "enableIncubateEggsToolStripMenuItem5";
+            this.enableIncubateEggsToolStripMenuItem5.Size = new System.Drawing.Size(198, 28);
+            this.enableIncubateEggsToolStripMenuItem5.Text = "Enable";
+            this.enableIncubateEggsToolStripMenuItem5.Click += new System.EventHandler(this.enableIncubateEggsToolStripMenuItem5_Click);
+            // 
+            // luckyEggToolStripMenuItem
+            // 
+            this.luckyEggToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.enableLuckyEggsToolStripMenuItem6});
+            this.luckyEggToolStripMenuItem.Name = "luckyEggToolStripMenuItem";
+            this.luckyEggToolStripMenuItem.Size = new System.Drawing.Size(210, 28);
+            this.luckyEggToolStripMenuItem.Text = "Lucky Egg";
+            // 
+            // enableLuckyEggsToolStripMenuItem6
+            // 
+            this.enableLuckyEggsToolStripMenuItem6.Name = "enableLuckyEggsToolStripMenuItem6";
+            this.enableLuckyEggsToolStripMenuItem6.Size = new System.Drawing.Size(198, 28);
+            this.enableLuckyEggsToolStripMenuItem6.Text = "Enable";
+            this.enableLuckyEggsToolStripMenuItem6.Click += new System.EventHandler(this.enableLuckyEggsToolStripMenuItem6_Click);
+            // 
+            // catchPokemonToolStripMenuItem
+            // 
+            this.catchPokemonToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.enableCatchPokemonToolStripMenuItem2});
+            this.catchPokemonToolStripMenuItem.Name = "catchPokemonToolStripMenuItem";
+            this.catchPokemonToolStripMenuItem.Size = new System.Drawing.Size(210, 28);
+            this.catchPokemonToolStripMenuItem.Text = "Catch Pokemon";
+            // 
+            // enableCatchPokemonToolStripMenuItem2
+            // 
+            this.enableCatchPokemonToolStripMenuItem2.Name = "enableCatchPokemonToolStripMenuItem2";
+            this.enableCatchPokemonToolStripMenuItem2.Size = new System.Drawing.Size(198, 28);
+            this.enableCatchPokemonToolStripMenuItem2.Text = "Enable";
+            this.enableCatchPokemonToolStripMenuItem2.Click += new System.EventHandler(this.enableCatchPokemonToolStripMenuItem2_Click);
+            // 
+            // snipePokemonToolStripMenuItem
+            // 
+            this.snipePokemonToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.enableSnipePokemonToolStripMenuItem3,
+            this.setPokestopRateToolStripMenuItem,
+            this.setMinBallsToolStripMenuItem,
+            this.setMaxPokemonToolStripMenuItem});
+            this.snipePokemonToolStripMenuItem.Name = "snipePokemonToolStripMenuItem";
+            this.snipePokemonToolStripMenuItem.Size = new System.Drawing.Size(210, 28);
+            this.snipePokemonToolStripMenuItem.Text = "Snipe Pokemon";
+            // 
+            // enableSnipePokemonToolStripMenuItem3
+            // 
+            this.enableSnipePokemonToolStripMenuItem3.Name = "enableSnipePokemonToolStripMenuItem3";
+            this.enableSnipePokemonToolStripMenuItem3.Size = new System.Drawing.Size(227, 28);
+            this.enableSnipePokemonToolStripMenuItem3.Text = "Enable";
+            this.enableSnipePokemonToolStripMenuItem3.Click += new System.EventHandler(this.enableSnipePokemonToolStripMenuItem3_Click);
+            // 
+            // setPokestopRateToolStripMenuItem
+            // 
+            this.setPokestopRateToolStripMenuItem.Name = "setPokestopRateToolStripMenuItem";
+            this.setPokestopRateToolStripMenuItem.Size = new System.Drawing.Size(227, 28);
+            this.setPokestopRateToolStripMenuItem.Text = "Set Pokestop Rate";
+            this.setPokestopRateToolStripMenuItem.Click += new System.EventHandler(this.setPokestopRateToolStripMenuItem_Click);
+            // 
+            // setMinBallsToolStripMenuItem
+            // 
+            this.setMinBallsToolStripMenuItem.Name = "setMinBallsToolStripMenuItem";
+            this.setMinBallsToolStripMenuItem.Size = new System.Drawing.Size(227, 28);
+            this.setMinBallsToolStripMenuItem.Text = "Set Min Balls";
+            this.setMinBallsToolStripMenuItem.Click += new System.EventHandler(this.setMinBallsToolStripMenuItem_Click);
+            // 
+            // setMaxPokemonToolStripMenuItem
+            // 
+            this.setMaxPokemonToolStripMenuItem.Name = "setMaxPokemonToolStripMenuItem";
+            this.setMaxPokemonToolStripMenuItem.Size = new System.Drawing.Size(227, 28);
+            this.setMaxPokemonToolStripMenuItem.Text = "Set Max Pokemon";
+            this.setMaxPokemonToolStripMenuItem.Click += new System.EventHandler(this.setMaxPokemonToolStripMenuItem_Click);
             // 
             // clearCountsToolStripMenuItem
             // 
@@ -476,21 +654,6 @@
             this.timerListViewUpdate.Interval = 1000;
             this.timerListViewUpdate.Tick += new System.EventHandler(this.timerListViewUpdate_Tick);
             // 
-            // settingsToolStripMenuItem
-            // 
-            this.settingsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.setMaxLevelToolStripMenuItem});
-            this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(217, 28);
-            this.settingsToolStripMenuItem.Text = "Settings";
-            // 
-            // setMaxLevelToolStripMenuItem
-            // 
-            this.setMaxLevelToolStripMenuItem.Name = "setMaxLevelToolStripMenuItem";
-            this.setMaxLevelToolStripMenuItem.Size = new System.Drawing.Size(198, 28);
-            this.setMaxLevelToolStripMenuItem.Text = "Set Max Level";
-            this.setMaxLevelToolStripMenuItem.Click += new System.EventHandler(this.setMaxLevelToolStripMenuItem_Click);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -560,6 +723,24 @@
         private System.Windows.Forms.ToolStripMenuItem logViewerToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem setMaxLevelToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem transferToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem enableTransferToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem evolveToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem enableEvolveToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem catchPokemonToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem enableCatchPokemonToolStripMenuItem2;
+        private System.Windows.Forms.ToolStripMenuItem snipePokemonToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem enableSnipePokemonToolStripMenuItem3;
+        private System.Windows.Forms.ToolStripMenuItem recycleToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem enableRecycleToolStripMenuItem4;
+        private System.Windows.Forms.ToolStripMenuItem incubateEggsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem enableIncubateEggsToolStripMenuItem5;
+        private System.Windows.Forms.ToolStripMenuItem setMinBallsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem setMaxPokemonToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem setPokestopRateToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem luckyEggToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem enableLuckyEggsToolStripMenuItem6;
+        private System.Windows.Forms.ToolStripMenuItem setRequiredPokemonToolStripMenuItem;
     }
 }
 

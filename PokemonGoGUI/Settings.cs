@@ -117,6 +117,7 @@ namespace PokemonGoGUI
             GoogleRefreshToken = String.Empty;
             DefaultLatitude = -33.870225;
             DefaultLongitude = 151.208343;
+            DefaultAltitude = 10;
             MimicWalking = true;
             CatchPokemon = true;
             WalkingSpeed = 7;

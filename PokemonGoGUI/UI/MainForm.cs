@@ -803,15 +803,204 @@ namespace PokemonGoGUI
 
             int level = 0;
 
-            if(!Int32.TryParse(data, out level) && level >= 0)
+            if(!Int32.TryParse(data, out level) || level < 0)
             {
-                MessageBox.Show("Invalid max level value");
+                MessageBox.Show("Invalid value");
                 return;
             }
 
             foreach(Manager manager in fastObjectListViewMain.SelectedObjects)
             {
                 manager.UserSettings.MaxLevel = level;
+            }
+
+            fastObjectListViewMain.RefreshSelectedObjects();
+        }
+
+        private void contextMenuStripAccounts_Opening(object sender, CancelEventArgs e)
+        {
+            Manager manager = fastObjectListViewMain.SelectedObjects.Cast<Manager>().FirstOrDefault();
+
+            if(manager == null)
+            {
+                return;
+            }
+
+            enableTransferToolStripMenuItem.Checked = manager.UserSettings.TransferPokemon;
+            enableEvolveToolStripMenuItem1.Checked = manager.UserSettings.EvolvePokemon;
+            enableRecycleToolStripMenuItem4.Checked = manager.UserSettings.RecycleItems;
+            enableIncubateEggsToolStripMenuItem5.Checked = manager.UserSettings.IncubateEggs;
+            enableLuckyEggsToolStripMenuItem6.Checked = manager.UserSettings.UseLuckyEgg;
+            enableSnipePokemonToolStripMenuItem3.Checked = manager.UserSettings.SnipePokemon;
+            enableCatchPokemonToolStripMenuItem2.Checked = manager.UserSettings.CatchPokemon;
+        }
+
+        private void enableTransferToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach(Manager manager in fastObjectListViewMain.SelectedObjects)
+            {
+                manager.UserSettings.TransferPokemon = !enableTransferToolStripMenuItem.Checked;
+            }
+
+            fastObjectListViewMain.RefreshSelectedObjects();
+        }
+
+        private void enableEvolveToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            foreach (Manager manager in fastObjectListViewMain.SelectedObjects)
+            {
+                manager.UserSettings.EvolvePokemon = !enableEvolveToolStripMenuItem1.Checked;
+            }
+
+            fastObjectListViewMain.RefreshSelectedObjects();
+        }
+
+        private void enableRecycleToolStripMenuItem4_Click(object sender, EventArgs e)
+        {
+            foreach (Manager manager in fastObjectListViewMain.SelectedObjects)
+            {
+                manager.UserSettings.RecycleItems = !enableRecycleToolStripMenuItem4.Checked;
+            }
+
+            fastObjectListViewMain.RefreshSelectedObjects();
+        }
+
+        private void enableIncubateEggsToolStripMenuItem5_Click(object sender, EventArgs e)
+        {
+            foreach (Manager manager in fastObjectListViewMain.SelectedObjects)
+            {
+                manager.UserSettings.IncubateEggs = !enableIncubateEggsToolStripMenuItem5.Checked;
+            }
+
+            fastObjectListViewMain.RefreshSelectedObjects();
+        }
+
+        private void enableLuckyEggsToolStripMenuItem6_Click(object sender, EventArgs e)
+        {
+            foreach (Manager manager in fastObjectListViewMain.SelectedObjects)
+            {
+                manager.UserSettings.UseLuckyEgg = !enableLuckyEggsToolStripMenuItem6.Checked;
+            }
+
+            fastObjectListViewMain.RefreshSelectedObjects();
+        }
+
+        private void enableCatchPokemonToolStripMenuItem2_Click(object sender, EventArgs e)
+        {
+            foreach (Manager manager in fastObjectListViewMain.SelectedObjects)
+            {
+                manager.UserSettings.CatchPokemon = !enableCatchPokemonToolStripMenuItem2.Checked;
+            }
+
+            fastObjectListViewMain.RefreshSelectedObjects();
+        }
+
+        private void enableSnipePokemonToolStripMenuItem3_Click(object sender, EventArgs e)
+        {
+            foreach (Manager manager in fastObjectListViewMain.SelectedObjects)
+            {
+                manager.UserSettings.SnipePokemon = !enableSnipePokemonToolStripMenuItem3.Checked;
+            }
+
+            fastObjectListViewMain.RefreshSelectedObjects();
+        }
+
+        private void setRequiredPokemonToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+            string data = Prompt.ShowDialog("Evolvable pokemon required to evolve:", "Set Min Pokemon Before Evolve");
+
+            if (String.IsNullOrEmpty(data))
+            {
+                return;
+            }
+
+            int value = 0;
+
+            if (!Int32.TryParse(data, out value) || value >= 500)
+            {
+                MessageBox.Show("Invalid value");
+                return;
+            }
+
+            foreach (Manager manager in fastObjectListViewMain.SelectedObjects)
+            {
+                manager.UserSettings.MinPokemonBeforeEvolve = value;
+            }
+
+            fastObjectListViewMain.RefreshSelectedObjects();
+        }
+
+        private void setPokestopRateToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string data = Prompt.ShowDialog("Snipe after pokestops amount:", "Set Pokestop Rate");
+
+            if (String.IsNullOrEmpty(data))
+            {
+                return;
+            }
+
+            int value = 0;
+
+            if (!Int32.TryParse(data, out value) || value >= 1000)
+            {
+                MessageBox.Show("Invalid value");
+                return;
+            }
+
+            foreach (Manager manager in fastObjectListViewMain.SelectedObjects)
+            {
+                manager.UserSettings.SnipeAfterPokestops = value;
+            }
+
+            fastObjectListViewMain.RefreshSelectedObjects();
+        }
+
+        private void setMinBallsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string data = Prompt.ShowDialog("Minimum balls required to snipe:", "Set Minimum Balls");
+
+            if (String.IsNullOrEmpty(data))
+            {
+                return;
+            }
+
+            int value = 0;
+
+            if (!Int32.TryParse(data, out value) || value >= 1000)
+            {
+                MessageBox.Show("Invalid value");
+                return;
+            }
+
+            foreach (Manager manager in fastObjectListViewMain.SelectedObjects)
+            {
+                manager.UserSettings.MinBallsToSnipe = value;
+            }
+
+            fastObjectListViewMain.RefreshSelectedObjects();
+        }
+
+        private void setMaxPokemonToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string data = Prompt.ShowDialog("Total pokemon per snipe:", "Set Maximum Pokemon To Snipe");
+
+            if (String.IsNullOrEmpty(data))
+            {
+                return;
+            }
+
+            int value = 0;
+
+            if (!Int32.TryParse(data, out value) || value >= 500)
+            {
+                MessageBox.Show("Invalid value");
+                return;
+            }
+
+            foreach (Manager manager in fastObjectListViewMain.SelectedObjects)
+            {
+                manager.UserSettings.MaxPokemonPerSnipe = value;
             }
 
             fastObjectListViewMain.RefreshSelectedObjects();
