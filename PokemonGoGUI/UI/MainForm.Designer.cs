@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.fastObjectListViewMain = new BrightIdeasSoftware.FastObjectListView();
             this.olvColumnUsername = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnAccountState = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
@@ -74,6 +75,7 @@
             this.setPokestopRateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.setMinBallsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.setMaxPokemonToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.afterLevelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clearCountsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.countsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.logsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -98,7 +100,6 @@
             this.logViewerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.garbageCollectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.timerListViewUpdate = new System.Windows.Forms.Timer(this.components);
-            this.afterLevelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewMain)).BeginInit();
             this.contextMenuStripAccounts.SuspendLayout();
             this.SuspendLayout();
@@ -263,7 +264,7 @@
             this.deleteToolStripMenuItem,
             this.devToolsToolStripMenuItem});
             this.contextMenuStripAccounts.Name = "contextMenuStrip1";
-            this.contextMenuStripAccounts.Size = new System.Drawing.Size(218, 507);
+            this.contextMenuStripAccounts.Size = new System.Drawing.Size(218, 476);
             this.contextMenuStripAccounts.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStripAccounts_Opening);
             // 
             // updateDetailsToolStripMenuItem
@@ -478,6 +479,13 @@
             this.setMaxPokemonToolStripMenuItem.Text = "Set Max Pokemon";
             this.setMaxPokemonToolStripMenuItem.Click += new System.EventHandler(this.setMaxPokemonToolStripMenuItem_Click);
             // 
+            // afterLevelToolStripMenuItem
+            // 
+            this.afterLevelToolStripMenuItem.Name = "afterLevelToolStripMenuItem";
+            this.afterLevelToolStripMenuItem.Size = new System.Drawing.Size(227, 28);
+            this.afterLevelToolStripMenuItem.Text = "After Level";
+            this.afterLevelToolStripMenuItem.Click += new System.EventHandler(this.afterLevelToolStripMenuItem_Click);
+            // 
             // clearCountsToolStripMenuItem
             // 
             this.clearCountsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -656,19 +664,13 @@
             this.timerListViewUpdate.Interval = 1000;
             this.timerListViewUpdate.Tick += new System.EventHandler(this.timerListViewUpdate_Tick);
             // 
-            // afterLevelToolStripMenuItem
-            // 
-            this.afterLevelToolStripMenuItem.Name = "afterLevelToolStripMenuItem";
-            this.afterLevelToolStripMenuItem.Size = new System.Drawing.Size(227, 28);
-            this.afterLevelToolStripMenuItem.Text = "After Level";
-            this.afterLevelToolStripMenuItem.Click += new System.EventHandler(this.afterLevelToolStripMenuItem_Click);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1041, 482);
             this.Controls.Add(this.fastObjectListViewMain);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainForm";
             this.Text = "GoManager";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);

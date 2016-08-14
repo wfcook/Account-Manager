@@ -192,7 +192,6 @@ namespace PokemonGoGUI.GoManager
                 {
                     Message = message
                 };
-
             }
             catch(GoogleException ex)
             {
@@ -596,21 +595,24 @@ namespace PokemonGoGUI.GoManager
                         await Task.Delay(delayTime);
 
                         //Check sniping
-                        int remainingBalls = RemainingPokeballs();
-
-                        if (remainingBalls >= UserSettings.MinBallsToSnipe)
+                        if (Stats.Level > UserSettings.SnipeAfterLevel)
                         {
-                            if (UserSettings.SnipePokemon && IsRunning && pokeStopNumber >= UserSettings.SnipeAfterPokestops && pokeStopNumber % UserSettings.SnipeAfterPokestops == 0)
+                            int remainingBalls = RemainingPokeballs();
+
+                            if (remainingBalls >= UserSettings.MinBallsToSnipe)
                             {
-                                await SnipeAllPokemon();
+                                if (UserSettings.SnipePokemon && IsRunning && pokeStopNumber >= UserSettings.SnipeAfterPokestops && pokeStopNumber % UserSettings.SnipeAfterPokestops == 0)
+                                {
+                                    await SnipeAllPokemon();
+                                }
                             }
-                        }
-                        else
-                        {
-                            LogCaller(new LoggerEventArgs(String.Format("Not enough pokeballs to snipe. Need {0} have {1}", UserSettings.MinBallsToSnipe, remainingBalls), LoggerTypes.Info));
-                        }
+                            else
+                            {
+                                LogCaller(new LoggerEventArgs(String.Format("Not enough pokeballs to snipe. Need {0} have {1}", UserSettings.MinBallsToSnipe, remainingBalls), LoggerTypes.Info));
+                            }
 
-                        await Task.Delay(delayTime);
+                            await Task.Delay(delayTime);
+                        }
 
                         //Clean inventory, evolve, transfer, etc on first and every 10 stops
                         if(IsRunning && ((pokeStopNumber > 4 && pokeStopNumber % 10 == 0) || pokeStopNumber == 1))
