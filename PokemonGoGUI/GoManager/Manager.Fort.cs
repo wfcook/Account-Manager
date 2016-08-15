@@ -138,7 +138,7 @@ namespace PokemonGoGUI.GoManager
                         break;
                     }
 
-                    await Task.Delay(500);
+                    await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
                 }
                 
                 if(fortResponse != null && fortResponse.ExperienceAwarded == 0)
@@ -167,7 +167,7 @@ namespace PokemonGoGUI.GoManager
 
                             bypassResponse = await _client.Fort.SearchFort(pokestop.Id, pokestop.Latitude, pokestop.Longitude);
 
-                            await Task.Delay(UserSettings.DelayBetweenPlayerActions);
+                            await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
                         } while (bypassResponse.ExperienceAwarded == 0 && totalAttempts <= maxAttempts);
 
                         if(bypassResponse.ExperienceAwarded != 0)
@@ -199,7 +199,7 @@ namespace PokemonGoGUI.GoManager
                     _totalZeroExpStops = 0;
                 }
 
-                await Task.Delay(500);
+                await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
 
                 return new MethodResult
                 {

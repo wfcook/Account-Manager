@@ -41,7 +41,7 @@ namespace PokemonGoGUI.GoManager
                                         LoggerTypes.Transfer));
                     }
 
-                    await Task.Delay(200);
+                    await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
                 }
                 catch (Exception ex)
                 {

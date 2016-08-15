@@ -223,7 +223,7 @@ namespace PokemonGoGUI.GoManager
                         LogCaller(new LoggerEventArgs(String.Format("Failed to delete {0}. Message: {1}", itemSetting.FriendlyName, response.Result), LoggerTypes.Warning));
                     }
 
-                    await Task.Delay(UserSettings.DelayBetweenPlayerActions);
+                    await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
                 }
                 catch (Exception ex)
                 {

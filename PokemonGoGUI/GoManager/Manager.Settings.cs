@@ -17,6 +17,26 @@ namespace PokemonGoGUI.GoManager
 {
     public partial class Manager
     {
+        private int CalculateDelay(int baseDelay, int offset)
+        {
+            lock(_rand)
+            {
+                int maxOffset = offset * 2;
+
+                int currentOffset = _rand.Next(0, maxOffset + 1) - offset;
+
+                int returnDelay = baseDelay + currentOffset;
+
+                //API throttles
+                if(returnDelay <= 200)
+                {
+                    return 200;
+                }
+
+                return returnDelay;
+            }
+        }
+
         public async Task<MethodResult<Dictionary<PokemonId, PokemonSettings>>> GetItemTemplates()
         {
             if (PokeSettings != null && PokeSettings.Count != 0)

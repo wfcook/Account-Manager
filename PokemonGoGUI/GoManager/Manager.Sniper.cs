@@ -82,7 +82,7 @@ namespace PokemonGoGUI.GoManager
 
             LogCaller(new LoggerEventArgs(String.Format("Sniping {0} pokemon", pokemonToSnipe.Count), LoggerTypes.Info));
 
-            await Task.Delay(7000);
+            await Task.Delay(CalculateDelay(UserSettings.DelayBetweenSnipes, UserSettings.BetweenSnipesDelayRandom));
 
             bool hasPokeballs = HasPokeballsLeft();
             int failedAttempts = 0;
@@ -104,7 +104,7 @@ namespace PokemonGoGUI.GoManager
 
                 MethodResult<bool> captureResult = await CaptureSnipePokemon(pokemon.Latitude, pokemon.Longitude, pokemon.PokemonId);
 
-                await Task.Delay(7000);
+                await Task.Delay(CalculateDelay(UserSettings.DelayBetweenSnipes, UserSettings.BetweenSnipesDelayRandom));
                 
                 if(!captureResult.Success)
                 {
@@ -142,7 +142,7 @@ namespace PokemonGoGUI.GoManager
             //Update location
             MethodResult result = await UpdateLocation(new GeoCoordinate(latitude, longitude, _client.CurrentAltitude));
 
-            await Task.Delay(800);
+            await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
             if(!result.Success)
             {
@@ -165,7 +165,7 @@ namespace PokemonGoGUI.GoManager
                 };
             }
 
-            await Task.Delay(800);
+            await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
             MapPokemon pokemonToSnipe = pokemonResult.Data.FirstOrDefault(x => x.PokemonId == pokemon);
 
@@ -184,7 +184,7 @@ namespace PokemonGoGUI.GoManager
             //Encounter
             MethodResult<EncounterResponse> eResponseResult = await EncounterPokemon(pokemonToSnipe);
 
-            await Task.Delay(800);
+            await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
             if(!eResponseResult.Success)
             {

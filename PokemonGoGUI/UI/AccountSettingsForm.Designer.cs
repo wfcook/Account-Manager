@@ -162,6 +162,27 @@
             this.restoreDefaultsToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTipProxy = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipMinAccountState = new System.Windows.Forms.ToolTip(this.components);
+            this.tabPageHumanization = new System.Windows.Forms.TabPage();
+            this.label32 = new System.Windows.Forms.Label();
+            this.checkBoxHumanizeThrows = new System.Windows.Forms.CheckBox();
+            this.toolTipHumanizeThrows = new System.Windows.Forms.ToolTip(this.components);
+            this.numericUpDownInsideReticuleChance = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this.label33 = new System.Windows.Forms.Label();
+            this.label34 = new System.Windows.Forms.Label();
+            this.numericUpDownLocationUpdateDelay = new System.Windows.Forms.NumericUpDown();
+            this.label35 = new System.Windows.Forms.Label();
+            this.numericUpDownPlayerActionRandomiz = new System.Windows.Forms.NumericUpDown();
+            this.label36 = new System.Windows.Forms.Label();
+            this.numericUpDownLocationUpdateRandom = new System.Windows.Forms.NumericUpDown();
+            this.label37 = new System.Windows.Forms.Label();
+            this.numericUpDownDelayBetweenSnipes = new System.Windows.Forms.NumericUpDown();
+            this.label38 = new System.Windows.Forms.Label();
+            this.numericUpDownDelayBetweenSnipeRandom = new System.Windows.Forms.NumericUpDown();
+            this.label39 = new System.Windows.Forms.Label();
+            this.numericUpDownGeneralDelay = new System.Windows.Forms.NumericUpDown();
+            this.label40 = new System.Windows.Forms.Label();
+            this.numericUpDownGeneralDelayRandom = new System.Windows.Forms.NumericUpDown();
             this.tabControlMain.SuspendLayout();
             this.tabPageDetails.SuspendLayout();
             this.tabControlSettings.SuspendLayout();
@@ -184,6 +205,16 @@
             this.tabPageTransfer.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewTransfer)).BeginInit();
             this.contextMenuStripTransfer.SuspendLayout();
+            this.tabPageHumanization.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownInsideReticuleChance)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownLocationUpdateDelay)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownPlayerActionRandomiz)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownLocationUpdateRandom)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDelayBetweenSnipes)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDelayBetweenSnipeRandom)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownGeneralDelay)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownGeneralDelayRandom)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControlMain
@@ -224,6 +255,7 @@
             this.tabControlSettings.Controls.Add(this.tabPageSettingsGeneral);
             this.tabControlSettings.Controls.Add(this.tabPageSettingsNavigation);
             this.tabControlSettings.Controls.Add(this.tabPageDevice);
+            this.tabControlSettings.Controls.Add(this.tabPageHumanization);
             this.tabControlSettings.Location = new System.Drawing.Point(-4, 0);
             this.tabControlSettings.Name = "tabControlSettings";
             this.tabControlSettings.SelectedIndex = 0;
@@ -1501,6 +1533,290 @@
             this.restoreDefaultsToolStripMenuItem2.Text = "Restore Defaults";
             this.restoreDefaultsToolStripMenuItem2.Click += new System.EventHandler(this.restoreDefaultsToolStripMenuItem2_Click);
             // 
+            // tabPageHumanization
+            // 
+            this.tabPageHumanization.Controls.Add(this.numericUpDownDelayBetweenSnipes);
+            this.tabPageHumanization.Controls.Add(this.numericUpDownLocationUpdateDelay);
+            this.tabPageHumanization.Controls.Add(this.numericUpDownDelayBetweenSnipeRandom);
+            this.tabPageHumanization.Controls.Add(this.numericUpDownLocationUpdateRandom);
+            this.tabPageHumanization.Controls.Add(this.numericUpDownGeneralDelayRandom);
+            this.tabPageHumanization.Controls.Add(this.numericUpDownPlayerActionRandomiz);
+            this.tabPageHumanization.Controls.Add(this.numericUpDownGeneralDelay);
+            this.tabPageHumanization.Controls.Add(this.numericUpDown1);
+            this.tabPageHumanization.Controls.Add(this.label37);
+            this.tabPageHumanization.Controls.Add(this.numericUpDownInsideReticuleChance);
+            this.tabPageHumanization.Controls.Add(this.label38);
+            this.tabPageHumanization.Controls.Add(this.label34);
+            this.tabPageHumanization.Controls.Add(this.label36);
+            this.tabPageHumanization.Controls.Add(this.label40);
+            this.tabPageHumanization.Controls.Add(this.checkBoxHumanizeThrows);
+            this.tabPageHumanization.Controls.Add(this.label35);
+            this.tabPageHumanization.Controls.Add(this.label39);
+            this.tabPageHumanization.Controls.Add(this.label33);
+            this.tabPageHumanization.Controls.Add(this.label32);
+            this.tabPageHumanization.Location = new System.Drawing.Point(4, 25);
+            this.tabPageHumanization.Name = "tabPageHumanization";
+            this.tabPageHumanization.Size = new System.Drawing.Size(494, 428);
+            this.tabPageHumanization.TabIndex = 3;
+            this.tabPageHumanization.Text = "Humanization";
+            this.tabPageHumanization.UseVisualStyleBackColor = true;
+            // 
+            // label32
+            // 
+            this.label32.AutoSize = true;
+            this.label32.Location = new System.Drawing.Point(74, 52);
+            this.label32.Name = "label32";
+            this.label32.Size = new System.Drawing.Size(135, 16);
+            this.label32.TabIndex = 0;
+            this.label32.Text = "Hit inside reticule (%):";
+            // 
+            // checkBoxHumanizeThrows
+            // 
+            this.checkBoxHumanizeThrows.AutoSize = true;
+            this.checkBoxHumanizeThrows.Location = new System.Drawing.Point(157, 24);
+            this.checkBoxHumanizeThrows.Name = "checkBoxHumanizeThrows";
+            this.checkBoxHumanizeThrows.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.checkBoxHumanizeThrows.Size = new System.Drawing.Size(137, 20);
+            this.checkBoxHumanizeThrows.TabIndex = 1;
+            this.checkBoxHumanizeThrows.Text = "Humanize Throws";
+            this.toolTipHumanizeThrows.SetToolTip(this.checkBoxHumanizeThrows, "This randomizes the reticule size on throws.");
+            this.checkBoxHumanizeThrows.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDownInsideReticuleChance
+            // 
+            this.numericUpDownInsideReticuleChance.Location = new System.Drawing.Point(215, 50);
+            this.numericUpDownInsideReticuleChance.Name = "numericUpDownInsideReticuleChance";
+            this.numericUpDownInsideReticuleChance.Size = new System.Drawing.Size(79, 22);
+            this.numericUpDownInsideReticuleChance.TabIndex = 2;
+            // 
+            // numericUpDown1
+            // 
+            this.numericUpDown1.Location = new System.Drawing.Point(197, 108);
+            this.numericUpDown1.Maximum = new decimal(new int[] {
+            1000000,
+            0,
+            0,
+            0});
+            this.numericUpDown1.Minimum = new decimal(new int[] {
+            200,
+            0,
+            0,
+            0});
+            this.numericUpDown1.Name = "numericUpDown1";
+            this.numericUpDown1.Size = new System.Drawing.Size(97, 22);
+            this.numericUpDown1.TabIndex = 3;
+            this.numericUpDown1.Value = new decimal(new int[] {
+            200,
+            0,
+            0,
+            0});
+            // 
+            // label33
+            // 
+            this.label33.AutoSize = true;
+            this.label33.Location = new System.Drawing.Point(33, 110);
+            this.label33.Name = "label33";
+            this.label33.Size = new System.Drawing.Size(158, 16);
+            this.label33.TabIndex = 0;
+            this.label33.Text = "Player Action Delay (ms):";
+            // 
+            // label34
+            // 
+            this.label34.AutoSize = true;
+            this.label34.Location = new System.Drawing.Point(13, 138);
+            this.label34.Name = "label34";
+            this.label34.Size = new System.Drawing.Size(178, 16);
+            this.label34.TabIndex = 0;
+            this.label34.Text = "Location Update Delay (ms):";
+            // 
+            // numericUpDownLocationUpdateDelay
+            // 
+            this.numericUpDownLocationUpdateDelay.Location = new System.Drawing.Point(197, 136);
+            this.numericUpDownLocationUpdateDelay.Maximum = new decimal(new int[] {
+            1000000,
+            0,
+            0,
+            0});
+            this.numericUpDownLocationUpdateDelay.Minimum = new decimal(new int[] {
+            200,
+            0,
+            0,
+            0});
+            this.numericUpDownLocationUpdateDelay.Name = "numericUpDownLocationUpdateDelay";
+            this.numericUpDownLocationUpdateDelay.Size = new System.Drawing.Size(97, 22);
+            this.numericUpDownLocationUpdateDelay.TabIndex = 3;
+            this.numericUpDownLocationUpdateDelay.Value = new decimal(new int[] {
+            200,
+            0,
+            0,
+            0});
+            // 
+            // label35
+            // 
+            this.label35.AutoSize = true;
+            this.label35.Location = new System.Drawing.Point(300, 110);
+            this.label35.Name = "label35";
+            this.label35.Size = new System.Drawing.Size(23, 16);
+            this.label35.TabIndex = 0;
+            this.label35.Text = "+/-";
+            // 
+            // numericUpDownPlayerActionRandomiz
+            // 
+            this.numericUpDownPlayerActionRandomiz.Location = new System.Drawing.Point(329, 108);
+            this.numericUpDownPlayerActionRandomiz.Maximum = new decimal(new int[] {
+            1000000,
+            0,
+            0,
+            0});
+            this.numericUpDownPlayerActionRandomiz.Name = "numericUpDownPlayerActionRandomiz";
+            this.numericUpDownPlayerActionRandomiz.Size = new System.Drawing.Size(97, 22);
+            this.numericUpDownPlayerActionRandomiz.TabIndex = 3;
+            this.numericUpDownPlayerActionRandomiz.Value = new decimal(new int[] {
+            200,
+            0,
+            0,
+            0});
+            // 
+            // label36
+            // 
+            this.label36.AutoSize = true;
+            this.label36.Location = new System.Drawing.Point(300, 138);
+            this.label36.Name = "label36";
+            this.label36.Size = new System.Drawing.Size(23, 16);
+            this.label36.TabIndex = 0;
+            this.label36.Text = "+/-";
+            // 
+            // numericUpDownLocationUpdateRandom
+            // 
+            this.numericUpDownLocationUpdateRandom.Location = new System.Drawing.Point(329, 136);
+            this.numericUpDownLocationUpdateRandom.Maximum = new decimal(new int[] {
+            1000000,
+            0,
+            0,
+            0});
+            this.numericUpDownLocationUpdateRandom.Name = "numericUpDownLocationUpdateRandom";
+            this.numericUpDownLocationUpdateRandom.Size = new System.Drawing.Size(97, 22);
+            this.numericUpDownLocationUpdateRandom.TabIndex = 3;
+            this.numericUpDownLocationUpdateRandom.Value = new decimal(new int[] {
+            200,
+            0,
+            0,
+            0});
+            // 
+            // label37
+            // 
+            this.label37.AutoSize = true;
+            this.label37.Location = new System.Drawing.Point(15, 166);
+            this.label37.Name = "label37";
+            this.label37.Size = new System.Drawing.Size(176, 16);
+            this.label37.TabIndex = 0;
+            this.label37.Text = "Delay Between Snipes (ms):";
+            // 
+            // numericUpDownDelayBetweenSnipes
+            // 
+            this.numericUpDownDelayBetweenSnipes.Location = new System.Drawing.Point(197, 164);
+            this.numericUpDownDelayBetweenSnipes.Maximum = new decimal(new int[] {
+            1000000,
+            0,
+            0,
+            0});
+            this.numericUpDownDelayBetweenSnipes.Minimum = new decimal(new int[] {
+            200,
+            0,
+            0,
+            0});
+            this.numericUpDownDelayBetweenSnipes.Name = "numericUpDownDelayBetweenSnipes";
+            this.numericUpDownDelayBetweenSnipes.Size = new System.Drawing.Size(97, 22);
+            this.numericUpDownDelayBetweenSnipes.TabIndex = 3;
+            this.numericUpDownDelayBetweenSnipes.Value = new decimal(new int[] {
+            200,
+            0,
+            0,
+            0});
+            // 
+            // label38
+            // 
+            this.label38.AutoSize = true;
+            this.label38.Location = new System.Drawing.Point(300, 166);
+            this.label38.Name = "label38";
+            this.label38.Size = new System.Drawing.Size(23, 16);
+            this.label38.TabIndex = 0;
+            this.label38.Text = "+/-";
+            // 
+            // numericUpDownDelayBetweenSnipeRandom
+            // 
+            this.numericUpDownDelayBetweenSnipeRandom.Location = new System.Drawing.Point(329, 164);
+            this.numericUpDownDelayBetweenSnipeRandom.Maximum = new decimal(new int[] {
+            1000000,
+            0,
+            0,
+            0});
+            this.numericUpDownDelayBetweenSnipeRandom.Name = "numericUpDownDelayBetweenSnipeRandom";
+            this.numericUpDownDelayBetweenSnipeRandom.Size = new System.Drawing.Size(97, 22);
+            this.numericUpDownDelayBetweenSnipeRandom.TabIndex = 3;
+            this.numericUpDownDelayBetweenSnipeRandom.Value = new decimal(new int[] {
+            200,
+            0,
+            0,
+            0});
+            // 
+            // label39
+            // 
+            this.label39.AutoSize = true;
+            this.label39.Location = new System.Drawing.Point(64, 82);
+            this.label39.Name = "label39";
+            this.label39.Size = new System.Drawing.Size(127, 16);
+            this.label39.TabIndex = 0;
+            this.label39.Text = "General Delay (ms):";
+            // 
+            // numericUpDownGeneralDelay
+            // 
+            this.numericUpDownGeneralDelay.Location = new System.Drawing.Point(197, 80);
+            this.numericUpDownGeneralDelay.Maximum = new decimal(new int[] {
+            1000000,
+            0,
+            0,
+            0});
+            this.numericUpDownGeneralDelay.Minimum = new decimal(new int[] {
+            200,
+            0,
+            0,
+            0});
+            this.numericUpDownGeneralDelay.Name = "numericUpDownGeneralDelay";
+            this.numericUpDownGeneralDelay.Size = new System.Drawing.Size(97, 22);
+            this.numericUpDownGeneralDelay.TabIndex = 3;
+            this.numericUpDownGeneralDelay.Value = new decimal(new int[] {
+            200,
+            0,
+            0,
+            0});
+            // 
+            // label40
+            // 
+            this.label40.AutoSize = true;
+            this.label40.Location = new System.Drawing.Point(300, 82);
+            this.label40.Name = "label40";
+            this.label40.Size = new System.Drawing.Size(23, 16);
+            this.label40.TabIndex = 0;
+            this.label40.Text = "+/-";
+            // 
+            // numericUpDownGeneralDelayRandom
+            // 
+            this.numericUpDownGeneralDelayRandom.Location = new System.Drawing.Point(329, 80);
+            this.numericUpDownGeneralDelayRandom.Maximum = new decimal(new int[] {
+            1000000,
+            0,
+            0,
+            0});
+            this.numericUpDownGeneralDelayRandom.Name = "numericUpDownGeneralDelayRandom";
+            this.numericUpDownGeneralDelayRandom.Size = new System.Drawing.Size(97, 22);
+            this.numericUpDownGeneralDelayRandom.TabIndex = 3;
+            this.numericUpDownGeneralDelayRandom.Value = new decimal(new int[] {
+            200,
+            0,
+            0,
+            0});
+            // 
             // AccountSettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -1538,6 +1854,17 @@
             this.tabPageTransfer.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewTransfer)).EndInit();
             this.contextMenuStripTransfer.ResumeLayout(false);
+            this.tabPageHumanization.ResumeLayout(false);
+            this.tabPageHumanization.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownInsideReticuleChance)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownLocationUpdateDelay)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownPlayerActionRandomiz)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownLocationUpdateRandom)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDelayBetweenSnipes)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDelayBetweenSnipeRandom)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownGeneralDelay)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownGeneralDelayRandom)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1677,5 +2004,26 @@
         private System.Windows.Forms.Label label26;
         private System.Windows.Forms.NumericUpDown numericUpDownSnipeAfterLevel;
         private System.Windows.Forms.Label label31;
+        private System.Windows.Forms.TabPage tabPageHumanization;
+        private System.Windows.Forms.NumericUpDown numericUpDownInsideReticuleChance;
+        private System.Windows.Forms.CheckBox checkBoxHumanizeThrows;
+        private System.Windows.Forms.ToolTip toolTipHumanizeThrows;
+        private System.Windows.Forms.Label label32;
+        private System.Windows.Forms.NumericUpDown numericUpDown1;
+        private System.Windows.Forms.Label label33;
+        private System.Windows.Forms.NumericUpDown numericUpDownLocationUpdateDelay;
+        private System.Windows.Forms.Label label34;
+        private System.Windows.Forms.NumericUpDown numericUpDownLocationUpdateRandom;
+        private System.Windows.Forms.NumericUpDown numericUpDownPlayerActionRandomiz;
+        private System.Windows.Forms.Label label36;
+        private System.Windows.Forms.Label label35;
+        private System.Windows.Forms.NumericUpDown numericUpDownDelayBetweenSnipes;
+        private System.Windows.Forms.NumericUpDown numericUpDownDelayBetweenSnipeRandom;
+        private System.Windows.Forms.Label label37;
+        private System.Windows.Forms.Label label38;
+        private System.Windows.Forms.NumericUpDown numericUpDownGeneralDelayRandom;
+        private System.Windows.Forms.NumericUpDown numericUpDownGeneralDelay;
+        private System.Windows.Forms.Label label40;
+        private System.Windows.Forms.Label label39;
     }
 }

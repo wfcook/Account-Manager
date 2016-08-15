@@ -18,7 +18,7 @@ namespace PokemonGoGUI.GoManager
             {
                 MethodResult result = await UpdateLocation(location);
 
-                await Task.Delay(500);
+                await Task.Delay(CalculateDelay(UserSettings.DelayBetweenLocationUpdates, UserSettings.LocationupdateDelayRandom));
 
                 return result;
             }
@@ -50,7 +50,7 @@ namespace PokemonGoGUI.GoManager
 
                     LogCaller(new LoggerEventArgs(String.Format("Failed to walk to location. Retry #{0}", currentTries + 1), LoggerTypes.Warning));
 
-                    await Task.Delay(500);
+                    await Task.Delay(CalculateDelay(UserSettings.DelayBetweenLocationUpdates, UserSettings.LocationupdateDelayRandom));
                 }
                 catch (Exception ex)
                 {
@@ -97,7 +97,7 @@ namespace PokemonGoGUI.GoManager
 
             while (CalculateDistanceInMeters(sourceLocation, location) >= 30)
             {
-                await Task.Delay(UserSettings.DelayBetweenLocationUpdates);
+                await Task.Delay(CalculateDelay(UserSettings.DelayBetweenLocationUpdates, UserSettings.LocationupdateDelayRandom));
 
                 double millisecondsUntilGetUpdatePlayerLocationResponse = (DateTime.Now - requestSendDateTime).TotalMilliseconds;
 

@@ -30,6 +30,8 @@ namespace PokemonGoGUI.GoManager
     {
         private Client _client = new Client();
         private DateTime _lastMapRequest = new DateTime();
+        private Random _rand = new Random();
+
         private int _totalZeroExpStops = 0;
         private bool _firstRun = true;
         private int _failedInventoryReponses = 0;
@@ -241,6 +243,7 @@ namespace PokemonGoGUI.GoManager
             _client.SetSettings(UserSettings);
             _pauser.Set();
             _autoRestart = false;
+            _rand = new Random();
 
             State = BotState.Starting;
 
@@ -402,7 +405,7 @@ namespace PokemonGoGUI.GoManager
                         continue;
                     }
 
-                    await Task.Delay(delayTime);
+                    await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
                     //Get pokemon settings
                     if(PokeSettings == null)
@@ -413,20 +416,20 @@ namespace PokemonGoGUI.GoManager
                     }
 
 
-                    await Task.Delay(delayTime);
+                    await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
                     //Get profile data
                     LogCaller(new LoggerEventArgs("Grabbing player data ...", LoggerTypes.Debug));
                     result = await RepeatAction(GetProfile, 2);
 
-                    await Task.Delay(delayTime);
+                    await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
                     //Update inventory
                     LogCaller(new LoggerEventArgs("Updating inventory items ...", LoggerTypes.Debug));
 
                     result = await RepeatAction<List<InventoryItem>>(GetInventory, 1);
 
-                    await Task.Delay(delayTime);
+                    await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
                     if(!result.Success)
                     {
@@ -466,7 +469,7 @@ namespace PokemonGoGUI.GoManager
                         }
                     }
 
-                    await Task.Delay(delayTime);
+                    await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
                     #endregion
 
@@ -564,7 +567,7 @@ namespace PokemonGoGUI.GoManager
                             break;
                         }
 
-                        await Task.Delay(delayTime);
+                        await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
                         //Search
                         MethodResult searchResult = await SearchPokestop(pokestop);
@@ -592,7 +595,7 @@ namespace PokemonGoGUI.GoManager
                         //Get nearby lured pokemon
                         MethodResult luredPokemonResponse = await RepeatAction(() => CatchLuredPokemon(pokestop), 2);
 
-                        await Task.Delay(delayTime);
+                        await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
                         //Check sniping
                         if (Stats.Level >= UserSettings.SnipeAfterLevel)
@@ -611,7 +614,7 @@ namespace PokemonGoGUI.GoManager
                                 LogCaller(new LoggerEventArgs(String.Format("Not enough pokeballs to snipe. Need {0} have {1}", UserSettings.MinBallsToSnipe, remainingBalls), LoggerTypes.Info));
                             }
 
-                            await Task.Delay(delayTime);
+                            await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
                         }
 
                         //Clean inventory, evolve, transfer, etc on first and every 10 stops
@@ -621,7 +624,7 @@ namespace PokemonGoGUI.GoManager
 
                             await GetInventory();
 
-                            await Task.Delay(delayTime);
+                            await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
                             if (UserSettings.RecycleItems)
                             {
@@ -629,7 +632,7 @@ namespace PokemonGoGUI.GoManager
 
                                 await RecycleItems();
 
-                                await Task.Delay(delayTime);
+                                await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
                             }
 
                             if(UserSettings.EvolvePokemon)
@@ -638,11 +641,11 @@ namespace PokemonGoGUI.GoManager
 
                                 if (evolveResult.Success)
                                 {
-                                    await Task.Delay(delayTime);
+                                    await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
                                     await GetInventory();
 
-                                    await Task.Delay(delayTime);
+                                    await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
                                 }
                             }
 
@@ -654,7 +657,7 @@ namespace PokemonGoGUI.GoManager
                                 {
                                     secondInventoryUpdate = true;
 
-                                    await Task.Delay(delayTime);
+                                    await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
                                 }
                             }
 
@@ -666,7 +669,7 @@ namespace PokemonGoGUI.GoManager
                                 {
                                     secondInventoryUpdate = true;
 
-                                    await Task.Delay(delayTime);
+                                    await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
                                 }
                             }
 
@@ -678,7 +681,7 @@ namespace PokemonGoGUI.GoManager
 
                         ++pokeStopNumber;
 
-                        await Task.Delay(delayTime);
+                        await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
                         if(UserSettings.MaxLevel > 0 && Level >= UserSettings.MaxLevel)
                         {
@@ -749,7 +752,7 @@ namespace PokemonGoGUI.GoManager
                     return result;
                 }
 
-                await Task.Delay(1000);
+                await Task.Delay(CalculateDelay(1000, 200));
             }
 
             return result;
@@ -768,7 +771,7 @@ namespace PokemonGoGUI.GoManager
                     return result;
                 }
 
-                await Task.Delay(1000);
+                await Task.Delay(CalculateDelay(1000, 200));
             }
 
             return result;

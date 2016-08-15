@@ -45,6 +45,24 @@ namespace PokemonGoGUI
         public int MaxPokemonPerSnipe { get; set; }
         public int SnipeAfterLevel { get; set; }
 
+        //Humanization
+        public bool EnableHumanization { get; set; }
+        public int InsideReticuleChance { get; set; }
+
+        public int DelayBetweenPlayerActions { get; set; }
+        public int PlayerActionDelayRandom { get; set; }
+
+        public int DelayBetweenLocationUpdates { get; set; }
+        public int LocationupdateDelayRandom { get; set; }
+
+        public int DelayBetweenSnipes { get; set; }
+        public int BetweenSnipesDelayRandom { get; set; }
+
+        public int GeneralDelay { get; set; }
+        public int GeneralDelayRandom { get; set; }
+
+        //End Humanization
+
         public string DeviceId { get; set; }
         public string AndroidBoardName { get; set; }
         public string AndroidBootloader { get; set; }
@@ -87,9 +105,6 @@ namespace PokemonGoGUI
         public List<TransferSetting> TransferSettings { get; set; }
         //public List<CatchSetting> SniperSettings { get; set; }
 
-        //Delays
-        public int DelayBetweenPlayerActions { get; set; }
-        public int DelayBetweenLocationUpdates { get; set; }
 
         [JsonConstructor]
         public Settings(bool jsonConstructor = true)
@@ -124,11 +139,15 @@ namespace PokemonGoGUI
             WalkingSpeed = 7;
             MaxTravelDistance = 1000;
             EncounterWhileWalking = false;
-            MinPokemonBeforeEvolve = 100;
+            EnableHumanization = false;
+            InsideReticuleChance = 100;
+            MinPokemonBeforeEvolve = 0;
             SnipeAfterPokestops = 5;
             StopAtMinAccountState = AccountState.PokemonBanOrPokestopBanTemp;
             DelayBetweenPlayerActions = 500;
             DelayBetweenLocationUpdates = 1000;
+            DelayBetweenSnipes = 7000;
+            GeneralDelay = 800;
             MinBallsToSnipe = 20;
             MaxPokemonPerSnipe = 100;
             SnipeAfterLevel = 0;

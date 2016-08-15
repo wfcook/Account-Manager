@@ -46,7 +46,7 @@ namespace PokemonGoGUI.GoManager
 
                 if (!result.Success)
                 {
-                    await Task.Delay(1000);
+                    await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
 
                     continue;
                 }
@@ -54,7 +54,7 @@ namespace PokemonGoGUI.GoManager
 
                 MethodResult catchResult = await CatchPokemon(result.Data, pokemon);
 
-                await Task.Delay(500);
+                await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
             }
 
             return new MethodResult
@@ -101,7 +101,7 @@ namespace PokemonGoGUI.GoManager
 
             MethodResult catchResult = await CatchPokemon(fortData);
 
-            await Task.Delay(500);
+            await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
 
             return new MethodResult
             {
@@ -208,7 +208,7 @@ namespace PokemonGoGUI.GoManager
 
                     ++attemptCount;
 
-                    await Task.Delay(1000);
+                    await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
 
                 } while (catchPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchMissed || catchPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchEscape);
             }
@@ -302,12 +302,12 @@ namespace PokemonGoGUI.GoManager
 
                     if((isLowProbability && isHighCp) || isHighPerfection)
                     {
-                        await Task.Delay(200);
+                        await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
 
                         await UseBerry(mapPokemon);
                     }
 
-                    await Task.Delay(200);
+                    await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
 
                     catchPokemonResponse = await _client.Encounter.CatchPokemon(mapPokemon.EncounterId, mapPokemon.SpawnPointId, pokeBall);
 
@@ -370,7 +370,7 @@ namespace PokemonGoGUI.GoManager
 
                     ++attemptCount;
 
-                    await Task.Delay(500);
+                    await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
 
                 } while (catchPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchMissed || catchPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchEscape);
             }
@@ -528,7 +528,7 @@ namespace PokemonGoGUI.GoManager
                 LogCaller(new LoggerEventArgs("Use Berry request failed", LoggerTypes.Exception, ex));
             }
 
-            await Task.Delay(500);
+            await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
         }
 
         private async Task UseBerry(MapPokemon pokemon)
