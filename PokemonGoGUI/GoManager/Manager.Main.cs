@@ -620,6 +620,10 @@ namespace PokemonGoGUI.GoManager
                         //Clean inventory, evolve, transfer, etc on first and every 10 stops
                         if(IsRunning && ((pokeStopNumber > 4 && pokeStopNumber % 10 == 0) || pokeStopNumber == 1))
                         {
+                            await SendEcho();
+
+                            await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
+
                             bool secondInventoryUpdate = false;
 
                             await GetInventory();

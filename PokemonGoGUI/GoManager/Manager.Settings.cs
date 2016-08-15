@@ -33,6 +33,8 @@ namespace PokemonGoGUI.GoManager
                     return 200;
                 }
 
+                LogCaller(new LoggerEventArgs(String.Format("Delay {0}", returnDelay), LoggerTypes.Debug));
+
                 return returnDelay;
             }
         }

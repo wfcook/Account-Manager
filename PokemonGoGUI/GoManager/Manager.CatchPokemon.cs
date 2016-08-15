@@ -172,7 +172,20 @@ namespace PokemonGoGUI.GoManager
                         await UseBerry(fortData.LureInfo.EncounterId, fortData.Id);
                     }
 
-                    catchPokemonResponse = await _client.Encounter.CatchPokemon(fortData.LureInfo.EncounterId, fortData.Id, pokeBall);
+
+                    double reticuleSize = 1.95;
+                    int hitInsideReticule = 1;
+
+                    //Humanization
+                    if (UserSettings.EnableHumanization)
+                    {
+                        reticuleSize = (double)_rand.Next(10, 195) / 100;
+                        hitInsideReticule = HitInsideReticle();
+                    }
+
+                    //End humanization
+
+                    catchPokemonResponse = await _client.Encounter.CatchPokemon(fortData.LureInfo.EncounterId, fortData.Id, pokeBall, reticuleSize, 1, hitInsideReticule);
 
                     string pokemon = String.Format("Name: {0}, CP: {1}, IV: {2:0.00}%", fortData.LureInfo.ActivePokemonId, eResponse.PokemonData.Cp, CalculateIVPerfection(eResponse.PokemonData).Data);
 
@@ -309,7 +322,18 @@ namespace PokemonGoGUI.GoManager
 
                     await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
 
-                    catchPokemonResponse = await _client.Encounter.CatchPokemon(mapPokemon.EncounterId, mapPokemon.SpawnPointId, pokeBall);
+
+                    double reticuleSize = 1.95;
+                    int hitInsideReticule = 1;
+
+                    //Humanization
+                    if (UserSettings.EnableHumanization)
+                    {
+                        reticuleSize = (double)_rand.Next(10, 195) / 100;
+                        hitInsideReticule = HitInsideReticle();
+                    }
+
+                    catchPokemonResponse = await _client.Encounter.CatchPokemon(mapPokemon.EncounterId, mapPokemon.SpawnPointId, pokeBall, reticuleSize, 1, hitInsideReticule);
 
                     string pokemon = String.Format("Name: {0}, CP: {1}, IV: {2:0.00}%", mapPokemon.PokemonId, eResponse.WildPokemon.PokemonData.Cp, CalculateIVPerfection(eResponse.WildPokemon.PokemonData).Data);
                     string pokeBallName = pokeBall.ToString().Replace("Item", "");
@@ -534,6 +558,19 @@ namespace PokemonGoGUI.GoManager
         private async Task UseBerry(MapPokemon pokemon)
         {
             await UseBerry(pokemon.EncounterId, pokemon.SpawnPointId);
+        }
+
+        private int HitInsideReticle()
+        {
+            lock(_rand)
+            {
+                if (_rand.Next(1, 101) <= UserSettings.InsideReticuleChance)
+                {
+                    return 1;
+                }
+
+                return 0;
+            }
         }
     }
 }
