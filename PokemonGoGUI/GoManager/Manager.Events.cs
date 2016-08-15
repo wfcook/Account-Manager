@@ -33,7 +33,7 @@ namespace PokemonGoGUI.GoManager
                 eMessage = args.Exception.Message;
             }
 
-            AddLog(new Log(args.LogType, args.Message, eMessage));
+            AddLog(new Log(args.LogType, args.Message, (Exception)args.Exception));
 
             LoggerHandler caller = OnLog;
 

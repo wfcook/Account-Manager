@@ -284,7 +284,7 @@ namespace PokemonGoGUI
             DeviceId = RandomString(16);
         }
 
-        private string RandomString(int length, string alphabet = "abcdefghijklmnopqrstuvwxyz0123456789")
+        private string RandomString(int length, string alphabet = "0123456789abcedef")
         {
             var outOfRange = Byte.MaxValue + 1 - (Byte.MaxValue + 1) % alphabet.Length;
 

@@ -15,7 +15,7 @@ namespace PokemonGoGUI.GoManager.Models
         public LoggerTypes LoggerType { get; private set; }
         public DateTime Date { get; private set; }
         public string Message { get; private set; }
-        //public Exception Exception { get; private set; }
+        public Exception Exception { get; private set; }
         public string ExceptionMessage { get; private set; }
 
         /*
@@ -33,12 +33,17 @@ namespace PokemonGoGUI.GoManager.Models
             }
         }*/
 
-        public Log(LoggerTypes type, string message, string exceptionMessage = null)
+        public Log(LoggerTypes type, string message, Exception exception = null)
         {
             this.LoggerType = type;
             this.Message = message;
             this.Date = DateTime.Now;
-            this.ExceptionMessage = exceptionMessage;
+            this.Exception = exception;
+
+            if (exception != null)
+            {
+                this.ExceptionMessage = exception.Message;
+            }
         }
 
         public Color GetLogColor()
