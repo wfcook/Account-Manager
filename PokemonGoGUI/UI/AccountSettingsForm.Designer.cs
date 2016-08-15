@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AccountSettingsForm));
             this.tabControlMain = new System.Windows.Forms.TabControl();
             this.tabPageDetails = new System.Windows.Forms.TabPage();
             this.tabControlSettings = new System.Windows.Forms.TabControl();
@@ -1898,7 +1897,6 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(502, 539);
             this.Controls.Add(this.tabControlMain);
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(522, 433);
             this.Name = "AccountSettingsForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;

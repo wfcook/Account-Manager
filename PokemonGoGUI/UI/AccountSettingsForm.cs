@@ -65,6 +65,8 @@ namespace PokemonGoGUI.UI
 
         private void AccountSettingsForm_Load(object sender, EventArgs e)
         {
+            this.Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
+
             foreach (AccountState state in Enum.GetValues(typeof(AccountState)))
             {
                 if(state == AccountState.Good)

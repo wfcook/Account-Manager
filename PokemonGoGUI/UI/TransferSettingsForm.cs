@@ -37,6 +37,8 @@ namespace PokemonGoGUI.UI
         
         private void TransferSettingsForm_Load(object sender, EventArgs e)
         {
+            this.Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
+
             foreach (TransferType setting in Enum.GetValues(typeof(TransferType)))
             {
                 comboBoxTransferType.Items.Add(setting);

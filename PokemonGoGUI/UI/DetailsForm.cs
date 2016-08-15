@@ -256,6 +256,8 @@ namespace PokemonGoGUI.UI
 
         private async void DetailsForm_Load(object sender, EventArgs e)
         {
+            this.Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
+
             _totalLogs = _manager.Logs.Count;
 
             if (_manager.LogHeaderSettings != null)

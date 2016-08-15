@@ -29,6 +29,8 @@ namespace PokemonGoGUI.UI
 
         private async void LogViewerForm_Load(object sender, EventArgs e)
         {
+            this.Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
+
             try
             {
                 string data = await Task.Run(() => File.ReadAllText(_fileName));
