@@ -80,7 +80,7 @@ namespace PokemonGoGUI.GoManager
             }
             catch(PtcOfflineException ex)
             {
-                LogCaller(new LoggerEventArgs("Ptc server offline. Please try again later.", LoggerTypes.Exception, ex));
+                LogCaller(new LoggerEventArgs("Ptc server offline. Please try again later.", LoggerTypes.Exception));
 
                 return new MethodResult
                 {
@@ -89,7 +89,7 @@ namespace PokemonGoGUI.GoManager
             }
             catch(AccountNotVerifiedException ex)
             {
-                LogCaller(new LoggerEventArgs("Account not verified.", LoggerTypes.Exception, ex));
+                LogCaller(new LoggerEventArgs("Account not verified.", LoggerTypes.Exception));
 
                 return new MethodResult
                 {
@@ -102,11 +102,11 @@ namespace PokemonGoGUI.GoManager
                 {
                     if (String.IsNullOrEmpty(Proxy))
                     {
-                        LogCaller(new LoggerEventArgs("Login request has timed out.", LoggerTypes.Warning, ex));
+                        LogCaller(new LoggerEventArgs("Login request has timed out.", LoggerTypes.Warning));
                     }
                     else
                     {
-                        LogCaller(new LoggerEventArgs("Login request has timed out. Possible bad proxy.", LoggerTypes.ProxyIssue, ex));
+                        LogCaller(new LoggerEventArgs("Login request has timed out. Possible bad proxy.", LoggerTypes.ProxyIssue));
                     }
 
                     return new MethodResult
@@ -188,7 +188,7 @@ namespace PokemonGoGUI.GoManager
                     message = "IP address is banned. Stopping bot ...";
                 }
                 
-                LogCaller(new LoggerEventArgs(message, LoggerTypes.ProxyIssue, ex));
+                LogCaller(new LoggerEventArgs(message, LoggerTypes.ProxyIssue));
 
                 return new MethodResult
                 {
@@ -199,7 +199,7 @@ namespace PokemonGoGUI.GoManager
             {
                 Stop();
 
-                LogCaller(new LoggerEventArgs(ex.Message, LoggerTypes.Warning, ex));
+                LogCaller(new LoggerEventArgs(ex.Message, LoggerTypes.Warning));
 
                 return new MethodResult
                 {
@@ -807,9 +807,9 @@ namespace PokemonGoGUI.GoManager
                     Success = true
                 };
             }
-            catch(Exception ex)
+            catch(Exception)
             {
-                LogCaller(new LoggerEventArgs("Echo failed", LoggerTypes.Warning, ex));
+                LogCaller(new LoggerEventArgs("Echo failed", LoggerTypes.Warning));
 
                 return new MethodResult
                 {
