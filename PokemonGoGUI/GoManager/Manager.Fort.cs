@@ -1,4 +1,5 @@
-﻿using POGOProtos.Map.Fort;
+﻿using POGOProtos.Inventory.Item;
+using POGOProtos.Map.Fort;
 using POGOProtos.Networking.Responses;
 using PokemonGo.RocketAPI;
 using PokemonGoGUI.Extensions;
@@ -77,6 +78,16 @@ namespace PokemonGoGUI.GoManager
                     string message = String.Format("Searched Fort. Exp: {0}. Items: {1}.",
                         fortResponse.ExperienceAwarded,
                         StringUtil.GetSummedFriendlyNameOfItemAwardList(fortResponse.ItemsAwarded.ToList()));
+
+                    foreach(ItemAward award in fortResponse.ItemsAwarded)
+                    {
+                        ItemData item = Items.FirstOrDefault(x => x.ItemId == award.ItemId);
+
+                        if(item != null)
+                        {
+                            item.Count += award.ItemCount;
+                        }
+                    }
 
                     if (fortResponse.Result != FortSearchResponse.Types.Result.OutOfRange)
                     {
