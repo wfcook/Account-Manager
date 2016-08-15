@@ -37,6 +37,47 @@ namespace PokemonGoGUI.GoManager
             }
         }
 
+        public MethodResult<AccountExportModel> GetAccountExport()
+        {
+            if(Stats == null)
+            {
+                LogCaller(new LoggerEventArgs(String.Format("No stats found for {0}. Please update details", UserSettings.PtcUsername), LoggerTypes.Warning));
+
+                return new MethodResult<AccountExportModel>();
+            }
+
+            if (AllItems == null || AllItems.Count == 0)
+            {
+                LogCaller(new LoggerEventArgs(String.Format("No items found for {0}. Please update details", UserSettings.PtcUsername), LoggerTypes.Warning));
+
+                return new MethodResult<AccountExportModel>();
+            }
+
+            if (Pokedex == null || Pokedex.Count == 0)
+            {
+                LogCaller(new LoggerEventArgs(String.Format("No pokedex found for {0}. Please update details", UserSettings.PtcUsername), LoggerTypes.Warning));
+
+                return new MethodResult<AccountExportModel>();
+            }
+
+            AccountExportModel exportModel = new AccountExportModel();
+
+            exportModel.Level = Stats.Level;
+            exportModel.Type = UserSettings.AuthType.ToString();
+            exportModel.Username = UserSettings.PtcUsername;
+            exportModel.Password = UserSettings.PtcPassword;
+            exportModel.Pokedex = Pokedex.Select(x => new PokedexEntryExportModel(x)).ToList();
+            exportModel.Pokemon = Pokemon.Select(x => new PokemonDataExportModel(x, CalculateIVPerfection(x).Data)).ToList();
+            exportModel.Items = Items.Select(x => new ItemDataExportModel(x)).ToList();
+            exportModel.Eggs = Eggs.Select(x => new EggDataExportModel(x)).ToList();
+
+            return new MethodResult<AccountExportModel>
+            {
+                Data = exportModel,
+                Success = true
+            };
+        }
+
         public async Task<MethodResult<Dictionary<PokemonId, PokemonSettings>>> GetItemTemplates()
         {
             if (PokeSettings != null && PokeSettings.Count != 0)

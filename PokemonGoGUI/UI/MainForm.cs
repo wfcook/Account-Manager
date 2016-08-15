@@ -1,4 +1,5 @@
-﻿using PokemonGo.RocketAPI;
+﻿using Newtonsoft.Json;
+using PokemonGo.RocketAPI;
 using PokemonGo.RocketAPI.Helpers;
 using PokemonGoGUI.Enums;
 using PokemonGoGUI.Extensions;
@@ -1054,5 +1055,51 @@ namespace PokemonGoGUI
         }
 
         #endregion
+
+        private void exportJsonToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string fileName = String.Empty;
+            List<AccountExportModel> exportModels = new List<AccountExportModel>();
+
+            using(SaveFileDialog sfd = new SaveFileDialog())
+            {
+                sfd.Filter = "Json Files (*.json)|*.json|All Files (*.*)|*.*";
+
+                if(sfd.ShowDialog() == DialogResult.OK)
+                {
+                    fileName = sfd.FileName;
+                }
+                else
+                {
+                    return;
+                }
+            }
+
+            foreach(Manager manager in fastObjectListViewMain.SelectedObjects)
+            {
+                MethodResult<AccountExportModel> result = manager.GetAccountExport();
+
+                if(!result.Success)
+                {
+                    continue;
+                }
+
+                exportModels.Add(result.Data);
+            }
+
+            try
+            {
+                string data = JsonConvert.SerializeObject(exportModels, Formatting.None);
+
+                File.WriteAllText(fileName, data);
+
+                MessageBox.Show(String.Format("Successfully exported {0} of {1} accounts", exportModels.Count, fastObjectListViewMain.SelectedObjects.Count));
+
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(String.Format("Failed to save to file. Ex: {0}", ex.Message));
+            }
+        }
     }
 }

@@ -1,4 +1,6 @@
-﻿using POGOProtos.Data;
+﻿using Newtonsoft.Json;
+using POGOProtos.Data;
+using POGOProtos.Inventory.Item;
 using PokemonGo.RocketAPI.Enums;
 using System;
 using System.Collections.Generic;
@@ -10,26 +12,89 @@ namespace PokemonGoGUI.Models
 {
     public class AccountExportModel
     {
-        public AuthType type { get; set; }
-        public string username { get; set; }
-        public string password { get; set; }
-        public int level { get; set; }
-        public List<PokedexEntryExportModel> pokedex { get; set; }
+        [JsonProperty("type")]
+        public string Type { get; set; }
+        [JsonProperty("username")]
+        public string Username { get; set; }
+        [JsonProperty("password")]
+        public string Password { get; set; }
+        [JsonProperty("level")]
+        public int Level { get; set; }
+        [JsonProperty("pokedex")]
+        public List<PokedexEntryExportModel> Pokedex { get; set; }
+        [JsonProperty("items")]
+        public List<ItemDataExportModel> Items { get; set; }
+        [JsonProperty("pokemon")]
+        public List<PokemonDataExportModel> Pokemon { get; set; }
+        [JsonProperty("eggs")]
+        public List<EggDataExportModel> Eggs { get; set; }
     }
 
     public class PokedexEntryExportModel
     {
-        public int id { get; set; }
-        public string name { get; set; }
-        public int timesEncountered { get; set; }
-        public int timesCaught { get; set; }
+        [JsonProperty("id")]
+        public int Id { get; set; }
+        [JsonProperty("name")]
+        public string Name { get; set; }
+        [JsonProperty("timesEncountered")]
+        public int TimesEncountered { get; set; }
+        [JsonProperty("timesCaught")]
+        public int TimesCaught { get; set; }
 
         public PokedexEntryExportModel(PokedexEntry entry)
         {
-            id = (int)entry.PokemonId;
-            name = entry.PokemonId.ToString();
-            timesEncountered = entry.TimesEncountered;
-            timesCaught = entry.TimesCaptured;
+            Id = (int)entry.PokemonId;
+            Name = entry.PokemonId.ToString();
+            TimesEncountered = entry.TimesEncountered;
+            TimesCaught = entry.TimesCaptured;
+        }
+    }
+
+    public class ItemDataExportModel
+    {
+        [JsonProperty("itemName")]
+        public string ItemName { get; set; }
+        [JsonProperty("count")]
+        public int Count { get; set; }
+
+        public ItemDataExportModel(ItemData itemData)
+        {
+            ItemName = itemData.ItemId.ToString().Replace("Item", "");
+            Count = itemData.Count;
+        }
+    }
+
+    public class PokemonDataExportModel
+    {
+        [JsonProperty("pokedexEntry")]
+        public int PokedexEntry { get; set; }
+        [JsonProperty("pokemonName")]
+        public string PokemonName { get; set; }
+        [JsonProperty("cp")]
+        public int CP { get; set; }
+        [JsonProperty("iv")]
+        public double IV { get; set; }
+
+        public PokemonDataExportModel(PokemonData pokemon, double iv)
+        {
+            PokedexEntry = (int)pokemon.PokemonId;
+            PokemonName = pokemon.PokemonId.ToString();
+            CP = pokemon.Cp;
+            IV = iv;
+        }
+    }
+
+    public class EggDataExportModel
+    {
+        [JsonProperty("targetDistance")]
+        public double TargetDistance { get; set; }
+        [JsonProperty("id")]
+        public ulong Id { get; set; }
+
+        public EggDataExportModel(PokemonData pokemon)
+        {
+            TargetDistance = pokemon.EggKmWalkedTarget;
+            Id = pokemon.Id;
         }
     }
 }

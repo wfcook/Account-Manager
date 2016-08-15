@@ -100,6 +100,7 @@
             this.logViewerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.garbageCollectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.timerListViewUpdate = new System.Windows.Forms.Timer(this.components);
+            this.exportJsonToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewMain)).BeginInit();
             this.contextMenuStripAccounts.SuspendLayout();
             this.SuspendLayout();
@@ -265,7 +266,7 @@
             this.deleteToolStripMenuItem,
             this.devToolsToolStripMenuItem});
             this.contextMenuStripAccounts.Name = "contextMenuStrip1";
-            this.contextMenuStripAccounts.Size = new System.Drawing.Size(218, 476);
+            this.contextMenuStripAccounts.Size = new System.Drawing.Size(218, 507);
             this.contextMenuStripAccounts.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStripAccounts_Opening);
             // 
             // updateDetailsToolStripMenuItem
@@ -588,7 +589,8 @@
             this.exportToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.exportProxiesToolStripMenuItem,
             this.exportAccountsToolStripMenuItem,
-            this.exportStatsToolStripMenuItem});
+            this.exportStatsToolStripMenuItem,
+            this.exportJsonToolStripMenuItem});
             this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
             this.exportToolStripMenuItem.Size = new System.Drawing.Size(217, 28);
             this.exportToolStripMenuItem.Text = "Export";
@@ -664,6 +666,13 @@
             this.timerListViewUpdate.Enabled = true;
             this.timerListViewUpdate.Interval = 1000;
             this.timerListViewUpdate.Tick += new System.EventHandler(this.timerListViewUpdate_Tick);
+            // 
+            // exportJsonToolStripMenuItem
+            // 
+            this.exportJsonToolStripMenuItem.Name = "exportJsonToolStripMenuItem";
+            this.exportJsonToolStripMenuItem.Size = new System.Drawing.Size(214, 28);
+            this.exportJsonToolStripMenuItem.Text = "Export Json";
+            this.exportJsonToolStripMenuItem.Click += new System.EventHandler(this.exportJsonToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -754,6 +763,7 @@
         private System.Windows.Forms.ToolStripMenuItem enableLuckyEggsToolStripMenuItem6;
         private System.Windows.Forms.ToolStripMenuItem setRequiredPokemonToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem afterLevelToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem exportJsonToolStripMenuItem;
     }
 }
 
