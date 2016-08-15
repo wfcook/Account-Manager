@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DetailsForm));
             this.tabControlMain = new System.Windows.Forms.TabControl();
             this.tabPageStats = new System.Windows.Forms.TabPage();
             this.buttonUpdateStats = new System.Windows.Forms.Button();
@@ -101,6 +102,8 @@
             this.fastObjectListViewInventory = new BrightIdeasSoftware.FastObjectListView();
             this.olvColumnInventoryItem = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnInventoryAmount = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.contextMenuStripRecycle = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.recycleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabPageCandy = new System.Windows.Forms.TabPage();
             this.fastObjectListViewCandy = new BrightIdeasSoftware.FastObjectListView();
             this.olvColumnCandyFamily = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
@@ -114,8 +117,6 @@
             this.contextMenuStripLog = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.contextMenuStripRecycle = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.recycleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControlMain.SuspendLayout();
             this.tabPageStats.SuspendLayout();
             this.tabPagePokedex.SuspendLayout();
@@ -127,12 +128,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewEggs)).BeginInit();
             this.tabPageInventory.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewInventory)).BeginInit();
+            this.contextMenuStripRecycle.SuspendLayout();
             this.tabPageCandy.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewCandy)).BeginInit();
             this.tabPageLogs.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewLogs)).BeginInit();
             this.contextMenuStripLog.SuspendLayout();
-            this.contextMenuStripRecycle.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControlMain
@@ -809,6 +810,21 @@
             this.olvColumnInventoryAmount.AspectName = "Count";
             this.olvColumnInventoryAmount.Text = "Amount";
             // 
+            // contextMenuStripRecycle
+            // 
+            this.contextMenuStripRecycle.ImageScalingSize = new System.Drawing.Size(22, 22);
+            this.contextMenuStripRecycle.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.recycleToolStripMenuItem});
+            this.contextMenuStripRecycle.Name = "contextMenuStripRecycle";
+            this.contextMenuStripRecycle.Size = new System.Drawing.Size(147, 32);
+            // 
+            // recycleToolStripMenuItem
+            // 
+            this.recycleToolStripMenuItem.Name = "recycleToolStripMenuItem";
+            this.recycleToolStripMenuItem.Size = new System.Drawing.Size(146, 28);
+            this.recycleToolStripMenuItem.Text = "Recycle";
+            this.recycleToolStripMenuItem.Click += new System.EventHandler(this.recycleToolStripMenuItem_Click);
+            // 
             // tabPageCandy
             // 
             this.tabPageCandy.Controls.Add(this.fastObjectListViewCandy);
@@ -935,27 +951,13 @@
             this.exportToolStripMenuItem.Text = "Export";
             this.exportToolStripMenuItem.Click += new System.EventHandler(this.exportToolStripMenuItem_Click);
             // 
-            // contextMenuStripRecycle
-            // 
-            this.contextMenuStripRecycle.ImageScalingSize = new System.Drawing.Size(22, 22);
-            this.contextMenuStripRecycle.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.recycleToolStripMenuItem});
-            this.contextMenuStripRecycle.Name = "contextMenuStripRecycle";
-            this.contextMenuStripRecycle.Size = new System.Drawing.Size(147, 32);
-            // 
-            // recycleToolStripMenuItem
-            // 
-            this.recycleToolStripMenuItem.Name = "recycleToolStripMenuItem";
-            this.recycleToolStripMenuItem.Size = new System.Drawing.Size(146, 28);
-            this.recycleToolStripMenuItem.Text = "Recycle";
-            this.recycleToolStripMenuItem.Click += new System.EventHandler(this.recycleToolStripMenuItem_Click);
-            // 
             // DetailsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1132, 469);
             this.Controls.Add(this.tabControlMain);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "DetailsForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "DetailsForm";
@@ -973,12 +975,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewEggs)).EndInit();
             this.tabPageInventory.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewInventory)).EndInit();
+            this.contextMenuStripRecycle.ResumeLayout(false);
             this.tabPageCandy.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewCandy)).EndInit();
             this.tabPageLogs.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewLogs)).EndInit();
             this.contextMenuStripLog.ResumeLayout(false);
-            this.contextMenuStripRecycle.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
