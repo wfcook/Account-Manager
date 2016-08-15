@@ -268,6 +268,8 @@ namespace PokemonGoGUI.GoManager
         {
             if(!IsRunning)
             {
+                Start();
+
                 return;
             }
 
