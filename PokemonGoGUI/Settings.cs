@@ -17,6 +17,7 @@ namespace PokemonGoGUI
 {
     public class Settings : ISettings
     {
+        public string GroupName { get; set; }
         public string AccountName { get; set; }
         public AuthType AuthType { get; set; }
         public string PtcUsername { get; set; }
@@ -132,6 +133,7 @@ namespace PokemonGoGUI
 
         public void LoadDefaults()
         {
+            GroupName = "Default";
             AuthType = AuthType.Ptc;
             GoogleRefreshToken = String.Empty;
             DefaultLatitude = -33.870225;

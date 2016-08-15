@@ -657,11 +657,11 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(45, 9);
+            this.label7.Location = new System.Drawing.Point(64, 9);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(48, 16);
+            this.label7.Size = new System.Drawing.Size(41, 16);
             this.label7.TabIndex = 24;
-            this.label7.Text = "Name:";
+            this.label7.Text = "Alias:";
             // 
             // label3
             // 
@@ -1871,16 +1871,25 @@
             // 
             // numericUpDownMaxLogs
             // 
-            this.numericUpDownMaxLogs.Enabled = false;
             this.numericUpDownMaxLogs.Location = new System.Drawing.Point(368, 169);
             this.numericUpDownMaxLogs.Maximum = new decimal(new int[] {
-            39,
+            999999,
+            0,
+            0,
+            0});
+            this.numericUpDownMaxLogs.Minimum = new decimal(new int[] {
+            20,
             0,
             0,
             0});
             this.numericUpDownMaxLogs.Name = "numericUpDownMaxLogs";
             this.numericUpDownMaxLogs.Size = new System.Drawing.Size(89, 22);
             this.numericUpDownMaxLogs.TabIndex = 50;
+            this.numericUpDownMaxLogs.Value = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
             // 
             // AccountSettingsForm
             // 

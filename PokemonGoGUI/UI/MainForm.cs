@@ -35,6 +35,7 @@ namespace PokemonGoGUI
 
             fastObjectListViewMain.BackColor = Color.FromArgb(43, 43, 43);
             fastObjectListViewMain.ForeColor = Color.LightGray;
+            //fastObjectListViewMain.AlwaysGroupByColumn = olvColumnGroup;
 
             Text = "GoManager - v" + _versionNumber;
 
@@ -508,6 +509,12 @@ namespace PokemonGoGUI
             }
         }
 
+
+        private void showGroupsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            showGroupsToolStripMenuItem.Checked = !showGroupsToolStripMenuItem.Checked;
+        }
+
         private void fastObjectListViewMain_FormatCell(object sender, BrightIdeasSoftware.FormatCellEventArgs e)
         {
             Manager manager = (Manager)e.Model;
@@ -815,6 +822,23 @@ namespace PokemonGoGUI
 
         #region Fast Settings
 
+        private void setGroupToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string data = Prompt.ShowDialog("Group name", "Set group name", "Default");
+
+            if(String.IsNullOrEmpty(data))
+            {
+                return;
+            }
+
+            foreach(Manager manager in fastObjectListViewMain.SelectedObjects)
+            {
+                manager.UserSettings.GroupName = data;
+            }
+
+            fastObjectListViewMain.RefreshSelectedObjects();
+        }
+
         private void setMaxLevelToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string data = Prompt.ShowDialog("Max Level:", "Set Max Level");
@@ -1101,5 +1125,6 @@ namespace PokemonGoGUI
                 MessageBox.Show(String.Format("Failed to save to file. Ex: {0}", ex.Message));
             }
         }
+
     }
 }

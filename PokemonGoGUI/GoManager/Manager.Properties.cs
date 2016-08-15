@@ -28,6 +28,20 @@ namespace PokemonGoGUI.GoManager
         public AccountState AccountState { get; set; }
 
         [JsonIgnore]
+        public string GroupName
+        {
+            get
+            {
+                if (String.IsNullOrEmpty(UserSettings.GroupName))
+                {
+                    return String.Empty;
+                }
+
+                return UserSettings.GroupName;
+            }
+        }
+
+        [JsonIgnore]
         public string Proxy
         {
             get
