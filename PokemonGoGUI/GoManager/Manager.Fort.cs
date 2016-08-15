@@ -55,9 +55,7 @@ namespace PokemonGoGUI.GoManager
                                 Stop();
                             }
                         }
-
-                        //This error should never happen normally, so assume temp ban
-                        if (!_potentialPokeStopBan)
+                        else //This error should never happen normally, so assume temp ban
                         {
                             _potentialPokeStopBan = true;
                             //Display error only on first notice
