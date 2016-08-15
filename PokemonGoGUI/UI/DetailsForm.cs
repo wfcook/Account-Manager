@@ -7,6 +7,7 @@ using POGOProtos.Settings.Master;
 using PokemonGo.RocketAPI;
 using PokemonGo.RocketAPI.Helpers;
 using PokemonGoGUI.Enums;
+using PokemonGoGUI.Extensions;
 using PokemonGoGUI.GoManager;
 using PokemonGoGUI.GoManager.Models;
 using PokemonGoGUI.Models;
@@ -668,6 +669,37 @@ namespace PokemonGoGUI.UI
 
             MessageBox.Show("Finished unfavoriting pokemon");
 
+        }
+
+        private async void recycleToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string data = Prompt.ShowDialog("Amount to recycle", "Set recycle amount");
+            int amount = 0;
+
+            if(String.IsNullOrEmpty(data) || !Int32.TryParse(data, out amount) || amount <= 0)
+            {
+                return;
+            }
+
+            foreach(ItemData item in fastObjectListViewInventory.SelectedObjects)
+            {
+                int toDelete = amount;
+
+                if(amount > item.Count)
+                {
+                    toDelete = item.Count;
+                }
+
+                await _manager.RecycleItem(item, toDelete);
+
+                await Task.Delay(500);
+            }
+
+            await _manager.UpdateInventory();
+
+            fastObjectListViewInventory.SetObjects(_manager.Items);
+
+            MessageBox.Show("Finished recycling items");
         }
     }
 }

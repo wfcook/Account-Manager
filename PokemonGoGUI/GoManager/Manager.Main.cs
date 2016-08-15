@@ -427,7 +427,7 @@ namespace PokemonGoGUI.GoManager
                     //Update inventory
                     LogCaller(new LoggerEventArgs("Updating inventory items ...", LoggerTypes.Debug));
 
-                    result = await RepeatAction<List<InventoryItem>>(GetInventory, 1);
+                    result = await RepeatAction<List<InventoryItem>>(UpdateInventory, 1);
 
                     await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
@@ -598,7 +598,7 @@ namespace PokemonGoGUI.GoManager
 
                             bool secondInventoryUpdate = false;
 
-                            await GetInventory();
+                            await UpdateInventory();
 
                             await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
@@ -606,7 +606,7 @@ namespace PokemonGoGUI.GoManager
                             {
                                 secondInventoryUpdate = true;
 
-                                await RecycleItems();
+                                await RecycleFilteredItems();
 
                                 await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
                             }
@@ -619,7 +619,7 @@ namespace PokemonGoGUI.GoManager
                                 {
                                     await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
-                                    await GetInventory();
+                                    await UpdateInventory();
 
                                     await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
                                 }
@@ -651,7 +651,7 @@ namespace PokemonGoGUI.GoManager
 
                             if (secondInventoryUpdate)
                             {
-                                await GetInventory();
+                                await UpdateInventory();
                             }
                         }
 

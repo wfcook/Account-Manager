@@ -46,7 +46,7 @@ namespace PokemonGoGUI.GoManager
 
             await Task.Delay(500);
 
-            await GetInventory();
+            await UpdateInventory();
 
             LogCaller(new LoggerEventArgs("Finished updating details", LoggerTypes.Debug));
 
