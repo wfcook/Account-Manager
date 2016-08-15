@@ -167,7 +167,7 @@
             this.checkBoxHumanizeThrows = new System.Windows.Forms.CheckBox();
             this.toolTipHumanizeThrows = new System.Windows.Forms.ToolTip(this.components);
             this.numericUpDownInsideReticuleChance = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDownPlayerActionDelay = new System.Windows.Forms.NumericUpDown();
             this.label33 = new System.Windows.Forms.Label();
             this.label34 = new System.Windows.Forms.Label();
             this.numericUpDownLocationUpdateDelay = new System.Windows.Forms.NumericUpDown();
@@ -207,7 +207,7 @@
             this.contextMenuStripTransfer.SuspendLayout();
             this.tabPageHumanization.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownInsideReticuleChance)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownPlayerActionDelay)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownLocationUpdateDelay)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownPlayerActionRandomiz)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownLocationUpdateRandom)).BeginInit();
@@ -1542,7 +1542,7 @@
             this.tabPageHumanization.Controls.Add(this.numericUpDownGeneralDelayRandom);
             this.tabPageHumanization.Controls.Add(this.numericUpDownPlayerActionRandomiz);
             this.tabPageHumanization.Controls.Add(this.numericUpDownGeneralDelay);
-            this.tabPageHumanization.Controls.Add(this.numericUpDown1);
+            this.tabPageHumanization.Controls.Add(this.numericUpDownPlayerActionDelay);
             this.tabPageHumanization.Controls.Add(this.label37);
             this.tabPageHumanization.Controls.Add(this.numericUpDownInsideReticuleChance);
             this.tabPageHumanization.Controls.Add(this.label38);
@@ -1573,7 +1573,7 @@
             // checkBoxHumanizeThrows
             // 
             this.checkBoxHumanizeThrows.AutoSize = true;
-            this.checkBoxHumanizeThrows.Location = new System.Drawing.Point(157, 24);
+            this.checkBoxHumanizeThrows.Location = new System.Drawing.Point(127, 24);
             this.checkBoxHumanizeThrows.Name = "checkBoxHumanizeThrows";
             this.checkBoxHumanizeThrows.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.checkBoxHumanizeThrows.Size = new System.Drawing.Size(137, 20);
@@ -1589,23 +1589,23 @@
             this.numericUpDownInsideReticuleChance.Size = new System.Drawing.Size(79, 22);
             this.numericUpDownInsideReticuleChance.TabIndex = 2;
             // 
-            // numericUpDown1
+            // numericUpDownPlayerActionDelay
             // 
-            this.numericUpDown1.Location = new System.Drawing.Point(197, 108);
-            this.numericUpDown1.Maximum = new decimal(new int[] {
+            this.numericUpDownPlayerActionDelay.Location = new System.Drawing.Point(197, 108);
+            this.numericUpDownPlayerActionDelay.Maximum = new decimal(new int[] {
             1000000,
             0,
             0,
             0});
-            this.numericUpDown1.Minimum = new decimal(new int[] {
+            this.numericUpDownPlayerActionDelay.Minimum = new decimal(new int[] {
             200,
             0,
             0,
             0});
-            this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(97, 22);
-            this.numericUpDown1.TabIndex = 3;
-            this.numericUpDown1.Value = new decimal(new int[] {
+            this.numericUpDownPlayerActionDelay.Name = "numericUpDownPlayerActionDelay";
+            this.numericUpDownPlayerActionDelay.Size = new System.Drawing.Size(97, 22);
+            this.numericUpDownPlayerActionDelay.TabIndex = 3;
+            this.numericUpDownPlayerActionDelay.Value = new decimal(new int[] {
             200,
             0,
             0,
@@ -1857,7 +1857,7 @@
             this.tabPageHumanization.ResumeLayout(false);
             this.tabPageHumanization.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownInsideReticuleChance)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownPlayerActionDelay)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownLocationUpdateDelay)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownPlayerActionRandomiz)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownLocationUpdateRandom)).EndInit();
@@ -2009,7 +2009,7 @@
         private System.Windows.Forms.CheckBox checkBoxHumanizeThrows;
         private System.Windows.Forms.ToolTip toolTipHumanizeThrows;
         private System.Windows.Forms.Label label32;
-        private System.Windows.Forms.NumericUpDown numericUpDown1;
+        private System.Windows.Forms.NumericUpDown numericUpDownPlayerActionDelay;
         private System.Windows.Forms.Label label33;
         private System.Windows.Forms.NumericUpDown numericUpDownLocationUpdateDelay;
         private System.Windows.Forms.Label label34;

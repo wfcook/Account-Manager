@@ -122,6 +122,23 @@ namespace PokemonGoGUI.UI
             numericUpDownMaxPokemonPerSnipe.Value = settings.MaxPokemonPerSnipe;
             numericUpDownSnipeAfterLevel.Value = settings.SnipeAfterLevel;
 
+            //Humanization
+            checkBoxHumanizeThrows.Checked = settings.EnableHumanization;
+            numericUpDownInsideReticuleChance.Value = settings.InsideReticuleChance;
+
+            numericUpDownGeneralDelay.Value = settings.GeneralDelay;
+            numericUpDownGeneralDelayRandom.Value = settings.GeneralDelayRandom;
+
+            numericUpDownDelayBetweenSnipes.Value = settings.DelayBetweenSnipes;
+            numericUpDownDelayBetweenSnipeRandom.Value = settings.BetweenSnipesDelayRandom;
+
+            numericUpDownLocationUpdateDelay.Value = settings.DelayBetweenLocationUpdates;
+            numericUpDownLocationUpdateRandom.Value = settings.LocationupdateDelayRandom;
+
+            numericUpDownPlayerActionDelay.Value = settings.DelayBetweenPlayerActions;
+            numericUpDownPlayerActionRandomiz.Value = settings.PlayerActionDelayRandom;
+            //End humanization
+
             //Device settings
             textBoxDeviceId.Text = settings.DeviceId;
             textBoxDeviceModel.Text = settings.DeviceModel;
@@ -273,6 +290,24 @@ namespace PokemonGoGUI.UI
             userSettings.MaxPokemonPerSnipe = (int)numericUpDownMaxPokemonPerSnipe.Value;
             userSettings.SnipeAfterLevel = (int)numericUpDownSnipeAfterLevel.Value;
             userSettings.StopAtMinAccountState = (AccountState)comboBoxMinAccountState.SelectedItem;
+
+            //Humanization
+            userSettings.EnableHumanization = checkBoxHumanizeThrows.Checked;
+            userSettings.InsideReticuleChance = (int)numericUpDownInsideReticuleChance.Value;
+
+            userSettings.GeneralDelay = (int)numericUpDownGeneralDelay.Value;
+            userSettings.GeneralDelayRandom = (int)numericUpDownGeneralDelayRandom.Value;
+
+            userSettings.DelayBetweenSnipes = (int)numericUpDownDelayBetweenSnipes.Value;
+            userSettings.BetweenSnipesDelayRandom = (int)numericUpDownDelayBetweenSnipeRandom.Value;
+
+            userSettings.DelayBetweenLocationUpdates = (int)numericUpDownLocationUpdateDelay.Value;
+            userSettings.LocationupdateDelayRandom = (int)numericUpDownLocationUpdateRandom.Value;
+
+            userSettings.DelayBetweenPlayerActions = (int)numericUpDownPlayerActionDelay.Value;
+            userSettings.PlayerActionDelayRandom = (int)numericUpDownPlayerActionRandomiz.Value;
+
+            //End humanization
 
             //Device settings
             userSettings.DeviceId = textBoxDeviceId.Text;
