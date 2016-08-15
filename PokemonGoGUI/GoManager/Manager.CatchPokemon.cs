@@ -155,7 +155,7 @@ namespace PokemonGoGUI.GoManager
 
                     if (pokeBall == ItemId.ItemUnknown)
                     {
-                        LogCaller(new LoggerEventArgs("No pokeballs remaining", LoggerTypes.Warning));
+                        LogCaller(new LoggerEventArgs("No pokeballs remaining (lure)", LoggerTypes.Warning));
 
                         return new MethodResult
                         {
@@ -301,7 +301,7 @@ namespace PokemonGoGUI.GoManager
 
                     if (pokeBall == ItemId.ItemUnknown)
                     {
-                        LogCaller(new LoggerEventArgs("No pokeballs remaining", LoggerTypes.Warning));
+                        LogCaller(new LoggerEventArgs("No pokeballs remaining (encounter)", LoggerTypes.Warning));
 
                         return new MethodResult
                         {

@@ -590,20 +590,24 @@ namespace PokemonGoGUI.GoManager
                             continue;
                         }
 
-                        //Catch nearby pokemon
-                        MethodResult nearbyPokemonResponse = await RepeatAction(CatchNeabyPokemon, 2);
+                        int remainingBalls = RemainingPokeballs();
 
+                        if (remainingBalls > 0)
+                        {
+                            //Catch nearby pokemon
+                            MethodResult nearbyPokemonResponse = await RepeatAction(CatchNeabyPokemon, 1);
 
-                        //Get nearby lured pokemon
-                        MethodResult luredPokemonResponse = await RepeatAction(() => CatchLuredPokemon(pokestop), 2);
+                            await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
-                        await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
+                            //Get nearby lured pokemon
+                            MethodResult luredPokemonResponse = await RepeatAction(() => CatchLuredPokemon(pokestop), 1);
+
+                            await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
+                        }
 
                         //Check sniping
                         if (Stats.Level >= UserSettings.SnipeAfterLevel)
                         {
-                            int remainingBalls = RemainingPokeballs();
-
                             if (remainingBalls >= UserSettings.MinBallsToSnipe)
                             {
                                 if (UserSettings.SnipePokemon && IsRunning && pokeStopNumber >= UserSettings.SnipeAfterPokestops && pokeStopNumber % UserSettings.SnipeAfterPokestops == 0)
