@@ -501,34 +501,6 @@ namespace PokemonGoGUI.GoManager
                         continue;
                     }
 
-                    if(_potentialPokeStopBan)
-                    {
-                        if (AccountState != Enums.AccountState.PokestopBanTemp && AccountState != Enums.AccountState.PokemonBanAndPokestopBanTemp)
-                        {
-                            LogCaller(new LoggerEventArgs("Pokestop ban detected. Marking state", LoggerTypes.Warning));
-                        }
-
-                        //Already pokemon banned
-                        if (AccountState == Enums.AccountState.PokemonBanTemp || AccountState == Enums.AccountState.PokemonBanAndPokestopBanTemp)
-                        {
-                            AccountState = Enums.AccountState.PokemonBanAndPokestopBanTemp;
-                        }
-                        else
-                        {
-                            AccountState = Enums.AccountState.PokestopBanTemp;
-                        }
-
-                        //Check for auto stop bot
-                        if ((UserSettings.StopAtMinAccountState == Enums.AccountState.PokestopBanTemp ||
-                            UserSettings.StopAtMinAccountState == Enums.AccountState.PokemonBanOrPokestopBanTemp) ||
-                            (UserSettings.StopAtMinAccountState == Enums.AccountState.PokemonBanAndPokestopBanTemp && AccountState == Enums.AccountState.PokemonBanAndPokestopBanTemp))
-                        {
-                            LogCaller(new LoggerEventArgs("Auto stopping bot ...", LoggerTypes.Info));
-
-                            Stop();
-                        }
-                    }
-
                     GeoCoordinate defaultLocation = new GeoCoordinate(UserSettings.DefaultLatitude, UserSettings.DefaultLongitude);
 
                     List<FortData> pokestopsToFarm = pokestops.Data;
