@@ -45,6 +45,9 @@ namespace PokemonGoGUI
         public int MaxPokemonPerSnipe { get; set; }
         public int SnipeAfterLevel { get; set; }
 
+        public int MaxLogs { get; set; }
+        public double RunForHours{ get; set; }
+
         //Humanization
         public bool EnableHumanization { get; set; }
         public int InsideReticuleChance { get; set; }
@@ -151,6 +154,7 @@ namespace PokemonGoGUI
             MinBallsToSnipe = 20;
             MaxPokemonPerSnipe = 100;
             SnipeAfterLevel = 0;
+            MaxLogs = 400;
         }
 
         public void LoadDeviceSettings()

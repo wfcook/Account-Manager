@@ -121,6 +121,8 @@ namespace PokemonGoGUI.UI
             numericUpDownMinBallsToSnipe.Value = settings.MinBallsToSnipe;
             numericUpDownMaxPokemonPerSnipe.Value = settings.MaxPokemonPerSnipe;
             numericUpDownSnipeAfterLevel.Value = settings.SnipeAfterLevel;
+            numericUpDownRunForHours.Value = new Decimal(settings.RunForHours);
+            numericUpDownMaxLogs.Value = settings.MaxLogs;
 
             //Humanization
             checkBoxHumanizeThrows.Checked = settings.EnableHumanization;
@@ -290,6 +292,9 @@ namespace PokemonGoGUI.UI
             userSettings.MaxPokemonPerSnipe = (int)numericUpDownMaxPokemonPerSnipe.Value;
             userSettings.SnipeAfterLevel = (int)numericUpDownSnipeAfterLevel.Value;
             userSettings.StopAtMinAccountState = (AccountState)comboBoxMinAccountState.SelectedItem;
+
+            userSettings.RunForHours = (double)numericUpDownRunForHours.Value;
+            userSettings.MaxLogs = (int)numericUpDownMaxLogs.Value;
 
             //Humanization
             userSettings.EnableHumanization = checkBoxHumanizeThrows.Checked;

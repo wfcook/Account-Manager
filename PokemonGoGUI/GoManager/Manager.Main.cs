@@ -337,10 +337,28 @@ namespace PokemonGoGUI.GoManager
             return false;
         }
 
+        private bool CheckTime()
+        {
+            if(UserSettings.RunForHours == 0)
+            {
+                return false;
+            }
+
+            if(_runningStopwatch.Elapsed.TotalHours >= UserSettings.RunForHours)
+            {
+                Stop();
+
+                LogCaller(new LoggerEventArgs("Max runtime reached. Stopping ...", LoggerTypes.Info));
+
+                return true;
+            }
+
+            return false;
+        }
+
         private async void RunningThread()
         {
             int failedWaitTime = 5000;
-            int delayTime = 700;
             int maxFailed = 3;
             int currentFails = 0;
 
@@ -349,6 +367,11 @@ namespace PokemonGoGUI.GoManager
 
             while(IsRunning)
             {
+                if(CheckTime())
+                {
+                    continue;
+                }
+
                 WaitPaused();
 
                 StartingUp = true;
@@ -515,6 +538,11 @@ namespace PokemonGoGUI.GoManager
                         if (!IsRunning || currentFailedStops >= maxFailedStops)
                         {
                             break;
+                        }
+
+                        if (CheckTime())
+                        {
+                            continue;
                         }
 
                         WaitPaused();

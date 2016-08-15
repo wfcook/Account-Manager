@@ -21,9 +21,9 @@ namespace PokemonGoGUI.GoManager
                     Logs.Add(log);
                 }
 
-                if(Logs.Count >= 400)
+                if(Logs.Count >= UserSettings.MaxLogs)
                 {
-                    IEnumerable<Log> tempLogs = Logs.Reverse<Log>().Take(200);
+                    IEnumerable<Log> tempLogs = Logs.Reverse<Log>().Take(UserSettings.MaxLogs / 4); ;
 
                     Logs = tempLogs.Reverse<Log>().ToList();
                 }
