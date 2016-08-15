@@ -26,7 +26,7 @@ namespace PokemonGoGUI
         List<Manager> _managers = new List<Manager>();
 
         private readonly string _saveFile = "data";
-        private const string _versionNumber = "1.2.0";
+        private const string _versionNumber = "1.2.1";
 
         public MainForm()
         {

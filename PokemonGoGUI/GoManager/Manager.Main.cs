@@ -104,7 +104,7 @@ namespace PokemonGoGUI.GoManager
                     }
                     else
                     {
-                        LogCaller(new LoggerEventArgs("Login request has timed out. Possible bad proxy.", LoggerTypes.Warning, ex));
+                        LogCaller(new LoggerEventArgs("Login request has timed out. Possible bad proxy.", LoggerTypes.ProxyIssue, ex));
                     }
 
                     return new MethodResult
@@ -117,7 +117,7 @@ namespace PokemonGoGUI.GoManager
                 {
                     if (ex.Status == WebExceptionStatus.ConnectionClosed)
                     {
-                        LogCaller(new LoggerEventArgs("Potential http proxy detected. Only https proxies will work.", LoggerTypes.Warning));
+                        LogCaller(new LoggerEventArgs("Potential http proxy detected. Only https proxies will work.", LoggerTypes.ProxyIssue));
 
                         return new MethodResult
                         {
@@ -127,7 +127,7 @@ namespace PokemonGoGUI.GoManager
                     else if (ex.Status == WebExceptionStatus.ConnectFailure || ex.Status == WebExceptionStatus.ProtocolError || ex.Status == WebExceptionStatus.ReceiveFailure
                         || ex.Status == WebExceptionStatus.ServerProtocolViolation)
                     {
-                        LogCaller(new LoggerEventArgs("Proxy is offline", LoggerTypes.Warning));
+                        LogCaller(new LoggerEventArgs("Proxy is offline", LoggerTypes.ProxyIssue));
 
                         return new MethodResult
                         {
@@ -151,7 +151,7 @@ namespace PokemonGoGUI.GoManager
                     }
                     else
                     {
-                        LogCaller(new LoggerEventArgs("Login request has timed out. Possible bad proxy", LoggerTypes.Warning));
+                        LogCaller(new LoggerEventArgs("Login request has timed out. Possible bad proxy", LoggerTypes.ProxyIssue));
                     }
 
                     return new MethodResult
@@ -186,7 +186,7 @@ namespace PokemonGoGUI.GoManager
                     message = "IP address is banned. Stopping bot ...";
                 }
                 
-                LogCaller(new LoggerEventArgs(message, LoggerTypes.Warning, ex));
+                LogCaller(new LoggerEventArgs(message, LoggerTypes.ProxyIssue, ex));
 
                 return new MethodResult
                 {

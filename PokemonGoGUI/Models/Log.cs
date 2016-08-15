@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace PokemonGoGUI.GoManager.Models
 {
-    public enum LoggerTypes { Debug, Info, Warning, Exception, PokemonEscape, PokemonFlee, LocationUpdate, Transfer, Evolve, Incubate, Recycle, Success };
+    public enum LoggerTypes { Debug, Info, Warning, Exception, PokemonEscape, PokemonFlee, LocationUpdate, Transfer, Evolve, Incubate, Recycle, ProxyIssue, Success };
 
     public class Log
     {
@@ -50,6 +50,8 @@ namespace PokemonGoGUI.GoManager.Models
                 case LoggerTypes.Success:
                     return Color.Green;
                 case LoggerTypes.Warning:
+                    return Color.Yellow;
+                case LoggerTypes.ProxyIssue:
                     return Color.Yellow;
                 case LoggerTypes.PokemonFlee:
                     return Color.Salmon;

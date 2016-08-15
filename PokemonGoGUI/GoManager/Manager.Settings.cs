@@ -19,7 +19,7 @@ namespace PokemonGoGUI.GoManager
     {
         public async Task<MethodResult<Dictionary<PokemonId, PokemonSettings>>> GetItemTemplates()
         {
-            if (PokeSettings != null)
+            if (PokeSettings != null && PokeSettings.Count != 0)
             {
                 return new MethodResult<Dictionary<PokemonId, PokemonSettings>>
                 {
