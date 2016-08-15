@@ -341,6 +341,12 @@ namespace PokemonGoGUI.GoManager
         [JsonIgnore]
         public int PokestopsFarmed { get; set; }
 
+        [JsonIgnore]
+        public int ItemsFarmed { get; set; }
+
+        [JsonIgnore]
+        public int TotalPokeStopExp { get; set; }
+
         private Stopwatch _runningStopwatch = new Stopwatch();
         private int _expGained = 0;
 

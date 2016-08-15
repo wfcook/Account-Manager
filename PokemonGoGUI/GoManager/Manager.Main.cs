@@ -42,6 +42,7 @@ namespace PokemonGoGUI.GoManager
         private bool _potentialPokeStopBan = false;
         /*private int _failedPokestopResponse = 0;*/
         private bool _autoRestart = false;
+        private bool _wasAutoRestarted = false;
 
         private ManualResetEvent _pauser = new ManualResetEvent(true);
 
@@ -238,6 +239,12 @@ namespace PokemonGoGUI.GoManager
                 };
             }
 
+            if(!_wasAutoRestarted)
+            {
+                _expGained = 0;
+                _wasAutoRestarted = false;
+            }
+
             IsRunning = true;
             _totalZeroExpStops = 0;
             _client.SetSettings(UserSettings);
@@ -253,7 +260,6 @@ namespace PokemonGoGUI.GoManager
             LogCaller(new LoggerEventArgs("Bot started", LoggerTypes.Info));
 
             _runningStopwatch.Start();
-            _expGained = 0;
             _potentialPokemonBan = false;
 
             t.Start();
@@ -724,6 +730,7 @@ namespace PokemonGoGUI.GoManager
 
             if(_autoRestart)
             {
+                _wasAutoRestarted = true;
                 Start();
             }
         }
@@ -859,9 +866,11 @@ namespace PokemonGoGUI.GoManager
         public void ClearStats()
         {
             _fleeingPokemonResponses = 0;
-            _failedInventoryReponses = 0;
+            //_expGained = 0;
             PokemonCaught = 0;
             PokestopsFarmed = 0;
+            ItemsFarmed = 0;
+            TotalPokeStopExp = 0;
         }
     }
 }

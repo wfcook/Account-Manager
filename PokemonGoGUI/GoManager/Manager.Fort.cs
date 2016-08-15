@@ -86,6 +86,7 @@ namespace PokemonGoGUI.GoManager
                         if(item != null)
                         {
                             item.Count += award.ItemCount;
+                            ItemsFarmed += award.ItemCount;
                         }
                     }
 
@@ -107,6 +108,7 @@ namespace PokemonGoGUI.GoManager
                         }
 
                         ExpIncrease(fortResponse.ExperienceAwarded);
+                        TotalPokeStopExp += fortResponse.ExperienceAwarded;
                         ++PokestopsFarmed;
 
                         if (fortResponse.ExperienceAwarded == 0)

@@ -672,7 +672,9 @@ namespace PokemonGoGUI.UI
         {
             _manager.RandomDeviceId();
 
-            UpdateDetails(_manager.UserSettings);
+            textBoxDeviceId.Text = _manager.UserSettings.DeviceId;
+
+            //UpdateDetails(_manager.UserSettings);
         }
 
         private void buttonResetDefaults_Click(object sender, EventArgs e)

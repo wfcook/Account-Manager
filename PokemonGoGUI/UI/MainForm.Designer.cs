@@ -31,6 +31,7 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.fastObjectListViewMain = new BrightIdeasSoftware.FastObjectListView();
+            this.olvColumnGroup = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnUsername = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnAccountState = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnMaxLevel = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
@@ -46,7 +47,6 @@
             this.olvColumnTotalLogs = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnProxy = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnLastLogMessage = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.olvColumnGroup = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.contextMenuStripAccounts = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.updateDetailsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewDetailsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -57,6 +57,7 @@
             this.stopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.setGroupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.setMaxLevelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.transferToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.enableTransferToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -103,7 +104,8 @@
             this.logViewerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.garbageCollectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.timerListViewUpdate = new System.Windows.Forms.Timer(this.components);
-            this.setGroupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.olvColumnPokestopExp = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnTotalItems = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewMain)).BeginInit();
             this.contextMenuStripAccounts.SuspendLayout();
             this.SuspendLayout();
@@ -114,6 +116,8 @@
             this.fastObjectListViewMain.AllColumns.Add(this.olvColumnUsername);
             this.fastObjectListViewMain.AllColumns.Add(this.olvColumnAccountState);
             this.fastObjectListViewMain.AllColumns.Add(this.olvColumnMaxLevel);
+            this.fastObjectListViewMain.AllColumns.Add(this.olvColumnPokestopExp);
+            this.fastObjectListViewMain.AllColumns.Add(this.olvColumnTotalItems);
             this.fastObjectListViewMain.AllColumns.Add(this.olvColumnLevel);
             this.fastObjectListViewMain.AllColumns.Add(this.olvColumnPokestopsFarmed);
             this.fastObjectListViewMain.AllColumns.Add(this.olvColumnPokemonCaught);
@@ -157,6 +161,11 @@
             this.fastObjectListViewMain.FormatCell += new System.EventHandler<BrightIdeasSoftware.FormatCellEventArgs>(this.fastObjectListViewMain_FormatCell);
             this.fastObjectListViewMain.DoubleClick += new System.EventHandler(this.fastObjectListViewMain_DoubleClick);
             this.fastObjectListViewMain.KeyDown += new System.Windows.Forms.KeyEventHandler(this.fastObjectListViewMain_KeyDown);
+            // 
+            // olvColumnGroup
+            // 
+            this.olvColumnGroup.AspectName = "GroupName";
+            this.olvColumnGroup.Text = "Group";
             // 
             // olvColumnUsername
             // 
@@ -246,11 +255,6 @@
             this.olvColumnLastLogMessage.Text = "Last Log";
             this.olvColumnLastLogMessage.Width = 248;
             // 
-            // olvColumnGroup
-            // 
-            this.olvColumnGroup.AspectName = "GroupName";
-            this.olvColumnGroup.Text = "Group";
-            // 
             // contextMenuStripAccounts
             // 
             this.contextMenuStripAccounts.ImageScalingSize = new System.Drawing.Size(22, 22);
@@ -277,7 +281,7 @@
             this.deleteToolStripMenuItem,
             this.devToolsToolStripMenuItem});
             this.contextMenuStripAccounts.Name = "contextMenuStrip1";
-            this.contextMenuStripAccounts.Size = new System.Drawing.Size(218, 535);
+            this.contextMenuStripAccounts.Size = new System.Drawing.Size(218, 504);
             this.contextMenuStripAccounts.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStripAccounts_Opening);
             // 
             // updateDetailsToolStripMenuItem
@@ -347,6 +351,13 @@
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
             this.settingsToolStripMenuItem.Size = new System.Drawing.Size(217, 28);
             this.settingsToolStripMenuItem.Text = "Settings";
+            // 
+            // setGroupToolStripMenuItem
+            // 
+            this.setGroupToolStripMenuItem.Name = "setGroupToolStripMenuItem";
+            this.setGroupToolStripMenuItem.Size = new System.Drawing.Size(210, 28);
+            this.setGroupToolStripMenuItem.Text = "Set Group";
+            this.setGroupToolStripMenuItem.Click += new System.EventHandler(this.setGroupToolStripMenuItem_Click);
             // 
             // setMaxLevelToolStripMenuItem
             // 
@@ -694,12 +705,17 @@
             this.timerListViewUpdate.Interval = 1000;
             this.timerListViewUpdate.Tick += new System.EventHandler(this.timerListViewUpdate_Tick);
             // 
-            // setGroupToolStripMenuItem
+            // olvColumnPokestopExp
             // 
-            this.setGroupToolStripMenuItem.Name = "setGroupToolStripMenuItem";
-            this.setGroupToolStripMenuItem.Size = new System.Drawing.Size(210, 28);
-            this.setGroupToolStripMenuItem.Text = "Set Group";
-            this.setGroupToolStripMenuItem.Click += new System.EventHandler(this.setGroupToolStripMenuItem_Click);
+            this.olvColumnPokestopExp.AspectName = "TotalPokeStopExp";
+            this.olvColumnPokestopExp.IsVisible = false;
+            this.olvColumnPokestopExp.Text = "Pokestop Exp";
+            // 
+            // olvColumnTotalItems
+            // 
+            this.olvColumnTotalItems.AspectName = "ItemsFarmed";
+            this.olvColumnTotalItems.IsVisible = false;
+            this.olvColumnTotalItems.Text = "Items Found";
             // 
             // MainForm
             // 
@@ -794,6 +810,8 @@
         private BrightIdeasSoftware.OLVColumn olvColumnGroup;
         private System.Windows.Forms.ToolStripMenuItem showGroupsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem setGroupToolStripMenuItem;
+        private BrightIdeasSoftware.OLVColumn olvColumnPokestopExp;
+        private BrightIdeasSoftware.OLVColumn olvColumnTotalItems;
     }
 }
 
