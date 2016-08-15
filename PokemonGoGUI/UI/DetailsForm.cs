@@ -86,6 +86,18 @@ namespace PokemonGoGUI.UI
 
             #region Pokemon
 
+            olvColumnPokemonFavorite.AspectGetter = delegate(object x)
+            {
+                PokemonData pokemon = (PokemonData)x;
+
+                if(pokemon.Favorite == 1)
+                {
+                    return true;
+                }
+
+                return false;
+            };
+
             olvColumnPokemonRarity.AspectGetter = delegate(object x)
             {
                 PokemonData pokemon = (PokemonData)x;

@@ -226,6 +226,17 @@ namespace PokemonGoGUI
 
         private void editToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            int count = fastObjectListViewMain.SelectedObjects.Count;
+            if(count > 1)
+            {
+                DialogResult result = MessageBox.Show(String.Format("Are you sure you want to open {0} edit forms?", count), "Confirmation", MessageBoxButtons.YesNo);
+
+                if(result != DialogResult.Yes)
+                {
+                    return;
+                }
+            }
+
             foreach(Manager manager in fastObjectListViewMain.SelectedObjects)
             {
                 AccountSettingsForm asForm = new AccountSettingsForm(manager);
