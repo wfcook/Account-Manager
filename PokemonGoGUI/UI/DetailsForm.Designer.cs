@@ -69,6 +69,7 @@
             this.tabPagePokemon = new System.Windows.Forms.TabPage();
             this.fastObjectListViewPokemon = new BrightIdeasSoftware.FastObjectListView();
             this.olvColumnPokemonId = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnPokemonFavorite = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnPokemonName = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnCp = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnPokemonCandy = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
@@ -110,7 +111,9 @@
             this.contextMenuStripLog = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.olvColumnPokemonFavorite = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.favoriteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.setFavoriteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.setUnfavoriteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControlMain.SuspendLayout();
             this.tabPageStats.SuspendLayout();
             this.tabPagePokedex.SuspendLayout();
@@ -568,6 +571,10 @@
             this.olvColumnPokemonId.AspectName = "Id";
             this.olvColumnPokemonId.Text = "Id";
             // 
+            // olvColumnPokemonFavorite
+            // 
+            this.olvColumnPokemonFavorite.Text = "Favorite";
+            // 
             // olvColumnPokemonName
             // 
             this.olvColumnPokemonName.AspectName = "";
@@ -652,32 +659,33 @@
             // 
             this.contextMenuStripPokemonDetails.ImageScalingSize = new System.Drawing.Size(22, 22);
             this.contextMenuStripPokemonDetails.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.favoriteToolStripMenuItem,
             this.upgradeToolStripMenuItem,
             this.evolveToolStripMenuItem,
             this.transferToolStripMenuItem});
             this.contextMenuStripPokemonDetails.Name = "contextMenuStripPokemonDetails";
-            this.contextMenuStripPokemonDetails.Size = new System.Drawing.Size(157, 88);
+            this.contextMenuStripPokemonDetails.Size = new System.Drawing.Size(199, 147);
             this.contextMenuStripPokemonDetails.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStripPokemonDetails_Opening);
             // 
             // upgradeToolStripMenuItem
             // 
             this.upgradeToolStripMenuItem.Enabled = false;
             this.upgradeToolStripMenuItem.Name = "upgradeToolStripMenuItem";
-            this.upgradeToolStripMenuItem.Size = new System.Drawing.Size(156, 28);
+            this.upgradeToolStripMenuItem.Size = new System.Drawing.Size(198, 28);
             this.upgradeToolStripMenuItem.Text = "Upgrade";
             this.upgradeToolStripMenuItem.Click += new System.EventHandler(this.upgradeToolStripMenuItem_Click);
             // 
             // evolveToolStripMenuItem
             // 
             this.evolveToolStripMenuItem.Name = "evolveToolStripMenuItem";
-            this.evolveToolStripMenuItem.Size = new System.Drawing.Size(156, 28);
+            this.evolveToolStripMenuItem.Size = new System.Drawing.Size(198, 28);
             this.evolveToolStripMenuItem.Text = "Evolve";
             this.evolveToolStripMenuItem.Click += new System.EventHandler(this.evolveToolStripMenuItem_Click);
             // 
             // transferToolStripMenuItem
             // 
             this.transferToolStripMenuItem.Name = "transferToolStripMenuItem";
-            this.transferToolStripMenuItem.Size = new System.Drawing.Size(156, 28);
+            this.transferToolStripMenuItem.Size = new System.Drawing.Size(198, 28);
             this.transferToolStripMenuItem.Text = "Transfer";
             this.transferToolStripMenuItem.Click += new System.EventHandler(this.transferToolStripMenuItem_Click);
             // 
@@ -900,9 +908,28 @@
             this.exportToolStripMenuItem.Text = "Export";
             this.exportToolStripMenuItem.Click += new System.EventHandler(this.exportToolStripMenuItem_Click);
             // 
-            // olvColumnPokemonFavorite
+            // favoriteToolStripMenuItem
             // 
-            this.olvColumnPokemonFavorite.Text = "Favorite";
+            this.favoriteToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.setFavoriteToolStripMenuItem,
+            this.setUnfavoriteToolStripMenuItem});
+            this.favoriteToolStripMenuItem.Name = "favoriteToolStripMenuItem";
+            this.favoriteToolStripMenuItem.Size = new System.Drawing.Size(198, 28);
+            this.favoriteToolStripMenuItem.Text = "Favorite";
+            // 
+            // setFavoriteToolStripMenuItem
+            // 
+            this.setFavoriteToolStripMenuItem.Name = "setFavoriteToolStripMenuItem";
+            this.setFavoriteToolStripMenuItem.Size = new System.Drawing.Size(198, 28);
+            this.setFavoriteToolStripMenuItem.Text = "Set Favorite";
+            this.setFavoriteToolStripMenuItem.Click += new System.EventHandler(this.setFavoriteToolStripMenuItem_Click);
+            // 
+            // setUnfavoriteToolStripMenuItem
+            // 
+            this.setUnfavoriteToolStripMenuItem.Name = "setUnfavoriteToolStripMenuItem";
+            this.setUnfavoriteToolStripMenuItem.Size = new System.Drawing.Size(198, 28);
+            this.setUnfavoriteToolStripMenuItem.Text = "Set Unfavorite";
+            this.setUnfavoriteToolStripMenuItem.Click += new System.EventHandler(this.setUnfavoriteToolStripMenuItem_Click);
             // 
             // DetailsForm
             // 
@@ -1020,5 +1047,8 @@
         private System.Windows.Forms.ToolStripMenuItem copyToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exportToolStripMenuItem;
         private BrightIdeasSoftware.OLVColumn olvColumnPokemonFavorite;
+        private System.Windows.Forms.ToolStripMenuItem favoriteToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem setFavoriteToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem setUnfavoriteToolStripMenuItem;
     }
 }

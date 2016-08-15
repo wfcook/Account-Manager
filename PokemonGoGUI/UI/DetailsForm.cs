@@ -639,5 +639,35 @@ namespace PokemonGoGUI.UI
                 }
             }
         }
+
+        private async void setFavoriteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            favoriteToolStripMenuItem.Enabled = false;
+
+            await _manager.FavoritePokemon(fastObjectListViewPokemon.SelectedObjects.Cast<PokemonData>(), true);
+            await UpdateDetails();
+
+            favoriteToolStripMenuItem.Enabled = true;
+
+            fastObjectListViewPokemon.SetObjects(_manager.Pokemon);
+
+            MessageBox.Show("Finished favoriting pokemon");
+
+        }
+
+        private async void setUnfavoriteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            favoriteToolStripMenuItem.Enabled = false;
+
+            await _manager.FavoritePokemon(fastObjectListViewPokemon.SelectedObjects.Cast<PokemonData>(), false);
+            await UpdateDetails();
+
+            favoriteToolStripMenuItem.Enabled = true;
+
+            fastObjectListViewPokemon.SetObjects(_manager.Pokemon);
+
+            MessageBox.Show("Finished unfavoriting pokemon");
+
+        }
     }
 }

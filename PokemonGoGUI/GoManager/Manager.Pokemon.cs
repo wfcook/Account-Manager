@@ -308,6 +308,57 @@ namespace PokemonGoGUI.GoManager
             };
         }
 
+        public async Task<MethodResult> FavoritePokemon(IEnumerable<PokemonData> pokemonToFavorite, bool favorite = true)
+        {
+            foreach (PokemonData pokemon in pokemonToFavorite)
+            {
+                bool isFavorited = true;
+                string message = "unfavorited";
+
+                if(pokemon.Favorite == 0)
+                {
+                    isFavorited = false;
+                    message = "favorited";
+                }
+
+                if(isFavorited == favorite)
+                {
+                    continue;
+                }
+
+                try
+                {
+                    SetFavoritePokemonResponse favoriteResponse = await _client.Inventory.SetFavoritePokemon(pokemon.Id, favorite);
+
+
+                    if (favoriteResponse.Result != SetFavoritePokemonResponse.Types.Result.Success)
+                    {
+                        LogCaller(new LoggerEventArgs(String.Format("Failed to favorite/unfavorite pokemon {0}. Response: {1}", pokemon.PokemonId, favoriteResponse.Result), LoggerTypes.Warning));
+                    }
+                    else
+                    {
+                        LogCaller(new LoggerEventArgs(
+                            String.Format("Successully {3} {0}. Cp: {1}. IV: {2:0.00}%",
+                                        pokemon.PokemonId,
+                                        pokemon.Cp,
+                                        CalculateIVPerfection(pokemon).Data, message),
+                                        LoggerTypes.Info));
+                    }
+
+                    await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+                }
+                catch (Exception ex)
+                {
+                    LogCaller(new LoggerEventArgs("Favorite request failed", LoggerTypes.Exception, ex));
+                }
+            }
+
+            return new MethodResult
+            {
+                Success = true
+            };
+        }
+
         private double CalculateMaxCpMultiplier(PokemonData poke)
         {
             PokemonSettings pokemonSettings = GetPokemonSetting(poke.PokemonId).Data;
