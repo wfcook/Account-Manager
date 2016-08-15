@@ -149,6 +149,7 @@
             this.fastObjectListViewMain.View = System.Windows.Forms.View.Details;
             this.fastObjectListViewMain.VirtualMode = true;
             this.fastObjectListViewMain.FormatCell += new System.EventHandler<BrightIdeasSoftware.FormatCellEventArgs>(this.fastObjectListViewMain_FormatCell);
+            this.fastObjectListViewMain.DoubleClick += new System.EventHandler(this.fastObjectListViewMain_DoubleClick);
             this.fastObjectListViewMain.KeyDown += new System.Windows.Forms.KeyEventHandler(this.fastObjectListViewMain_KeyDown);
             // 
             // olvColumnUsername

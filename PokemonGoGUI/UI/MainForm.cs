@@ -48,6 +48,11 @@ namespace PokemonGoGUI
             }
         }
 
+        private void fastObjectListViewMain_DoubleClick(object sender, EventArgs e)
+        {
+            ShowDetails(fastObjectListViewMain.SelectedObjects.Cast<Manager>());
+        }
+
         private void RefreshManager(Manager manager)
         {
             fastObjectListViewMain.RefreshObject(manager);
@@ -796,6 +801,8 @@ namespace PokemonGoGUI
             }
         }
 
+        #region Fast Settings
+
         private void setMaxLevelToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string data = Prompt.ShowDialog("Max Level:", "Set Max Level");
@@ -1034,5 +1041,7 @@ namespace PokemonGoGUI
 
             fastObjectListViewMain.RefreshSelectedObjects();
         }
+
+        #endregion
     }
 }

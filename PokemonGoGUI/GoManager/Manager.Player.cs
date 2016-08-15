@@ -1,6 +1,7 @@
 ﻿using POGOProtos.Data;
 using POGOProtos.Enums;
 using POGOProtos.Inventory;
+using POGOProtos.Inventory.Item;
 using POGOProtos.Networking.Responses;
 using POGOProtos.Settings.Master;
 using PokemonGo.RocketAPI;
