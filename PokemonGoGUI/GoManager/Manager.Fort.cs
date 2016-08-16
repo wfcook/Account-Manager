@@ -79,17 +79,6 @@ namespace PokemonGoGUI.GoManager
                         fortResponse.ExperienceAwarded,
                         StringUtil.GetSummedFriendlyNameOfItemAwardList(fortResponse.ItemsAwarded.ToList()));
 
-                    foreach(ItemAward award in fortResponse.ItemsAwarded)
-                    {
-                        ItemData item = Items.FirstOrDefault(x => x.ItemId == award.ItemId);
-
-                        if(item != null)
-                        {
-                            item.Count += award.ItemCount;
-                            ItemsFarmed += award.ItemCount;
-                        }
-                    }
-
                     if (fortResponse.Result != FortSearchResponse.Types.Result.OutOfRange)
                     {
                         //Successfully grabbed stop
@@ -138,10 +127,12 @@ namespace PokemonGoGUI.GoManager
                             //Already pokestop banned
                             if (AccountState == Enums.AccountState.PokestopBanTemp || AccountState == Enums.AccountState.PokemonBanAndPokestopBanTemp)
                             {
+                                _potentialPokemonBan = false;
                                 AccountState = Enums.AccountState.PokemonBanAndPokestopBanTemp;
                             }
                             else
                             {
+                                _potentialPokemonBan = false;
                                 AccountState = Enums.AccountState.PokemonBanTemp;
                             }
 

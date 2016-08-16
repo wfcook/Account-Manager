@@ -35,7 +35,6 @@
             this.olvColumnAccountState = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnMaxLevel = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnPokestopExp = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.olvColumnTotalItems = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnLevel = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnPokestopsFarmed = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnPokemonCaught = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
@@ -116,7 +115,6 @@
             this.fastObjectListViewMain.AllColumns.Add(this.olvColumnAccountState);
             this.fastObjectListViewMain.AllColumns.Add(this.olvColumnMaxLevel);
             this.fastObjectListViewMain.AllColumns.Add(this.olvColumnPokestopExp);
-            this.fastObjectListViewMain.AllColumns.Add(this.olvColumnTotalItems);
             this.fastObjectListViewMain.AllColumns.Add(this.olvColumnLevel);
             this.fastObjectListViewMain.AllColumns.Add(this.olvColumnPokestopsFarmed);
             this.fastObjectListViewMain.AllColumns.Add(this.olvColumnPokemonCaught);
@@ -190,13 +188,6 @@
             this.olvColumnPokestopExp.DisplayIndex = 2;
             this.olvColumnPokestopExp.IsVisible = false;
             this.olvColumnPokestopExp.Text = "Pokestop Exp";
-            // 
-            // olvColumnTotalItems
-            // 
-            this.olvColumnTotalItems.AspectName = "ItemsFarmed";
-            this.olvColumnTotalItems.DisplayIndex = 3;
-            this.olvColumnTotalItems.IsVisible = false;
-            this.olvColumnTotalItems.Text = "Items Found";
             // 
             // olvColumnLevel
             // 
@@ -813,7 +804,6 @@
         private System.Windows.Forms.ToolStripMenuItem showGroupsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem setGroupToolStripMenuItem;
         private BrightIdeasSoftware.OLVColumn olvColumnPokestopExp;
-        private BrightIdeasSoftware.OLVColumn olvColumnTotalItems;
     }
 }
 
