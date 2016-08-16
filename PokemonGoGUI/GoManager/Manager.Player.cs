@@ -42,13 +42,38 @@ namespace PokemonGoGUI.GoManager
 
             await Task.Delay(500);
 
-            await GetItemTemplates(); //Don't care if it fails
+            bool potentialAccountban = false;
+
+            MethodResult<Dictionary<PokemonId, PokemonSettings>> result = await GetItemTemplates();
+
+            if(result.Success && result.Data != null && result.Data.Count == 0)
+            {
+                potentialAccountban = true;
+            }
 
             await Task.Delay(500);
 
-            await UpdateInventory();
+            MethodResult inventoryResult = await UpdateInventory();
 
-            LogCaller(new LoggerEventArgs("Finished updating details", LoggerTypes.Debug));
+            if (!inventoryResult.Success)
+            {
+                if (inventoryResult.Message == "Failed to get inventory." && potentialAccountban)
+                {
+                    AccountState = Enums.AccountState.AccountBan;
+
+                    LogCaller(new LoggerEventArgs("Potential account ban/deletion or server issues detected. Note: This is NOT confirmed, but we can't run it anyways. Stopping ...", LoggerTypes.Warning));
+                }
+            }
+            else
+            {
+                if(AccountState == Enums.AccountState.AccountBan)
+                {
+                    AccountState = Enums.AccountState.Good;
+                }
+
+                LogCaller(new LoggerEventArgs("Finished updating details", LoggerTypes.Debug));
+            }
+
 
             return new MethodResult
             {
