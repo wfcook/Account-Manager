@@ -46,6 +46,18 @@ namespace PokemonGoGUI
 
         private void ShowDetails(IEnumerable<Manager> managers)
         {
+            int count = fastObjectListViewMain.SelectedObjects.Count;
+
+            if (count > 1)
+            {
+                DialogResult result = MessageBox.Show(String.Format("Are you sure you want to open {0} detail forms?", count), "Confirmation", MessageBoxButtons.YesNo);
+
+                if (result != DialogResult.Yes)
+                {
+                    return;
+                }
+            }
+
             foreach(Manager manager in managers)
             {
                 DetailsForm dForm = new DetailsForm(manager);
@@ -234,6 +246,7 @@ namespace PokemonGoGUI
         private void editToolStripMenuItem_Click(object sender, EventArgs e)
         {
             int count = fastObjectListViewMain.SelectedObjects.Count;
+
             if(count > 1)
             {
                 DialogResult result = MessageBox.Show(String.Format("Are you sure you want to open {0} edit forms?", count), "Confirmation", MessageBoxButtons.YesNo);
@@ -575,6 +588,9 @@ namespace PokemonGoGUI
                 switch(manager.AccountState)
                 {
                     case AccountState.AccountBan:
+                        e.SubItem.ForeColor = Color.Red;
+                        break;
+                    case AccountState.NotVerified:
                         e.SubItem.ForeColor = Color.Red;
                         break;
                     case AccountState.PokemonBanTemp:
@@ -1237,6 +1253,30 @@ namespace PokemonGoGUI
         private void timerStatusBarUpdate_Tick(object sender, EventArgs e)
         {
             UpdateStatusBar();
+        }
+
+        private void importConfigToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string configFile = ImportConfig();
+
+            if(String.IsNullOrEmpty(configFile))
+            {
+                return;
+            }
+
+            try
+            {
+                string data = File.ReadAllText(configFile);
+
+                foreach (Manager manager in fastObjectListViewMain.SelectedObjects)
+                {
+                    manager.ImportConfig(data);
+                }
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(String.Format("Failed to import config file. Ex: {0}", ex.Message));
+            }
         }
     }
 }

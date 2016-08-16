@@ -117,6 +117,7 @@
             this.toolStripStatusLabel6 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabelAccountBanned = new System.Windows.Forms.ToolStripStatusLabel();
             this.timerStatusBarUpdate = new System.Windows.Forms.Timer(this.components);
+            this.importConfigToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewMain)).BeginInit();
             this.contextMenuStripAccounts.SuspendLayout();
             this.statusStripStats.SuspendLayout();
@@ -313,7 +314,7 @@
             this.deleteToolStripMenuItem,
             this.devToolsToolStripMenuItem});
             this.contextMenuStripAccounts.Name = "contextMenuStrip1";
-            this.contextMenuStripAccounts.Size = new System.Drawing.Size(218, 532);
+            this.contextMenuStripAccounts.Size = new System.Drawing.Size(218, 563);
             this.contextMenuStripAccounts.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStripAccounts_Opening);
             // 
             // updateDetailsToolStripMenuItem
@@ -380,7 +381,8 @@
             this.incubateEggsToolStripMenuItem,
             this.luckyEggToolStripMenuItem,
             this.catchPokemonToolStripMenuItem,
-            this.snipePokemonToolStripMenuItem});
+            this.snipePokemonToolStripMenuItem,
+            this.importConfigToolStripMenuItem});
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
             this.settingsToolStripMenuItem.Size = new System.Drawing.Size(217, 28);
             this.settingsToolStripMenuItem.Text = "Settings";
@@ -830,6 +832,13 @@
             this.timerStatusBarUpdate.Interval = 5000;
             this.timerStatusBarUpdate.Tick += new System.EventHandler(this.timerStatusBarUpdate_Tick);
             // 
+            // importConfigToolStripMenuItem
+            // 
+            this.importConfigToolStripMenuItem.Name = "importConfigToolStripMenuItem";
+            this.importConfigToolStripMenuItem.Size = new System.Drawing.Size(220, 28);
+            this.importConfigToolStripMenuItem.Text = "Import Config";
+            this.importConfigToolStripMenuItem.Click += new System.EventHandler(this.importConfigToolStripMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -940,6 +949,7 @@
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelTempBanned;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel6;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelAccountBanned;
+        private System.Windows.Forms.ToolStripMenuItem importConfigToolStripMenuItem;
     }
 }
 

@@ -13,6 +13,7 @@ namespace PokemonGoGUI.Enums
         PokemonBanOrPokestopBanTemp,
         PokemonBanAndPokestopBanTemp,
         PokestopBanTemp,
-        PokemonBanTemp
+        PokemonBanTemp,
+        NotVerified
     }
 }

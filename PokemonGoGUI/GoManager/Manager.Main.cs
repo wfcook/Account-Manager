@@ -81,16 +81,20 @@ namespace PokemonGoGUI.GoManager
             }
             catch(PtcOfflineException ex)
             {
-                LogCaller(new LoggerEventArgs("Ptc server offline. Please try again later.", LoggerTypes.Exception));
+                LogCaller(new LoggerEventArgs("Ptc server offline. Please try again later.", LoggerTypes.Warning));
 
                 return new MethodResult
                 {
                     Message = "Ptc server offline."
                 };
             }
-            catch(AccountNotVerifiedException ex)
+            catch(AccountNotVerifiedException)
             {
-                LogCaller(new LoggerEventArgs("Account not verified.", LoggerTypes.Exception));
+                Stop();
+
+                LogCaller(new LoggerEventArgs("Account not verified. Stopping ...", LoggerTypes.Warning));
+
+                AccountState = Enums.AccountState.NotVerified;
 
                 return new MethodResult
                 {
