@@ -57,6 +57,7 @@
             this.pauseUnPauseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.snipeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.setGroupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.setMaxLevelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -80,6 +81,7 @@
             this.setMinBallsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.setMaxPokemonToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.afterLevelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.importConfigToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clearCountsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.countsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.logsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -117,7 +119,7 @@
             this.toolStripStatusLabel6 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabelAccountBanned = new System.Windows.Forms.ToolStripStatusLabel();
             this.timerStatusBarUpdate = new System.Windows.Forms.Timer(this.components);
-            this.importConfigToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.largeAddressAwareToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewMain)).BeginInit();
             this.contextMenuStripAccounts.SuspendLayout();
             this.statusStripStats.SuspendLayout();
@@ -299,6 +301,7 @@
             this.pauseUnPauseToolStripMenuItem,
             this.stopToolStripMenuItem,
             this.toolStripSeparator4,
+            this.snipeToolStripMenuItem,
             this.settingsToolStripMenuItem,
             this.clearCountsToolStripMenuItem,
             this.addNewToolStripMenuItem,
@@ -314,7 +317,7 @@
             this.deleteToolStripMenuItem,
             this.devToolsToolStripMenuItem});
             this.contextMenuStripAccounts.Name = "contextMenuStrip1";
-            this.contextMenuStripAccounts.Size = new System.Drawing.Size(218, 563);
+            this.contextMenuStripAccounts.Size = new System.Drawing.Size(218, 591);
             this.contextMenuStripAccounts.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStripAccounts_Opening);
             // 
             // updateDetailsToolStripMenuItem
@@ -368,6 +371,13 @@
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
             this.toolStripSeparator4.Size = new System.Drawing.Size(214, 6);
+            // 
+            // snipeToolStripMenuItem
+            // 
+            this.snipeToolStripMenuItem.Name = "snipeToolStripMenuItem";
+            this.snipeToolStripMenuItem.Size = new System.Drawing.Size(217, 28);
+            this.snipeToolStripMenuItem.Text = "Snipe";
+            this.snipeToolStripMenuItem.Click += new System.EventHandler(this.snipeToolStripMenuItem_Click);
             // 
             // settingsToolStripMenuItem
             // 
@@ -553,6 +563,13 @@
             this.afterLevelToolStripMenuItem.Text = "After Level";
             this.afterLevelToolStripMenuItem.Click += new System.EventHandler(this.afterLevelToolStripMenuItem_Click);
             // 
+            // importConfigToolStripMenuItem
+            // 
+            this.importConfigToolStripMenuItem.Name = "importConfigToolStripMenuItem";
+            this.importConfigToolStripMenuItem.Size = new System.Drawing.Size(220, 28);
+            this.importConfigToolStripMenuItem.Text = "Import Config";
+            this.importConfigToolStripMenuItem.Click += new System.EventHandler(this.importConfigToolStripMenuItem_Click);
+            // 
             // clearCountsToolStripMenuItem
             // 
             this.clearCountsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -731,7 +748,8 @@
             // 
             this.devToolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.logViewerToolStripMenuItem,
-            this.garbageCollectionToolStripMenuItem});
+            this.garbageCollectionToolStripMenuItem,
+            this.largeAddressAwareToolStripMenuItem});
             this.devToolsToolStripMenuItem.Name = "devToolsToolStripMenuItem";
             this.devToolsToolStripMenuItem.Size = new System.Drawing.Size(217, 28);
             this.devToolsToolStripMenuItem.Text = "Dev Tools";
@@ -740,14 +758,14 @@
             // logViewerToolStripMenuItem
             // 
             this.logViewerToolStripMenuItem.Name = "logViewerToolStripMenuItem";
-            this.logViewerToolStripMenuItem.Size = new System.Drawing.Size(236, 28);
+            this.logViewerToolStripMenuItem.Size = new System.Drawing.Size(249, 28);
             this.logViewerToolStripMenuItem.Text = "Log Viewer";
             this.logViewerToolStripMenuItem.Click += new System.EventHandler(this.logViewerToolStripMenuItem_Click);
             // 
             // garbageCollectionToolStripMenuItem
             // 
             this.garbageCollectionToolStripMenuItem.Name = "garbageCollectionToolStripMenuItem";
-            this.garbageCollectionToolStripMenuItem.Size = new System.Drawing.Size(236, 28);
+            this.garbageCollectionToolStripMenuItem.Size = new System.Drawing.Size(249, 28);
             this.garbageCollectionToolStripMenuItem.Text = "Garbage Collection";
             this.garbageCollectionToolStripMenuItem.Click += new System.EventHandler(this.garbageCollectionToolStripMenuItem_Click);
             // 
@@ -832,12 +850,12 @@
             this.timerStatusBarUpdate.Interval = 5000;
             this.timerStatusBarUpdate.Tick += new System.EventHandler(this.timerStatusBarUpdate_Tick);
             // 
-            // importConfigToolStripMenuItem
+            // largeAddressAwareToolStripMenuItem
             // 
-            this.importConfigToolStripMenuItem.Name = "importConfigToolStripMenuItem";
-            this.importConfigToolStripMenuItem.Size = new System.Drawing.Size(220, 28);
-            this.importConfigToolStripMenuItem.Text = "Import Config";
-            this.importConfigToolStripMenuItem.Click += new System.EventHandler(this.importConfigToolStripMenuItem_Click);
+            this.largeAddressAwareToolStripMenuItem.Name = "largeAddressAwareToolStripMenuItem";
+            this.largeAddressAwareToolStripMenuItem.Size = new System.Drawing.Size(249, 28);
+            this.largeAddressAwareToolStripMenuItem.Text = "Large Address Aware";
+            this.largeAddressAwareToolStripMenuItem.Click += new System.EventHandler(this.largeAddressAwareToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -950,6 +968,8 @@
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel6;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelAccountBanned;
         private System.Windows.Forms.ToolStripMenuItem importConfigToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem snipeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem largeAddressAwareToolStripMenuItem;
     }
 }
 

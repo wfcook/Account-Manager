@@ -750,6 +750,7 @@ namespace PokemonGoGUI.GoManager
         {
             if(!IsRunning)
             {
+                _client.Logout();
                 return;
             }
 
@@ -761,6 +762,7 @@ namespace PokemonGoGUI.GoManager
 
             if(!_autoRestart)
             {
+                _client.Logout();
                 _runningStopwatch.Reset();
             }
 

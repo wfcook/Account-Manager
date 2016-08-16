@@ -28,9 +28,9 @@ namespace PokemonGoGUI.GoManager
                 int returnDelay = baseDelay + currentOffset;
 
                 //API throttles
-                if(returnDelay <= 200)
+                if(returnDelay <= 500)
                 {
-                    return 200;
+                    return 500;
                 }
 
                 return returnDelay;

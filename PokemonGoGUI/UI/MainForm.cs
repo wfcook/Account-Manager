@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using POGOProtos.Enums;
 using PokemonGo.RocketAPI;
 using PokemonGo.RocketAPI.Enums;
 using PokemonGo.RocketAPI.Helpers;
@@ -1277,6 +1278,71 @@ namespace PokemonGoGUI
             {
                 MessageBox.Show(String.Format("Failed to import config file. Ex: {0}", ex.Message));
             }
+        }
+
+        private async void snipeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            List<string> currentPokemon = new List<string>();
+
+            foreach(PokemonId p in Enum.GetValues(typeof(PokemonId)))
+            {
+                if(p != PokemonId.Missingno)
+                {
+                    currentPokemon.Add(p.ToString());
+                }
+            }
+
+            string pokemon = AutoCompletePrompt.ShowDialog("Pokemon to snipe", "Pokemon", currentPokemon);
+
+            if(String.IsNullOrEmpty(pokemon))
+            {
+                return;
+            }
+
+            PokemonId pokemonToSnipe = PokemonId.Missingno;
+
+            if(!Enum.TryParse<PokemonId>(pokemon, true, out pokemonToSnipe))
+            {
+                MessageBox.Show("Invalid pokemon");
+                return;
+            }
+
+            string data = Prompt.ShowDialog("Location. Format = x.xxx, x.xxx", "Enter Location");
+
+            if(String.IsNullOrEmpty(data))
+            {
+                return;
+            }
+
+            string[] parts = data.Split(',');
+
+            double lat = 0;
+            double lon = 0;
+
+            if(!double.TryParse(parts[0], NumberStyles.Any, CultureInfo.InvariantCulture, out lat))
+            {
+                MessageBox.Show("Invalid latitutde.");
+                return;
+            }
+
+            if (!double.TryParse(parts[1], NumberStyles.Any, CultureInfo.InvariantCulture, out lon))
+            {
+                MessageBox.Show("Invalid longitude.");
+                return;
+            }
+
+            foreach(Manager manager in fastObjectListViewMain.SelectedObjects)
+            {
+                //Snipe all at once
+                manager.ManualSnipe(lat, lon, pokemonToSnipe);
+
+                await Task.Delay(100);
+            }
+        }
+
+        private void largeAddressAwareToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(LargeAddressAware.IsLargeAware(Application.ExecutablePath).ToString());
         }
     }
 }

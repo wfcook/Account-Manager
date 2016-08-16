@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using PokemonGo.RocketAPI.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -15,7 +16,7 @@ namespace PokemonGoGUI.GoManager.Models
         public LoggerTypes LoggerType { get; private set; }
         public DateTime Date { get; private set; }
         public string Message { get; private set; }
-        public Exception Exception { get; private set; }
+        public string StackTrace { get; private set; }
         public string ExceptionMessage { get; private set; }
 
         /*
@@ -38,10 +39,10 @@ namespace PokemonGoGUI.GoManager.Models
             this.LoggerType = type;
             this.Message = message;
             this.Date = DateTime.Now;
-            this.Exception = exception;
 
             if (exception != null)
             {
+                this.StackTrace = exception.StackTrace;
                 this.ExceptionMessage = exception.Message;
             }
         }

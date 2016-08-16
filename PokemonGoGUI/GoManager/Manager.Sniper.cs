@@ -143,6 +143,53 @@ namespace PokemonGoGUI.GoManager
             };
         }
 
+        public async Task<MethodResult> ManualSnipe(double latitude, double longitude, PokemonId pokemon)
+        {
+            if (State != Enums.BotState.Stopped)
+            {
+                Pause();
+            }
+            else
+            {
+                MethodResult result = await UpdateDetails();
+
+                if(!result.Success)
+                {
+                    return result;
+                }
+            }
+
+            await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
+
+            //Wait for actual pause ...
+            //Using pausing to prevent infinite loop. Possible to manual exit this by stopping/starting
+            while(State == Enums.BotState.Pausing || State == Enums.BotState.Stopping)
+            {
+                await Task.Delay(100);
+            }
+
+            //Make sure it's a paused state or stopped. 
+            if(State != Enums.BotState.Paused && State != Enums.BotState.Stopped)
+            {
+                LogCaller(new LoggerEventArgs("Manual intervention on pausing. Aborting snipe", LoggerTypes.Info));
+
+                return new MethodResult();
+            }
+
+            //All good
+            await CaptureSnipePokemon(latitude, longitude, pokemon);
+
+            if (State == Enums.BotState.Paused)
+            {
+                UnPause();
+            }
+
+            return new MethodResult
+            {
+                Success = true
+            };
+        }
+
         private async Task<MethodResult<bool>> CaptureSnipePokemon(double latitude, double longitude, PokemonId pokemon)
         {
             LogCaller(new LoggerEventArgs(String.Format("Sniping {0} at location {1}, {2}", pokemon, latitude, longitude), LoggerTypes.Info));

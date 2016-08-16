@@ -715,14 +715,12 @@ namespace PokemonGoGUI.UI
         {
             Log log = fastObjectListViewLogs.SelectedObject as Log;
 
-            if(log == null || log.Exception == null)
+            if(log == null || String.IsNullOrEmpty(log.StackTrace))
             {
                 return;
             }
-
-            string copiedMessage = log.Exception.ToString();
-
-            Clipboard.SetText(copiedMessage);
+            
+            Clipboard.SetText(log.StackTrace);
 
             MessageBox.Show("Stack trace copied");
         }
