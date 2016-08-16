@@ -46,6 +46,16 @@ namespace PokemonGoGUI.GoManager
 
         public async Task<MethodResult> SnipeAllPokemon()
         {
+            if(!UserSettings.CatchSettings.Any(x => x.Snipe))
+            {
+                LogCaller(new LoggerEventArgs("No pokemon set to snipe.", LoggerTypes.Info));
+
+                return new MethodResult
+                {
+                    Message = "No pokemon set to snipe"
+                };
+            }
+
             MethodResult<PokeSniperObject> pokeSniperResult = RequestPokeSniperRares();
 
             if(!pokeSniperResult.Success)

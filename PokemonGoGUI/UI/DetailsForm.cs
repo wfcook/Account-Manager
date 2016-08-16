@@ -91,6 +91,13 @@ namespace PokemonGoGUI.UI
             {
                 PokemonData pokemon = (PokemonData)x;
 
+                return (int)pokemon.PokemonId;
+            };
+
+            olvColumnPokemonFavorite.AspectGetter = delegate(object x)
+            {
+                PokemonData pokemon = (PokemonData)x;
+
                 if(pokemon.Favorite == 1)
                 {
                     return true;

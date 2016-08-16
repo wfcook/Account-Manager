@@ -10,6 +10,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokemonGoGUI", "PokemonGoGU
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokemonGo.RocketAPI", "PokemonGo.RocketAPI\PokemonGo.RocketAPI.csproj", "{05D2DA44-1B8E-4CF7-94ED-4D52451CD095}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A03A7BB2-4F0B-467B-84B2-9A76E6AAE6FB} = {A03A7BB2-4F0B-467B-84B2-9A76E6AAE6FB}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{79C8924F-42AC-4C64-B9E4-2CD178E19A44}"
 	ProjectSection(SolutionItems) = preProject

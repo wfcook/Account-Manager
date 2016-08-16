@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using PokemonGo.RocketAPI;
+using PokemonGo.RocketAPI.Enums;
 using PokemonGo.RocketAPI.Helpers;
 using PokemonGoGUI.Enums;
 using PokemonGoGUI.Extensions;
@@ -12,6 +13,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -39,6 +41,7 @@ namespace PokemonGoGUI
 
             Text = "GoManager - v" + _versionNumber;
 
+            UpdateStatusBar();
         }
 
         private void ShowDetails(IEnumerable<Manager> managers)
@@ -360,6 +363,42 @@ namespace PokemonGoGUI
             }
         }
 
+        private void UpdateStatusBar()
+        {
+            toolStripStatusLabelTotalAccounts.Text = _managers.Count.ToString();
+
+            //Longer running
+            int tempBanned = 0;
+            int running = 0;
+            int permBan = 0;
+
+            List<Manager> tempManagers = new List<Manager>(_managers);
+
+            foreach(Manager manager in tempManagers)
+            {
+                if(manager.IsRunning)
+                {
+                    ++running;
+                }
+
+                if(manager.AccountState == AccountState.AccountBan)
+                {
+                    ++permBan;
+                }
+
+                if(manager.AccountState == AccountState.PokemonBanAndPokestopBanTemp ||
+                    manager.AccountState == AccountState.PokemonBanTemp ||
+                    manager.AccountState == AccountState.PokestopBanTemp)
+                {
+                    ++tempBanned;
+                }
+            }
+
+            toolStripStatusLabelAccountBanned.Text = permBan.ToString();
+            toolStripStatusLabelTempBanned.Text = tempBanned.ToString();
+            toolStripStatusLabelTotalRunning.Text = running.ToString();
+        }
+
         private async void wConfigToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ToolStripMenuItem tSMI = sender as ToolStripMenuItem;
@@ -436,6 +475,15 @@ namespace PokemonGoGUI
                     manager.UserSettings.ProxyUsername = importModel.ProxyUsername;
                     manager.UserSettings.ProxyPassword = importModel.ProxyPassword;
 
+                    if(importModel.Username.Contains("@"))
+                    {
+                        manager.UserSettings.AuthType = AuthType.Google;
+                    }
+                    else
+                    {
+                        manager.UserSettings.AuthType = AuthType.Ptc;
+                    }
+
                     if (parts.Length % 2 == 1)
                     {
                         manager.UserSettings.MaxLevel = importModel.MaxLevel;
@@ -466,6 +514,8 @@ namespace PokemonGoGUI
             }
 
             fastObjectListViewMain.RefreshObject(_managers[0]);
+
+            UpdateStatusBar();
         }
 
         private void clearProxiesToolStripMenuItem_Click(object sender, EventArgs e)
@@ -510,7 +560,6 @@ namespace PokemonGoGUI
                 fastObjectListViewMain.UseCellFormatEvents = false;
             }
         }
-
 
         private void showGroupsToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -823,6 +872,29 @@ namespace PokemonGoGUI
         }
 
         #region Fast Settings
+
+        private void setMaxRuntimeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string data = Prompt.ShowDialog("Max Runtime", "Set Max Runtime").Replace(",", ".");
+            double value = 0;
+
+            if (String.IsNullOrEmpty(data))
+            {
+                return;
+            }
+
+            if (!Double.TryParse(data, NumberStyles.Any, CultureInfo.InvariantCulture, out value) || value < 0)
+            {
+                MessageBox.Show("Invalid runtime value");
+            }
+
+            foreach (Manager manager in fastObjectListViewMain.SelectedObjects)
+            {
+                manager.UserSettings.RunForHours = value;
+            }
+
+            fastObjectListViewMain.RefreshSelectedObjects();
+        }
 
         private void setGroupToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1142,5 +1214,29 @@ namespace PokemonGoGUI
             }
         }
 
+        private void showStatusBarToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            bool showGroups = !statusStripStats.Visible;
+
+            statusStripStats.Visible = showGroups;
+            timerStatusBarUpdate.Enabled = showGroups;
+
+            int scrollBarHeight = 38;
+
+            if(showGroups)
+            {
+                UpdateStatusBar();
+                fastObjectListViewMain.Height = this.Height - statusStripStats.Height - scrollBarHeight;
+            }
+            else
+            {
+                fastObjectListViewMain.Height = this.Height - scrollBarHeight;
+            }
+        }
+
+        private void timerStatusBarUpdate_Tick(object sender, EventArgs e)
+        {
+            UpdateStatusBar();
+        }
     }
 }

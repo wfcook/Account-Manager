@@ -115,8 +115,9 @@
             this.olvColumnException = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.contextMenuStripLog = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copyStackTraceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.olvColumnPokemonIdNumber = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.tabControlMain.SuspendLayout();
             this.tabPageStats.SuspendLayout();
             this.tabPagePokedex.SuspendLayout();
@@ -524,6 +525,7 @@
             // 
             // fastObjectListViewPokemon
             // 
+            this.fastObjectListViewPokemon.AllColumns.Add(this.olvColumnPokemonIdNumber);
             this.fastObjectListViewPokemon.AllColumns.Add(this.olvColumnPokemonId);
             this.fastObjectListViewPokemon.AllColumns.Add(this.olvColumnPokemonFavorite);
             this.fastObjectListViewPokemon.AllColumns.Add(this.olvColumnPokemonName);
@@ -542,7 +544,7 @@
             this.fastObjectListViewPokemon.AllColumns.Add(this.olvColumnPokemonBall);
             this.fastObjectListViewPokemon.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.fastObjectListViewPokemon.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.olvColumnPokemonId,
+            this.olvColumnPokemonIdNumber,
             this.olvColumnPokemonFavorite,
             this.olvColumnPokemonName,
             this.olvColumnCp,
@@ -573,6 +575,8 @@
             // olvColumnPokemonId
             // 
             this.olvColumnPokemonId.AspectName = "Id";
+            this.olvColumnPokemonId.DisplayIndex = 1;
+            this.olvColumnPokemonId.IsVisible = false;
             this.olvColumnPokemonId.Text = "Id";
             // 
             // olvColumnPokemonFavorite
@@ -936,7 +940,7 @@
             this.copyStackTraceToolStripMenuItem,
             this.exportToolStripMenuItem});
             this.contextMenuStripLog.Name = "contextMenuStripLog";
-            this.contextMenuStripLog.Size = new System.Drawing.Size(214, 119);
+            this.contextMenuStripLog.Size = new System.Drawing.Size(214, 88);
             // 
             // copyToolStripMenuItem
             // 
@@ -945,6 +949,13 @@
             this.copyToolStripMenuItem.Text = "Copy";
             this.copyToolStripMenuItem.Click += new System.EventHandler(this.copyToolStripMenuItem_Click);
             // 
+            // copyStackTraceToolStripMenuItem
+            // 
+            this.copyStackTraceToolStripMenuItem.Name = "copyStackTraceToolStripMenuItem";
+            this.copyStackTraceToolStripMenuItem.Size = new System.Drawing.Size(213, 28);
+            this.copyStackTraceToolStripMenuItem.Text = "Copy StackTrace";
+            this.copyStackTraceToolStripMenuItem.Click += new System.EventHandler(this.copyStackTraceToolStripMenuItem_Click);
+            // 
             // exportToolStripMenuItem
             // 
             this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
@@ -952,12 +963,9 @@
             this.exportToolStripMenuItem.Text = "Export";
             this.exportToolStripMenuItem.Click += new System.EventHandler(this.exportToolStripMenuItem_Click);
             // 
-            // copyStackTraceToolStripMenuItem
+            // olvColumnPokemonIdNumber
             // 
-            this.copyStackTraceToolStripMenuItem.Name = "copyStackTraceToolStripMenuItem";
-            this.copyStackTraceToolStripMenuItem.Size = new System.Drawing.Size(213, 28);
-            this.copyStackTraceToolStripMenuItem.Text = "Copy StackTrace";
-            this.copyStackTraceToolStripMenuItem.Click += new System.EventHandler(this.copyStackTraceToolStripMenuItem_Click);
+            this.olvColumnPokemonIdNumber.Text = "Pokemon Id";
             // 
             // DetailsForm
             // 
@@ -1082,5 +1090,6 @@
         private System.Windows.Forms.ContextMenuStrip contextMenuStripRecycle;
         private System.Windows.Forms.ToolStripMenuItem recycleToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem copyStackTraceToolStripMenuItem;
+        private BrightIdeasSoftware.OLVColumn olvColumnPokemonIdNumber;
     }
 }

@@ -34,8 +34,6 @@
             this.tabControlSettings = new System.Windows.Forms.TabControl();
             this.tabPageSettingsGeneral = new System.Windows.Forms.TabPage();
             this.comboBoxMinAccountState = new System.Windows.Forms.ComboBox();
-            this.textBoxProxy = new System.Windows.Forms.TextBox();
-            this.label12 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.numericUpDownRunForHours = new System.Windows.Forms.NumericUpDown();
             this.numericUpDownSnipeAfterLevel = new System.Windows.Forms.NumericUpDown();
@@ -188,6 +186,13 @@
             this.toolTipHumanizeThrows = new System.Windows.Forms.ToolTip(this.components);
             this.label43 = new System.Windows.Forms.Label();
             this.numericUpDownMaxLogs = new System.Windows.Forms.NumericUpDown();
+            this.tabPageProxy = new System.Windows.Forms.TabPage();
+            this.textBoxProxy = new System.Windows.Forms.TextBox();
+            this.label12 = new System.Windows.Forms.Label();
+            this.numericUpDownMaxFailBeforeReset = new System.Windows.Forms.NumericUpDown();
+            this.label44 = new System.Windows.Forms.Label();
+            this.checkBoxStopOnIPBan = new System.Windows.Forms.CheckBox();
+            this.checkBoxAutoRotateProxies = new System.Windows.Forms.CheckBox();
             this.tabControlMain.SuspendLayout();
             this.tabPageDetails.SuspendLayout();
             this.tabControlSettings.SuspendLayout();
@@ -222,6 +227,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewTransfer)).BeginInit();
             this.contextMenuStripTransfer.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownMaxLogs)).BeginInit();
+            this.tabPageProxy.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownMaxFailBeforeReset)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControlMain
@@ -260,6 +267,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControlSettings.Controls.Add(this.tabPageSettingsGeneral);
+            this.tabControlSettings.Controls.Add(this.tabPageProxy);
             this.tabControlSettings.Controls.Add(this.tabPageSettingsNavigation);
             this.tabControlSettings.Controls.Add(this.tabPageDevice);
             this.tabControlSettings.Controls.Add(this.tabPageHumanization);
@@ -272,8 +280,6 @@
             // tabPageSettingsGeneral
             // 
             this.tabPageSettingsGeneral.Controls.Add(this.comboBoxMinAccountState);
-            this.tabPageSettingsGeneral.Controls.Add(this.textBoxProxy);
-            this.tabPageSettingsGeneral.Controls.Add(this.label12);
             this.tabPageSettingsGeneral.Controls.Add(this.label9);
             this.tabPageSettingsGeneral.Controls.Add(this.numericUpDownRunForHours);
             this.tabPageSettingsGeneral.Controls.Add(this.numericUpDownMaxLogs);
@@ -320,33 +326,16 @@
             // comboBoxMinAccountState
             // 
             this.comboBoxMinAccountState.FormattingEnabled = true;
-            this.comboBoxMinAccountState.Location = new System.Drawing.Point(130, 307);
+            this.comboBoxMinAccountState.Location = new System.Drawing.Point(129, 279);
             this.comboBoxMinAccountState.Name = "comboBoxMinAccountState";
             this.comboBoxMinAccountState.Size = new System.Drawing.Size(232, 24);
             this.comboBoxMinAccountState.TabIndex = 56;
             this.toolTipMinAccountState.SetToolTip(this.comboBoxMinAccountState, "This setting will auto stop the bot when the specific state is reached");
             // 
-            // textBoxProxy
-            // 
-            this.textBoxProxy.Location = new System.Drawing.Point(67, 223);
-            this.textBoxProxy.Name = "textBoxProxy";
-            this.textBoxProxy.Size = new System.Drawing.Size(180, 22);
-            this.textBoxProxy.TabIndex = 55;
-            this.toolTipProxy.SetToolTip(this.textBoxProxy, "Valid Formats:\r\nIP:Port\r\nIP:Port:Username:Password");
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(11, 226);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(50, 16);
-            this.label12.TabIndex = 54;
-            this.label12.Text = "Proxy*:";
-            // 
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(22, 254);
+            this.label9.Location = new System.Drawing.Point(21, 226);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(157, 16);
             this.label9.TabIndex = 51;
@@ -355,7 +344,7 @@
             // numericUpDownRunForHours
             // 
             this.numericUpDownRunForHours.DecimalPlaces = 2;
-            this.numericUpDownRunForHours.Location = new System.Drawing.Point(185, 337);
+            this.numericUpDownRunForHours.Location = new System.Drawing.Point(184, 309);
             this.numericUpDownRunForHours.Maximum = new decimal(new int[] {
             99999,
             0,
@@ -516,14 +505,14 @@
             // 
             // textBoxMaxLevel
             // 
-            this.textBoxMaxLevel.Location = new System.Drawing.Point(185, 279);
+            this.textBoxMaxLevel.Location = new System.Drawing.Point(184, 251);
             this.textBoxMaxLevel.Name = "textBoxMaxLevel";
             this.textBoxMaxLevel.Size = new System.Drawing.Size(65, 22);
             this.textBoxMaxLevel.TabIndex = 37;
             // 
             // textBoxPokemonBeforeEvolve
             // 
-            this.textBoxPokemonBeforeEvolve.Location = new System.Drawing.Point(185, 251);
+            this.textBoxPokemonBeforeEvolve.Location = new System.Drawing.Point(184, 223);
             this.textBoxPokemonBeforeEvolve.Name = "textBoxPokemonBeforeEvolve";
             this.textBoxPokemonBeforeEvolve.Size = new System.Drawing.Size(65, 22);
             this.textBoxPokemonBeforeEvolve.TabIndex = 35;
@@ -545,7 +534,7 @@
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(0, 310);
+            this.label15.Location = new System.Drawing.Point(-1, 282);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(123, 16);
             this.label15.TabIndex = 15;
@@ -554,7 +543,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(107, 282);
+            this.label11.Location = new System.Drawing.Point(106, 254);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(72, 16);
             this.label11.TabIndex = 15;
@@ -563,7 +552,7 @@
             // label42
             // 
             this.label42.AutoSize = true;
-            this.label42.Location = new System.Drawing.Point(253, 339);
+            this.label42.Location = new System.Drawing.Point(252, 311);
             this.label42.Name = "label42";
             this.label42.Size = new System.Drawing.Size(41, 16);
             this.label42.TabIndex = 19;
@@ -572,7 +561,7 @@
             // label41
             // 
             this.label41.AutoSize = true;
-            this.label41.Location = new System.Drawing.Point(129, 339);
+            this.label41.Location = new System.Drawing.Point(128, 311);
             this.label41.Name = "label41";
             this.label41.Size = new System.Drawing.Size(50, 16);
             this.label41.TabIndex = 19;
@@ -1891,6 +1880,82 @@
             0,
             0});
             // 
+            // tabPageProxy
+            // 
+            this.tabPageProxy.Controls.Add(this.checkBoxAutoRotateProxies);
+            this.tabPageProxy.Controls.Add(this.checkBoxStopOnIPBan);
+            this.tabPageProxy.Controls.Add(this.numericUpDownMaxFailBeforeReset);
+            this.tabPageProxy.Controls.Add(this.textBoxProxy);
+            this.tabPageProxy.Controls.Add(this.label44);
+            this.tabPageProxy.Controls.Add(this.label12);
+            this.tabPageProxy.Location = new System.Drawing.Point(4, 25);
+            this.tabPageProxy.Name = "tabPageProxy";
+            this.tabPageProxy.Size = new System.Drawing.Size(494, 428);
+            this.tabPageProxy.TabIndex = 4;
+            this.tabPageProxy.Text = "Proxy";
+            this.tabPageProxy.UseVisualStyleBackColor = true;
+            // 
+            // textBoxProxy
+            // 
+            this.textBoxProxy.Location = new System.Drawing.Point(157, 24);
+            this.textBoxProxy.Name = "textBoxProxy";
+            this.textBoxProxy.Size = new System.Drawing.Size(180, 22);
+            this.textBoxProxy.TabIndex = 57;
+            this.toolTipProxy.SetToolTip(this.textBoxProxy, "Valid Formats:\r\nIP:Port\r\nIP:Port:Username:Password");
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(101, 27);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(50, 16);
+            this.label12.TabIndex = 56;
+            this.label12.Text = "Proxy*:";
+            // 
+            // numericUpDownMaxFailBeforeReset
+            // 
+            this.numericUpDownMaxFailBeforeReset.Location = new System.Drawing.Point(224, 52);
+            this.numericUpDownMaxFailBeforeReset.Maximum = new decimal(new int[] {
+            999999,
+            0,
+            0,
+            0});
+            this.numericUpDownMaxFailBeforeReset.Name = "numericUpDownMaxFailBeforeReset";
+            this.numericUpDownMaxFailBeforeReset.Size = new System.Drawing.Size(113, 22);
+            this.numericUpDownMaxFailBeforeReset.TabIndex = 58;
+            // 
+            // label44
+            // 
+            this.label44.AutoSize = true;
+            this.label44.Location = new System.Drawing.Point(19, 54);
+            this.label44.Name = "label44";
+            this.label44.Size = new System.Drawing.Size(199, 16);
+            this.label44.TabIndex = 56;
+            this.label44.Text = "Failed Requests Before Restart:";
+            // 
+            // checkBoxStopOnIPBan
+            // 
+            this.checkBoxStopOnIPBan.AutoSize = true;
+            this.checkBoxStopOnIPBan.Location = new System.Drawing.Point(219, 80);
+            this.checkBoxStopOnIPBan.Name = "checkBoxStopOnIPBan";
+            this.checkBoxStopOnIPBan.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.checkBoxStopOnIPBan.Size = new System.Drawing.Size(118, 20);
+            this.checkBoxStopOnIPBan.TabIndex = 59;
+            this.checkBoxStopOnIPBan.Text = "Stop on IP Ban";
+            this.checkBoxStopOnIPBan.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxAutoRotateProxies
+            // 
+            this.checkBoxAutoRotateProxies.AutoSize = true;
+            this.checkBoxAutoRotateProxies.Location = new System.Drawing.Point(300, 380);
+            this.checkBoxAutoRotateProxies.Name = "checkBoxAutoRotateProxies";
+            this.checkBoxAutoRotateProxies.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.checkBoxAutoRotateProxies.Size = new System.Drawing.Size(148, 20);
+            this.checkBoxAutoRotateProxies.TabIndex = 59;
+            this.checkBoxAutoRotateProxies.Text = "Auto Rotate Proxies";
+            this.checkBoxAutoRotateProxies.UseVisualStyleBackColor = true;
+            this.checkBoxAutoRotateProxies.Visible = false;
+            // 
             // AccountSettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -1941,6 +2006,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewTransfer)).EndInit();
             this.contextMenuStripTransfer.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownMaxLogs)).EndInit();
+            this.tabPageProxy.ResumeLayout(false);
+            this.tabPageProxy.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownMaxFailBeforeReset)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -2040,8 +2108,6 @@
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.ComboBox comboBoxLocationPresets;
         private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.TextBox textBoxProxy;
-        private System.Windows.Forms.Label label12;
         private System.Windows.Forms.ComboBox comboBoxMinAccountState;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.ToolTip toolTipMinAccountState;
@@ -2106,5 +2172,12 @@
         private System.Windows.Forms.Label label41;
         private System.Windows.Forms.NumericUpDown numericUpDownMaxLogs;
         private System.Windows.Forms.Label label43;
+        private System.Windows.Forms.TabPage tabPageProxy;
+        private System.Windows.Forms.TextBox textBoxProxy;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.CheckBox checkBoxStopOnIPBan;
+        private System.Windows.Forms.NumericUpDown numericUpDownMaxFailBeforeReset;
+        private System.Windows.Forms.Label label44;
+        private System.Windows.Forms.CheckBox checkBoxAutoRotateProxies;
     }
 }

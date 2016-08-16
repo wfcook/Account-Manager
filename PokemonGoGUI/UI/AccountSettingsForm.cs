@@ -125,6 +125,8 @@ namespace PokemonGoGUI.UI
             numericUpDownSnipeAfterLevel.Value = settings.SnipeAfterLevel;
             numericUpDownRunForHours.Value = new Decimal(settings.RunForHours);
             numericUpDownMaxLogs.Value = settings.MaxLogs;
+            numericUpDownMaxFailBeforeReset.Value = settings.MaxFailBeforeReset;
+            checkBoxStopOnIPBan.Checked = settings.StopOnIPBan;
 
             //Humanization
             checkBoxHumanizeThrows.Checked = settings.EnableHumanization;
@@ -297,6 +299,8 @@ namespace PokemonGoGUI.UI
 
             userSettings.RunForHours = (double)numericUpDownRunForHours.Value;
             userSettings.MaxLogs = (int)numericUpDownMaxLogs.Value;
+            userSettings.StopOnIPBan = checkBoxStopOnIPBan.Checked;
+            userSettings.MaxFailBeforeReset = (int)numericUpDownMaxFailBeforeReset.Value;
 
             //Humanization
             userSettings.EnableHumanization = checkBoxHumanizeThrows.Checked;

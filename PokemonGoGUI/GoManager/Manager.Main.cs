@@ -174,19 +174,22 @@ namespace PokemonGoGUI.GoManager
                     Message = "Username or password incorrect"
                 };
             }
-            catch(IPBannedException ex)
+            catch(IPBannedException)
             {
-                Stop();
+                if (UserSettings.StopOnIPBan)
+                {
+                    Stop();
+                }
 
                 string message = String.Empty;
 
                 if(!String.IsNullOrEmpty(Proxy))
                 {
-                    message = "Proxy IP is banned. Stopping bot ...";
+                    message = "Proxy IP is banned.";
                 }
                 else
                 {
-                    message = "IP address is banned. Stopping bot ...";
+                    message = "IP address is banned.";
                 }
                 
                 LogCaller(new LoggerEventArgs(message, LoggerTypes.ProxyIssue));
@@ -365,7 +368,6 @@ namespace PokemonGoGUI.GoManager
         private async void RunningThread()
         {
             int failedWaitTime = 5000;
-            int maxFailed = 3;
             int currentFails = 0;
 
             //Reset account state
@@ -382,7 +384,7 @@ namespace PokemonGoGUI.GoManager
 
                 StartingUp = true;
 
-                if(currentFails >= maxFailed)
+                if(currentFails >= UserSettings.MaxFailBeforeReset)
                 {
                     currentFails = 0;
                     _client.Logout();
@@ -525,7 +527,7 @@ namespace PokemonGoGUI.GoManager
                     {
                         _potentialPokeStopBan = false;
 
-                        LogCaller(new LoggerEventArgs(String.Format("{0}. Failure {1}/{2}", pokestops.Message, currentFails, maxFailed), LoggerTypes.Warning));
+                        LogCaller(new LoggerEventArgs(String.Format("{0}. Failure {1}/{2}", pokestops.Message, currentFails, UserSettings.MaxFailBeforeReset), LoggerTypes.Warning));
 
                         await Task.Delay(failedWaitTime);
 
@@ -536,12 +538,11 @@ namespace PokemonGoGUI.GoManager
 
                     List<FortData> pokestopsToFarm = pokestops.Data;
 
-                    int maxFailedStops = 3;
                     int currentFailedStops = 0;
 
                     while(pokestopsToFarm.Any())
                     {
-                        if (!IsRunning || currentFailedStops >= maxFailedStops)
+                        if (!IsRunning || currentFailedStops >= UserSettings.MaxFailBeforeReset)
                         {
                             break;
                         }
@@ -632,7 +633,13 @@ namespace PokemonGoGUI.GoManager
                         //Clean inventory, evolve, transfer, etc on first and every 10 stops
                         if(IsRunning && ((pokeStopNumber > 4 && pokeStopNumber % 10 == 0) || pokeStopNumber == 1))
                         {
-                            await SendEcho();
+                            MethodResult echoResult = await SendEcho();
+
+                            //Echo failed, restart
+                            if(!echoResult.Success)
+                            {
+                                break;
+                            }
 
                             await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
@@ -869,7 +876,6 @@ namespace PokemonGoGUI.GoManager
             //_expGained = 0;
             PokemonCaught = 0;
             PokestopsFarmed = 0;
-            ItemsFarmed = 0;
             TotalPokeStopExp = 0;
         }
     }

@@ -344,6 +344,20 @@ namespace PokemonGoGUI.GoManager
         [JsonIgnore]
         public int TotalPokeStopExp { get; set; }
 
+        [JsonIgnore]
+        public double MaxRuntime
+        {
+            get
+            {
+                if(UserSettings == null)
+                {
+                    return 0;
+                }
+
+                return UserSettings.RunForHours;
+            }
+        }
+
         private Stopwatch _runningStopwatch = new Stopwatch();
         private int _expGained = 0;
 

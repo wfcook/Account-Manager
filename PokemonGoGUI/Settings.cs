@@ -86,6 +86,9 @@ namespace PokemonGoGUI
         public string ProxyUsername { get; set; }
         public string ProxyPassword { get; set; }
 
+        public bool StopOnIPBan { get; set; }
+        public int MaxFailBeforeReset { get; set; }
+
         public AccountState StopAtMinAccountState { get; set; }
 
         public ProxyEx Proxy
@@ -102,7 +105,6 @@ namespace PokemonGoGUI
             }
         }
 
-        //Proxy
         public List<InventoryItemSetting> ItemSettings { get; set; }
         public List<CatchSetting> CatchSettings { get; set; }
         public List<EvolveSetting> EvolveSettings { get; set; }
@@ -157,6 +159,8 @@ namespace PokemonGoGUI
             MaxPokemonPerSnipe = 100;
             SnipeAfterLevel = 0;
             MaxLogs = 400;
+            MaxFailBeforeReset = 3;
+            StopOnIPBan = true;
         }
 
         public void LoadDeviceSettings()
