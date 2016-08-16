@@ -34,6 +34,8 @@
             this.olvColumnUsername = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnAccountState = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnMaxLevel = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnPokestopExp = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnTotalItems = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnLevel = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnPokestopsFarmed = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnPokemonCaught = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
@@ -103,8 +105,6 @@
             this.logViewerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.garbageCollectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.timerListViewUpdate = new System.Windows.Forms.Timer(this.components);
-            this.olvColumnPokestopExp = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.olvColumnTotalItems = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewMain)).BeginInit();
             this.contextMenuStripAccounts.SuspendLayout();
             this.SuspendLayout();
@@ -184,14 +184,30 @@
             this.olvColumnMaxLevel.IsVisible = false;
             this.olvColumnMaxLevel.Text = "Max Level";
             // 
+            // olvColumnPokestopExp
+            // 
+            this.olvColumnPokestopExp.AspectName = "TotalPokeStopExp";
+            this.olvColumnPokestopExp.DisplayIndex = 2;
+            this.olvColumnPokestopExp.IsVisible = false;
+            this.olvColumnPokestopExp.Text = "Pokestop Exp";
+            // 
+            // olvColumnTotalItems
+            // 
+            this.olvColumnTotalItems.AspectName = "ItemsFarmed";
+            this.olvColumnTotalItems.DisplayIndex = 3;
+            this.olvColumnTotalItems.IsVisible = false;
+            this.olvColumnTotalItems.Text = "Items Found";
+            // 
             // olvColumnLevel
             // 
             this.olvColumnLevel.AspectName = "Level";
+            this.olvColumnLevel.DisplayIndex = 4;
             this.olvColumnLevel.Text = "Level";
             // 
             // olvColumnPokestopsFarmed
             // 
             this.olvColumnPokestopsFarmed.AspectName = "PokestopsFarmed";
+            this.olvColumnPokestopsFarmed.DisplayIndex = 3;
             this.olvColumnPokestopsFarmed.Text = "Pokestops";
             // 
             // olvColumnPokemonCaught
@@ -703,18 +719,6 @@
             this.timerListViewUpdate.Enabled = true;
             this.timerListViewUpdate.Interval = 1000;
             this.timerListViewUpdate.Tick += new System.EventHandler(this.timerListViewUpdate_Tick);
-            // 
-            // olvColumnPokestopExp
-            // 
-            this.olvColumnPokestopExp.AspectName = "TotalPokeStopExp";
-            this.olvColumnPokestopExp.IsVisible = false;
-            this.olvColumnPokestopExp.Text = "Pokestop Exp";
-            // 
-            // olvColumnTotalItems
-            // 
-            this.olvColumnTotalItems.AspectName = "ItemsFarmed";
-            this.olvColumnTotalItems.IsVisible = false;
-            this.olvColumnTotalItems.Text = "Items Found";
             // 
             // MainForm
             // 

@@ -116,6 +116,7 @@
             this.contextMenuStripLog = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.copyStackTraceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControlMain.SuspendLayout();
             this.tabPageStats.SuspendLayout();
             this.tabPagePokedex.SuspendLayout();
@@ -932,23 +933,31 @@
             this.contextMenuStripLog.ImageScalingSize = new System.Drawing.Size(22, 22);
             this.contextMenuStripLog.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.copyToolStripMenuItem,
+            this.copyStackTraceToolStripMenuItem,
             this.exportToolStripMenuItem});
             this.contextMenuStripLog.Name = "contextMenuStripLog";
-            this.contextMenuStripLog.Size = new System.Drawing.Size(140, 60);
+            this.contextMenuStripLog.Size = new System.Drawing.Size(214, 119);
             // 
             // copyToolStripMenuItem
             // 
             this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
-            this.copyToolStripMenuItem.Size = new System.Drawing.Size(139, 28);
+            this.copyToolStripMenuItem.Size = new System.Drawing.Size(213, 28);
             this.copyToolStripMenuItem.Text = "Copy";
             this.copyToolStripMenuItem.Click += new System.EventHandler(this.copyToolStripMenuItem_Click);
             // 
             // exportToolStripMenuItem
             // 
             this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
-            this.exportToolStripMenuItem.Size = new System.Drawing.Size(139, 28);
+            this.exportToolStripMenuItem.Size = new System.Drawing.Size(213, 28);
             this.exportToolStripMenuItem.Text = "Export";
             this.exportToolStripMenuItem.Click += new System.EventHandler(this.exportToolStripMenuItem_Click);
+            // 
+            // copyStackTraceToolStripMenuItem
+            // 
+            this.copyStackTraceToolStripMenuItem.Name = "copyStackTraceToolStripMenuItem";
+            this.copyStackTraceToolStripMenuItem.Size = new System.Drawing.Size(213, 28);
+            this.copyStackTraceToolStripMenuItem.Text = "Copy StackTrace";
+            this.copyStackTraceToolStripMenuItem.Click += new System.EventHandler(this.copyStackTraceToolStripMenuItem_Click);
             // 
             // DetailsForm
             // 
@@ -1072,5 +1081,6 @@
         private System.Windows.Forms.ToolStripMenuItem setUnfavoriteToolStripMenuItem;
         private System.Windows.Forms.ContextMenuStrip contextMenuStripRecycle;
         private System.Windows.Forms.ToolStripMenuItem recycleToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem copyStackTraceToolStripMenuItem;
     }
 }

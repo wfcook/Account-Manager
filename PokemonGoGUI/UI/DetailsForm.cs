@@ -703,5 +703,21 @@ namespace PokemonGoGUI.UI
 
             MessageBox.Show("Finished recycling items");
         }
+
+        private void copyStackTraceToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Log log = fastObjectListViewLogs.SelectedObject as Log;
+
+            if(log == null || log.Exception == null)
+            {
+                return;
+            }
+
+            string copiedMessage = log.Exception.ToString();
+
+            Clipboard.SetText(copiedMessage);
+
+            MessageBox.Show("Stack trace copied");
+        }
     }
 }

@@ -27,7 +27,7 @@ namespace PokemonGoGUI
         List<Manager> _managers = new List<Manager>();
 
         private readonly string _saveFile = "data";
-        private const string _versionNumber = "1.2.2";
+        private const string _versionNumber = "1.2.3";
 
         public MainForm()
         {
@@ -1082,10 +1082,17 @@ namespace PokemonGoGUI
 
         #endregion
 
-        private void exportJsonToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void exportJsonToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string fileName = String.Empty;
             List<AccountExportModel> exportModels = new List<AccountExportModel>();
+
+            DialogResult dialogResult = MessageBox.Show("Update details before exporting?", "Update details", MessageBoxButtons.YesNoCancel);
+
+            if(dialogResult == DialogResult.Cancel)
+            {
+                return;
+            }
 
             using(SaveFileDialog sfd = new SaveFileDialog())
             {
@@ -1103,6 +1110,13 @@ namespace PokemonGoGUI
 
             foreach(Manager manager in fastObjectListViewMain.SelectedObjects)
             {
+                if(dialogResult == DialogResult.Yes)
+                {
+                    await manager.UpdateDetails();
+
+                    await Task.Delay(500);
+                }
+
                 MethodResult<AccountExportModel> result = manager.GetAccountExport();
 
                 if(!result.Success)

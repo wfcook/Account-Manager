@@ -135,24 +135,27 @@ namespace PokemonGoGUI.GoManager
                         }
                         else if (_fleeingPokemonResponses >= _fleeingPokemonUntilBan)
                         {
-                            //Only occurs when out of range is found
-                            if(fortResponse.ExperienceAwarded == 0)
-                            {
-                                LogCaller(new LoggerEventArgs("Pokemon fleeing and failing to grab stops. Potential pokemon & pokestop ban.", LoggerTypes.Warning));
-                            }
-                            else
-                            {
-                                LogCaller(new LoggerEventArgs("Pokemon fleeing, yet grabbing stops. Potential pokemon ban.", LoggerTypes.Warning));
-                            }
-
                             //Already pokestop banned
-                            if(AccountState == Enums.AccountState.PokestopBanTemp || AccountState == Enums.AccountState.PokemonBanAndPokestopBanTemp)
+                            if (AccountState == Enums.AccountState.PokestopBanTemp || AccountState == Enums.AccountState.PokemonBanAndPokestopBanTemp)
                             {
                                 AccountState = Enums.AccountState.PokemonBanAndPokestopBanTemp;
                             }
                             else
                             {
                                 AccountState = Enums.AccountState.PokemonBanTemp;
+                            }
+
+                            if (AccountState != Enums.AccountState.PokemonBanTemp)
+                            {
+                                //Only occurs when out of range is found
+                                if (fortResponse.ExperienceAwarded == 0)
+                                {
+                                    LogCaller(new LoggerEventArgs("Pokemon fleeing and failing to grab stops. Potential pokemon & pokestop ban.", LoggerTypes.Warning));
+                                }
+                                else
+                                {
+                                    LogCaller(new LoggerEventArgs("Pokemon fleeing, yet grabbing stops. Potential pokemon ban.", LoggerTypes.Warning));
+                                }
                             }
 
                             if(UserSettings.StopAtMinAccountState == Enums.AccountState.PokemonBanTemp || 
@@ -166,7 +169,8 @@ namespace PokemonGoGUI.GoManager
 
                             return new MethodResult
                             {
-                                Message = "Bans detected"
+                                Message = "Bans detected",
+                                Success = true
                             };
                         }
 
