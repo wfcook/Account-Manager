@@ -127,6 +127,7 @@ namespace PokemonGoGUI.UI
             numericUpDownMaxLogs.Value = settings.MaxLogs;
             numericUpDownMaxFailBeforeReset.Value = settings.MaxFailBeforeReset;
             checkBoxStopOnIPBan.Checked = settings.StopOnIPBan;
+            checkBoxAutoRotateProxies.Checked = settings.AutoRotateProxies;
 
             //Humanization
             checkBoxHumanizeThrows.Checked = settings.EnableHumanization;
@@ -301,6 +302,7 @@ namespace PokemonGoGUI.UI
             userSettings.MaxLogs = (int)numericUpDownMaxLogs.Value;
             userSettings.StopOnIPBan = checkBoxStopOnIPBan.Checked;
             userSettings.MaxFailBeforeReset = (int)numericUpDownMaxFailBeforeReset.Value;
+            userSettings.AutoRotateProxies = checkBoxAutoRotateProxies.Checked;
 
             //Humanization
             userSettings.EnableHumanization = checkBoxHumanizeThrows.Checked;
