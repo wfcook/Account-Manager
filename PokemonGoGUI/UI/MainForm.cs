@@ -3,6 +3,7 @@ using POGOProtos.Enums;
 using PokemonGo.RocketAPI;
 using PokemonGo.RocketAPI.Enums;
 using PokemonGo.RocketAPI.Helpers;
+using PokemonGoGUI.AccountScheduler;
 using PokemonGoGUI.Enums;
 using PokemonGoGUI.Extensions;
 using PokemonGoGUI.GoManager;
@@ -30,6 +31,7 @@ namespace PokemonGoGUI
     {
         private List<Manager> _managers = new List<Manager>();
         private ProxyHandler _proxyHandler = new ProxyHandler();
+        private List<Scheduler> _schedulers = new List<Scheduler>();
 
         private readonly string _saveFile = "data";
         private const string _versionNumber = "1.2.4";
@@ -129,38 +131,45 @@ namespace PokemonGoGUI
             SaveSettings();
         }
 
-        private async Task LoadSettings()
+        private async Task<bool> LoadSettings()
         {
             string jsonFile = _saveFile + ".json";
-            string bsonFile = _saveFile + ".bson";
+            string gzipFile = _saveFile + ".json.gz";
 
             try
             {
                 bool jsonFileExists = File.Exists(jsonFile);
-                bool bsonFileExists = File.Exists(bsonFile);
+                bool gzipFileExists = File.Exists(gzipFile);
 
-                if(!jsonFileExists && !bsonFileExists)
+                if(!jsonFileExists && !gzipFileExists)
                 {
-                    return;
+                    return false;
                 }
 
                 List<Manager> tempManagers = new List<Manager>();
 
-                if (bsonFileExists)
+                if (gzipFileExists)
                 {
-                    byte[] data = await Task.Run(() => File.ReadAllBytes(bsonFile));
-                    tempManagers = Serializer.FromBson<List<Manager>>(data);
+                    byte[] byteData = await Task.Run(() => File.ReadAllBytes(gzipFile));
+                    string data = Compression.Unzip(byteData);
+
+                    ProgramExportModel model = Serializer.FromJson<ProgramExportModel>(data);
+
+                    _proxyHandler = model.ProxyHandler;
+                    _managers = model.Managers;
+                    _schedulers = model.Schedulers;
                 }
                 else
                 {
                     string data = await Task.Run(() => File.ReadAllText(jsonFile));
+
                     tempManagers = Serializer.FromJson<List<Manager>>(data);
                 }
 
                 if(tempManagers == null)
                 {
                     MessageBox.Show("Failed to load settings");
-                    return;
+                    return true;
                 }
 
                 foreach(Manager manager in tempManagers)
@@ -185,15 +194,26 @@ namespace PokemonGoGUI
             }
 
             fastObjectListViewMain.SetObjects(_managers);
+
+            return true;
         }
 
         private void SaveSettings()
         {
             try
             {
-                string data = Serializer.ToJson(_managers);
+                ProgramExportModel model = new ProgramExportModel
+                {
+                    Managers = _managers,
+                    ProxyHandler = _proxyHandler,
+                    Schedulers = _schedulers
+                };
 
-                File.WriteAllText(_saveFile + ".json", data);
+                string data = Serializer.ToJson(model);
+
+                byte[] dataBytes = Compression.Zip(data);
+
+                File.WriteAllBytes(_saveFile + ".json.gz", dataBytes);
             }
             catch
             {

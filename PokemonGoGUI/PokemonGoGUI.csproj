@@ -99,6 +99,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountScheduler\Scheduler.cs" />
     <Compile Include="Enums\AccountState.cs" />
     <Compile Include="Enums\BotState.cs" />
     <Compile Include="Enums\CheckType.cs" />
@@ -133,6 +134,7 @@
     <Compile Include="GoManager\Manager.Inventory.cs" />
     <Compile Include="GoManager\Manager.Log.cs" />
     <Compile Include="Models\PokeSniperResult.cs" />
+    <Compile Include="Models\ProgramExportModel.cs" />
     <Compile Include="Models\TransferSettings.cs" />
     <Compile Include="ProxyManager\ProxyHandler.cs" />
     <Compile Include="UI\AccountSettingsForm.cs">
@@ -212,6 +214,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="encrypt.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="encrypt_32.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="gomanager_vector_icon_1.ico" />
