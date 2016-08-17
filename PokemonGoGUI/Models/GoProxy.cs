@@ -19,7 +19,7 @@ namespace PokemonGoGUI.Models
         {
             MaxConcurrentFails = 3;
             MaxAccounts = 1;
+            IsBanned = true;
         }
-
     }
 }

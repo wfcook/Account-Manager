@@ -229,10 +229,14 @@ namespace PokemonGoGUI.GoManager
                 settings.PtcPassword = UserSettings.PtcPassword;
                 settings.PtcUsername = UserSettings.PtcUsername;
                 settings.AuthType = UserSettings.AuthType;
+                settings.ProxyIP = UserSettings.ProxyIP;
+                settings.ProxyPassword = UserSettings.ProxyPassword;
+                settings.ProxyPort = UserSettings.ProxyPort;
+                settings.ProxyUsername = UserSettings.ProxyUsername;
 
                 UserSettings = settings;
 
-                UserSettings.LoadDeviceSettings();
+                UserSettings.RandomizeDeviceId();
 
                 LogCaller(new LoggerEventArgs("Successfully imported config file", LoggerTypes.Info));
 

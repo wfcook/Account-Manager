@@ -1,4 +1,5 @@
-﻿using PokemonGoGUI.Models;
+﻿using PokemonGo.RocketAPI;
+using PokemonGoGUI.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -72,6 +73,28 @@ namespace PokemonGoGUI.ProxyManager
             }
         }
 
+        public bool AddProxy(string data)
+        {
+            ProxyEx proxy = null;
+
+            if(!ProxyEx.TryParse(data, out proxy))
+            {
+                return false;
+            }
+
+            GoProxy goProxy = new GoProxy
+            {
+                Address = proxy.Address,
+                Password = proxy.Password,
+                Port = proxy.Port,
+                Username = proxy.Username
+            };
+
+            AddProxy(goProxy);
+
+            return true;
+        }
+
         public GoProxy GetRandomProxy()
         {
             if(Proxies == null)
@@ -94,6 +117,14 @@ namespace PokemonGoGUI.ProxyManager
             }
 
             return availableProxies[GetRandom(0, availableProxies.Count)];
+        }
+
+        public void RemoveProxy(GoProxy proxy)
+        {
+            lock(Proxies)
+            {
+                Proxies.Remove(proxy);
+            }
         }
 
         private int GetRandom(int min, int max)

@@ -728,14 +728,13 @@
             // checkBoxAutoRotateProxies
             // 
             this.checkBoxAutoRotateProxies.AutoSize = true;
-            this.checkBoxAutoRotateProxies.Location = new System.Drawing.Point(300, 380);
+            this.checkBoxAutoRotateProxies.Location = new System.Drawing.Point(189, 106);
             this.checkBoxAutoRotateProxies.Name = "checkBoxAutoRotateProxies";
             this.checkBoxAutoRotateProxies.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.checkBoxAutoRotateProxies.Size = new System.Drawing.Size(148, 20);
             this.checkBoxAutoRotateProxies.TabIndex = 59;
             this.checkBoxAutoRotateProxies.Text = "Auto Rotate Proxies";
             this.checkBoxAutoRotateProxies.UseVisualStyleBackColor = true;
-            this.checkBoxAutoRotateProxies.Visible = false;
             // 
             // checkBoxStopOnIPBan
             // 

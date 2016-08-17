@@ -114,18 +114,30 @@
             this.toolStripStatusLabelTempBanned = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel6 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabelAccountBanned = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel3 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabelTotalProxies = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel5 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabelBannedProxies = new System.Windows.Forms.ToolStripStatusLabel();
             this.timerStatusBarUpdate = new System.Windows.Forms.Timer(this.components);
             this.tabControlProxies = new System.Windows.Forms.TabControl();
             this.tabPageAccounts = new System.Windows.Forms.TabPage();
             this.tabPageProxies = new System.Windows.Forms.TabPage();
             this.fastObjectListViewProxies = new BrightIdeasSoftware.FastObjectListView();
-            this.fileSystemWatcher1 = new System.IO.FileSystemWatcher();
             this.olvColumnProxyIP = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnProxyPort = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnProxyAuth = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnUsageCount = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnCurrentFails = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnProxyBanned = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.olvColumnUsageCount = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.contextMenuStripProxy = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.addToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.singleProxyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.fromFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.setToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.maxConcurrentFailsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.maxAccountsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.resetBanStateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.deleteToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewMain)).BeginInit();
             this.contextMenuStripAccounts.SuspendLayout();
             this.statusStripStats.SuspendLayout();
@@ -133,7 +145,7 @@
             this.tabPageAccounts.SuspendLayout();
             this.tabPageProxies.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewProxies)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher1)).BeginInit();
+            this.contextMenuStripProxy.SuspendLayout();
             this.SuspendLayout();
             // 
             // fastObjectListViewMain
@@ -762,7 +774,11 @@
             this.toolStripStatusLabel4,
             this.toolStripStatusLabelTempBanned,
             this.toolStripStatusLabel6,
-            this.toolStripStatusLabelAccountBanned});
+            this.toolStripStatusLabelAccountBanned,
+            this.toolStripStatusLabel3,
+            this.toolStripStatusLabelTotalProxies,
+            this.toolStripStatusLabel5,
+            this.toolStripStatusLabelBannedProxies});
             this.statusStripStats.Location = new System.Drawing.Point(0, 454);
             this.statusStripStats.Name = "statusStripStats";
             this.statusStripStats.Size = new System.Drawing.Size(1041, 28);
@@ -819,6 +835,32 @@
             this.toolStripStatusLabelAccountBanned.Name = "toolStripStatusLabelAccountBanned";
             this.toolStripStatusLabelAccountBanned.Size = new System.Drawing.Size(19, 23);
             this.toolStripStatusLabelAccountBanned.Text = "0";
+            // 
+            // toolStripStatusLabel3
+            // 
+            this.toolStripStatusLabel3.Margin = new System.Windows.Forms.Padding(20, 3, 0, 2);
+            this.toolStripStatusLabel3.Name = "toolStripStatusLabel3";
+            this.toolStripStatusLabel3.Size = new System.Drawing.Size(68, 23);
+            this.toolStripStatusLabel3.Text = "Proxies:";
+            // 
+            // toolStripStatusLabelTotalProxies
+            // 
+            this.toolStripStatusLabelTotalProxies.Name = "toolStripStatusLabelTotalProxies";
+            this.toolStripStatusLabelTotalProxies.Size = new System.Drawing.Size(19, 23);
+            this.toolStripStatusLabelTotalProxies.Text = "0";
+            // 
+            // toolStripStatusLabel5
+            // 
+            this.toolStripStatusLabel5.Margin = new System.Windows.Forms.Padding(20, 3, 0, 2);
+            this.toolStripStatusLabel5.Name = "toolStripStatusLabel5";
+            this.toolStripStatusLabel5.Size = new System.Drawing.Size(131, 23);
+            this.toolStripStatusLabel5.Text = "Banned Proxies:";
+            // 
+            // toolStripStatusLabelBannedProxies
+            // 
+            this.toolStripStatusLabelBannedProxies.Name = "toolStripStatusLabelBannedProxies";
+            this.toolStripStatusLabelBannedProxies.Size = new System.Drawing.Size(19, 23);
+            this.toolStripStatusLabelBannedProxies.Text = "0";
             // 
             // timerStatusBarUpdate
             // 
@@ -877,7 +919,7 @@
             this.olvColumnUsageCount,
             this.olvColumnCurrentFails,
             this.olvColumnProxyBanned});
-            this.fastObjectListViewProxies.ContextMenuStrip = this.contextMenuStripAccounts;
+            this.fastObjectListViewProxies.ContextMenuStrip = this.contextMenuStripProxy;
             this.fastObjectListViewProxies.Cursor = System.Windows.Forms.Cursors.Default;
             this.fastObjectListViewProxies.Dock = System.Windows.Forms.DockStyle.Fill;
             this.fastObjectListViewProxies.FullRowSelect = true;
@@ -892,18 +934,15 @@
             this.fastObjectListViewProxies.View = System.Windows.Forms.View.Details;
             this.fastObjectListViewProxies.VirtualMode = true;
             // 
-            // fileSystemWatcher1
-            // 
-            this.fileSystemWatcher1.EnableRaisingEvents = true;
-            this.fileSystemWatcher1.SynchronizingObject = this;
-            // 
             // olvColumnProxyIP
             // 
+            this.olvColumnProxyIP.AspectName = "Address";
             this.olvColumnProxyIP.Text = "Proxy";
             this.olvColumnProxyIP.Width = 124;
             // 
             // olvColumnProxyPort
             // 
+            this.olvColumnProxyPort.AspectName = "Port";
             this.olvColumnProxyPort.Text = "Port";
             this.olvColumnProxyPort.Width = 104;
             // 
@@ -912,6 +951,11 @@
             this.olvColumnProxyAuth.Text = "Authentication";
             this.olvColumnProxyAuth.Width = 135;
             // 
+            // olvColumnUsageCount
+            // 
+            this.olvColumnUsageCount.Text = "Usage Count";
+            this.olvColumnUsageCount.Width = 131;
+            // 
             // olvColumnCurrentFails
             // 
             this.olvColumnCurrentFails.Text = "Failures";
@@ -919,12 +963,80 @@
             // 
             // olvColumnProxyBanned
             // 
+            this.olvColumnProxyBanned.AspectName = "IsBanned";
+            this.olvColumnProxyBanned.AspectToStringFormat = "";
             this.olvColumnProxyBanned.Text = "Banned";
             // 
-            // olvColumnUsageCount
+            // contextMenuStripProxy
             // 
-            this.olvColumnUsageCount.Text = "Usage Count";
-            this.olvColumnUsageCount.Width = 131;
+            this.contextMenuStripProxy.ImageScalingSize = new System.Drawing.Size(22, 22);
+            this.contextMenuStripProxy.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.addToolStripMenuItem,
+            this.setToolStripMenuItem,
+            this.deleteToolStripMenuItem1});
+            this.contextMenuStripProxy.Name = "contextMenuStripProxy";
+            this.contextMenuStripProxy.Size = new System.Drawing.Size(140, 88);
+            // 
+            // addToolStripMenuItem
+            // 
+            this.addToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.singleProxyToolStripMenuItem,
+            this.fromFileToolStripMenuItem});
+            this.addToolStripMenuItem.Name = "addToolStripMenuItem";
+            this.addToolStripMenuItem.Size = new System.Drawing.Size(139, 28);
+            this.addToolStripMenuItem.Text = "Add";
+            // 
+            // singleProxyToolStripMenuItem
+            // 
+            this.singleProxyToolStripMenuItem.Name = "singleProxyToolStripMenuItem";
+            this.singleProxyToolStripMenuItem.Size = new System.Drawing.Size(183, 28);
+            this.singleProxyToolStripMenuItem.Text = "Single Proxy";
+            this.singleProxyToolStripMenuItem.Click += new System.EventHandler(this.singleProxyToolStripMenuItem_Click);
+            // 
+            // fromFileToolStripMenuItem
+            // 
+            this.fromFileToolStripMenuItem.Name = "fromFileToolStripMenuItem";
+            this.fromFileToolStripMenuItem.Size = new System.Drawing.Size(183, 28);
+            this.fromFileToolStripMenuItem.Text = "From File...";
+            this.fromFileToolStripMenuItem.Click += new System.EventHandler(this.fromFileToolStripMenuItem_Click);
+            // 
+            // setToolStripMenuItem
+            // 
+            this.setToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.maxConcurrentFailsToolStripMenuItem,
+            this.maxAccountsToolStripMenuItem,
+            this.resetBanStateToolStripMenuItem});
+            this.setToolStripMenuItem.Name = "setToolStripMenuItem";
+            this.setToolStripMenuItem.Size = new System.Drawing.Size(139, 28);
+            this.setToolStripMenuItem.Text = "Set";
+            // 
+            // maxConcurrentFailsToolStripMenuItem
+            // 
+            this.maxConcurrentFailsToolStripMenuItem.Name = "maxConcurrentFailsToolStripMenuItem";
+            this.maxConcurrentFailsToolStripMenuItem.Size = new System.Drawing.Size(249, 28);
+            this.maxConcurrentFailsToolStripMenuItem.Text = "Max Concurrent Fails";
+            this.maxConcurrentFailsToolStripMenuItem.Click += new System.EventHandler(this.maxConcurrentFailsToolStripMenuItem_Click);
+            // 
+            // maxAccountsToolStripMenuItem
+            // 
+            this.maxAccountsToolStripMenuItem.Name = "maxAccountsToolStripMenuItem";
+            this.maxAccountsToolStripMenuItem.Size = new System.Drawing.Size(249, 28);
+            this.maxAccountsToolStripMenuItem.Text = "Max Accounts";
+            this.maxAccountsToolStripMenuItem.Click += new System.EventHandler(this.maxAccountsToolStripMenuItem_Click);
+            // 
+            // resetBanStateToolStripMenuItem
+            // 
+            this.resetBanStateToolStripMenuItem.Name = "resetBanStateToolStripMenuItem";
+            this.resetBanStateToolStripMenuItem.Size = new System.Drawing.Size(249, 28);
+            this.resetBanStateToolStripMenuItem.Text = "Reset Ban State";
+            this.resetBanStateToolStripMenuItem.Click += new System.EventHandler(this.resetBanStateToolStripMenuItem_Click);
+            // 
+            // deleteToolStripMenuItem1
+            // 
+            this.deleteToolStripMenuItem1.Name = "deleteToolStripMenuItem1";
+            this.deleteToolStripMenuItem1.Size = new System.Drawing.Size(139, 28);
+            this.deleteToolStripMenuItem1.Text = "Delete";
+            this.deleteToolStripMenuItem1.Click += new System.EventHandler(this.deleteToolStripMenuItem1_Click);
             // 
             // MainForm
             // 
@@ -945,7 +1057,7 @@
             this.tabPageAccounts.ResumeLayout(false);
             this.tabPageProxies.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewProxies)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher1)).EndInit();
+            this.contextMenuStripProxy.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1043,13 +1155,25 @@
         private System.Windows.Forms.TabPage tabPageAccounts;
         private System.Windows.Forms.TabPage tabPageProxies;
         private BrightIdeasSoftware.FastObjectListView fastObjectListViewProxies;
-        private System.IO.FileSystemWatcher fileSystemWatcher1;
         private BrightIdeasSoftware.OLVColumn olvColumnProxyIP;
         private BrightIdeasSoftware.OLVColumn olvColumnProxyPort;
         private BrightIdeasSoftware.OLVColumn olvColumnProxyAuth;
         private BrightIdeasSoftware.OLVColumn olvColumnCurrentFails;
         private BrightIdeasSoftware.OLVColumn olvColumnProxyBanned;
         private BrightIdeasSoftware.OLVColumn olvColumnUsageCount;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStripProxy;
+        private System.Windows.Forms.ToolStripMenuItem addToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem singleProxyToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem fromFileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem setToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem maxConcurrentFailsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem maxAccountsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem resetBanStateToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel3;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelTotalProxies;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel5;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelBannedProxies;
     }
 }
 

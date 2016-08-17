@@ -85,6 +85,7 @@ namespace PokemonGoGUI
         public int ProxyPort { get; set; }
         public string ProxyUsername { get; set; }
         public string ProxyPassword { get; set; }
+        public bool AutoRotateProxies { get; set; }
 
         public bool StopOnIPBan { get; set; }
         public int MaxFailBeforeReset { get; set; }

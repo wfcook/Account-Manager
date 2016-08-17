@@ -32,7 +32,7 @@ namespace PokemonGoGUI
         private ProxyHandler _proxyHandler = new ProxyHandler();
 
         private readonly string _saveFile = "data";
-        private const string _versionNumber = "1.2.3";
+        private const string _versionNumber = "1.2.4";
 
         public MainForm()
         {
@@ -49,7 +49,32 @@ namespace PokemonGoGUI
 
             Text = "GoManager - v" + _versionNumber;
 
-            UpdateStatusBar();
+            olvColumnProxyAuth.AspectGetter = delegate(object x)
+            {
+                GoProxy proxy = (GoProxy)x;
+
+                if(String.IsNullOrEmpty(proxy.Username) || String.IsNullOrEmpty(proxy.Password))
+                {
+                    return String.Empty;
+                }
+
+                return String.Format("{0}:{1}", proxy.Password, proxy.Username);
+            };
+
+            olvColumnCurrentFails.AspectGetter = delegate(object x)
+            {
+                GoProxy proxy = (GoProxy)x;
+
+                return String.Format("{0}/{1}", proxy.CurrentConcurrentFails, proxy.MaxConcurrentFails);
+            };
+
+
+            olvColumnUsageCount.AspectGetter = delegate(object x)
+            {
+                GoProxy proxy = (GoProxy)x;
+
+                return String.Format("{0}/{1}", proxy.CurrentAccounts, proxy.MaxAccounts);
+            };
         }
 
         private void ShowDetails(IEnumerable<Manager> managers)
@@ -88,6 +113,8 @@ namespace PokemonGoGUI
             this.Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
 
             await LoadSettings();
+
+            UpdateStatusBar();
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -392,6 +419,7 @@ namespace PokemonGoGUI
             int tempBanned = 0;
             int running = 0;
             int permBan = 0;
+            int bannedProxies = 0;
 
             List<Manager> tempManagers = new List<Manager>(_managers);
 
@@ -418,6 +446,12 @@ namespace PokemonGoGUI
             toolStripStatusLabelAccountBanned.Text = permBan.ToString();
             toolStripStatusLabelTempBanned.Text = tempBanned.ToString();
             toolStripStatusLabelTotalRunning.Text = running.ToString();
+
+            if(_proxyHandler.Proxies != null)
+            {
+                toolStripStatusLabelTotalProxies.Text = _proxyHandler.Proxies.Count.ToString();
+                toolStripStatusLabelBannedProxies.Text = _proxyHandler.Proxies.Count(x => x.IsBanned).ToString();
+            }
         }
 
         private async void wConfigToolStripMenuItem_Click(object sender, EventArgs e)
@@ -529,14 +563,24 @@ namespace PokemonGoGUI
 
         private void timerListViewUpdate_Tick(object sender, EventArgs e)
         {
-            if(_managers.Count == 0)
+            if (tabControlProxies.SelectedTab == tabPageAccounts)
             {
-                return;
+                if (_managers.Count == 0)
+                {
+                    return;
+                }
+
+                fastObjectListViewMain.RefreshObject(_managers[0]);
             }
+            else if(tabControlProxies.SelectedTab == tabPageProxies)
+            {
+                if(_proxyHandler.Proxies.Count == 0)
+                {
+                    return;
+                }
 
-            fastObjectListViewMain.RefreshObject(_managers[0]);
-
-            UpdateStatusBar();
+                fastObjectListViewProxies.RefreshObject(_proxyHandler.Proxies.First());
+            }
         }
 
         private void clearProxiesToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1352,11 +1396,163 @@ namespace PokemonGoGUI
             MessageBox.Show(LargeAddressAware.IsLargeAware(Application.ExecutablePath).ToString());
         }
 
+        #region Proxies
+
         private void tabControlProxies_SelectedIndexChanged(object sender, EventArgs e)
         {
             if(tabControlProxies.SelectedTab == tabPageProxies)
             {
+                fastObjectListViewProxies.SetObjects(_proxyHandler.Proxies);
             }
         }
+
+        private void resetBanStateToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach(GoProxy proxy in fastObjectListViewProxies.SelectedObjects)
+            {
+                _proxyHandler.MarkProxy(proxy, false);
+            }
+
+            fastObjectListViewProxies.RefreshSelectedObjects();
+        }
+
+        private void singleProxyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string data = Prompt.ShowDialog("Add proxy", "Proxy");
+
+            if(String.IsNullOrEmpty(data))
+            {
+                return;
+            }
+
+            bool success = _proxyHandler.AddProxy(data);
+
+            if(!success)
+            {
+                MessageBox.Show("Invalid proxy format");
+                return;
+            }
+
+            fastObjectListViewProxies.SetObjects(_proxyHandler.Proxies);
+        }
+
+        private void fromFileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string fileName = String.Empty;
+            using (OpenFileDialog ofd = new OpenFileDialog())
+            {
+                ofd.Title = "Open proxy file";
+                ofd.Filter = "Text Files (*.txt)|*.txt|All Files (*.*)|*.*";
+
+                if (ofd.ShowDialog() == DialogResult.OK)
+                {
+                    fileName = ofd.FileName;
+                }
+            }
+
+            if (String.IsNullOrEmpty(fileName))
+            {
+                return;
+            }
+
+            try
+            {
+                string[] proxyData = File.ReadAllLines(fileName);
+
+                int count = 0;
+
+                foreach (string pData in proxyData)
+                {
+                    if(_proxyHandler.AddProxy(pData))
+                    {
+                        ++count;
+                    }
+                }
+
+                fastObjectListViewProxies.SetObjects(_proxyHandler.Proxies);
+
+                MessageBox.Show(String.Format("Imported {0} proxies", count), "Info");
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show("Failed to import proxy file. Ex: {0}", ex.Message);
+            }
+        }
+
+        private void deleteToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            int count = fastObjectListViewProxies.SelectedObjects.Count;
+
+            if(count == 0)
+            {
+                return;
+            }
+
+            DialogResult result = MessageBox.Show(String.Format("Are you sure you want to delete {0} proxies?", count), "Confirmation", MessageBoxButtons.YesNo);
+
+            if(result != DialogResult.Yes)
+            {
+                return;
+            }
+
+            foreach(GoProxy proxy in fastObjectListViewProxies.SelectedObjects)
+            {
+                _proxyHandler.RemoveProxy(proxy);
+            }
+
+            fastObjectListViewProxies.SetObjects(_proxyHandler.Proxies);
+        }
+
+        private void maxConcurrentFailsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string data = Prompt.ShowDialog("Max concurrent fails", "Set fails", "3");
+
+            if(String.IsNullOrEmpty(data))
+            {
+                return;
+            }
+
+            int value = 0;
+
+            if(!Int32.TryParse(data, out value) || value <= 0)
+            {
+                MessageBox.Show("Invalid value");
+                return;
+            }
+
+            foreach(GoProxy proxy in fastObjectListViewProxies.SelectedObjects)
+            {
+                proxy.MaxConcurrentFails = value;
+            }
+
+            fastObjectListViewProxies.RefreshSelectedObjects();
+        }
+
+        private void maxAccountsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string data = Prompt.ShowDialog("Max Accounts", "Set Accounts", "3");
+
+            if (String.IsNullOrEmpty(data))
+            {
+                return;
+            }
+
+            int value = 0;
+
+            if (!Int32.TryParse(data, out value) || value <= 0)
+            {
+                MessageBox.Show("Invalid value");
+                return;
+            }
+
+            foreach (GoProxy proxy in fastObjectListViewProxies.SelectedObjects)
+            {
+                proxy.MaxAccounts = value;
+            }
+
+            fastObjectListViewProxies.RefreshSelectedObjects();
+        }
+
+        #endregion
     }
 }
