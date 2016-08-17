@@ -933,6 +933,7 @@
             this.fastObjectListViewProxies.UseFiltering = true;
             this.fastObjectListViewProxies.View = System.Windows.Forms.View.Details;
             this.fastObjectListViewProxies.VirtualMode = true;
+            this.fastObjectListViewProxies.FormatCell += new System.EventHandler<BrightIdeasSoftware.FormatCellEventArgs>(this.fastObjectListViewProxies_FormatCell);
             // 
             // olvColumnProxyIP
             // 

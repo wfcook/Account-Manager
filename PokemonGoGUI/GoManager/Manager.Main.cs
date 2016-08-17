@@ -14,6 +14,7 @@ using PokemonGo.RocketAPI.Helpers;
 using PokemonGoGUI.Enums;
 using PokemonGoGUI.GoManager.Models;
 using PokemonGoGUI.Models;
+using PokemonGoGUI.ProxyManager;
 using System;
 using System.Collections.Generic;
 using System.Device.Location;
@@ -45,11 +46,18 @@ namespace PokemonGoGUI.GoManager
         private bool _wasAutoRestarted = false;
 
         private ManualResetEvent _pauser = new ManualResetEvent(true);
+        private bool _proxyIssue = false;
+
+        //Needs to be saved on close
+        public GoProxy CurrentProxy { get; set; }
+
+        [JsonIgnore]
+        public ProxyHandler ProxyHandler { get; set; }
 
         private bool _isPaused { get { return !_pauser.WaitOne(0); } }
 
         [JsonConstructor]
-        public Manager(bool jsonConstructor = true)
+        public Manager()
         {
             //Json.net can't deserialize the type
             Stats = new PlayerStats();
@@ -58,11 +66,12 @@ namespace PokemonGoGUI.GoManager
             LoadFarmLocations();
         }
 
-        public Manager()
+        public Manager(ProxyHandler handler)
         {
             UserSettings = new Settings();
             Logs = new List<Log>();
             Stats = new PlayerStats();
+            ProxyHandler = handler;
 
             LoadFarmLocations();
         }
@@ -76,6 +85,11 @@ namespace PokemonGoGUI.GoManager
                 MethodResult result = await _client.DoLogin(UserSettings);
 
                 LogCaller(new LoggerEventArgs(result.Message, LoggerTypes.Debug));
+
+                if(CurrentProxy != null)
+                {
+                    ProxyHandler.ResetFailCounter(CurrentProxy);
+                }
 
                 return result;
             }
@@ -111,6 +125,7 @@ namespace PokemonGoGUI.GoManager
                     }
                     else
                     {
+                        _proxyIssue = true;
                         LogCaller(new LoggerEventArgs("Login request has timed out. Possible bad proxy.", LoggerTypes.ProxyIssue));
                     }
 
@@ -124,6 +139,7 @@ namespace PokemonGoGUI.GoManager
                 {
                     if (ex.Status == WebExceptionStatus.ConnectionClosed)
                     {
+                        _proxyIssue = true;
                         LogCaller(new LoggerEventArgs("Potential http proxy detected. Only https proxies will work.", LoggerTypes.ProxyIssue));
 
                         return new MethodResult
@@ -134,6 +150,7 @@ namespace PokemonGoGUI.GoManager
                     else if (ex.Status == WebExceptionStatus.ConnectFailure || ex.Status == WebExceptionStatus.ProtocolError || ex.Status == WebExceptionStatus.ReceiveFailure
                         || ex.Status == WebExceptionStatus.ServerProtocolViolation)
                     {
+                        _proxyIssue = true;
                         LogCaller(new LoggerEventArgs("Proxy is offline", LoggerTypes.ProxyIssue));
 
                         return new MethodResult
@@ -158,6 +175,7 @@ namespace PokemonGoGUI.GoManager
                     }
                     else
                     {
+                        _proxyIssue = true;
                         LogCaller(new LoggerEventArgs("Login request has timed out. Possible bad proxy", LoggerTypes.ProxyIssue));
                     }
 
@@ -189,13 +207,20 @@ namespace PokemonGoGUI.GoManager
 
                 if(!String.IsNullOrEmpty(Proxy))
                 {
+                    if(CurrentProxy != null)
+                    {
+                        ProxyHandler.MarkProxy(CurrentProxy, true);
+                    }
+
                     message = "Proxy IP is banned.";
                 }
                 else
                 {
                     message = "IP address is banned.";
                 }
-                
+
+                _proxyIssue = true;
+
                 LogCaller(new LoggerEventArgs(message, LoggerTypes.ProxyIssue));
 
                 return new MethodResult
@@ -386,6 +411,59 @@ namespace PokemonGoGUI.GoManager
 
                 WaitPaused();
 
+                if ((_proxyIssue || CurrentProxy == null) && UserSettings.AutoRotateProxies)
+                {
+                    if(_proxyIssue && CurrentProxy != null)
+                    {
+                        ProxyHandler.IncreaseFailCounter(CurrentProxy);
+                    }
+
+                    //Decrease usage
+                    if (CurrentProxy != null)
+                    {
+                        ProxyHandler.ProxyUsed(CurrentProxy, false);
+                    }
+
+                    //Get new
+                    CurrentProxy = ProxyHandler.GetRandomProxy();
+
+                    if (CurrentProxy == null)
+                    {
+                        LogCaller(new LoggerEventArgs("No available proxies left. Will recheck every 5 seconds", LoggerTypes.Warning));
+                    }
+
+                    while (CurrentProxy == null && IsRunning)
+                    {
+                        await Task.Delay(5000);
+
+                        CurrentProxy = ProxyHandler.GetRandomProxy();
+                    }
+
+                    //Program is stopping
+                    if(CurrentProxy == null)
+                    {
+                        continue;
+                    }
+
+                    ProxyHandler.ProxyUsed(CurrentProxy, true);
+
+                    UserSettings.ProxyIP = CurrentProxy.Address;
+                    UserSettings.ProxyPort = CurrentProxy.Port;
+                    UserSettings.ProxyUsername = CurrentProxy.Username;
+                    UserSettings.ProxyPassword = CurrentProxy.Password;
+
+
+                    LogCaller(new LoggerEventArgs(String.Format("Changing proxy to {0}", CurrentProxy.ToString()), LoggerTypes.Info));
+
+                    //Have to restart to set proxy
+                    Restart();
+
+                    _proxyIssue = false;
+
+                    continue;
+                }
+
+
                 StartingUp = true;
 
                 if(currentFails >= UserSettings.MaxFailBeforeReset)
@@ -529,6 +607,7 @@ namespace PokemonGoGUI.GoManager
 
                     if(totalStops == 0)
                     {
+                        _proxyIssue = false;
                         _potentialPokeStopBan = false;
 
                         LogCaller(new LoggerEventArgs(String.Format("{0}. Failure {1}/{2}", pokestops.Message, currentFails, UserSettings.MaxFailBeforeReset), LoggerTypes.Warning));

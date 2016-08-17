@@ -626,6 +626,11 @@ namespace PokemonGoGUI.UI
 
         private async void buttonExportConfig_Click(object sender, EventArgs e)
         {
+            if(!SaveSettings())
+            {
+                return;
+            }
+
             using (SaveFileDialog sfd = new SaveFileDialog())
             {
                 sfd.Filter = "Json Files (*.json)|*.json|All Files (*.*)|*.*";

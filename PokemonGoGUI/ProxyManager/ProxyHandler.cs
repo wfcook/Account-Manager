@@ -107,7 +107,7 @@ namespace PokemonGoGUI.ProxyManager
             lock(Proxies)
             {
                 availableProxies = Proxies.Where(x =>
-                            x.MaxConcurrentFails > x.CurrentConcurrentFails &&
+                            x.MaxConcurrentFails >= x.CurrentConcurrentFails &&
                             !x.IsBanned).ToList();
             }
 

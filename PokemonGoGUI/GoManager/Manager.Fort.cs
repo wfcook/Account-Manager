@@ -59,6 +59,7 @@ namespace PokemonGoGUI.GoManager
                         else //This error should never happen normally, so assume temp ban
                         {
                             _potentialPokeStopBan = true;
+                            _proxyIssue = true;
                             //Display error only on first notice
                             LogCaller(new LoggerEventArgs("Pokestop out of range. Potential temp pokestop ban or IP ban", LoggerTypes.Warning));
                         }

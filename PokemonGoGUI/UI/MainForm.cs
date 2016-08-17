@@ -156,7 +156,7 @@ namespace PokemonGoGUI
                     ProgramExportModel model = Serializer.FromJson<ProgramExportModel>(data);
 
                     _proxyHandler = model.ProxyHandler;
-                    _managers = model.Managers;
+                    tempManagers = model.Managers;
                     _schedulers = model.Schedulers;
                 }
                 else
@@ -174,6 +174,7 @@ namespace PokemonGoGUI
 
                 foreach(Manager manager in tempManagers)
                 {
+                    manager.ProxyHandler = _proxyHandler;
                     manager.OnLog += manager_OnLog;
                     manager.OnInventoryUpdate += manager_OnInventoryUpdate;
 
@@ -247,7 +248,7 @@ namespace PokemonGoGUI
 
         private void addNewToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Manager manager = new Manager();
+            Manager manager = new Manager(_proxyHandler);
 
             AccountSettingsForm asForm = new AccountSettingsForm(manager);
             
@@ -528,7 +529,7 @@ namespace PokemonGoGUI
                         continue;
                     }
 
-                    Manager manager = new Manager();
+                    Manager manager = new Manager(_proxyHandler);
 
                     if (useConfig)
                     {
@@ -1574,5 +1575,48 @@ namespace PokemonGoGUI
         }
 
         #endregion
+
+        private void fastObjectListViewProxies_FormatCell(object sender, BrightIdeasSoftware.FormatCellEventArgs e)
+        {
+            GoProxy proxy = (GoProxy)e.Model;
+
+            if(e.Column == olvColumnCurrentFails)
+            {
+                if(proxy.CurrentConcurrentFails == 0)
+                {
+                    e.SubItem.ForeColor = Color.Green;
+                }
+                else if(proxy.CurrentConcurrentFails > 0)
+                {
+                    e.SubItem.ForeColor = Color.Yellow;
+                }
+                else if (proxy.CurrentConcurrentFails >= proxy.MaxAccounts)
+                {
+                    e.SubItem.ForeColor = Color.Red;
+                }
+            }
+            else if (e.Column == olvColumnProxyBanned)
+            {
+                if(proxy.IsBanned)
+                {
+                    e.SubItem.ForeColor = Color.Red;
+                }
+                else
+                {
+                    e.SubItem.ForeColor = Color.Green;
+                }
+            }
+            else if (e.Column == olvColumnUsageCount)
+            {
+                if(proxy.CurrentAccounts == 0)
+                {
+                    e.SubItem.ForeColor = Color.Green;
+                }
+                else if(proxy.CurrentAccounts <= proxy.MaxAccounts)
+                {
+                    e.SubItem.ForeColor = Color.Yellow;
+                }
+            }
+        }
     }
 }
