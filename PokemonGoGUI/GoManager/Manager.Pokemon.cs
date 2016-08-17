@@ -23,6 +23,11 @@ namespace PokemonGoGUI.GoManager
         {
             foreach (PokemonData pokemon in pokemonToTransfer.Where(x => x.Favorite == 0))
             {
+                if (!IsRunning)
+                {
+                    break;
+                }
+
                 try
                 {
                     ReleasePokemonResponse releaseResponse = await _client.Inventory.TransferPokemon(pokemon.Id);
@@ -76,7 +81,7 @@ namespace PokemonGoGUI.GoManager
             };
         }
 
-        private async Task<MethodResult<List<PokemonData>>> GetPokemonToTransfer()
+        public async Task<MethodResult<List<PokemonData>>> GetPokemonToTransfer()
         {
             if (!UserSettings.TransferPokemon)
             {

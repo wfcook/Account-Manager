@@ -8,6 +8,7 @@ using PokemonGoGUI.Extensions;
 using PokemonGoGUI.GoManager;
 using PokemonGoGUI.GoManager.Models;
 using PokemonGoGUI.Models;
+using PokemonGoGUI.ProxyManager;
 using PokemonGoGUI.UI;
 using System;
 using System.Collections.Generic;
@@ -27,7 +28,8 @@ namespace PokemonGoGUI
 {
     public partial class MainForm : Form
     {
-        List<Manager> _managers = new List<Manager>();
+        private List<Manager> _managers = new List<Manager>();
+        private ProxyHandler _proxyHandler = new ProxyHandler();
 
         private readonly string _saveFile = "data";
         private const string _versionNumber = "1.2.3";
@@ -38,7 +40,12 @@ namespace PokemonGoGUI
 
             fastObjectListViewMain.BackColor = Color.FromArgb(43, 43, 43);
             fastObjectListViewMain.ForeColor = Color.LightGray;
-            //fastObjectListViewMain.AlwaysGroupByColumn = olvColumnGroup;
+
+            //BackColor = Color.FromArgb(43, 43, 43);
+
+            //tabPage1.BorderStyle = BorderStyle.None;
+            //tabPage1.BackColor = Color.FromArgb(43, 43, 43);
+            //fastOjectListViewMain.AlwaysGroupByColumn = olvColumnGroup;
 
             Text = "GoManager - v" + _versionNumber;
 
@@ -892,7 +899,7 @@ namespace PokemonGoGUI
 
         private void setMaxRuntimeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string data = Prompt.ShowDialog("Max Runtime", "Set Max Runtime").Replace(",", ".");
+            string data = Prompt.ShowDialog("Max Runtime (hours)", "Set Max Runtime").Replace(",", ".");
             double value = 0;
 
             if (String.IsNullOrEmpty(data))
@@ -1343,6 +1350,13 @@ namespace PokemonGoGUI
         private void largeAddressAwareToolStripMenuItem_Click(object sender, EventArgs e)
         {
             MessageBox.Show(LargeAddressAware.IsLargeAware(Application.ExecutablePath).ToString());
+        }
+
+        private void tabControlProxies_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if(tabControlProxies.SelectedTab == tabPageProxies)
+            {
+            }
         }
     }
 }

@@ -107,6 +107,7 @@
     <Compile Include="Models\CatchSetting.cs" />
     <Compile Include="Models\EvolveSetting.cs" />
     <Compile Include="Models\FarmLocation.cs" />
+    <Compile Include="Models\GoProxy.cs" />
     <Compile Include="Models\InventoryItemSetting.cs" />
     <Compile Include="Models\Log.cs" />
     <Compile Include="GoManager\Manager.Events.cs" />
@@ -114,6 +115,7 @@
     <Compile Include="GoManager\Manager.Log.cs" />
     <Compile Include="Models\PokeSniperResult.cs" />
     <Compile Include="Models\TransferSettings.cs" />
+    <Compile Include="ProxyManager\ProxyHandler.cs" />
     <Compile Include="UI\AccountSettingsForm.cs">
       <SubType>Form</SubType>
     </Compile>

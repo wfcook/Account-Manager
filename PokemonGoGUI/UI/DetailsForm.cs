@@ -87,7 +87,8 @@ namespace PokemonGoGUI.UI
 
             #region Pokemon
 
-            olvColumnPokemonFavorite.AspectGetter = delegate(object x)
+           
+            olvColumnPokemonId.AspectGetter = delegate(object x)
             {
                 PokemonData pokemon = (PokemonData)x;
 
@@ -723,6 +724,24 @@ namespace PokemonGoGUI.UI
             Clipboard.SetText(log.StackTrace);
 
             MessageBox.Show("Stack trace copied");
+        }
+
+        private async void showFutureTransfersToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            showFutureTransfersToolStripMenuItem.Enabled = false;
+
+            MethodResult<List<PokemonData>> result = await _manager.GetPokemonToTransfer();
+
+            if(result.Success)
+            {
+                fastObjectListViewPokemon.SetObjects(result.Data);
+            }
+            else
+            {
+                MessageBox.Show("Failed to get pokemon to be transfered");
+            }
+
+            showFutureTransfersToolStripMenuItem.Enabled = true;
         }
     }
 }
