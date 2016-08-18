@@ -430,6 +430,7 @@ namespace PokemonGoGUI.GoManager
                     }
 
                     //Get new
+                    //This call will increment the proxy
                     CurrentProxy = ProxyHandler.GetRandomProxy();
 
                     if (CurrentProxy == null)
@@ -449,8 +450,6 @@ namespace PokemonGoGUI.GoManager
                     {
                         continue;
                     }
-
-                    ProxyHandler.ProxyUsed(CurrentProxy, true);
 
                     UserSettings.ProxyIP = CurrentProxy.Address;
                     UserSettings.ProxyPort = CurrentProxy.Port;
@@ -572,7 +571,16 @@ namespace PokemonGoGUI.GoManager
 
                     //End startup phase
                     StartingUp = false;
-                    State = BotState.Running;
+
+                    //Prevent changing back to running state
+                    if (State != BotState.Stopping)
+                    {
+                        State = BotState.Running;
+                    }
+                    else
+                    {
+                        continue;
+                    }
 
                     //Update location
                     if (_firstRun)

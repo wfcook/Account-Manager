@@ -1596,7 +1596,7 @@ namespace PokemonGoGUI
                 {
                     e.SubItem.ForeColor = Color.Yellow;
                 }
-                else if (proxy.CurrentConcurrentFails >= proxy.MaxAccounts)
+                else if (proxy.CurrentConcurrentFails >= proxy.MaxConcurrentFails)
                 {
                     e.SubItem.ForeColor = Color.Red;
                 }
@@ -1621,6 +1621,10 @@ namespace PokemonGoGUI
                 else if(proxy.CurrentAccounts <= proxy.MaxAccounts)
                 {
                     e.SubItem.ForeColor = Color.Yellow;
+                }
+                else
+                {
+                    e.SubItem.ForeColor = Color.Red;
                 }
             }
         }

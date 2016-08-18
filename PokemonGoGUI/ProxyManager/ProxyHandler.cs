@@ -107,16 +107,21 @@ namespace PokemonGoGUI.ProxyManager
             lock(Proxies)
             {
                 availableProxies = Proxies.Where(x =>
-                            x.MaxConcurrentFails >= x.CurrentConcurrentFails &&
+                            x.MaxConcurrentFails > x.CurrentConcurrentFails &&
+                            x.MaxAccounts > x.CurrentAccounts &&
                             !x.IsBanned).ToList();
-            }
 
-            if(availableProxies.Count == 0)
-            {
-                return null;
-            }
+                if (availableProxies.Count == 0)
+                {
+                    return null;
+                }
 
-            return availableProxies[GetRandom(0, availableProxies.Count)];
+                GoProxy returnProxy = availableProxies[GetRandom(0, availableProxies.Count)];
+
+                ProxyUsed(returnProxy, true);
+
+                return returnProxy;
+            }
         }
 
         public void RemoveProxy(GoProxy proxy)
