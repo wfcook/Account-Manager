@@ -213,7 +213,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="encrypt.dll">
+    <Content Include="encrypt_64.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="encrypt_32.dll">

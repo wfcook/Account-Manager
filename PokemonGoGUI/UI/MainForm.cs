@@ -115,9 +115,45 @@ namespace PokemonGoGUI
         {
             this.Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
 
+            RenameDLL();
+
             await LoadSettings();
 
             UpdateStatusBar();
+        }
+
+        private void RenameDLL()
+        {
+            try
+            {
+                if(File.Exists("encrypt.dll"))
+                {
+                    return;
+                }
+
+                string dllToRename = "encrypt_32.dll";
+
+                if(Environment.Is64BitOperatingSystem)
+                {
+                    dllToRename = "encrypt_64.dll";
+                }
+
+                if(!File.Exists(dllToRename))
+                {
+                    MessageBox.Show(String.Format("Missing {0} library. Closing ...", dllToRename), "Warning");
+
+                    Application.Exit();
+                    return;
+                }
+
+                File.Copy(dllToRename, "encrypt.dll");
+            }
+            catch(Exception)
+            {
+                MessageBox.Show("Failed to rename proper encrypt dll.\nTo manually complete this ...\nRename encrypt_32 to encrypt.dll for 32bit system.\nRename encrypt_64 to encrypt.dll for 64bit system", "Info");
+
+                Application.Exit();
+            }
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
