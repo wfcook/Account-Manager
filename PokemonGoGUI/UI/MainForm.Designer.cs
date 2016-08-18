@@ -104,6 +104,7 @@
             this.logViewerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.garbageCollectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.largeAddressAwareToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.enableSpoofToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.timerListViewUpdate = new System.Windows.Forms.Timer(this.components);
             this.statusStripStats = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
@@ -730,7 +731,8 @@
             this.devToolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.logViewerToolStripMenuItem,
             this.garbageCollectionToolStripMenuItem,
-            this.largeAddressAwareToolStripMenuItem});
+            this.largeAddressAwareToolStripMenuItem,
+            this.enableSpoofToolStripMenuItem});
             this.devToolsToolStripMenuItem.Name = "devToolsToolStripMenuItem";
             this.devToolsToolStripMenuItem.Size = new System.Drawing.Size(217, 28);
             this.devToolsToolStripMenuItem.Text = "Dev Tools";
@@ -756,6 +758,13 @@
             this.largeAddressAwareToolStripMenuItem.Size = new System.Drawing.Size(249, 28);
             this.largeAddressAwareToolStripMenuItem.Text = "Large Address Aware";
             this.largeAddressAwareToolStripMenuItem.Click += new System.EventHandler(this.largeAddressAwareToolStripMenuItem_Click);
+            // 
+            // enableSpoofToolStripMenuItem
+            // 
+            this.enableSpoofToolStripMenuItem.Name = "enableSpoofToolStripMenuItem";
+            this.enableSpoofToolStripMenuItem.Size = new System.Drawing.Size(249, 28);
+            this.enableSpoofToolStripMenuItem.Text = "Enable SPF";
+            this.enableSpoofToolStripMenuItem.Click += new System.EventHandler(this.enableSpoofToolStripMenuItem_Click);
             // 
             // timerListViewUpdate
             // 
@@ -1175,6 +1184,7 @@
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelTotalProxies;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel5;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelBannedProxies;
+        private System.Windows.Forms.ToolStripMenuItem enableSpoofToolStripMenuItem;
     }
 }
 

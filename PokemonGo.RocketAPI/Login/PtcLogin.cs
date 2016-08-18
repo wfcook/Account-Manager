@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using PokemonGo.RocketAPI.Exceptions;
+using PokemonGo.RocketAPI.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -19,6 +20,7 @@ namespace PokemonGo.RocketAPI.Login
         readonly CookieContainer cookies = new CookieContainer();
         readonly int defaultTimeout = 10000;
         readonly ProxyEx defaultProxy;
+        string ip = IPGenerate.GenerateIP();
 
         public PtcLogin(string username, string password, ISettings settings)
         {
@@ -135,8 +137,8 @@ namespace PokemonGo.RocketAPI.Login
             using(WebClientEx wc = new WebClientEx())
             {
                 wc.CookieContainer = cookies;
-                wc.Proxy = defaultProxy.AsWebProxy();
                 wc.Timeout = defaultTimeout;
+                wc.Proxy = defaultProxy.AsWebProxy();
 
                 string response = Encoding.UTF8.GetString(await wc.UploadValuesTaskAsync(Resources.PtcLoginUrl, loginRequest));
 
@@ -151,8 +153,8 @@ namespace PokemonGo.RocketAPI.Login
             using(WebClientEx wc = new WebClientEx())
             {
                 wc.CookieContainer = cookies;
-                wc.Proxy = defaultProxy.AsWebProxy();
                 wc.Timeout = defaultTimeout;
+                wc.Proxy = defaultProxy.AsWebProxy();
 
                 string response = await wc.DownloadStringTaskAsync(Resources.PtcLoginUrl);
                 SessionData sessionData = JsonConvert.DeserializeObject<SessionData>(response);
@@ -168,8 +170,8 @@ namespace PokemonGo.RocketAPI.Login
             using(WebClientEx wc = new WebClientEx())
             {
                 wc.CookieContainer = cookies;
-                wc.Proxy = defaultProxy.AsWebProxy();
                 wc.Timeout = defaultTimeout;
+                wc.Proxy = defaultProxy.AsWebProxy();
 
                 string tokenData = Encoding.UTF8.GetString(await wc.UploadValuesTaskAsync(Resources.PtcLoginOauth, tokenRequest));
 

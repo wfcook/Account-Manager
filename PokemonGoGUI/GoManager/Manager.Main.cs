@@ -160,6 +160,11 @@ namespace PokemonGoGUI.GoManager
                     }
                 }
 
+                if(!String.IsNullOrEmpty(Proxy))
+                {
+                    _proxyIssue = true;
+                }
+
                 LogCaller(new LoggerEventArgs("Failed to login due to request error", LoggerTypes.Exception, ex.InnerException));
 
                 return new MethodResult
@@ -254,7 +259,7 @@ namespace PokemonGoGUI.GoManager
 
         public MethodResult Start()
         {
-            ServicePointManager.DefaultConnectionLimit = 100;
+            ServicePointManager.DefaultConnectionLimit = Int32.MaxValue;
 
             if(IsRunning)
             {

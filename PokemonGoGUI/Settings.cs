@@ -45,6 +45,7 @@ namespace PokemonGoGUI
         public int MinBallsToSnipe { get; set; }
         public int MaxPokemonPerSnipe { get; set; }
         public int SnipeAfterLevel { get; set; }
+        public bool SPF { get; set; }
 
         public int MaxLogs { get; set; }
         public double RunForHours{ get; set; }

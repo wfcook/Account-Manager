@@ -32,6 +32,7 @@ namespace PokemonGoGUI
         private List<Manager> _managers = new List<Manager>();
         private ProxyHandler _proxyHandler = new ProxyHandler();
         private List<Scheduler> _schedulers = new List<Scheduler>();
+        private bool _spf = false;
 
         private readonly string _saveFile = "data";
         private const string _versionNumber = "1.2.4";
@@ -356,6 +357,7 @@ namespace PokemonGoGUI
 
             foreach(Manager manager in fastObjectListViewMain.SelectedObjects)
             {
+                manager.UserSettings.SPF = _spf;
                 manager.Start();
 
                 await Task.Delay(200);
@@ -1403,6 +1405,8 @@ namespace PokemonGoGUI
                 return;
             }
 
+            snipePokemonToolStripMenuItem.Enabled = false;
+
             foreach(Manager manager in fastObjectListViewMain.SelectedObjects)
             {
                 //Snipe all at once
@@ -1410,6 +1414,8 @@ namespace PokemonGoGUI
 
                 await Task.Delay(100);
             }
+
+            snipePokemonToolStripMenuItem.Enabled = true;
         }
 
         private void largeAddressAwareToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1617,6 +1623,13 @@ namespace PokemonGoGUI
                     e.SubItem.ForeColor = Color.Yellow;
                 }
             }
+        }
+
+        private void enableSpoofToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _spf = !_spf;
+
+            enableSpoofToolStripMenuItem.Checked = _spf;
         }
     }
 }

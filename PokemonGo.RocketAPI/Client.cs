@@ -94,10 +94,10 @@ namespace PokemonGo.RocketAPI
                 AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
                 AllowAutoRedirect = false,
                 Proxy = proxy.AsWebProxy(),
-                UseProxy = true,
+                UseProxy = true
             };
 
-            PokemonHttpClient = new PokemonHttpClient(handler);
+            PokemonHttpClient = new PokemonHttpClient(handler, Settings);
 
         }
 

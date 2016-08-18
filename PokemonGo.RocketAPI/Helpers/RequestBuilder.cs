@@ -78,6 +78,16 @@ namespace PokemonGo.RocketAPI.Helpers
                 FirmwareType = settings.FirmwareType,
                 FirmwareFingerprint = settings.FirmwareFingerprint
             };
+
+            float altitude = 0;
+            long requestLength = 200;
+
+            lock(RandomDevice)
+            {
+                altitude = (float)(RandomDevice.NextDouble() * (15 - 10) + 10);
+                requestLength = (long)RandomDevice.Next(100, 300);
+            }
+
             sig.LocationFix.Add(new POGOProtos.Networking.Signature.Types.LocationFix()
             {
                 Provider = "network",
@@ -85,8 +95,9 @@ namespace PokemonGo.RocketAPI.Helpers
                 //Unk4 = 120,
                 Latitude = (float)_latitude,
                 Longitude = (float)_longitude,
-                Altitude = (float)_altitude,
-                TimestampSinceStart = (ulong)_internalWatch.ElapsedMilliseconds - 200,
+                //Altitude = (float)_altitude,
+                Altitude = altitude, //Just random for now
+                TimestampSinceStart = (ulong)(_internalWatch.ElapsedMilliseconds - requestLength),
                 Floor = 3,
                 LocationType = 1
             });
@@ -110,8 +121,15 @@ namespace PokemonGo.RocketAPI.Helpers
                 sig.RequestHash.Add(BitConverter.ToUInt64(x.ComputeHash(req.ToByteArray()), 0));
 
             //static for now
-            sig.Unk22 = ByteString.CopyFrom(new byte[16] { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F });
+            //sig.Unk22 = ByteString.CopyFrom(new byte[16] { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F });
+            byte[] buffer = new byte[16];
 
+            lock (RandomDevice)
+            {
+                RandomDevice.NextBytes(buffer);
+            }
+
+            sig.Unk22 = ByteString.CopyFrom(buffer);
 
             Unknown6 val = new Unknown6();
             val.RequestType = 6;
@@ -132,7 +150,7 @@ namespace PokemonGo.RocketAPI.Helpers
                 int outputSize = outputLength;
                 EncryptNative(ptr, bytes.Length, new byte[32], 32, ptrOutput, out outputSize);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //Console.WriteLine(ex.Message);
             }
