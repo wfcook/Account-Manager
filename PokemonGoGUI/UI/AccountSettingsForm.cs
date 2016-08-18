@@ -128,6 +128,7 @@ namespace PokemonGoGUI.UI
             numericUpDownMaxFailBeforeReset.Value = settings.MaxFailBeforeReset;
             checkBoxStopOnIPBan.Checked = settings.StopOnIPBan;
             checkBoxAutoRotateProxies.Checked = settings.AutoRotateProxies;
+            numericUpDownSearchFortBelow.Value = new Decimal(settings.SearchFortBelowPercent);
 
             //Humanization
             checkBoxHumanizeThrows.Checked = settings.EnableHumanization;
@@ -144,6 +145,8 @@ namespace PokemonGoGUI.UI
 
             numericUpDownPlayerActionDelay.Value = settings.DelayBetweenPlayerActions;
             numericUpDownPlayerActionRandomiz.Value = settings.PlayerActionDelayRandom;
+
+            numericUpDownWalkingOffset.Value = new Decimal(settings.WalkingSpeedOffset);
             //End humanization
 
             //Device settings
@@ -297,6 +300,7 @@ namespace PokemonGoGUI.UI
             userSettings.MaxPokemonPerSnipe = (int)numericUpDownMaxPokemonPerSnipe.Value;
             userSettings.SnipeAfterLevel = (int)numericUpDownSnipeAfterLevel.Value;
             userSettings.StopAtMinAccountState = (AccountState)comboBoxMinAccountState.SelectedItem;
+            userSettings.SearchFortBelowPercent = (double)numericUpDownSearchFortBelow.Value;
 
             userSettings.RunForHours = (double)numericUpDownRunForHours.Value;
             userSettings.MaxLogs = (int)numericUpDownMaxLogs.Value;
@@ -320,6 +324,7 @@ namespace PokemonGoGUI.UI
             userSettings.DelayBetweenPlayerActions = (int)numericUpDownPlayerActionDelay.Value;
             userSettings.PlayerActionDelayRandom = (int)numericUpDownPlayerActionRandomiz.Value;
 
+            userSettings.WalkingSpeedOffset = (double)numericUpDownWalkingOffset.Value;
             //End humanization
 
             //Device settings

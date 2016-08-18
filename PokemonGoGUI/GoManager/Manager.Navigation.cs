@@ -68,8 +68,7 @@ namespace PokemonGoGUI.GoManager
 
         public async Task<MethodResult> WalkToLocation(GeoCoordinate location, Func<Task<MethodResult>> functionExecutedWhileWalking)
         {
-            //double speedDownTo = 20 / 3.6;
-            double speedInMetersPerSecond = UserSettings.WalkingSpeed / 3.6;
+            double speedInMetersPerSecond = UserSettings.WalkingSpeed / 3.6 + WalkOffset();
 
             GeoCoordinate sourceLocation = new GeoCoordinate(_client.CurrentLatitude, _client.CurrentLongitude);
             double distanceToTarget = CalculateDistanceInMeters(sourceLocation, location);
@@ -98,6 +97,8 @@ namespace PokemonGoGUI.GoManager
             while (CalculateDistanceInMeters(sourceLocation, location) >= 30)
             {
                 await Task.Delay(CalculateDelay(UserSettings.DelayBetweenLocationUpdates, UserSettings.LocationupdateDelayRandom));
+
+                speedInMetersPerSecond = UserSettings.WalkingSpeed / 3.6 + WalkOffset();
 
                 double millisecondsUntilGetUpdatePlayerLocationResponse = (DateTime.Now - requestSendDateTime).TotalMilliseconds;
 
@@ -264,6 +265,18 @@ namespace PokemonGoGUI.GoManager
         private double ToRad(double degrees)
         {
             return degrees * (Math.PI / 180);
+        }
+
+        private double WalkOffset()
+        {
+            lock(_rand)
+            {
+                double maxOffset = UserSettings.WalkingSpeedOffset * 2;
+
+                double offset = _rand.NextDouble() * maxOffset - UserSettings.WalkingSpeedOffset;
+
+                return offset;
+            }
         }
     }
 }

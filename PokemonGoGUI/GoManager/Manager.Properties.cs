@@ -226,6 +226,34 @@ namespace PokemonGoGUI.GoManager
         }
 
         [JsonIgnore]
+        public string RemainingRunningTime
+        {
+            get
+            {
+                if (MaxRuntime == 0)
+                {
+                    return "Unlimited";
+                }
+
+                double remainingHours = MaxRuntime - _runningStopwatch.Elapsed.TotalHours;
+                TimeSpan time = TimeSpan.FromHours(remainingHours);
+
+
+                if (time.TotalHours < 1)
+                {
+                    return String.Format("{0:0}m {1:00}s", time.Minutes, time.Seconds);
+                }
+
+                if (time.TotalHours >= 24)
+                {
+                    return String.Format("{0:0}d {1:0}h {2:00}m", time.Days, time.Hours, time.Seconds);
+                }
+
+                return String.Format("{0:0}h {1:00}m {2:00}s", time.Hours, time.Minutes, time.Seconds);
+            }
+        }
+
+        [JsonIgnore]
         public string ExpRatio
         {
             get

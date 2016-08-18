@@ -193,6 +193,11 @@
             this.toolTipProxy = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipMinAccountState = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipHumanizeThrows = new System.Windows.Forms.ToolTip(this.components);
+            this.label45 = new System.Windows.Forms.Label();
+            this.numericUpDownWalkingOffset = new System.Windows.Forms.NumericUpDown();
+            this.label46 = new System.Windows.Forms.Label();
+            this.label47 = new System.Windows.Forms.Label();
+            this.numericUpDownSearchFortBelow = new System.Windows.Forms.NumericUpDown();
             this.tabControlMain.SuspendLayout();
             this.tabPageDetails.SuspendLayout();
             this.tabControlSettings.SuspendLayout();
@@ -229,6 +234,8 @@
             this.tabPageTransfer.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewTransfer)).BeginInit();
             this.contextMenuStripTransfer.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownWalkingOffset)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSearchFortBelow)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControlMain
@@ -281,6 +288,7 @@
             // 
             this.tabPageSettingsGeneral.Controls.Add(this.comboBoxMinAccountState);
             this.tabPageSettingsGeneral.Controls.Add(this.label9);
+            this.tabPageSettingsGeneral.Controls.Add(this.numericUpDownSearchFortBelow);
             this.tabPageSettingsGeneral.Controls.Add(this.numericUpDownRunForHours);
             this.tabPageSettingsGeneral.Controls.Add(this.numericUpDownMaxLogs);
             this.tabPageSettingsGeneral.Controls.Add(this.numericUpDownSnipeAfterLevel);
@@ -299,7 +307,9 @@
             this.tabPageSettingsGeneral.Controls.Add(this.textBoxPtcPassword);
             this.tabPageSettingsGeneral.Controls.Add(this.textBoxName);
             this.tabPageSettingsGeneral.Controls.Add(this.label15);
+            this.tabPageSettingsGeneral.Controls.Add(this.label47);
             this.tabPageSettingsGeneral.Controls.Add(this.label11);
+            this.tabPageSettingsGeneral.Controls.Add(this.label46);
             this.tabPageSettingsGeneral.Controls.Add(this.label42);
             this.tabPageSettingsGeneral.Controls.Add(this.label41);
             this.tabPageSettingsGeneral.Controls.Add(this.label43);
@@ -344,7 +354,7 @@
             // numericUpDownRunForHours
             // 
             this.numericUpDownRunForHours.DecimalPlaces = 2;
-            this.numericUpDownRunForHours.Location = new System.Drawing.Point(184, 309);
+            this.numericUpDownRunForHours.Location = new System.Drawing.Point(222, 337);
             this.numericUpDownRunForHours.Maximum = new decimal(new int[] {
             99999,
             0,
@@ -574,7 +584,7 @@
             // label42
             // 
             this.label42.AutoSize = true;
-            this.label42.Location = new System.Drawing.Point(252, 311);
+            this.label42.Location = new System.Drawing.Point(290, 339);
             this.label42.Name = "label42";
             this.label42.Size = new System.Drawing.Size(41, 16);
             this.label42.TabIndex = 17;
@@ -583,7 +593,7 @@
             // label41
             // 
             this.label41.AutoSize = true;
-            this.label41.Location = new System.Drawing.Point(128, 311);
+            this.label41.Location = new System.Drawing.Point(166, 339);
             this.label41.Name = "label41";
             this.label41.Size = new System.Drawing.Size(50, 16);
             this.label41.TabIndex = 18;
@@ -787,6 +797,7 @@
             // 
             // tabPageSettingsNavigation
             // 
+            this.tabPageSettingsNavigation.Controls.Add(this.numericUpDownWalkingOffset);
             this.tabPageSettingsNavigation.Controls.Add(this.comboBoxLocationPresets);
             this.tabPageSettingsNavigation.Controls.Add(this.label10);
             this.tabPageSettingsNavigation.Controls.Add(this.checkBoxEncounterWhileWalking);
@@ -795,6 +806,7 @@
             this.tabPageSettingsNavigation.Controls.Add(this.textBoxMaxTravelDistance);
             this.tabPageSettingsNavigation.Controls.Add(this.textBoxLong);
             this.tabPageSettingsNavigation.Controls.Add(this.textBoxLat);
+            this.tabPageSettingsNavigation.Controls.Add(this.label45);
             this.tabPageSettingsNavigation.Controls.Add(this.label6);
             this.tabPageSettingsNavigation.Controls.Add(this.label8);
             this.tabPageSettingsNavigation.Controls.Add(this.label5);
@@ -1955,6 +1967,54 @@
             this.restoreDefaultsToolStripMenuItem2.Text = "Restore Defaults";
             this.restoreDefaultsToolStripMenuItem2.Click += new System.EventHandler(this.restoreDefaultsToolStripMenuItem2_Click);
             // 
+            // label45
+            // 
+            this.label45.AutoSize = true;
+            this.label45.Location = new System.Drawing.Point(259, 149);
+            this.label45.Name = "label45";
+            this.label45.Size = new System.Drawing.Size(23, 16);
+            this.label45.TabIndex = 43;
+            this.label45.Text = "+/-";
+            // 
+            // numericUpDownWalkingOffset
+            // 
+            this.numericUpDownWalkingOffset.DecimalPlaces = 2;
+            this.numericUpDownWalkingOffset.Location = new System.Drawing.Point(288, 147);
+            this.numericUpDownWalkingOffset.Maximum = new decimal(new int[] {
+            999999,
+            0,
+            0,
+            0});
+            this.numericUpDownWalkingOffset.Name = "numericUpDownWalkingOffset";
+            this.numericUpDownWalkingOffset.Size = new System.Drawing.Size(84, 22);
+            this.numericUpDownWalkingOffset.TabIndex = 55;
+            // 
+            // label46
+            // 
+            this.label46.AutoSize = true;
+            this.label46.Location = new System.Drawing.Point(21, 311);
+            this.label46.Name = "label46";
+            this.label46.Size = new System.Drawing.Size(195, 16);
+            this.label46.TabIndex = 18;
+            this.label46.Text = "Search Pokestops when below ";
+            // 
+            // label47
+            // 
+            this.label47.AutoSize = true;
+            this.label47.Location = new System.Drawing.Point(306, 311);
+            this.label47.Name = "label47";
+            this.label47.Size = new System.Drawing.Size(93, 16);
+            this.label47.TabIndex = 17;
+            this.label47.Text = "inventory filled";
+            // 
+            // numericUpDownSearchFortBelow
+            // 
+            this.numericUpDownSearchFortBelow.DecimalPlaces = 2;
+            this.numericUpDownSearchFortBelow.Location = new System.Drawing.Point(222, 309);
+            this.numericUpDownSearchFortBelow.Name = "numericUpDownSearchFortBelow";
+            this.numericUpDownSearchFortBelow.Size = new System.Drawing.Size(78, 22);
+            this.numericUpDownSearchFortBelow.TabIndex = 11;
+            // 
             // AccountSettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -2007,6 +2067,8 @@
             this.tabPageTransfer.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewTransfer)).EndInit();
             this.contextMenuStripTransfer.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownWalkingOffset)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSearchFortBelow)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -2177,5 +2239,10 @@
         private System.Windows.Forms.NumericUpDown numericUpDownMaxFailBeforeReset;
         private System.Windows.Forms.Label label44;
         private System.Windows.Forms.CheckBox checkBoxAutoRotateProxies;
+        private System.Windows.Forms.Label label45;
+        private System.Windows.Forms.NumericUpDown numericUpDownWalkingOffset;
+        private System.Windows.Forms.NumericUpDown numericUpDownSearchFortBelow;
+        private System.Windows.Forms.Label label47;
+        private System.Windows.Forms.Label label46;
     }
 }

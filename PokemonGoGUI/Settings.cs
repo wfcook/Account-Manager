@@ -46,6 +46,7 @@ namespace PokemonGoGUI
         public int MaxPokemonPerSnipe { get; set; }
         public int SnipeAfterLevel { get; set; }
         public bool SPF { get; set; }
+        public double SearchFortBelowPercent { get; set; }
 
         public int MaxLogs { get; set; }
         public double RunForHours{ get; set; }
@@ -66,6 +67,7 @@ namespace PokemonGoGUI
         public int GeneralDelay { get; set; }
         public int GeneralDelayRandom { get; set; }
 
+        public double WalkingSpeedOffset { get; set; }
         //End Humanization
 
         public string DeviceId { get; set; }
@@ -163,6 +165,7 @@ namespace PokemonGoGUI
             MaxLogs = 400;
             MaxFailBeforeReset = 3;
             StopOnIPBan = true;
+            SearchFortBelowPercent = 100;
         }
 
         public void LoadDeviceSettings()

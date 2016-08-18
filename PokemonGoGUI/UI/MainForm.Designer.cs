@@ -142,6 +142,7 @@
             this.maxAccountsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.resetBanStateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.olvColumnRemainingTime = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewMain)).BeginInit();
             this.contextMenuStripAccounts.SuspendLayout();
             this.statusStripStats.SuspendLayout();
@@ -165,6 +166,7 @@
             this.fastObjectListViewMain.AllColumns.Add(this.olvColumnTillRankUp);
             this.fastObjectListViewMain.AllColumns.Add(this.olvColumnBotState);
             this.fastObjectListViewMain.AllColumns.Add(this.olvColumnRunningTime);
+            this.fastObjectListViewMain.AllColumns.Add(this.olvColumnRemainingTime);
             this.fastObjectListViewMain.AllColumns.Add(this.olvColumnProxy);
             this.fastObjectListViewMain.AllColumns.Add(this.olvColumnLastLogMessage);
             this.fastObjectListViewMain.AllowColumnReorder = true;
@@ -213,14 +215,12 @@
             // olvColumnLevel
             // 
             this.olvColumnLevel.AspectName = "Level";
-            this.olvColumnLevel.DisplayIndex = 3;
             this.olvColumnLevel.Text = "Level";
             this.olvColumnLevel.Width = 30;
             // 
             // olvColumnAccountState
             // 
             this.olvColumnAccountState.AspectName = "AccountState";
-            this.olvColumnAccountState.DisplayIndex = 2;
             this.olvColumnAccountState.Text = "Account Status";
             // 
             // olvColumnPokestopsFarmed
@@ -258,13 +258,11 @@
             // olvColumnRunningTime
             // 
             this.olvColumnRunningTime.AspectName = "RunningTime";
-            this.olvColumnRunningTime.DisplayIndex = 11;
             this.olvColumnRunningTime.Text = "Time";
             // 
             // olvColumnProxy
             // 
             this.olvColumnProxy.AspectName = "Proxy";
-            this.olvColumnProxy.DisplayIndex = 10;
             this.olvColumnProxy.Text = "Proxy";
             // 
             // olvColumnLastLogMessage
@@ -1075,6 +1073,13 @@
             this.deleteToolStripMenuItem1.Text = "Delete";
             this.deleteToolStripMenuItem1.Click += new System.EventHandler(this.deleteToolStripMenuItem1_Click);
             // 
+            // olvColumnRemainingTime
+            // 
+            this.olvColumnRemainingTime.AspectName = "RemainingRunningTime";
+            this.olvColumnRemainingTime.DisplayIndex = 11;
+            this.olvColumnRemainingTime.IsVisible = false;
+            this.olvColumnRemainingTime.Text = "Remaining Time";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -1215,6 +1220,7 @@
         private System.Windows.Forms.ToolStripMenuItem proxyToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem enableIPBanStopToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem enableRotateProxiesToolStripMenuItem;
+        private BrightIdeasSoftware.OLVColumn olvColumnRemainingTime;
     }
 }
 

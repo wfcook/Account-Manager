@@ -675,16 +675,25 @@ namespace PokemonGoGUI.GoManager
                         await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
                         //Search
-                        MethodResult searchResult = await SearchPokestop(pokestop);
+                        double filledInventorySpace = FilledInventorySpace();
 
-                        //OutOfRange will show up as a success
-                        if(searchResult.Success)
+                        if (filledInventorySpace < UserSettings.SearchFortBelowPercent)
                         {
-                            currentFailedStops = 0;
+                            MethodResult searchResult = await SearchPokestop(pokestop);
+
+                            //OutOfRange will show up as a success
+                            if (searchResult.Success)
+                            {
+                                currentFailedStops = 0;
+                            }
+                            else
+                            {
+                                ++currentFailedStops;
+                            }
                         }
                         else
                         {
-                            ++currentFailedStops;
+                            LogCaller(new LoggerEventArgs(String.Format("Skipping fort. Currently at {0:0.00}% filled", filledInventorySpace), LoggerTypes.Info));
                         }
 
                         //Stop bot instantly
