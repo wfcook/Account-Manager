@@ -20,7 +20,6 @@ namespace PokemonGo.RocketAPI.Login
         readonly CookieContainer cookies = new CookieContainer();
         readonly int defaultTimeout = 10000;
         readonly ProxyEx defaultProxy;
-        string ip = IPGenerate.GenerateIP();
 
         public PtcLogin(string username, string password, ISettings settings)
         {
