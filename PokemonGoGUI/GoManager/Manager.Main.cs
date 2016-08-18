@@ -478,7 +478,7 @@ namespace PokemonGoGUI.GoManager
 
                 if (_failedInventoryReponses >= _failedInventoryUntilBan)
                 {
-                    AccountState = AccountState.AccountBan;
+                    AccountState = AccountState.PermAccountBan;
 
                     LogCaller(new LoggerEventArgs("Potential account ban/deletion or server issues detected. Note: This is NOT confirmed, but we can't run it anyways. Stopping ...", LoggerTypes.Warning));
 

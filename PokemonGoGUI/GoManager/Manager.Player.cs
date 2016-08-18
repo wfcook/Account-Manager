@@ -59,14 +59,14 @@ namespace PokemonGoGUI.GoManager
             {
                 if (inventoryResult.Message == "Failed to get inventory." && potentialAccountban)
                 {
-                    AccountState = Enums.AccountState.AccountBan;
+                    AccountState = Enums.AccountState.PermAccountBan;
 
                     LogCaller(new LoggerEventArgs("Potential account ban/deletion or server issues detected. Note: This is NOT confirmed, but we can't run it anyways. Stopping ...", LoggerTypes.Warning));
                 }
             }
             else
             {
-                if(AccountState == Enums.AccountState.AccountBan)
+                if(AccountState == Enums.AccountState.PermAccountBan)
                 {
                     AccountState = Enums.AccountState.Good;
                 }

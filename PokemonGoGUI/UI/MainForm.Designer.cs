@@ -139,6 +139,9 @@
             this.maxAccountsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.resetBanStateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.proxyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.enableIPBanStopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.enableRotateProxiesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewMain)).BeginInit();
             this.contextMenuStripAccounts.SuspendLayout();
             this.statusStripStats.SuspendLayout();
@@ -299,7 +302,7 @@
             this.deleteToolStripMenuItem,
             this.devToolsToolStripMenuItem});
             this.contextMenuStripAccounts.Name = "contextMenuStrip1";
-            this.contextMenuStripAccounts.Size = new System.Drawing.Size(218, 560);
+            this.contextMenuStripAccounts.Size = new System.Drawing.Size(218, 591);
             this.contextMenuStripAccounts.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStripAccounts_Opening);
             // 
             // updateDetailsToolStripMenuItem
@@ -374,7 +377,8 @@
             this.luckyEggToolStripMenuItem,
             this.catchPokemonToolStripMenuItem,
             this.snipePokemonToolStripMenuItem,
-            this.importConfigToolStripMenuItem});
+            this.importConfigToolStripMenuItem,
+            this.proxyToolStripMenuItem});
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
             this.settingsToolStripMenuItem.Size = new System.Drawing.Size(217, 28);
             this.settingsToolStripMenuItem.Text = "Settings";
@@ -764,7 +768,7 @@
             this.enableSpoofToolStripMenuItem.Name = "enableSpoofToolStripMenuItem";
             this.enableSpoofToolStripMenuItem.Size = new System.Drawing.Size(249, 28);
             this.enableSpoofToolStripMenuItem.Text = "Enable SPF";
-            this.enableSpoofToolStripMenuItem.Click += new System.EventHandler(this.enableSpoofToolStripMenuItem_Click);
+            this.enableSpoofToolStripMenuItem.Click += new System.EventHandler(this.enableSpfToolStripMenuItem_Click);
             // 
             // timerListViewUpdate
             // 
@@ -1048,6 +1052,28 @@
             this.deleteToolStripMenuItem1.Text = "Delete";
             this.deleteToolStripMenuItem1.Click += new System.EventHandler(this.deleteToolStripMenuItem1_Click);
             // 
+            // proxyToolStripMenuItem
+            // 
+            this.proxyToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.enableIPBanStopToolStripMenuItem,
+            this.enableRotateProxiesToolStripMenuItem});
+            this.proxyToolStripMenuItem.Name = "proxyToolStripMenuItem";
+            this.proxyToolStripMenuItem.Size = new System.Drawing.Size(220, 28);
+            this.proxyToolStripMenuItem.Text = "Proxy";
+            // 
+            // enableIPBanStopToolStripMenuItem
+            // 
+            this.enableIPBanStopToolStripMenuItem.Name = "enableIPBanStopToolStripMenuItem";
+            this.enableIPBanStopToolStripMenuItem.Size = new System.Drawing.Size(255, 28);
+            this.enableIPBanStopToolStripMenuItem.Text = "Enable IP Ban Stop";
+            this.enableIPBanStopToolStripMenuItem.Click += new System.EventHandler(this.enableIPBanStopToolStripMenuItem_Click);
+            // 
+            // enableRotateProxiesToolStripMenuItem
+            // 
+            this.enableRotateProxiesToolStripMenuItem.Name = "enableRotateProxiesToolStripMenuItem";
+            this.enableRotateProxiesToolStripMenuItem.Size = new System.Drawing.Size(255, 28);
+            this.enableRotateProxiesToolStripMenuItem.Text = "Enable Rotate Proxies";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -1185,6 +1211,9 @@
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel5;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelBannedProxies;
         private System.Windows.Forms.ToolStripMenuItem enableSpoofToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem proxyToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem enableIPBanStopToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem enableRotateProxiesToolStripMenuItem;
     }
 }
 

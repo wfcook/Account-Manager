@@ -44,6 +44,9 @@ namespace PokemonGoGUI
             fastObjectListViewMain.BackColor = Color.FromArgb(43, 43, 43);
             fastObjectListViewMain.ForeColor = Color.LightGray;
 
+            fastObjectListViewProxies.BackColor = Color.FromArgb(43, 43, 43);
+            fastObjectListViewProxies.ForeColor = Color.LightGray;
+
             //BackColor = Color.FromArgb(43, 43, 43);
 
             //tabPage1.BorderStyle = BorderStyle.None;
@@ -489,7 +492,7 @@ namespace PokemonGoGUI
                     ++running;
                 }
 
-                if(manager.AccountState == AccountState.AccountBan)
+                if(manager.AccountState == AccountState.PermAccountBan)
                 {
                     ++permBan;
                 }
@@ -674,6 +677,9 @@ namespace PokemonGoGUI
                 fastObjectListViewMain.BackColor = Color.FromArgb(43, 43, 43);
                 fastObjectListViewMain.ForeColor = Color.LightGray;
 
+                fastObjectListViewProxies.BackColor = Color.FromArgb(43, 43, 43);
+                fastObjectListViewProxies.ForeColor = Color.LightGray;
+
                 fastObjectListViewMain.UseCellFormatEvents = true;
             }
             else
@@ -681,7 +687,11 @@ namespace PokemonGoGUI
                 fastObjectListViewMain.BackColor = SystemColors.Window;
                 fastObjectListViewMain.ForeColor = SystemColors.WindowText;
 
+                fastObjectListViewProxies.BackColor = SystemColors.Window;
+                fastObjectListViewProxies.ForeColor = SystemColors.WindowText;
+
                 fastObjectListViewMain.UseCellFormatEvents = false;
+                fastObjectListViewProxies.UseCellFormatEvents = false;
             }
         }
 
@@ -698,7 +708,7 @@ namespace PokemonGoGUI
             {
                 switch(manager.AccountState)
                 {
-                    case AccountState.AccountBan:
+                    case AccountState.PermAccountBan:
                         e.SubItem.ForeColor = Color.Red;
                         break;
                     case AccountState.NotVerified:
@@ -1665,11 +1675,16 @@ namespace PokemonGoGUI
             }
         }
 
-        private void enableSpoofToolStripMenuItem_Click(object sender, EventArgs e)
+        private void enableSpfToolStripMenuItem_Click(object sender, EventArgs e)
         {
             _spf = !_spf;
 
             enableSpoofToolStripMenuItem.Checked = _spf;
+        }
+
+        private void enableIPBanStopToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

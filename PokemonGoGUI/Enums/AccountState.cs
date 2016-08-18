@@ -9,7 +9,7 @@ namespace PokemonGoGUI.Enums
     public enum AccountState
     {
         Good,
-        AccountBan,
+        PermAccountBan,
         PokemonBanOrPokestopBanTemp,
         PokemonBanAndPokestopBanTemp,
         PokestopBanTemp,
