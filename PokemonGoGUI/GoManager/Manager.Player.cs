@@ -40,7 +40,7 @@ namespace PokemonGoGUI.GoManager
 
             await GetProfile(); //Don't care if it fails
 
-            await Task.Delay(500);
+            await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
             bool potentialAccountban = false;
 
@@ -51,7 +51,7 @@ namespace PokemonGoGUI.GoManager
                 potentialAccountban = true;
             }
 
-            await Task.Delay(500);
+            await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
             MethodResult inventoryResult = await UpdateInventory();
 

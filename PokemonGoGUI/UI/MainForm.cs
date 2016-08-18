@@ -1010,6 +1010,26 @@ namespace PokemonGoGUI
 
         #region Fast Settings
 
+        private void enableIPBanStopToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (Manager manager in fastObjectListViewMain.SelectedObjects)
+            {
+                manager.UserSettings.StopOnIPBan = !enableIPBanStopToolStripMenuItem.Checked;
+            }
+
+            fastObjectListViewMain.RefreshSelectedObjects();
+        }
+
+        private void enableRotateProxiesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (Manager manager in fastObjectListViewMain.SelectedObjects)
+            {
+                manager.UserSettings.AutoRotateProxies = !enableRotateProxiesToolStripMenuItem.Checked;
+            }
+
+            fastObjectListViewMain.RefreshSelectedObjects();
+        }
+
         private void setMaxRuntimeToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string data = Prompt.ShowDialog("Max Runtime (hours)", "Set Max Runtime").Replace(",", ".");
@@ -1091,6 +1111,8 @@ namespace PokemonGoGUI
             enableLuckyEggsToolStripMenuItem6.Checked = manager.UserSettings.UseLuckyEgg;
             enableSnipePokemonToolStripMenuItem3.Checked = manager.UserSettings.SnipePokemon;
             enableCatchPokemonToolStripMenuItem2.Checked = manager.UserSettings.CatchPokemon;
+            enableRotateProxiesToolStripMenuItem.Checked = manager.UserSettings.AutoRotateProxies;
+            enableIPBanStopToolStripMenuItem.Checked = manager.UserSettings.StopOnIPBan;
         }
 
         private void enableTransferToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1682,9 +1704,5 @@ namespace PokemonGoGUI
             enableSpoofToolStripMenuItem.Checked = _spf;
         }
 
-        private void enableIPBanStopToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-        }
     }
 }

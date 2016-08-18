@@ -77,6 +77,9 @@
             this.setMaxPokemonToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.afterLevelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.importConfigToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.proxyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.enableIPBanStopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.enableRotateProxiesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clearCountsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.countsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.logsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -139,9 +142,6 @@
             this.maxAccountsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.resetBanStateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.proxyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.enableIPBanStopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.enableRotateProxiesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewMain)).BeginInit();
             this.contextMenuStripAccounts.SuspendLayout();
             this.statusStripStats.SuspendLayout();
@@ -302,7 +302,7 @@
             this.deleteToolStripMenuItem,
             this.devToolsToolStripMenuItem});
             this.contextMenuStripAccounts.Name = "contextMenuStrip1";
-            this.contextMenuStripAccounts.Size = new System.Drawing.Size(218, 591);
+            this.contextMenuStripAccounts.Size = new System.Drawing.Size(218, 560);
             this.contextMenuStripAccounts.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStripAccounts_Opening);
             // 
             // updateDetailsToolStripMenuItem
@@ -370,6 +370,7 @@
             this.setGroupToolStripMenuItem,
             this.setMaxLevelToolStripMenuItem,
             this.setMaxRuntimeToolStripMenuItem,
+            this.proxyToolStripMenuItem,
             this.transferToolStripMenuItem,
             this.evolveToolStripMenuItem,
             this.recycleToolStripMenuItem,
@@ -377,8 +378,7 @@
             this.luckyEggToolStripMenuItem,
             this.catchPokemonToolStripMenuItem,
             this.snipePokemonToolStripMenuItem,
-            this.importConfigToolStripMenuItem,
-            this.proxyToolStripMenuItem});
+            this.importConfigToolStripMenuItem});
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
             this.settingsToolStripMenuItem.Size = new System.Drawing.Size(217, 28);
             this.settingsToolStripMenuItem.Text = "Settings";
@@ -555,6 +555,29 @@
             this.importConfigToolStripMenuItem.Size = new System.Drawing.Size(220, 28);
             this.importConfigToolStripMenuItem.Text = "Import Config";
             this.importConfigToolStripMenuItem.Click += new System.EventHandler(this.importConfigToolStripMenuItem_Click);
+            // 
+            // proxyToolStripMenuItem
+            // 
+            this.proxyToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.enableIPBanStopToolStripMenuItem,
+            this.enableRotateProxiesToolStripMenuItem});
+            this.proxyToolStripMenuItem.Name = "proxyToolStripMenuItem";
+            this.proxyToolStripMenuItem.Size = new System.Drawing.Size(220, 28);
+            this.proxyToolStripMenuItem.Text = "Proxy";
+            // 
+            // enableIPBanStopToolStripMenuItem
+            // 
+            this.enableIPBanStopToolStripMenuItem.Name = "enableIPBanStopToolStripMenuItem";
+            this.enableIPBanStopToolStripMenuItem.Size = new System.Drawing.Size(255, 28);
+            this.enableIPBanStopToolStripMenuItem.Text = "Enable IP Ban Stop";
+            this.enableIPBanStopToolStripMenuItem.Click += new System.EventHandler(this.enableIPBanStopToolStripMenuItem_Click);
+            // 
+            // enableRotateProxiesToolStripMenuItem
+            // 
+            this.enableRotateProxiesToolStripMenuItem.Name = "enableRotateProxiesToolStripMenuItem";
+            this.enableRotateProxiesToolStripMenuItem.Size = new System.Drawing.Size(255, 28);
+            this.enableRotateProxiesToolStripMenuItem.Text = "Enable Rotate Proxies";
+            this.enableRotateProxiesToolStripMenuItem.Click += new System.EventHandler(this.enableRotateProxiesToolStripMenuItem_Click);
             // 
             // clearCountsToolStripMenuItem
             // 
@@ -1051,28 +1074,6 @@
             this.deleteToolStripMenuItem1.Size = new System.Drawing.Size(139, 28);
             this.deleteToolStripMenuItem1.Text = "Delete";
             this.deleteToolStripMenuItem1.Click += new System.EventHandler(this.deleteToolStripMenuItem1_Click);
-            // 
-            // proxyToolStripMenuItem
-            // 
-            this.proxyToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.enableIPBanStopToolStripMenuItem,
-            this.enableRotateProxiesToolStripMenuItem});
-            this.proxyToolStripMenuItem.Name = "proxyToolStripMenuItem";
-            this.proxyToolStripMenuItem.Size = new System.Drawing.Size(220, 28);
-            this.proxyToolStripMenuItem.Text = "Proxy";
-            // 
-            // enableIPBanStopToolStripMenuItem
-            // 
-            this.enableIPBanStopToolStripMenuItem.Name = "enableIPBanStopToolStripMenuItem";
-            this.enableIPBanStopToolStripMenuItem.Size = new System.Drawing.Size(255, 28);
-            this.enableIPBanStopToolStripMenuItem.Text = "Enable IP Ban Stop";
-            this.enableIPBanStopToolStripMenuItem.Click += new System.EventHandler(this.enableIPBanStopToolStripMenuItem_Click);
-            // 
-            // enableRotateProxiesToolStripMenuItem
-            // 
-            this.enableRotateProxiesToolStripMenuItem.Name = "enableRotateProxiesToolStripMenuItem";
-            this.enableRotateProxiesToolStripMenuItem.Size = new System.Drawing.Size(255, 28);
-            this.enableRotateProxiesToolStripMenuItem.Text = "Enable Rotate Proxies";
             // 
             // MainForm
             // 
