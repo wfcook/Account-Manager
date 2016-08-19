@@ -35,7 +35,7 @@ namespace PokemonGoGUI
         private bool _spf = false;
 
         private readonly string _saveFile = "data";
-        private const string _versionNumber = "1.2.4";
+        private const string _versionNumber = "1.2.6";
 
         public MainForm()
         {

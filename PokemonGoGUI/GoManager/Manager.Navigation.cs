@@ -68,7 +68,12 @@ namespace PokemonGoGUI.GoManager
 
         public async Task<MethodResult> WalkToLocation(GeoCoordinate location, Func<Task<MethodResult>> functionExecutedWhileWalking)
         {
-            double speedInMetersPerSecond = UserSettings.WalkingSpeed / 3.6 + WalkOffset();
+            double speedInMetersPerSecond = (UserSettings.WalkingSpeed + WalkOffset()) / 3.6;
+
+            if(speedInMetersPerSecond <= 0)
+            {
+                speedInMetersPerSecond = 0;
+            }
 
             GeoCoordinate sourceLocation = new GeoCoordinate(_client.CurrentLatitude, _client.CurrentLongitude);
             double distanceToTarget = CalculateDistanceInMeters(sourceLocation, location);
@@ -94,11 +99,16 @@ namespace PokemonGoGUI.GoManager
 
             sourceLocation = new GeoCoordinate(_client.CurrentLatitude, _client.CurrentLongitude);
 
-            while (CalculateDistanceInMeters(sourceLocation, location) >= 30)
+            while (CalculateDistanceInMeters(sourceLocation, location) >= 25)
             {
                 await Task.Delay(CalculateDelay(UserSettings.DelayBetweenLocationUpdates, UserSettings.LocationupdateDelayRandom));
 
-                speedInMetersPerSecond = UserSettings.WalkingSpeed / 3.6 + WalkOffset();
+                speedInMetersPerSecond = (UserSettings.WalkingSpeed + WalkOffset()) / 3.6;
+
+                if (speedInMetersPerSecond <= 0)
+                {
+                    speedInMetersPerSecond = 0;
+                }
 
                 double millisecondsUntilGetUpdatePlayerLocationResponse = (DateTime.Now - requestSendDateTime).TotalMilliseconds;
 

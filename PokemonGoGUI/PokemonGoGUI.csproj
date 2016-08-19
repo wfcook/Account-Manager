@@ -72,8 +72,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\POGOProtos\bin\Debug\POGOProtos.dll</HintPath>
     </Reference>
-    <Reference Include="Pokemon.Go.Rocket.API">
-      <HintPath>..\PokemonGo.RocketAPI\bin\Debug\Pokemon.Go.Rocket.API.dll</HintPath>
+    <Reference Include="Pokemon-Go-Rocket-API">
+      <HintPath>..\PokemonGo.RocketAPI\bin\Release\Pokemon-Go-Rocket-API.dll</HintPath>
     </Reference>
     <Reference Include="S2Geometry">
       <HintPath>..\S2Geometry.dll</HintPath>
@@ -100,9 +100,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountScheduler\Scheduler.cs" />
+    <Compile Include="AccountScheduler\SchedulerLimiter.cs" />
     <Compile Include="Enums\AccountState.cs" />
     <Compile Include="Enums\BotState.cs" />
     <Compile Include="Enums\CheckType.cs" />
+    <Compile Include="Enums\SchedulerOption.cs" />
     <Compile Include="Enums\TransferType.cs" />
     <Compile Include="Extensions\Compression.cs" />
     <Compile Include="Extensions\LargeAddressAware.cs" />

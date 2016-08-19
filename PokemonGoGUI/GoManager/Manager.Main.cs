@@ -480,7 +480,7 @@ namespace PokemonGoGUI.GoManager
                 {
                     AccountState = AccountState.PermAccountBan;
 
-                    LogCaller(new LoggerEventArgs("Potential account ban/deletion or server issues detected. Note: This is NOT confirmed, but we can't run it anyways. Stopping ...", LoggerTypes.Warning));
+                    LogCaller(new LoggerEventArgs("Potential account ban", LoggerTypes.Warning));
 
                     Stop();
 

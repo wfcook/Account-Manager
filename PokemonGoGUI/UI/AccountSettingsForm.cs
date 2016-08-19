@@ -268,6 +268,12 @@ namespace PokemonGoGUI.UI
                 return false;
             }
 
+            if (walkingSpeed < (double)numericUpDownWalkingOffset.Value)
+            {
+                MessageBox.Show("Walking offset must be more than walking speed", "Warning");
+                return false;
+            }
+
             if (radioButtonPtc.Checked)
             {
                 userSettings.AuthType = AuthType.Ptc;
@@ -276,6 +282,7 @@ namespace PokemonGoGUI.UI
             {
                 userSettings.AuthType = AuthType.Google;
             }
+
 
             userSettings.MimicWalking = checkBoxMimicWalking.Checked;
             userSettings.PtcUsername = textBoxPtcUsername.Text;
