@@ -24,7 +24,7 @@ namespace PokemonGo.RocketAPI.Rpc
                 PokemonId = pokemonId
             };
 
-            return await PostProtoPayload<Request, ReleasePokemonResponse>(RequestType.ReleasePokemon, message);
+            return await PostProtoPayload<Request, ReleasePokemonResponse>(RequestType.ReleasePokemon, message).ConfigureAwait(false);
         }
 
         public async Task<EvolvePokemonResponse> EvolvePokemon(ulong pokemonId)
@@ -34,7 +34,7 @@ namespace PokemonGo.RocketAPI.Rpc
                 PokemonId = pokemonId
             };
 
-            return await PostProtoPayload<Request, EvolvePokemonResponse>(RequestType.EvolvePokemon, message);
+            return await PostProtoPayload<Request, EvolvePokemonResponse>(RequestType.EvolvePokemon, message).ConfigureAwait(false);
         }
 
         public async Task<UpgradePokemonResponse> UpgradePokemon(ulong pokemonId)
@@ -44,12 +44,12 @@ namespace PokemonGo.RocketAPI.Rpc
                 PokemonId = pokemonId
             };
 
-            return await PostProtoPayload<Request, UpgradePokemonResponse>(RequestType.UpgradePokemon, message);
+            return await PostProtoPayload<Request, UpgradePokemonResponse>(RequestType.UpgradePokemon, message).ConfigureAwait(false);
         }
 
         public async Task<GetInventoryResponse> GetInventory()
         {
-            return await PostProtoPayload<Request, GetInventoryResponse>(RequestType.GetInventory, new GetInventoryMessage());
+            return await PostProtoPayload<Request, GetInventoryResponse>(RequestType.GetInventory, new GetInventoryMessage()).ConfigureAwait(false);
         }
 
         public async Task<RecycleInventoryItemResponse> RecycleItem(ItemId itemId, int amount)
@@ -59,8 +59,8 @@ namespace PokemonGo.RocketAPI.Rpc
                 ItemId = itemId,
                 Count = amount
             };
-            
-            return await PostProtoPayload<Request, RecycleInventoryItemResponse>(RequestType.RecycleInventoryItem, message);
+
+            return await PostProtoPayload<Request, RecycleInventoryItemResponse>(RequestType.RecycleInventoryItem, message).ConfigureAwait(false);
         }
 
         public async Task<UseItemXpBoostResponse> UseItemXpBoost()
@@ -69,8 +69,8 @@ namespace PokemonGo.RocketAPI.Rpc
             {
                 ItemId = ItemId.ItemLuckyEgg
             };
-            
-            return await PostProtoPayload<Request, UseItemXpBoostResponse>(RequestType.UseItemXpBoost, message);
+
+            return await PostProtoPayload<Request, UseItemXpBoostResponse>(RequestType.UseItemXpBoost, message).ConfigureAwait(false);
         }
 
         public async Task<UseItemEggIncubatorResponse> UseItemEggIncubator(string itemId, ulong pokemonId)
@@ -81,12 +81,12 @@ namespace PokemonGo.RocketAPI.Rpc
                 PokemonId = pokemonId
             };
 
-            return await PostProtoPayload<Request, UseItemEggIncubatorResponse>(RequestType.UseItemEggIncubator, message);
+            return await PostProtoPayload<Request, UseItemEggIncubatorResponse>(RequestType.UseItemEggIncubator, message).ConfigureAwait(false);
         }
 
         public async Task<GetHatchedEggsResponse> GetHatchedEgg()
         {
-            return await PostProtoPayload<Request, GetHatchedEggsResponse>(RequestType.GetHatchedEggs, new GetHatchedEggsMessage());
+            return await PostProtoPayload<Request, GetHatchedEggsResponse>(RequestType.GetHatchedEggs, new GetHatchedEggsMessage()).ConfigureAwait(false);
         }
 
         public async Task<UseItemPotionResponse> UseItemPotion(ItemId itemId, ulong pokemonId)
@@ -97,7 +97,7 @@ namespace PokemonGo.RocketAPI.Rpc
                 PokemonId = pokemonId
             };
 
-            return await PostProtoPayload<Request, UseItemPotionResponse>(RequestType.UseItemPotion, message);
+            return await PostProtoPayload<Request, UseItemPotionResponse>(RequestType.UseItemPotion, message).ConfigureAwait(false);
         }
 
         public async Task<UseItemEggIncubatorResponse> UseItemRevive(ItemId itemId, ulong pokemonId)
@@ -108,7 +108,7 @@ namespace PokemonGo.RocketAPI.Rpc
                 PokemonId = pokemonId
             };
 
-            return await PostProtoPayload<Request, UseItemEggIncubatorResponse>(RequestType.UseItemEggIncubator, message);
+            return await PostProtoPayload<Request, UseItemEggIncubatorResponse>(RequestType.UseItemEggIncubator, message).ConfigureAwait(false);
         }
 
         public async Task<UseIncenseResponse> UseIncense(ItemId incenseType)
@@ -118,7 +118,7 @@ namespace PokemonGo.RocketAPI.Rpc
                 IncenseType = incenseType
             };
 
-            return await PostProtoPayload<Request, UseIncenseResponse>(RequestType.UseIncense, message);
+            return await PostProtoPayload<Request, UseIncenseResponse>(RequestType.UseIncense, message).ConfigureAwait(false);
         }
 
         public async Task<UseItemGymResponse> UseItemInGym(string gymId, ItemId itemId)
@@ -131,7 +131,7 @@ namespace PokemonGo.RocketAPI.Rpc
                 PlayerLongitude = _client.CurrentLongitude
             };
 
-            return await PostProtoPayload<Request, UseItemGymResponse>(RequestType.UseItemGym, message);
+            return await PostProtoPayload<Request, UseItemGymResponse>(RequestType.UseItemGym, message).ConfigureAwait(false);
         }
 
         public async Task<NicknamePokemonResponse> NicknamePokemon(ulong pokemonId, string nickName)
@@ -142,7 +142,7 @@ namespace PokemonGo.RocketAPI.Rpc
                 Nickname = nickName
             };
 
-            return await PostProtoPayload<Request, NicknamePokemonResponse>(RequestType.NicknamePokemon, message);
+            return await PostProtoPayload<Request, NicknamePokemonResponse>(RequestType.NicknamePokemon, message).ConfigureAwait(false);
         }
 
         public async Task<SetFavoritePokemonResponse> SetFavoritePokemon(ulong pokemonId, bool isFavorite)
@@ -153,7 +153,7 @@ namespace PokemonGo.RocketAPI.Rpc
                 IsFavorite = isFavorite
             };
 
-            return await PostProtoPayload<Request, SetFavoritePokemonResponse>(RequestType.SetFavoritePokemon, message);
+            return await PostProtoPayload<Request, SetFavoritePokemonResponse>(RequestType.SetFavoritePokemon, message).ConfigureAwait(false);
         }
     }
 }

@@ -165,7 +165,7 @@ namespace PokemonGoGUI
             MaxLogs = 400;
             MaxFailBeforeReset = 3;
             StopOnIPBan = true;
-            SearchFortBelowPercent = 100;
+            SearchFortBelowPercent = 1000;
         }
 
         public void LoadDeviceSettings()

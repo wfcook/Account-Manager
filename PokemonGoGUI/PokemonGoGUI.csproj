@@ -101,6 +101,8 @@
   <ItemGroup>
     <Compile Include="AccountScheduler\Scheduler.cs" />
     <Compile Include="AccountScheduler\SchedulerLimiter.cs" />
+    <Compile Include="AccountScheduler\Tracker.cs" />
+    <Compile Include="AccountScheduler\TrackerValues.cs" />
     <Compile Include="Enums\AccountState.cs" />
     <Compile Include="Enums\BotState.cs" />
     <Compile Include="Enums\CheckType.cs" />
@@ -122,6 +124,7 @@
     <Compile Include="GoManager\Manager.Player.cs" />
     <Compile Include="GoManager\Manager.Pokemon.cs" />
     <Compile Include="GoManager\Manager.Properties.cs" />
+    <Compile Include="GoManager\Manager.Scheduler.cs" />
     <Compile Include="GoManager\Manager.Settings.cs" />
     <Compile Include="GoManager\Manager.Sniper.cs" />
     <Compile Include="Models\AccountExportModel.cs" />

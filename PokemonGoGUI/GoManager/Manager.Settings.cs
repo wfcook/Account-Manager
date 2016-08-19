@@ -317,13 +317,7 @@ namespace PokemonGoGUI.GoManager
         {
             UserSettings.RandomizeDeviceId();
         }
-
-        /*
-        public void RestoreSniperDefaults()
-        {
-            UserSettings.LoadSniperSettings();
-        }*/
-
+        
         public override bool Equals(object obj)
         {
             Manager tempManager = obj as Manager;

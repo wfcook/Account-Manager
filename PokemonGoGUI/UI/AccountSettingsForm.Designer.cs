@@ -2011,6 +2011,11 @@
             // 
             this.numericUpDownSearchFortBelow.DecimalPlaces = 2;
             this.numericUpDownSearchFortBelow.Location = new System.Drawing.Point(222, 309);
+            this.numericUpDownSearchFortBelow.Maximum = new decimal(new int[] {
+            1000000,
+            0,
+            0,
+            0});
             this.numericUpDownSearchFortBelow.Name = "numericUpDownSearchFortBelow";
             this.numericUpDownSearchFortBelow.Size = new System.Drawing.Size(78, 22);
             this.numericUpDownSearchFortBelow.TabIndex = 11;

@@ -41,20 +41,20 @@ namespace PokemonGo.RocketAPI.Rpc
             where TResponsePayload : IMessage<TResponsePayload>, new()
         {
             var requestEnvelops = RequestBuilder.GetRequestEnvelope(type, message);
-            return await _client.PokemonHttpClient.PostProtoPayload<TRequest, TResponsePayload>(ApiUrl, requestEnvelops);
+            return await _client.PokemonHttpClient.PostProtoPayload<TRequest, TResponsePayload>(ApiUrl, requestEnvelops).ConfigureAwait(false);
         }
 
         protected async Task<TResponsePayload> PostProtoPayload<TRequest, TResponsePayload>(RequestEnvelope requestEnvelope) where TRequest : IMessage<TRequest>
             where TResponsePayload : IMessage<TResponsePayload>, new()
         {
-            return await _client.PokemonHttpClient.PostProtoPayload<TRequest, TResponsePayload>(ApiUrl, requestEnvelope);
+            return await _client.PokemonHttpClient.PostProtoPayload<TRequest, TResponsePayload>(ApiUrl, requestEnvelope).ConfigureAwait(false);
         }
 
         protected async Task<Tuple<T1, T2>> PostProtoPayload<TRequest, T1, T2>(RequestEnvelope requestEnvelope) where TRequest : IMessage<TRequest>
             where T1 : class, IMessage<T1>, new()
             where T2 : class, IMessage<T2>, new()
         {
-            var responses = await PostProtoPayload<TRequest>(requestEnvelope, typeof (T1), typeof (T2));
+            var responses = await PostProtoPayload<TRequest>(requestEnvelope, typeof(T1), typeof(T2)).ConfigureAwait(false);
             return new Tuple<T1, T2>(responses[0] as T1, responses[1] as T2);
         }
 
@@ -63,7 +63,7 @@ namespace PokemonGo.RocketAPI.Rpc
             where T2 : class, IMessage<T2>, new()
             where T3 : class, IMessage<T3>, new()
         {
-            var responses = await PostProtoPayload<TRequest>(requestEnvelope, typeof(T1), typeof(T2), typeof(T3));
+            var responses = await PostProtoPayload<TRequest>(requestEnvelope, typeof(T1), typeof(T2), typeof(T3)).ConfigureAwait(false);
             return new Tuple<T1, T2, T3>(responses[0] as T1, responses[1] as T2, responses[2] as T3);
         }
 
@@ -73,7 +73,7 @@ namespace PokemonGo.RocketAPI.Rpc
             where T3 : class, IMessage<T3>, new()
             where T4 : class, IMessage<T4>, new()
         {
-            var responses = await PostProtoPayload<TRequest>(requestEnvelope, typeof(T1), typeof(T2), typeof(T3), typeof(T4));
+            var responses = await PostProtoPayload<TRequest>(requestEnvelope, typeof(T1), typeof(T2), typeof(T3), typeof(T4)).ConfigureAwait(false);
             return new Tuple<T1, T2, T3, T4>(responses[0] as T1, responses[1] as T2, responses[2] as T3, responses[3] as T4);
         }
         protected async Task<Tuple<T1, T2, T3, T4, T5>> PostProtoPayload<TRequest, T1, T2, T3, T4, T5>(RequestEnvelope requestEnvelope) where TRequest : IMessage<TRequest>
@@ -89,16 +89,17 @@ namespace PokemonGo.RocketAPI.Rpc
         
         protected async Task<IMessage[]> PostProtoPayload<TRequest>(RequestEnvelope requestEnvelope, params Type[] responseTypes) where TRequest : IMessage<TRequest>
         {
-            return await _client.PokemonHttpClient.PostProtoPayload<TRequest>(ApiUrl, requestEnvelope, responseTypes);
+            return await _client.PokemonHttpClient.PostProtoPayload<TRequest>(ApiUrl, requestEnvelope, responseTypes).ConfigureAwait(false);
         }
 
         protected async Task<ResponseEnvelope> PostProto<TRequest>(RequestEnvelope requestEnvelope) where TRequest : IMessage<TRequest>
         {
-            return await _client.PokemonHttpClient.PostProto<TRequest>(ApiUrl, requestEnvelope);
+            return await _client.PokemonHttpClient.PostProto<TRequest>(ApiUrl, requestEnvelope).ConfigureAwait(false);
         }
+
         protected async Task<ResponseEnvelope> PostProto<TRequest>(string url, RequestEnvelope requestEnvelope) where TRequest : IMessage<TRequest>
         {
-            return await _client.PokemonHttpClient.PostProto<TRequest>(url, requestEnvelope);
+            return await _client.PokemonHttpClient.PostProto<TRequest>(url, requestEnvelope).ConfigureAwait(false);
         }
     }
 }

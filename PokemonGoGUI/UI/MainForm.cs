@@ -225,6 +225,8 @@ namespace PokemonGoGUI
                         manager.UserSettings.LoadDeviceSettings();
                     }
 
+                    manager.Tracker.CalculatedTrackingHours();
+
                     _managers.Add(manager);
                 }
             }
@@ -674,11 +676,16 @@ namespace PokemonGoGUI
 
             if(isChecked)
             {
+                new Scheduler();
+
                 fastObjectListViewMain.BackColor = Color.FromArgb(43, 43, 43);
                 fastObjectListViewMain.ForeColor = Color.LightGray;
 
                 fastObjectListViewProxies.BackColor = Color.FromArgb(43, 43, 43);
                 fastObjectListViewProxies.ForeColor = Color.LightGray;
+
+                fastObjectListViewScheduler.BackColor = Color.FromArgb(43, 43, 43);
+                fastObjectListViewScheduler.ForeColor = Color.LightGray;
 
                 fastObjectListViewMain.UseCellFormatEvents = true;
             }
@@ -689,6 +696,10 @@ namespace PokemonGoGUI
 
                 fastObjectListViewProxies.BackColor = SystemColors.Window;
                 fastObjectListViewProxies.ForeColor = SystemColors.WindowText;
+
+
+                fastObjectListViewScheduler.BackColor = SystemColors.Window;
+                fastObjectListViewScheduler.ForeColor = SystemColors.WindowText;
 
                 fastObjectListViewMain.UseCellFormatEvents = false;
                 fastObjectListViewProxies.UseCellFormatEvents = false;

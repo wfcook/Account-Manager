@@ -7,6 +7,7 @@ using POGOProtos.Inventory.Item;
 using POGOProtos.Networking.Responses;
 using POGOProtos.Settings.Master;
 using PokemonGo.RocketAPI;
+using PokemonGoGUI.AccountScheduler;
 using PokemonGoGUI.Enums;
 using PokemonGoGUI.GoManager.Models;
 using PokemonGoGUI.Models;
@@ -26,6 +27,39 @@ namespace PokemonGoGUI.GoManager
         public byte[] LogHeaderSettings { get; set; }
 
         public AccountState AccountState { get; set; }
+
+        public Tracker Tracker { get; set; }
+
+        [JsonIgnore]
+        public int PokemonCaught
+        {
+            get
+            {
+                if(Tracker == null)
+                {
+                    return 0;
+                }
+
+                return Tracker.PokemonCaught;
+            }
+        }
+
+        [JsonIgnore]
+        public int PokestopsFarmed
+        {
+            get
+            {
+                if (Tracker == null)
+                {
+                    return 0;
+                }
+
+                return Tracker.PokestopsFarmed;
+            }
+        }
+
+        
+
 
         [JsonIgnore]
         public string GroupName
@@ -362,12 +396,6 @@ namespace PokemonGoGUI.GoManager
                 return _expGained;
             }
         }
-
-        [JsonIgnore]
-        public int PokemonCaught { get; set; }
-
-        [JsonIgnore]
-        public int PokestopsFarmed { get; set; }
 
         [JsonIgnore]
         public int TotalPokeStopExp { get; set; }

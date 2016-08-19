@@ -11,6 +11,7 @@ using POGOProtos.Settings.Master;
 using PokemonGo.RocketAPI;
 using PokemonGo.RocketAPI.Exceptions;
 using PokemonGo.RocketAPI.Helpers;
+using PokemonGoGUI.AccountScheduler;
 using PokemonGoGUI.Enums;
 using PokemonGoGUI.GoManager.Models;
 using PokemonGoGUI.Models;
@@ -59,9 +60,9 @@ namespace PokemonGoGUI.GoManager
         [JsonConstructor]
         public Manager()
         {
-            //Json.net can't deserialize the type
             Stats = new PlayerStats();
             Logs = new List<Log>();
+            Tracker = new Tracker();
 
             LoadFarmLocations();
         }
@@ -71,6 +72,7 @@ namespace PokemonGoGUI.GoManager
             UserSettings = new Settings();
             Logs = new List<Log>();
             Stats = new PlayerStats();
+
             ProxyHandler = handler;
 
             LoadFarmLocations();
@@ -981,8 +983,8 @@ namespace PokemonGoGUI.GoManager
         {
             _fleeingPokemonResponses = 0;
             //_expGained = 0;
-            PokemonCaught = 0;
-            PokestopsFarmed = 0;
+            //PokemonCaught = 0;
+            //PokestopsFarmed = 0;
             TotalPokeStopExp = 0;
         }
     }

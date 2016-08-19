@@ -139,7 +139,7 @@ namespace PokemonGo.RocketAPI.Login
                 wc.Timeout = defaultTimeout;
                 wc.Proxy = defaultProxy.AsWebProxy();
 
-                string response = Encoding.UTF8.GetString(await wc.UploadValuesTaskAsync(Resources.PtcLoginUrl, loginRequest));
+                string response = Encoding.UTF8.GetString(await wc.UploadValuesTaskAsync(Resources.PtcLoginUrl, loginRequest).ConfigureAwait(false));
 
                 var ticketId = ExtractTicketFromResponse(response, wc.ResponseHeaders);
 
@@ -155,7 +155,7 @@ namespace PokemonGo.RocketAPI.Login
                 wc.Timeout = defaultTimeout;
                 wc.Proxy = defaultProxy.AsWebProxy();
 
-                string response = await wc.DownloadStringTaskAsync(Resources.PtcLoginUrl);
+                string response = await wc.DownloadStringTaskAsync(Resources.PtcLoginUrl).ConfigureAwait(false);
                 SessionData sessionData = JsonConvert.DeserializeObject<SessionData>(response);
 
                 return sessionData;
@@ -172,7 +172,7 @@ namespace PokemonGo.RocketAPI.Login
                 wc.Timeout = defaultTimeout;
                 wc.Proxy = defaultProxy.AsWebProxy();
 
-                string tokenData = Encoding.UTF8.GetString(await wc.UploadValuesTaskAsync(Resources.PtcLoginOauth, tokenRequest));
+                string tokenData = Encoding.UTF8.GetString(await wc.UploadValuesTaskAsync(Resources.PtcLoginOauth, tokenRequest).ConfigureAwait(false));
 
                 return HttpUtility.ParseQueryString(tokenData)["access_token"];
             }

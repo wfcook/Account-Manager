@@ -101,7 +101,7 @@ namespace PokemonGo.RocketAPI.Rpc
                 });
 
 
-            var serverResponse = await PostProto<Request>(Resources.RpcUrl, serverRequest);
+            var serverResponse = await PostProto<Request>(Resources.RpcUrl, serverRequest).ConfigureAwait(false);
 
             if (serverResponse.AuthTicket == null)
             {
