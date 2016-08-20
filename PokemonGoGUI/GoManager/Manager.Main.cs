@@ -73,6 +73,7 @@ namespace PokemonGoGUI.GoManager
             UserSettings = new Settings();
             Logs = new List<Log>();
             Stats = new PlayerStats();
+            Tracker = new PokemonGoGUI.AccountScheduler.Tracker();
 
             ProxyHandler = handler;
 
@@ -262,6 +263,12 @@ namespace PokemonGoGUI.GoManager
 
         public MethodResult Start()
         {
+            //Fixing a bug on my part
+            if(Tracker == null)
+            {
+                Tracker = new Tracker();
+            }
+
             ServicePointManager.DefaultConnectionLimit = Int32.MaxValue;
 
             if(IsRunning)

@@ -226,7 +226,10 @@ namespace PokemonGoGUI
                         manager.UserSettings.LoadDeviceSettings();
                     }
 
-                    manager.Tracker.CalculatedTrackingHours();
+                    if (manager.Tracker != null)
+                    {
+                        manager.Tracker.CalculatedTrackingHours();
+                    }
 
                     _managers.Add(manager);
                 }
@@ -1780,7 +1783,12 @@ namespace PokemonGoGUI
         {
             _spf = !_spf;
 
-            enableSpoofToolStripMenuItem.Checked = _spf;
+            foreach(Manager manager in _managers)
+            {
+                manager.UserSettings.SPF = _spf;
+            }
+
+            //enableSpoofToolStripMenuItem.Checked = _spf;
         }
 
         private void largeAddressAwareToolStripMenuItem_Click(object sender, EventArgs e)
