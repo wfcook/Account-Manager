@@ -64,7 +64,7 @@ namespace PokemonGoGUI
                     return String.Empty;
                 }
 
-                return String.Format("{0}:{1}", proxy.Password, proxy.Username);
+                return String.Format("{0}:{1}", proxy.Username, proxy.Password);
             };
 
             olvColumnCurrentFails.AspectGetter = delegate(object x)
@@ -1827,9 +1827,41 @@ namespace PokemonGoGUI
                 return;
             }
 
+            //Deleting many at once will take awhile without this
+            Dictionary<Scheduler, List<Manager>> managerSchedulers = new Dictionary<Scheduler, List<Manager>>();
+
+            foreach(Manager manager in _managers)
+            {
+                if(manager.AccountScheduler == null)
+                {
+                    continue;
+                }
+
+                if(managerSchedulers.ContainsKey(manager.AccountScheduler))
+                {
+                    managerSchedulers[manager.AccountScheduler].Add(manager);
+                }
+                else
+                {
+                    List<Manager> m = new List<Manager>();
+                    m.Add(manager);
+
+                    managerSchedulers.Add(manager.AccountScheduler, m);
+                }
+            }
+
             foreach (Scheduler scheduler in fastObjectListViewScheduler.SelectedObjects)
             {
                 _schedulers.Remove(scheduler);
+                
+                //Should always be true. If not, bug.
+                if(managerSchedulers.ContainsKey(scheduler))
+                {
+                    foreach(Manager manager in managerSchedulers[scheduler])
+                    {
+                        manager.RemoveScheduler();
+                    }
+                }
             }
 
             fastObjectListViewScheduler.SetObjects(_schedulers);

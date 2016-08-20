@@ -289,7 +289,6 @@ namespace PokemonGoGUI.GoManager
             if(!_wasAutoRestarted)
             {
                 _expGained = 0;
-                _wasAutoRestarted = false;
             }
 
             IsRunning = true;
@@ -297,6 +296,7 @@ namespace PokemonGoGUI.GoManager
             _client.SetSettings(UserSettings);
             _pauser.Set();
             _autoRestart = false;
+            //_wasAutoRestarted = false;
             _rand = new Random();
 
             State = BotState.Starting;
