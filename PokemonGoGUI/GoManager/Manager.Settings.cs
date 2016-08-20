@@ -236,7 +236,14 @@ namespace PokemonGoGUI.GoManager
 
                 UserSettings = settings;
 
-                UserSettings.RandomizeDeviceId();
+                if (!String.IsNullOrEmpty(UserSettings.DeviceBrand))
+                {
+                    UserSettings.RandomizeDeviceId();
+                }
+                else
+                {
+                    UserSettings.LoadDeviceSettings();
+                }
 
                 LogCaller(new LoggerEventArgs("Successfully imported config file", LoggerTypes.Info));
 

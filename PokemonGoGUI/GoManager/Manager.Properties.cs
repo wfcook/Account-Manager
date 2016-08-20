@@ -30,6 +30,22 @@ namespace PokemonGoGUI.GoManager
 
         public Tracker Tracker { get; set; }
 
+        public Scheduler AccountScheduler { get; set; }
+
+        [JsonIgnore]
+        public string SchedulerName
+        {
+            get
+            {
+                if(AccountScheduler == null)
+                {
+                    return String.Empty;
+                }
+
+                return AccountScheduler.Name;
+            }
+        }
+
         [JsonIgnore]
         public int PokemonCaught
         {
@@ -57,9 +73,6 @@ namespace PokemonGoGUI.GoManager
                 return Tracker.PokestopsFarmed;
             }
         }
-
-        
-
 
         [JsonIgnore]
         public string GroupName

@@ -49,6 +49,7 @@ namespace PokemonGoGUI.GoManager
         private ManualResetEvent _pauser = new ManualResetEvent(true);
         private bool _proxyIssue = false;
 
+
         //Needs to be saved on close
         public GoProxy CurrentProxy { get; set; }
 
@@ -862,6 +863,7 @@ namespace PokemonGoGUI.GoManager
 
             _pauser.Set();
             _runningStopwatch.Stop();
+            _failedInventoryReponses = 0;
 
             if(!_autoRestart)
             {

@@ -85,32 +85,32 @@ namespace PokemonGo.RocketAPI
 
         public new async Task<string> DownloadStringTaskAsync(string address)
         {
-            return await Task.Run(() => this.DownloadString(address));
+            return await Task.Run(() => this.DownloadString(address)).ConfigureAwait(false);
         }
 
         public new async Task<string> DownloadStringTaskAsync(Uri address)
         {
-            return await DownloadStringTaskAsync(address.ToString());
+            return await DownloadStringTaskAsync(address.ToString()).ConfigureAwait(false);
         }
 
         public new async Task<byte[]> DownloadDataTaskAsync(string address)
         {
-            return await Task.Run(() => this.DownloadData(address));
+            return await Task.Run(() => this.DownloadData(address)).ConfigureAwait(false);
         }
 
         public new async Task<byte[]> DownloadDataTaskAsync(Uri address)
         {
-            return await DownloadDataTaskAsync(address.ToString());
+            return await DownloadDataTaskAsync(address.ToString()).ConfigureAwait(false);
         }
 
         public new async Task DownloadFileTaskAsync(string address, string fileName)
         {
-            await Task.Run(() => this.DownloadFile(address, fileName));
+            await Task.Run(() => this.DownloadFile(address, fileName)).ConfigureAwait(false);
         }
 
         public new async Task DownloadFileTaskAsync(Uri address, string fileName)
         {
-            await DownloadFileTaskAsync(address.ToString(), fileName);
+            await DownloadFileTaskAsync(address.ToString(), fileName).ConfigureAwait(false);
         }
 
         #endregion

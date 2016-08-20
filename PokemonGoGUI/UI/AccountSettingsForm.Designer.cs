@@ -373,7 +373,7 @@
             0,
             0});
             this.numericUpDownMaxLogs.Minimum = new decimal(new int[] {
-            20,
+            4,
             0,
             0,
             0});

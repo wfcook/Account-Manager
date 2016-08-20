@@ -55,6 +55,14 @@ namespace PokemonGoGUI.GoManager
 
             MethodResult inventoryResult = await UpdateInventory();
 
+            if(inventoryResult.Success)
+            {
+                if(AccountState == Enums.AccountState.PermAccountBan)
+                {
+                    AccountState = Enums.AccountState.Good;
+                }
+            }
+
             if (!inventoryResult.Success)
             {
                 if (inventoryResult.Message == "Failed to get inventory." && potentialAccountban)
@@ -137,6 +145,7 @@ namespace PokemonGoGUI.GoManager
 
             if (Stats != null && PlayerData != null)
             {
+                builder.AppendLine(String.Format("Group: {0}", UserSettings.GroupName));
                 builder.AppendLine(String.Format("Username: {0}", UserSettings.PtcUsername));
                 builder.AppendLine(String.Format("Password: {0}", UserSettings.PtcPassword));
                 builder.AppendLine(String.Format("Level: {0}", Stats.Level));
