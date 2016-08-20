@@ -21,6 +21,7 @@ namespace PokemonGoGUI.GoManager
     {
         public async Task<MethodResult> TransferPokemon(IEnumerable<PokemonData> pokemonToTransfer)
         {
+            /*
             if (State != Enums.BotState.Stopped)
             {
                 Pause();
@@ -41,7 +42,7 @@ namespace PokemonGoGUI.GoManager
                 LogCaller(new LoggerEventArgs("Manual intervention on pausing. Aborting transfer", LoggerTypes.Info));
 
                 return new MethodResult();
-            }
+            }*/
 
             foreach (PokemonData pokemon in pokemonToTransfer.Where(x => x.Favorite == 0))
             {

@@ -35,7 +35,7 @@ namespace PokemonGoGUI
         private bool _spf = false;
 
         private readonly string _saveFile = "data";
-        private const string _versionNumber = "1.2.6";
+        private const string _versionNumber = "1.2.6c";
 
         public MainForm()
         {
@@ -163,7 +163,7 @@ namespace PokemonGoGUI
         {
             if(_managers.Any(x => x.IsRunning))
             {
-                MessageBox.Show("Please stop bots before closing");
+                MessageBox.Show("Please stop bots before closing", "Information");
 
                 e.Cancel = true;
             }
@@ -1126,6 +1126,8 @@ namespace PokemonGoGUI
 
         private void contextMenuStripAccounts_Opening(object sender, CancelEventArgs e)
         {
+            enableSpoofToolStripMenuItem.Checked = _spf;
+
             Manager manager = fastObjectListViewMain.SelectedObjects.Cast<Manager>().FirstOrDefault();
 
             if(manager == null)
@@ -1142,7 +1144,6 @@ namespace PokemonGoGUI
             enableCatchPokemonToolStripMenuItem2.Checked = manager.UserSettings.CatchPokemon;
             enableRotateProxiesToolStripMenuItem.Checked = manager.UserSettings.AutoRotateProxies;
             enableIPBanStopToolStripMenuItem.Checked = manager.UserSettings.StopOnIPBan;
-            enableSpoofToolStripMenuItem.Checked = _spf;
 
             //Remove all
             schedulerToolStripMenuItem.DropDownItems.Clear();
@@ -1826,7 +1827,7 @@ namespace PokemonGoGUI
                 return;
             }
 
-            foreach(Scheduler scheduler in _schedulers)
+            foreach (Scheduler scheduler in fastObjectListViewScheduler.SelectedObjects)
             {
                 _schedulers.Remove(scheduler);
             }
