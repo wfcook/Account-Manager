@@ -110,6 +110,8 @@ namespace PokemonGoGUI.GoManager
             {
                 Stop();
 
+                RemoveProxy();
+
                 LogCaller(new LoggerEventArgs("Account not verified. Stopping ...", LoggerTypes.Warning));
 
                 AccountState = Enums.AccountState.NotVerified;
@@ -198,6 +200,8 @@ namespace PokemonGoGUI.GoManager
                 //Puts stopping log before other log.
                 Stop();
 
+                RemoveProxy();
+
                 LogCaller(new LoggerEventArgs("Invalid credentials or account lockout. Stopping bot...", LoggerTypes.Warning, ex));
 
                 return new MethodResult
@@ -210,6 +214,7 @@ namespace PokemonGoGUI.GoManager
                 if (UserSettings.StopOnIPBan)
                 {
                     Stop();
+
                 }
 
                 string message = String.Empty;
@@ -240,6 +245,7 @@ namespace PokemonGoGUI.GoManager
             catch(GoogleException ex)
             {
                 Stop();
+                RemoveProxy();
 
                 LogCaller(new LoggerEventArgs(ex.Message, LoggerTypes.Warning));
 
@@ -833,10 +839,6 @@ namespace PokemonGoGUI.GoManager
             {
                 _wasAutoRestarted = true;
                 Start();
-            }
-            else
-            {
-                RemoveProxy();
             }
         }
 
