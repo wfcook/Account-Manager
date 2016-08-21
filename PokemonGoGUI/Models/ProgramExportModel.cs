@@ -15,5 +15,6 @@ namespace PokemonGoGUI.Models
         public ProxyHandler ProxyHandler { get; set; }
         public List<Scheduler> Schedulers { get; set; }
         public bool SPF { get; set; }
+        public bool FirstRun { get; set; }
     }
 }

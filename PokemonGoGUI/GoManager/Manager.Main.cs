@@ -97,7 +97,7 @@ namespace PokemonGoGUI.GoManager
 
                 return result;
             }
-            catch(PtcOfflineException ex)
+            catch(PtcOfflineException)
             {
                 LogCaller(new LoggerEventArgs("Ptc server offline. Please try again later.", LoggerTypes.Warning));
 
@@ -314,6 +314,7 @@ namespace PokemonGoGUI.GoManager
 
             _runningStopwatch.Start();
             _potentialPokemonBan = false;
+            _fleeingPokemonResponses = 0;
 
             t.Start();
 
@@ -922,6 +923,15 @@ namespace PokemonGoGUI.GoManager
                 {
                     Message = response.Context,
                     Success = true
+                };
+            }
+            catch (BadImageFormatException)
+            {
+                LogCaller(new LoggerEventArgs("Incorrect encrypt dll used. Please delete 'encrypt.dll' and restart the program", LoggerTypes.FatalError));
+
+                return new MethodResult
+                {
+                    Message = "Incorrect DLL used"
                 };
             }
             catch(Exception ex)

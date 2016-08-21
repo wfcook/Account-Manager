@@ -36,6 +36,8 @@ namespace PokemonGoGUI.UI
 
         private void SchedulerSettingForm_Load(object sender, EventArgs e)
         {
+
+
             UpdateDetails();
         }
 

@@ -33,6 +33,7 @@ namespace PokemonGoGUI
         private ProxyHandler _proxyHandler = new ProxyHandler();
         private List<Scheduler> _schedulers = new List<Scheduler>();
         private bool _spf = false;
+        private bool _firstRun = true;
 
         private readonly string _saveFile = "data";
         private const string _versionNumber = "1.2.6c";
@@ -137,18 +138,37 @@ namespace PokemonGoGUI
                     return;
                 }
 
-                string dllToRename = "encrypt_32.dll";
+                string dllToRename = "encrypt_{0}.dll";
 
-                if(Environment.Is64BitProcess)
+                string bit = "32";
+
+                if (Environment.Is64BitOperatingSystem)
                 {
-                    dllToRename = "encrypt_64.dll";
+                    bit = "64";
                 }
+
+                DialogResult result = MessageBox.Show(String.Format("{0}bit OS detected. Is this correct?", bit), "Confirmation", MessageBoxButtons.YesNo);
+
+                if(result == DialogResult.No)
+                {
+                    if(bit == "64")
+                    {
+                        bit = "32";
+                    }
+                    else
+                    {
+                        bit = "64";
+                    }
+                }
+
+                dllToRename = String.Format(dllToRename, bit);
 
                 if(!File.Exists(dllToRename))
                 {
                     MessageBox.Show(String.Format("Missing {0} library. Closing ...", dllToRename), "Warning");
 
-                    Application.Exit();
+                    //Prevents saving
+                    Environment.Exit(0);
                     return;
                 }
 
@@ -202,6 +222,8 @@ namespace PokemonGoGUI
                     tempManagers = model.Managers;
                     _schedulers = model.Schedulers;
                     _spf = model.SPF;
+                    _firstRun = model.FirstRun;
+
                 }
                 else
                 {
@@ -258,7 +280,8 @@ namespace PokemonGoGUI
                     Managers = _managers,
                     ProxyHandler = _proxyHandler,
                     Schedulers = _schedulers,
-                    SPF = _spf
+                    SPF = _spf,
+                    FirstRun = false
                 };
 
                 string data = Serializer.ToJson(model);
