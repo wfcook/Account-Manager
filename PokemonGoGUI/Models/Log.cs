@@ -1,11 +1,5 @@
-﻿using Newtonsoft.Json;
-using PokemonGo.RocketAPI.Exceptions;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PokemonGoGUI.GoManager.Models
 {

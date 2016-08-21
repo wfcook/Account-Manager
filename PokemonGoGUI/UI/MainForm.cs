@@ -2,7 +2,6 @@
 using POGOProtos.Enums;
 using PokemonGo.RocketAPI;
 using PokemonGo.RocketAPI.Enums;
-using PokemonGo.RocketAPI.Helpers;
 using PokemonGoGUI.AccountScheduler;
 using PokemonGoGUI.Enums;
 using PokemonGoGUI.Extensions;
@@ -14,14 +13,10 @@ using PokemonGoGUI.UI;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 

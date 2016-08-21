@@ -1,16 +1,10 @@
 ﻿using Newtonsoft.Json;
-using POGOProtos.Data;
 using POGOProtos.Data.Player;
-using POGOProtos.Enums;
 using POGOProtos.Inventory;
-using POGOProtos.Inventory.Item;
 using POGOProtos.Map.Fort;
-using POGOProtos.Map.Pokemon;
 using POGOProtos.Networking.Responses;
-using POGOProtos.Settings.Master;
 using PokemonGo.RocketAPI;
 using PokemonGo.RocketAPI.Exceptions;
-using PokemonGo.RocketAPI.Helpers;
 using PokemonGoGUI.AccountScheduler;
 using PokemonGoGUI.Enums;
 using PokemonGoGUI.GoManager.Models;
@@ -21,8 +15,6 @@ using System.Collections.Generic;
 using System.Device.Location;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 

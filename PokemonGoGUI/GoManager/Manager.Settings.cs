@@ -2,7 +2,6 @@
 using POGOProtos.Networking.Responses;
 using POGOProtos.Settings.Master;
 using PokemonGo.RocketAPI;
-using PokemonGo.RocketAPI.Helpers;
 using PokemonGoGUI.Extensions;
 using PokemonGoGUI.GoManager.Models;
 using PokemonGoGUI.Models;
@@ -10,7 +9,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace PokemonGoGUI.GoManager

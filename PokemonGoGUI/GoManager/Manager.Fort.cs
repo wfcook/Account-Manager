@@ -6,9 +6,7 @@ using PokemonGoGUI.Extensions;
 using PokemonGoGUI.GoManager.Models;
 using System;
 using System.Collections.Generic;
-using System.Device.Location;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace PokemonGoGUI.GoManager

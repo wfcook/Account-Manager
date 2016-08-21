@@ -1,5 +1,4 @@
-﻿using POGOProtos.Data.Battle;
-using POGOProtos.Map;
+﻿using POGOProtos.Map;
 using POGOProtos.Map.Fort;
 using POGOProtos.Networking.Responses;
 using PokemonGo.RocketAPI.Extensions;
@@ -7,11 +6,9 @@ using PokemonGo.RocketAPI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Device.Location;
 using POGOProtos.Map.Pokemon;
-using PokemonGoGUI.GoManager.Models;
 
 namespace PokemonGoGUI.GoManager
 {
