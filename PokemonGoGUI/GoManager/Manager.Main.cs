@@ -214,7 +214,6 @@ namespace PokemonGoGUI.GoManager
                 if (UserSettings.StopOnIPBan)
                 {
                     Stop();
-
                 }
 
                 string message = String.Empty;
