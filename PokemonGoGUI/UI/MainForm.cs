@@ -344,6 +344,9 @@ namespace PokemonGoGUI
 
                 if (!manager.IsRunning)
                 {
+                    manager.RemoveProxy();
+                    manager.RemoveScheduler();
+
                     manager.OnLog -= manager_OnLog;
                     manager.OnInventoryUpdate -= manager_OnInventoryUpdate;
 
@@ -1678,15 +1681,39 @@ namespace PokemonGoGUI
                 return;
             }
 
-            //TODO
-            /*
-             * Use dictionary to remove proxies from manager
-             * 
-             */
+            Dictionary<GoProxy, List<Manager>> pManagers = new Dictionary<GoProxy, List<Manager>>();
+
+            foreach(Manager manager in _managers)
+            {
+                if(manager.CurrentProxy == null)
+                {
+                    continue;
+                }
+
+                if(pManagers.ContainsKey(manager.CurrentProxy))
+                {
+                    pManagers[manager.CurrentProxy].Add(manager);
+                }
+                else
+                {
+                    List<Manager> m = new List<Manager>();
+                    m.Add(manager);
+
+                    pManagers.Add(manager.CurrentProxy, m);
+                }
+            }
 
             foreach(GoProxy proxy in fastObjectListViewProxies.SelectedObjects)
             {
                 _proxyHandler.RemoveProxy(proxy);
+
+                if(pManagers.ContainsKey(proxy))
+                {
+                    foreach(Manager manager in _managers)
+                    {
+                        manager.RemoveProxy();
+                    }
+                }
             }
 
             fastObjectListViewProxies.SetObjects(_proxyHandler.Proxies);
