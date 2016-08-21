@@ -716,19 +716,19 @@ namespace PokemonGoGUI.GoManager
                         //Check sniping
                         if (Stats.Level >= UserSettings.SnipeAfterLevel)
                         {
-                            if (remainingBalls >= UserSettings.MinBallsToSnipe)
+                            if (UserSettings.SnipePokemon && IsRunning && pokeStopNumber >= UserSettings.SnipeAfterPokestops && pokeStopNumber % UserSettings.SnipeAfterPokestops == 0)
                             {
-                                if (UserSettings.SnipePokemon && IsRunning && pokeStopNumber >= UserSettings.SnipeAfterPokestops && pokeStopNumber % UserSettings.SnipeAfterPokestops == 0)
+                                if (remainingBalls >= UserSettings.MinBallsToSnipe)
                                 {
                                     await SnipeAllPokemon();
                                 }
-                            }
-                            else
-                            {
-                                LogCaller(new LoggerEventArgs(String.Format("Not enough pokeballs to snipe. Need {0} have {1}", UserSettings.MinBallsToSnipe, remainingBalls), LoggerTypes.Info));
-                            }
+                                else
+                                {
+                                    LogCaller(new LoggerEventArgs(String.Format("Not enough pokeballs to snipe. Need {0} have {1}", UserSettings.MinBallsToSnipe, remainingBalls), LoggerTypes.Info));
+                                }
 
-                            await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
+                                await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
+                            }
                         }
 
                         //Clean inventory, evolve, transfer, etc on first and every 10 stops

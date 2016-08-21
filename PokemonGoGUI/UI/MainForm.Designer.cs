@@ -1256,6 +1256,7 @@
             this.Controls.Add(this.tabControlProxies);
             this.Controls.Add(this.statusStripStats);
             this.Name = "MainForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "GoManager";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.MainForm_Load);

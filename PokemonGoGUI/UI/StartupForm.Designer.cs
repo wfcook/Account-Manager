@@ -67,11 +67,11 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(12, 9);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(346, 64);
+            this.label1.Size = new System.Drawing.Size(346, 80);
             this.label1.TabIndex = 2;
             this.label1.Text = "Welcome to GoManager! \r\nRight Clicking on the next window will help you get start" +
-    "ed.\r\nIf you require any additional help, \r\nyou can always ask questions in our D" +
-    "iscord chat.";
+    "ed.\r\n\r\nIf you require any additional help, \r\nyou can always ask questions in our" +
+    " Discord chat.";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label2
@@ -132,7 +132,7 @@
             this.Controls.Add(this.checkBoxShowOnStartup);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "StartupForm";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Welcome!";
             this.Load += new System.EventHandler(this.StartupForm_Load);
             this.ResumeLayout(false);

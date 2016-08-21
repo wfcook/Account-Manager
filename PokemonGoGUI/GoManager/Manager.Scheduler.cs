@@ -66,8 +66,8 @@ namespace PokemonGoGUI.GoManager
                 {
                     //Only auto start when both are below min values
                     //Otherwise we'll get constant start/stops
-                    if (PokemonCaught <= scheduler.PokemonLimiter.Min &&
-                        PokestopsFarmed <= scheduler.PokeStoplimiter.Min)
+                    if ((PokemonCaught <= scheduler.PokemonLimiter.Min || scheduler.PokemonLimiter.Option == SchedulerOption.Nothing) &&
+                        (PokestopsFarmed <= scheduler.PokeStoplimiter.Min || scheduler.PokeStoplimiter.Option == SchedulerOption.Nothing))
                     {
                         LogCaller(new LoggerEventArgs("Auto starting (schedule) ...", LoggerTypes.Debug));
                         Start();
