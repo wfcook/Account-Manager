@@ -145,7 +145,7 @@ namespace PokemonGoGUI.GoManager
                             {
                                 if (State == BotState.Stopped)
                                 {
-                                    LogCaller(new LoggerEventArgs("Min pokemon limit reached. Enabling option", LoggerTypes.Info));
+                                    LogCaller(new LoggerEventArgs("Min pokemon limit reached. Starting...", LoggerTypes.Info));
                                     Start();
                                 }
                             }
@@ -159,32 +159,41 @@ namespace PokemonGoGUI.GoManager
             {
                 if (PokestopsFarmed >= scheduler.PokeStoplimiter.Max)
                 {
-                    LogCaller(new LoggerEventArgs("Max pokestop limit reached. Executing selected option", LoggerTypes.Info));
-
                     switch (scheduler.PokeStoplimiter.Option)
                     {
                         case SchedulerOption.DisableEnable: //No extra checks
-                            UserSettings.SearchFortBelowPercent = 0;
+                            if (UserSettings.SearchFortBelowPercent != 0)
+                            {
+                                LogCaller(new LoggerEventArgs("Max pokestop limit reached. Disabling...", LoggerTypes.Info));
+                                UserSettings.SearchFortBelowPercent = 0;
+                            }
                             break;
                         case SchedulerOption.StartStop: //Just stop it
+                            LogCaller(new LoggerEventArgs("Max pokestop limit reached. Stopping ...", LoggerTypes.Info));
                             Stop();
                             break;
                     }
                 }
                 else if (PokestopsFarmed <= scheduler.PokeStoplimiter.Min)
                 {
-                    LogCaller(new LoggerEventArgs("Min pokestop limit reached. Executing selected option", LoggerTypes.Info));
-
                     switch (scheduler.PokeStoplimiter.Option)
                     {
                         case SchedulerOption.DisableEnable: //No extra checks
-                            UserSettings.SearchFortBelowPercent = 1000;
+                            if (UserSettings.SearchFortBelowPercent != 1000)
+                            {
+                                LogCaller(new LoggerEventArgs("Min pokestop limit reached. Enable ...", LoggerTypes.Info));
+                                UserSettings.SearchFortBelowPercent = 1000;
+                            }
                             break;
                         case SchedulerOption.StartStop: //Start only if pokemon is disabled/nothing or pokemon caught below threshold
                             if (scheduler.PokemonLimiter.Option != SchedulerOption.StartStop ||
                                 PokemonCaught <= scheduler.PokemonLimiter.Min)
                             {
-                                Start();
+                                if (State == BotState.Stopped)
+                                {
+                                    LogCaller(new LoggerEventArgs("Min pokestop limit reached. Executing selected option", LoggerTypes.Info));
+                                    Start();
+                                }
                             }
                             break;
                     }
