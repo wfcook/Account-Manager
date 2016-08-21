@@ -55,7 +55,7 @@ namespace PokemonGoGUI.GoManager
             }
 
             //Don't auto start when max level is hit
-            if(Level >= UserSettings.MaxLevel)
+            if(UserSettings.MaxLevel != 0 && Level >= UserSettings.MaxLevel)
             {
                 return;
             }
@@ -92,17 +92,14 @@ namespace PokemonGoGUI.GoManager
             //Master stop
             if (scheduler.MasterOption == SchedulerOption.StartStop)
             {
-                if (scheduler.MasterOption == Enums.SchedulerOption.StartStop)
+                if (State != Enums.BotState.Stopping && State != Enums.BotState.Stopped)
                 {
-                    if (State != Enums.BotState.Stopping && State != Enums.BotState.Stopped)
+                    if (PokemonCaught >= scheduler.PokemonLimiter.Max && PokestopsFarmed >= scheduler.PokeStoplimiter.Max)
                     {
-                        if (PokemonCaught >= scheduler.PokemonLimiter.Max && PokestopsFarmed >= scheduler.PokeStoplimiter.Max)
-                        {
-                            LogCaller(new LoggerEventArgs("Max pokemon and pokestop limit reached. Stopping", LoggerTypes.Debug));
-                            Stop();
+                        LogCaller(new LoggerEventArgs("Max pokemon and pokestop limit reached. Stopping", LoggerTypes.Debug));
+                        Stop();
 
-                            return;
-                        }
+                        return;
                     }
                 }
             }
