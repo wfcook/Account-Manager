@@ -684,6 +684,8 @@ namespace PokemonGoGUI
 
             foreach(Manager manager in fastObjectListViewMain.SelectedObjects)
             {
+                manager.RemoveProxy();
+
                 manager.UserSettings.ProxyIP = null;
                 manager.UserSettings.ProxyPort = 0;
                 manager.UserSettings.ProxyUsername = null;
@@ -1681,6 +1683,7 @@ namespace PokemonGoGUI
                 return;
             }
 
+            /*
             Dictionary<GoProxy, List<Manager>> pManagers = new Dictionary<GoProxy, List<Manager>>();
 
             foreach(Manager manager in _managers)
@@ -1701,19 +1704,29 @@ namespace PokemonGoGUI
 
                     pManagers.Add(manager.CurrentProxy, m);
                 }
-            }
+            }*/
+
+            bool messageShown = false;
 
             foreach(GoProxy proxy in fastObjectListViewProxies.SelectedObjects)
             {
+                if(proxy.CurrentAccounts > 0 && !messageShown)
+                {
+                    messageShown = true;
+
+                    MessageBox.Show("Only proxies with 0 accounts tied to them will be removed", "Information");
+                }
+
                 _proxyHandler.RemoveProxy(proxy);
 
+                /*
                 if(pManagers.ContainsKey(proxy))
                 {
                     foreach(Manager manager in _managers)
                     {
                         manager.RemoveProxy();
                     }
-                }
+                }*/
             }
 
             fastObjectListViewProxies.SetObjects(_proxyHandler.Proxies);
