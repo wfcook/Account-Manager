@@ -35,6 +35,7 @@
             this.tabPageSettingsGeneral = new System.Windows.Forms.TabPage();
             this.comboBoxMinAccountState = new System.Windows.Forms.ComboBox();
             this.label9 = new System.Windows.Forms.Label();
+            this.numericUpDownSearchFortBelow = new System.Windows.Forms.NumericUpDown();
             this.numericUpDownRunForHours = new System.Windows.Forms.NumericUpDown();
             this.numericUpDownMaxLogs = new System.Windows.Forms.NumericUpDown();
             this.numericUpDownSnipeAfterLevel = new System.Windows.Forms.NumericUpDown();
@@ -53,7 +54,9 @@
             this.textBoxPtcPassword = new System.Windows.Forms.TextBox();
             this.textBoxName = new System.Windows.Forms.TextBox();
             this.label15 = new System.Windows.Forms.Label();
+            this.label47 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
+            this.label46 = new System.Windows.Forms.Label();
             this.label42 = new System.Windows.Forms.Label();
             this.label41 = new System.Windows.Forms.Label();
             this.label43 = new System.Windows.Forms.Label();
@@ -77,6 +80,7 @@
             this.label44 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
             this.tabPageSettingsNavigation = new System.Windows.Forms.TabPage();
+            this.numericUpDownWalkingOffset = new System.Windows.Forms.NumericUpDown();
             this.comboBoxLocationPresets = new System.Windows.Forms.ComboBox();
             this.label10 = new System.Windows.Forms.Label();
             this.checkBoxEncounterWhileWalking = new System.Windows.Forms.CheckBox();
@@ -85,6 +89,7 @@
             this.textBoxMaxTravelDistance = new System.Windows.Forms.TextBox();
             this.textBoxLong = new System.Windows.Forms.TextBox();
             this.textBoxLat = new System.Windows.Forms.TextBox();
+            this.label45 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
@@ -193,15 +198,12 @@
             this.toolTipProxy = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipMinAccountState = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipHumanizeThrows = new System.Windows.Forms.ToolTip(this.components);
-            this.label45 = new System.Windows.Forms.Label();
-            this.numericUpDownWalkingOffset = new System.Windows.Forms.NumericUpDown();
-            this.label46 = new System.Windows.Forms.Label();
-            this.label47 = new System.Windows.Forms.Label();
-            this.numericUpDownSearchFortBelow = new System.Windows.Forms.NumericUpDown();
+            this.checkBoxRemoveOnStop = new System.Windows.Forms.CheckBox();
             this.tabControlMain.SuspendLayout();
             this.tabPageDetails.SuspendLayout();
             this.tabControlSettings.SuspendLayout();
             this.tabPageSettingsGeneral.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSearchFortBelow)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownRunForHours)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownMaxLogs)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSnipeAfterLevel)).BeginInit();
@@ -211,6 +213,7 @@
             this.tabPageProxy.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownMaxFailBeforeReset)).BeginInit();
             this.tabPageSettingsNavigation.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownWalkingOffset)).BeginInit();
             this.tabPageDevice.SuspendLayout();
             this.tabPageHumanization.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDelayBetweenSnipes)).BeginInit();
@@ -234,8 +237,6 @@
             this.tabPageTransfer.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewTransfer)).BeginInit();
             this.contextMenuStripTransfer.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownWalkingOffset)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSearchFortBelow)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControlMain
@@ -350,6 +351,19 @@
             this.label9.Size = new System.Drawing.Size(157, 16);
             this.label9.TabIndex = 32;
             this.label9.Text = "Pokemon Before Evolve:";
+            // 
+            // numericUpDownSearchFortBelow
+            // 
+            this.numericUpDownSearchFortBelow.DecimalPlaces = 2;
+            this.numericUpDownSearchFortBelow.Location = new System.Drawing.Point(222, 309);
+            this.numericUpDownSearchFortBelow.Maximum = new decimal(new int[] {
+            1000000,
+            0,
+            0,
+            0});
+            this.numericUpDownSearchFortBelow.Name = "numericUpDownSearchFortBelow";
+            this.numericUpDownSearchFortBelow.Size = new System.Drawing.Size(78, 22);
+            this.numericUpDownSearchFortBelow.TabIndex = 11;
             // 
             // numericUpDownRunForHours
             // 
@@ -572,6 +586,15 @@
             this.label15.TabIndex = 14;
             this.label15.Text = "Auto Stop On State:";
             // 
+            // label47
+            // 
+            this.label47.AutoSize = true;
+            this.label47.Location = new System.Drawing.Point(306, 311);
+            this.label47.Name = "label47";
+            this.label47.Size = new System.Drawing.Size(93, 16);
+            this.label47.TabIndex = 17;
+            this.label47.Text = "inventory filled";
+            // 
             // label11
             // 
             this.label11.AutoSize = true;
@@ -580,6 +603,15 @@
             this.label11.Size = new System.Drawing.Size(72, 16);
             this.label11.TabIndex = 15;
             this.label11.Text = "Max Level:";
+            // 
+            // label46
+            // 
+            this.label46.AutoSize = true;
+            this.label46.Location = new System.Drawing.Point(21, 311);
+            this.label46.Name = "label46";
+            this.label46.Size = new System.Drawing.Size(195, 16);
+            this.label46.TabIndex = 18;
+            this.label46.Text = "Search Pokestops when below ";
             // 
             // label42
             // 
@@ -722,6 +754,7 @@
             // 
             // tabPageProxy
             // 
+            this.tabPageProxy.Controls.Add(this.checkBoxRemoveOnStop);
             this.tabPageProxy.Controls.Add(this.checkBoxAutoRotateProxies);
             this.tabPageProxy.Controls.Add(this.checkBoxStopOnIPBan);
             this.tabPageProxy.Controls.Add(this.numericUpDownMaxFailBeforeReset);
@@ -745,6 +778,7 @@
             this.checkBoxAutoRotateProxies.TabIndex = 59;
             this.checkBoxAutoRotateProxies.Text = "Auto Rotate Proxies";
             this.checkBoxAutoRotateProxies.UseVisualStyleBackColor = true;
+            this.checkBoxAutoRotateProxies.CheckedChanged += new System.EventHandler(this.checkBoxAutoRotateProxies_CheckedChanged);
             // 
             // checkBoxStopOnIPBan
             // 
@@ -819,6 +853,19 @@
             this.tabPageSettingsNavigation.Text = "Navigation";
             this.tabPageSettingsNavigation.UseVisualStyleBackColor = true;
             // 
+            // numericUpDownWalkingOffset
+            // 
+            this.numericUpDownWalkingOffset.DecimalPlaces = 2;
+            this.numericUpDownWalkingOffset.Location = new System.Drawing.Point(288, 147);
+            this.numericUpDownWalkingOffset.Maximum = new decimal(new int[] {
+            999999,
+            0,
+            0,
+            0});
+            this.numericUpDownWalkingOffset.Name = "numericUpDownWalkingOffset";
+            this.numericUpDownWalkingOffset.Size = new System.Drawing.Size(84, 22);
+            this.numericUpDownWalkingOffset.TabIndex = 55;
+            // 
             // comboBoxLocationPresets
             // 
             this.comboBoxLocationPresets.FormattingEnabled = true;
@@ -889,6 +936,15 @@
             this.textBoxLat.Name = "textBoxLat";
             this.textBoxLat.Size = new System.Drawing.Size(146, 22);
             this.textBoxLat.TabIndex = 1;
+            // 
+            // label45
+            // 
+            this.label45.AutoSize = true;
+            this.label45.Location = new System.Drawing.Point(259, 149);
+            this.label45.Name = "label45";
+            this.label45.Size = new System.Drawing.Size(23, 16);
+            this.label45.TabIndex = 43;
+            this.label45.Text = "+/-";
             // 
             // label6
             // 
@@ -1967,58 +2023,17 @@
             this.restoreDefaultsToolStripMenuItem2.Text = "Restore Defaults";
             this.restoreDefaultsToolStripMenuItem2.Click += new System.EventHandler(this.restoreDefaultsToolStripMenuItem2_Click);
             // 
-            // label45
+            // checkBoxRemoveOnStop
             // 
-            this.label45.AutoSize = true;
-            this.label45.Location = new System.Drawing.Point(259, 149);
-            this.label45.Name = "label45";
-            this.label45.Size = new System.Drawing.Size(23, 16);
-            this.label45.TabIndex = 43;
-            this.label45.Text = "+/-";
-            // 
-            // numericUpDownWalkingOffset
-            // 
-            this.numericUpDownWalkingOffset.DecimalPlaces = 2;
-            this.numericUpDownWalkingOffset.Location = new System.Drawing.Point(288, 147);
-            this.numericUpDownWalkingOffset.Maximum = new decimal(new int[] {
-            999999,
-            0,
-            0,
-            0});
-            this.numericUpDownWalkingOffset.Name = "numericUpDownWalkingOffset";
-            this.numericUpDownWalkingOffset.Size = new System.Drawing.Size(84, 22);
-            this.numericUpDownWalkingOffset.TabIndex = 55;
-            // 
-            // label46
-            // 
-            this.label46.AutoSize = true;
-            this.label46.Location = new System.Drawing.Point(21, 311);
-            this.label46.Name = "label46";
-            this.label46.Size = new System.Drawing.Size(195, 16);
-            this.label46.TabIndex = 18;
-            this.label46.Text = "Search Pokestops when below ";
-            // 
-            // label47
-            // 
-            this.label47.AutoSize = true;
-            this.label47.Location = new System.Drawing.Point(306, 311);
-            this.label47.Name = "label47";
-            this.label47.Size = new System.Drawing.Size(93, 16);
-            this.label47.TabIndex = 17;
-            this.label47.Text = "inventory filled";
-            // 
-            // numericUpDownSearchFortBelow
-            // 
-            this.numericUpDownSearchFortBelow.DecimalPlaces = 2;
-            this.numericUpDownSearchFortBelow.Location = new System.Drawing.Point(222, 309);
-            this.numericUpDownSearchFortBelow.Maximum = new decimal(new int[] {
-            1000000,
-            0,
-            0,
-            0});
-            this.numericUpDownSearchFortBelow.Name = "numericUpDownSearchFortBelow";
-            this.numericUpDownSearchFortBelow.Size = new System.Drawing.Size(78, 22);
-            this.numericUpDownSearchFortBelow.TabIndex = 11;
+            this.checkBoxRemoveOnStop.AutoSize = true;
+            this.checkBoxRemoveOnStop.Enabled = false;
+            this.checkBoxRemoveOnStop.Location = new System.Drawing.Point(125, 132);
+            this.checkBoxRemoveOnStop.Name = "checkBoxRemoveOnStop";
+            this.checkBoxRemoveOnStop.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.checkBoxRemoveOnStop.Size = new System.Drawing.Size(212, 20);
+            this.checkBoxRemoveOnStop.TabIndex = 59;
+            this.checkBoxRemoveOnStop.Text = "Remove Proxy When Stopped";
+            this.checkBoxRemoveOnStop.UseVisualStyleBackColor = true;
             // 
             // AccountSettingsForm
             // 
@@ -2036,6 +2051,7 @@
             this.tabControlSettings.ResumeLayout(false);
             this.tabPageSettingsGeneral.ResumeLayout(false);
             this.tabPageSettingsGeneral.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSearchFortBelow)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownRunForHours)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownMaxLogs)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSnipeAfterLevel)).EndInit();
@@ -2047,6 +2063,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownMaxFailBeforeReset)).EndInit();
             this.tabPageSettingsNavigation.ResumeLayout(false);
             this.tabPageSettingsNavigation.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownWalkingOffset)).EndInit();
             this.tabPageDevice.ResumeLayout(false);
             this.tabPageDevice.PerformLayout();
             this.tabPageHumanization.ResumeLayout(false);
@@ -2072,8 +2089,6 @@
             this.tabPageTransfer.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewTransfer)).EndInit();
             this.contextMenuStripTransfer.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownWalkingOffset)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSearchFortBelow)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -2249,5 +2264,6 @@
         private System.Windows.Forms.NumericUpDown numericUpDownSearchFortBelow;
         private System.Windows.Forms.Label label47;
         private System.Windows.Forms.Label label46;
+        private System.Windows.Forms.CheckBox checkBoxRemoveOnStop;
     }
 }

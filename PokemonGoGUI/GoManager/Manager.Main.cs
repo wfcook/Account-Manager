@@ -841,6 +841,10 @@ namespace PokemonGoGUI.GoManager
                 _wasAutoRestarted = true;
                 Start();
             }
+            else if (UserSettings.AutoRemoveOnStop)
+            {
+                RemoveProxy();
+            }
         }
 
         public void Stop()

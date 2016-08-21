@@ -236,6 +236,7 @@ namespace PokemonGoGUI.GoManager
 
                 UserSettings = settings;
 
+
                 if (!String.IsNullOrEmpty(UserSettings.DeviceBrand))
                 {
                     UserSettings.RandomizeDeviceId();
