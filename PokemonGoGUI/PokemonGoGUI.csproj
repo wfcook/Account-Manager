@@ -179,6 +179,12 @@
     <Compile Include="UI\SchedulerSettingForm.Designer.cs">
       <DependentUpon>SchedulerSettingForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\StartupForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\StartupForm.Designer.cs">
+      <DependentUpon>StartupForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\TransferSettingsForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -209,6 +215,9 @@
     </Compile>
     <EmbeddedResource Include="UI\SchedulerSettingForm.resx">
       <DependentUpon>SchedulerSettingForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\StartupForm.resx">
+      <DependentUpon>StartupForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\TransferSettingsForm.resx">
       <DependentUpon>TransferSettingsForm.cs</DependentUpon>

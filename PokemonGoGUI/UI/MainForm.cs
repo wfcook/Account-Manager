@@ -33,7 +33,7 @@ namespace PokemonGoGUI
         private ProxyHandler _proxyHandler = new ProxyHandler();
         private List<Scheduler> _schedulers = new List<Scheduler>();
         private bool _spf = false;
-        private bool _firstRun = true;
+        private bool _showStartup = true;
 
         private readonly string _saveFile = "data";
         private const string _versionNumber = "1.2.6c";
@@ -125,6 +125,16 @@ namespace PokemonGoGUI
             RenameDLL();
 
             await LoadSettings();
+
+            if(_showStartup)
+            {
+                StartupForm startForm = new StartupForm();
+                
+                if(startForm.ShowDialog() == DialogResult.OK)
+                {
+                    _showStartup = startForm.ShowOnStartUp;
+                }
+            }
 
             UpdateStatusBar();
         }
@@ -222,7 +232,7 @@ namespace PokemonGoGUI
                     tempManagers = model.Managers;
                     _schedulers = model.Schedulers;
                     _spf = model.SPF;
-                    _firstRun = model.FirstRun;
+                    _showStartup = model.ShowWelcomeMessage;
 
                 }
                 else
@@ -281,7 +291,7 @@ namespace PokemonGoGUI
                     ProxyHandler = _proxyHandler,
                     Schedulers = _schedulers,
                     SPF = _spf,
-                    FirstRun = false
+                    ShowWelcomeMessage = _showStartup
                 };
 
                 string data = Serializer.ToJson(model);
