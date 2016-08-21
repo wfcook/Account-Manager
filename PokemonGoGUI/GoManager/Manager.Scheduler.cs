@@ -92,7 +92,7 @@ namespace PokemonGoGUI.GoManager
             //Master stop
             if (scheduler.MasterOption == SchedulerOption.StartStop)
             {
-                if (State != Enums.BotState.Stopping && State != Enums.BotState.Stopped)
+                if (State != BotState.Stopping && State != BotState.Stopped)
                 {
                     if (PokemonCaught >= scheduler.PokemonLimiter.Max && PokestopsFarmed >= scheduler.PokeStoplimiter.Max)
                     {
