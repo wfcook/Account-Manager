@@ -428,46 +428,13 @@ namespace PokemonGoGUI.GoManager
 
                 if ((_proxyIssue || CurrentProxy == null) && UserSettings.AutoRotateProxies)
                 {
-                    if(_proxyIssue && CurrentProxy != null)
-                    {
-                        ProxyHandler.IncreaseFailCounter(CurrentProxy);
-                    }
+                    bool success = await ChangeProxy();
 
-                    //Decrease usage
-                    if (CurrentProxy != null)
-                    {
-                        ProxyHandler.ProxyUsed(CurrentProxy, false);
-                    }
-
-                    //Get new
-                    //This call will increment the proxy
-                    CurrentProxy = ProxyHandler.GetRandomProxy();
-
-                    if (CurrentProxy == null)
-                    {
-                        LogCaller(new LoggerEventArgs("No available proxies left. Will recheck every 5 seconds", LoggerTypes.Warning));
-                    }
-
-                    while (CurrentProxy == null && IsRunning)
-                    {
-                        await Task.Delay(5000);
-
-                        CurrentProxy = ProxyHandler.GetRandomProxy();
-                    }
-
-                    //Program is stopping
-                    if(CurrentProxy == null)
+                    //Fails when it's stopping
+                    if(!success)
                     {
                         continue;
                     }
-
-                    UserSettings.ProxyIP = CurrentProxy.Address;
-                    UserSettings.ProxyPort = CurrentProxy.Port;
-                    UserSettings.ProxyUsername = CurrentProxy.Username;
-                    UserSettings.ProxyPassword = CurrentProxy.Password;
-
-
-                    LogCaller(new LoggerEventArgs(String.Format("Changing proxy to {0}", CurrentProxy.ToString()), LoggerTypes.Info));
 
                     //Have to restart to set proxy
                     Restart();
@@ -491,6 +458,9 @@ namespace PokemonGoGUI.GoManager
                     AccountState = AccountState.PermAccountBan;
 
                     LogCaller(new LoggerEventArgs("Potential account ban", LoggerTypes.Warning));
+
+                    //Remove proxy
+                    RemoveProxy();
 
                     Stop();
 
@@ -634,6 +604,15 @@ namespace PokemonGoGUI.GoManager
                         _potentialPokeStopBan = false;
 
                         LogCaller(new LoggerEventArgs(String.Format("{0}. Failure {1}/{2}", pokestops.Message, currentFails, UserSettings.MaxFailBeforeReset), LoggerTypes.Warning));
+
+                        if (UserSettings.AutoRotateProxies && currentFails >= UserSettings.MaxFailBeforeReset)
+                        {
+                            if (pokestops.Message.StartsWith("No pokestop data found."))
+                            {
+                                _proxyIssue = true;
+                                await ChangeProxy();
+                            }
+                        }
 
                         await Task.Delay(failedWaitTime);
 
@@ -855,6 +834,10 @@ namespace PokemonGoGUI.GoManager
                 _wasAutoRestarted = true;
                 Start();
             }
+            else
+            {
+                RemoveProxy();
+            }
         }
 
         public void Stop()
@@ -939,9 +922,9 @@ namespace PokemonGoGUI.GoManager
                     Success = true
                 };
             }
-            catch(Exception)
+            catch(Exception ex)
             {
-                LogCaller(new LoggerEventArgs("Echo failed", LoggerTypes.Warning));
+                LogCaller(new LoggerEventArgs("Echo failed", LoggerTypes.Warning, ex));
 
                 return new MethodResult
                 {

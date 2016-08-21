@@ -56,6 +56,7 @@
             this.button1 = new System.Windows.Forms.Button();
             this.label11 = new System.Windows.Forms.Label();
             this.textBoxChosenColor = new System.Windows.Forms.TextBox();
+            this.dateTimePickerStartTime = new System.Windows.Forms.DateTimePicker();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownStartTime)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownEndTime)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownPokemonMin)).BeginInit();
@@ -95,10 +96,10 @@
             this.numericUpDownStartTime.DecimalPlaces = 2;
             this.numericUpDownStartTime.Location = new System.Drawing.Point(136, 69);
             this.numericUpDownStartTime.Maximum = new decimal(new int[] {
-            23,
+            2399,
             0,
             0,
-            0});
+            131072});
             this.numericUpDownStartTime.Name = "numericUpDownStartTime";
             this.numericUpDownStartTime.Size = new System.Drawing.Size(68, 22);
             this.numericUpDownStartTime.TabIndex = 2;
@@ -108,10 +109,10 @@
             this.numericUpDownEndTime.DecimalPlaces = 2;
             this.numericUpDownEndTime.Location = new System.Drawing.Point(235, 69);
             this.numericUpDownEndTime.Maximum = new decimal(new int[] {
-            23,
+            2399,
             0,
             0,
-            0});
+            131072});
             this.numericUpDownEndTime.Name = "numericUpDownEndTime";
             this.numericUpDownEndTime.Size = new System.Drawing.Size(68, 22);
             this.numericUpDownEndTime.TabIndex = 3;
@@ -325,11 +326,22 @@
             this.textBoxChosenColor.TabIndex = 1;
             this.textBoxChosenColor.Text = "Color";
             // 
+            // dateTimePickerStartTime
+            // 
+            this.dateTimePickerStartTime.CalendarForeColor = System.Drawing.Color.Black;
+            this.dateTimePickerStartTime.CalendarTrailingForeColor = System.Drawing.Color.Black;
+            this.dateTimePickerStartTime.Format = System.Windows.Forms.DateTimePickerFormat.Time;
+            this.dateTimePickerStartTime.Location = new System.Drawing.Point(29, 249);
+            this.dateTimePickerStartTime.Name = "dateTimePickerStartTime";
+            this.dateTimePickerStartTime.Size = new System.Drawing.Size(101, 22);
+            this.dateTimePickerStartTime.TabIndex = 13;
+            // 
             // SchedulerSettingForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(430, 283);
+            this.Controls.Add(this.dateTimePickerStartTime);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.buttonDone);
             this.Controls.Add(this.label10);
@@ -400,5 +412,6 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.TextBox textBoxChosenColor;
+        private System.Windows.Forms.DateTimePicker dateTimePickerStartTime;
     }
 }

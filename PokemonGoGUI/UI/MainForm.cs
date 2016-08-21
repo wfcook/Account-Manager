@@ -47,6 +47,9 @@ namespace PokemonGoGUI
             fastObjectListViewProxies.BackColor = Color.FromArgb(43, 43, 43);
             fastObjectListViewProxies.ForeColor = Color.LightGray;
 
+            fastObjectListViewScheduler.BackColor = Color.FromArgb(43, 43, 43);
+            fastObjectListViewScheduler.ForeColor = Color.LightGray;
+
             //BackColor = Color.FromArgb(43, 43, 43);
 
             //tabPage1.BorderStyle = BorderStyle.None;
@@ -1162,13 +1165,16 @@ namespace PokemonGoGUI
             schedulerToolStripMenuItem.DropDownItems.Add(noneSMI);
 
             //Add all current schedulers
-            foreach(Scheduler scheduler in _schedulers)
+            if (_schedulers != null)
             {
-                ToolStripMenuItem tSMI = new ToolStripMenuItem(scheduler.Name);
-                tSMI.Tag = scheduler;
-                tSMI.Click += schedule_Click;
+                foreach (Scheduler scheduler in _schedulers)
+                {
+                    ToolStripMenuItem tSMI = new ToolStripMenuItem(scheduler.Name);
+                    tSMI.Tag = scheduler;
+                    tSMI.Click += schedule_Click;
 
-                schedulerToolStripMenuItem.DropDownItems.Add(tSMI);
+                    schedulerToolStripMenuItem.DropDownItems.Add(tSMI);
+                }
             }
         }
 
@@ -1671,6 +1677,12 @@ namespace PokemonGoGUI
             {
                 return;
             }
+
+            //TODO
+            /*
+             * Use dictionary to remove proxies from manager
+             * 
+             */
 
             foreach(GoProxy proxy in fastObjectListViewProxies.SelectedObjects)
             {

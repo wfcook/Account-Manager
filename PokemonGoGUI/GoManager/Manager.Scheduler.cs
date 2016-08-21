@@ -54,6 +54,11 @@ namespace PokemonGoGUI.GoManager
                 return;
             }
 
+            //Don't auto start when max level is hit
+            if(Level >= UserSettings.MaxLevel)
+            {
+                return;
+            }
 
             if (e.Scheduler.WithinTime())
             {
@@ -107,32 +112,42 @@ namespace PokemonGoGUI.GoManager
             {
                 if (PokemonCaught >= scheduler.PokemonLimiter.Max)
                 {
-                    LogCaller(new LoggerEventArgs("Max pokemon limit reached. Executing selected option", LoggerTypes.Info));
 
                     switch (scheduler.PokemonLimiter.Option)
                     {
                         case SchedulerOption.DisableEnable: //No extra checks
-                            UserSettings.CatchPokemon = false;
+                            if(UserSettings.CatchPokemon)
+                            {
+                                LogCaller(new LoggerEventArgs("Max pokemon limit reached. Disabling setting...", LoggerTypes.Info));
+                                UserSettings.CatchPokemon = false;
+                            }
                             break;
                         case SchedulerOption.StartStop: //Just stop it
+                            LogCaller(new LoggerEventArgs("Max pokemon limit reached. Stopping bot...", LoggerTypes.Info));
                             Stop();
                             break;
                     }
                 }
                 else if (PokemonCaught <= scheduler.PokemonLimiter.Min)
                 {
-                    LogCaller(new LoggerEventArgs("Min pokemon limit reached. Executing selected option", LoggerTypes.Info));
-
                     switch (scheduler.PokemonLimiter.Option)
                     {
                         case SchedulerOption.DisableEnable: //No extra checks
-                            UserSettings.CatchPokemon = true;
+                            if (!UserSettings.CatchPokemon)
+                            {
+                                LogCaller(new LoggerEventArgs("Min pokemon limit reached. Enabling catching...", LoggerTypes.Info));
+                                UserSettings.CatchPokemon = true;
+                            }
                             break;
                         case SchedulerOption.StartStop: //Start only if pokestop is disabled/nothing or pokestops below threshold
                             if (scheduler.PokeStoplimiter.Option != SchedulerOption.StartStop ||
                                 PokestopsFarmed <= scheduler.PokeStoplimiter.Min)
                             {
-                                Start();
+                                if (State == BotState.Stopped)
+                                {
+                                    LogCaller(new LoggerEventArgs("Min pokemon limit reached. Enabling option", LoggerTypes.Info));
+                                    Start();
+                                }
                             }
                             break;
                     }
