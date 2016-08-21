@@ -103,15 +103,25 @@ namespace PokemonGoGUI.AccountScheduler
             double currentHour = hour + hourPercent;
 
             //Always run
-            if (EndTime == 0 && StartTime == 0)
+            if (StartTime == EndTime)
             {
                 return true;
             }
 
-            //Within running hours
-            if (currentHour >= StartTime && currentHour <= EndTime)
+            //In the middle
+            if (StartTime <= EndTime)
             {
-                return true;
+                if (currentHour >= StartTime && currentHour <= EndTime)
+                {
+                    return true;
+                }
+            }
+            else if (StartTime >= EndTime) //Running across day line
+            {
+                if(currentHour <= EndTime || currentHour >= StartTime)
+                {
+                    return true;
+                }
             }
 
             return false;
