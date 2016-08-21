@@ -11,6 +11,15 @@ namespace PokemonGoGUI.GoManager
 {
     public partial class Manager
     {
+        public void AddSchedulerEvent()
+        {
+            if (AccountScheduler != null)
+            {
+                AccountScheduler.OnSchedule -= scheduler_OnSchedule;
+                AccountScheduler.OnSchedule += scheduler_OnSchedule;
+            }
+        }
+
         public void AddScheduler(Scheduler scheduler)
         {
             if(AccountScheduler != null)

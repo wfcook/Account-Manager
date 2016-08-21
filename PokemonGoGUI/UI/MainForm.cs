@@ -215,6 +215,7 @@ namespace PokemonGoGUI
 
                 foreach(Manager manager in tempManagers)
                 {
+                    manager.AddSchedulerEvent();
                     manager.ProxyHandler = _proxyHandler;
                     manager.OnLog += manager_OnLog;
                     manager.OnInventoryUpdate += manager_OnInventoryUpdate;
