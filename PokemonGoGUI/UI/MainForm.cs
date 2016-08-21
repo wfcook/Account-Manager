@@ -1599,7 +1599,7 @@ namespace PokemonGoGUI
             foreach(Manager manager in fastObjectListViewMain.SelectedObjects)
             {
                 //Snipe all at once
-                await manager.ManualSnipe(lat, lon, pokemonToSnipe);
+                manager.ManualSnipe(lat, lon, pokemonToSnipe);
 
                 await Task.Delay(100);
             }
