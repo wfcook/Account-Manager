@@ -145,15 +145,10 @@ namespace PokemonGo.RocketAPI.Helpers
             FillMemory(ptr, (uint)outputLength, 0);
             FillMemory(ptrOutput, (uint)outputLength, 0);
             Marshal.Copy(bytes, 0, ptr, bytes.Length);
-            try
-            {
-                int outputSize = outputLength;
-                EncryptNative(ptr, bytes.Length, new byte[32], 32, ptrOutput, out outputSize);
-            }
-            catch (Exception)
-            {
-                //Console.WriteLine(ex.Message);
-            }
+
+            int outputSize = outputLength;
+            EncryptNative(ptr, bytes.Length, new byte[32], 32, ptrOutput, out outputSize);
+
             var output = new byte[outputLength];
             Marshal.Copy(ptrOutput, output, 0, outputLength);
 

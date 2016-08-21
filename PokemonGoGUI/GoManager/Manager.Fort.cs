@@ -6,9 +6,7 @@ using PokemonGoGUI.Extensions;
 using PokemonGoGUI.GoManager.Models;
 using System;
 using System.Collections.Generic;
-using System.Device.Location;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace PokemonGoGUI.GoManager
@@ -80,6 +78,30 @@ namespace PokemonGoGUI.GoManager
                         fortResponse.ExperienceAwarded,
                         StringUtil.GetSummedFriendlyNameOfItemAwardList(fortResponse.ItemsAwarded.ToList()));
 
+                    Dictionary<ItemId, ItemData> itemDictionary = new Dictionary<ItemId, ItemData>();
+
+                    foreach(ItemData item in Items)
+                    {
+                        itemDictionary.Add(item.ItemId, item);
+                    }
+
+                    foreach(ItemAward item in fortResponse.ItemsAwarded)
+                    {
+                        if(itemDictionary.ContainsKey(item.ItemId))
+                        {
+                            itemDictionary[item.ItemId].Count += item.ItemCount;
+                        }
+                        else
+                        {
+                            Items.Add(new ItemData
+                                {
+                                    ItemId = item.ItemId,
+                                    Unseen = true,
+                                    Count = item.ItemCount
+                                });
+                        }
+                    }
+
                     if (fortResponse.Result != FortSearchResponse.Types.Result.OutOfRange)
                     {
                         //Successfully grabbed stop
@@ -99,7 +121,8 @@ namespace PokemonGoGUI.GoManager
 
                         ExpIncrease(fortResponse.ExperienceAwarded);
                         TotalPokeStopExp += fortResponse.ExperienceAwarded;
-                        ++PokestopsFarmed;
+
+                        Tracker.AddValues(0, 1);
 
                         if (fortResponse.ExperienceAwarded == 0)
                         {
@@ -212,7 +235,8 @@ namespace PokemonGoGUI.GoManager
                                                     StringUtil.GetSummedFriendlyNameOfItemAwardList(bypassResponse.ItemsAwarded.ToList()));
 
                             ExpIncrease(fortResponse.ExperienceAwarded);
-                            PokestopsFarmed++;
+
+                            Tracker.AddValues(0, 1);
 
                             //_expGained += fortResponse.ExperienceAwarded;
 

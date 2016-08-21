@@ -2,7 +2,6 @@
 using POGOProtos.Networking.Responses;
 using POGOProtos.Settings.Master;
 using PokemonGo.RocketAPI;
-using PokemonGo.RocketAPI.Helpers;
 using PokemonGoGUI.Extensions;
 using PokemonGoGUI.GoManager.Models;
 using PokemonGoGUI.Models;
@@ -10,7 +9,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace PokemonGoGUI.GoManager
@@ -236,7 +234,15 @@ namespace PokemonGoGUI.GoManager
 
                 UserSettings = settings;
 
-                UserSettings.RandomizeDeviceId();
+
+                if (!String.IsNullOrEmpty(UserSettings.DeviceBrand))
+                {
+                    UserSettings.RandomizeDeviceId();
+                }
+                else
+                {
+                    UserSettings.LoadDeviceSettings();
+                }
 
                 LogCaller(new LoggerEventArgs("Successfully imported config file", LoggerTypes.Info));
 
@@ -317,13 +323,7 @@ namespace PokemonGoGUI.GoManager
         {
             UserSettings.RandomizeDeviceId();
         }
-
-        /*
-        public void RestoreSniperDefaults()
-        {
-            UserSettings.LoadSniperSettings();
-        }*/
-
+        
         public override bool Equals(object obj)
         {
             Manager tempManager = obj as Manager;

@@ -8,10 +8,7 @@ using PokemonGoGUI.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PokemonGoGUI
 {
@@ -89,6 +86,7 @@ namespace PokemonGoGUI
         public string ProxyUsername { get; set; }
         public string ProxyPassword { get; set; }
         public bool AutoRotateProxies { get; set; }
+        public bool AutoRemoveOnStop { get; set; }
 
         public bool StopOnIPBan { get; set; }
         public int MaxFailBeforeReset { get; set; }
@@ -165,7 +163,7 @@ namespace PokemonGoGUI
             MaxLogs = 400;
             MaxFailBeforeReset = 3;
             StopOnIPBan = true;
-            SearchFortBelowPercent = 100;
+            SearchFortBelowPercent = 1000;
         }
 
         public void LoadDeviceSettings()

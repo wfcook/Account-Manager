@@ -2,7 +2,6 @@
 using POGOProtos.Enums;
 using PokemonGo.RocketAPI;
 using PokemonGo.RocketAPI.Enums;
-using PokemonGo.RocketAPI.Helpers;
 using PokemonGoGUI.AccountScheduler;
 using PokemonGoGUI.Enums;
 using PokemonGoGUI.Extensions;
@@ -14,14 +13,10 @@ using PokemonGoGUI.UI;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -33,9 +28,10 @@ namespace PokemonGoGUI
         private ProxyHandler _proxyHandler = new ProxyHandler();
         private List<Scheduler> _schedulers = new List<Scheduler>();
         private bool _spf = false;
+        private bool _showStartup = true;
 
         private readonly string _saveFile = "data";
-        private const string _versionNumber = "1.2.6";
+        private const string _versionNumber = "1.2.6d";
 
         public MainForm()
         {
@@ -46,6 +42,9 @@ namespace PokemonGoGUI
 
             fastObjectListViewProxies.BackColor = Color.FromArgb(43, 43, 43);
             fastObjectListViewProxies.ForeColor = Color.LightGray;
+
+            fastObjectListViewScheduler.BackColor = Color.FromArgb(43, 43, 43);
+            fastObjectListViewScheduler.ForeColor = Color.LightGray;
 
             //BackColor = Color.FromArgb(43, 43, 43);
 
@@ -64,7 +63,7 @@ namespace PokemonGoGUI
                     return String.Empty;
                 }
 
-                return String.Format("{0}:{1}", proxy.Password, proxy.Username);
+                return String.Format("{0}:{1}", proxy.Username, proxy.Password);
             };
 
             olvColumnCurrentFails.AspectGetter = delegate(object x)
@@ -122,6 +121,16 @@ namespace PokemonGoGUI
 
             await LoadSettings();
 
+            if(_showStartup)
+            {
+                StartupForm startForm = new StartupForm();
+                
+                if(startForm.ShowDialog() == DialogResult.OK)
+                {
+                    _showStartup = startForm.ShowOnStartUp;
+                }
+            }
+
             UpdateStatusBar();
         }
 
@@ -134,18 +143,37 @@ namespace PokemonGoGUI
                     return;
                 }
 
-                string dllToRename = "encrypt_32.dll";
+                string dllToRename = "encrypt_{0}.dll";
 
-                if(Environment.Is64BitOperatingSystem)
+                string bit = "32";
+
+                if (Environment.Is64BitOperatingSystem)
                 {
-                    dllToRename = "encrypt_64.dll";
+                    bit = "64";
                 }
+
+                DialogResult result = MessageBox.Show(String.Format("{0}bit OS detected. Is this correct?", bit), "Confirmation", MessageBoxButtons.YesNo);
+
+                if(result == DialogResult.No)
+                {
+                    if(bit == "64")
+                    {
+                        bit = "32";
+                    }
+                    else
+                    {
+                        bit = "64";
+                    }
+                }
+
+                dllToRename = String.Format(dllToRename, bit);
 
                 if(!File.Exists(dllToRename))
                 {
                     MessageBox.Show(String.Format("Missing {0} library. Closing ...", dllToRename), "Warning");
 
-                    Application.Exit();
+                    //Prevents saving
+                    Environment.Exit(0);
                     return;
                 }
 
@@ -163,7 +191,7 @@ namespace PokemonGoGUI
         {
             if(_managers.Any(x => x.IsRunning))
             {
-                MessageBox.Show("Please stop bots before closing");
+                MessageBox.Show("Please stop bots before closing", "Information");
 
                 e.Cancel = true;
             }
@@ -198,6 +226,9 @@ namespace PokemonGoGUI
                     _proxyHandler = model.ProxyHandler;
                     tempManagers = model.Managers;
                     _schedulers = model.Schedulers;
+                    _spf = model.SPF;
+                    _showStartup = model.ShowWelcomeMessage;
+
                 }
                 else
                 {
@@ -214,6 +245,7 @@ namespace PokemonGoGUI
 
                 foreach(Manager manager in tempManagers)
                 {
+                    manager.AddSchedulerEvent();
                     manager.ProxyHandler = _proxyHandler;
                     manager.OnLog += manager_OnLog;
                     manager.OnInventoryUpdate += manager_OnInventoryUpdate;
@@ -223,6 +255,11 @@ namespace PokemonGoGUI
                     {
                         //Load some
                         manager.UserSettings.LoadDeviceSettings();
+                    }
+
+                    if (manager.Tracker != null)
+                    {
+                        manager.Tracker.CalculatedTrackingHours();
                     }
 
                     _managers.Add(manager);
@@ -247,7 +284,9 @@ namespace PokemonGoGUI
                 {
                     Managers = _managers,
                     ProxyHandler = _proxyHandler,
-                    Schedulers = _schedulers
+                    Schedulers = _schedulers,
+                    SPF = _spf,
+                    ShowWelcomeMessage = _showStartup
                 };
 
                 string data = Serializer.ToJson(model);
@@ -264,6 +303,8 @@ namespace PokemonGoGUI
 
         private void manager_OnInventoryUpdate(object sender, EventArgs e)
         {
+            return;
+
             Manager manager = sender as Manager;
 
             if(manager == null)
@@ -276,6 +317,8 @@ namespace PokemonGoGUI
 
         private void manager_OnLog(object sender, LoggerEventArgs e)
         {
+            return;
+
             Manager manager = sender as Manager;
 
             if (manager == null)
@@ -329,6 +372,9 @@ namespace PokemonGoGUI
 
                 if (!manager.IsRunning)
                 {
+                    manager.RemoveProxy();
+                    manager.RemoveScheduler();
+
                     manager.OnLog -= manager_OnLog;
                     manager.OnInventoryUpdate -= manager_OnInventoryUpdate;
 
@@ -481,7 +527,6 @@ namespace PokemonGoGUI
             int tempBanned = 0;
             int running = 0;
             int permBan = 0;
-            int bannedProxies = 0;
 
             List<Manager> tempManagers = new List<Manager>(_managers);
 
@@ -643,6 +688,15 @@ namespace PokemonGoGUI
 
                 fastObjectListViewProxies.RefreshObject(_proxyHandler.Proxies.First());
             }
+            else if (tabControlProxies.SelectedTab == tabPageScheduler)
+            {
+                if(_schedulers.Count == 0)
+                {
+                    return;
+                }
+
+                fastObjectListViewScheduler.RefreshObject(_schedulers[0]);
+            }
         }
 
         private void clearProxiesToolStripMenuItem_Click(object sender, EventArgs e)
@@ -658,6 +712,8 @@ namespace PokemonGoGUI
 
             foreach(Manager manager in fastObjectListViewMain.SelectedObjects)
             {
+                manager.RemoveProxy();
+
                 manager.UserSettings.ProxyIP = null;
                 manager.UserSettings.ProxyPort = 0;
                 manager.UserSettings.ProxyUsername = null;
@@ -674,11 +730,16 @@ namespace PokemonGoGUI
 
             if(isChecked)
             {
+                new Scheduler();
+
                 fastObjectListViewMain.BackColor = Color.FromArgb(43, 43, 43);
                 fastObjectListViewMain.ForeColor = Color.LightGray;
 
                 fastObjectListViewProxies.BackColor = Color.FromArgb(43, 43, 43);
                 fastObjectListViewProxies.ForeColor = Color.LightGray;
+
+                fastObjectListViewScheduler.BackColor = Color.FromArgb(43, 43, 43);
+                fastObjectListViewScheduler.ForeColor = Color.LightGray;
 
                 fastObjectListViewMain.UseCellFormatEvents = true;
             }
@@ -689,6 +750,10 @@ namespace PokemonGoGUI
 
                 fastObjectListViewProxies.BackColor = SystemColors.Window;
                 fastObjectListViewProxies.ForeColor = SystemColors.WindowText;
+
+
+                fastObjectListViewScheduler.BackColor = SystemColors.Window;
+                fastObjectListViewScheduler.ForeColor = SystemColors.WindowText;
 
                 fastObjectListViewMain.UseCellFormatEvents = false;
                 fastObjectListViewProxies.UseCellFormatEvents = false;
@@ -704,7 +769,14 @@ namespace PokemonGoGUI
         {
             Manager manager = (Manager)e.Model;
 
-            if(e.Column == olvColumnAccountState)
+            if(e.Column == olvColumnScheduler)
+            {
+                if(manager.AccountScheduler != null)
+                {
+                    e.SubItem.ForeColor = manager.AccountScheduler.NameColor;
+                }
+            }
+            else if(e.Column == olvColumnAccountState)
             {
                 switch(manager.AccountState)
                 {
@@ -788,12 +860,20 @@ namespace PokemonGoGUI
         {
             updateDetailsToolStripMenuItem.Enabled = false;
 
-            foreach(Manager manager in fastObjectListViewMain.SelectedObjects)
+            ParallelOptions options = new ParallelOptions
             {
-                manager.UpdateDetails();
+                MaxDegreeOfParallelism = 10
+            };
 
-                await Task.Delay(100);
-            }
+            IEnumerable<Manager> selectedManager = fastObjectListViewMain.SelectedObjects.Cast<Manager>();
+
+            await Task.Run(() =>
+                {
+                    Parallel.ForEach(selectedManager, options, (manager) =>
+                    {
+                        manager.UpdateDetails().Wait();
+                    });
+                });
 
             updateDetailsToolStripMenuItem.Enabled = true;
         }
@@ -993,20 +1073,6 @@ namespace PokemonGoGUI
             }
         }
 
-        private void logViewerToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            using(OpenFileDialog ofd = new OpenFileDialog())
-            {
-                ofd.Filter = "Json Files (*.json)|*.json|All Files (*.*)|*.*";
-                
-                if(ofd.ShowDialog() == DialogResult.OK)
-                {
-                    LogViewerForm lvForm = new LogViewerForm(ofd.FileName);
-
-                    lvForm.ShowDialog();
-                }
-            }
-        }
 
         #region Fast Settings
 
@@ -1097,6 +1163,8 @@ namespace PokemonGoGUI
 
         private void contextMenuStripAccounts_Opening(object sender, CancelEventArgs e)
         {
+            enableSpoofToolStripMenuItem.Checked = _spf;
+
             Manager manager = fastObjectListViewMain.SelectedObjects.Cast<Manager>().FirstOrDefault();
 
             if(manager == null)
@@ -1113,6 +1181,51 @@ namespace PokemonGoGUI
             enableCatchPokemonToolStripMenuItem2.Checked = manager.UserSettings.CatchPokemon;
             enableRotateProxiesToolStripMenuItem.Checked = manager.UserSettings.AutoRotateProxies;
             enableIPBanStopToolStripMenuItem.Checked = manager.UserSettings.StopOnIPBan;
+
+            //Remove all
+            schedulerToolStripMenuItem.DropDownItems.Clear();
+
+            //Add none
+            ToolStripMenuItem noneSMI = new ToolStripMenuItem("None");
+            noneSMI.Click += (o, s) =>
+                {
+                    foreach (Manager m in fastObjectListViewMain.SelectedObjects)
+                    {
+                        m.RemoveScheduler();
+                    }
+                };
+
+            schedulerToolStripMenuItem.DropDownItems.Add(noneSMI);
+
+            //Add all current schedulers
+            if (_schedulers != null)
+            {
+                foreach (Scheduler scheduler in _schedulers)
+                {
+                    ToolStripMenuItem tSMI = new ToolStripMenuItem(scheduler.Name);
+                    tSMI.Tag = scheduler;
+                    tSMI.Click += schedule_Click;
+
+                    schedulerToolStripMenuItem.DropDownItems.Add(tSMI);
+                }
+            }
+        }
+
+        private void schedule_Click(object sender, EventArgs e)
+        {
+            ToolStripMenuItem tSMI = sender as ToolStripMenuItem;
+            
+            if(tSMI == null)
+            {
+                return;
+            }
+
+            foreach(Manager manager in fastObjectListViewMain.SelectedObjects)
+            {
+                manager.AddScheduler((Scheduler)tSMI.Tag);
+            }
+
+            fastObjectListViewMain.RefreshSelectedObjects();
         }
 
         private void enableTransferToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1339,24 +1452,32 @@ namespace PokemonGoGUI
                 }
             }
 
-            foreach(Manager manager in fastObjectListViewMain.SelectedObjects)
-            {
-                if(dialogResult == DialogResult.Yes)
+            IEnumerable<Manager> selectedManagers = fastObjectListViewMain.SelectedObjects.Cast<Manager>();
+
+            await Task.Run(() =>
                 {
-                    await manager.UpdateDetails();
+                    ParallelOptions options = new ParallelOptions
+                    {
+                        MaxDegreeOfParallelism = 10
+                    };
 
-                    await Task.Delay(500);
-                }
+                    Parallel.ForEach(selectedManagers, options, (manager) =>
+                    {
+                        if (dialogResult == DialogResult.Yes)
+                        {
+                            manager.UpdateDetails().Wait();
+                        }
 
-                MethodResult<AccountExportModel> result = manager.GetAccountExport();
+                        MethodResult<AccountExportModel> result = manager.GetAccountExport();
 
-                if(!result.Success)
-                {
-                    continue;
-                }
+                        if (!result.Success)
+                        {
+                            return;
+                        }
 
-                exportModels.Add(result.Data);
-            }
+                        exportModels.Add(result.Data);
+                    });
+                });
 
             try
             {
@@ -1486,10 +1607,6 @@ namespace PokemonGoGUI
             snipePokemonToolStripMenuItem.Enabled = true;
         }
 
-        private void largeAddressAwareToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show(LargeAddressAware.IsLargeAware(Application.ExecutablePath).ToString());
-        }
 
         #region Proxies
 
@@ -1498,6 +1615,10 @@ namespace PokemonGoGUI
             if(tabControlProxies.SelectedTab == tabPageProxies)
             {
                 fastObjectListViewProxies.SetObjects(_proxyHandler.Proxies);
+            }
+            else if(tabControlProxies.SelectedTab == tabPageScheduler)
+            {
+                fastObjectListViewScheduler.SetObjects(_schedulers);
             }
         }
 
@@ -1590,9 +1711,50 @@ namespace PokemonGoGUI
                 return;
             }
 
+            /*
+            Dictionary<GoProxy, List<Manager>> pManagers = new Dictionary<GoProxy, List<Manager>>();
+
+            foreach(Manager manager in _managers)
+            {
+                if(manager.CurrentProxy == null)
+                {
+                    continue;
+                }
+
+                if(pManagers.ContainsKey(manager.CurrentProxy))
+                {
+                    pManagers[manager.CurrentProxy].Add(manager);
+                }
+                else
+                {
+                    List<Manager> m = new List<Manager>();
+                    m.Add(manager);
+
+                    pManagers.Add(manager.CurrentProxy, m);
+                }
+            }*/
+
+            bool messageShown = false;
+
             foreach(GoProxy proxy in fastObjectListViewProxies.SelectedObjects)
             {
+                if(proxy.CurrentAccounts > 0 && !messageShown)
+                {
+                    messageShown = true;
+
+                    MessageBox.Show("Only proxies with 0 accounts tied to them will be removed", "Information");
+                }
+
                 _proxyHandler.RemoveProxy(proxy);
+
+                /*
+                if(pManagers.ContainsKey(proxy))
+                {
+                    foreach(Manager manager in _managers)
+                    {
+                        manager.RemoveProxy();
+                    }
+                }*/
             }
 
             fastObjectListViewProxies.SetObjects(_proxyHandler.Proxies);
@@ -1648,19 +1810,17 @@ namespace PokemonGoGUI
             fastObjectListViewProxies.RefreshSelectedObjects();
         }
 
-        #endregion
-
         private void fastObjectListViewProxies_FormatCell(object sender, BrightIdeasSoftware.FormatCellEventArgs e)
         {
             GoProxy proxy = (GoProxy)e.Model;
 
-            if(e.Column == olvColumnCurrentFails)
+            if (e.Column == olvColumnCurrentFails)
             {
-                if(proxy.CurrentConcurrentFails == 0)
+                if (proxy.CurrentConcurrentFails == 0)
                 {
                     e.SubItem.ForeColor = Color.Green;
                 }
-                else if(proxy.CurrentConcurrentFails > 0)
+                else if (proxy.CurrentConcurrentFails > 0)
                 {
                     e.SubItem.ForeColor = Color.Yellow;
                 }
@@ -1671,7 +1831,7 @@ namespace PokemonGoGUI
             }
             else if (e.Column == olvColumnProxyBanned)
             {
-                if(proxy.IsBanned)
+                if (proxy.IsBanned)
                 {
                     e.SubItem.ForeColor = Color.Red;
                 }
@@ -1682,11 +1842,11 @@ namespace PokemonGoGUI
             }
             else if (e.Column == olvColumnUsageCount)
             {
-                if(proxy.CurrentAccounts == 0)
+                if (proxy.CurrentAccounts == 0)
                 {
                     e.SubItem.ForeColor = Color.Green;
                 }
-                else if(proxy.CurrentAccounts <= proxy.MaxAccounts)
+                else if (proxy.CurrentAccounts <= proxy.MaxAccounts)
                 {
                     e.SubItem.ForeColor = Color.Yellow;
                 }
@@ -1697,12 +1857,186 @@ namespace PokemonGoGUI
             }
         }
 
+        #endregion
+
+        #region Dev Tools
+
         private void enableSpfToolStripMenuItem_Click(object sender, EventArgs e)
         {
             _spf = !_spf;
 
-            enableSpoofToolStripMenuItem.Checked = _spf;
+            foreach(Manager manager in _managers)
+            {
+                manager.UserSettings.SPF = _spf;
+            }
+
+            //enableSpoofToolStripMenuItem.Checked = _spf;
         }
 
+        private void largeAddressAwareToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(LargeAddressAware.IsLargeAware(Application.ExecutablePath).ToString());
+        }
+
+        private void logViewerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog ofd = new OpenFileDialog())
+            {
+                ofd.Filter = "Json Files (*.json)|*.json|All Files (*.*)|*.*";
+
+                if (ofd.ShowDialog() == DialogResult.OK)
+                {
+                    LogViewerForm lvForm = new LogViewerForm(ofd.FileName);
+
+                    lvForm.ShowDialog();
+                }
+            }
+        }
+
+        #endregion
+
+        #region Scheduler
+
+        private void deleteToolStripMenuItem2_Click(object sender, EventArgs e)
+        {
+            int count = fastObjectListViewScheduler.SelectedObjects.Count;
+
+            DialogResult result = MessageBox.Show(String.Format("Are you sure you want to remove {0} schedules?", count), "Confirmation", MessageBoxButtons.YesNo);
+
+            if(result != DialogResult.Yes)
+            {
+                return;
+            }
+
+            //Deleting many at once will take awhile without this
+            Dictionary<Scheduler, List<Manager>> managerSchedulers = new Dictionary<Scheduler, List<Manager>>();
+
+            foreach(Manager manager in _managers)
+            {
+                if(manager.AccountScheduler == null)
+                {
+                    continue;
+                }
+
+                if(managerSchedulers.ContainsKey(manager.AccountScheduler))
+                {
+                    managerSchedulers[manager.AccountScheduler].Add(manager);
+                }
+                else
+                {
+                    List<Manager> m = new List<Manager>();
+                    m.Add(manager);
+
+                    managerSchedulers.Add(manager.AccountScheduler, m);
+                }
+            }
+
+            foreach (Scheduler scheduler in fastObjectListViewScheduler.SelectedObjects)
+            {
+                _schedulers.Remove(scheduler);
+                
+                //Should always be true. If not, bug.
+                if(managerSchedulers.ContainsKey(scheduler))
+                {
+                    foreach(Manager manager in managerSchedulers[scheduler])
+                    {
+                        manager.RemoveScheduler();
+                    }
+                }
+            }
+
+            fastObjectListViewScheduler.SetObjects(_schedulers);
+        }
+
+        private void enablelDisableToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach(Scheduler scheduler in fastObjectListViewScheduler.SelectedObjects)
+            {
+                scheduler.Enabled = !scheduler.Enabled;
+            }
+
+            fastObjectListViewScheduler.RefreshSelectedObjects();
+        }
+
+        private void editToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            int count = fastObjectListViewScheduler.SelectedObjects.Count;
+
+            if(count > 1)
+            {
+                DialogResult result = MessageBox.Show(String.Format("Are you sure you want to open up {0} edit forms?", count), "Confirmation", MessageBoxButtons.YesNo);
+
+                if(result != DialogResult.Yes)
+                {
+                    return;
+                }
+            }
+
+            foreach(Scheduler scheduler in fastObjectListViewScheduler.SelectedObjects)
+            {
+                SchedulerSettingForm schedulerForm = new SchedulerSettingForm(scheduler);
+
+                schedulerForm.ShowDialog();
+            }
+
+            fastObjectListViewScheduler.RefreshSelectedObjects();
+        }
+
+        private void addNewToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            Scheduler scheduler = new Scheduler();
+
+            SchedulerSettingForm schedulerForm = new SchedulerSettingForm(scheduler);
+            
+            if(schedulerForm.ShowDialog() == DialogResult.OK)
+            {
+                _schedulers.Add(scheduler);
+            }
+
+            fastObjectListViewScheduler.SetObjects(_schedulers);
+        }
+
+        private void manualCheckToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach(Scheduler scheduler in fastObjectListViewScheduler.SelectedObjects)
+            {
+                scheduler.ForceCall();
+            }
+        }
+
+        private void fastObjectListViewScheduler_FormatCell(object sender, BrightIdeasSoftware.FormatCellEventArgs e)
+        {
+            Scheduler scheduler = (Scheduler)e.Model;
+            bool withinTime = scheduler.WithinTime();
+
+            if(e.Column == olvColumnSchedulerName)
+            {
+                e.SubItem.ForeColor = scheduler.NameColor;
+            }
+            else if (e.Column == olvColumnSchedulerEnabled)
+            {
+                if(scheduler.Enabled)
+                {
+                    e.SubItem.ForeColor = Color.Green;
+                }
+                else
+                {
+                    e.SubItem.ForeColor = Color.Red;
+                }
+            }
+            else if (e.Column == olvColumnSchedulerStart || e.Column == olvColumnSchedulerEnd)
+            {
+                if(withinTime)
+                {
+                    e.SubItem.ForeColor = Color.Green;
+                }
+                else
+                {
+                    e.SubItem.ForeColor = Color.Red;
+                }
+            }
+        }
+
+        #endregion
     }
 }

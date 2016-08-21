@@ -10,7 +10,6 @@ using PokemonGoGUI.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace PokemonGoGUI.GoManager
@@ -192,7 +191,9 @@ namespace PokemonGoGUI.GoManager
                     if (catchPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchSuccess)
                     {
                         int expGained = catchPokemonResponse.CaptureAward.Xp.Sum();
-                        ++PokemonCaught;
+
+
+                        Tracker.AddValues(1, 0);
 
                         ExpIncrease(expGained);
 
@@ -342,7 +343,7 @@ namespace PokemonGoGUI.GoManager
                     {
                         //Reset data
                         _fleeingPokemonResponses = 0;
-                        ++PokemonCaught;
+                        Tracker.AddValues(1, 0);
                         _potentialPokemonBan = false;
 
                         int expGained = catchPokemonResponse.CaptureAward.Xp.Sum();

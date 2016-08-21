@@ -1,15 +1,9 @@
-﻿using Newtonsoft.Json;
-using PokemonGo.RocketAPI.Exceptions;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PokemonGoGUI.GoManager.Models
 {
-    public enum LoggerTypes { Debug, Info, Warning, Exception, PokemonEscape, PokemonFlee, LocationUpdate, Transfer, Evolve, Incubate, Recycle, ProxyIssue, Success };
+    public enum LoggerTypes { Debug, Info, Warning, Exception, FatalError, PokemonEscape, PokemonFlee, LocationUpdate, Transfer, Evolve, Incubate, Recycle, ProxyIssue, Success };
 
     public class Log
     {
@@ -51,6 +45,8 @@ namespace PokemonGoGUI.GoManager.Models
         {
             switch (this.LoggerType)
             {
+                case LoggerTypes.FatalError:
+                    return Color.White;
                 case LoggerTypes.Exception:
                     return Color.Red;
                 case LoggerTypes.Success:

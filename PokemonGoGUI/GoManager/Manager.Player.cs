@@ -1,7 +1,6 @@
 ﻿using POGOProtos.Data;
 using POGOProtos.Enums;
 using POGOProtos.Inventory;
-using POGOProtos.Inventory.Item;
 using POGOProtos.Networking.Responses;
 using POGOProtos.Settings.Master;
 using PokemonGo.RocketAPI;
@@ -54,6 +53,14 @@ namespace PokemonGoGUI.GoManager
             await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
             MethodResult inventoryResult = await UpdateInventory();
+
+            if(inventoryResult.Success)
+            {
+                if(AccountState == Enums.AccountState.PermAccountBan)
+                {
+                    AccountState = Enums.AccountState.Good;
+                }
+            }
 
             if (!inventoryResult.Success)
             {
@@ -137,6 +144,7 @@ namespace PokemonGoGUI.GoManager
 
             if (Stats != null && PlayerData != null)
             {
+                builder.AppendLine(String.Format("Group: {0}", UserSettings.GroupName));
                 builder.AppendLine(String.Format("Username: {0}", UserSettings.PtcUsername));
                 builder.AppendLine(String.Format("Password: {0}", UserSettings.PtcPassword));
                 builder.AppendLine(String.Format("Level: {0}", Stats.Level));

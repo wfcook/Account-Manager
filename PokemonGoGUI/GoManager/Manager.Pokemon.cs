@@ -4,7 +4,6 @@ using POGOProtos.Inventory;
 using POGOProtos.Networking.Responses;
 using POGOProtos.Settings.Master;
 using PokemonGo.RocketAPI;
-using PokemonGo.RocketAPI.Helpers;
 using PokemonGoGUI.Enums;
 using PokemonGoGUI.Extensions;
 using PokemonGoGUI.GoManager.Models;
@@ -12,7 +11,6 @@ using PokemonGoGUI.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace PokemonGoGUI.GoManager
@@ -21,6 +19,29 @@ namespace PokemonGoGUI.GoManager
     {
         public async Task<MethodResult> TransferPokemon(IEnumerable<PokemonData> pokemonToTransfer)
         {
+            /*
+            if (State != Enums.BotState.Stopped)
+            {
+                Pause();
+            }
+
+            await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
+
+            //Wait for actual pause ...
+            //Using pausing to prevent infinite loop. Possible to manual exit this by stopping/starting
+            while (State == Enums.BotState.Pausing || State == Enums.BotState.Stopping)
+            {
+                await Task.Delay(100);
+            }
+
+            //Make sure it's a paused state or stopped. 
+            if (State != Enums.BotState.Paused && State != Enums.BotState.Stopped)
+            {
+                LogCaller(new LoggerEventArgs("Manual intervention on pausing. Aborting transfer", LoggerTypes.Info));
+
+                return new MethodResult();
+            }*/
+
             foreach (PokemonData pokemon in pokemonToTransfer.Where(x => x.Favorite == 0))
             {
                 if (!IsRunning)

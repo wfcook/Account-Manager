@@ -6,14 +6,9 @@ using PokemonGoGUI.GoManager;
 using PokemonGoGUI.Models;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Globalization;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace PokemonGoGUI.UI
@@ -128,6 +123,7 @@ namespace PokemonGoGUI.UI
             numericUpDownMaxFailBeforeReset.Value = settings.MaxFailBeforeReset;
             checkBoxStopOnIPBan.Checked = settings.StopOnIPBan;
             checkBoxAutoRotateProxies.Checked = settings.AutoRotateProxies;
+            checkBoxRemoveOnStop.Checked = settings.AutoRemoveOnStop;
             numericUpDownSearchFortBelow.Value = new Decimal(settings.SearchFortBelowPercent);
 
             //Humanization
@@ -314,6 +310,7 @@ namespace PokemonGoGUI.UI
             userSettings.StopOnIPBan = checkBoxStopOnIPBan.Checked;
             userSettings.MaxFailBeforeReset = (int)numericUpDownMaxFailBeforeReset.Value;
             userSettings.AutoRotateProxies = checkBoxAutoRotateProxies.Checked;
+            userSettings.AutoRemoveOnStop = checkBoxRemoveOnStop.Checked;
 
             //Humanization
             userSettings.EnableHumanization = checkBoxHumanizeThrows.Checked;
@@ -707,6 +704,11 @@ namespace PokemonGoGUI.UI
             _manager.RestoreDeviceDefaults();
 
             UpdateDetails(_manager.UserSettings);
+        }
+
+        private void checkBoxAutoRotateProxies_CheckedChanged(object sender, EventArgs e)
+        {
+            checkBoxRemoveOnStop.Enabled = checkBoxAutoRotateProxies.Checked;
         }
 
     }

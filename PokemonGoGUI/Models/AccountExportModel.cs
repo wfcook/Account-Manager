@@ -1,12 +1,8 @@
 ﻿using Newtonsoft.Json;
 using POGOProtos.Data;
 using POGOProtos.Inventory.Item;
-using PokemonGo.RocketAPI.Enums;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PokemonGoGUI.Models
 {

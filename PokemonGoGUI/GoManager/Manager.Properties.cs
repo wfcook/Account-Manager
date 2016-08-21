@@ -4,9 +4,9 @@ using POGOProtos.Data.Player;
 using POGOProtos.Enums;
 using POGOProtos.Inventory;
 using POGOProtos.Inventory.Item;
-using POGOProtos.Networking.Responses;
 using POGOProtos.Settings.Master;
 using PokemonGo.RocketAPI;
+using PokemonGoGUI.AccountScheduler;
 using PokemonGoGUI.Enums;
 using PokemonGoGUI.GoManager.Models;
 using PokemonGoGUI.Models;
@@ -14,8 +14,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PokemonGoGUI.GoManager
 {
@@ -26,6 +24,52 @@ namespace PokemonGoGUI.GoManager
         public byte[] LogHeaderSettings { get; set; }
 
         public AccountState AccountState { get; set; }
+
+        public Tracker Tracker { get; set; }
+
+        public Scheduler AccountScheduler { get; set; }
+
+        [JsonIgnore]
+        public string SchedulerName
+        {
+            get
+            {
+                if(AccountScheduler == null)
+                {
+                    return String.Empty;
+                }
+
+                return AccountScheduler.Name;
+            }
+        }
+
+        [JsonIgnore]
+        public int PokemonCaught
+        {
+            get
+            {
+                if(Tracker == null)
+                {
+                    return 0;
+                }
+
+                return Tracker.PokemonCaught;
+            }
+        }
+
+        [JsonIgnore]
+        public int PokestopsFarmed
+        {
+            get
+            {
+                if (Tracker == null)
+                {
+                    return 0;
+                }
+
+                return Tracker.PokestopsFarmed;
+            }
+        }
 
         [JsonIgnore]
         public string GroupName
@@ -362,12 +406,6 @@ namespace PokemonGoGUI.GoManager
                 return _expGained;
             }
         }
-
-        [JsonIgnore]
-        public int PokemonCaught { get; set; }
-
-        [JsonIgnore]
-        public int PokestopsFarmed { get; set; }
 
         [JsonIgnore]
         public int TotalPokeStopExp { get; set; }

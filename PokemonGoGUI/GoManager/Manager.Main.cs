@@ -1,16 +1,11 @@
 ﻿using Newtonsoft.Json;
-using POGOProtos.Data;
 using POGOProtos.Data.Player;
-using POGOProtos.Enums;
 using POGOProtos.Inventory;
-using POGOProtos.Inventory.Item;
 using POGOProtos.Map.Fort;
-using POGOProtos.Map.Pokemon;
 using POGOProtos.Networking.Responses;
-using POGOProtos.Settings.Master;
 using PokemonGo.RocketAPI;
 using PokemonGo.RocketAPI.Exceptions;
-using PokemonGo.RocketAPI.Helpers;
+using PokemonGoGUI.AccountScheduler;
 using PokemonGoGUI.Enums;
 using PokemonGoGUI.GoManager.Models;
 using PokemonGoGUI.Models;
@@ -20,8 +15,6 @@ using System.Collections.Generic;
 using System.Device.Location;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -48,6 +41,7 @@ namespace PokemonGoGUI.GoManager
         private ManualResetEvent _pauser = new ManualResetEvent(true);
         private bool _proxyIssue = false;
 
+
         //Needs to be saved on close
         public GoProxy CurrentProxy { get; set; }
 
@@ -59,9 +53,9 @@ namespace PokemonGoGUI.GoManager
         [JsonConstructor]
         public Manager()
         {
-            //Json.net can't deserialize the type
             Stats = new PlayerStats();
             Logs = new List<Log>();
+            Tracker = new Tracker();
 
             LoadFarmLocations();
         }
@@ -71,6 +65,8 @@ namespace PokemonGoGUI.GoManager
             UserSettings = new Settings();
             Logs = new List<Log>();
             Stats = new PlayerStats();
+            Tracker = new PokemonGoGUI.AccountScheduler.Tracker();
+
             ProxyHandler = handler;
 
             LoadFarmLocations();
@@ -93,7 +89,7 @@ namespace PokemonGoGUI.GoManager
 
                 return result;
             }
-            catch(PtcOfflineException ex)
+            catch(PtcOfflineException)
             {
                 LogCaller(new LoggerEventArgs("Ptc server offline. Please try again later.", LoggerTypes.Warning));
 
@@ -105,6 +101,8 @@ namespace PokemonGoGUI.GoManager
             catch(AccountNotVerifiedException)
             {
                 Stop();
+
+                RemoveProxy();
 
                 LogCaller(new LoggerEventArgs("Account not verified. Stopping ...", LoggerTypes.Warning));
 
@@ -194,6 +192,8 @@ namespace PokemonGoGUI.GoManager
                 //Puts stopping log before other log.
                 Stop();
 
+                RemoveProxy();
+
                 LogCaller(new LoggerEventArgs("Invalid credentials or account lockout. Stopping bot...", LoggerTypes.Warning, ex));
 
                 return new MethodResult
@@ -236,6 +236,7 @@ namespace PokemonGoGUI.GoManager
             catch(GoogleException ex)
             {
                 Stop();
+                RemoveProxy();
 
                 LogCaller(new LoggerEventArgs(ex.Message, LoggerTypes.Warning));
 
@@ -259,6 +260,12 @@ namespace PokemonGoGUI.GoManager
 
         public MethodResult Start()
         {
+            //Fixing a bug on my part
+            if(Tracker == null)
+            {
+                Tracker = new Tracker();
+            }
+
             ServicePointManager.DefaultConnectionLimit = Int32.MaxValue;
 
             if(IsRunning)
@@ -279,7 +286,6 @@ namespace PokemonGoGUI.GoManager
             if(!_wasAutoRestarted)
             {
                 _expGained = 0;
-                _wasAutoRestarted = false;
             }
 
             IsRunning = true;
@@ -287,6 +293,7 @@ namespace PokemonGoGUI.GoManager
             _client.SetSettings(UserSettings);
             _pauser.Set();
             _autoRestart = false;
+            //_wasAutoRestarted = false;
             _rand = new Random();
 
             State = BotState.Starting;
@@ -298,6 +305,7 @@ namespace PokemonGoGUI.GoManager
 
             _runningStopwatch.Start();
             _potentialPokemonBan = false;
+            _fleeingPokemonResponses = 0;
 
             t.Start();
 
@@ -418,46 +426,13 @@ namespace PokemonGoGUI.GoManager
 
                 if ((_proxyIssue || CurrentProxy == null) && UserSettings.AutoRotateProxies)
                 {
-                    if(_proxyIssue && CurrentProxy != null)
-                    {
-                        ProxyHandler.IncreaseFailCounter(CurrentProxy);
-                    }
+                    bool success = await ChangeProxy();
 
-                    //Decrease usage
-                    if (CurrentProxy != null)
-                    {
-                        ProxyHandler.ProxyUsed(CurrentProxy, false);
-                    }
-
-                    //Get new
-                    //This call will increment the proxy
-                    CurrentProxy = ProxyHandler.GetRandomProxy();
-
-                    if (CurrentProxy == null)
-                    {
-                        LogCaller(new LoggerEventArgs("No available proxies left. Will recheck every 5 seconds", LoggerTypes.Warning));
-                    }
-
-                    while (CurrentProxy == null && IsRunning)
-                    {
-                        await Task.Delay(5000);
-
-                        CurrentProxy = ProxyHandler.GetRandomProxy();
-                    }
-
-                    //Program is stopping
-                    if(CurrentProxy == null)
+                    //Fails when it's stopping
+                    if(!success)
                     {
                         continue;
                     }
-
-                    UserSettings.ProxyIP = CurrentProxy.Address;
-                    UserSettings.ProxyPort = CurrentProxy.Port;
-                    UserSettings.ProxyUsername = CurrentProxy.Username;
-                    UserSettings.ProxyPassword = CurrentProxy.Password;
-
-
-                    LogCaller(new LoggerEventArgs(String.Format("Changing proxy to {0}", CurrentProxy.ToString()), LoggerTypes.Info));
 
                     //Have to restart to set proxy
                     Restart();
@@ -481,6 +456,9 @@ namespace PokemonGoGUI.GoManager
                     AccountState = AccountState.PermAccountBan;
 
                     LogCaller(new LoggerEventArgs("Potential account ban", LoggerTypes.Warning));
+
+                    //Remove proxy
+                    RemoveProxy();
 
                     Stop();
 
@@ -625,6 +603,15 @@ namespace PokemonGoGUI.GoManager
 
                         LogCaller(new LoggerEventArgs(String.Format("{0}. Failure {1}/{2}", pokestops.Message, currentFails, UserSettings.MaxFailBeforeReset), LoggerTypes.Warning));
 
+                        if (UserSettings.AutoRotateProxies && currentFails >= UserSettings.MaxFailBeforeReset)
+                        {
+                            if (pokestops.Message.StartsWith("No pokestop data found."))
+                            {
+                                _proxyIssue = true;
+                                await ChangeProxy();
+                            }
+                        }
+
                         await Task.Delay(failedWaitTime);
 
                         continue;
@@ -720,19 +707,19 @@ namespace PokemonGoGUI.GoManager
                         //Check sniping
                         if (Stats.Level >= UserSettings.SnipeAfterLevel)
                         {
-                            if (remainingBalls >= UserSettings.MinBallsToSnipe)
+                            if (UserSettings.SnipePokemon && IsRunning && pokeStopNumber >= UserSettings.SnipeAfterPokestops && pokeStopNumber % UserSettings.SnipeAfterPokestops == 0)
                             {
-                                if (UserSettings.SnipePokemon && IsRunning && pokeStopNumber >= UserSettings.SnipeAfterPokestops && pokeStopNumber % UserSettings.SnipeAfterPokestops == 0)
+                                if (remainingBalls >= UserSettings.MinBallsToSnipe)
                                 {
                                     await SnipeAllPokemon();
                                 }
-                            }
-                            else
-                            {
-                                LogCaller(new LoggerEventArgs(String.Format("Not enough pokeballs to snipe. Need {0} have {1}", UserSettings.MinBallsToSnipe, remainingBalls), LoggerTypes.Info));
-                            }
+                                else
+                                {
+                                    LogCaller(new LoggerEventArgs(String.Format("Not enough pokeballs to snipe. Need {0} have {1}", UserSettings.MinBallsToSnipe, remainingBalls), LoggerTypes.Info));
+                                }
 
-                            await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
+                                await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
+                            }
                         }
 
                         //Clean inventory, evolve, transfer, etc on first and every 10 stops
@@ -845,6 +832,10 @@ namespace PokemonGoGUI.GoManager
                 _wasAutoRestarted = true;
                 Start();
             }
+            else if (UserSettings.AutoRemoveOnStop)
+            {
+                RemoveProxy();
+            }
         }
 
         public void Stop()
@@ -860,6 +851,7 @@ namespace PokemonGoGUI.GoManager
 
             _pauser.Set();
             _runningStopwatch.Stop();
+            _failedInventoryReponses = 0;
 
             if(!_autoRestart)
             {
@@ -928,9 +920,18 @@ namespace PokemonGoGUI.GoManager
                     Success = true
                 };
             }
-            catch(Exception)
+            catch (BadImageFormatException)
             {
-                LogCaller(new LoggerEventArgs("Echo failed", LoggerTypes.Warning));
+                LogCaller(new LoggerEventArgs("Incorrect encrypt dll used. Please delete 'encrypt.dll' and restart the program", LoggerTypes.FatalError));
+
+                return new MethodResult
+                {
+                    Message = "Incorrect DLL used"
+                };
+            }
+            catch(Exception ex)
+            {
+                LogCaller(new LoggerEventArgs("Echo failed", LoggerTypes.Warning, ex));
 
                 return new MethodResult
                 {
@@ -981,8 +982,8 @@ namespace PokemonGoGUI.GoManager
         {
             _fleeingPokemonResponses = 0;
             //_expGained = 0;
-            PokemonCaught = 0;
-            PokestopsFarmed = 0;
+            //PokemonCaught = 0;
+            //PokestopsFarmed = 0;
             TotalPokeStopExp = 0;
         }
     }
