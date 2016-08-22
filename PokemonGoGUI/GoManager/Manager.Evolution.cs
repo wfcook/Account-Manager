@@ -27,7 +27,7 @@ namespace PokemonGoGUI.GoManager
 
             LogCaller(new LoggerEventArgs(String.Format("{0} pokemon to evolve", response.Data.Count), LoggerTypes.Info));
 
-            if (response.Data.Count < UserSettings.MinPokemonBeforeEvolve)
+            if (response.Data.Count < UserSettings.MinPokemonBeforeEvolve && !LuckyEggActive)
             {
                 LogCaller(new LoggerEventArgs(String.Format("Not enough pokemon to evolve. {0} of {1} evolvable pokemon", response.Data.Count, UserSettings.MinPokemonBeforeEvolve), LoggerTypes.Info));
 
@@ -38,13 +38,16 @@ namespace PokemonGoGUI.GoManager
                 };
             }
 
-            if(UserSettings.UseLuckyEgg)
+            if (!LuckyEggActive)
             {
-                MethodResult result = await UseLuckyEgg();
-
-                if(!result.Success)
+                if (UserSettings.UseLuckyEgg)
                 {
-                    LogCaller(new LoggerEventArgs("Failed to use lucky egg. Possibly already active. Continuing evolving", LoggerTypes.Info));
+                    MethodResult result = await UseLuckyEgg();
+
+                    if (!result.Success)
+                    {
+                        LogCaller(new LoggerEventArgs("Failed to use lucky egg. Possibly already active. Continuing evolving", LoggerTypes.Info));
+                    }
                 }
             }
 
@@ -241,6 +244,14 @@ namespace PokemonGoGUI.GoManager
 
         private async Task<MethodResult> UseLuckyEgg()
         {
+            if(LuckyEggActive)
+            {
+                return new MethodResult
+                {
+                    Success = true
+                };
+            }
+
             ItemData data = Items.FirstOrDefault(x => x.ItemId == POGOProtos.Inventory.Item.ItemId.ItemLuckyEgg);
 
             if(data == null || data.Count == 0)
@@ -259,6 +270,8 @@ namespace PokemonGoGUI.GoManager
 
                 if (response.Result == UseItemXpBoostResponse.Types.Result.Success)
                 {
+                    LastLuckyEgg = DateTime.Now;
+
                     LogCaller(new LoggerEventArgs(String.Format("Lucky egg used. Remaining: {0}", data.Count - 1), LoggerTypes.Info));
 
                     return new MethodResult

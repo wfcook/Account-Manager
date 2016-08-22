@@ -31,7 +31,7 @@ namespace PokemonGoGUI
         private bool _showStartup = true;
 
         private readonly string _saveFile = "data";
-        private const string _versionNumber = "1.2.6d";
+        private const string _versionNumber = "1.2.7";
 
         public MainForm()
         {
@@ -782,6 +782,13 @@ namespace PokemonGoGUI
                     e.SubItem.ForeColor = manager.AccountScheduler.NameColor;
                 }
             }
+            else if (e.Column == olvColumnExpPerHour)
+            {
+                if(manager.LuckyEggActive)
+                {
+                    e.SubItem.ForeColor = Color.Green;
+                }
+            }
             else if(e.Column == olvColumnAccountState)
             {
                 switch(manager.AccountState)
@@ -840,6 +847,47 @@ namespace PokemonGoGUI
                 }
 
                 e.SubItem.ForeColor = log.GetLogColor();
+            }
+            else if (e.Column == olvColumnPokemonCaught)
+            {
+                if(manager.AccountScheduler == null)
+                {
+                    return;
+                }
+
+                if(manager.PokemonCaught >= manager.AccountScheduler.PokemonLimiter.Max)
+                {
+                    e.SubItem.ForeColor = Color.Red;
+                }
+                else if (manager.PokemonCaught >= manager.AccountScheduler.PokemonLimiter.Min)
+                {
+                    e.SubItem.ForeColor = Color.Green;
+                }
+                else
+                {
+                    e.SubItem.ForeColor = Color.Yellow;
+                }
+
+            }
+            else if (e.Column == olvColumnPokestopsFarmed)
+            {
+                if (manager.AccountScheduler == null)
+                {
+                    return;
+                }
+
+                if (manager.PokestopsFarmed >= manager.AccountScheduler.PokeStoplimiter.Max)
+                {
+                    e.SubItem.ForeColor = Color.Red;
+                }
+                else if (manager.PokestopsFarmed >= manager.AccountScheduler.PokeStoplimiter.Min)
+                {
+                    e.SubItem.ForeColor = Color.Green;
+                }
+                else
+                {
+                    e.SubItem.ForeColor = Color.Yellow;
+                }
             }
 
         }

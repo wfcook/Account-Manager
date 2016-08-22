@@ -19,31 +19,13 @@ namespace PokemonGoGUI.GoManager
     {
         public async Task<MethodResult> TransferPokemon(IEnumerable<PokemonData> pokemonToTransfer)
         {
-            /*
-            if (State != Enums.BotState.Stopped)
+            foreach (PokemonData pokemon in pokemonToTransfer)
             {
-                Pause();
-            }
+                if(pokemon.Favorite == 1)
+                {
+                    continue;
+                }
 
-            await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
-
-            //Wait for actual pause ...
-            //Using pausing to prevent infinite loop. Possible to manual exit this by stopping/starting
-            while (State == Enums.BotState.Pausing || State == Enums.BotState.Stopping)
-            {
-                await Task.Delay(100);
-            }
-
-            //Make sure it's a paused state or stopped. 
-            if (State != Enums.BotState.Paused && State != Enums.BotState.Stopped)
-            {
-                LogCaller(new LoggerEventArgs("Manual intervention on pausing. Aborting transfer", LoggerTypes.Info));
-
-                return new MethodResult();
-            }*/
-
-            foreach (PokemonData pokemon in pokemonToTransfer.Where(x => x.Favorite == 0))
-            {
                 try
                 {
                     ReleasePokemonResponse releaseResponse = await _client.Inventory.TransferPokemon(pokemon.Id);
