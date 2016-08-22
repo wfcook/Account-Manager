@@ -160,8 +160,6 @@
             this.enablelDisableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.manualCheckToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
-            this.fromFileToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.fromProxiesTabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewMain)).BeginInit();
             this.contextMenuStripAccounts.SuspendLayout();
             this.statusStripStats.SuspendLayout();
@@ -699,10 +697,10 @@
             // 
             // importProxiesToolStripMenuItem
             // 
-            this.importProxiesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fromFileToolStripMenuItem1,
             this.importProxiesToolStripMenuItem.Name = "importProxiesToolStripMenuItem";
+            this.importProxiesToolStripMenuItem.Size = new System.Drawing.Size(201, 28);
             this.importProxiesToolStripMenuItem.Text = "Import Proxies";
+            this.importProxiesToolStripMenuItem.Click += new System.EventHandler(this.importProxiesToolStripMenuItem_Click_1);
             // 
             // toolStripSeparator2
             // 
@@ -1250,20 +1248,6 @@
             this.deleteToolStripMenuItem2.Text = "Delete";
             this.deleteToolStripMenuItem2.Click += new System.EventHandler(this.deleteToolStripMenuItem2_Click);
             // 
-            // fromFileToolStripMenuItem1
-            // 
-            this.fromFileToolStripMenuItem1.Name = "fromFileToolStripMenuItem1";
-            this.fromFileToolStripMenuItem1.Size = new System.Drawing.Size(161, 22);
-            this.fromFileToolStripMenuItem1.Text = "From File";
-            this.fromFileToolStripMenuItem1.Click += new System.EventHandler(this.fromFileToolStripMenuItem1_Click);
-            // 
-            // fromProxiesTabToolStripMenuItem
-            // 
-            this.fromProxiesTabToolStripMenuItem.Name = "fromProxiesTabToolStripMenuItem";
-            this.fromProxiesTabToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
-            this.fromProxiesTabToolStripMenuItem.Text = "From ProxiesTab";
-            this.fromProxiesTabToolStripMenuItem.Click += new System.EventHandler(this.fromProxiesTabToolStripMenuItem_Click);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -1426,8 +1410,6 @@
         private System.Windows.Forms.ToolStripMenuItem schedulerToolStripMenuItem;
         private BrightIdeasSoftware.OLVColumn olvColumnScheduler;
         private System.Windows.Forms.ToolStripMenuItem manualCheckToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem fromFileToolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem fromProxiesTabToolStripMenuItem;
     }
 }
 

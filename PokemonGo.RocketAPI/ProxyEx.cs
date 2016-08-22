@@ -13,13 +13,6 @@ namespace PokemonGo.RocketAPI
         public int Port { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
-        public string Combo
-        {
-            get
-            {
-                return string.Format("{0}:{1}:{2}:{3}", this.Address, this.Port, this.Username, this.Password);
-            }
-        }
 
         public ProxyEx()
         {
