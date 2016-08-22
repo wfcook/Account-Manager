@@ -859,7 +859,7 @@ namespace PokemonGoGUI
                 {
                     e.SubItem.ForeColor = Color.Red;
                 }
-                else if (manager.PokemonCaught >= manager.AccountScheduler.PokemonLimiter.Min)
+                else if (manager.PokemonCaught <= manager.AccountScheduler.PokemonLimiter.Min)
                 {
                     e.SubItem.ForeColor = Color.Green;
                 }
@@ -880,7 +880,7 @@ namespace PokemonGoGUI
                 {
                     e.SubItem.ForeColor = Color.Red;
                 }
-                else if (manager.PokestopsFarmed >= manager.AccountScheduler.PokeStoplimiter.Min)
+                else if (manager.PokestopsFarmed <= manager.AccountScheduler.PokeStoplimiter.Min)
                 {
                     e.SubItem.ForeColor = Color.Green;
                 }
