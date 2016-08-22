@@ -200,7 +200,7 @@ namespace PokemonGoGUI.UI
         {
             if (SaveSettings())
             {
-                MessageBox.Show("Settings saved.\nSome settings won't take effect until the account stops running.");
+                MessageBox.Show("Settings saved.\nSome settings won't take effect until the account stops running.", "Info");
             }
         }
 
@@ -218,49 +218,49 @@ namespace PokemonGoGUI.UI
 
             if (!Int32.TryParse(textBoxMaxLevel.Text, out maxLevel) || maxLevel < 0)
             {
-                MessageBox.Show("Invalid Max level");
+                MessageBox.Show("Invalid Max level", "Warning");
                 return false;
             }
 
             if (!Int32.TryParse(textBoxPokemonBeforeEvolve.Text, out minPokemonBeforeEvolve) || minPokemonBeforeEvolve < 0)
             {
-                MessageBox.Show("Invalid pokemon before evolve");
+                MessageBox.Show("Invalid pokemon before evolve", "Warning");
                 return false;
             }
 
             if (!Int32.TryParse(textBoxWalkSpeed.Text, out walkingSpeed) || walkingSpeed <= 0)
             {
-                MessageBox.Show("Invalid walking speed");
+                MessageBox.Show("Invalid walking speed", "Warning");
                 return false;
             }
 
             if (!Int32.TryParse(textBoxMaxTravelDistance.Text, out maxTravelDistance) || maxTravelDistance <= 0)
             {
-                MessageBox.Show("Invalid max travel distance");
+                MessageBox.Show("Invalid max travel distance", "Warning");
                 return false;
             }
 
             if (!Double.TryParse(textBoxLat.Text.Replace(",", "."), NumberStyles.Any, CultureInfo.InvariantCulture, out defaultLat))
             {
-                MessageBox.Show("Invalid latitude");
+                MessageBox.Show("Invalid latitude", "Warning");
                 return false;
             }
 
             if (!Double.TryParse(textBoxLong.Text.Replace(",", "."), NumberStyles.Any, CultureInfo.InvariantCulture, out defaultLong))
             {
-                MessageBox.Show("Invalid longitude");
+                MessageBox.Show("Invalid longitude", "Warning");
                 return false;
             }
 
             if (!String.IsNullOrEmpty(textBoxProxy.Text) && !ProxyEx.TryParse(textBoxProxy.Text, out proxyEx))
             {
-                MessageBox.Show("Invalid proxy format");
+                MessageBox.Show("Invalid proxy format", "Warning");
                 return false;
             }
 
             if (comboBoxMinAccountState.SelectedItem == null)
             {
-                MessageBox.Show("Please select a valid min account state");
+                MessageBox.Show("Please select a valid min account state", "Warning");
                 return false;
             }
 
@@ -533,7 +533,7 @@ namespace PokemonGoGUI.UI
 
             if(!Int32.TryParse(cp, out changeCp) || changeCp < 0)
             {
-                MessageBox.Show("Invalid amount");
+                MessageBox.Show("Invalid amount", "Warning");
 
                 return;
             }
@@ -653,7 +653,7 @@ namespace PokemonGoGUI.UI
 
                 if (result.Success)
                 {
-                    MessageBox.Show("Config exported");
+                    MessageBox.Show("Config exported", "Info");
                 }
             }
         }

@@ -19,15 +19,12 @@ namespace PokemonGoGUI.GoManager
 {
     public partial class Manager
     {
-        public Settings UserSettings { get; set; }
-
         public byte[] LogHeaderSettings { get; set; }
-
         public AccountState AccountState { get; set; }
-
+        public Settings UserSettings { get; set; }
         public Tracker Tracker { get; set; }
-
         public Scheduler AccountScheduler { get; set; }
+        public DateTime LastLuckyEgg { get; set; }
 
         [JsonIgnore]
         public string SchedulerName
@@ -421,6 +418,20 @@ namespace PokemonGoGUI.GoManager
                 }
 
                 return UserSettings.RunForHours;
+            }
+        }
+
+        [JsonIgnore]
+        public bool LuckyEggActive
+        {
+            get
+            {
+                if(DateTime.Now < LastLuckyEgg.AddMinutes(30))
+                {
+                    return true;
+                }
+
+                return false;
             }
         }
 

@@ -31,7 +31,7 @@ namespace PokemonGoGUI
         private bool _showStartup = true;
 
         private readonly string _saveFile = "data";
-        private const string _versionNumber = "1.2.6d";
+        private const string _versionNumber = "1.2.7";
 
         public MainForm()
         {
@@ -115,6 +115,7 @@ namespace PokemonGoGUI
 
         private async void MainForm_Load(object sender, EventArgs e)
         {
+
             this.Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
 
             RenameDLL();
@@ -670,6 +671,11 @@ namespace PokemonGoGUI
 
         private void timerListViewUpdate_Tick(object sender, EventArgs e)
         {
+            if(WindowState == FormWindowState.Minimized)
+            {
+                return;
+            }
+
             if (tabControlProxies.SelectedTab == tabPageAccounts)
             {
                 if (_managers.Count == 0)
@@ -776,6 +782,13 @@ namespace PokemonGoGUI
                     e.SubItem.ForeColor = manager.AccountScheduler.NameColor;
                 }
             }
+            else if (e.Column == olvColumnExpPerHour)
+            {
+                if(manager.LuckyEggActive)
+                {
+                    e.SubItem.ForeColor = Color.Green;
+                }
+            }
             else if(e.Column == olvColumnAccountState)
             {
                 switch(manager.AccountState)
@@ -834,6 +847,47 @@ namespace PokemonGoGUI
                 }
 
                 e.SubItem.ForeColor = log.GetLogColor();
+            }
+            else if (e.Column == olvColumnPokemonCaught)
+            {
+                if(manager.AccountScheduler == null)
+                {
+                    return;
+                }
+
+                if(manager.PokemonCaught >= manager.AccountScheduler.PokemonLimiter.Max)
+                {
+                    e.SubItem.ForeColor = Color.Red;
+                }
+                else if (manager.PokemonCaught >= manager.AccountScheduler.PokemonLimiter.Min)
+                {
+                    e.SubItem.ForeColor = Color.Green;
+                }
+                else
+                {
+                    e.SubItem.ForeColor = Color.Yellow;
+                }
+
+            }
+            else if (e.Column == olvColumnPokestopsFarmed)
+            {
+                if (manager.AccountScheduler == null)
+                {
+                    return;
+                }
+
+                if (manager.PokestopsFarmed >= manager.AccountScheduler.PokeStoplimiter.Max)
+                {
+                    e.SubItem.ForeColor = Color.Red;
+                }
+                else if (manager.PokestopsFarmed >= manager.AccountScheduler.PokeStoplimiter.Min)
+                {
+                    e.SubItem.ForeColor = Color.Green;
+                }
+                else
+                {
+                    e.SubItem.ForeColor = Color.Yellow;
+                }
             }
 
         }
@@ -1049,6 +1103,13 @@ namespace PokemonGoGUI
 
         private void clearCountsToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            DialogResult result = MessageBox.Show("This will reset your last 23 hour count and is updated to accurately reflect your pokestops + pokemon counts.\n\nAre you sure you want to clear this?", "Confirmation", MessageBoxButtons.YesNo);
+
+            if(result != DialogResult.Yes)
+            {
+                return;
+            }
+
             foreach(Manager manager in fastObjectListViewMain.SelectedObjects)
             {
                 manager.ClearStats();
@@ -1075,11 +1136,13 @@ namespace PokemonGoGUI
             }
         }
 
-        private void restartToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void restartToolStripMenuItem_Click(object sender, EventArgs e)
         {
             foreach(Manager manager in fastObjectListViewMain.SelectedObjects)
             {
                 manager.Restart();
+
+                await Task.Delay(100);
             }
         }
 
@@ -1506,6 +1569,11 @@ namespace PokemonGoGUI
 
         private void showStatusBarToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if(WindowState == FormWindowState.Minimized)
+            {
+                return;
+            }
+
             bool showGroups = !statusStripStats.Visible;
 
             statusStripStats.Visible = showGroups;
@@ -1701,7 +1769,7 @@ namespace PokemonGoGUI
             }
             catch(Exception ex)
             {
-                MessageBox.Show("Failed to import proxy file. Ex: {0}", ex.Message);
+                MessageBox.Show(String.Format("Failed to import proxy file. Ex: {0}", ex.Message), "Exception occured");
             }
         }
 
@@ -1783,7 +1851,7 @@ namespace PokemonGoGUI
 
             if(!Int32.TryParse(data, out value) || value <= 0)
             {
-                MessageBox.Show("Invalid value");
+                MessageBox.Show("Invalid value", "Warning");
                 return;
             }
 
@@ -1808,7 +1876,7 @@ namespace PokemonGoGUI
 
             if (!Int32.TryParse(data, out value) || value <= 0)
             {
-                MessageBox.Show("Invalid value");
+                MessageBox.Show("Invalid value", "Warning");
                 return;
             }
 

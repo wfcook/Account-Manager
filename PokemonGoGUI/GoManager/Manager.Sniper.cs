@@ -5,6 +5,7 @@ using PokemonGo.RocketAPI;
 using PokemonGoGUI.Extensions;
 using PokemonGoGUI.GoManager.Models;
 using PokemonGoGUI.Models;
+using PokemonGoGUI.Snipers;
 using System;
 using System.Collections.Generic;
 using System.Device.Location;
@@ -22,20 +23,9 @@ namespace PokemonGoGUI.GoManager
         {
             try
             {
-                using(WebClient wc = new WebClient())
-                {
-                    string response = wc.DownloadString("http://pokesnipers.com/api/v1/pokemon.json");
-
-                    PokeSniperObject pkObject = Serializer.FromJson<PokeSniperObject>(response);
-
-                    return new MethodResult<PokeSniperObject>
-                    {
-                        Data = pkObject,
-                        Success = true
-                    };
-                }
+                return PokeSniper.RequestPokemon();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 LogCaller(new LoggerEventArgs("Failed to request PokeSniper website", LoggerTypes.Warning, ex));
 
@@ -77,7 +67,7 @@ namespace PokemonGoGUI.GoManager
 
             List<PokeSniperResult> pokemonToSnipe = pokeSniperResult.Data.results.Where(x => x.id > _lastPokeSniperId && PokemonWithinCatchSettings(x.PokemonId, true) && x.DespawnTime >= DateTime.Now.AddSeconds(30)).TakeLast(UserSettings.MaxPokemonPerSnipe).ToList();
 
-            _lastPokeSniperId = pokeSniperResult.Data.results.OrderByDescending(x => x.id).First().id;
+            _lastPokeSniperId = pokemonToSnipe.OrderByDescending(x => x.id).First().id;
 
             if(pokemonToSnipe.Count == 0) 
             {
@@ -256,7 +246,7 @@ namespace PokemonGoGUI.GoManager
             }
 
             //Update location back
-            MethodResult locationResult = await RepeatAction(() => UpdateLocation(originalLocation), 2);
+            MethodResult locationResult = await UpdateLocation(originalLocation);
 
             if(!locationResult.Success)
             {

@@ -11,6 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PokemonGoGUI.Extensions;
 
 namespace PokemonGoGUI.GoManager
 {
@@ -81,6 +82,7 @@ namespace PokemonGoGUI.GoManager
                 LogCaller(new LoggerEventArgs("Finished updating details", LoggerTypes.Debug));
             }
 
+            await ClaimLevelUpRewards(Level);
 
             return new MethodResult
             {
@@ -222,6 +224,52 @@ namespace PokemonGoGUI.GoManager
                 LogCaller(new LoggerEventArgs("Failed to export stats due to exception", LoggerTypes.Warning, ex));
 
                 return new MethodResult();
+            }
+        }
+
+        public async Task<MethodResult> ClaimLevelUpRewards(int level)
+        {
+            try
+            {
+                if (!_client.LoggedIn)
+                {
+                    MethodResult result = await Login();
+
+                    if (!result.Success)
+                    {
+                        return result;
+                    }
+                }
+
+                LevelUpRewardsResponse response = await _client.Player.GetLevelUpRewards(level);
+
+                if(response.Result == LevelUpRewardsResponse.Types.Result.Success)
+                {
+                    string rewards = StringUtil.GetSummedFriendlyNameOfItemAwardList(response.ItemsAwarded);
+
+                    LogCaller(new LoggerEventArgs(String.Format("Grabbed rewards for level {0}. Rewards: {1}", level, rewards), LoggerTypes.Info));
+                }
+                else if(response.Result == LevelUpRewardsResponse.Types.Result.Unset)
+                {
+                    LogCaller(new LoggerEventArgs("Failed to request rewards", LoggerTypes.Warning));
+
+                    return new MethodResult();
+                }
+
+                return new MethodResult
+                {
+                    Success = true
+                };
+
+            }
+            catch (Exception ex)
+            {
+                LogCaller(new LoggerEventArgs("Failed to get level up rewards", LoggerTypes.Exception, ex));
+
+                return new MethodResult
+                {
+                    Message = "Failed to get level up rewards"
+                };
             }
         }
     }

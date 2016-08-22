@@ -63,11 +63,11 @@ namespace PokemonGoGUI.ProxyManager
             }
         }
 
-        public void AddProxy(GoProxy proxy)
+        public bool AddProxy(GoProxy proxy)
         {
             lock(Proxies)
             {
-                Proxies.Add(proxy);
+                return Proxies.Add(proxy);
             }
         }
 
@@ -80,6 +80,7 @@ namespace PokemonGoGUI.ProxyManager
                 return false;
             }
 
+
             GoProxy goProxy = new GoProxy
             {
                 Address = proxy.Address,
@@ -88,9 +89,7 @@ namespace PokemonGoGUI.ProxyManager
                 Username = proxy.Username
             };
 
-            AddProxy(goProxy);
-
-            return true;
+            return AddProxy(goProxy);
         }
 
         public GoProxy GetRandomProxy()
