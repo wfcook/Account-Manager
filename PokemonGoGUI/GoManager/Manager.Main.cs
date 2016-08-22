@@ -517,14 +517,14 @@ namespace PokemonGoGUI.GoManager
 
                     //Get profile data
                     LogCaller(new LoggerEventArgs("Grabbing player data ...", LoggerTypes.Debug));
-                    result = await RepeatAction(GetProfile, 2);
+                    result = await GetProfile();
 
                     await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
                     //Update inventory
                     LogCaller(new LoggerEventArgs("Updating inventory items ...", LoggerTypes.Debug));
 
-                    result = await RepeatAction<List<InventoryItem>>(UpdateInventory, 1);
+                    result = await UpdateInventory();
 
                     await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
@@ -565,7 +565,7 @@ namespace PokemonGoGUI.GoManager
                     {
                         LogCaller(new LoggerEventArgs("Setting default location ...", LoggerTypes.Debug));
 
-                        result = await RepeatAction(() => UpdateLocation(new GeoCoordinate(UserSettings.DefaultLatitude, UserSettings.DefaultLongitude)), 2);
+                        result = await UpdateLocation(new GeoCoordinate(UserSettings.DefaultLatitude, UserSettings.DefaultLongitude));
 
                         if (!result.Success)
                         {
@@ -584,7 +584,7 @@ namespace PokemonGoGUI.GoManager
                     //Get pokestops
                     LogCaller(new LoggerEventArgs("Grabbing pokestops...", LoggerTypes.Debug));
 
-                    MethodResult<List<FortData>> pokestops = await RepeatAction<List<FortData>>(GetPokeStops, 2);
+                    MethodResult<List<FortData>> pokestops = await GetPokeStops();
 
                     if(!pokestops.Success)
                     {
@@ -650,7 +650,7 @@ namespace PokemonGoGUI.GoManager
                         LogCaller(new LoggerEventArgs(String.Format("Going to stop {0} of {1}. Distance {2:0.00}m", pokeStopNumber, totalStops, distance), LoggerTypes.Info));
 
                         //Go to stops
-                        MethodResult walkResult = await RepeatAction(() => GoToLocation(new GeoCoordinate(pokestop.Latitude, pokestop.Longitude)), 1);
+                        MethodResult walkResult = await GoToLocation(new GeoCoordinate(pokestop.Latitude, pokestop.Longitude));
 
                         if (!walkResult.Success)
                         {
@@ -694,12 +694,12 @@ namespace PokemonGoGUI.GoManager
                         if (remainingBalls > 0)
                         {
                             //Catch nearby pokemon
-                            MethodResult nearbyPokemonResponse = await RepeatAction(CatchNeabyPokemon, 1);
+                            MethodResult nearbyPokemonResponse = await CatchNeabyPokemon();
 
                             await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
                             //Get nearby lured pokemon
-                            MethodResult luredPokemonResponse = await RepeatAction(() => CatchLuredPokemon(pokestop), 1);
+                            MethodResult luredPokemonResponse = await CatchLuredPokemon(pokestop);
 
                             await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
                         }
@@ -862,6 +862,7 @@ namespace PokemonGoGUI.GoManager
             IsRunning = false;
         }
 
+        /*
         private async Task<MethodResult> RepeatAction(Func<Task<MethodResult>> action, int tries)
         {
             MethodResult result = new MethodResult();
@@ -899,6 +900,7 @@ namespace PokemonGoGUI.GoManager
 
             return result;
         }
+        */
 
         private async Task<MethodResult> SendEcho()
         {

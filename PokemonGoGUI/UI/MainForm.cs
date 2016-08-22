@@ -671,6 +671,11 @@ namespace PokemonGoGUI
 
         private void timerListViewUpdate_Tick(object sender, EventArgs e)
         {
+            if(WindowState == FormWindowState.Minimized)
+            {
+                return;
+            }
+
             if (tabControlProxies.SelectedTab == tabPageAccounts)
             {
                 if (_managers.Count == 0)
@@ -1702,7 +1707,7 @@ namespace PokemonGoGUI
             }
             catch(Exception ex)
             {
-                MessageBox.Show("Failed to import proxy file. Ex: {0}", ex.Message);
+                MessageBox.Show(String.Format("Failed to import proxy file. Ex: {0}", ex.Message), "Exception occured");
             }
         }
 
@@ -1784,7 +1789,7 @@ namespace PokemonGoGUI
 
             if(!Int32.TryParse(data, out value) || value <= 0)
             {
-                MessageBox.Show("Invalid value");
+                MessageBox.Show("Invalid value", "Warning");
                 return;
             }
 
@@ -1809,7 +1814,7 @@ namespace PokemonGoGUI
 
             if (!Int32.TryParse(data, out value) || value <= 0)
             {
-                MessageBox.Show("Invalid value");
+                MessageBox.Show("Invalid value", "Warning");
                 return;
             }
 

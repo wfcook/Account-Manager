@@ -256,7 +256,7 @@ namespace PokemonGoGUI.GoManager
             }
 
             //Update location back
-            MethodResult locationResult = await RepeatAction(() => UpdateLocation(originalLocation), 2);
+            MethodResult locationResult = await UpdateLocation(originalLocation);
 
             if(!locationResult.Success)
             {
