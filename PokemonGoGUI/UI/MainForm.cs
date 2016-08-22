@@ -1519,6 +1519,11 @@ namespace PokemonGoGUI
 
         private void showStatusBarToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if(WindowState == FormWindowState.Minimized)
+            {
+                return;
+            }
+
             bool showGroups = !statusStripStats.Visible;
 
             statusStripStats.Visible = showGroups;

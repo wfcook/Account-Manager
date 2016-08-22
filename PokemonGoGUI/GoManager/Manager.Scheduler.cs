@@ -55,6 +55,12 @@ namespace PokemonGoGUI.GoManager
                 return;
             }
 
+            //Should not start with these states
+            if(AccountState == AccountState.PermAccountBan || AccountState == AccountState.NotVerified)
+            {
+                return;
+            }
+
             if (e.Scheduler.WithinTime())
             {
                 if (State == Enums.BotState.Stopped)
