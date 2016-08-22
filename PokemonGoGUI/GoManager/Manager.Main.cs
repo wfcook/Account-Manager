@@ -540,6 +540,12 @@ namespace PokemonGoGUI.GoManager
                         continue;
                     }
 
+                    LogCaller(new LoggerEventArgs("Getting level up rewards ...", LoggerTypes.Debug));
+
+                    result = await ClaimLevelUpRewards(Level);
+
+                    await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
+
                     _failedInventoryReponses = 0;
 
                     if(WaitPaused())
@@ -737,7 +743,16 @@ namespace PokemonGoGUI.GoManager
 
                             bool secondInventoryUpdate = false;
 
+                            int prevLevel = Level;
+
                             await UpdateInventory();
+
+                            if (Level > prevLevel)
+                            {
+                                await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
+
+                                await ClaimLevelUpRewards(Level);
+                            }
 
                             await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 

@@ -249,7 +249,7 @@ namespace PokemonGoGUI.GoManager
 
                     LogCaller(new LoggerEventArgs(String.Format("Grabbed rewards for level {0}. Rewards: {1}", level, rewards), LoggerTypes.Info));
                 }
-                else
+                else if(response.Result == LevelUpRewardsResponse.Types.Result.Unset)
                 {
                     LogCaller(new LoggerEventArgs("Failed to request rewards", LoggerTypes.Warning));
 
