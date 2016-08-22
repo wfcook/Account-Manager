@@ -1088,11 +1088,13 @@ namespace PokemonGoGUI
             }
         }
 
-        private void restartToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void restartToolStripMenuItem_Click(object sender, EventArgs e)
         {
             foreach(Manager manager in fastObjectListViewMain.SelectedObjects)
             {
                 manager.Restart();
+
+                await Task.Delay(100);
             }
         }
 
