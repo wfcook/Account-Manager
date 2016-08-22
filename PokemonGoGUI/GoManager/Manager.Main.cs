@@ -983,10 +983,9 @@ namespace PokemonGoGUI.GoManager
         public void ClearStats()
         {
             _fleeingPokemonResponses = 0;
-            //_expGained = 0;
-            //PokemonCaught = 0;
-            //PokestopsFarmed = 0;
             TotalPokeStopExp = 0;
+            Tracker.Values.Clear();
+            Tracker.CalculatedTrackingHours();
         }
     }
 }

@@ -1055,6 +1055,13 @@ namespace PokemonGoGUI
 
         private void clearCountsToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            DialogResult result = MessageBox.Show("This will reset your last 23 hour count and is updated to accurately reflect your pokestops + pokemon counts.\n\nAre you sure you want to clear this?", "Confirmation", MessageBoxButtons.YesNo);
+
+            if(result != DialogResult.Yes)
+            {
+                return;
+            }
+
             foreach(Manager manager in fastObjectListViewMain.SelectedObjects)
             {
                 manager.ClearStats();
