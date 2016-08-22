@@ -942,13 +942,13 @@ namespace PokemonGoGUI
             updateDetailsToolStripMenuItem.Enabled = true;
         }
 
-        private void importProxiesToolStripMenuItem_Click_1(object sender, EventArgs e)
+        private void fromFileToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             int count = fastObjectListViewMain.SelectedObjects.Count;
             string fileName = String.Empty;
             int accountsPerProxy = 0;
 
-            if(count == 0)
+            if (count == 0)
             {
                 MessageBox.Show("Please select 1 or more accounts");
                 return;
@@ -956,7 +956,7 @@ namespace PokemonGoGUI
 
             string pPerAccount = Prompt.ShowDialog("Accounts per proxy", "Accounts per proxy", "1");
 
-            if(String.IsNullOrEmpty(pPerAccount))
+            if (String.IsNullOrEmpty(pPerAccount))
             {
                 return;
             }
@@ -1044,6 +1044,80 @@ namespace PokemonGoGUI
                 manager.UserSettings.ProxyPassword = proxy.Password;
             }
         }
+
+        private void fromProxiesTabToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            int count = fastObjectListViewMain.SelectedObjects.Count;
+            int accountsPerProxy = 0;
+
+            if (count == 0)
+            {
+                MessageBox.Show("Please select 1 or more accounts");
+                return;
+            }
+
+            string pPerAccount = Prompt.ShowDialog("Accounts per proxy", "Accounts per proxy", "1");
+
+            if (String.IsNullOrEmpty(pPerAccount))
+            {
+                return;
+            }
+
+            if (!Int32.TryParse(pPerAccount, out accountsPerProxy) || accountsPerProxy <= 0)
+            {
+                MessageBox.Show("Invalid input");
+
+                return;
+            }
+
+            List<ProxyEx> proxies = new List<ProxyEx>();
+
+            ProxyEx tempProxyEx = null;
+
+            foreach (GoProxy proxy in _proxyHandler.Proxies)
+            {
+                if (ProxyEx.TryParse(proxy.Combo, out tempProxyEx))
+                {
+                    proxies.Add(tempProxyEx);
+                }
+
+            }
+
+            if (proxies.Count == 0)
+            {
+                MessageBox.Show("No proxies found");
+                return;
+            }
+
+            int proxyIndex = 0;
+            int proxyUsage = 0;
+
+            foreach (Manager manager in fastObjectListViewMain.SelectedObjects)
+            {
+                ++proxyUsage;
+
+                if (proxyUsage > accountsPerProxy)
+                {
+                    ++proxyIndex;
+                    proxyUsage = 1;
+
+                    if (proxyIndex >= proxies.Count)
+                    {
+                        MessageBox.Show("Out of proxies");
+                        return;
+                    }
+                }
+
+                ProxyEx proxy = proxies[proxyIndex];
+
+                manager.UserSettings.ProxyIP = proxy.Address;
+                manager.UserSettings.ProxyPort = proxy.Port;
+                manager.UserSettings.ProxyUsername = proxy.Username;
+                manager.UserSettings.ProxyPassword = proxy.Password;
+            }
+        }
+
+
 
         private void exportAccountsToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
@@ -2116,5 +2190,6 @@ namespace PokemonGoGUI
         }
 
         #endregion
+
     }
 }
