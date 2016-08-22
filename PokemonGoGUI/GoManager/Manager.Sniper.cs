@@ -67,8 +67,6 @@ namespace PokemonGoGUI.GoManager
 
             List<PokeSniperResult> pokemonToSnipe = pokeSniperResult.Data.results.Where(x => x.id > _lastPokeSniperId && PokemonWithinCatchSettings(x.PokemonId, true) && x.DespawnTime >= DateTime.Now.AddSeconds(30)).TakeLast(UserSettings.MaxPokemonPerSnipe).ToList();
 
-            _lastPokeSniperId = pokemonToSnipe.OrderByDescending(x => x.id).First().id;
-
             if(pokemonToSnipe.Count == 0) 
             {
                 LogCaller(new LoggerEventArgs("No pokemon to snipe within catch settings", LoggerTypes.Info));
@@ -78,6 +76,8 @@ namespace PokemonGoGUI.GoManager
                     Message = "No catchable pokemon found"
                 };
             }
+
+            _lastPokeSniperId = pokemonToSnipe.OrderByDescending(x => x.id).First().id;
 
             LogCaller(new LoggerEventArgs(String.Format("Sniping {0} pokemon", pokemonToSnipe.Count), LoggerTypes.Info));
 
