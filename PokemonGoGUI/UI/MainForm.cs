@@ -630,9 +630,9 @@ namespace PokemonGoGUI
                         }
                     }
 
-                    manager.UserSettings.AccountName = importModel.Username;
-                    manager.UserSettings.PtcUsername = importModel.Username;
-                    manager.UserSettings.PtcPassword = importModel.Password;
+                    manager.UserSettings.AccountName = importModel.Username.Trim();
+                    manager.UserSettings.PtcUsername = importModel.Username.Trim();
+                    manager.UserSettings.PtcPassword = importModel.Password.Trim();
                     manager.UserSettings.ProxyIP = importModel.Address;
                     manager.UserSettings.ProxyPort = importModel.Port;
                     manager.UserSettings.ProxyUsername = importModel.ProxyUsername;

@@ -281,8 +281,8 @@ namespace PokemonGoGUI.UI
 
 
             userSettings.MimicWalking = checkBoxMimicWalking.Checked;
-            userSettings.PtcUsername = textBoxPtcUsername.Text;
-            userSettings.PtcPassword = textBoxPtcPassword.Text;
+            userSettings.PtcUsername = textBoxPtcUsername.Text.Trim();
+            userSettings.PtcPassword = textBoxPtcPassword.Text.Trim();
             userSettings.DefaultLatitude = defaultLat;
             userSettings.DefaultLongitude = defaultLong;
             userSettings.WalkingSpeed = walkingSpeed;
