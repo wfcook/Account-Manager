@@ -850,10 +850,20 @@ namespace PokemonGoGUI
 
         private async void exportStatsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            foreach(Manager manager in fastObjectListViewMain.SelectedObjects)
+            ParallelOptions options = new ParallelOptions
             {
-                await manager.ExportStats();
-            }
+                MaxDegreeOfParallelism = 10
+            };
+
+            IEnumerable<Manager> managers = fastObjectListViewMain.SelectedObjects.Cast<Manager>();
+
+            await Task.Run(() =>
+                {
+                    Parallel.ForEach(managers, (manager) =>
+                    {
+                        manager.ExportStats().Wait();
+                    });
+                });
         }
 
         private async void updateDetailsToolStripMenuItem_Click(object sender, EventArgs e)
