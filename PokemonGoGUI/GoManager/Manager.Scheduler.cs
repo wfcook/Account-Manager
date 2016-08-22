@@ -1,6 +1,9 @@
 ﻿using PokemonGoGUI.AccountScheduler;
 using PokemonGoGUI.Enums;
 using PokemonGoGUI.GoManager.Models;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace PokemonGoGUI.GoManager
 {
@@ -37,7 +40,7 @@ namespace PokemonGoGUI.GoManager
             AccountScheduler = null;
         }
 
-        private void scheduler_OnSchedule(object sender, SchedulerEventArgs e)
+        private async void scheduler_OnSchedule(object sender, SchedulerEventArgs e)
         {
             Tracker.CalculatedTrackingHours();
 
@@ -61,6 +64,13 @@ namespace PokemonGoGUI.GoManager
                 return;
             }
 
+            int delay = 0;
+
+            lock(_rand)
+            {
+                delay = _rand.Next(0, 45000);
+            }
+
             if (e.Scheduler.WithinTime())
             {
                 if (State == Enums.BotState.Stopped)
@@ -70,7 +80,10 @@ namespace PokemonGoGUI.GoManager
                     if ((PokemonCaught <= scheduler.PokemonLimiter.Min || scheduler.PokemonLimiter.Option == SchedulerOption.Nothing) &&
                         (PokestopsFarmed <= scheduler.PokeStoplimiter.Min || scheduler.PokeStoplimiter.Option == SchedulerOption.Nothing))
                     {
-                        LogCaller(new LoggerEventArgs("Auto starting (schedule) ...", LoggerTypes.Debug));
+                        LogCaller(new LoggerEventArgs(String.Format("Auto starting (schedule) in {0} seconds...", delay/1000), LoggerTypes.Debug));
+
+                        await Task.Delay(delay);
+
                         Start();
                     }
                 }
@@ -145,7 +158,10 @@ namespace PokemonGoGUI.GoManager
                             {
                                 if (State == BotState.Stopped)
                                 {
-                                    LogCaller(new LoggerEventArgs("Min pokemon limit reached. Starting...", LoggerTypes.Debug));
+                                    LogCaller(new LoggerEventArgs(String.Format("Min pokemon limit reached. Starting in {0} seconds", delay/1000), LoggerTypes.Debug));
+
+                                    await Task.Delay(delay);
+
                                     Start();
                                 }
                             }
@@ -191,7 +207,10 @@ namespace PokemonGoGUI.GoManager
                             {
                                 if (State == BotState.Stopped)
                                 {
-                                    LogCaller(new LoggerEventArgs("Min pokestop limit reached. Executing selected option", LoggerTypes.Debug));
+                                    LogCaller(new LoggerEventArgs(String.Format("Min pokestop limit reached. Starting in {0} seconds", delay/1000), LoggerTypes.Debug));
+
+                                    await Task.Delay(delay);
+
                                     Start();
                                 }
                             }
