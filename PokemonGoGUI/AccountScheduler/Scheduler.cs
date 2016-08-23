@@ -1,5 +1,7 @@
-﻿using PokemonGoGUI.Enums;
+﻿using Newtonsoft.Json;
+using PokemonGoGUI.Enums;
 using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Timers;
 
@@ -21,10 +23,24 @@ namespace PokemonGoGUI.AccountScheduler
         public SchedulerLimiter PokeStoplimiter { get; set; }
         public SchedulerLimiter PokemonLimiter { get; set; }
         public SchedulerOption MasterOption { get; set; }
-
         public Color NameColor { get; set; }
 
+        [JsonIgnore]
+        public double TimeSinceLastCall
+        {
+            get
+            {
+                if(!Enabled)
+                {
+                    return 0;
+                }
+
+                return _lastCall.Elapsed.TotalMinutes;
+            }
+        }
+
         private Timer _timer = new Timer(Minute * 5);
+        private Stopwatch _lastCall = Stopwatch.StartNew();
 
         public int CheckTime
         {
@@ -37,8 +53,10 @@ namespace PokemonGoGUI.AccountScheduler
                 _checkTime = value * Minute;
 
                 _timer.Interval = _checkTime;
+                _timer.Stop();
+                _timer.Start();
+                _lastCall.Restart();
             }
-
         }
 
         public string PokemonSettings
@@ -125,6 +143,8 @@ namespace PokemonGoGUI.AccountScheduler
 
         private void _timer_Elapsed(object sender, ElapsedEventArgs e)
         {
+            _lastCall.Restart();
+
             CheckCaller();
         }
 
