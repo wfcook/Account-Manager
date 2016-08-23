@@ -130,6 +130,7 @@
     <Compile Include="GoManager\Manager.Scheduler.cs" />
     <Compile Include="GoManager\Manager.Settings.cs" />
     <Compile Include="GoManager\Manager.Sniper.cs" />
+    <Compile Include="GoManager\Manager.Tutorial.cs" />
     <Compile Include="Models\AccountExportModel.cs" />
     <Compile Include="Models\AccountImport.cs" />
     <Compile Include="Models\CatchSetting.cs" />

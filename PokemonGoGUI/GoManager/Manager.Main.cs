@@ -504,6 +504,30 @@ namespace PokemonGoGUI.GoManager
 
                     await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
+                    if (UserSettings.StopOnAPIUpdate)
+                    {
+                        //Get Game settings
+                        LogCaller(new LoggerEventArgs("Grabbing game settings ...", LoggerTypes.Debug));
+
+                        MethodResult<bool> minClientResponse = await GetGameSettings("0.33.0");
+
+                        if (result.Success)
+                        {
+                            //Version isn't 0.33
+                            if (!minClientResponse.Data)
+                            {
+                                Stop();
+
+                                LogCaller(new LoggerEventArgs("API updated to version 0.35. Stopping ...", LoggerTypes.Warning));
+
+                                continue;
+                            }
+                        }
+
+                        await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
+                    }
+
+
                     //Get pokemon settings
                     if(PokeSettings == null)
                     {

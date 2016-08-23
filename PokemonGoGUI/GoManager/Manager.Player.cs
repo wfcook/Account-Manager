@@ -277,5 +277,25 @@ namespace PokemonGoGUI.GoManager
                 };
             }
         }
+
+        public async Task<MethodResult<bool>> GetGameSettings(string minVersion)
+        {
+            try
+            {
+                DownloadSettingsResponse response = await _client.Download.GetSettings();
+
+                return new MethodResult<bool>
+                {
+                    Data = response.Settings.MinimumClientVersion == minVersion,
+                    Success = true
+                };
+            }
+            catch(Exception ex)
+            {
+                LogCaller(new LoggerEventArgs("Failed to request game settings", LoggerTypes.Exception, ex));
+
+                return new MethodResult<bool>();
+            }
+        }
     }
 }
