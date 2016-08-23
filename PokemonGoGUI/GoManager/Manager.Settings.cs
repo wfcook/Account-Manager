@@ -231,6 +231,7 @@ namespace PokemonGoGUI.GoManager
                 settings.ProxyPassword = UserSettings.ProxyPassword;
                 settings.ProxyPort = UserSettings.ProxyPort;
                 settings.ProxyUsername = UserSettings.ProxyUsername;
+                settings.GroupName = UserSettings.GroupName;
 
                 UserSettings = settings;
 
