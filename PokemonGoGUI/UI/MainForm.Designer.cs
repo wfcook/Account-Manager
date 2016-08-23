@@ -160,6 +160,7 @@
             this.enablelDisableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.manualCheckToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.claimLevelUpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewMain)).BeginInit();
             this.contextMenuStripAccounts.SuspendLayout();
             this.statusStripStats.SuspendLayout();
@@ -335,7 +336,7 @@
             this.deleteToolStripMenuItem,
             this.devToolsToolStripMenuItem});
             this.contextMenuStripAccounts.Name = "contextMenuStrip1";
-            this.contextMenuStripAccounts.Size = new System.Drawing.Size(218, 588);
+            this.contextMenuStripAccounts.Size = new System.Drawing.Size(218, 619);
             this.contextMenuStripAccounts.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStripAccounts_Opening);
             // 
             // schedulerToolStripMenuItem
@@ -409,6 +410,7 @@
             this.setGroupToolStripMenuItem,
             this.setMaxLevelToolStripMenuItem,
             this.setMaxRuntimeToolStripMenuItem,
+            this.claimLevelUpToolStripMenuItem,
             this.proxyToolStripMenuItem,
             this.transferToolStripMenuItem,
             this.evolveToolStripMenuItem,
@@ -1248,6 +1250,13 @@
             this.deleteToolStripMenuItem2.Text = "Delete";
             this.deleteToolStripMenuItem2.Click += new System.EventHandler(this.deleteToolStripMenuItem2_Click);
             // 
+            // claimLevelUpToolStripMenuItem
+            // 
+            this.claimLevelUpToolStripMenuItem.Name = "claimLevelUpToolStripMenuItem";
+            this.claimLevelUpToolStripMenuItem.Size = new System.Drawing.Size(220, 28);
+            this.claimLevelUpToolStripMenuItem.Text = "Claim Level Up";
+            this.claimLevelUpToolStripMenuItem.Click += new System.EventHandler(this.claimLevelUpToolStripMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -1410,6 +1419,7 @@
         private System.Windows.Forms.ToolStripMenuItem schedulerToolStripMenuItem;
         private BrightIdeasSoftware.OLVColumn olvColumnScheduler;
         private System.Windows.Forms.ToolStripMenuItem manualCheckToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem claimLevelUpToolStripMenuItem;
     }
 }
 

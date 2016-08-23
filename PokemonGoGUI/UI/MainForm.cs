@@ -1146,8 +1146,17 @@ namespace PokemonGoGUI
             }
         }
 
-
         #region Fast Settings
+
+        private void claimLevelUpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (Manager manager in fastObjectListViewMain.SelectedObjects)
+            {
+                manager.UserSettings.ClaimLevelUpRewards = !claimLevelUpToolStripMenuItem.Checked;
+            }
+
+            fastObjectListViewMain.RefreshSelectedObjects();
+        }
 
         private void enableIPBanStopToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1254,6 +1263,7 @@ namespace PokemonGoGUI
             enableCatchPokemonToolStripMenuItem2.Checked = manager.UserSettings.CatchPokemon;
             enableRotateProxiesToolStripMenuItem.Checked = manager.UserSettings.AutoRotateProxies;
             enableIPBanStopToolStripMenuItem.Checked = manager.UserSettings.StopOnIPBan;
+            claimLevelUpToolStripMenuItem.Checked = manager.UserSettings.ClaimLevelUpRewards;
 
             //Remove all
             schedulerToolStripMenuItem.DropDownItems.Clear();
