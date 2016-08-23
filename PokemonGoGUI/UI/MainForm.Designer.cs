@@ -153,6 +153,7 @@
             this.olvColumnSchedulerEnd = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnSchedulerPokestop = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnSchedulerPokemon = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnSchedulerLastCall = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnSchedulerTime = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnSchedulerEnabled = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.contextMenuStripScheduler = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -161,7 +162,7 @@
             this.enablelDisableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.manualCheckToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
-            this.olvColumnSchedulerLastCall = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.helpInfoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewMain)).BeginInit();
             this.contextMenuStripAccounts.SuspendLayout();
             this.statusStripStats.SuspendLayout();
@@ -335,9 +336,10 @@
             this.showStatusBarToolStripMenuItem,
             this.showGroupsToolStripMenuItem,
             this.deleteToolStripMenuItem,
-            this.devToolsToolStripMenuItem});
+            this.devToolsToolStripMenuItem,
+            this.helpInfoToolStripMenuItem});
             this.contextMenuStripAccounts.Name = "contextMenuStrip1";
-            this.contextMenuStripAccounts.Size = new System.Drawing.Size(218, 588);
+            this.contextMenuStripAccounts.Size = new System.Drawing.Size(218, 647);
             this.contextMenuStripAccounts.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStripAccounts_Opening);
             // 
             // schedulerToolStripMenuItem
@@ -1201,6 +1203,12 @@
             this.olvColumnSchedulerPokemon.Text = "Pokemon Settings";
             this.olvColumnSchedulerPokemon.Width = 151;
             // 
+            // olvColumnSchedulerLastCall
+            // 
+            this.olvColumnSchedulerLastCall.AspectName = "TimeSinceLastCall";
+            this.olvColumnSchedulerLastCall.AspectToStringFormat = "{0:0.00}";
+            this.olvColumnSchedulerLastCall.Text = "Since Last Call (Min)";
+            // 
             // olvColumnSchedulerTime
             // 
             this.olvColumnSchedulerTime.AspectName = "CheckTime";
@@ -1260,11 +1268,12 @@
             this.deleteToolStripMenuItem2.Text = "Delete";
             this.deleteToolStripMenuItem2.Click += new System.EventHandler(this.deleteToolStripMenuItem2_Click);
             // 
-            // olvColumnSchedulerLastCall
+            // helpInfoToolStripMenuItem
             // 
-            this.olvColumnSchedulerLastCall.AspectName = "TimeSinceLastCall";
-            this.olvColumnSchedulerLastCall.AspectToStringFormat = "{0:0.00}";
-            this.olvColumnSchedulerLastCall.Text = "Since Last Call (Min)";
+            this.helpInfoToolStripMenuItem.Name = "helpInfoToolStripMenuItem";
+            this.helpInfoToolStripMenuItem.Size = new System.Drawing.Size(217, 28);
+            this.helpInfoToolStripMenuItem.Text = "Help/Info";
+            this.helpInfoToolStripMenuItem.Visible = false;
             // 
             // MainForm
             // 
@@ -1430,6 +1439,7 @@
         private System.Windows.Forms.ToolStripMenuItem manualCheckToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem claimLevelUpToolStripMenuItem;
         private BrightIdeasSoftware.OLVColumn olvColumnSchedulerLastCall;
+        private System.Windows.Forms.ToolStripMenuItem helpInfoToolStripMenuItem;
     }
 }
 

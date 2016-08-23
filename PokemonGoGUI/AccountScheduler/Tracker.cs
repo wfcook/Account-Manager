@@ -76,7 +76,7 @@ namespace PokemonGoGUI.AccountScheduler
             }
         }
 
-        private DateTime GetCurrentHourDateTime()
+        public DateTime GetCurrentHourDateTime()
         {
             DateTime currentTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, 0, 0);
 
