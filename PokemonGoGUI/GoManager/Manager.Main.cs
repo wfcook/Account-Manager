@@ -540,11 +540,14 @@ namespace PokemonGoGUI.GoManager
                         continue;
                     }
 
-                    LogCaller(new LoggerEventArgs("Getting level up rewards ...", LoggerTypes.Debug));
+                    if (UserSettings.ClaimLevelUpRewards)
+                    {
+                        LogCaller(new LoggerEventArgs("Getting level up rewards ...", LoggerTypes.Debug));
 
-                    result = await ClaimLevelUpRewards(Level);
+                        result = await ClaimLevelUpRewards(Level);
 
-                    await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
+                        await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
+                    }
 
                     _failedInventoryReponses = 0;
 
@@ -870,7 +873,6 @@ namespace PokemonGoGUI.GoManager
 
             if(!_autoRestart)
             {
-                _client.Logout();
                 _runningStopwatch.Reset();
             }
 
