@@ -124,6 +124,7 @@ namespace PokemonGoGUI.UI
             checkBoxStopOnIPBan.Checked = settings.StopOnIPBan;
             checkBoxAutoRotateProxies.Checked = settings.AutoRotateProxies;
             checkBoxRemoveOnStop.Checked = settings.AutoRemoveOnStop;
+            checkBoxClaimLevelUp.Checked = settings.ClaimLevelUpRewards;
             numericUpDownSearchFortBelow.Value = new Decimal(settings.SearchFortBelowPercent);
 
             //Humanization
@@ -281,8 +282,8 @@ namespace PokemonGoGUI.UI
 
 
             userSettings.MimicWalking = checkBoxMimicWalking.Checked;
-            userSettings.PtcUsername = textBoxPtcUsername.Text;
-            userSettings.PtcPassword = textBoxPtcPassword.Text;
+            userSettings.PtcUsername = textBoxPtcUsername.Text.Trim();
+            userSettings.PtcPassword = textBoxPtcPassword.Text.Trim();
             userSettings.DefaultLatitude = defaultLat;
             userSettings.DefaultLongitude = defaultLong;
             userSettings.WalkingSpeed = walkingSpeed;
@@ -304,6 +305,7 @@ namespace PokemonGoGUI.UI
             userSettings.SnipeAfterLevel = (int)numericUpDownSnipeAfterLevel.Value;
             userSettings.StopAtMinAccountState = (AccountState)comboBoxMinAccountState.SelectedItem;
             userSettings.SearchFortBelowPercent = (double)numericUpDownSearchFortBelow.Value;
+            userSettings.ClaimLevelUpRewards = checkBoxClaimLevelUp.Checked;
 
             userSettings.RunForHours = (double)numericUpDownRunForHours.Value;
             userSettings.MaxLogs = (int)numericUpDownMaxLogs.Value;

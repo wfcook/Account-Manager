@@ -229,6 +229,11 @@ namespace PokemonGoGUI.GoManager
 
         public async Task<MethodResult> ClaimLevelUpRewards(int level)
         {
+            if(!UserSettings.ClaimLevelUpRewards)
+            {
+                return new MethodResult();
+            }
+
             try
             {
                 if (!_client.LoggedIn)

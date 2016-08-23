@@ -30,6 +30,7 @@ namespace PokemonGoGUI
         public bool EncounterWhileWalking { get; set; }
         public int MaxTravelDistance { get; set; }
         public bool UseLuckyEgg { get; set; }
+        public bool ClaimLevelUpRewards { get; set; }
         public int MinPokemonBeforeEvolve { get; set; }
         public bool RecycleItems { get; set; }
         public bool TransferPokemon { get; set; }

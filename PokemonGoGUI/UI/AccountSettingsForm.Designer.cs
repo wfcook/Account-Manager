@@ -73,6 +73,7 @@
             this.labelUsername = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.tabPageProxy = new System.Windows.Forms.TabPage();
+            this.checkBoxRemoveOnStop = new System.Windows.Forms.CheckBox();
             this.checkBoxAutoRotateProxies = new System.Windows.Forms.CheckBox();
             this.checkBoxStopOnIPBan = new System.Windows.Forms.CheckBox();
             this.numericUpDownMaxFailBeforeReset = new System.Windows.Forms.NumericUpDown();
@@ -198,7 +199,7 @@
             this.toolTipProxy = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipMinAccountState = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipHumanizeThrows = new System.Windows.Forms.ToolTip(this.components);
-            this.checkBoxRemoveOnStop = new System.Windows.Forms.CheckBox();
+            this.checkBoxClaimLevelUp = new System.Windows.Forms.CheckBox();
             this.tabControlMain.SuspendLayout();
             this.tabPageDetails.SuspendLayout();
             this.tabControlSettings.SuspendLayout();
@@ -298,6 +299,7 @@
             this.tabPageSettingsGeneral.Controls.Add(this.numericUpDownSnipeAfterStops);
             this.tabPageSettingsGeneral.Controls.Add(this.checkBoxSnipePokemon);
             this.tabPageSettingsGeneral.Controls.Add(this.checkBoxIncubateEggs);
+            this.tabPageSettingsGeneral.Controls.Add(this.checkBoxClaimLevelUp);
             this.tabPageSettingsGeneral.Controls.Add(this.checkBoxUseLuckyEgg);
             this.tabPageSettingsGeneral.Controls.Add(this.checkBoxRecycle);
             this.tabPageSettingsGeneral.Controls.Add(this.checkBoxEvolve);
@@ -380,7 +382,7 @@
             // 
             // numericUpDownMaxLogs
             // 
-            this.numericUpDownMaxLogs.Location = new System.Drawing.Point(368, 169);
+            this.numericUpDownMaxLogs.Location = new System.Drawing.Point(368, 195);
             this.numericUpDownMaxLogs.Maximum = new decimal(new int[] {
             999999,
             0,
@@ -634,7 +636,7 @@
             // label43
             // 
             this.label43.AutoSize = true;
-            this.label43.Location = new System.Drawing.Point(293, 171);
+            this.label43.Location = new System.Drawing.Point(293, 197);
             this.label43.Name = "label43";
             this.label43.Size = new System.Drawing.Size(69, 16);
             this.label43.TabIndex = 19;
@@ -767,6 +769,18 @@
             this.tabPageProxy.TabIndex = 4;
             this.tabPageProxy.Text = "Proxy";
             this.tabPageProxy.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxRemoveOnStop
+            // 
+            this.checkBoxRemoveOnStop.AutoSize = true;
+            this.checkBoxRemoveOnStop.Enabled = false;
+            this.checkBoxRemoveOnStop.Location = new System.Drawing.Point(125, 132);
+            this.checkBoxRemoveOnStop.Name = "checkBoxRemoveOnStop";
+            this.checkBoxRemoveOnStop.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.checkBoxRemoveOnStop.Size = new System.Drawing.Size(212, 20);
+            this.checkBoxRemoveOnStop.TabIndex = 59;
+            this.checkBoxRemoveOnStop.Text = "Remove Proxy When Stopped";
+            this.checkBoxRemoveOnStop.UseVisualStyleBackColor = true;
             // 
             // checkBoxAutoRotateProxies
             // 
@@ -2023,17 +2037,15 @@
             this.restoreDefaultsToolStripMenuItem2.Text = "Restore Defaults";
             this.restoreDefaultsToolStripMenuItem2.Click += new System.EventHandler(this.restoreDefaultsToolStripMenuItem2_Click);
             // 
-            // checkBoxRemoveOnStop
+            // checkBoxClaimLevelUp
             // 
-            this.checkBoxRemoveOnStop.AutoSize = true;
-            this.checkBoxRemoveOnStop.Enabled = false;
-            this.checkBoxRemoveOnStop.Location = new System.Drawing.Point(125, 132);
-            this.checkBoxRemoveOnStop.Name = "checkBoxRemoveOnStop";
-            this.checkBoxRemoveOnStop.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.checkBoxRemoveOnStop.Size = new System.Drawing.Size(212, 20);
-            this.checkBoxRemoveOnStop.TabIndex = 59;
-            this.checkBoxRemoveOnStop.Text = "Remove Proxy When Stopped";
-            this.checkBoxRemoveOnStop.UseVisualStyleBackColor = true;
+            this.checkBoxClaimLevelUp.AutoSize = true;
+            this.checkBoxClaimLevelUp.Location = new System.Drawing.Point(347, 162);
+            this.checkBoxClaimLevelUp.Name = "checkBoxClaimLevelUp";
+            this.checkBoxClaimLevelUp.Size = new System.Drawing.Size(121, 20);
+            this.checkBoxClaimLevelUp.TabIndex = 17;
+            this.checkBoxClaimLevelUp.Text = "Claim Level Up";
+            this.checkBoxClaimLevelUp.UseVisualStyleBackColor = true;
             // 
             // AccountSettingsForm
             // 
@@ -2265,5 +2277,6 @@
         private System.Windows.Forms.Label label47;
         private System.Windows.Forms.Label label46;
         private System.Windows.Forms.CheckBox checkBoxRemoveOnStop;
+        private System.Windows.Forms.CheckBox checkBoxClaimLevelUp;
     }
 }

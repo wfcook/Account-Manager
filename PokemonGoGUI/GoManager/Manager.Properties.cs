@@ -173,7 +173,7 @@ namespace PokemonGoGUI.GoManager
 
                 lock (Logs)
                 {
-                    string message = Logs.LastOrDefault(x => x.LoggerType != LoggerTypes.LocationUpdate).Message;
+                    string message = Logs.Last().Message;
 
                     if (String.IsNullOrEmpty(message))
                     {

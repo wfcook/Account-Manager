@@ -9,6 +9,8 @@ namespace PokemonGoGUI.GoManager
 {
     public partial class Manager
     {
+        private DateTime _lastTrackerUpdate = new DateTime();
+
         public void AddSchedulerEvent()
         {
             if (AccountScheduler != null)
@@ -42,7 +44,14 @@ namespace PokemonGoGUI.GoManager
 
         private async void scheduler_OnSchedule(object sender, SchedulerEventArgs e)
         {
-            Tracker.CalculatedTrackingHours();
+            DateTime currentTime = Tracker.GetCurrentHourDateTime();
+
+            if (currentTime != _lastTrackerUpdate)
+            {
+                _lastTrackerUpdate = currentTime;
+
+                Tracker.CalculatedTrackingHours();
+            }
 
             Scheduler scheduler = e.Scheduler;
 
@@ -197,7 +206,7 @@ namespace PokemonGoGUI.GoManager
                         case SchedulerOption.DisableEnable: //No extra checks
                             if (UserSettings.SearchFortBelowPercent != 1000)
                             {
-                                LogCaller(new LoggerEventArgs("Min pokestop limit reached. Enable ...", LoggerTypes.Debug));
+                                LogCaller(new LoggerEventArgs("Min pokestop limit reached. Enabling ...", LoggerTypes.Debug));
                                 UserSettings.SearchFortBelowPercent = 1000;
                             }
                             break;

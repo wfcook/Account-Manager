@@ -630,9 +630,9 @@ namespace PokemonGoGUI
                         }
                     }
 
-                    manager.UserSettings.AccountName = importModel.Username;
-                    manager.UserSettings.PtcUsername = importModel.Username;
-                    manager.UserSettings.PtcPassword = importModel.Password;
+                    manager.UserSettings.AccountName = importModel.Username.Trim();
+                    manager.UserSettings.PtcUsername = importModel.Username.Trim();
+                    manager.UserSettings.PtcPassword = importModel.Password.Trim();
                     manager.UserSettings.ProxyIP = importModel.Address;
                     manager.UserSettings.ProxyPort = importModel.Port;
                     manager.UserSettings.ProxyUsername = importModel.ProxyUsername;
@@ -850,7 +850,7 @@ namespace PokemonGoGUI
             }
             else if (e.Column == olvColumnPokemonCaught)
             {
-                if(manager.AccountScheduler == null)
+                if (manager.AccountScheduler == null || manager.AccountScheduler.PokemonLimiter.Option == SchedulerOption.Nothing)
                 {
                     return;
                 }
@@ -859,7 +859,7 @@ namespace PokemonGoGUI
                 {
                     e.SubItem.ForeColor = Color.Red;
                 }
-                else if (manager.PokemonCaught >= manager.AccountScheduler.PokemonLimiter.Min)
+                else if (manager.PokemonCaught <= manager.AccountScheduler.PokemonLimiter.Min)
                 {
                     e.SubItem.ForeColor = Color.Green;
                 }
@@ -871,7 +871,7 @@ namespace PokemonGoGUI
             }
             else if (e.Column == olvColumnPokestopsFarmed)
             {
-                if (manager.AccountScheduler == null)
+                if (manager.AccountScheduler == null || manager.AccountScheduler.PokeStoplimiter.Option == SchedulerOption.Nothing)
                 {
                     return;
                 }
@@ -880,7 +880,7 @@ namespace PokemonGoGUI
                 {
                     e.SubItem.ForeColor = Color.Red;
                 }
-                else if (manager.PokestopsFarmed >= manager.AccountScheduler.PokeStoplimiter.Min)
+                else if (manager.PokestopsFarmed <= manager.AccountScheduler.PokeStoplimiter.Min)
                 {
                     e.SubItem.ForeColor = Color.Green;
                 }
@@ -1146,8 +1146,17 @@ namespace PokemonGoGUI
             }
         }
 
-
         #region Fast Settings
+
+        private void claimLevelUpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (Manager manager in fastObjectListViewMain.SelectedObjects)
+            {
+                manager.UserSettings.ClaimLevelUpRewards = !claimLevelUpToolStripMenuItem.Checked;
+            }
+
+            fastObjectListViewMain.RefreshSelectedObjects();
+        }
 
         private void enableIPBanStopToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1254,6 +1263,7 @@ namespace PokemonGoGUI
             enableCatchPokemonToolStripMenuItem2.Checked = manager.UserSettings.CatchPokemon;
             enableRotateProxiesToolStripMenuItem.Checked = manager.UserSettings.AutoRotateProxies;
             enableIPBanStopToolStripMenuItem.Checked = manager.UserSettings.StopOnIPBan;
+            claimLevelUpToolStripMenuItem.Checked = manager.UserSettings.ClaimLevelUpRewards;
 
             //Remove all
             schedulerToolStripMenuItem.DropDownItems.Clear();

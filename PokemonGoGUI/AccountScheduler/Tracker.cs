@@ -55,8 +55,7 @@ namespace PokemonGoGUI.AccountScheduler
         public void CalculatedTrackingHours()
         {
             DateTime currentTime = GetCurrentHourDateTime();
-            DateTime resetTime = currentTime.AddHours(-24); //Tracks last 24 hours
-            //DateTime resetTime = currentTime.AddSeconds(-24);
+            DateTime resetTime = currentTime.AddHours(-23); //Tracks last 23 hours
 
             lock (Values)
             {
@@ -77,7 +76,7 @@ namespace PokemonGoGUI.AccountScheduler
             }
         }
 
-        private DateTime GetCurrentHourDateTime()
+        public DateTime GetCurrentHourDateTime()
         {
             DateTime currentTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, 0, 0);
 
