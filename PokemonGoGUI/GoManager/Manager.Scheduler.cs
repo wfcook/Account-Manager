@@ -197,7 +197,7 @@ namespace PokemonGoGUI.GoManager
                         case SchedulerOption.DisableEnable: //No extra checks
                             if (UserSettings.SearchFortBelowPercent != 1000)
                             {
-                                LogCaller(new LoggerEventArgs("Min pokestop limit reached. Enable ...", LoggerTypes.Debug));
+                                LogCaller(new LoggerEventArgs("Min pokestop limit reached. Enabling ...", LoggerTypes.Debug));
                                 UserSettings.SearchFortBelowPercent = 1000;
                             }
                             break;

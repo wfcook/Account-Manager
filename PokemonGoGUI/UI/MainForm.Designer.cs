@@ -1130,8 +1130,8 @@
             this.fastObjectListViewScheduler.AllColumns.Add(this.olvColumnSchedulerName);
             this.fastObjectListViewScheduler.AllColumns.Add(this.olvColumnSchedulerStart);
             this.fastObjectListViewScheduler.AllColumns.Add(this.olvColumnSchedulerEnd);
-            this.fastObjectListViewScheduler.AllColumns.Add(this.olvColumnSchedulerPokemon);
             this.fastObjectListViewScheduler.AllColumns.Add(this.olvColumnSchedulerPokestop);
+            this.fastObjectListViewScheduler.AllColumns.Add(this.olvColumnSchedulerPokemon);
             this.fastObjectListViewScheduler.AllColumns.Add(this.olvColumnSchedulerTime);
             this.fastObjectListViewScheduler.AllColumns.Add(this.olvColumnSchedulerEnabled);
             this.fastObjectListViewScheduler.AllowColumnReorder = true;
@@ -1139,8 +1139,8 @@
             this.olvColumnSchedulerName,
             this.olvColumnSchedulerStart,
             this.olvColumnSchedulerEnd,
-            this.olvColumnSchedulerPokemon,
             this.olvColumnSchedulerPokestop,
+            this.olvColumnSchedulerPokemon,
             this.olvColumnSchedulerTime,
             this.olvColumnSchedulerEnabled});
             this.fastObjectListViewScheduler.ContextMenuStrip = this.contextMenuStripScheduler;

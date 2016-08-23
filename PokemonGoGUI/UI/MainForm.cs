@@ -850,7 +850,7 @@ namespace PokemonGoGUI
             }
             else if (e.Column == olvColumnPokemonCaught)
             {
-                if(manager.AccountScheduler == null)
+                if (manager.AccountScheduler == null || manager.AccountScheduler.PokemonLimiter.Option == SchedulerOption.Nothing)
                 {
                     return;
                 }
@@ -871,7 +871,7 @@ namespace PokemonGoGUI
             }
             else if (e.Column == olvColumnPokestopsFarmed)
             {
-                if (manager.AccountScheduler == null)
+                if (manager.AccountScheduler == null || manager.AccountScheduler.PokeStoplimiter.Option == SchedulerOption.Nothing)
                 {
                     return;
                 }
