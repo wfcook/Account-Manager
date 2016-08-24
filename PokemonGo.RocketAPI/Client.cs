@@ -46,7 +46,19 @@ namespace PokemonGo.RocketAPI
 
         internal PokemonHttpClient PokemonHttpClient;
         internal string ApiUrl { get; set; }
+        
         internal AuthTicket AuthTicket { get; set; }
+
+        public bool AuthExpired
+        {
+            get
+            {
+                DateTime expired = DateTimeExtensions.GetDateTimeFromMilliseconds(AuthTicket.ExpireTimestampMs);
+
+                //1 minute buffer
+                return DateTime.UtcNow > expired.AddMinutes(-1);
+            }
+        }
 
         public bool LoggedIn
         {
@@ -110,6 +122,17 @@ namespace PokemonGo.RocketAPI
             return new MethodResult
             {
                 Message = "Successfully logged into server.",
+                Success = true
+            };
+        }
+
+        public async Task<MethodResult> ReAuthenticate()
+        {
+            await Login.ReAuthenticate();
+
+            return new MethodResult
+            {
+                Message = "Successfully reauthenticated.",
                 Success = true
             };
         }

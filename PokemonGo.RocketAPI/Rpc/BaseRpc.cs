@@ -9,18 +9,22 @@ using PokemonGo.RocketAPI.Extensions;
 using PokemonGo.RocketAPI.Helpers;
 using POGOProtos.Networking.Requests;
 using POGOProtos.Networking.Envelopes;
+using System.Threading;
 
 namespace PokemonGo.RocketAPI.Rpc
 {
     public class BaseRpc
     {
+        protected static Random _rand = new Random();
+
         protected Client _client;
+        protected static long _requestId = (long)_rand.Next(100000000, 999999999);
 
         protected RequestBuilder RequestBuilder 
         {
             get
             {
-                return new RequestBuilder(_client.AuthToken, _client.AuthType, _client.CurrentLatitude, _client.CurrentLongitude, _client.CurrentAltitude, _client.Settings, _client.AuthTicket);
+                return new RequestBuilder(_client.AuthToken, _client.AuthType, _client.CurrentLatitude, _client.CurrentLongitude, _client.CurrentAltitude, _client.Settings, (ulong)NextRequestId(), _client.AuthTicket);
             }
         }
 
@@ -100,6 +104,13 @@ namespace PokemonGo.RocketAPI.Rpc
         protected async Task<ResponseEnvelope> PostProto<TRequest>(string url, RequestEnvelope requestEnvelope) where TRequest : IMessage<TRequest>
         {
             return await _client.PokemonHttpClient.PostProto<TRequest>(url, requestEnvelope).ConfigureAwait(false);
+        }
+
+        private long NextRequestId()
+        {
+            Interlocked.Increment(ref _requestId);
+
+            return _requestId;
         }
     }
 }

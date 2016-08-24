@@ -72,13 +72,22 @@ namespace PokemonGoGUI.GoManager
             LoadFarmLocations();
         }
 
-        public async Task<MethodResult> Login()
+        public async Task<MethodResult> Login(bool reAuthenticate = false)
         {
             LogCaller(new LoggerEventArgs("Attempting to login ...", LoggerTypes.Debug));
 
             try
             {
-                MethodResult result = await _client.DoLogin(UserSettings);
+                MethodResult result = null;
+
+                if (!reAuthenticate)
+                {
+                    result = await _client.DoLogin(UserSettings);
+                }
+                else
+                {
+                    result = await _client.ReAuthenticate();
+                }
 
                 LogCaller(new LoggerEventArgs(result.Message, LoggerTypes.Debug));
 
@@ -487,9 +496,9 @@ namespace PokemonGoGUI.GoManager
                         }
                     }
 
-                    LogCaller(new LoggerEventArgs("Sending echo test ...", LoggerTypes.Debug));
+                    //LogCaller(new LoggerEventArgs("Sending echo test ...", LoggerTypes.Debug));
 
-                    result = await SendEcho();
+                    result = await CheckReauthentication();
 
                     if(!result.Success)
                     {
@@ -758,7 +767,7 @@ namespace PokemonGoGUI.GoManager
                         //Clean inventory, evolve, transfer, etc on first and every 10 stops
                         if(IsRunning && ((pokeStopNumber > 4 && pokeStopNumber % 10 == 0) || pokeStopNumber == 1))
                         {
-                            MethodResult echoResult = await SendEcho();
+                            MethodResult echoResult = await CheckReauthentication();
 
                             //Echo failed, restart
                             if(!echoResult.Success)
@@ -943,27 +952,28 @@ namespace PokemonGoGUI.GoManager
         }
         */
 
-        private async Task<MethodResult> SendEcho()
+        private async Task<MethodResult> CheckReauthentication()
         {
-            try
+            if (!_client.AuthExpired)
             {
-                if(_client.Misc == null || !_client.LoggedIn)
-                {
-                    return new MethodResult
-                    {
-                        Message = "Client not logged in"
-                    };
-                }
-
-                EchoResponse response = await _client.Misc.SendEcho();
-
                 return new MethodResult
                 {
-                    Message = response.Context,
                     Success = true
                 };
             }
-            catch (BadImageFormatException)
+
+            try
+            {
+                LogCaller(new LoggerEventArgs("Session expired. Logging back in", LoggerTypes.Debug));
+
+                await _client.ReAuthenticate();
+
+                return new MethodResult
+                {
+                    Success = true
+                };
+            }
+            /*catch (BadImageFormatException)
             {
                 LogCaller(new LoggerEventArgs("Incorrect encrypt dll used. Please delete 'encrypt.dll' and restart the program", LoggerTypes.FatalError));
 
@@ -971,15 +981,12 @@ namespace PokemonGoGUI.GoManager
                 {
                     Message = "Incorrect DLL used"
                 };
-            }
+            }*/
             catch(Exception ex)
             {
-                LogCaller(new LoggerEventArgs("Echo failed", LoggerTypes.Warning, ex));
+                LogCaller(new LoggerEventArgs("Failed to reauthenticate failed", LoggerTypes.Warning, ex));
 
-                return new MethodResult
-                {
-                    Message = "Echo failed"
-                };
+                return new MethodResult();
             }
         }
 
