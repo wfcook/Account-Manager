@@ -21,7 +21,7 @@ namespace PokemonGoGUI.GoManager
         {
             LogCaller(new LoggerEventArgs("Updating details", LoggerTypes.Debug));
 
-            MethodResult echoResult = await SendEcho();
+            MethodResult echoResult = await CheckReauthentication();
 
             if(!echoResult.Success)
             {
@@ -275,6 +275,26 @@ namespace PokemonGoGUI.GoManager
                 {
                     Message = "Failed to get level up rewards"
                 };
+            }
+        }
+
+        public async Task<MethodResult<bool>> GetGameSettings(string minVersion)
+        {
+            try
+            {
+                DownloadSettingsResponse response = await _client.Download.GetSettings();
+
+                return new MethodResult<bool>
+                {
+                    Data = response.Settings.MinimumClientVersion == minVersion,
+                    Success = true
+                };
+            }
+            catch(Exception ex)
+            {
+                LogCaller(new LoggerEventArgs("Failed to request game settings", LoggerTypes.Exception, ex));
+
+                return new MethodResult<bool>();
             }
         }
     }

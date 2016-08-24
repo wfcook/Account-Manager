@@ -59,6 +59,11 @@ namespace PokemonGo.RocketAPI.Rpc
             await SetServer().ConfigureAwait(false);
         }
 
+        public async Task ReAuthenticate()
+        {
+            await login.GetAccessToken().ConfigureAwait(false);
+        }
+
         private async Task SetServer()
         {
             #region Standard intial request messages in right Order

@@ -45,6 +45,7 @@ namespace PokemonGoGUI
         public int SnipeAfterLevel { get; set; }
         public bool SPF { get; set; }
         public double SearchFortBelowPercent { get; set; }
+        public bool StopOnAPIUpdate { get; set; }
 
         public int MaxLogs { get; set; }
         public double RunForHours{ get; set; }
@@ -165,6 +166,7 @@ namespace PokemonGoGUI
             MaxFailBeforeReset = 3;
             StopOnIPBan = true;
             SearchFortBelowPercent = 1000;
+            StopOnAPIUpdate = true;
         }
 
         public void LoadDeviceSettings()

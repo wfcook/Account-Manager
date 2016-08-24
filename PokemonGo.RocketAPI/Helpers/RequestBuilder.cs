@@ -23,8 +23,9 @@ namespace PokemonGo.RocketAPI.Helpers
         private readonly AuthTicket _authTicket;
         static private readonly Stopwatch _internalWatch = new Stopwatch();
         private readonly ISettings settings;
+        private readonly ulong _requestId;
 
-        public RequestBuilder(string authToken, AuthType authType, double latitude, double longitude, double altitude, ISettings settings, AuthTicket authTicket = null)
+        public RequestBuilder(string authToken, AuthType authType, double latitude, double longitude, double altitude, ISettings settings,  ulong requestId, AuthTicket authTicket = null)
         {
             _authToken = authToken;
             _authType = authType;
@@ -33,8 +34,12 @@ namespace PokemonGo.RocketAPI.Helpers
             _altitude = altitude;
             this.settings = settings;
             _authTicket = authTicket;
+            _requestId = requestId;
+
             if (!_internalWatch.IsRunning)
+            {
                 _internalWatch.Start();
+            }
         }
 
         private Unknown6 GenerateSignature(IEnumerable<IMessage> requests)
@@ -147,7 +152,14 @@ namespace PokemonGo.RocketAPI.Helpers
             Marshal.Copy(bytes, 0, ptr, bytes.Length);
 
             int outputSize = outputLength;
-            EncryptNative(ptr, bytes.Length, new byte[32], 32, ptrOutput, out outputSize);
+            byte[] iv = new byte[32];
+
+            lock (RandomDevice)
+            {
+                RandomDevice.NextBytes(iv);
+            }
+
+            EncryptNative(ptr, bytes.Length, iv, iv.Length, ptrOutput, out outputSize);
 
             var output = new byte[outputLength];
             Marshal.Copy(ptrOutput, output, 0, outputLength);
@@ -165,11 +177,18 @@ namespace PokemonGo.RocketAPI.Helpers
 
         public RequestEnvelope GetRequestEnvelope(params Request[] customRequests)
         {
+            int randomUk12 = 0;
+
+            lock(RandomDevice)
+            {
+                randomUk12 = RandomDevice.Next(100, 999);
+            }
+
             var e = new RequestEnvelope
             {
                 StatusCode = 2, //1
 
-                RequestId = 1469378659230941192, //3
+                RequestId = _requestId, //3
                 Requests = { customRequests }, //4
 
                 //Unknown6 = , //6
@@ -177,7 +196,7 @@ namespace PokemonGo.RocketAPI.Helpers
                 Longitude = _longitude, //8
                 Altitude = _altitude, //9
                 AuthTicket = _authTicket, //11
-                Unknown12 = 989 //12
+                Unknown12 = randomUk12 //12
             };
             e.Unknown6.Add(GenerateSignature(customRequests));
             return e;
@@ -185,11 +204,20 @@ namespace PokemonGo.RocketAPI.Helpers
 
         public RequestEnvelope GetInitialRequestEnvelope(params Request[] customRequests)
         {
+            int randomUk12 = 0;
+            int randomUk2 = 0;
+
+            lock(RandomDevice)
+            {
+                randomUk12 = RandomDevice.Next(100, 1000);
+                randomUk2 = RandomDevice.Next(10, 100);
+            }
+
             var e = new RequestEnvelope
             {
                 StatusCode = 2, //1
 
-                RequestId = 1469378659230941192, //3
+                RequestId = _requestId, //3
                 Requests = { customRequests }, //4
 
                 //Unknown6 = , //6
@@ -202,10 +230,10 @@ namespace PokemonGo.RocketAPI.Helpers
                     Token = new POGOProtos.Networking.Envelopes.RequestEnvelope.Types.AuthInfo.Types.JWT
                     {
                         Contents = _authToken,
-                        Unknown2 = 14
+                        Unknown2 = randomUk2
                     }
                 }, //10
-                Unknown12 = 989 //12
+                Unknown12 = randomUk12 //12
             };
             return e;
         }

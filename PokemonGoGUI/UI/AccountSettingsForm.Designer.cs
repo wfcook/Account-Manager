@@ -44,6 +44,7 @@
             this.numericUpDownSnipeAfterStops = new System.Windows.Forms.NumericUpDown();
             this.checkBoxSnipePokemon = new System.Windows.Forms.CheckBox();
             this.checkBoxIncubateEggs = new System.Windows.Forms.CheckBox();
+            this.checkBoxClaimLevelUp = new System.Windows.Forms.CheckBox();
             this.checkBoxUseLuckyEgg = new System.Windows.Forms.CheckBox();
             this.checkBoxRecycle = new System.Windows.Forms.CheckBox();
             this.checkBoxEvolve = new System.Windows.Forms.CheckBox();
@@ -199,7 +200,7 @@
             this.toolTipProxy = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipMinAccountState = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipHumanizeThrows = new System.Windows.Forms.ToolTip(this.components);
-            this.checkBoxClaimLevelUp = new System.Windows.Forms.CheckBox();
+            this.checkBoxStopOnAPIUpdate = new System.Windows.Forms.CheckBox();
             this.tabControlMain.SuspendLayout();
             this.tabPageDetails.SuspendLayout();
             this.tabControlSettings.SuspendLayout();
@@ -299,6 +300,7 @@
             this.tabPageSettingsGeneral.Controls.Add(this.numericUpDownSnipeAfterStops);
             this.tabPageSettingsGeneral.Controls.Add(this.checkBoxSnipePokemon);
             this.tabPageSettingsGeneral.Controls.Add(this.checkBoxIncubateEggs);
+            this.tabPageSettingsGeneral.Controls.Add(this.checkBoxStopOnAPIUpdate);
             this.tabPageSettingsGeneral.Controls.Add(this.checkBoxClaimLevelUp);
             this.tabPageSettingsGeneral.Controls.Add(this.checkBoxUseLuckyEgg);
             this.tabPageSettingsGeneral.Controls.Add(this.checkBoxRecycle);
@@ -382,7 +384,7 @@
             // 
             // numericUpDownMaxLogs
             // 
-            this.numericUpDownMaxLogs.Location = new System.Drawing.Point(368, 195);
+            this.numericUpDownMaxLogs.Location = new System.Drawing.Point(368, 224);
             this.numericUpDownMaxLogs.Maximum = new decimal(new int[] {
             999999,
             0,
@@ -494,17 +496,27 @@
             // checkBoxIncubateEggs
             // 
             this.checkBoxIncubateEggs.AutoSize = true;
-            this.checkBoxIncubateEggs.Location = new System.Drawing.Point(347, 110);
+            this.checkBoxIncubateEggs.Location = new System.Drawing.Point(335, 111);
             this.checkBoxIncubateEggs.Name = "checkBoxIncubateEggs";
             this.checkBoxIncubateEggs.Size = new System.Drawing.Size(116, 20);
             this.checkBoxIncubateEggs.TabIndex = 16;
             this.checkBoxIncubateEggs.Text = "Incubate Eggs";
             this.checkBoxIncubateEggs.UseVisualStyleBackColor = true;
             // 
+            // checkBoxClaimLevelUp
+            // 
+            this.checkBoxClaimLevelUp.AutoSize = true;
+            this.checkBoxClaimLevelUp.Location = new System.Drawing.Point(335, 163);
+            this.checkBoxClaimLevelUp.Name = "checkBoxClaimLevelUp";
+            this.checkBoxClaimLevelUp.Size = new System.Drawing.Size(121, 20);
+            this.checkBoxClaimLevelUp.TabIndex = 17;
+            this.checkBoxClaimLevelUp.Text = "Claim Level Up";
+            this.checkBoxClaimLevelUp.UseVisualStyleBackColor = true;
+            // 
             // checkBoxUseLuckyEgg
             // 
             this.checkBoxUseLuckyEgg.AutoSize = true;
-            this.checkBoxUseLuckyEgg.Location = new System.Drawing.Point(347, 136);
+            this.checkBoxUseLuckyEgg.Location = new System.Drawing.Point(335, 137);
             this.checkBoxUseLuckyEgg.Name = "checkBoxUseLuckyEgg";
             this.checkBoxUseLuckyEgg.Size = new System.Drawing.Size(121, 20);
             this.checkBoxUseLuckyEgg.TabIndex = 17;
@@ -514,7 +526,7 @@
             // checkBoxRecycle
             // 
             this.checkBoxRecycle.AutoSize = true;
-            this.checkBoxRecycle.Location = new System.Drawing.Point(347, 84);
+            this.checkBoxRecycle.Location = new System.Drawing.Point(335, 85);
             this.checkBoxRecycle.Name = "checkBoxRecycle";
             this.checkBoxRecycle.Size = new System.Drawing.Size(110, 20);
             this.checkBoxRecycle.TabIndex = 15;
@@ -524,7 +536,7 @@
             // checkBoxEvolve
             // 
             this.checkBoxEvolve.AutoSize = true;
-            this.checkBoxEvolve.Location = new System.Drawing.Point(347, 58);
+            this.checkBoxEvolve.Location = new System.Drawing.Point(335, 59);
             this.checkBoxEvolve.Name = "checkBoxEvolve";
             this.checkBoxEvolve.Size = new System.Drawing.Size(102, 20);
             this.checkBoxEvolve.TabIndex = 14;
@@ -534,7 +546,7 @@
             // checkBoxCatchPokemon
             // 
             this.checkBoxCatchPokemon.AutoSize = true;
-            this.checkBoxCatchPokemon.Location = new System.Drawing.Point(347, 8);
+            this.checkBoxCatchPokemon.Location = new System.Drawing.Point(335, 9);
             this.checkBoxCatchPokemon.Name = "checkBoxCatchPokemon";
             this.checkBoxCatchPokemon.Size = new System.Drawing.Size(122, 20);
             this.checkBoxCatchPokemon.TabIndex = 12;
@@ -544,7 +556,7 @@
             // checkBoxTransfers
             // 
             this.checkBoxTransfers.AutoSize = true;
-            this.checkBoxTransfers.Location = new System.Drawing.Point(347, 32);
+            this.checkBoxTransfers.Location = new System.Drawing.Point(335, 33);
             this.checkBoxTransfers.Name = "checkBoxTransfers";
             this.checkBoxTransfers.Size = new System.Drawing.Size(110, 20);
             this.checkBoxTransfers.TabIndex = 13;
@@ -636,7 +648,7 @@
             // label43
             // 
             this.label43.AutoSize = true;
-            this.label43.Location = new System.Drawing.Point(293, 197);
+            this.label43.Location = new System.Drawing.Point(293, 226);
             this.label43.Name = "label43";
             this.label43.Size = new System.Drawing.Size(69, 16);
             this.label43.TabIndex = 19;
@@ -2037,15 +2049,15 @@
             this.restoreDefaultsToolStripMenuItem2.Text = "Restore Defaults";
             this.restoreDefaultsToolStripMenuItem2.Click += new System.EventHandler(this.restoreDefaultsToolStripMenuItem2_Click);
             // 
-            // checkBoxClaimLevelUp
+            // checkBoxStopOnAPIUpdate
             // 
-            this.checkBoxClaimLevelUp.AutoSize = true;
-            this.checkBoxClaimLevelUp.Location = new System.Drawing.Point(347, 162);
-            this.checkBoxClaimLevelUp.Name = "checkBoxClaimLevelUp";
-            this.checkBoxClaimLevelUp.Size = new System.Drawing.Size(121, 20);
-            this.checkBoxClaimLevelUp.TabIndex = 17;
-            this.checkBoxClaimLevelUp.Text = "Claim Level Up";
-            this.checkBoxClaimLevelUp.UseVisualStyleBackColor = true;
+            this.checkBoxStopOnAPIUpdate.AutoSize = true;
+            this.checkBoxStopOnAPIUpdate.Location = new System.Drawing.Point(335, 189);
+            this.checkBoxStopOnAPIUpdate.Name = "checkBoxStopOnAPIUpdate";
+            this.checkBoxStopOnAPIUpdate.Size = new System.Drawing.Size(148, 20);
+            this.checkBoxStopOnAPIUpdate.TabIndex = 17;
+            this.checkBoxStopOnAPIUpdate.Text = "Stop on API Update";
+            this.checkBoxStopOnAPIUpdate.UseVisualStyleBackColor = true;
             // 
             // AccountSettingsForm
             // 
@@ -2278,5 +2290,6 @@
         private System.Windows.Forms.Label label46;
         private System.Windows.Forms.CheckBox checkBoxRemoveOnStop;
         private System.Windows.Forms.CheckBox checkBoxClaimLevelUp;
+        private System.Windows.Forms.CheckBox checkBoxStopOnAPIUpdate;
     }
 }

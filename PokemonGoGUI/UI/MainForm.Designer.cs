@@ -112,6 +112,7 @@
             this.garbageCollectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.largeAddressAwareToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.enableSpoofToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.helpInfoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.timerListViewUpdate = new System.Windows.Forms.Timer(this.components);
             this.statusStripStats = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
@@ -162,7 +163,6 @@
             this.enablelDisableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.manualCheckToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
-            this.helpInfoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewMain)).BeginInit();
             this.contextMenuStripAccounts.SuspendLayout();
             this.statusStripStats.SuspendLayout();
@@ -339,7 +339,7 @@
             this.devToolsToolStripMenuItem,
             this.helpInfoToolStripMenuItem});
             this.contextMenuStripAccounts.Name = "contextMenuStrip1";
-            this.contextMenuStripAccounts.Size = new System.Drawing.Size(218, 647);
+            this.contextMenuStripAccounts.Size = new System.Drawing.Size(218, 616);
             this.contextMenuStripAccounts.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStripAccounts_Opening);
             // 
             // schedulerToolStripMenuItem
@@ -844,6 +844,13 @@
             this.enableSpoofToolStripMenuItem.Text = "Enable SPF";
             this.enableSpoofToolStripMenuItem.Click += new System.EventHandler(this.enableSpfToolStripMenuItem_Click);
             // 
+            // helpInfoToolStripMenuItem
+            // 
+            this.helpInfoToolStripMenuItem.Name = "helpInfoToolStripMenuItem";
+            this.helpInfoToolStripMenuItem.Size = new System.Drawing.Size(217, 28);
+            this.helpInfoToolStripMenuItem.Text = "Help/Info";
+            this.helpInfoToolStripMenuItem.Visible = false;
+            // 
             // timerListViewUpdate
             // 
             this.timerListViewUpdate.Enabled = true;
@@ -1183,13 +1190,13 @@
             // 
             this.olvColumnSchedulerStart.AspectName = "StartTime";
             this.olvColumnSchedulerStart.Text = "Start Hour";
-            this.olvColumnSchedulerStart.Width = 95;
+            this.olvColumnSchedulerStart.Width = 50;
             // 
             // olvColumnSchedulerEnd
             // 
             this.olvColumnSchedulerEnd.AspectName = "EndTime";
             this.olvColumnSchedulerEnd.Text = "End Hour";
-            this.olvColumnSchedulerEnd.Width = 88;
+            this.olvColumnSchedulerEnd.Width = 50;
             // 
             // olvColumnSchedulerPokestop
             // 
@@ -1267,13 +1274,6 @@
             this.deleteToolStripMenuItem2.Size = new System.Drawing.Size(203, 28);
             this.deleteToolStripMenuItem2.Text = "Delete";
             this.deleteToolStripMenuItem2.Click += new System.EventHandler(this.deleteToolStripMenuItem2_Click);
-            // 
-            // helpInfoToolStripMenuItem
-            // 
-            this.helpInfoToolStripMenuItem.Name = "helpInfoToolStripMenuItem";
-            this.helpInfoToolStripMenuItem.Size = new System.Drawing.Size(217, 28);
-            this.helpInfoToolStripMenuItem.Text = "Help/Info";
-            this.helpInfoToolStripMenuItem.Visible = false;
             // 
             // MainForm
             // 
