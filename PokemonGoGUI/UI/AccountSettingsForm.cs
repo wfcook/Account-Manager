@@ -126,6 +126,7 @@ namespace PokemonGoGUI.UI
             checkBoxRemoveOnStop.Checked = settings.AutoRemoveOnStop;
             checkBoxClaimLevelUp.Checked = settings.ClaimLevelUpRewards;
             numericUpDownSearchFortBelow.Value = new Decimal(settings.SearchFortBelowPercent);
+            numericUpDownForceEvolveAbove.Value = new Decimal(settings.ForceEvolveAbovePercent);
             checkBoxStopOnAPIUpdate.Checked = settings.StopOnAPIUpdate;
 
             //Humanization
@@ -306,6 +307,7 @@ namespace PokemonGoGUI.UI
             userSettings.SnipeAfterLevel = (int)numericUpDownSnipeAfterLevel.Value;
             userSettings.StopAtMinAccountState = (AccountState)comboBoxMinAccountState.SelectedItem;
             userSettings.SearchFortBelowPercent = (double)numericUpDownSearchFortBelow.Value;
+            userSettings.ForceEvolveAbovePercent = (double) numericUpDownForceEvolveAbove.Value;
             userSettings.ClaimLevelUpRewards = checkBoxClaimLevelUp.Checked;
             userSettings.StopOnAPIUpdate = checkBoxStopOnAPIUpdate.Checked;
 

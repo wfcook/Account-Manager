@@ -26,8 +26,8 @@ namespace PokemonGoGUI.GoManager
             }
 
             LogCaller(new LoggerEventArgs(String.Format("{0} pokemon to evolve", response.Data.Count), LoggerTypes.Info));
-
-            if (response.Data.Count < UserSettings.MinPokemonBeforeEvolve && !LuckyEggActive)
+            
+            if (response.Data.Count < UserSettings.MinPokemonBeforeEvolve && !LuckyEggActive && FilledPokemonInventorySpace() <= UserSettings.ForceEvolveAbovePercent)
             {
                 LogCaller(new LoggerEventArgs(String.Format("Not enough pokemon to evolve. {0} of {1} evolvable pokemon", response.Data.Count, UserSettings.MinPokemonBeforeEvolve), LoggerTypes.Info));
 
@@ -318,6 +318,16 @@ namespace PokemonGoGUI.GoManager
                     Message = "Lucky egg request failed"
                 };
             }
+        }
+
+        public double FilledPokemonInventorySpace()
+        {
+            if (Pokemon == null || PlayerData == null)
+            {
+                return 0;
+            }
+
+            return (double)(Pokemon.Count + Eggs.Count) / PlayerData.MaxPokemonStorage * 100;
         }
     }
 }

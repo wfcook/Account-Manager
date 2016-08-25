@@ -201,6 +201,9 @@
             this.toolTipMinAccountState = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipHumanizeThrows = new System.Windows.Forms.ToolTip(this.components);
             this.checkBoxStopOnAPIUpdate = new System.Windows.Forms.CheckBox();
+            this.numericUpDownForceEvolveAbove = new System.Windows.Forms.NumericUpDown();
+            this.label48 = new System.Windows.Forms.Label();
+            this.label49 = new System.Windows.Forms.Label();
             this.tabControlMain.SuspendLayout();
             this.tabPageDetails.SuspendLayout();
             this.tabControlSettings.SuspendLayout();
@@ -239,6 +242,7 @@
             this.tabPageTransfer.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewTransfer)).BeginInit();
             this.contextMenuStripTransfer.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownForceEvolveAbove)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControlMain
@@ -289,6 +293,9 @@
             // 
             // tabPageSettingsGeneral
             // 
+            this.tabPageSettingsGeneral.Controls.Add(this.numericUpDownForceEvolveAbove);
+            this.tabPageSettingsGeneral.Controls.Add(this.label48);
+            this.tabPageSettingsGeneral.Controls.Add(this.label49);
             this.tabPageSettingsGeneral.Controls.Add(this.comboBoxMinAccountState);
             this.tabPageSettingsGeneral.Controls.Add(this.label9);
             this.tabPageSettingsGeneral.Controls.Add(this.numericUpDownSearchFortBelow);
@@ -359,7 +366,7 @@
             // numericUpDownSearchFortBelow
             // 
             this.numericUpDownSearchFortBelow.DecimalPlaces = 2;
-            this.numericUpDownSearchFortBelow.Location = new System.Drawing.Point(222, 309);
+            this.numericUpDownSearchFortBelow.Location = new System.Drawing.Point(166, 251);
             this.numericUpDownSearchFortBelow.Maximum = new decimal(new int[] {
             1000000,
             0,
@@ -372,7 +379,7 @@
             // numericUpDownRunForHours
             // 
             this.numericUpDownRunForHours.DecimalPlaces = 2;
-            this.numericUpDownRunForHours.Location = new System.Drawing.Point(222, 337);
+            this.numericUpDownRunForHours.Location = new System.Drawing.Point(165, 297);
             this.numericUpDownRunForHours.Maximum = new decimal(new int[] {
             99999,
             0,
@@ -2058,6 +2065,37 @@
             this.checkBoxStopOnAPIUpdate.TabIndex = 17;
             this.checkBoxStopOnAPIUpdate.Text = "Stop on API Update";
             this.checkBoxStopOnAPIUpdate.UseVisualStyleBackColor = true;
+            this.numericUpDownForceEvolveAbove.DecimalPlaces = 2;
+            this.numericUpDownForceEvolveAbove.Location = new System.Drawing.Point(166, 274);
+            this.numericUpDownForceEvolveAbove.Margin = new System.Windows.Forms.Padding(2);
+            this.numericUpDownForceEvolveAbove.Maximum = new decimal(new int[] {
+            1000000,
+            0,
+            0,
+            0});
+            this.numericUpDownForceEvolveAbove.Name = "numericUpDownForceEvolveAbove";
+            this.numericUpDownForceEvolveAbove.Size = new System.Drawing.Size(58, 20);
+            this.numericUpDownForceEvolveAbove.TabIndex = 33;
+            // 
+            // label48
+            // 
+            this.label48.AutoSize = true;
+            this.label48.Location = new System.Drawing.Point(230, 276);
+            this.label48.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label48.Name = "label48";
+            this.label48.Size = new System.Drawing.Size(122, 13);
+            this.label48.TabIndex = 34;
+            this.label48.Text = "Pokemon inventory filled";
+            // 
+            // label49
+            // 
+            this.label49.AutoSize = true;
+            this.label49.Location = new System.Drawing.Point(16, 276);
+            this.label49.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label49.Name = "label49";
+            this.label49.Size = new System.Drawing.Size(150, 13);
+            this.label49.TabIndex = 35;
+            this.label49.Text = "Force evolve Pokemon above";
             // 
             // AccountSettingsForm
             // 
@@ -2113,6 +2151,7 @@
             this.tabPageTransfer.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewTransfer)).EndInit();
             this.contextMenuStripTransfer.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownForceEvolveAbove)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -2291,5 +2330,8 @@
         private System.Windows.Forms.CheckBox checkBoxRemoveOnStop;
         private System.Windows.Forms.CheckBox checkBoxClaimLevelUp;
         private System.Windows.Forms.CheckBox checkBoxStopOnAPIUpdate;
+        private System.Windows.Forms.NumericUpDown numericUpDownForceEvolveAbove;
+        private System.Windows.Forms.Label label48;
+        private System.Windows.Forms.Label label49;
     }
 }
