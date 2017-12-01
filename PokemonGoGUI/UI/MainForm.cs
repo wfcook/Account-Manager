@@ -31,7 +31,7 @@ namespace PokemonGoGUI
         private bool _showStartup = true;
 
         private readonly string _saveFile = "data";
-        private const string _versionNumber = "1.3.1 - Betas testes by FurtiF";
+        private const string _versionNumber = "2.19.1 - Betas testes by FurtiF";
 
         public MainForm()
         {
@@ -1632,7 +1632,7 @@ namespace PokemonGoGUI
             foreach(Manager manager in fastObjectListViewMain.SelectedObjects)
             {
                 //Snipe all at once
-                manager.ManualSnipe(lat, lon, pokemonToSnipe);
+                await manager.ManualSnipe(lat, lon, pokemonToSnipe).ConfigureAwait(false);
 
                 await Task.Delay(100);
             }

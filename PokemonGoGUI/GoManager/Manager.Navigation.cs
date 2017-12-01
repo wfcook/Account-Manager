@@ -143,6 +143,7 @@ namespace PokemonGoGUI.GoManager
 
         private async Task<MethodResult> UpdateLocation(GeoCoordinate location)
         {
+            await Task.Delay(0);
             try
             {
                 GeoCoordinate previousLocation = new GeoCoordinate(_client.CurrentLatitude, _client.CurrentLongitude);
