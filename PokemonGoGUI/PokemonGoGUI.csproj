@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>PokemonGoGUI</RootNamespace>
     <AssemblyName>PokemonGoGUI</AssemblyName>
-    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
     <PublishUrl>publish\</PublishUrl>
@@ -97,27 +97,27 @@
     <Reference Include="Google.Protobuf, Version=3.5.0.0, Culture=neutral, PublicKeyToken=a7d26565bac4d604, processorArchitecture=MSIL">
       <HintPath>..\packages\Google.Protobuf.3.5.0\lib\net45\Google.Protobuf.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="ObjectListView, Version=2.9.1.1072, Culture=neutral, PublicKeyToken=b1c5bf581481bcd4, processorArchitecture=MSIL">
       <HintPath>..\packages\ObjectListView.Official.2.9.1\lib\net20\ObjectListView.dll</HintPath>
     </Reference>
-    <Reference Include="POGOProtos.Core, Version=2.19.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\POGOProtos.Core.2.19.1\lib\net45\POGOProtos.Core.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="GeoCoordinate.NetStandard1, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\GeoCoordinate.NetStandard1.1.0.1\lib\netstandard1.1\GeoCoordinate.NetStandard1.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Design" />
-    <Reference Include="System.Device" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="POGOProtos.Core, Version=2.19.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\POGOProtos.Core.2.19.1\lib\net45\POGOProtos.Core.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountScheduler\Scheduler.cs" />
@@ -287,12 +287,10 @@
     <PostBuildEvent>
     </PostBuildEvent>
   </PropertyGroup>
-  <Import Project="..\packages\Fody.2.2.1.0\build\net452\Fody.targets" Condition="Exists('..\packages\Fody.2.2.1.0\build\net452\Fody.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>Ce projet fait référence à des packages NuGet qui sont manquants sur cet ordinateur. Utilisez l'option de restauration des packages NuGet pour les télécharger. Pour plus d'informations, consultez http://go.microsoft.com/fwlink/?LinkID=322105. Le fichier manquant est : {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Fody.2.2.1.0\build\net452\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Fody.2.2.1.0\build\net452\Fody.targets'))" />
     <Error Condition="!Exists('..\packages\Costura.Fody.1.6.2\build\dotnet\Costura.Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Costura.Fody.1.6.2\build\dotnet\Costura.Fody.targets'))" />
   </Target>
   <Import Project="..\packages\Costura.Fody.1.6.2\build\dotnet\Costura.Fody.targets" Condition="Exists('..\packages\Costura.Fody.1.6.2\build\dotnet\Costura.Fody.targets')" />
@@ -303,4 +301,5 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <Import Project="..\packages\Fody.2.2.1.0\build\portable-net+sl+win+wpa+wp\Fody.targets" Condition="Exists('..\packages\Fody.2.2.1.0\build\portable-net+sl+win+wpa+wp\Fody.targets')" />
 </Project>

@@ -1,7 +1,7 @@
 ﻿using PokemonGo.RocketAPI;
 using PokemonGoGUI.GoManager.Models;
 using System;
-using System.Device.Location;
+using GeoCoordinatePortable;
 using System.Threading.Tasks;
 
 namespace PokemonGoGUI.GoManager
