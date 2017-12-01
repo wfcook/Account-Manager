@@ -1,10 +1,10 @@
 ﻿<Properties StartupConfiguration="{7A0DED79-9DC9-41C1-A1A7-FD671C22CB0A}|Default">
   <MonoDevelop.Ide.ItemProperties.PokemonGoGUI PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="PokemonGoGUI/PokemonGoGUI.csproj">
+  <MonoDevelop.Ide.Workbench ActiveDocument="readme-generator État">
     <Files>
       <File FileName="PokemonGo.RocketAPI/Extensions/HttpClientExtensions.cs" Line="31" Column="94" />
       <File FileName="PokemonGo.RocketAPI/packages.config" Line="4" Column="47" />
-      <File FileName="PokemonGo.RocketAPI/PokemonGo.RocketAPI.csproj" Line="79" Column="55" />
+      <File FileName="PokemonGo.RocketAPI/PokemonGo.RocketAPI.csproj" Line="1" Column="1" />
       <File FileName="readme-generator État" />
       <File FileName="PokemonGoGUI/PokemonGoGUI.csproj" Line="1" Column="1" />
     </Files>
