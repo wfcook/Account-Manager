@@ -72,7 +72,7 @@ namespace PokemonGo.RocketAPI
         public AccessToken AccessToken { get; set; }
         //For Test
         //public int PageOffset { get; set; }
-        public string AuthToken { get; set; }
+        //public string AuthToken { get; set; }
 
         public Client()
         {
@@ -82,7 +82,7 @@ namespace PokemonGo.RocketAPI
         {
             SetSettings(settings);
 
-            await Login.DoLogin();
+            await Login.DoLogin().ConfigureAwait(false);
 
             return new MethodResult
             {
@@ -106,7 +106,8 @@ namespace PokemonGo.RocketAPI
         {
             AuthTicket = null;
             ApiUrl = null;
-            AuthToken = null;
+            //AuthToken = null;
+            AccessToken = null;
         }
 
         public bool LoggedIn
@@ -236,6 +237,7 @@ namespace PokemonGo.RocketAPI
         public void Reset()
         {
             AccessToken = null;
+            //AuthToken = null;
             AuthTicket = null;
             StartTime = Utils.GetTime(true);
             RequestBuilder = new RequestBuilder(this, this.Settings);

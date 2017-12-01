@@ -12,6 +12,10 @@ using System.Threading;
 using PokemonGo.RocketAPI.LoginProviders;
 using PokemonGo.RocketAPI.Authentication.Data;
 using POGOProtos.Enums;
+using POGOProtos.Networking.Requests.Messages;
+using PokemonGo.RocketAPI.Extensions;
+using POGOProtos.Networking.Requests;
+using Google.Protobuf;
 
 #endregion
 
@@ -118,7 +122,7 @@ namespace PokemonGo.RocketAPI.Rpc
         {
             get
             {
-                if (String.IsNullOrEmpty(Client.AuthToken) ||
+                if (String.IsNullOrEmpty(Client.AccessToken.Token) ||
                     String.IsNullOrEmpty(Client.ApiUrl) ||
                     Client.AuthTicket == null)
                 {
