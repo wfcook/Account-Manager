@@ -175,8 +175,8 @@ namespace PokemonGoGUI.GoManager
             try
             {
                 //Only mapobject returns objects
-                var checkAllReponse = await _client.Map.GetMapObjects();
-                GetMapObjectsResponse mapObjectResponse = checkAllReponse.Item1;
+                var checkAllReponse = await _client.Map.GetMapObjects().ConfigureAwait(false);
+                GetMapObjectsResponse mapObjectResponse = checkAllReponse;
 
                 _lastMapRequest = DateTime.Now;
 

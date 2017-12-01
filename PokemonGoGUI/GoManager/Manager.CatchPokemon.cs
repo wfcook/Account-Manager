@@ -173,7 +173,7 @@ namespace PokemonGoGUI.GoManager
 
 
                     double reticuleSize = 1.95;
-                    int hitInsideReticule = 1;
+                    bool hitInsideReticule = false;
 
                     //Humanization
                     if (UserSettings.EnableHumanization)
@@ -325,7 +325,7 @@ namespace PokemonGoGUI.GoManager
 
 
                     double reticuleSize = 1.95;
-                    int hitInsideReticule = 1;
+                    bool hitInsideReticule = false;
 
                     //Humanization
                     if (UserSettings.EnableHumanization)
@@ -573,16 +573,16 @@ namespace PokemonGoGUI.GoManager
             await UseBerry(pokemon.EncounterId, pokemon.SpawnPointId);
         }
 
-        private int HitInsideReticle()
+        private bool HitInsideReticle()
         {
             lock(_rand)
             {
                 if (_rand.Next(1, 101) <= UserSettings.InsideReticuleChance)
                 {
-                    return 1;
+                    return true;
                 }
 
-                return 0;
+                return false;
             }
         }
     }

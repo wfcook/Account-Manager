@@ -158,7 +158,7 @@ namespace PokemonGoGUI.GoManager
                     };
                 }
 
-                await _client.Player.UpdatePlayerLocation(location.Latitude, location.Longitude, location.Altitude);
+                _client.Player.UpdatePlayerLocation(location.Latitude, location.Longitude, location.Altitude, _client.CurrentSpeed);
 
                 string message = String.Format("Location updated to {0}, {1}. Distance: {2:0.00}m", location.Latitude, location.Longitude, distance);
 

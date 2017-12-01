@@ -32,7 +32,7 @@ namespace PokemonGoGUI.GoManager
                     }
                 }
 
-                GetInventoryResponse inventory = await _client.Inventory.GetInventory();
+                GetHoloInventoryResponse inventory = await _client.Inventory.GetInventory();
 
                 if (inventory == null || inventory.InventoryDelta == null)
                 {

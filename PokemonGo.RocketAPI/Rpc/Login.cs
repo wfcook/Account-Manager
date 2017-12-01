@@ -1,32 +1,126 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+#region using directives
+
+using System;
 using System.Threading.Tasks;
-using Google.Protobuf;
 using PokemonGo.RocketAPI.Enums;
 using PokemonGo.RocketAPI.Exceptions;
-using PokemonGo.RocketAPI.Extensions;
 using PokemonGo.RocketAPI.Helpers;
-using PokemonGo.RocketAPI.Login;
-using POGOProtos.Networking.Requests;
-using POGOProtos.Networking.Requests.Messages;
+using POGOProtos.Networking.Responses;
+using System.IO;
+using Newtonsoft.Json;
+using System.Threading;
+using PokemonGo.RocketAPI.LoginProviders;
+using PokemonGo.RocketAPI.Authentication.Data;
+using POGOProtos.Enums;
+
+#endregion
 
 namespace PokemonGo.RocketAPI.Rpc
 {
     public delegate void GoogleDeviceCodeDelegate(string code, string uri);
+
     public class Login : BaseRpc
     {
-        //public event GoogleDeviceCodeDelegate GoogleDeviceCodeEvent;
-        private ILoginType login;
+        private Semaphore ReauthenticateMutex { get; } = new Semaphore(1, 1);
+        public Login(Client client) : base(client)
+        {
+            Client.LoginProvider = SetLoginType(client.Settings);
+            Client.ApiUrl = Constants.RpcUrl;
+        }
+
+        private ILoginProvider SetLoginType(ISettings settings)
+        {
+            switch (settings.AuthType)
+            {
+                case AuthType.Google:
+                    return new GoogleLoginProvider(settings.GoogleUsername, settings.GooglePassword);
+                case AuthType.Ptc:
+                    return new PtcLoginProvider(settings.PtcUsername, settings.PtcPassword);
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(settings.AuthType), "Unknown AuthType");
+            }
+        }
+
+        private bool IsValidAccessToken()
+        {
+            if (Client.AccessToken == null || string.IsNullOrEmpty(Client.AccessToken.Token) || Client.AccessToken.IsExpired)
+                return false;
+
+            return true;
+        }
+
+        public async Task<AccessToken> GetValidAccessToken(bool forceRefresh = false, bool isCached = false)
+        {
+            try
+            {
+                ReauthenticateMutex.WaitOne();
+
+                if (forceRefresh)
+                {
+                    Client.AccessToken.Expire();
+                    if (isCached)
+                        DeleteSavedAccessToken();
+                }
+
+                if (IsValidAccessToken())
+                    return Client.AccessToken;
+
+                // If we got here then access token is expired or not loaded into memory.
+                if (isCached)
+                {
+                    var loginProvider = Client.LoginProvider;
+                    var cacheDir = Path.Combine(Directory.GetCurrentDirectory(), "Cache");
+                    var fileName = Path.Combine(cacheDir, $"{loginProvider.UserId}-{loginProvider.ProviderId}.json");
+
+                    if (!Directory.Exists(cacheDir))
+                        Directory.CreateDirectory(cacheDir);
+
+                    if (File.Exists(fileName))
+                    {
+                        var accessToken = JsonConvert.DeserializeObject<AccessToken>(File.ReadAllText(fileName));
+
+                        if (!accessToken.IsExpired)
+                        {
+                            Client.AccessToken = accessToken;
+                            return accessToken;
+                        }
+                    }
+                }
+
+                await Reauthenticate(isCached).ConfigureAwait(false);
+                return Client.AccessToken;
+            }
+            finally
+            {
+                ReauthenticateMutex.Release();
+            }
+        }
+
+        private void SaveAccessToken()
+        {
+            if (!IsValidAccessToken())
+                return;
+
+            var fileName = Path.Combine(Directory.GetCurrentDirectory(), "Cache", $"{Client.AccessToken.Uid}.json");
+
+            File.WriteAllText(fileName, JsonConvert.SerializeObject(Client.AccessToken, Formatting.Indented));
+        }
+
+        private void DeleteSavedAccessToken()
+        {
+            var cacheDir = Path.Combine(Directory.GetCurrentDirectory(), "Cache");
+            var fileName = Path.Combine(cacheDir, $"{Client.AccessToken?.Uid}-{Client.LoginProvider.ProviderId}.json");
+            if (File.Exists(fileName))
+                File.Delete(fileName);
+        }
 
         public bool LoggedIn
         {
             get
             {
-                if (String.IsNullOrEmpty(_client.AuthToken) ||
-                    String.IsNullOrEmpty(_client.ApiUrl) ||
-                    _client.AuthTicket == null)
+                if (String.IsNullOrEmpty(Client.AuthToken) ||
+                    String.IsNullOrEmpty(Client.ApiUrl) ||
+                    Client.AuthTicket == null)
                 {
                     return false;
                 }
@@ -35,88 +129,91 @@ namespace PokemonGo.RocketAPI.Rpc
             }
         }
 
-        public Login(Client client) : base(client)
+        public async Task Reauthenticate(bool isCached)
         {
-            login = SetLoginType(client.Settings);
-        }
-
-        private static ILoginType SetLoginType(ISettings settings)
-        {
-            switch (settings.AuthType)
+            var tries = 0;
+            while (!IsValidAccessToken())
             {
-                case AuthType.Google:
-                    return new GoogleLogin(settings.PtcUsername, settings.PtcPassword);
-                case AuthType.Ptc:
-                    return new PtcLogin(settings.PtcUsername, settings.PtcPassword, settings);
-                default:
-                    throw new ArgumentOutOfRangeException("AuthType", "Unknown AuthType");
+                // If expired, then we always delete the saved access token if it exists.
+                if (isCached)
+                    DeleteSavedAccessToken();
+
+                try
+                {
+                    Client.AccessToken = await Client.LoginProvider.GetAccessToken().ConfigureAwait(false);
+                }
+                catch (Exception ex)
+                {
+                    if (ex.Message.Contains("15 minutes")) throw new PtcLoginException(ex.Message);
+
+                    if (ex.Message.Contains("You have to log into a browser")) throw new GoogleTwoFactorException(ex.Message);
+                    //Logger.Error($"Reauthenticate exception was catched: {exception}");
+                }
+                finally
+                {
+                    if (!IsValidAccessToken())
+                    {
+                        var sleepSeconds = Math.Min(60, ++tries * 5);
+                        //Logger.Error($"Reauthentication failed, trying again in {sleepSeconds} seconds.");
+                        await Task.Delay(TimeSpan.FromMilliseconds(sleepSeconds * 1000)).ConfigureAwait(false);
+                    }
+                    else
+                    {
+                        // We have successfully refreshed the token so save it.
+                        if (isCached)
+                            SaveAccessToken();
+                    }
+
+                    if (tries == 5)
+                    {
+                        throw new TokenRefreshException("Error refreshing access token.");
+                    }
+                }
             }
         }
 
-        public async Task DoLogin()
+        public async Task<GetPlayerResponse> DoLogin()
         {
-            _client.AuthToken = await login.GetAccessToken().ConfigureAwait(false);
-            await SetServer().ConfigureAwait(false);
-        }
+            Client.Reset();
 
-        public async Task ReAuthenticate()
-        {
-            await login.GetAccessToken().ConfigureAwait(false);
-        }
+            // Don't wait for background start of killswitch.
+            // jjskuld - Ignore CS4014 warning for now.
+#pragma warning disable 4014
+            Client.KillswitchTask.Start();
+#pragma warning restore 4014
 
-        private async Task SetServer()
-        {
-            #region Standard intial request messages in right Order
-
-            var getPlayerMessage = new GetPlayerMessage();
-            var getHatchedEggsMessage = new GetHatchedEggsMessage();
-            var getInventoryMessage = new GetInventoryMessage
+            GetPlayerResponse player = await Client.Player.GetPlayer(false, true).ConfigureAwait(false); // Set false because initial GetPlayer does not use common requests.
+            if (player.Warn)
             {
-                LastTimestampMs = DateTime.UtcNow.ToUnixTime()
-            };
-            var checkAwardedBadgesMessage = new CheckAwardedBadgesMessage();
-            var downloadSettingsMessage = new DownloadSettingsMessage
-            {
-                Hash = "05daf51635c82611d1aac95c0b051d3ec088a930"
-            };
-
-            #endregion
-
-            var serverRequest = RequestBuilder.GetInitialRequestEnvelope(
-                new Request
-                {
-                    RequestType = RequestType.GetPlayer,
-                    RequestMessage = getPlayerMessage.ToByteString()
-                }, new Request
-                {
-                    RequestType = RequestType.GetHatchedEggs,
-                    RequestMessage = getHatchedEggsMessage.ToByteString()
-                }, new Request
-                {
-                    RequestType = RequestType.GetInventory,
-                    RequestMessage = getInventoryMessage.ToByteString()
-                }, new Request
-                {
-                    RequestType = RequestType.CheckAwardedBadges,
-                    RequestMessage = checkAwardedBadgesMessage.ToByteString()
-                }, new Request
-                {
-                    RequestType = RequestType.DownloadSettings,
-                    RequestMessage = downloadSettingsMessage.ToByteString()
-                });
-
-
-            var serverResponse = await PostProto<Request>(Resources.RpcUrl, serverRequest).ConfigureAwait(false);
-
-            if (serverResponse.AuthTicket == null)
-            {
-                _client.AuthToken = null;
-                throw new AccessTokenExpiredException();
             }
 
-            _client.AuthTicket = serverResponse.AuthTicket;
-            _client.ApiUrl = serverResponse.ApiUrl;
-        }
+            if (player.Banned)
+            {
+            }
 
+            await RandomHelper.RandomDelay(10000).ConfigureAwait(false);
+
+            await Client.Download.GetRemoteConfigVersion().ConfigureAwait(false);
+            await RandomHelper.RandomDelay(300).ConfigureAwait(false);
+
+            //var getAssetDigest = await Client.Download.GetAssetDigest().ConfigureAwait(false);
+            //Client.PageOffset = getAssetDigest.PageOffset;
+            await Client.Download.GetAssetDigest().ConfigureAwait(false);
+            await RandomHelper.RandomDelay(300).ConfigureAwait(false);
+
+            //var getItemTemplates = await Client.Download.GetItemTemplates().ConfigureAwait(false);
+            //Client.PageOffset = getItemTemplates.PageOffset;
+            await Client.Download.GetItemTemplates().ConfigureAwait(false);
+            await RandomHelper.RandomDelay(300).ConfigureAwait(false);
+
+            await Client.Player.GetPlayerProfile().ConfigureAwait(false);
+            await RandomHelper.RandomDelay(300).ConfigureAwait(false);
+
+            GetInboxResponse req = await Client.Misc.GetInbox(true, false, 0L).ConfigureAwait(false);
+            CommonRequest.ProcessGetInboxResponse(Client, req);
+            await RandomHelper.RandomDelay(300).ConfigureAwait(false);
+
+            return player;
+        }
     }
 }

@@ -14,9 +14,9 @@ namespace PokemonGoGUI.GoManager
         {
             var b = _client.Download.GetSettings().Result;
             var d =_client.Download.GetSettings().Result;
-            var a = _client.Misc.MarkTutorialComplete().Result;
+            var a = _client.Misc.MarkTutorialComplete(null).Result;
 
-            _client.Inventory.GetHatchedEgg();
+            _client.Inventory.GetHatchedEgg().ConfigureAwait(false);
             var c = _client.Player.GetPlayer().Result;
         }
     }

@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿#region using directives
+
 using System.Net;
 using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
 using PokemonGo.RocketAPI.Helpers;
+using System;
+
+#endregion
 
 namespace PokemonGo.RocketAPI.HttpClient
 {
@@ -17,8 +17,9 @@ namespace PokemonGo.RocketAPI.HttpClient
             DefaultRequestHeaders.ExpectContinue = false;
             DefaultRequestHeaders.TryAddWithoutValidation("Connection", "keep-alive");
             DefaultRequestHeaders.TryAddWithoutValidation("Accept", "*/*");
-            DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "application/x-www-form-urlencoded");
-
+            //DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "application/x-www-form-urlencoded");
+            DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "application/binary");
+            DefaultRequestHeaders.TryAddWithoutValidation("Accept-Encoding", "identity, gzip");
             this.Timeout = TimeSpan.FromSeconds(10);
         }
     }

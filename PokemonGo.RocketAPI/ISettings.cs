@@ -32,5 +32,16 @@ namespace PokemonGo.RocketAPI
         string ProxyUsername { get; set; }
         string ProxyPassword { get; set; }
         bool SPF { get; set; }
+
+        string DevicePlatform { get; set; }
+        bool UsePogoDevHashServer { get; set; }
+        string UrlHashServices { get; set; }
+        string EndPoint { get; set; }
+        bool UseCustomAPI { get; set; }
+        string AuthAPIKey { get; set; }
+        string Country { get; set; }
+        string Language { get; set; }
+        string TimeZone { get; set; }
+        string POSIX { get; set; }
     }
 }

@@ -22,7 +22,7 @@ using System.Windows.Forms;
 
 namespace PokemonGoGUI
 {
-    public partial class MainForm : Form
+    public partial class MainForm : System.Windows.Forms.Form
     {
         private List<Manager> _managers = new List<Manager>();
         private ProxyHandler _proxyHandler = new ProxyHandler();
@@ -31,7 +31,7 @@ namespace PokemonGoGUI
         private bool _showStartup = true;
 
         private readonly string _saveFile = "data";
-        private const string _versionNumber = "1.3.1";
+        private const string _versionNumber = "1.3.1 - Betas testes by FurtiF";
 
         public MainForm()
         {
@@ -118,8 +118,6 @@ namespace PokemonGoGUI
 
             this.Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
 
-            RenameDLL();
-
             await LoadSettings();
 
             if(_showStartup)
@@ -133,59 +131,6 @@ namespace PokemonGoGUI
             }
 
             UpdateStatusBar();
-        }
-
-        private void RenameDLL()
-        {
-            try
-            {
-                if(File.Exists("encrypt.dll"))
-                {
-                    return;
-                }
-
-                string dllToRename = "encrypt_{0}.dll";
-
-                string bit = "32";
-
-                if (Environment.Is64BitOperatingSystem)
-                {
-                    bit = "64";
-                }
-
-                DialogResult result = MessageBox.Show(String.Format("{0}bit OS detected. Is this correct?", bit), "Confirmation", MessageBoxButtons.YesNo);
-
-                if(result == DialogResult.No)
-                {
-                    if(bit == "64")
-                    {
-                        bit = "32";
-                    }
-                    else
-                    {
-                        bit = "64";
-                    }
-                }
-
-                dllToRename = String.Format(dllToRename, bit);
-
-                if(!File.Exists(dllToRename))
-                {
-                    MessageBox.Show(String.Format("Missing {0} library. Closing ...", dllToRename), "Warning");
-
-                    //Prevents saving
-                    Environment.Exit(0);
-                    return;
-                }
-
-                File.Copy(dllToRename, "encrypt.dll");
-            }
-            catch(Exception)
-            {
-                MessageBox.Show("Failed to rename proper encrypt dll.\nTo manually complete this ...\nRename encrypt_32 to encrypt.dll for 32bit system.\nRename encrypt_64 to encrypt.dll for 64bit system", "Info");
-
-                Application.Exit();
-            }
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)

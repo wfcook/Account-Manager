@@ -23,7 +23,7 @@ using System.Windows.Forms;
 
 namespace PokemonGoGUI.UI
 {
-    public partial class DetailsForm : Form
+    public partial class DetailsForm : System.Windows.Forms.Form
     {
         private Manager _manager; 
         private int _totalLogs = 0;

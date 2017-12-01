@@ -238,7 +238,7 @@ namespace PokemonGoGUI.GoManager
 
                 if (!String.IsNullOrEmpty(UserSettings.DeviceBrand))
                 {
-                    UserSettings.RandomizeDeviceId();
+                    UserSettings.RandomizeDevice();
                 }
                 else
                 {
@@ -322,7 +322,7 @@ namespace PokemonGoGUI.GoManager
 
         public void RandomDeviceId()
         {
-            UserSettings.RandomizeDeviceId();
+            UserSettings.RandomizeDevice();
         }
         
         public override bool Equals(object obj)

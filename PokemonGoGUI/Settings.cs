@@ -3,6 +3,7 @@ using POGOProtos.Enums;
 using POGOProtos.Inventory.Item;
 using PokemonGo.RocketAPI;
 using PokemonGo.RocketAPI.Enums;
+using PokemonGo.RocketAPI.Helpers;
 using PokemonGoGUI.Enums;
 using PokemonGoGUI.Models;
 using System;
@@ -14,6 +15,17 @@ namespace PokemonGoGUI
 {
     public class Settings : ISettings
     {
+        public string DevicePlatform { get; set; }
+        public bool UsePogoDevHashServer { get; set; }
+        public string UrlHashServices { get; set; }
+        public string EndPoint { get; set; }
+        public bool UseCustomAPI { get; set; }
+        public string AuthAPIKey { get; set; }
+        public string Country { get; set; }
+        public string Language { get; set; }
+        public string TimeZone { get; set; }
+        public string POSIX { get; set; }
+
         public string GroupName { get; set; }
         public string AccountName { get; set; }
         public AuthType AuthType { get; set; }
@@ -173,19 +185,20 @@ namespace PokemonGoGUI
 
         public void LoadDeviceSettings()
         {
-            RandomizeDeviceId();
-            AndroidBoardName = "universal7420";
-            AndroidBootloader = "universal7420";
-            DeviceBrand = "universal7420";
-            DeviceModel = "zeroflte";
-            DeviceModelIdentifier = "SM-G920F";
-            DeviceModelBoot = "qcom";
-            HardwareManufacturer = "samsung";
-            HardwareModel = "SM-G920F";
-            FirmwareBrand = "zerofltexx";
-            FirmwareTags = "release-keys";
-            FirmwareFingerprint = "samsung/zerofltexx/zeroflte:6.0.1/MMB29K/G920FXXS3DPD2:user/release-keys";
-            FirmwareType = "user";
+            var device = DeviceInfoHelper.GetRandomIosDevice();
+            DeviceId = device.DeviceId;
+            AndroidBoardName = device.AndroidBoardName;
+            AndroidBootloader = device.AndroidBootloader;
+            DeviceBrand = device.DeviceBrand;
+            DeviceModel = device.DeviceModel;
+            DeviceModelIdentifier = device.DeviceModelIdentifier;
+            DeviceModelBoot = device.DeviceModelBoot;
+            HardwareManufacturer = device.HardwareManufacturer;
+            HardwareModel = device.HardwareModel;
+            FirmwareBrand = device.FirmwareBrand;
+            FirmwareTags = device.FirmwareTags;
+            FirmwareType = device.FirmwareType;
+            FirmwareFingerprint = device.FirmwareFingerprint;
         }
 
         public void LoadCatchSettings()
@@ -291,24 +304,11 @@ namespace PokemonGoGUI
         }
         */
 
-        public void RandomizeDeviceId()
+        public void RandomizeDevice()
         {
-            DeviceId = RandomString(16);
-        }
-
-        private string RandomString(int length, string alphabet = "0123456789abcedef")
-        {
-            var outOfRange = Byte.MaxValue + 1 - (Byte.MaxValue + 1) % alphabet.Length;
-
-            return string.Concat(
-                Enumerable
-                    .Repeat(0, Int32.MaxValue)
-                    .Select(e => this.RandomByte())
-                    .Where(randomByte => randomByte < outOfRange)
-                    .Take(length)
-                    .Select(randomByte => alphabet[randomByte % alphabet.Length])
-            );
-        }
+            var device = DeviceInfoHelper.GetRandomIosDevice();
+            DeviceId = device.DeviceId;
+         }
 
         private byte RandomByte()
         {
