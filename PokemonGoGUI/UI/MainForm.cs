@@ -104,7 +104,7 @@ namespace PokemonGoGUI
             }
         }
 
-        private void fastObjectListViewMain_DoubleClick(object sender, EventArgs e)
+        private void FastObjectListViewMain_DoubleClick(object sender, EventArgs e)
         {
             ShowDetails(fastObjectListViewMain.SelectedObjects.Cast<Manager>());
         }
@@ -194,8 +194,8 @@ namespace PokemonGoGUI
                 {
                     manager.AddSchedulerEvent();
                     manager.ProxyHandler = _proxyHandler;
-                    manager.OnLog += manager_OnLog;
-                    manager.OnInventoryUpdate += manager_OnInventoryUpdate;
+                    manager.OnLog += Manager_OnLog;
+                    manager.OnInventoryUpdate += Manager_OnInventoryUpdate;
 
                     //Patch for version upgrade
                     if(String.IsNullOrEmpty(manager.UserSettings.DeviceId))
@@ -248,9 +248,9 @@ namespace PokemonGoGUI
             }
         }
 
-        private void manager_OnInventoryUpdate(object sender, EventArgs e)
+        private void Manager_OnInventoryUpdate(object sender, EventArgs e)
         {
-            return;
+            //return;
 
             Manager manager = sender as Manager;
 
@@ -259,12 +259,12 @@ namespace PokemonGoGUI
                 return;
             }
 
-            //RefreshManager(manager);
+            RefreshManager(manager);
         }
 
-        private void manager_OnLog(object sender, LoggerEventArgs e)
+        private void Manager_OnLog(object sender, LoggerEventArgs e)
         {
-            return;
+            //return;
 
             Manager manager = sender as Manager;
 
@@ -273,10 +273,10 @@ namespace PokemonGoGUI
                 return;
             }
 
-            //RefreshManager(manager);
+            RefreshManager(manager);
         }
 
-        private void addNewToolStripMenuItem_Click(object sender, EventArgs e)
+        private void AddNewToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Manager manager = new Manager(_proxyHandler);
 
@@ -290,7 +290,7 @@ namespace PokemonGoGUI
             fastObjectListViewMain.SetObjects(_managers);
         }
 
-        private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
+        private void DeleteToolStripMenuItem_Click(object sender, EventArgs e)
         {
             int totalAccounts = fastObjectListViewMain.SelectedObjects.Count;
 
@@ -322,8 +322,8 @@ namespace PokemonGoGUI
                     manager.RemoveProxy();
                     manager.RemoveScheduler();
 
-                    manager.OnLog -= manager_OnLog;
-                    manager.OnInventoryUpdate -= manager_OnInventoryUpdate;
+                    manager.OnLog -= Manager_OnLog;
+                    manager.OnInventoryUpdate -= Manager_OnInventoryUpdate;
 
                     _managers.Remove(manager);
                 }
@@ -332,7 +332,7 @@ namespace PokemonGoGUI
             fastObjectListViewMain.SetObjects(_managers);
         }
 
-        private void editToolStripMenuItem_Click(object sender, EventArgs e)
+        private void EditToolStripMenuItem_Click(object sender, EventArgs e)
         {
             int count = fastObjectListViewMain.SelectedObjects.Count;
 
@@ -355,7 +355,7 @@ namespace PokemonGoGUI
             fastObjectListViewMain.RefreshSelectedObjects();
         }
 
-        private void fastObjectListViewMain_KeyDown(object sender, KeyEventArgs e)
+        private void FastObjectListViewMain_KeyDown(object sender, KeyEventArgs e)
         {
             if(e.Control && e.Alt && e.KeyCode == Keys.U)
             {
@@ -378,12 +378,12 @@ namespace PokemonGoGUI
             e.Handled = true;
         }
 
-        private void viewDetailsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ViewDetailsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ShowDetails(fastObjectListViewMain.SelectedObjects.Cast<Manager>());
         }
 
-        private async void startToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void StartToolStripMenuItem_Click(object sender, EventArgs e)
         {
             startToolStripMenuItem.Enabled = false;
 
@@ -400,7 +400,7 @@ namespace PokemonGoGUI
             fastObjectListViewMain.RefreshSelectedObjects();
         }
 
-        private void stopToolStripMenuItem_Click(object sender, EventArgs e)
+        private void StopToolStripMenuItem_Click(object sender, EventArgs e)
         {
             foreach (Manager manager in fastObjectListViewMain.SelectedObjects)
             {
@@ -444,8 +444,8 @@ namespace PokemonGoGUI
 
         private void AddManager(Manager manager)
         {
-            manager.OnLog += manager_OnLog;
-            manager.OnInventoryUpdate += manager_OnInventoryUpdate;
+            manager.OnLog += Manager_OnLog;
+            manager.OnInventoryUpdate += Manager_OnInventoryUpdate;
 
             _managers.Add(manager);
         }
@@ -508,12 +508,11 @@ namespace PokemonGoGUI
             }
         }
 
-        private async void wConfigToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void WConfigToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ToolStripMenuItem tSMI = sender as ToolStripMenuItem;
-            bool useConfig = false;
 
-            if(tSMI == null || !Boolean.TryParse(tSMI.Tag.ToString(), out useConfig))
+            if (tSMI == null || !Boolean.TryParse(tSMI.Tag.ToString(), out bool useConfig))
             {
                 return;
             }
@@ -615,7 +614,7 @@ namespace PokemonGoGUI
             }
         }
 
-        private void timerListViewUpdate_Tick(object sender, EventArgs e)
+        private void TimerListViewUpdate_Tick(object sender, EventArgs e)
         {
             if(WindowState == FormWindowState.Minimized)
             {
@@ -651,7 +650,7 @@ namespace PokemonGoGUI
             }
         }
 
-        private void clearProxiesToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ClearProxiesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             int totalAccounts = fastObjectListViewMain.SelectedObjects.Count;
 
@@ -675,7 +674,7 @@ namespace PokemonGoGUI
             fastObjectListViewMain.RefreshSelectedObjects();
         }
 
-        private void enableColorsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void EnableColorsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             enableColorsToolStripMenuItem.Checked = !enableColorsToolStripMenuItem.Checked;
             bool isChecked = enableColorsToolStripMenuItem.Checked;
@@ -712,12 +711,12 @@ namespace PokemonGoGUI
             }
         }
 
-        private void showGroupsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ShowGroupsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             showGroupsToolStripMenuItem.Checked = !showGroupsToolStripMenuItem.Checked;
         }
 
-        private void fastObjectListViewMain_FormatCell(object sender, BrightIdeasSoftware.FormatCellEventArgs e)
+        private void FastObjectListViewMain_FormatCell(object sender, BrightIdeasSoftware.FormatCellEventArgs e)
         {
             Manager manager = (Manager)e.Model;
 
@@ -838,7 +837,7 @@ namespace PokemonGoGUI
 
         }
 
-        private void garbageCollectionToolStripMenuItem_Click(object sender, EventArgs e)
+        private void GarbageCollectionToolStripMenuItem_Click(object sender, EventArgs e)
         {
             DialogResult result = MessageBox.Show("This should not be called outside testing purposes. Continue?", "Confirmation", MessageBoxButtons.YesNo);
 
@@ -848,7 +847,7 @@ namespace PokemonGoGUI
             }
         }
 
-        private async void exportStatsToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void ExportStatsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ParallelOptions options = new ParallelOptions
             {
@@ -866,7 +865,7 @@ namespace PokemonGoGUI
                 });
         }
 
-        private async void updateDetailsToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void UpdateDetailsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             updateDetailsToolStripMenuItem.Enabled = false;
 
@@ -888,13 +887,12 @@ namespace PokemonGoGUI
             updateDetailsToolStripMenuItem.Enabled = true;
         }
 
-        private void importProxiesToolStripMenuItem_Click_1(object sender, EventArgs e)
+        private void ImportProxiesToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
             int count = fastObjectListViewMain.SelectedObjects.Count;
             string fileName = String.Empty;
-            int accountsPerProxy = 0;
 
-            if(count == 0)
+            if (count == 0)
             {
                 MessageBox.Show("Please select 1 or more accounts");
                 return;
@@ -907,7 +905,7 @@ namespace PokemonGoGUI
                 return;
             }
 
-            if (!Int32.TryParse(pPerAccount, out accountsPerProxy) || accountsPerProxy <= 0)
+            if (!Int32.TryParse(pPerAccount, out int accountsPerProxy) || accountsPerProxy <= 0)
             {
                 MessageBox.Show("Invalid input");
 
@@ -991,7 +989,7 @@ namespace PokemonGoGUI
             }
         }
 
-        private void exportAccountsToolStripMenuItem_Click_1(object sender, EventArgs e)
+        private void ExportAccountsToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
             if (fastObjectListViewMain.SelectedObjects.Count == 0)
             {
@@ -1019,7 +1017,7 @@ namespace PokemonGoGUI
             }
         }
 
-        private void exportProxiesToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ExportProxiesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if(fastObjectListViewMain.SelectedObjects.Count == 0)
             {
@@ -1047,7 +1045,7 @@ namespace PokemonGoGUI
             }
         }
 
-        private void clearCountsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ClearCountsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             DialogResult result = MessageBox.Show("This will reset your last 23 hour count and is updated to accurately reflect your pokestops + pokemon counts.\n\nAre you sure you want to clear this?", "Confirmation", MessageBoxButtons.YesNo);
 
@@ -1064,7 +1062,7 @@ namespace PokemonGoGUI
             fastObjectListViewMain.RefreshSelectedObjects();
         }
 
-        private void logsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void LogsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             foreach (Manager manager in fastObjectListViewMain.SelectedObjects)
             {
@@ -1074,7 +1072,7 @@ namespace PokemonGoGUI
             fastObjectListViewMain.RefreshSelectedObjects();
         }
 
-        private void pauseUnPauseToolStripMenuItem_Click(object sender, EventArgs e)
+        private void PauseUnPauseToolStripMenuItem_Click(object sender, EventArgs e)
         {
             foreach(Manager manager in fastObjectListViewMain.SelectedObjects)
             {
@@ -1082,7 +1080,7 @@ namespace PokemonGoGUI
             }
         }
 
-        private async void restartToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void RestartToolStripMenuItem_Click(object sender, EventArgs e)
         {
             foreach(Manager manager in fastObjectListViewMain.SelectedObjects)
             {
@@ -1094,7 +1092,7 @@ namespace PokemonGoGUI
 
         #region Fast Settings
 
-        private void claimLevelUpToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ClaimLevelUpToolStripMenuItem_Click(object sender, EventArgs e)
         {
             foreach (Manager manager in fastObjectListViewMain.SelectedObjects)
             {
@@ -1104,7 +1102,7 @@ namespace PokemonGoGUI
             fastObjectListViewMain.RefreshSelectedObjects();
         }
 
-        private void enableIPBanStopToolStripMenuItem_Click(object sender, EventArgs e)
+        private void EnableIPBanStopToolStripMenuItem_Click(object sender, EventArgs e)
         {
             foreach (Manager manager in fastObjectListViewMain.SelectedObjects)
             {
@@ -1114,7 +1112,7 @@ namespace PokemonGoGUI
             fastObjectListViewMain.RefreshSelectedObjects();
         }
 
-        private void enableRotateProxiesToolStripMenuItem_Click(object sender, EventArgs e)
+        private void EnableRotateProxiesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             foreach (Manager manager in fastObjectListViewMain.SelectedObjects)
             {
@@ -1124,17 +1122,16 @@ namespace PokemonGoGUI
             fastObjectListViewMain.RefreshSelectedObjects();
         }
 
-        private void setMaxRuntimeToolStripMenuItem_Click(object sender, EventArgs e)
+        private void SetMaxRuntimeToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string data = Prompt.ShowDialog("Max Runtime (hours)", "Set Max Runtime").Replace(",", ".");
-            double value = 0;
 
             if (String.IsNullOrEmpty(data))
             {
                 return;
             }
 
-            if (!Double.TryParse(data, NumberStyles.Any, CultureInfo.InvariantCulture, out value) || value < 0)
+            if (!Double.TryParse(data, NumberStyles.Any, CultureInfo.InvariantCulture, out double value) || value < 0)
             {
                 MessageBox.Show("Invalid runtime value");
             }
@@ -1147,7 +1144,7 @@ namespace PokemonGoGUI
             fastObjectListViewMain.RefreshSelectedObjects();
         }
 
-        private void setGroupToolStripMenuItem_Click(object sender, EventArgs e)
+        private void SetGroupToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string data = Prompt.ShowDialog("Group name", "Set group name", "Default");
 
@@ -1164,7 +1161,7 @@ namespace PokemonGoGUI
             fastObjectListViewMain.RefreshSelectedObjects();
         }
 
-        private void setMaxLevelToolStripMenuItem_Click(object sender, EventArgs e)
+        private void SetMaxLevelToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string data = Prompt.ShowDialog("Max Level:", "Set Max Level");
 
@@ -1173,15 +1170,13 @@ namespace PokemonGoGUI
                 return;
             }
 
-            int level = 0;
-
-            if(!Int32.TryParse(data, out level) || level < 0)
+            if (!Int32.TryParse(data, out int level) || level < 0)
             {
                 MessageBox.Show("Invalid value");
                 return;
             }
 
-            foreach(Manager manager in fastObjectListViewMain.SelectedObjects)
+            foreach (Manager manager in fastObjectListViewMain.SelectedObjects)
             {
                 manager.UserSettings.MaxLevel = level;
             }
@@ -1189,7 +1184,7 @@ namespace PokemonGoGUI
             fastObjectListViewMain.RefreshSelectedObjects();
         }
 
-        private void contextMenuStripAccounts_Opening(object sender, CancelEventArgs e)
+        private void ContextMenuStripAccounts_Opening(object sender, CancelEventArgs e)
         {
             enableSpoofToolStripMenuItem.Checked = _spf;
 
@@ -1231,16 +1226,18 @@ namespace PokemonGoGUI
             {
                 foreach (Scheduler scheduler in _schedulers)
                 {
-                    ToolStripMenuItem tSMI = new ToolStripMenuItem(scheduler.Name);
-                    tSMI.Tag = scheduler;
-                    tSMI.Click += schedule_Click;
+                    ToolStripMenuItem tSMI = new ToolStripMenuItem(scheduler.Name)
+                    {
+                        Tag = scheduler
+                    };
+                    tSMI.Click += Schedule_Click;
 
                     schedulerToolStripMenuItem.DropDownItems.Add(tSMI);
                 }
             }
         }
 
-        private void schedule_Click(object sender, EventArgs e)
+        private void Schedule_Click(object sender, EventArgs e)
         {
             ToolStripMenuItem tSMI = sender as ToolStripMenuItem;
             
@@ -1257,7 +1254,7 @@ namespace PokemonGoGUI
             fastObjectListViewMain.RefreshSelectedObjects();
         }
 
-        private void enableTransferToolStripMenuItem_Click(object sender, EventArgs e)
+        private void EnableTransferToolStripMenuItem_Click(object sender, EventArgs e)
         {
             foreach(Manager manager in fastObjectListViewMain.SelectedObjects)
             {
@@ -1267,7 +1264,7 @@ namespace PokemonGoGUI
             fastObjectListViewMain.RefreshSelectedObjects();
         }
 
-        private void enableEvolveToolStripMenuItem1_Click(object sender, EventArgs e)
+        private void EnableEvolveToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             foreach (Manager manager in fastObjectListViewMain.SelectedObjects)
             {
@@ -1277,7 +1274,7 @@ namespace PokemonGoGUI
             fastObjectListViewMain.RefreshSelectedObjects();
         }
 
-        private void enableRecycleToolStripMenuItem4_Click(object sender, EventArgs e)
+        private void EnableRecycleToolStripMenuItem4_Click(object sender, EventArgs e)
         {
             foreach (Manager manager in fastObjectListViewMain.SelectedObjects)
             {
@@ -1287,7 +1284,7 @@ namespace PokemonGoGUI
             fastObjectListViewMain.RefreshSelectedObjects();
         }
 
-        private void enableIncubateEggsToolStripMenuItem5_Click(object sender, EventArgs e)
+        private void EnableIncubateEggsToolStripMenuItem5_Click(object sender, EventArgs e)
         {
             foreach (Manager manager in fastObjectListViewMain.SelectedObjects)
             {
@@ -1297,7 +1294,7 @@ namespace PokemonGoGUI
             fastObjectListViewMain.RefreshSelectedObjects();
         }
 
-        private void enableLuckyEggsToolStripMenuItem6_Click(object sender, EventArgs e)
+        private void EnableLuckyEggsToolStripMenuItem6_Click(object sender, EventArgs e)
         {
             foreach (Manager manager in fastObjectListViewMain.SelectedObjects)
             {
@@ -1307,7 +1304,7 @@ namespace PokemonGoGUI
             fastObjectListViewMain.RefreshSelectedObjects();
         }
 
-        private void enableCatchPokemonToolStripMenuItem2_Click(object sender, EventArgs e)
+        private void EnableCatchPokemonToolStripMenuItem2_Click(object sender, EventArgs e)
         {
             foreach (Manager manager in fastObjectListViewMain.SelectedObjects)
             {
@@ -1317,7 +1314,7 @@ namespace PokemonGoGUI
             fastObjectListViewMain.RefreshSelectedObjects();
         }
 
-        private void enableSnipePokemonToolStripMenuItem3_Click(object sender, EventArgs e)
+        private void EnableSnipePokemonToolStripMenuItem3_Click(object sender, EventArgs e)
         {
             foreach (Manager manager in fastObjectListViewMain.SelectedObjects)
             {
@@ -1327,7 +1324,7 @@ namespace PokemonGoGUI
             fastObjectListViewMain.RefreshSelectedObjects();
         }
 
-        private void setRequiredPokemonToolStripMenuItem_Click(object sender, EventArgs e)
+        private void SetRequiredPokemonToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
             string data = Prompt.ShowDialog("Evolvable pokemon required to evolve:", "Set Min Pokemon Before Evolve");
@@ -1337,9 +1334,7 @@ namespace PokemonGoGUI
                 return;
             }
 
-            int value = 0;
-
-            if (!Int32.TryParse(data, out value) || value >= 500 || value < 0)
+            if (!Int32.TryParse(data, out int value) || value >= 500 || value < 0)
             {
                 MessageBox.Show("Invalid value");
                 return;
@@ -1353,7 +1348,7 @@ namespace PokemonGoGUI
             fastObjectListViewMain.RefreshSelectedObjects();
         }
 
-        private void setPokestopRateToolStripMenuItem_Click(object sender, EventArgs e)
+        private void SetPokestopRateToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string data = Prompt.ShowDialog("Snipe after pokestops amount:", "Set Pokestop Rate");
 
@@ -1362,9 +1357,7 @@ namespace PokemonGoGUI
                 return;
             }
 
-            int value = 0;
-
-            if (!Int32.TryParse(data, out value) || value >= 1000 || value < 0)
+            if (!Int32.TryParse(data, out int value) || value >= 1000 || value < 0)
             {
                 MessageBox.Show("Invalid value");
                 return;
@@ -1378,7 +1371,7 @@ namespace PokemonGoGUI
             fastObjectListViewMain.RefreshSelectedObjects();
         }
 
-        private void setMinBallsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void SetMinBallsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string data = Prompt.ShowDialog("Minimum balls required to snipe:", "Set Minimum Balls");
 
@@ -1387,9 +1380,7 @@ namespace PokemonGoGUI
                 return;
             }
 
-            int value = 0;
-
-            if (!Int32.TryParse(data, out value) || value >= 1000 || value < 0)
+            if (!Int32.TryParse(data, out int value) || value >= 1000 || value < 0)
             {
                 MessageBox.Show("Invalid value");
                 return;
@@ -1403,7 +1394,7 @@ namespace PokemonGoGUI
             fastObjectListViewMain.RefreshSelectedObjects();
         }
 
-        private void setMaxPokemonToolStripMenuItem_Click(object sender, EventArgs e)
+        private void SetMaxPokemonToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string data = Prompt.ShowDialog("Total pokemon per snipe:", "Set Maximum Pokemon To Snipe");
 
@@ -1412,9 +1403,7 @@ namespace PokemonGoGUI
                 return;
             }
 
-            int value = 0;
-
-            if (!Int32.TryParse(data, out value) || value >= 500 || value < 0)
+            if (!Int32.TryParse(data, out int value) || value >= 500 || value < 0)
             {
                 MessageBox.Show("Invalid value");
                 return;
@@ -1428,7 +1417,7 @@ namespace PokemonGoGUI
             fastObjectListViewMain.RefreshSelectedObjects();
         }
 
-        private void afterLevelToolStripMenuItem_Click(object sender, EventArgs e)
+        private void AfterLevelToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string data = Prompt.ShowDialog("Snipe after level:", "Set Snipe After Level");
 
@@ -1437,9 +1426,7 @@ namespace PokemonGoGUI
                 return;
             }
 
-            int value = 0;
-
-            if (!Int32.TryParse(data, out value) || value >= 40 || value < 0)
+            if (!Int32.TryParse(data, out int value) || value >= 40 || value < 0)
             {
                 MessageBox.Show("Invalid value");
                 return;
@@ -1455,7 +1442,7 @@ namespace PokemonGoGUI
 
         #endregion
 
-        private async void exportJsonToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void ExportJsonToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string fileName = String.Empty;
             List<AccountExportModel> exportModels = new List<AccountExportModel>();
@@ -1523,7 +1510,7 @@ namespace PokemonGoGUI
             }
         }
 
-        private void showStatusBarToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ShowStatusBarToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if(WindowState == FormWindowState.Minimized)
             {
@@ -1548,12 +1535,12 @@ namespace PokemonGoGUI
             }
         }
 
-        private void timerStatusBarUpdate_Tick(object sender, EventArgs e)
+        private void TimerStatusBarUpdate_Tick(object sender, EventArgs e)
         {
             UpdateStatusBar();
         }
 
-        private void importConfigToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ImportConfigToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string configFile = ImportConfig();
 
@@ -1577,7 +1564,7 @@ namespace PokemonGoGUI
             }
         }
 
-        private async void snipeToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void SnipeToolStripMenuItem_Click(object sender, EventArgs e)
         {
             List<string> currentPokemon = new List<string>();
 
@@ -1613,16 +1600,13 @@ namespace PokemonGoGUI
 
             string[] parts = data.Split(',');
 
-            double lat = 0;
-            double lon = 0;
-
-            if(!double.TryParse(parts[0], NumberStyles.Any, CultureInfo.InvariantCulture, out lat))
+            if (!double.TryParse(parts[0], NumberStyles.Any, CultureInfo.InvariantCulture, out double lat))
             {
                 MessageBox.Show("Invalid latitutde.");
                 return;
             }
 
-            if (!double.TryParse(parts[1], NumberStyles.Any, CultureInfo.InvariantCulture, out lon))
+            if (!double.TryParse(parts[1], NumberStyles.Any, CultureInfo.InvariantCulture, out double lon))
             {
                 MessageBox.Show("Invalid longitude.");
                 return;
@@ -1644,7 +1628,7 @@ namespace PokemonGoGUI
 
         #region Proxies
 
-        private void tabControlProxies_SelectedIndexChanged(object sender, EventArgs e)
+        private void TabControlProxies_SelectedIndexChanged(object sender, EventArgs e)
         {
             if(tabControlProxies.SelectedTab == tabPageProxies)
             {
@@ -1656,7 +1640,7 @@ namespace PokemonGoGUI
             }
         }
 
-        private void resetBanStateToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ResetBanStateToolStripMenuItem_Click(object sender, EventArgs e)
         {
             foreach(GoProxy proxy in fastObjectListViewProxies.SelectedObjects)
             {
@@ -1666,7 +1650,7 @@ namespace PokemonGoGUI
             fastObjectListViewProxies.RefreshSelectedObjects();
         }
 
-        private void singleProxyToolStripMenuItem_Click(object sender, EventArgs e)
+        private void SingleProxyToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string data = Prompt.ShowDialog("Add proxy", "Proxy");
 
@@ -1686,7 +1670,7 @@ namespace PokemonGoGUI
             fastObjectListViewProxies.SetObjects(_proxyHandler.Proxies);
         }
 
-        private void fromFileToolStripMenuItem_Click(object sender, EventArgs e)
+        private void FromFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string fileName = String.Empty;
             using (OpenFileDialog ofd = new OpenFileDialog())
@@ -1729,7 +1713,7 @@ namespace PokemonGoGUI
             }
         }
 
-        private void deleteToolStripMenuItem1_Click(object sender, EventArgs e)
+        private void DeleteToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             int count = fastObjectListViewProxies.SelectedObjects.Count;
 
@@ -1794,7 +1778,7 @@ namespace PokemonGoGUI
             fastObjectListViewProxies.SetObjects(_proxyHandler.Proxies);
         }
 
-        private void maxConcurrentFailsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void MaxConcurrentFailsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string data = Prompt.ShowDialog("Max concurrent fails", "Set fails", "3");
 
@@ -1803,15 +1787,13 @@ namespace PokemonGoGUI
                 return;
             }
 
-            int value = 0;
-
-            if(!Int32.TryParse(data, out value) || value <= 0)
+            if (!Int32.TryParse(data, out int value) || value <= 0)
             {
                 MessageBox.Show("Invalid value", "Warning");
                 return;
             }
 
-            foreach(GoProxy proxy in fastObjectListViewProxies.SelectedObjects)
+            foreach (GoProxy proxy in fastObjectListViewProxies.SelectedObjects)
             {
                 proxy.MaxConcurrentFails = value;
             }
@@ -1819,7 +1801,7 @@ namespace PokemonGoGUI
             fastObjectListViewProxies.RefreshSelectedObjects();
         }
 
-        private void maxAccountsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void MaxAccountsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string data = Prompt.ShowDialog("Max Accounts", "Set Accounts", "3");
 
@@ -1828,9 +1810,7 @@ namespace PokemonGoGUI
                 return;
             }
 
-            int value = 0;
-
-            if (!Int32.TryParse(data, out value) || value <= 0)
+            if (!Int32.TryParse(data, out int value) || value <= 0)
             {
                 MessageBox.Show("Invalid value", "Warning");
                 return;
@@ -1844,7 +1824,7 @@ namespace PokemonGoGUI
             fastObjectListViewProxies.RefreshSelectedObjects();
         }
 
-        private void fastObjectListViewProxies_FormatCell(object sender, BrightIdeasSoftware.FormatCellEventArgs e)
+        private void FastObjectListViewProxies_FormatCell(object sender, BrightIdeasSoftware.FormatCellEventArgs e)
         {
             GoProxy proxy = (GoProxy)e.Model;
 
@@ -1895,7 +1875,7 @@ namespace PokemonGoGUI
 
         #region Dev Tools
 
-        private void enableSpfToolStripMenuItem_Click(object sender, EventArgs e)
+        private void EnableSpfToolStripMenuItem_Click(object sender, EventArgs e)
         {
             _spf = !_spf;
 
@@ -1907,12 +1887,12 @@ namespace PokemonGoGUI
             //enableSpoofToolStripMenuItem.Checked = _spf;
         }
 
-        private void largeAddressAwareToolStripMenuItem_Click(object sender, EventArgs e)
+        private void LargeAddressAwareToolStripMenuItem_Click(object sender, EventArgs e)
         {
             MessageBox.Show(LargeAddressAware.IsLargeAware(Application.ExecutablePath).ToString());
         }
 
-        private void logViewerToolStripMenuItem_Click(object sender, EventArgs e)
+        private void LogViewerToolStripMenuItem_Click(object sender, EventArgs e)
         {
             using (OpenFileDialog ofd = new OpenFileDialog())
             {
@@ -1931,7 +1911,7 @@ namespace PokemonGoGUI
 
         #region Scheduler
 
-        private void deleteToolStripMenuItem2_Click(object sender, EventArgs e)
+        private void DeleteToolStripMenuItem2_Click(object sender, EventArgs e)
         {
             int count = fastObjectListViewScheduler.SelectedObjects.Count;
 
@@ -1958,8 +1938,10 @@ namespace PokemonGoGUI
                 }
                 else
                 {
-                    List<Manager> m = new List<Manager>();
-                    m.Add(manager);
+                    List<Manager> m = new List<Manager>
+                    {
+                        manager
+                    };
 
                     managerSchedulers.Add(manager.AccountScheduler, m);
                 }
@@ -1982,7 +1964,7 @@ namespace PokemonGoGUI
             fastObjectListViewScheduler.SetObjects(_schedulers);
         }
 
-        private void enablelDisableToolStripMenuItem_Click(object sender, EventArgs e)
+        private void EnablelDisableToolStripMenuItem_Click(object sender, EventArgs e)
         {
             foreach(Scheduler scheduler in fastObjectListViewScheduler.SelectedObjects)
             {
@@ -1992,7 +1974,7 @@ namespace PokemonGoGUI
             fastObjectListViewScheduler.RefreshSelectedObjects();
         }
 
-        private void editToolStripMenuItem1_Click(object sender, EventArgs e)
+        private void EditToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             int count = fastObjectListViewScheduler.SelectedObjects.Count;
 
@@ -2016,7 +1998,7 @@ namespace PokemonGoGUI
             fastObjectListViewScheduler.RefreshSelectedObjects();
         }
 
-        private void addNewToolStripMenuItem1_Click(object sender, EventArgs e)
+        private void AddNewToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             Scheduler scheduler = new Scheduler();
 
@@ -2030,7 +2012,7 @@ namespace PokemonGoGUI
             fastObjectListViewScheduler.SetObjects(_schedulers);
         }
 
-        private void manualCheckToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ManualCheckToolStripMenuItem_Click(object sender, EventArgs e)
         {
             foreach(Scheduler scheduler in fastObjectListViewScheduler.SelectedObjects)
             {
@@ -2038,7 +2020,7 @@ namespace PokemonGoGUI
             }
         }
 
-        private void fastObjectListViewScheduler_FormatCell(object sender, BrightIdeasSoftware.FormatCellEventArgs e)
+        private void FastObjectListViewScheduler_FormatCell(object sender, BrightIdeasSoftware.FormatCellEventArgs e)
         {
             Scheduler scheduler = (Scheduler)e.Model;
             bool withinTime = scheduler.WithinTime();
