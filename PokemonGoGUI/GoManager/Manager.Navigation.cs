@@ -70,7 +70,7 @@ namespace PokemonGoGUI.GoManager
                 speedInMetersPerSecond = 0;
             }
 
-            GeoCoordinate sourceLocation = new GeoCoordinate(_client.CurrentLatitude, _client.CurrentLongitude);
+            GeoCoordinate sourceLocation = new GeoCoordinate(_client.Session.Player.Latitude, _client.Session.Player.Longitude);
             double distanceToTarget = CalculateDistanceInMeters(sourceLocation, location);
 
             double nextWaypointBearing = DegreeBearing(sourceLocation, location);
@@ -92,7 +92,7 @@ namespace PokemonGoGUI.GoManager
                 return new MethodResult();
             }
 
-            sourceLocation = new GeoCoordinate(_client.CurrentLatitude, _client.CurrentLongitude);
+            sourceLocation = new GeoCoordinate(_client.Session.Player.Latitude, _client.Session.Player.Longitude);
 
             while (CalculateDistanceInMeters(sourceLocation, location) >= 25)
             {
@@ -107,7 +107,7 @@ namespace PokemonGoGUI.GoManager
 
                 double millisecondsUntilGetUpdatePlayerLocationResponse = (DateTime.Now - requestSendDateTime).TotalMilliseconds;
 
-                sourceLocation = new GeoCoordinate(_client.CurrentLatitude, _client.CurrentLongitude);
+                sourceLocation = new GeoCoordinate(_client.Session.Player.Latitude, _client.Session.Player.Longitude);
                 var currentDistanceToTarget = CalculateDistanceInMeters(sourceLocation, location);
 
                 nextWaypointDistance = Math.Min(currentDistanceToTarget,
@@ -145,7 +145,7 @@ namespace PokemonGoGUI.GoManager
             await Task.Delay(0);
             try
             {
-                GeoCoordinate previousLocation = new GeoCoordinate(_client.CurrentLatitude, _client.CurrentLongitude);
+                GeoCoordinate previousLocation = new GeoCoordinate(_client.Session.Player.Latitude, _client.Session.Player.Longitude);
 
                 double distance = CalculateDistanceInMeters(previousLocation, location);
 

@@ -34,12 +34,6 @@ namespace PokemonGoGUI
         public static ProxyEx Proxy;
         public ISettings Settings { get; private set; }
 
-        public double CurrentLatitude { get; internal set; }
-        public double CurrentLongitude { get; internal set; }
-        public double CurrentAltitude { get; internal set; }
-        public double CurrentAccuracy { get; internal set; }
-        public float CurrentSpeed { get; internal set; }
-
         public AuthType AuthType
         { get { return Settings.AuthType; } set { Settings.AuthType = value; } }
 

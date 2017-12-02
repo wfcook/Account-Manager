@@ -676,12 +676,12 @@ namespace PokemonGoGUI.GoManager
 
                         WaitPaused();
 
-                        pokestopsToFarm = pokestopsToFarm.OrderBy(x => CalculateDistanceInMeters(_client.CurrentLatitude, _client.CurrentLongitude, x.Latitude, x.Longitude)).ToList();
+                        pokestopsToFarm = pokestopsToFarm.OrderBy(x => CalculateDistanceInMeters(_client.Session.Player.Latitude, _client.Session.Player.Longitude, x.Latitude, x.Longitude)).ToList();
 
                         FortData pokestop = pokestopsToFarm[0];
                         pokestopsToFarm.RemoveAt(0);
 
-                        GeoCoordinate currentLocation = new GeoCoordinate(_client.CurrentLatitude, _client.CurrentLongitude);
+                        GeoCoordinate currentLocation = new GeoCoordinate(_client.Session.Player.Latitude, _client.Session.Player.Longitude);
                         GeoCoordinate fortLocation = new GeoCoordinate(pokestop.Latitude, pokestop.Longitude);
 
                         double distance = CalculateDistanceInMeters(currentLocation, fortLocation);

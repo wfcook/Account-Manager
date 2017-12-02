@@ -13,11 +13,6 @@ namespace PokemonGoGUI
 {
     public class Settings : ISettings
     {
-        public string DevicePlatform { get; set; }
-        public bool UsePogoDevHashServer { get; set; }
-        public string UrlHashServices { get; set; }
-        public string EndPoint { get; set; }
-        public bool UseCustomAPI { get; set; }
         public string AuthAPIKey { get; set; }
         public string Country { get; set; }
         public string Language { get; set; }
