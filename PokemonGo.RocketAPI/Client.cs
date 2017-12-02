@@ -72,7 +72,6 @@ namespace PokemonGo.RocketAPI
         public AccessToken AccessToken { get; set; }
         //For Test
         //public int PageOffset { get; set; }
-        //public string AuthToken { get; set; }
 
         public Client()
         {
@@ -106,7 +105,6 @@ namespace PokemonGo.RocketAPI
         {
             AuthTicket = null;
             ApiUrl = null;
-            //AuthToken = null;
             AccessToken = null;
         }
 
@@ -141,7 +139,21 @@ namespace PokemonGo.RocketAPI
 
         public void SetSettings(ISettings settings)
         {
-            if (settings.UsePogoDevHashServer || settings.UseCustomAPI)
+            Settings = settings;
+            Login = new Login(this);
+            Player = new Player(this);
+            Download = new Download(this);
+            Inventory = new Inventory(this);
+            Map = new Map(this);
+            Fort = new Fort(this);
+            Encounter = new Encounter(this);
+            Misc = new Misc(this);
+            KillswitchTask = new KillSwitchTask(this);
+
+            Player.SetCoordinates(Settings.DefaultLatitude, Settings.DefaultLongitude, Settings.DefaultAltitude);
+            Platform = Settings.DevicePlatform.Equals("ios", StringComparison.Ordinal) ? Platform.Ios : Platform.Android;
+
+            if (Settings.UsePogoDevHashServer || Settings.UseCustomAPI)
             {
                 if (string.IsNullOrEmpty(settings.AuthAPIKey)) throw new AuthConfigException("You have selected Pogodev API but not provide proper API Key");
 
@@ -149,7 +161,7 @@ namespace PokemonGo.RocketAPI
 
                 ApiEndPoint = Constants.ApiEndPoint;
 		
-                Hasher = new PokefarmerHasher(settings, settings.AuthAPIKey, ApiEndPoint);
+                Hasher = new PokefarmerHasher(Settings, settings.AuthAPIKey, ApiEndPoint);
 
                 // These 4 constants below need to change if we update the hashing server API version that is used.
                 Unknown25 = Constants.Unknown25;
@@ -162,7 +174,7 @@ namespace PokemonGo.RocketAPI
             }
             /*
             else
-            if (settings.UseLegacyAPI)
+            if (Settings.UseLegacyAPI)
             {
                 Hasher = new LegacyHashser();
                 Cryptor = new LegacyCrypt();
@@ -195,39 +207,25 @@ namespace PokemonGo.RocketAPI
 
             PokemonHttpClient = new PokemonHttpClient(handler);
 
-            Settings = settings;
-            Login = new Login(this);
-            Player = new Player(this);
-            Download = new Download(this);
-            Inventory = new Inventory(this);
-            Map = new Map(this);
-            Fort = new Fort(this);
-            Encounter = new Encounter(this);
-            Misc = new Misc(this);
-            KillswitchTask = new KillSwitchTask(this);
-
-            Player.SetCoordinates(Settings.DefaultLatitude, Settings.DefaultLongitude, Settings.DefaultAltitude);
-            Platform = settings.DevicePlatform.Equals("ios", StringComparison.Ordinal) ? Platform.Ios : Platform.Android;
-
             // We can no longer emulate Android so for now just overwrite settings with randomly generated iOS device info.
             if (Platform == Platform.Android)
             {
                 Signature.Types.DeviceInfo iosInfo = DeviceInfoHelper.GetRandomIosDevice();
-                settings.DeviceId = iosInfo.DeviceId;
-                settings.DeviceBrand = iosInfo.DeviceBrand;
-                settings.DeviceModel = iosInfo.DeviceModel;
-                settings.DeviceModelBoot = iosInfo.DeviceModelBoot;
-                settings.HardwareManufacturer = iosInfo.HardwareManufacturer;
-                settings.HardwareModel = iosInfo.HardwareModel;
-                settings.FirmwareBrand = iosInfo.FirmwareBrand;
-                settings.FirmwareType = iosInfo.FirmwareType;
+                Settings.DeviceId = iosInfo.DeviceId;
+                Settings.DeviceBrand = iosInfo.DeviceBrand;
+                Settings.DeviceModel = iosInfo.DeviceModel;
+                Settings.DeviceModelBoot = iosInfo.DeviceModelBoot;
+                Settings.HardwareManufacturer = iosInfo.HardwareManufacturer;
+                Settings.HardwareModel = iosInfo.HardwareModel;
+                Settings.FirmwareBrand = iosInfo.FirmwareBrand;
+                Settings.FirmwareType = iosInfo.FirmwareType;
 
                 // Clear out the android fields.
-                settings.AndroidBoardName = "";
-                settings.AndroidBootloader = "";
-                settings.DeviceModelIdentifier = "";
-                settings.FirmwareTags = "";
-                settings.FirmwareFingerprint = "";
+                Settings.AndroidBoardName = "";
+                Settings.AndroidBootloader = "";
+                Settings.DeviceModelIdentifier = "";
+                Settings.FirmwareTags = "";
+                Settings.FirmwareFingerprint = "";
 
                 // Now set the client platform to ios
                 Platform = Platform.Ios;
