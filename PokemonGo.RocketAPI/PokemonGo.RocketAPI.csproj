@@ -181,7 +181,6 @@
     <Compile Include="Helpers\Utils.cs" />
     <Compile Include="ICaptchaResolver.cs" />
     <Compile Include="ISettings.cs" />
-    <Compile Include="Logging\HashInfo.cs" />
     <Compile Include="LoginProviders\GoogleLoginProvider.cs" />
     <Compile Include="LoginProviders\ILoginProvider.cs" />
     <Compile Include="LoginProviders\PtcLoginProvider.cs" />

@@ -348,7 +348,7 @@
             // numericUpDownForceEvolveAbove
             // 
             this.numericUpDownForceEvolveAbove.DecimalPlaces = 2;
-            this.numericUpDownForceEvolveAbove.Location = new System.Drawing.Point(166, 274);
+            this.numericUpDownForceEvolveAbove.Location = new System.Drawing.Point(216, 280);
             this.numericUpDownForceEvolveAbove.Margin = new System.Windows.Forms.Padding(2);
             this.numericUpDownForceEvolveAbove.Maximum = new decimal(new int[] {
             1000000,
@@ -362,7 +362,7 @@
             // label48
             // 
             this.label48.AutoSize = true;
-            this.label48.Location = new System.Drawing.Point(278, 279);
+            this.label48.Location = new System.Drawing.Point(256, 314);
             this.label48.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label48.Name = "label48";
             this.label48.Size = new System.Drawing.Size(162, 17);
@@ -372,7 +372,7 @@
             // label49
             // 
             this.label49.AutoSize = true;
-            this.label49.Location = new System.Drawing.Point(16, 276);
+            this.label49.Location = new System.Drawing.Point(18, 282);
             this.label49.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label49.Name = "label49";
             this.label49.Size = new System.Drawing.Size(195, 17);
@@ -382,7 +382,7 @@
             // comboBoxMinAccountState
             // 
             this.comboBoxMinAccountState.FormattingEnabled = true;
-            this.comboBoxMinAccountState.Location = new System.Drawing.Point(223, 359);
+            this.comboBoxMinAccountState.Location = new System.Drawing.Point(188, 386);
             this.comboBoxMinAccountState.Name = "comboBoxMinAccountState";
             this.comboBoxMinAccountState.Size = new System.Drawing.Size(232, 24);
             this.comboBoxMinAccountState.TabIndex = 11;
@@ -400,7 +400,7 @@
             // numericUpDownSearchFortBelow
             // 
             this.numericUpDownSearchFortBelow.DecimalPlaces = 2;
-            this.numericUpDownSearchFortBelow.Location = new System.Drawing.Point(166, 251);
+            this.numericUpDownSearchFortBelow.Location = new System.Drawing.Point(187, 252);
             this.numericUpDownSearchFortBelow.Maximum = new decimal(new int[] {
             1000000,
             0,
@@ -413,7 +413,7 @@
             // numericUpDownRunForHours
             // 
             this.numericUpDownRunForHours.DecimalPlaces = 2;
-            this.numericUpDownRunForHours.Location = new System.Drawing.Point(165, 297);
+            this.numericUpDownRunForHours.Location = new System.Drawing.Point(423, 309);
             this.numericUpDownRunForHours.Maximum = new decimal(new int[] {
             99999,
             0,
@@ -623,7 +623,7 @@
             // 
             // textBoxPokemonBeforeEvolve
             // 
-            this.textBoxPokemonBeforeEvolve.Location = new System.Drawing.Point(184, 223);
+            this.textBoxPokemonBeforeEvolve.Location = new System.Drawing.Point(188, 223);
             this.textBoxPokemonBeforeEvolve.Name = "textBoxPokemonBeforeEvolve";
             this.textBoxPokemonBeforeEvolve.Size = new System.Drawing.Size(65, 22);
             this.textBoxPokemonBeforeEvolve.TabIndex = 9;
@@ -645,7 +645,7 @@
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(21, 362);
+            this.label15.Location = new System.Drawing.Point(16, 393);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(134, 17);
             this.label15.TabIndex = 14;
@@ -654,7 +654,7 @@
             // label47
             // 
             this.label47.AutoSize = true;
-            this.label47.Location = new System.Drawing.Point(306, 311);
+            this.label47.Location = new System.Drawing.Point(256, 359);
             this.label47.Name = "label47";
             this.label47.Size = new System.Drawing.Size(99, 17);
             this.label47.TabIndex = 17;
@@ -672,7 +672,7 @@
             // label46
             // 
             this.label46.AutoSize = true;
-            this.label46.Location = new System.Drawing.Point(21, 311);
+            this.label46.Location = new System.Drawing.Point(17, 314);
             this.label46.Name = "label46";
             this.label46.Size = new System.Drawing.Size(204, 17);
             this.label46.TabIndex = 18;
@@ -681,7 +681,7 @@
             // label42
             // 
             this.label42.AutoSize = true;
-            this.label42.Location = new System.Drawing.Point(290, 339);
+            this.label42.Location = new System.Drawing.Point(115, 359);
             this.label42.Name = "label42";
             this.label42.Size = new System.Drawing.Size(44, 17);
             this.label42.TabIndex = 17;
@@ -690,7 +690,7 @@
             // label41
             // 
             this.label41.AutoSize = true;
-            this.label41.Location = new System.Drawing.Point(166, 339);
+            this.label41.Location = new System.Drawing.Point(16, 359);
             this.label41.Name = "label41";
             this.label41.Size = new System.Drawing.Size(55, 17);
             this.label41.TabIndex = 18;
@@ -828,7 +828,7 @@
             this.tabPageProxy.Controls.Add(this.label12);
             this.tabPageProxy.Location = new System.Drawing.Point(4, 25);
             this.tabPageProxy.Name = "tabPageProxy";
-            this.tabPageProxy.Size = new System.Drawing.Size(494, 428);
+            this.tabPageProxy.Size = new System.Drawing.Size(496, 428);
             this.tabPageProxy.TabIndex = 4;
             this.tabPageProxy.Text = "Proxy";
             this.tabPageProxy.UseVisualStyleBackColor = true;
@@ -925,7 +925,7 @@
             this.tabPageSettingsNavigation.Location = new System.Drawing.Point(4, 25);
             this.tabPageSettingsNavigation.Name = "tabPageSettingsNavigation";
             this.tabPageSettingsNavigation.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageSettingsNavigation.Size = new System.Drawing.Size(494, 428);
+            this.tabPageSettingsNavigation.Size = new System.Drawing.Size(496, 428);
             this.tabPageSettingsNavigation.TabIndex = 1;
             this.tabPageSettingsNavigation.Text = "Navigation";
             this.tabPageSettingsNavigation.UseVisualStyleBackColor = true;
@@ -1376,7 +1376,7 @@
             this.tabPageHumanization.Controls.Add(this.label32);
             this.tabPageHumanization.Location = new System.Drawing.Point(4, 25);
             this.tabPageHumanization.Name = "tabPageHumanization";
-            this.tabPageHumanization.Size = new System.Drawing.Size(494, 428);
+            this.tabPageHumanization.Size = new System.Drawing.Size(496, 428);
             this.tabPageHumanization.TabIndex = 3;
             this.tabPageHumanization.Text = "Humanization";
             this.tabPageHumanization.UseVisualStyleBackColor = true;
@@ -1698,7 +1698,7 @@
             this.tabPageRecycling.Controls.Add(this.fastObjectListViewRecycling);
             this.tabPageRecycling.Location = new System.Drawing.Point(4, 25);
             this.tabPageRecycling.Name = "tabPageRecycling";
-            this.tabPageRecycling.Size = new System.Drawing.Size(494, 510);
+            this.tabPageRecycling.Size = new System.Drawing.Size(496, 510);
             this.tabPageRecycling.TabIndex = 2;
             this.tabPageRecycling.Text = "Recycling";
             this.tabPageRecycling.UseVisualStyleBackColor = true;
@@ -1718,7 +1718,7 @@
             this.fastObjectListViewRecycling.Location = new System.Drawing.Point(0, 0);
             this.fastObjectListViewRecycling.Name = "fastObjectListViewRecycling";
             this.fastObjectListViewRecycling.ShowGroups = false;
-            this.fastObjectListViewRecycling.Size = new System.Drawing.Size(494, 510);
+            this.fastObjectListViewRecycling.Size = new System.Drawing.Size(496, 510);
             this.fastObjectListViewRecycling.TabIndex = 0;
             this.fastObjectListViewRecycling.UseCompatibleStateImageBehavior = false;
             this.fastObjectListViewRecycling.View = System.Windows.Forms.View.Details;
@@ -1756,7 +1756,7 @@
             this.tabPageEvolving.Controls.Add(this.fastObjectListViewEvolve);
             this.tabPageEvolving.Location = new System.Drawing.Point(4, 25);
             this.tabPageEvolving.Name = "tabPageEvolving";
-            this.tabPageEvolving.Size = new System.Drawing.Size(494, 510);
+            this.tabPageEvolving.Size = new System.Drawing.Size(496, 510);
             this.tabPageEvolving.TabIndex = 3;
             this.tabPageEvolving.Text = "Evolving";
             this.tabPageEvolving.UseVisualStyleBackColor = true;
@@ -1779,7 +1779,7 @@
             this.fastObjectListViewEvolve.Location = new System.Drawing.Point(0, 0);
             this.fastObjectListViewEvolve.Name = "fastObjectListViewEvolve";
             this.fastObjectListViewEvolve.ShowGroups = false;
-            this.fastObjectListViewEvolve.Size = new System.Drawing.Size(494, 510);
+            this.fastObjectListViewEvolve.Size = new System.Drawing.Size(496, 510);
             this.fastObjectListViewEvolve.TabIndex = 2;
             this.fastObjectListViewEvolve.UseCompatibleStateImageBehavior = false;
             this.fastObjectListViewEvolve.View = System.Windows.Forms.View.Details;
@@ -1869,7 +1869,7 @@
             this.tabPageCatching.Controls.Add(this.fastObjectListViewCatch);
             this.tabPageCatching.Location = new System.Drawing.Point(4, 25);
             this.tabPageCatching.Name = "tabPageCatching";
-            this.tabPageCatching.Size = new System.Drawing.Size(494, 510);
+            this.tabPageCatching.Size = new System.Drawing.Size(496, 510);
             this.tabPageCatching.TabIndex = 4;
             this.tabPageCatching.Text = "Catching";
             this.tabPageCatching.UseVisualStyleBackColor = true;
@@ -1892,7 +1892,7 @@
             this.fastObjectListViewCatch.Location = new System.Drawing.Point(0, 0);
             this.fastObjectListViewCatch.Name = "fastObjectListViewCatch";
             this.fastObjectListViewCatch.ShowGroups = false;
-            this.fastObjectListViewCatch.Size = new System.Drawing.Size(494, 510);
+            this.fastObjectListViewCatch.Size = new System.Drawing.Size(496, 510);
             this.fastObjectListViewCatch.TabIndex = 1;
             this.fastObjectListViewCatch.UseCompatibleStateImageBehavior = false;
             this.fastObjectListViewCatch.View = System.Windows.Forms.View.Details;
@@ -2009,7 +2009,7 @@
             this.tabPageTransfer.Location = new System.Drawing.Point(4, 25);
             this.tabPageTransfer.Name = "tabPageTransfer";
             this.tabPageTransfer.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageTransfer.Size = new System.Drawing.Size(494, 510);
+            this.tabPageTransfer.Size = new System.Drawing.Size(496, 510);
             this.tabPageTransfer.TabIndex = 5;
             this.tabPageTransfer.Text = "Transfer";
             this.tabPageTransfer.UseVisualStyleBackColor = true;
@@ -2038,7 +2038,7 @@
             this.fastObjectListViewTransfer.Location = new System.Drawing.Point(3, 3);
             this.fastObjectListViewTransfer.Name = "fastObjectListViewTransfer";
             this.fastObjectListViewTransfer.ShowGroups = false;
-            this.fastObjectListViewTransfer.Size = new System.Drawing.Size(488, 504);
+            this.fastObjectListViewTransfer.Size = new System.Drawing.Size(490, 504);
             this.fastObjectListViewTransfer.TabIndex = 2;
             this.fastObjectListViewTransfer.UseCompatibleStateImageBehavior = false;
             this.fastObjectListViewTransfer.UseFiltering = true;

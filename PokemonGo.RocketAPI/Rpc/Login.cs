@@ -189,11 +189,17 @@ namespace PokemonGo.RocketAPI.Rpc
             GetPlayerResponse player = await Client.Player.GetPlayer(false, true).ConfigureAwait(false); // Set false because initial GetPlayer does not use common requests.
             if (player.Warn)
             {
+                
             }
 
             if (player.Banned)
             {
             }
+
+            new MethodResult
+            {
+                Message = "GetPlayer ok.",
+            };
 
             await RandomHelper.RandomDelay(10000).ConfigureAwait(false);
 

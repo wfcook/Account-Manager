@@ -41,7 +41,7 @@ namespace PokemonGo.RocketAPI
         public ICrypt Cryptor;
         internal RequestBuilder RequestBuilder;
 
-        public ISettings Settings { get; set; }
+        public ISettings Settings { get; private set; }
 
         public double CurrentLatitude { get; internal set; }
         public double CurrentLongitude { get; internal set; }
@@ -82,7 +82,7 @@ namespace PokemonGo.RocketAPI
         {
             SetSettings(settings);
 
-            await Login.DoLogin().ConfigureAwait(false);
+            await Login.DoLogin();
 
             return new MethodResult
             {
