@@ -176,7 +176,7 @@ namespace PokemonGoGUI.GoManager
 
             var response = await _client.Session.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
-                RequestType = RequestType.EncounterTutorialComplete,
+                RequestType = RequestType.GetMapObjects,
                 RequestMessage = new GetMapObjectsMessage
                 {
                     //CellId,
