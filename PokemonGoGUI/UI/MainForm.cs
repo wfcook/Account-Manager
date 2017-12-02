@@ -1,7 +1,5 @@
 ﻿using Newtonsoft.Json;
 using POGOProtos.Enums;
-using PokemonGo.RocketAPI;
-using PokemonGo.RocketAPI.Enums;
 using PokemonGoGUI.AccountScheduler;
 using PokemonGoGUI.Enums;
 using PokemonGoGUI.Extensions;

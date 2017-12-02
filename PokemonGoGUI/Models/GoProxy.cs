@@ -1,6 +1,4 @@
-﻿using PokemonGo.RocketAPI;
-
-namespace PokemonGoGUI.Models
+﻿namespace PokemonGoGUI.Models
 {
     public class GoProxy : ProxyEx
     {

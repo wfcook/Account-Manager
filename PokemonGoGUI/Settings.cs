@@ -1,9 +1,7 @@
 ﻿using Newtonsoft.Json;
+using POGOLib.Official.Util.Device;
 using POGOProtos.Enums;
 using POGOProtos.Inventory.Item;
-using PokemonGo.RocketAPI;
-using PokemonGo.RocketAPI.Enums;
-using PokemonGo.RocketAPI.Helpers;
 using PokemonGoGUI.Enums;
 using PokemonGoGUI.Models;
 using System;
@@ -185,20 +183,20 @@ namespace PokemonGoGUI
 
         public void LoadDeviceSettings()
         {
-            var device = DeviceInfoHelper.GetRandomIosDevice();
-            DeviceId = device.DeviceId;
-            AndroidBoardName = device.AndroidBoardName;
-            AndroidBootloader = device.AndroidBootloader;
-            DeviceBrand = device.DeviceBrand;
-            DeviceModel = device.DeviceModel;
-            DeviceModelIdentifier = device.DeviceModelIdentifier;
-            DeviceModelBoot = device.DeviceModelBoot;
-            HardwareManufacturer = device.HardwareManufacturer;
-            HardwareModel = device.HardwareModel;
-            FirmwareBrand = device.FirmwareBrand;
-            FirmwareTags = device.FirmwareTags;
-            FirmwareType = device.FirmwareType;
-            FirmwareFingerprint = device.FirmwareFingerprint;
+            var device = DeviceInfoUtil.GetRandomDevice();
+            DeviceId = device.DeviceInfo.DeviceId;
+            AndroidBoardName = device.DeviceInfo.AndroidBoardName;
+            AndroidBootloader = device.DeviceInfo.AndroidBootloader;
+            DeviceBrand = device.DeviceInfo.DeviceBrand;
+            DeviceModel = device.DeviceInfo.DeviceModel;
+            DeviceModelIdentifier = device.DeviceInfo.DeviceModelIdentifier;
+            DeviceModelBoot = device.DeviceInfo.DeviceModelBoot;
+            HardwareManufacturer = device.DeviceInfo.HardwareManufacturer;
+            HardwareModel = device.DeviceInfo.HardwareModel;
+            FirmwareBrand = device.DeviceInfo.FirmwareBrand;
+            FirmwareTags = device.DeviceInfo.FirmwareTags;
+            FirmwareType = device.DeviceInfo.FirmwareType;
+            FirmwareFingerprint = device.DeviceInfo.FirmwareFingerprint;
         }
 
         public void LoadCatchSettings()
@@ -306,8 +304,8 @@ namespace PokemonGoGUI
 
         public void RandomizeDevice()
         {
-            var device = DeviceInfoHelper.GetRandomIosDevice();
-            DeviceId = device.DeviceId;
+            var device = DeviceInfoUtil.GetRandomDevice();
+            DeviceId = device.DeviceInfo.DeviceId;
          }
 
         private byte RandomByte()

@@ -3,7 +3,6 @@ using POGOProtos.Enums;
 using POGOProtos.Inventory;
 using POGOProtos.Networking.Responses;
 using POGOProtos.Settings.Master;
-using PokemonGo.RocketAPI;
 using PokemonGoGUI.GoManager.Models;
 using System;
 using System.Collections.Generic;
@@ -12,6 +11,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using PokemonGoGUI.Extensions;
+using POGOProtos.Networking.Requests;
+using POGOProtos.Networking.Requests.Messages;
+using Google.Protobuf;
 
 namespace PokemonGoGUI.GoManager
 {
@@ -23,16 +25,16 @@ namespace PokemonGoGUI.GoManager
 
             MethodResult echoResult = await CheckReauthentication();
 
-            if(!echoResult.Success)
+            if (!echoResult.Success)
             {
                 _client.Logout();
             }
 
-            if(!_client.LoggedIn)
+            if (!_client.LoggedIn)
             {
                 MethodResult loginResult = await Login().ConfigureAwait(false);
 
-                if(!loginResult.Success)
+                if (!loginResult.Success)
                 {
                     return loginResult;
                 }
@@ -46,7 +48,7 @@ namespace PokemonGoGUI.GoManager
 
             MethodResult<Dictionary<PokemonId, PokemonSettings>> result = await GetItemTemplates();
 
-            if(result.Success && result.Data != null && result.Data.Count == 0)
+            if (result.Success && result.Data != null && result.Data.Count == 0)
             {
                 potentialAccountban = true;
             }
@@ -55,9 +57,9 @@ namespace PokemonGoGUI.GoManager
 
             MethodResult inventoryResult = await UpdateInventory();
 
-            if(inventoryResult.Success)
+            if (inventoryResult.Success)
             {
-                if(AccountState == Enums.AccountState.PermAccountBan)
+                if (AccountState == Enums.AccountState.PermAccountBan)
                 {
                     AccountState = Enums.AccountState.Good;
                 }
@@ -74,7 +76,7 @@ namespace PokemonGoGUI.GoManager
             }
             else
             {
-                if(AccountState == Enums.AccountState.PermAccountBan)
+                if (AccountState == Enums.AccountState.PermAccountBan)
                 {
                     AccountState = Enums.AccountState.Good;
                 }
@@ -104,20 +106,35 @@ namespace PokemonGoGUI.GoManager
                     }
                 }
 
-                GetPlayerResponse response = await _client.Player.GetPlayer();
-
-                if(response.Success)
+                var response = await _client.Session.RpcClient.SendRemoteProcedureCallAsync(new Request
                 {
-                    PlayerData = response.PlayerData;
+                    RequestType = RequestType.GetPlayer,
+                    RequestMessage = new GetPlayerMessage
+                    {
+                        //PlayerLocale = xxxxxxx
+                    }.ToByteString()
+                });
+
+                GetPlayerResponse getPlayerResponse = null;
+
+                try
+                {
+                    getPlayerResponse = GetPlayerResponse.Parser.ParseFrom(response);
+                    PlayerData = getPlayerResponse.PlayerData;
+                    return new MethodResult
+                    {
+                        Success = true
+                    };
                 }
-
-                return new MethodResult
+                catch (Exception ex)
                 {
-                    Success = response.Success
-                };
+                    if (response.IsEmpty)
+                        LogCaller(new LoggerEventArgs("Failed to get player stats", LoggerTypes.Exception, ex));
 
+                    return new MethodResult();
+                }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 LogCaller(new LoggerEventArgs("Failed to get player stats", LoggerTypes.Exception, ex));
 
@@ -219,7 +236,7 @@ namespace PokemonGoGUI.GoManager
                     Success = true
                 };
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 LogCaller(new LoggerEventArgs("Failed to export stats due to exception", LoggerTypes.Warning, ex));
 
@@ -229,7 +246,7 @@ namespace PokemonGoGUI.GoManager
 
         public async Task<MethodResult> ClaimLevelUpRewards(int level)
         {
-            if(!UserSettings.ClaimLevelUpRewards)
+            if (!UserSettings.ClaimLevelUpRewards)
             {
                 return new MethodResult();
             }
@@ -246,53 +263,71 @@ namespace PokemonGoGUI.GoManager
                     }
                 }
 
-                LevelUpRewardsResponse response = await _client.Player.GetLevelUpRewards(level);
-
-                if(response.Result == LevelUpRewardsResponse.Types.Result.Success)
+                var response = await _client.Session.RpcClient.SendRemoteProcedureCallAsync(new Request
                 {
-                    string rewards = StringUtil.GetSummedFriendlyNameOfItemAwardList(response.ItemsAwarded);
+                    RequestType = RequestType.LevelUpRewards,
+                    RequestMessage = new LevelUpRewardsMessage
+                    {
+                        Level = level
+                    }.ToByteString()
+                });
 
+                LevelUpRewardsResponse levelUpRewardsResponse = null;
+
+                try
+                {
+                    levelUpRewardsResponse = LevelUpRewardsResponse.Parser.ParseFrom(response);
+                    string rewards = StringUtil.GetSummedFriendlyNameOfItemAwardList(levelUpRewardsResponse.ItemsAwarded);
                     LogCaller(new LoggerEventArgs(String.Format("Grabbed rewards for level {0}. Rewards: {1}", level, rewards), LoggerTypes.Info));
+
+                    return new MethodResult
+                    {
+                        Success = true
+                    };
                 }
-                else if(response.Result == LevelUpRewardsResponse.Types.Result.Unset)
+                catch (Exception ex)
                 {
-                    LogCaller(new LoggerEventArgs("Failed to request rewards", LoggerTypes.Warning));
+                    if (response.IsEmpty)
+                        LogCaller(new LoggerEventArgs("Failed to get level up rewards", LoggerTypes.Exception, ex));
 
                     return new MethodResult();
                 }
-
-                return new MethodResult
-                {
-                    Success = true
-                };
-
             }
             catch (Exception ex)
             {
                 LogCaller(new LoggerEventArgs("Failed to get level up rewards", LoggerTypes.Exception, ex));
-
-                return new MethodResult
-                {
-                    Message = "Failed to get level up rewards"
-                };
+                return new MethodResult();
             }
         }
 
         public async Task<MethodResult<bool>> GetGameSettings(string minVersion)
         {
+            var response = await _client.Session.RpcClient.SendRemoteProcedureCallAsync(new Request
+            {
+                RequestType = RequestType.DownloadSettings,
+                RequestMessage = new DownloadSettingsMessage
+                {
+                    Hash = "05daf51635c82611d1aac95c0b051d3ec088a930"
+                }.ToByteString()
+            });
+
+            DownloadSettingsResponse downloadSettingsResponse = null;
+
             try
             {
-                DownloadSettingsResponse response = await _client.Download.GetSettings();
+                downloadSettingsResponse = DownloadSettingsResponse.Parser.ParseFrom(response);
+                LogCaller(new LoggerEventArgs("Avatar set to defaults", LoggerTypes.Success));
 
                 return new MethodResult<bool>
                 {
-                    Data = response.Settings.MinimumClientVersion == minVersion,
+                    Data = downloadSettingsResponse.Settings.MinimumClientVersion == minVersion,
                     Success = true
                 };
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                LogCaller(new LoggerEventArgs("Failed to request game settings", LoggerTypes.Exception, ex));
+                if (response.IsEmpty)
+                    LogCaller(new LoggerEventArgs("Failed to request game settings", LoggerTypes.Exception, ex));
 
                 return new MethodResult<bool>();
             }

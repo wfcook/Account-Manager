@@ -1,9 +1,11 @@
-﻿using POGOProtos.Data;
+﻿using Google.Protobuf;
+using POGOProtos.Data;
 using POGOProtos.Inventory;
 using POGOProtos.Inventory.Item;
+using POGOProtos.Networking.Requests;
+using POGOProtos.Networking.Requests.Messages;
 using POGOProtos.Networking.Responses;
-using PokemonGo.RocketAPI;
-using PokemonGo.RocketAPI.Exceptions;
+using PokemonGoGUI.Exceptions;
 using PokemonGoGUI.GoManager.Models;
 using PokemonGoGUI.Models;
 using System;
@@ -19,11 +21,11 @@ namespace PokemonGoGUI.GoManager
         {
             try
             {
-                if(!_client.LoggedIn)
+                if (!_client.LoggedIn)
                 {
                     MethodResult result = await Login();
 
-                    if(!result.Success)
+                    if (!result.Success)
                     {
                         return new MethodResult<List<InventoryItem>>
                         {
@@ -32,50 +34,53 @@ namespace PokemonGoGUI.GoManager
                     }
                 }
 
-                GetHoloInventoryResponse inventory = await _client.Inventory.GetInventory();
-
-                if (inventory == null || inventory.InventoryDelta == null)
+                var response = await _client.Session.RpcClient.SendRemoteProcedureCallAsync(new Request
                 {
-                    LogCaller(new LoggerEventArgs("Inventory request returned invalid data", LoggerTypes.Warning));
+                    RequestType = RequestType.GetHoloInventory,
+                    RequestMessage = new GetHoloInventoryMessage
+                    {
+                        //ItemBeenSeen
+                        //LastTimestampMs
+                    }.ToByteString()
+                });
+
+                GetHoloInventoryResponse inventory = null;
+
+                try
+                {
+                    inventory = GetHoloInventoryResponse.Parser.ParseFrom(response);
+                    List<InventoryItem> items = inventory.InventoryDelta.InventoryItems.ToList();
+                    AllItems = items;
+
+                    await UpdatePlayerStats(false);
+                    await UpdatePokemon(false);
+                    await UpdatePokedex(false);
+                    await UpdatePokemonCandy(false);
+                    await UpdateItemList(false);
+                    await UpdateIncubators(false);
+
+                    InventoryUpdateCaller(EventArgs.Empty);
 
                     return new MethodResult<List<InventoryItem>>
                     {
-                        Message = "Failed to get inventory."
+                        Data = items,
+                        Message = "Successfully grabbed inventory items",
+                        Success = true
                     };
                 }
-
-                List<InventoryItem> items = inventory.InventoryDelta.InventoryItems.ToList();
-                AllItems = items;
-
-                await UpdatePlayerStats(false);
-                await UpdatePokemon(false);
-                await UpdatePokedex(false);
-                await UpdatePokemonCandy(false);
-                await UpdateItemList(false);
-                await UpdateIncubators(false);
-
-                InventoryUpdateCaller(EventArgs.Empty);
-
-                return new MethodResult<List<InventoryItem>>
+                catch (Exception ex)
                 {
-                    Data = items,
-                    Message = "Successfully grabbed inventory items",
-                    Success = true
-                };
-            }
-            catch(InvalidResponseException ex)
-            {
-                LogCaller(new LoggerEventArgs("Inventory request has returned an invalid response", LoggerTypes.Warning, ex));
+                    if (response.IsEmpty)
+                        LogCaller(new LoggerEventArgs("Failed to get inventory because as empty result", LoggerTypes.Exception, ex));
 
-                return new MethodResult<List<InventoryItem>>
-                {
-                    Message = "Failed to get inventory."
-                };
+                    return new MethodResult<List<InventoryItem>>
+                    {
+                        Message = "Failed to get inventory"
+                    };
+                }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                LogCaller(new LoggerEventArgs("Failed to get inventory", LoggerTypes.Exception, ex));
-
                 return new MethodResult<List<InventoryItem>>
                 {
                     Message = "Failed to get inventory"
@@ -235,30 +240,32 @@ namespace PokemonGoGUI.GoManager
 
         public async Task<MethodResult> RecycleItem(InventoryItemSetting itemSetting, int toDelete)
         {
+            var response = await _client.Session.RpcClient.SendRemoteProcedureCallAsync(new Request
+            {
+                RequestType = RequestType.RecycleInventoryItem,
+                RequestMessage = new RecycleInventoryItemMessage
+                {
+                    Count = toDelete,
+                    ItemId = itemSetting.Id
+                }.ToByteString()
+            });
+
+            RecycleInventoryItemResponse recycleInventoryItemResponse = null;
+
             try
             {
-                RecycleInventoryItemResponse response = await _client.Inventory.RecycleItem(itemSetting.Id, toDelete);
+                recycleInventoryItemResponse = RecycleInventoryItemResponse.Parser.ParseFrom(response);
+                LogCaller(new LoggerEventArgs(String.Format("Deleted {0} {1}. Remaining {2}", toDelete, itemSetting.FriendlyName, recycleInventoryItemResponse.NewCount), LoggerTypes.Recycle));
 
-                if (response.Result == RecycleInventoryItemResponse.Types.Result.Success)
+                return new MethodResult
                 {
-                    LogCaller(new LoggerEventArgs(String.Format("Deleted {0} {1}. Remaining {2}", toDelete, itemSetting.FriendlyName, response.NewCount), LoggerTypes.Recycle));
-
-                    return new MethodResult
-                    {
-                        Success = true
-                    };
-                }
-                else
-                {
-                    LogCaller(new LoggerEventArgs(String.Format("Failed to delete {0}. Message: {1}", itemSetting.FriendlyName, response.Result), LoggerTypes.Warning));
-
-                    return new MethodResult();
-                }
-
+                    Success = true
+                };
             }
             catch (Exception ex)
             {
-                LogCaller(new LoggerEventArgs(String.Format("Failed to recycle iventory item {0}", itemSetting.FriendlyName), LoggerTypes.Warning, ex));
+                if (response.IsEmpty)
+                    LogCaller(new LoggerEventArgs(String.Format("Failed to recycle iventory item {0}", itemSetting.FriendlyName), LoggerTypes.Warning, ex));
 
                 return new MethodResult();
             }

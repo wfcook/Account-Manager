@@ -1,8 +1,10 @@
-﻿using POGOProtos.Data;
+﻿using Google.Protobuf;
+using POGOProtos.Data;
 using POGOProtos.Inventory;
 using POGOProtos.Inventory.Item;
+using POGOProtos.Networking.Requests;
+using POGOProtos.Networking.Requests.Messages;
 using POGOProtos.Networking.Responses;
-using PokemonGo.RocketAPI;
 using PokemonGoGUI.GoManager.Models;
 using System;
 using System.Collections.Generic;
@@ -48,18 +50,22 @@ namespace PokemonGoGUI.GoManager
                 };
             }
 
+            var response = await _client.Session.RpcClient.SendRemoteProcedureCallAsync(new Request
+            {
+                RequestType = RequestType.UseItemEggIncubator,
+                RequestMessage = new UseItemEggIncubatorMessage
+                {
+                    ItemId = incubatorResponse.Data.Id,
+                    PokemonId = egg.Id
+                }.ToByteString()
+            });
+
+            UseItemEggIncubatorResponse useItemEggIncubatorResponse = null;
+
             try
             {
-                UseItemEggIncubatorResponse response = await _client.Inventory.UseItemEggIncubator(incubatorResponse.Data.Id, egg.Id);
-
-                if(response.Result != UseItemEggIncubatorResponse.Types.Result.Success)
-                {
-                    LogCaller(new LoggerEventArgs(String.Format("Failed to incubate egg. Response: {0}", response.Result), LoggerTypes.Warning));
-
-                    return new MethodResult();
-                }
-
-                LogCaller(new LoggerEventArgs(String.Format("Incubating egg in {0}. Pokmeon Id: {1}", response.EggIncubator.ItemId.ToString().Replace("ItemIncubator", ""), response.EggIncubator.PokemonId), LoggerTypes.Incubate));
+                useItemEggIncubatorResponse = UseItemEggIncubatorResponse.Parser.ParseFrom(response);
+                LogCaller(new LoggerEventArgs(String.Format("Incubating egg in {0}. Pokmeon Id: {1}", useItemEggIncubatorResponse.EggIncubator.ItemId.ToString().Replace("ItemIncubator", ""), useItemEggIncubatorResponse.EggIncubator.PokemonId), LoggerTypes.Incubate));
 
                 return new MethodResult
                 {
@@ -67,14 +73,12 @@ namespace PokemonGoGUI.GoManager
                     Success = true
                 };
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                LogCaller(new LoggerEventArgs("Incubate egg request failed", LoggerTypes.Exception, ex));
+                if (response.IsEmpty)
+                    LogCaller(new LoggerEventArgs("UseItemEggIncubatorResponse parsing failed because response was empty", LoggerTypes.Exception, ex));
 
-                return new MethodResult
-                {
-                    Message = "Incubate egg request failed"
-                };
+                return new MethodResult();
             }
         }
 

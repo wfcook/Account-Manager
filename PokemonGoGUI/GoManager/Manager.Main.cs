@@ -1,18 +1,15 @@
-﻿using Newtonsoft.Json;
+﻿using GeoCoordinatePortable;
+using Newtonsoft.Json;
 using POGOProtos.Data.Player;
-using POGOProtos.Inventory;
 using POGOProtos.Map.Fort;
-using POGOProtos.Networking.Responses;
-using PokemonGo.RocketAPI;
-using PokemonGo.RocketAPI.Exceptions;
 using PokemonGoGUI.AccountScheduler;
 using PokemonGoGUI.Enums;
+using PokemonGoGUI.Exceptions;
 using PokemonGoGUI.GoManager.Models;
 using PokemonGoGUI.Models;
 using PokemonGoGUI.ProxyManager;
 using System;
 using System.Collections.Generic;
-using GeoCoordinatePortable;
 using System.Linq;
 using System.Net;
 using System.Threading;
@@ -954,7 +951,7 @@ namespace PokemonGoGUI.GoManager
 
         private async Task<MethodResult> CheckReauthentication()
         {
-            if (!_client.AuthExpired)
+            if (!_client.AccessToken.IsExpired)
             {
                 return new MethodResult
                 {

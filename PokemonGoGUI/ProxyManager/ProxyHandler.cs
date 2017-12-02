@@ -1,5 +1,4 @@
-﻿using PokemonGo.RocketAPI;
-using PokemonGoGUI.Models;
+﻿using PokemonGoGUI.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

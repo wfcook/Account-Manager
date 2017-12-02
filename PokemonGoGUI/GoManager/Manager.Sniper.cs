@@ -1,7 +1,6 @@
 ﻿using POGOProtos.Enums;
 using POGOProtos.Map.Pokemon;
 using POGOProtos.Networking.Responses;
-using PokemonGo.RocketAPI;
 using PokemonGoGUI.Extensions;
 using PokemonGoGUI.GoManager.Models;
 using PokemonGoGUI.Models;
@@ -10,7 +9,6 @@ using System;
 using System.Collections.Generic;
 using GeoCoordinatePortable;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 
 namespace PokemonGoGUI.GoManager

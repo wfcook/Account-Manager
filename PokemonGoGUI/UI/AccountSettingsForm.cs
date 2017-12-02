@@ -1,6 +1,4 @@
-﻿using PokemonGo.RocketAPI;
-using PokemonGo.RocketAPI.Enums;
-using PokemonGoGUI.Enums;
+﻿using PokemonGoGUI.Enums;
 using PokemonGoGUI.Extensions;
 using PokemonGoGUI.GoManager;
 using PokemonGoGUI.Models;

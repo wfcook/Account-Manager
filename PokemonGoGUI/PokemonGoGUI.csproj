@@ -90,12 +90,18 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BouncyCastle.Crypto, Version=1.8.1.0, Culture=neutral, PublicKeyToken=0e99375e54769942, processorArchitecture=MSIL">
+      <HintPath>..\packages\Portable.BouncyCastle.1.8.1.2\lib\net4\BouncyCastle.Crypto.dll</HintPath>
+    </Reference>
     <Reference Include="Costura, Version=1.6.2.0, Culture=neutral, PublicKeyToken=9919ef960d84173d, processorArchitecture=MSIL">
       <HintPath>..\packages\Costura.Fody.1.6.2\lib\dotnet\Costura.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Google.Protobuf, Version=3.4.1.0, Culture=neutral, PublicKeyToken=a7d26565bac4d604, processorArchitecture=MSIL">
       <HintPath>..\packages\Google.Protobuf.3.4.1\lib\net45\Google.Protobuf.dll</HintPath>
+    </Reference>
+    <Reference Include="GPSOAuthSharp.NetStandard1, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\GPSOAuthSharp.NetStandard1.1.0.1\lib\netstandard1.1\GPSOAuthSharp.NetStandard1.dll</HintPath>
     </Reference>
     <Reference Include="ObjectListView, Version=2.9.1.1072, Culture=neutral, PublicKeyToken=b1c5bf581481bcd4, processorArchitecture=MSIL">
       <HintPath>..\packages\ObjectListView.Official.2.9.1\lib\net20\ObjectListView.dll</HintPath>
@@ -106,9 +112,25 @@
     <Reference Include="GeoCoordinate.NetStandard1, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>$(SolutionDir)\packages\GeoCoordinate.NetStandard1.1.0.1\lib\netstandard1.1\GeoCoordinate.NetStandard1.dll</HintPath>
     </Reference>
+    <Reference Include="POGOLib.Core, Version=1.6.8.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\POGOLib.Core.1.6.8\lib\netstandard1.1\POGOLib.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="POGOLib.Core.Google, Version=1.6.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\POGOLib.Core.Google.1.6.6\lib\netstandard1.1\POGOLib.Core.Google.dll</HintPath>
+    </Reference>
+    <Reference Include="S2Geometry, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\S2Geometry.1.0.3\lib\portable-net45+wp8+win8\S2Geometry.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
     <Reference Include="System.Design" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Runtime.InteropServices.RuntimeInformation, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.InteropServices.RuntimeInformation.4.3.0\lib\net45\System.Runtime.InteropServices.RuntimeInformation.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
@@ -124,13 +146,31 @@
     <Compile Include="AccountScheduler\SchedulerLimiter.cs" />
     <Compile Include="AccountScheduler\Tracker.cs" />
     <Compile Include="AccountScheduler\TrackerValues.cs" />
+    <Compile Include="Client.cs" />
+    <Compile Include="Enums\AuthType.cs" />
     <Compile Include="Enums\AccountState.cs" />
     <Compile Include="Enums\BotState.cs" />
     <Compile Include="Enums\CheckType.cs" />
     <Compile Include="Enums\SchedulerOption.cs" />
     <Compile Include="Enums\TransferType.cs" />
+    <Compile Include="Exceptions\AccessTokenExpiredException.cs" />
+    <Compile Include="Exceptions\AccountNotVerifiedException.cs" />
+    <Compile Include="Exceptions\APIBadRequestExceltion.cs" />
+    <Compile Include="Exceptions\AuthConfigException.cs" />
+    <Compile Include="Exceptions\CaptchaException.cs" />
+    <Compile Include="Exceptions\GoogleException.cs" />
+    <Compile Include="Exceptions\GoogleOfflineException.cs" />
+    <Compile Include="Exceptions\GoogleTwoFactorException.cs" />
+    <Compile Include="Exceptions\HasherException.cs" />
+    <Compile Include="Exceptions\InvalidResponseException.cs" />
+    <Compile Include="Exceptions\LoginFailedException.cs" />
+    <Compile Include="Exceptions\MinimumClientVersionException.cs" />
+    <Compile Include="Exceptions\PtcLoginException.cs" />
+    <Compile Include="Exceptions\PTCOfflineException.cs" />
+    <Compile Include="Exceptions\SessionInvalidatedException.cs" />
     <Compile Include="Extensions\ComboBoxEx.cs" />
     <Compile Include="Extensions\Compression.cs" />
+    <Compile Include="Extensions\DateTimeExtensions.cs" />
     <Compile Include="Extensions\LargeAddressAware.cs" />
     <Compile Include="Extensions\LinqEx.cs" />
     <Compile Include="Extensions\ObjectEx.cs" />
@@ -151,6 +191,8 @@
     <Compile Include="GoManager\Manager.Settings.cs" />
     <Compile Include="GoManager\Manager.Sniper.cs" />
     <Compile Include="GoManager\Manager.Tutorial.cs" />
+    <Compile Include="ISettings.cs" />
+    <Compile Include="MethodResult.cs" />
     <Compile Include="Models\AccountExportModel.cs" />
     <Compile Include="Models\AccountImport.cs" />
     <Compile Include="Models\CatchSetting.cs" />
@@ -165,6 +207,7 @@
     <Compile Include="Models\PokeSniperResult.cs" />
     <Compile Include="Models\ProgramExportModel.cs" />
     <Compile Include="Models\TransferSettings.cs" />
+    <Compile Include="ProxyEx.cs" />
     <Compile Include="ProxyManager\ProxyHandler.cs" />
     <Compile Include="Snipers\PokeSniper.cs" />
     <Compile Include="UI\AccountSettingsForm.cs">
@@ -275,12 +318,6 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\PokemonGo.RocketAPI\PokemonGo.RocketAPI.csproj">
-      <Project>{05d2da44-1b8e-4cf7-94ed-4d52451cd095}</Project>
-      <Name>PokemonGo.RocketAPI</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

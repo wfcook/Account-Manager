@@ -5,7 +5,6 @@ using POGOProtos.Enums;
 using POGOProtos.Inventory;
 using POGOProtos.Inventory.Item;
 using POGOProtos.Settings.Master;
-using PokemonGo.RocketAPI;
 using PokemonGoGUI.AccountScheduler;
 using PokemonGoGUI.Enums;
 using PokemonGoGUI.GoManager.Models;

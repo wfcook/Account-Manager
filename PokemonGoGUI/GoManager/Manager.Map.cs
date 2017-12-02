@@ -1,14 +1,16 @@
-﻿using POGOProtos.Map;
+﻿using GeoCoordinatePortable;
+using Google.Protobuf;
+using POGOProtos.Map;
 using POGOProtos.Map.Fort;
+using POGOProtos.Map.Pokemon;
+using POGOProtos.Networking.Requests;
+using POGOProtos.Networking.Requests.Messages;
 using POGOProtos.Networking.Responses;
-using PokemonGo.RocketAPI.Extensions;
-using PokemonGo.RocketAPI;
+using PokemonGoGUI.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using GeoCoordinatePortable;
-using POGOProtos.Map.Pokemon;
 
 namespace PokemonGoGUI.GoManager
 {
@@ -163,7 +165,7 @@ namespace PokemonGoGUI.GoManager
         {
             TimeSpan secondsSinceLastRequest = DateTime.Now - _lastMapRequest;
 
-            if(secondsSinceLastRequest < TimeSpan.FromSeconds(6))
+            if (secondsSinceLastRequest < TimeSpan.FromSeconds(6))
             {
                 return new MethodResult<List<MapCell>>
                 {
@@ -172,24 +174,36 @@ namespace PokemonGoGUI.GoManager
                 };
             }
 
+            var response = await _client.Session.RpcClient.SendRemoteProcedureCallAsync(new Request
+            {
+                RequestType = RequestType.EncounterTutorialComplete,
+                RequestMessage = new GetMapObjectsMessage
+                {
+                    //CellId,
+                    //Latitude,
+                    //Longitude,
+                    //SinceTimestampMs
+                }.ToByteString()
+            });
+
+            GetMapObjectsResponse getMapObjectsResponse = null;
+
             try
             {
-                //Only mapobject returns objects
-                var checkAllReponse = await _client.Map.GetMapObjects().ConfigureAwait(false);
-                GetMapObjectsResponse mapObjectResponse = checkAllReponse;
-
+                getMapObjectsResponse = GetMapObjectsResponse.Parser.ParseFrom(response);
                 _lastMapRequest = DateTime.Now;
 
                 return new MethodResult<List<MapCell>>
                 {
-                    Data = mapObjectResponse.MapCells.ToList(),
+                    Data = getMapObjectsResponse.MapCells.ToList(),
                     Message = "Success",
                     Success = true
                 };
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                LogCaller(new LoggerEventArgs("Failed to get map objects", Models.LoggerTypes.Exception, ex));
+                if (response.IsEmpty)
+                    LogCaller(new LoggerEventArgs("Failed to get map objects", Models.LoggerTypes.Exception, ex));
 
                 return new MethodResult<List<MapCell>>
                 {

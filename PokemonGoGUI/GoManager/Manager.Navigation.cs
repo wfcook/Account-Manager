@@ -1,5 +1,4 @@
-﻿using PokemonGo.RocketAPI;
-using PokemonGoGUI.GoManager.Models;
+﻿using PokemonGoGUI.GoManager.Models;
 using System;
 using GeoCoordinatePortable;
 using System.Threading.Tasks;
@@ -159,7 +158,7 @@ namespace PokemonGoGUI.GoManager
                     };
                 }
 
-                _client.Player.UpdatePlayerLocation(location.Latitude, location.Longitude, location.Altitude, _client.CurrentSpeed);
+                _client.Session.Player.SetCoordinates(location.Latitude, location.Longitude, location.Altitude);
 
                 string message = String.Format("Location updated to {0}, {1}. Distance: {2:0.00}m", location.Latitude, location.Longitude, distance);
 

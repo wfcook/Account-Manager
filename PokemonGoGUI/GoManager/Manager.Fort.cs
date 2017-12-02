@@ -1,7 +1,9 @@
-﻿using POGOProtos.Inventory.Item;
+﻿using Google.Protobuf;
+using POGOProtos.Inventory.Item;
 using POGOProtos.Map.Fort;
+using POGOProtos.Networking.Requests;
+using POGOProtos.Networking.Requests.Messages;
 using POGOProtos.Networking.Responses;
-using PokemonGo.RocketAPI;
 using PokemonGoGUI.Extensions;
 using PokemonGoGUI.GoManager.Models;
 using System;
@@ -23,7 +25,30 @@ namespace PokemonGoGUI.GoManager
 
                 for (int i = 0; i < maxFortAttempts; i++)
                 {
-                    fortResponse = await _client.Fort.SearchFort(pokestop.Id, pokestop.Latitude, pokestop.Longitude);
+                    var response = await _client.Session.RpcClient.SendRemoteProcedureCallAsync(new Request
+                    {
+                        RequestType = RequestType.FortSearch,
+                        RequestMessage = new FortSearchMessage
+                        {
+                            FortId = pokestop.Id,
+                            FortLatitude = pokestop.Latitude,
+                            FortLongitude = pokestop.Longitude,
+                            PlayerLatitude = _client.Session.Player.Latitude,
+                            PlayerLongitude = _client.Session.Player.Longitude
+                        }.ToByteString()
+                    });
+
+                    try
+                    {
+                        fortResponse = FortSearchResponse.Parser.ParseFrom(response);
+                    }
+                    catch (Exception ex)
+                    {
+                        if (response.IsEmpty)
+                            LogCaller(new LoggerEventArgs("FortSearchResponse parsing failed because response was empty", LoggerTypes.Exception, ex));
+
+                        return new MethodResult();
+                    }
 
                     if (fortResponse.Result == FortSearchResponse.Types.Result.OutOfRange)
                     {
@@ -219,7 +244,30 @@ namespace PokemonGoGUI.GoManager
                                 LogCaller(new LoggerEventArgs(String.Format("Softban bypass attempt {0} of {1}", totalAttempts, maxAttempts), LoggerTypes.Info));
                             }
 
-                            bypassResponse = await _client.Fort.SearchFort(pokestop.Id, pokestop.Latitude, pokestop.Longitude);
+                            var response = await _client.Session.RpcClient.SendRemoteProcedureCallAsync(new Request
+                            {
+                                RequestType = RequestType.FortSearch,
+                                RequestMessage = new FortSearchMessage
+                                {
+                                    FortId = pokestop.Id,
+                                    FortLatitude = pokestop.Latitude,
+                                    FortLongitude = pokestop.Longitude,
+                                    PlayerLatitude = _client.Session.Player.Latitude,
+                                    PlayerLongitude = _client.Session.Player.Longitude
+                                }.ToByteString()
+                            });
+
+                            try
+                            {
+                                bypassResponse = FortSearchResponse.Parser.ParseFrom(response);
+                            }
+                            catch (Exception ex)
+                            {
+                                if (response.IsEmpty)
+                                    LogCaller(new LoggerEventArgs("FortSearchResponse parsing failed because response was empty", LoggerTypes.Exception, ex));
+
+                                return new MethodResult();
+                            }
 
                             await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
                         } while (bypassResponse.ExperienceAwarded == 0 && totalAttempts <= maxAttempts);
