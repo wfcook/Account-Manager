@@ -180,6 +180,7 @@
     <Compile Include="Extensions\Prompt.cs" />
     <Compile Include="Extensions\Serializer.cs" />
     <Compile Include="Extensions\StringUtil.cs" />
+    <Compile Include="Extensions\TimeZone.cs" />
     <Compile Include="GoManager\Manager.CatchPokemon.cs" />
     <Compile Include="GoManager\Manager.Egg.cs" />
     <Compile Include="GoManager\Manager.Evolution.cs" />

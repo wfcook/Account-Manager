@@ -30,7 +30,7 @@ namespace PokemonGoGUI.GoManager
 
             if (PlayerData == null)
             {
-                MethodResult result = await GetProfile();
+                MethodResult result = await GetPlayer();
 
                 if (!result.Success)
                 {

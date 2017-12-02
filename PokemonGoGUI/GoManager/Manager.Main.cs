@@ -69,26 +69,45 @@ namespace PokemonGoGUI.GoManager
             LoadFarmLocations();
         }
 
-        public async Task<MethodResult> Login(bool reAuthenticate = false)
+        public async Task<MethodResult> Login()
         {
             LogCaller(new LoggerEventArgs("Attempting to login ...", LoggerTypes.Debug));
 
             try
             {
                 MethodResult result = null;
-
-                if (!reAuthenticate)
-                {
-                    result = await _client.DoLogin(UserSettings);
-                }
-                else
-                {
-                    result = await _client.ReAuthenticate();
-                }
-
+                result = await _client.DoLogin(UserSettings);
                 LogCaller(new LoggerEventArgs(result.Message, LoggerTypes.Debug));
 
-                if(CurrentProxy != null)
+                /**
+                //Get player
+                LogCaller(new LoggerEventArgs("Grabbing Player data ...", LoggerTypes.Debug));
+                result = await GetPlayer();
+
+                //Get remote config version
+                LogCaller(new LoggerEventArgs("Grabbing remote config version data ...", LoggerTypes.Debug));
+                result = await GetRemoteConfigVersion();
+
+                //Get asset digest
+                LogCaller(new LoggerEventArgs("Grabbing asset digest data ...", LoggerTypes.Debug));
+                result = await GetAssetDigest();
+
+                //Get item templates
+                LogCaller(new LoggerEventArgs("Grabbing item templates data ...", LoggerTypes.Debug));
+                result = await GetItemTemplates();
+
+                //Get player profile
+                LogCaller(new LoggerEventArgs("Grabbing profile data ...", LoggerTypes.Debug));
+                result = await GetProfile();
+
+                if (!result.Success)
+                {
+                    LogCaller(new LoggerEventArgs("Error to login ...", LoggerTypes.FatalError));
+                    Stop();
+                }
+
+                */
+                if (CurrentProxy != null)
                 {
                     ProxyHandler.ResetFailCounter(CurrentProxy);
                 }
@@ -499,7 +518,7 @@ namespace PokemonGoGUI.GoManager
 
                     if(!result.Success)
                     {
-                        //LogCaller(new LoggerEventArgs("Echo failed. Logging out before retry.", LoggerTypes.Debug));
+                        LogCaller(new LoggerEventArgs("Echo failed. Logging out before retry.", LoggerTypes.Debug));
 
                         _client.Logout();
 
@@ -515,16 +534,16 @@ namespace PokemonGoGUI.GoManager
                         //Get Game settings
                         LogCaller(new LoggerEventArgs("Grabbing game settings ...", LoggerTypes.Debug));
 
-                        MethodResult<bool> minClientResponse = await GetGameSettings("0.33.0");
+                        MethodResult<bool> minClientResponse = await GetGameSettings(_client.VersionStr);
 
                         if (result.Success)
                         {
-                            //Version isn't 0.33
+                            //Version isn't 0.xx.x
                             if (!minClientResponse.Data)
                             {
                                 Stop();
 
-                                LogCaller(new LoggerEventArgs("API updated to version 0.35. Stopping ...", LoggerTypes.Warning));
+                                LogCaller(new LoggerEventArgs("API updated to version 0.XX.x Stopping ...", LoggerTypes.Warning));
 
                                 continue;
                             }
@@ -547,7 +566,7 @@ namespace PokemonGoGUI.GoManager
 
                     //Get profile data
                     LogCaller(new LoggerEventArgs("Grabbing player data ...", LoggerTypes.Debug));
-                    result = await GetProfile();
+                    result = await GetPlayer();
 
                     await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
@@ -963,7 +982,7 @@ namespace PokemonGoGUI.GoManager
             {
                 LogCaller(new LoggerEventArgs("Session expired. Logging back in", LoggerTypes.Debug));
 
-                await _client.ReAuthenticate();
+                await _client.DoLogin(UserSettings);
 
                 return new MethodResult
                 {

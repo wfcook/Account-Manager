@@ -40,7 +40,7 @@ namespace PokemonGoGUI.GoManager
                 }
             }
 
-            await GetProfile(); //Don't care if it fails
+            await GetPlayer(); //Don't care if it fails
 
             await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
@@ -92,13 +92,13 @@ namespace PokemonGoGUI.GoManager
             };
         }
 
-        public async Task<MethodResult> GetProfile()
+        public async Task<MethodResult> GetPlayer()
         {
             try
             {
                 if (!_client.LoggedIn)
                 {
-                    MethodResult result = await Login().ConfigureAwait(false);
+                    MethodResult result = await Login();
 
                     if (!result.Success)
                     {
@@ -111,7 +111,7 @@ namespace PokemonGoGUI.GoManager
                     RequestType = RequestType.GetPlayer,
                     RequestMessage = new GetPlayerMessage
                     {
-                        //PlayerLocale = xxxxxxx
+                        PlayerLocale = _client.LocaleInfo.PlayerLocale()
                     }.ToByteString()
                 });
 
@@ -316,7 +316,7 @@ namespace PokemonGoGUI.GoManager
             try
             {
                 downloadSettingsResponse = DownloadSettingsResponse.Parser.ParseFrom(response);
-                LogCaller(new LoggerEventArgs("Avatar set to defaults", LoggerTypes.Success));
+                LogCaller(new LoggerEventArgs("Game settings loaded", LoggerTypes.Success));
 
                 return new MethodResult<bool>
                 {
@@ -328,6 +328,111 @@ namespace PokemonGoGUI.GoManager
             {
                 if (response.IsEmpty)
                     LogCaller(new LoggerEventArgs("Failed to request game settings", LoggerTypes.Exception, ex));
+
+                return new MethodResult<bool>();
+            }
+        }
+
+        //*************************************************************************************************************//
+        public async Task<MethodResult<bool>> GetRemoteConfigVersion()
+        {
+            var response = await _client.Session.RpcClient.SendRemoteProcedureCallAsync(new Request
+            {
+                RequestType = RequestType.DownloadRemoteConfigVersion,
+                RequestMessage = new DownloadRemoteConfigVersionMessage
+                {
+                    AppVersion = _client.VersionInt,
+                    DeviceManufacturer = _client.Settings.HardwareManufacturer,
+                    DeviceModel = _client.Settings.HardwareModel,
+                    Locale = _client.LocaleInfo.TimeZone,
+                    Platform = Platform.Ios
+                }.ToByteString()
+            });
+
+            DownloadRemoteConfigVersionResponse downloadRemoteConfigVersionResponse = null;
+
+            try
+            {
+                downloadRemoteConfigVersionResponse = DownloadRemoteConfigVersionResponse.Parser.ParseFrom(response);
+                LogCaller(new LoggerEventArgs("Download remote config version loaded", LoggerTypes.Success));
+
+                return new MethodResult<bool>
+                {
+                    Success = true
+                };
+            }
+            catch (Exception ex)
+            {
+                if (response.IsEmpty)
+                    LogCaller(new LoggerEventArgs("Failed to request DownloadRemoteConfigVersionResponse", LoggerTypes.Exception, ex));
+
+                return new MethodResult<bool>();
+            }
+        }
+
+        public async Task<MethodResult<bool>> GetAssetDigest()
+        {
+            var response = await _client.Session.RpcClient.SendRemoteProcedureCallAsync(new Request
+            {
+                RequestType = RequestType.GetAssetDigest,
+                RequestMessage = new GetAssetDigestMessage
+                {
+                    AppVersion = _client.VersionInt,
+                    DeviceManufacturer = _client.Settings.HardwareManufacturer,
+                    DeviceModel = _client.Settings.HardwareModel,
+                    Locale = _client.LocaleInfo.TimeZone,
+                    Platform = Platform.Ios
+                }.ToByteString()
+            });
+
+            GetAssetDigestResponse getAssetDigestResponse = null;
+
+            try
+            {
+                getAssetDigestResponse = GetAssetDigestResponse.Parser.ParseFrom(response);
+                LogCaller(new LoggerEventArgs("Download asset digest loaded", LoggerTypes.Success));
+
+                return new MethodResult<bool>
+                {
+                    Success = true
+                };
+            }
+            catch (Exception ex)
+            {
+                if (response.IsEmpty)
+                    LogCaller(new LoggerEventArgs("Failed to request GetAssetDigestResponse", LoggerTypes.Exception, ex));
+
+                return new MethodResult<bool>();
+            }
+        }
+
+        public async Task<MethodResult<bool>> GetProfile()
+        {
+            var response = await _client.Session.RpcClient.SendRemoteProcedureCallAsync(new Request
+            {
+                RequestType = RequestType.GetPlayerProfile,
+                RequestMessage = new GetPlayerProfileMessage
+                {
+                    PlayerName = _client.Session.Player.Data.Username
+                }.ToByteString()
+            });
+
+            GetPlayerProfileResponse getPlayerProfileResponse = null;
+
+            try
+            {
+                getPlayerProfileResponse = GetPlayerProfileResponse.Parser.ParseFrom(response);
+                LogCaller(new LoggerEventArgs("Download player profile loaded", LoggerTypes.Success));
+
+                return new MethodResult<bool>
+                {
+                    Success = true
+                };
+            }
+            catch (Exception ex)
+            {
+                if (response.IsEmpty)
+                    LogCaller(new LoggerEventArgs("Failed to request GetPlayerProfileResponse", LoggerTypes.Exception, ex));
 
                 return new MethodResult<bool>();
             }

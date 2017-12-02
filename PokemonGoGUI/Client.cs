@@ -24,6 +24,8 @@ using Newtonsoft.Json;
 using POGOLib.Official.Logging;
 using System.Linq;
 using Google.Protobuf;
+using PokemonGoGUI.GoManager.Models;
+using PokemonGoGUI.Extensions;
 
 #endregion
 
@@ -35,12 +37,17 @@ namespace PokemonGoGUI
         public ISettings Settings { get; private set; }
 
         public AuthType AuthType
-        { get { return Settings.AuthType; } set { Settings.AuthType = value; } }
+        { get { return Settings.AuthType; } private set { Settings.AuthType = value; } }
 
-        public AccessToken AccessToken { get; set; }
-        public Session Session { get; set; }
+        public AccessToken AccessToken { get; private set; }
+        public Session Session { get; private set; }
 
-        public bool LoggedIn { get; set; }
+        public bool LoggedIn { get; private set; }
+
+        public LocaleInfo LocaleInfo { get; private set; }
+
+        public uint VersionInt = 8300;
+        public string VersionStr = "0.83.2";
 
         public void Logout()
         {
@@ -53,7 +60,7 @@ namespace PokemonGoGUI
         {
         }
 
-        public async Task<MethodResult> DoLogin(ISettings settings)
+        public async Task<MethodResult<bool>> DoLogin(ISettings settings)
         {
             SetSettings(settings);
             Configuration.Hasher = new PokeHashHasher(Settings.AuthAPIKey);
@@ -84,15 +91,21 @@ namespace PokemonGoGUI
 
             // Send initial requests and start HeartbeatDispatcher.
             // This makes sure that the initial heartbeat request finishes and the "session.Map.Cells" contains stuff.
+            string msgStr = null;
             if (!await Session.StartupAsync())
             {
-                throw new Exception("Session couldn't start up.");
+                msgStr = "Session couldn't start up.";
+                LoggedIn = false;
             }
-
-            return new MethodResult
+            else
             {
-                Message = "Successfully logged into server.",
-                Success = true
+                LoggedIn = true;
+                msgStr = "Successfully logged into server.";
+            }
+            return new MethodResult<bool>()
+            {
+                Success = LoggedIn,
+                Message = msgStr
             };
         }
 
@@ -135,19 +148,7 @@ namespace PokemonGoGUI
         {
             Logger.Info("Map was updated.");
         }
-
-        
-        public async Task<MethodResult> ReAuthenticate()
-        {
-            await DoLogin(Settings);
-
-            return new MethodResult
-            {
-                Message = "Successfully reauthenticated.",
-                Success = true
-            };
-        }
-        
+     
         public void SetSettings(ISettings settings)
         {
             Settings = settings;
@@ -159,6 +160,9 @@ namespace PokemonGoGUI
                 Username = Settings.ProxyUsername,
                 Password = Settings.ProxyPassword
             };
+
+            LocaleInfo = new LocaleInfo();
+            LocaleInfo.SetValues(Settings.Country, Settings.Language, Settings.TimeZone, Settings.POSIX);
         }
 
         private void SaveAccessToken(AccessToken accessToken)
@@ -199,8 +203,6 @@ namespace PokemonGoGUI
 
             if (mayCache)
                 SaveAccessToken(session.AccessToken);
-
-            LoggedIn = true;
 
             return session;
         }
