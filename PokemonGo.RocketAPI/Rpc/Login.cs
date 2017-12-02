@@ -196,11 +196,6 @@ namespace PokemonGo.RocketAPI.Rpc
             {
             }
 
-            new MethodResult
-            {
-                Message = "GetPlayer ok.",
-            };
-
             await RandomHelper.RandomDelay(10000).ConfigureAwait(false);
 
             await Client.Download.GetRemoteConfigVersion().ConfigureAwait(false);
