@@ -31,26 +31,21 @@ namespace PokemonGoGUI
 {
     public class Client
     {
-        public static ProxyEx Proxy;
+        public ProxyEx Proxy;
         public ISettings Settings { get; private set; }
 
         public AuthType AuthType
         { get { return Settings.AuthType; } set { Settings.AuthType = value; } }
-
-        internal string ApiUrl { get; set; }
-        internal AuthTicket AuthTicket { get; set; }
 
         public AccessToken AccessToken { get; set; }
         public Session Session { get; set; }
 
         public bool LoggedIn { get; set; }
 
-         public void Logout()
+        public void Logout()
         {
             Session.Shutdown();
             LoggedIn = false;
-            AuthTicket = null;
-            ApiUrl = null;
             AccessToken = null;
         }
 
@@ -62,23 +57,23 @@ namespace PokemonGoGUI
         {
             SetSettings(settings);
             Configuration.Hasher = new PokeHashHasher(Settings.AuthAPIKey);
-            // Configuration.IgnoreHashVersion = true;
+            Configuration.IgnoreHashVersion = true;
 
             ILoginProvider loginProvider;
 
-            switch (settings.AuthType)
+            switch (Settings.AuthType)
             {
                 case AuthType.Google:
-                    loginProvider = new GoogleLoginProvider(settings.GoogleUsername, settings.GooglePassword);
+                    loginProvider = new GoogleLoginProvider(Settings.GoogleUsername, Settings.GooglePassword);
                     break;
                 case AuthType.Ptc:
-                    loginProvider = new PtcLoginProvider(settings.PtcUsername, settings.PtcPassword);
+                    loginProvider = new PtcLoginProvider(Settings.PtcUsername, Settings.PtcPassword);
                     break;
                 default:
                     throw new ArgumentException("Login provider must be either \"google\" or \"ptc\".");
             }
 
-            Session = await GetSession(loginProvider, settings.DefaultLatitude, settings.DefaultLongitude, true);
+            Session = await GetSession(loginProvider, Settings.DefaultLatitude, Settings.DefaultLongitude, true);
 
             SaveAccessToken(Session.AccessToken);
 
@@ -93,37 +88,6 @@ namespace PokemonGoGUI
             {
                 throw new Exception("Session couldn't start up.");
             }
-
-            // Retrieve the closest fort to your current player coordinates.
-            /*var closestFort = session.Map.GetFortsSortedByDistance().FirstOrDefault();
-            if (closestFort != null)
-            {
-                var fortDetailsBytes = await session.RpcClient.SendRemoteProcedureCallAsync(new Request
-                {
-                    RequestType = RequestType.FortDetails,
-                    RequestMessage = new FortDetailsMessage
-                    {
-                        FortId = closestFort.Id,
-                        Latitude = closestFort.Latitude,
-                        Longitude = closestFort.Longitude
-                    }.ToByteString()
-                });
-
-                if (fortDetailsBytes != null)
-                {
-                    var fortDetailsResponse = FortDetailsResponse.Parser.ParseFrom(fortDetailsBytes);
-
-                    Console.WriteLine(JsonConvert.SerializeObject(fortDetailsResponse, Formatting.Indented));
-                }
-                else
-                {
-                    Console.WriteLine("Couldn't print fort info, we probably had a captcha.");
-                }
-            }
-            else
-            {
-                Logger.Info("No fort found nearby.");
-            }*/
 
             return new MethodResult
             {
@@ -162,20 +126,20 @@ namespace PokemonGoGUI
             Logger.Info("Saved access token to file.");
         }
 
-        private static void InventoryOnUpdate(object sender, EventArgs e)
+        private void InventoryOnUpdate(object sender, EventArgs e)
         {
             Logger.Info("Inventory was updated.");
         }
 
-        private static void MapOnUpdate(object sender, EventArgs e)
+        private void MapOnUpdate(object sender, EventArgs e)
         {
             Logger.Info("Map was updated.");
         }
 
-
+        
         public async Task<MethodResult> ReAuthenticate()
         {
-            //await Login.Reauthenticate(true);
+            await DoLogin(Settings);
 
             return new MethodResult
             {
@@ -183,7 +147,7 @@ namespace PokemonGoGUI
                 Success = true
             };
         }
-
+        
         public void SetSettings(ISettings settings)
         {
             Settings = settings;

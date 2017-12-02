@@ -96,8 +96,11 @@ namespace PokemonGoGUI
 
             foreach(Manager manager in managers)
             {
-                DetailsForm dForm = new DetailsForm(manager);
-                dForm.Show();
+                if (manager.IsRunning)
+                {
+                    DetailsForm dForm = new DetailsForm(manager);
+                    dForm.Show();
+                }
             }
         }
 
