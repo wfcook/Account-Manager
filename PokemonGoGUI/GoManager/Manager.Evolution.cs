@@ -83,7 +83,7 @@ namespace PokemonGoGUI.GoManager
 
                 try
                 {
-                    var response = await _client.Session.RpcClient.SendRemoteProcedureCallAsync(new Request
+                    var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                     {
                         RequestType = RequestType.EvolvePokemon,
                         RequestMessage = new EvolvePokemonMessage
@@ -218,16 +218,14 @@ namespace PokemonGoGUI.GoManager
                     continue;
                 }
 
-                PokemonSettings setting = null;
-
-                if(!PokeSettings.TryGetValue(group.Key, out setting))
+                if (!PokeSettings.TryGetValue(group.Key, out PokemonSettings setting))
                 {
                     LogCaller(new LoggerEventArgs(String.Format("Failed to find settings for pokemon {0}", group.Key), LoggerTypes.Info));
 
                     continue;
                 }
 
-                if(setting.EvolutionIds.Count == 0)
+                if (setting.EvolutionIds.Count == 0)
                 {
                     //Pokemon can't evolve
                     continue;
@@ -287,7 +285,7 @@ namespace PokemonGoGUI.GoManager
 
             try
             {
-                var response = await _client.Session.RpcClient.SendRemoteProcedureCallAsync(new Request
+                var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                 {
                     RequestType = RequestType.UseItemXpBoost,
                     RequestMessage = new UseItemXpBoostMessage

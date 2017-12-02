@@ -106,7 +106,7 @@ namespace PokemonGoGUI.GoManager
                     }
                 }
 
-                var response = await _client.Session.RpcClient.SendRemoteProcedureCallAsync(new Request
+                var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                 {
                     RequestType = RequestType.GetPlayer,
                     RequestMessage = new GetPlayerMessage
@@ -263,7 +263,7 @@ namespace PokemonGoGUI.GoManager
                     }
                 }
 
-                var response = await _client.Session.RpcClient.SendRemoteProcedureCallAsync(new Request
+                var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                 {
                     RequestType = RequestType.LevelUpRewards,
                     RequestMessage = new LevelUpRewardsMessage
@@ -302,7 +302,7 @@ namespace PokemonGoGUI.GoManager
 
         public async Task<MethodResult<bool>> GetGameSettings(string minVersion)
         {
-            var response = await _client.Session.RpcClient.SendRemoteProcedureCallAsync(new Request
+            var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
                 RequestType = RequestType.DownloadSettings,
                 RequestMessage = new DownloadSettingsMessage
@@ -336,7 +336,7 @@ namespace PokemonGoGUI.GoManager
         //*************************************************************************************************************//
         public async Task<MethodResult<bool>> GetRemoteConfigVersion()
         {
-            var response = await _client.Session.RpcClient.SendRemoteProcedureCallAsync(new Request
+            var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
                 RequestType = RequestType.DownloadRemoteConfigVersion,
                 RequestMessage = new DownloadRemoteConfigVersionMessage
@@ -372,7 +372,7 @@ namespace PokemonGoGUI.GoManager
 
         public async Task<MethodResult<bool>> GetAssetDigest()
         {
-            var response = await _client.Session.RpcClient.SendRemoteProcedureCallAsync(new Request
+            var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
                 RequestType = RequestType.GetAssetDigest,
                 RequestMessage = new GetAssetDigestMessage
@@ -408,12 +408,12 @@ namespace PokemonGoGUI.GoManager
 
         public async Task<MethodResult<bool>> GetProfile()
         {
-            var response = await _client.Session.RpcClient.SendRemoteProcedureCallAsync(new Request
+            var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
                 RequestType = RequestType.GetPlayerProfile,
                 RequestMessage = new GetPlayerProfileMessage
                 {
-                    PlayerName = _client.Session.Player.Data.Username
+                    PlayerName = _client.ClientSession.Player.Data.Username
                 }.ToByteString()
             });
 

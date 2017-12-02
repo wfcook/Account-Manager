@@ -40,7 +40,7 @@ namespace PokemonGoGUI
         { get { return Settings.AuthType; } private set { Settings.AuthType = value; } }
 
         public AccessToken AccessToken { get; private set; }
-        public Session Session { get; private set; }
+        public Session ClientSession { get; private set; }
 
         public bool LoggedIn { get; private set; }
 
@@ -51,7 +51,7 @@ namespace PokemonGoGUI
 
         public void Logout()
         {
-            Session.Shutdown();
+            ClientSession.Shutdown();
             LoggedIn = false;
             AccessToken = null;
         }
@@ -80,19 +80,19 @@ namespace PokemonGoGUI
                     throw new ArgumentException("Login provider must be either \"google\" or \"ptc\".");
             }
 
-            Session = await GetSession(loginProvider, Settings.DefaultLatitude, Settings.DefaultLongitude, true);
+            ClientSession = await GetSession(loginProvider, Settings.DefaultLatitude, Settings.DefaultLongitude, true);
 
-            SaveAccessToken(Session.AccessToken);
+            SaveAccessToken(ClientSession.AccessToken);
 
-            Session.AccessTokenUpdated += SessionOnAccessTokenUpdated;
-            Session.InventoryUpdate += InventoryOnUpdate;
-            Session.MapUpdate += MapOnUpdate;
-            Session.CaptchaReceived += SessionOnCaptchaReceived;
+            ClientSession.AccessTokenUpdated += SessionOnAccessTokenUpdated;
+            ClientSession.InventoryUpdate += InventoryOnUpdate;
+            ClientSession.MapUpdate += MapOnUpdate;
+            ClientSession.CaptchaReceived += SessionOnCaptchaReceived;
 
             // Send initial requests and start HeartbeatDispatcher.
             // This makes sure that the initial heartbeat request finishes and the "session.Map.Cells" contains stuff.
             string msgStr = null;
-            if (!await Session.StartupAsync())
+            if (!await ClientSession.StartupAsync())
             {
                 msgStr = "Session couldn't start up.";
                 LoggedIn = false;
@@ -174,7 +174,7 @@ namespace PokemonGoGUI
         }
 
         /// <summary>
-        /// Login to PokémonGo and return an authenticated <see cref="Session" />.
+        /// Login to PokémonGo and return an authenticated <see cref="ClientSession" />.
         /// </summary>
         /// <param name="loginProvider">Provider must be PTC or Google.</param>
         /// <param name="initLat">The initial latitude.</param>

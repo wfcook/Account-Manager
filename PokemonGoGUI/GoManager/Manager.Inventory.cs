@@ -34,7 +34,7 @@ namespace PokemonGoGUI.GoManager
                     }
                 }
 
-                var response = await _client.Session.RpcClient.SendRemoteProcedureCallAsync(new Request
+                var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                 {
                     RequestType = RequestType.GetHoloInventory,
                     RequestMessage = new GetHoloInventoryMessage
@@ -240,7 +240,7 @@ namespace PokemonGoGUI.GoManager
 
         public async Task<MethodResult> RecycleItem(InventoryItemSetting itemSetting, int toDelete)
         {
-            var response = await _client.Session.RpcClient.SendRemoteProcedureCallAsync(new Request
+            var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
                 RequestType = RequestType.RecycleInventoryItem,
                 RequestMessage = new RecycleInventoryItemMessage

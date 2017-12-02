@@ -129,7 +129,7 @@ namespace PokemonGoGUI.GoManager
 
         public async Task<MethodResult> MarkTutorialsComplete(List<TutorialState> tutorials)
         {
-            var response = await _client.Session.RpcClient.SendRemoteProcedureCallAsync(new Request
+            var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
                 RequestType = RequestType.MarkTutorialComplete,
                 RequestMessage = new MarkTutorialCompleteMessage
@@ -164,7 +164,7 @@ namespace PokemonGoGUI.GoManager
 
         public async Task<MethodResult> CompleteEncounterTutorial(PokemonId pokemon)
         {
-            var response = await _client.Session.RpcClient.SendRemoteProcedureCallAsync(new Request
+            var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
                 RequestType = RequestType.EncounterTutorialComplete,
                 RequestMessage = new EncounterTutorialCompleteMessage
@@ -198,7 +198,7 @@ namespace PokemonGoGUI.GoManager
         {
             PlayerAvatar avatar = new PlayerAvatar();
 
-            var response = await _client.Session.RpcClient.SendRemoteProcedureCallAsync(new Request
+            var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
                 RequestType = RequestType.SetAvatar,
                 RequestMessage = new SetAvatarMessage

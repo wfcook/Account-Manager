@@ -181,7 +181,7 @@ namespace PokemonGoGUI.GoManager
         {
             LogCaller(new LoggerEventArgs(String.Format("Sniping {0} at location {1}, {2}", pokemon, latitude, longitude), LoggerTypes.Info));
 
-            GeoCoordinate originalLocation = new GeoCoordinate(_client.Session.Player.Latitude, _client.Session.Player.Longitude);
+            GeoCoordinate originalLocation = new GeoCoordinate(_client.ClientSession.Player.Latitude, _client.ClientSession.Player.Longitude);
 
             //Update location
             MethodResult result = await UpdateLocation(new GeoCoordinate(latitude, longitude));

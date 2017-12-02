@@ -323,8 +323,10 @@ namespace PokemonGoGUI.GoManager
 
             State = BotState.Starting;
 
-            Thread t = new Thread(RunningThread);
-            t.IsBackground = true;
+            Thread t = new Thread(RunningThread)
+            {
+                IsBackground = true
+            };
 
             LogCaller(new LoggerEventArgs("Bot started", LoggerTypes.Info));
 
@@ -695,12 +697,12 @@ namespace PokemonGoGUI.GoManager
 
                         WaitPaused();
 
-                        pokestopsToFarm = pokestopsToFarm.OrderBy(x => CalculateDistanceInMeters(_client.Session.Player.Latitude, _client.Session.Player.Longitude, x.Latitude, x.Longitude)).ToList();
+                        pokestopsToFarm = pokestopsToFarm.OrderBy(x => CalculateDistanceInMeters(_client.ClientSession.Player.Latitude, _client.ClientSession.Player.Longitude, x.Latitude, x.Longitude)).ToList();
 
                         FortData pokestop = pokestopsToFarm[0];
                         pokestopsToFarm.RemoveAt(0);
 
-                        GeoCoordinate currentLocation = new GeoCoordinate(_client.Session.Player.Latitude, _client.Session.Player.Longitude);
+                        GeoCoordinate currentLocation = new GeoCoordinate(_client.ClientSession.Player.Latitude, _client.ClientSession.Player.Longitude);
                         GeoCoordinate fortLocation = new GeoCoordinate(pokestop.Latitude, pokestop.Longitude);
 
                         double distance = CalculateDistanceInMeters(currentLocation, fortLocation);
@@ -1008,40 +1010,41 @@ namespace PokemonGoGUI.GoManager
 
         private void LoadFarmLocations()
         {
-            FarmLocations = new List<FarmLocation>();
-
-            FarmLocations.Add(new FarmLocation
+            FarmLocations = new List<FarmLocation>
+            {
+                new FarmLocation
                 {
                     Name = "Current"
-                });
+                },
 
-            FarmLocations.Add(new FarmLocation
+                new FarmLocation
                 {
                     Latitude = -33.870225,
                     Longitude = 151.208343,
                     Name = "Sydney, Australia"
-                });
+                },
 
-            FarmLocations.Add(new FarmLocation
+                new FarmLocation
                 {
                     Latitude = 35.665705,
                     Longitude = 139.753348,
                     Name = "Tokyo, Japan"
-                });
+                },
 
-            FarmLocations.Add(new FarmLocation
+                new FarmLocation
                 {
                     Latitude = 40.764665,
                     Longitude = -73.973184,
                     Name = "Central Park, NY"
-                });
+                },
 
-            FarmLocations.Add(new FarmLocation
+                new FarmLocation
                 {
                     Latitude = 52.373806,
-                    Longitude = 4.903985,  
+                    Longitude = 4.903985,
                     Name = "Amsterdam, Netherlands"
-                });
+                }
+            };
         }
 
         public void ClearStats()

@@ -25,7 +25,7 @@ namespace PokemonGoGUI.GoManager
 
                 for (int i = 0; i < maxFortAttempts; i++)
                 {
-                    var response = await _client.Session.RpcClient.SendRemoteProcedureCallAsync(new Request
+                    var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                     {
                         RequestType = RequestType.FortSearch,
                         RequestMessage = new FortSearchMessage
@@ -33,8 +33,8 @@ namespace PokemonGoGUI.GoManager
                             FortId = pokestop.Id,
                             FortLatitude = pokestop.Latitude,
                             FortLongitude = pokestop.Longitude,
-                            PlayerLatitude = _client.Session.Player.Latitude,
-                            PlayerLongitude = _client.Session.Player.Longitude
+                            PlayerLatitude = _client.ClientSession.Player.Latitude,
+                            PlayerLongitude = _client.ClientSession.Player.Longitude
                         }.ToByteString()
                     });
 
@@ -244,7 +244,7 @@ namespace PokemonGoGUI.GoManager
                                 LogCaller(new LoggerEventArgs(String.Format("Softban bypass attempt {0} of {1}", totalAttempts, maxAttempts), LoggerTypes.Info));
                             }
 
-                            var response = await _client.Session.RpcClient.SendRemoteProcedureCallAsync(new Request
+                            var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                             {
                                 RequestType = RequestType.FortSearch,
                                 RequestMessage = new FortSearchMessage
@@ -252,8 +252,8 @@ namespace PokemonGoGUI.GoManager
                                     FortId = pokestop.Id,
                                     FortLatitude = pokestop.Latitude,
                                     FortLongitude = pokestop.Longitude,
-                                    PlayerLatitude = _client.Session.Player.Latitude,
-                                    PlayerLongitude = _client.Session.Player.Longitude
+                                    PlayerLatitude = _client.ClientSession.Player.Latitude,
+                                    PlayerLongitude = _client.ClientSession.Player.Longitude
                                 }.ToByteString()
                             });
 
