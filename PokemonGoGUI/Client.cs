@@ -1,31 +1,19 @@
 ﻿#region using directives
 
-using System;
-using System.Net;
-using POGOProtos.Enums;
-using POGOProtos.Networking.Envelopes;
-using POGOProtos.Settings;
-using System.Threading.Tasks;
-using System.Net.Http;
+using Newtonsoft.Json;
+using POGOLib.Official;
+using POGOLib.Official.Logging;
 using POGOLib.Official.LoginProviders;
 using POGOLib.Official.Net;
 using POGOLib.Official.Net.Authentication;
 using POGOLib.Official.Net.Authentication.Data;
-using POGOLib.Official.Util.Hash;
-using POGOProtos.Networking.Requests;
-using POGOProtos.Networking.Requests.Messages;
-using POGOProtos.Networking.Responses;
-using POGOLib.Official.Extensions;
 using POGOLib.Official.Net.Captcha;
+using POGOLib.Official.Util.Hash;
 using PokemonGoGUI.Enums;
-using POGOLib.Official;
-using System.IO;
-using Newtonsoft.Json;
-using POGOLib.Official.Logging;
-using System.Linq;
-using Google.Protobuf;
-using PokemonGoGUI.GoManager.Models;
 using PokemonGoGUI.Extensions;
+using System;
+using System.IO;
+using System.Threading.Tasks;
 
 #endregion
 

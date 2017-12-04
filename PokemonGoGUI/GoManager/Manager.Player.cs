@@ -302,35 +302,14 @@ namespace PokemonGoGUI.GoManager
 
         public async Task<MethodResult<bool>> GetGameSettings(string minVersion)
         {
-            var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
+            await Task.Delay(0); //remove warn
+            LogCaller(new LoggerEventArgs("Game settings loaded", LoggerTypes.Success));
+
+            return new MethodResult<bool>
             {
-                RequestType = RequestType.DownloadSettings,
-                RequestMessage = new DownloadSettingsMessage
-                {
-                    Hash = "05daf51635c82611d1aac95c0b051d3ec088a930"
-                }.ToByteString()
-            });
-
-            DownloadSettingsResponse downloadSettingsResponse = null;
-
-            try
-            {
-                downloadSettingsResponse = DownloadSettingsResponse.Parser.ParseFrom(response);
-                LogCaller(new LoggerEventArgs("Game settings loaded", LoggerTypes.Success));
-
-                return new MethodResult<bool>
-                {
-                    Data = downloadSettingsResponse.Settings.MinimumClientVersion == minVersion,
-                    Success = true
-                };
-            }
-            catch (Exception ex)
-            {
-                if (response.IsEmpty)
-                    LogCaller(new LoggerEventArgs("Failed to request game settings", LoggerTypes.Exception, ex));
-
-                return new MethodResult<bool>();
-            }
+                Data = _client.ClientSession.GlobalSettings.MinimumClientVersion == minVersion,
+                Success = true,
+            };
         }
 
         //*************************************************************************************************************//

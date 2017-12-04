@@ -29,7 +29,7 @@ namespace PokemonGoGUI
         private bool _showStartup = true;
 
         private readonly string _saveFile = "data";
-        private const string _versionNumber = "2.19.1 - Betas testes by FurtiF";
+        private const string _versionNumber = "2.19.2 By --=FurtiF™=--";
 
         public MainForm()
         {

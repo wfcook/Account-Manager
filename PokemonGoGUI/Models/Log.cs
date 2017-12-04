@@ -46,7 +46,7 @@ namespace PokemonGoGUI.GoManager.Models
             switch (this.LoggerType)
             {
                 case LoggerTypes.FatalError:
-                    return Color.White;
+                    return Color.Red;
                 case LoggerTypes.Exception:
                     return Color.Red;
                 case LoggerTypes.Success:

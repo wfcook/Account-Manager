@@ -86,7 +86,7 @@ namespace PokemonGoGUI.GoManager
 
                 return result;
             }
-            catch(PtcOfflineException)
+            catch (PtcOfflineException)
             {
                 LogCaller(new LoggerEventArgs("Ptc server offline. Please try again later.", LoggerTypes.Warning));
 
@@ -95,7 +95,7 @@ namespace PokemonGoGUI.GoManager
                     Message = "Ptc server offline."
                 };
             }
-            catch(AccountNotVerifiedException)
+            catch (AccountNotVerifiedException)
             {
                 Stop();
 
@@ -110,7 +110,7 @@ namespace PokemonGoGUI.GoManager
                     Message = "Account not verified."
                 };
             }
-            catch(WebException ex)
+            catch (WebException ex)
             {
                 if (ex.Status == WebExceptionStatus.Timeout)
                 {
@@ -155,7 +155,7 @@ namespace PokemonGoGUI.GoManager
                     }
                 }
 
-                if(!String.IsNullOrEmpty(Proxy))
+                if (!String.IsNullOrEmpty(Proxy))
                 {
                     _proxyIssue = true;
                 }
@@ -167,24 +167,24 @@ namespace PokemonGoGUI.GoManager
                     Message = "Failed to login due to request error"
                 };
             }
-            catch(TaskCanceledException)
+            catch (TaskCanceledException)
             {
-                    if(String.IsNullOrEmpty(Proxy))
-                    {
-                        LogCaller(new LoggerEventArgs("Login request has timed out", LoggerTypes.Warning));
-                    }
-                    else
-                    {
-                        _proxyIssue = true;
-                        LogCaller(new LoggerEventArgs("Login request has timed out. Possible bad proxy", LoggerTypes.ProxyIssue));
-                    }
+                if (String.IsNullOrEmpty(Proxy))
+                {
+                    LogCaller(new LoggerEventArgs("Login request has timed out", LoggerTypes.Warning));
+                }
+                else
+                {
+                    _proxyIssue = true;
+                    LogCaller(new LoggerEventArgs("Login request has timed out. Possible bad proxy", LoggerTypes.ProxyIssue));
+                }
 
-                    return new MethodResult
-                    {
-                        Message = "Login request has timed out"
-                    };
+                return new MethodResult
+                {
+                    Message = "Login request has timed out"
+                };
             }
-            catch(InvalidCredentialsException ex)
+            catch (InvalidCredentialsException ex)
             {
                 //Puts stopping log before other log.
                 Stop();
@@ -198,7 +198,7 @@ namespace PokemonGoGUI.GoManager
                     Message = "Username or password incorrect"
                 };
             }
-            catch(IPBannedException)
+            catch (IPBannedException)
             {
                 if (UserSettings.StopOnIPBan)
                 {
@@ -207,9 +207,9 @@ namespace PokemonGoGUI.GoManager
 
                 string message = String.Empty;
 
-                if(!String.IsNullOrEmpty(Proxy))
+                if (!String.IsNullOrEmpty(Proxy))
                 {
-                    if(CurrentProxy != null)
+                    if (CurrentProxy != null)
                     {
                         ProxyHandler.MarkProxy(CurrentProxy, true);
                     }
@@ -230,7 +230,7 @@ namespace PokemonGoGUI.GoManager
                     Message = message
                 };
             }
-            catch(GoogleException ex)
+            catch (GoogleException ex)
             {
                 Stop();
                 RemoveProxy();
@@ -242,7 +242,7 @@ namespace PokemonGoGUI.GoManager
                     Message = "Failed to login"
                 };
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _client.Logout();
 
@@ -258,14 +258,14 @@ namespace PokemonGoGUI.GoManager
         public MethodResult Start()
         {
             //Fixing a bug on my part
-            if(Tracker == null)
+            if (Tracker == null)
             {
                 Tracker = new Tracker();
             }
 
             ServicePointManager.DefaultConnectionLimit = Int32.MaxValue;
 
-            if(IsRunning)
+            if (IsRunning)
             {
                 return new MethodResult
                 {
@@ -280,7 +280,7 @@ namespace PokemonGoGUI.GoManager
                 };
             }
 
-            if(!_wasAutoRestarted)
+            if (!_wasAutoRestarted)
             {
                 _expGained = 0;
             }
@@ -316,7 +316,7 @@ namespace PokemonGoGUI.GoManager
 
         public void Restart()
         {
-            if(!IsRunning)
+            if (!IsRunning)
             {
                 Start();
 
@@ -332,7 +332,7 @@ namespace PokemonGoGUI.GoManager
 
         public void Pause()
         {
-            if(!IsRunning)
+            if (!IsRunning)
             {
                 return;
             }
@@ -362,7 +362,7 @@ namespace PokemonGoGUI.GoManager
 
         public void TogglePause()
         {
-            if(State == BotState.Paused || State == BotState.Pausing)
+            if (State == BotState.Paused || State == BotState.Pausing)
             {
                 UnPause();
             }
@@ -389,12 +389,12 @@ namespace PokemonGoGUI.GoManager
 
         private bool CheckTime()
         {
-            if(UserSettings.RunForHours == 0)
+            if (UserSettings.RunForHours == 0)
             {
                 return false;
             }
 
-            if(_runningStopwatch.Elapsed.TotalHours >= UserSettings.RunForHours)
+            if (_runningStopwatch.Elapsed.TotalHours >= UserSettings.RunForHours)
             {
                 Stop();
 
@@ -503,30 +503,35 @@ namespace PokemonGoGUI.GoManager
 
                     await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
-                    /*
                     if (UserSettings.StopOnAPIUpdate)
                     {
                         //Get Game settings
                         LogCaller(new LoggerEventArgs("Grabbing game settings ...", LoggerTypes.Debug));
 
-                        MethodResult<bool> minClientResponse = await GetGameSettings(_client.VersionStr);
-
-                        if (result.Success)
+                        try
                         {
-                            //Version isn't 0.xx.x
-                            if (!minClientResponse.Data)
+                            MethodResult<bool> minClientResponse = await GetGameSettings(_client.VersionStr);
+
+                            if (result.Success)
                             {
-                                Stop();
-
-                                LogCaller(new LoggerEventArgs("API updated to version 0.XX.x Stopping ...", LoggerTypes.Warning));
-
-                                continue;
+                                //Version isn't 0.xx.x
+                                if (!minClientResponse.Data)
+                                {
+                                    LogCaller(new LoggerEventArgs($"Emulates API {_client.VersionStr} ...", LoggerTypes.FatalError, new Exception($"New API needed {_client.ClientSession.GlobalSettings.MinimumClientVersion}. Stopping ...")));
+                                    Stop();
+                                    continue;
+                                }
                             }
-                        }
 
-                        await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
+                            await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
+                        }
+                        catch (Exception)
+                        {
+                            LogCaller(new LoggerEventArgs("Game settings failed", LoggerTypes.FatalError, new Exception("Maybe this account is banned ...")));
+                            Stop();
+                            continue;
+                        }
                     }
-                    */
 
                     //Get pokemon settings
                     if (PokeSettings == null)
@@ -535,16 +540,16 @@ namespace PokemonGoGUI.GoManager
 
                         result = await GetItemTemplates();
                     }
-                    
+
 
                     await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
-                    //Get profile data
-                    LogCaller(new LoggerEventArgs("Grabbing player data ...", LoggerTypes.Debug));
-                    result = await GetPlayer();
+                    //Get profile data not needed on pogolib
+                    //LogCaller(new LoggerEventArgs("Grabbing player data ...", LoggerTypes.Debug));
+                    //result = await GetPlayer();
 
-                    await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
-                    
+                    //await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
+
                     //Update inventory
                     LogCaller(new LoggerEventArgs("Updating inventory items ...", LoggerTypes.Debug));
 
@@ -572,9 +577,9 @@ namespace PokemonGoGUI.GoManager
 
                         await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
                     }
-                    
+
                     _failedInventoryReponses = 0;
-                    
+
                     if (WaitPaused())
                     {
                         continue;
