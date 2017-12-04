@@ -6,7 +6,7 @@ using System;
 
 namespace PokemonGoGUI.Exceptions
 {
-    
+    [Serializable]
     public class SessionInvalidatedException : Exception
     {
         public SessionInvalidatedException()

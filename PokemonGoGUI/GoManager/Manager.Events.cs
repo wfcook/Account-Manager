@@ -3,7 +3,7 @@ using System;
 
 namespace PokemonGoGUI.GoManager
 {
-    public partial class Manager
+    public partial class Manager :IDisposable
     {
         public delegate void LoggerHandler(object sender, LoggerEventArgs e);
         public event LoggerHandler OnLog;
@@ -12,12 +12,7 @@ namespace PokemonGoGUI.GoManager
 
         private void InventoryUpdateCaller(EventArgs args)
         {
-            EventHandler caller = OnInventoryUpdate;
-
-            if(caller != null)
-            {
-                caller(this, args);
-            }
+            OnInventoryUpdate?.Invoke(this, args);
         }
 
         private void LogCaller(LoggerEventArgs args)
@@ -31,12 +26,19 @@ namespace PokemonGoGUI.GoManager
 
             AddLog(new Log(args.LogType, args.Message, (Exception)args.Exception));
 
-            LoggerHandler caller = OnLog;
+            OnLog?.Invoke(this, args);
+        }
 
-            if (caller != null)
-            {
-                caller(this, args);
-            }
+        public void Dispose()
+        {
+            Dispose(true);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposing) return;
+
+            _pauser.Dispose();
         }
     }
 

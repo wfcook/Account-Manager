@@ -146,7 +146,7 @@ namespace PokemonGoGUI
         {
             Settings = settings;
 
-            int osId = OsVersions[settings.FirmwareType.Length].Length;
+            int osId = OsVersions[Settings.FirmwareType.Length].Length;
             var firmwareUserAgentPart = OsUserAgentParts[osId];
             var firmwareType = OsVersions[osId];
 
@@ -155,19 +155,19 @@ namespace PokemonGoGUI
                 UserAgent = $"pokemongo/1 {firmwareUserAgentPart}",
                 DeviceInfo = new DeviceInfo
                 {
-                    DeviceId = settings.DeviceId,
-                    DeviceBrand = settings.DeviceBrand,
-                    DeviceModelBoot = settings.DeviceModelBoot,
-                    HardwareModel = settings.HardwareModel,
-                    HardwareManufacturer = settings.HardwareManufacturer,
-                    FirmwareBrand = settings.FirmwareBrand,
-                    FirmwareType = settings.FirmwareType,
-                    AndroidBoardName = settings.AndroidBoardName,
-                    AndroidBootloader = settings.AndroidBootloader,
-                    DeviceModel = settings.DeviceModel,
-                    DeviceModelIdentifier = settings.DeviceModelIdentifier,
-                    FirmwareFingerprint = settings.FirmwareFingerprint,
-                    FirmwareTags = settings.FirmwareTags
+                    DeviceId = Settings.DeviceId,
+                    DeviceBrand = Settings.DeviceBrand,
+                    DeviceModelBoot = Settings.DeviceModelBoot,
+                    HardwareModel = Settings.HardwareModel,
+                    HardwareManufacturer = Settings.HardwareManufacturer,
+                    FirmwareBrand = Settings.FirmwareBrand,
+                    FirmwareType = Settings.FirmwareType,
+                    AndroidBoardName = Settings.AndroidBoardName,
+                    AndroidBootloader = Settings.AndroidBootloader,
+                    DeviceModel = Settings.DeviceModel,
+                    DeviceModelIdentifier = Settings.DeviceModelIdentifier,
+                    FirmwareFingerprint = Settings.FirmwareFingerprint,
+                    FirmwareTags = Settings.FirmwareTags
                 }
             };
 

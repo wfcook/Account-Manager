@@ -7,7 +7,7 @@ using System.Timers;
 
 namespace PokemonGoGUI.AccountScheduler
 {
-    public class Scheduler
+    public class Scheduler :IDisposable
     {
         public delegate void CheckHandler(object sender, SchedulerEventArgs e);
         public event CheckHandler OnSchedule;
@@ -96,8 +96,10 @@ namespace PokemonGoGUI.AccountScheduler
             PokemonLimiter = new SchedulerLimiter();
             MasterOption = SchedulerOption.StartStop;
 
-            _timer = new Timer(_checkTime);
-            _timer.AutoReset = true;
+            _timer = new Timer(_checkTime)
+            {
+                AutoReset = true
+            };
             _timer.Elapsed += _timer_Elapsed;
 
             _timer.Start();
@@ -150,12 +152,19 @@ namespace PokemonGoGUI.AccountScheduler
 
         private void CheckCaller()
         {
-            CheckHandler caller = OnSchedule;
+            OnSchedule?.Invoke(this, new SchedulerEventArgs(this));
+        }
 
-            if (caller != null)
-            {
-                caller(this, new SchedulerEventArgs(this));
-            }
+        public void Dispose()
+        {
+            Dispose(true);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposing) return;
+
+            _timer.Dispose();
         }
     }
 
