@@ -29,7 +29,7 @@ namespace PokemonGoGUI
         private bool _showStartup = true;
 
         private readonly string _saveFile = "data";
-        private string _versionNumber = $"{Application.ProductVersion} By --=FurtiF™=--";
+        private string _versionNumber = $"{Application.ProductVersion} By M3G4MIND & --=FurtiF™=--";
 
         public MainForm()
         {
