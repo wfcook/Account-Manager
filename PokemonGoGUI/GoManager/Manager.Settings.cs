@@ -60,16 +60,17 @@ namespace PokemonGoGUI.GoManager
                 return new MethodResult<AccountExportModel>();
             }
 
-            AccountExportModel exportModel = new AccountExportModel();
-
-            exportModel.Level = Stats.Level;
-            exportModel.Type = UserSettings.AuthType.ToString();
-            exportModel.Username = UserSettings.PtcUsername;
-            exportModel.Password = UserSettings.PtcPassword;
-            exportModel.Pokedex = Pokedex.Select(x => new PokedexEntryExportModel(x)).ToList();
-            exportModel.Pokemon = Pokemon.Select(x => new PokemonDataExportModel(x, CalculateIVPerfection(x).Data)).ToList();
-            exportModel.Items = Items.Select(x => new ItemDataExportModel(x)).ToList();
-            exportModel.Eggs = Eggs.Select(x => new EggDataExportModel(x)).ToList();
+            AccountExportModel exportModel = new AccountExportModel
+            {
+                Level = Stats.Level,
+                Type = UserSettings.AuthType.ToString(),
+                Username = UserSettings.PtcUsername,
+                Password = UserSettings.PtcPassword,
+                Pokedex = Pokedex.Select(x => new PokedexEntryExportModel(x)).ToList(),
+                Pokemon = Pokemon.Select(x => new PokemonDataExportModel(x, CalculateIVPerfection(x).Data)).ToList(),
+                Items = Items.Select(x => new ItemDataExportModel(x)).ToList(),
+                Eggs = Eggs.Select(x => new EggDataExportModel(x)).ToList()
+            };
 
             return new MethodResult<AccountExportModel>
             {
@@ -189,10 +190,8 @@ namespace PokemonGoGUI.GoManager
                 };
             }
 
-            PokemonSettings pokemonSettings = null;
-
             //Shouldn't happen
-            if (!PokeSettings.TryGetValue(pokemon, out pokemonSettings))
+            if (!PokeSettings.TryGetValue(pokemon, out PokemonSettings pokemonSettings))
             {
                 return new MethodResult<PokemonSettings>()
                 {
@@ -262,7 +261,6 @@ namespace PokemonGoGUI.GoManager
                 settings.GroupName = UserSettings.GroupName;
 
                 UserSettings = settings;
-
 
                 if (!String.IsNullOrEmpty(UserSettings.DeviceBrand))
                 {
