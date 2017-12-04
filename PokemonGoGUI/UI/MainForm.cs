@@ -29,7 +29,7 @@ namespace PokemonGoGUI
         private bool _showStartup = true;
 
         private readonly string _saveFile = "data";
-        private const string _versionNumber = "2.19.2 By --=FurtiF™=--";
+        private string _versionNumber = $"{Application.ProductVersion} By M3G4MIND & --=FurtiF™=--";
 
         public MainForm()
         {
@@ -50,7 +50,7 @@ namespace PokemonGoGUI
             //tabPage1.BackColor = Color.FromArgb(43, 43, 43);
             //fastOjectListViewMain.AlwaysGroupByColumn = olvColumnGroup;
 
-            Text = "GoManager - v" + _versionNumber;
+            Text = "GoManager - " + _versionNumber;
 
             olvColumnProxyAuth.AspectGetter = delegate(object x)
             {
