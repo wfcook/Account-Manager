@@ -116,8 +116,9 @@ namespace PokemonGoGUI
 
         private async void MainForm_Load(object sender, EventArgs e)
         {
-
             this.Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
+
+            await GoManager.VersionCheckState.Execute();
 
             await LoadSettings();
 
