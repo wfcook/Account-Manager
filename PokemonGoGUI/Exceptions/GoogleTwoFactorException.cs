@@ -6,6 +6,7 @@ using System;
 
 namespace PokemonGoGUI.Exceptions
 {
+    [Serializable]
     public class GoogleTwoFactorException : Exception
     {
         public GoogleTwoFactorException(string message) : base(message)

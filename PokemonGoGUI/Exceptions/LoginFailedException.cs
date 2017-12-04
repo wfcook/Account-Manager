@@ -6,10 +6,9 @@ using System;
 
 namespace PokemonGoGUI.Exceptions
 {
-    
+    [Serializable]
     public class LoginFailedException : Exception
     {
-
         public LoginFailedException()
         {
         }
@@ -19,9 +18,9 @@ namespace PokemonGoGUI.Exceptions
         }
     }
 
+    [Serializable]
     public class TokenRefreshException : Exception
     {
-
         public TokenRefreshException()
         {
         }
@@ -31,6 +30,7 @@ namespace PokemonGoGUI.Exceptions
         }
     }
 
+    [Serializable]
     public class InvalidCredentialsException : Exception
     {
         public InvalidCredentialsException(string message)
@@ -40,6 +40,7 @@ namespace PokemonGoGUI.Exceptions
         }
     }
 
+    [Serializable]
     public class IPBannedException : Exception
     {
         public IPBannedException(string message)

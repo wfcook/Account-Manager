@@ -6,6 +6,7 @@ using System;
 
 namespace PokemonGoGUI.Exceptions
 {
+    [Serializable]
     public class InvalidResponseException : Exception
     {
         public InvalidResponseException()
