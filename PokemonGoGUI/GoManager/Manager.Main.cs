@@ -1026,7 +1026,7 @@ namespace PokemonGoGUI.GoManager
                 {
                     Latitude = 37.809979,
                     Longitude = -122.410426,
-                    Name = "Per39, San Francisco"
+                    Name = "Pier39, San Francisco"
                 },
                 new FarmLocation
                 {
