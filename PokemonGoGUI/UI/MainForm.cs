@@ -50,7 +50,7 @@ namespace PokemonGoGUI
             //tabPage1.BackColor = Color.FromArgb(43, 43, 43);
             //fastOjectListViewMain.AlwaysGroupByColumn = olvColumnGroup;
 
-            Text = "GoManager - v" + _versionNumber;
+            Text = "GoManager - " + _versionNumber;
 
             olvColumnProxyAuth.AspectGetter = delegate(object x)
             {
