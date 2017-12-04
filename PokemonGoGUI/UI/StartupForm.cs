@@ -17,7 +17,7 @@ namespace PokemonGoGUI.UI
 
             linkLabelDiscordChat.Links.Add(new LinkLabel.Link
             {
-                LinkData = "#"
+                LinkData = "https://discord.gg/nwa2Dx2"
             });
 
             linkLabel1.Links.Add(new LinkLabel.Link
