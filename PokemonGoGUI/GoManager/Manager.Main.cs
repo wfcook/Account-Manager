@@ -527,6 +527,7 @@ namespace PokemonGoGUI.GoManager
                         }
                         catch (Exception)
                         {
+                            AccountState = AccountState.PokemonBanAndPokestopBanTemp;
                             LogCaller(new LoggerEventArgs("Game settings failed", LoggerTypes.FatalError, new Exception("Maybe this account is banned ...")));
                             Stop();
                             continue;
@@ -537,10 +538,16 @@ namespace PokemonGoGUI.GoManager
                     if (PokeSettings == null)
                     {
                         LogCaller(new LoggerEventArgs("Grabbing pokemon settings ...", LoggerTypes.Debug));
-
                         result = await GetItemTemplates();
-                    }
 
+                        if(!result.Success)
+                        {
+                            AccountState = AccountState.PokemonBanAndPokestopBanTemp;
+                            LogCaller(new LoggerEventArgs("Load pokemon settings failed", LoggerTypes.FatalError, new Exception("Maybe this account is banned ...")));
+                            Stop();
+                            continue;
+                        }
+                    }
 
                     await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
