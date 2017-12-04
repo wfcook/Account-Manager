@@ -35,7 +35,7 @@ namespace PokemonGoGUI.GoManager
         private bool _autoRestart = false;
         private bool _wasAutoRestarted = false;
 
-        public ManualResetEvent _pauser = new ManualResetEvent(true);
+        private ManualResetEvent _pauser = new ManualResetEvent(true);
         private bool _proxyIssue = false;
 
 
