@@ -69,7 +69,7 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(346, 80);
             this.label1.TabIndex = 2;
-            this.label1.Text = "Welcome to GoManager! \r\nRight Clicking on the next window will help you get start" +
+            this.label1.Text = "Welcome to Account Manager! \r\nRight Clicking on the next window will help you get start" +
     "ed.\r\n\r\nIf you require any additional help, \r\nyou can always ask questions in our" +
     " Discord chat.";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -102,7 +102,7 @@
             this.linkLabelDiscordChat.Size = new System.Drawing.Size(164, 16);
             this.linkLabelDiscordChat.TabIndex = 5;
             this.linkLabelDiscordChat.TabStop = true;
-            this.linkLabelDiscordChat.Text = "https://discord.gg/4qn5gCf";
+            this.linkLabelDiscordChat.Text = "https://discord.gg/nwa2Dx2";
             this.linkLabelDiscordChat.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelDiscordChat_LinkClicked);
             // 
             // linkLabel1
