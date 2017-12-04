@@ -7,6 +7,7 @@ using POGOProtos.Networking.Requests;
 using POGOProtos.Networking.Requests.Messages;
 using POGOProtos.Networking.Responses;
 using PokemonGoGUI.Extensions;
+using PokemonGoGUI.GoManager.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -45,7 +46,7 @@ namespace PokemonGoGUI.GoManager
         {
             MethodResult<List<FortData>> allFortsResponse = await GetAllForts();
 
-            if(!allFortsResponse.Success)
+            if (!allFortsResponse.Success)
             {
                 return allFortsResponse;
             }
@@ -174,25 +175,46 @@ namespace PokemonGoGUI.GoManager
                 };
             }
 
+            await Task.Delay(0);           
+            var cells = _client.ClientSession.Map.Cells.ToList();
+            if (cells.Count > 1)
+            {
+                _lastMapRequest = DateTime.Now;
+
+                return new MethodResult<List<MapCell>>
+                {
+                    Data = cells,
+                    Message = "Success",
+                    Success = true
+                };
+            }
+            else
+            {
+                return new MethodResult<List<MapCell>>
+                {
+                    Data = new List<MapCell>(),
+                    Message = "Failed to get map objects"
+                };
+            }
+            /*/ Retrieve the closest fort to your current player coordinates.
             var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
                 RequestType = RequestType.GetMapObjects,
                 RequestMessage = new GetMapObjectsMessage
                 {
                     //CellId,
-                    //Latitude,
-                    //Longitude,
-                    //SinceTimestampMs
+                    Latitude = _client.ClientSession.Player.Latitude,
+                    Longitude = _client.ClientSession.Player.Longitude,
+                    //SinceTimestampMs 
                 }.ToByteString()
             });
 
             GetMapObjectsResponse getMapObjectsResponse = null;
-
             try
             {
                 getMapObjectsResponse = GetMapObjectsResponse.Parser.ParseFrom(response);
                 _lastMapRequest = DateTime.Now;
-
+ 
                 return new MethodResult<List<MapCell>>
                 {
                     Data = getMapObjectsResponse.MapCells.ToList(),
@@ -207,9 +229,11 @@ namespace PokemonGoGUI.GoManager
 
                 return new MethodResult<List<MapCell>>
                 {
+                    Data = new List<MapCell>(),
                     Message = "Failed to get map objects"
                 };
             }
+            */
         }
     }
 }

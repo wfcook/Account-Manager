@@ -79,34 +79,6 @@ namespace PokemonGoGUI.GoManager
                 result = await _client.DoLogin(UserSettings);
                 LogCaller(new LoggerEventArgs(result.Message, LoggerTypes.Debug));
 
-                /**
-                //Get player
-                LogCaller(new LoggerEventArgs("Grabbing Player data ...", LoggerTypes.Debug));
-                result = await GetPlayer();
-
-                //Get remote config version
-                LogCaller(new LoggerEventArgs("Grabbing remote config version data ...", LoggerTypes.Debug));
-                result = await GetRemoteConfigVersion();
-
-                //Get asset digest
-                LogCaller(new LoggerEventArgs("Grabbing asset digest data ...", LoggerTypes.Debug));
-                result = await GetAssetDigest();
-
-                //Get item templates
-                LogCaller(new LoggerEventArgs("Grabbing item templates data ...", LoggerTypes.Debug));
-                result = await GetItemTemplates();
-
-                //Get player profile
-                LogCaller(new LoggerEventArgs("Grabbing profile data ...", LoggerTypes.Debug));
-                result = await GetProfile();
-
-                if (!result.Success)
-                {
-                    LogCaller(new LoggerEventArgs("Error to login ...", LoggerTypes.FatalError));
-                    Stop();
-                }
-
-                */
                 if (CurrentProxy != null)
                 {
                     ProxyHandler.ResetFailCounter(CurrentProxy);
@@ -442,9 +414,9 @@ namespace PokemonGoGUI.GoManager
             //Reset account state
             AccountState = Enums.AccountState.Good;
 
-            while(IsRunning)
+            while (IsRunning)
             {
-                if(CheckTime())
+                if (CheckTime())
                 {
                     continue;
                 }
@@ -456,7 +428,7 @@ namespace PokemonGoGUI.GoManager
                     bool success = await ChangeProxy();
 
                     //Fails when it's stopping
-                    if(!success)
+                    if (!success)
                     {
                         continue;
                     }
@@ -472,7 +444,7 @@ namespace PokemonGoGUI.GoManager
 
                 StartingUp = true;
 
-                if(currentFails >= UserSettings.MaxFailBeforeReset)
+                if (currentFails >= UserSettings.MaxFailBeforeReset)
                 {
                     currentFails = 0;
                     _client.Logout();
@@ -518,7 +490,7 @@ namespace PokemonGoGUI.GoManager
 
                     result = await CheckReauthentication();
 
-                    if(!result.Success)
+                    if (!result.Success)
                     {
                         LogCaller(new LoggerEventArgs("Echo failed. Logging out before retry.", LoggerTypes.Debug));
 
@@ -531,6 +503,7 @@ namespace PokemonGoGUI.GoManager
 
                     await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
+                    /*
                     if (UserSettings.StopOnAPIUpdate)
                     {
                         //Get Game settings
@@ -553,16 +526,16 @@ namespace PokemonGoGUI.GoManager
 
                         await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
                     }
-
+                    */
 
                     //Get pokemon settings
-                    if(PokeSettings == null)
+                    if (PokeSettings == null)
                     {
                         LogCaller(new LoggerEventArgs("Grabbing pokemon settings ...", LoggerTypes.Debug));
 
                         result = await GetItemTemplates();
                     }
-
+                    
 
                     await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
@@ -571,7 +544,7 @@ namespace PokemonGoGUI.GoManager
                     result = await GetPlayer();
 
                     await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
-
+                    
                     //Update inventory
                     LogCaller(new LoggerEventArgs("Updating inventory items ...", LoggerTypes.Debug));
 
@@ -579,7 +552,7 @@ namespace PokemonGoGUI.GoManager
 
                     await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
-                    if(!result.Success)
+                    if (!result.Success)
                     {
                         if (result.Message == "Failed to get inventory.")
                         {
@@ -599,10 +572,10 @@ namespace PokemonGoGUI.GoManager
 
                         await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
                     }
-
+                    
                     _failedInventoryReponses = 0;
-
-                    if(WaitPaused())
+                    
+                    if (WaitPaused())
                     {
                         continue;
                     }
@@ -646,7 +619,7 @@ namespace PokemonGoGUI.GoManager
 
                     MethodResult<List<FortData>> pokestops = await GetPokeStops();
 
-                    if(!pokestops.Success)
+                    if (!pokestops.Success)
                     {
                         await Task.Delay(failedWaitTime);
 
@@ -656,7 +629,7 @@ namespace PokemonGoGUI.GoManager
                     int pokeStopNumber = 1;
                     int totalStops = pokestops.Data.Count;
 
-                    if(totalStops == 0)
+                    if (totalStops == 0)
                     {
                         _proxyIssue = false;
                         _potentialPokeStopBan = false;
@@ -679,11 +652,11 @@ namespace PokemonGoGUI.GoManager
 
                     GeoCoordinate defaultLocation = new GeoCoordinate(UserSettings.DefaultLatitude, UserSettings.DefaultLongitude);
 
-                    List<FortData> pokestopsToFarm = pokestops.Data;
+                    List<FortData> pokestopsToFarm = pokestops.Data.ToList();
 
                     int currentFailedStops = 0;
 
-                    while(pokestopsToFarm.Any())
+                    while (pokestopsToFarm.Any())
                     {
                         if (!IsRunning || currentFailedStops >= UserSettings.MaxFailBeforeReset)
                         {
@@ -744,7 +717,7 @@ namespace PokemonGoGUI.GoManager
                         }
 
                         //Stop bot instantly
-                        if(!IsRunning)
+                        if (!IsRunning)
                         {
                             continue;
                         }
@@ -783,12 +756,12 @@ namespace PokemonGoGUI.GoManager
                         }
 
                         //Clean inventory, evolve, transfer, etc on first and every 10 stops
-                        if(IsRunning && ((pokeStopNumber > 4 && pokeStopNumber % 10 == 0) || pokeStopNumber == 1))
+                        if (IsRunning && ((pokeStopNumber > 4 && pokeStopNumber % 10 == 0) || pokeStopNumber == 1))
                         {
                             MethodResult echoResult = await CheckReauthentication();
 
                             //Echo failed, restart
-                            if(!echoResult.Success)
+                            if (!echoResult.Success)
                             {
                                 break;
                             }
@@ -819,7 +792,7 @@ namespace PokemonGoGUI.GoManager
                                 await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
                             }
 
-                            if(UserSettings.EvolvePokemon)
+                            if (UserSettings.EvolvePokemon)
                             {
                                 MethodResult evolveResult = await EvolveFilteredPokemon();
 
@@ -835,9 +808,9 @@ namespace PokemonGoGUI.GoManager
 
                             if (UserSettings.TransferPokemon)
                             {
-                                MethodResult transferResult =  await TransferFilteredPokemon();
+                                MethodResult transferResult = await TransferFilteredPokemon();
 
-                                if(transferResult.Success)
+                                if (transferResult.Success)
                                 {
                                     secondInventoryUpdate = true;
 
@@ -845,7 +818,7 @@ namespace PokemonGoGUI.GoManager
                                 }
                             }
 
-                            if(UserSettings.IncubateEggs)
+                            if (UserSettings.IncubateEggs)
                             {
                                 MethodResult incubateResult = await IncubateEggs();
 
@@ -867,7 +840,7 @@ namespace PokemonGoGUI.GoManager
 
                         await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
-                        if(UserSettings.MaxLevel > 0 && Level >= UserSettings.MaxLevel)
+                        if (UserSettings.MaxLevel > 0 && Level >= UserSettings.MaxLevel)
                         {
                             LogCaller(new LoggerEventArgs(String.Format("Max level of {0} reached.", UserSettings.MaxLevel), LoggerTypes.Info));
 
@@ -883,7 +856,7 @@ namespace PokemonGoGUI.GoManager
 
                     #endregion
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     LogCaller(new LoggerEventArgs("Unknown exception occured. Restarting ...", LoggerTypes.Exception, ex));
                 }
@@ -896,7 +869,7 @@ namespace PokemonGoGUI.GoManager
             _client.Logout();
             LogCaller(new LoggerEventArgs(String.Format("Bot fully stopped at {0}", DateTime.Now), LoggerTypes.Info));
 
-            if(_autoRestart)
+            if (_autoRestart)
             {
                 _wasAutoRestarted = true;
                 Start();
@@ -909,7 +882,7 @@ namespace PokemonGoGUI.GoManager
 
         public void Stop()
         {
-            if(!IsRunning)
+            if (!IsRunning)
             {
                 _client.Logout();
                 return;
@@ -922,7 +895,7 @@ namespace PokemonGoGUI.GoManager
             _runningStopwatch.Stop();
             _failedInventoryReponses = 0;
 
-            if(!_autoRestart)
+            if (!_autoRestart)
             {
                 _runningStopwatch.Reset();
             }
@@ -933,40 +906,40 @@ namespace PokemonGoGUI.GoManager
         /*
         private async Task<MethodResult> RepeatAction(Func<Task<MethodResult>> action, int tries)
         {
-            MethodResult result = new MethodResult();
+        MethodResult result = new MethodResult();
 
-            for(int i = 0; i < tries; i++)
-            {
-                result = await action();
+        for(int i = 0; i < tries; i++)
+        {
+         result = await action();
 
-                if(result.Success)
-                {
-                    return result;
-                }
+         if(result.Success)
+         {
+             return result;
+         }
 
-                await Task.Delay(CalculateDelay(1000, 200));
-            }
+         await Task.Delay(CalculateDelay(1000, 200));
+        }
 
-            return result;
+        return result;
         }
 
         private async Task<MethodResult<T>> RepeatAction<T>(Func<Task<MethodResult<T>>> action, int tries)
         {
-            MethodResult<T> result = new MethodResult<T>();
+        MethodResult<T> result = new MethodResult<T>();
 
-            for (int i = 0; i < tries; i++)
-            {
-                result = await action();
+        for (int i = 0; i < tries; i++)
+        {
+         result = await action();
 
-                if (result.Success)
-                {
-                    return result;
-                }
+         if (result.Success)
+         {
+             return result;
+         }
 
-                await Task.Delay(CalculateDelay(1000, 200));
-            }
+         await Task.Delay(CalculateDelay(1000, 200));
+        }
 
-            return result;
+        return result;
         }
         */
 
@@ -1000,7 +973,7 @@ namespace PokemonGoGUI.GoManager
                     Message = "Incorrect DLL used"
                 };
             }*/
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 LogCaller(new LoggerEventArgs("Failed to reauthenticate failed", LoggerTypes.Warning, ex));
 

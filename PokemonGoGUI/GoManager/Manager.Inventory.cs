@@ -29,28 +29,15 @@ namespace PokemonGoGUI.GoManager
                     {
                         return new MethodResult<List<InventoryItem>>
                         {
-                            Message = result.Message
+                            Message = result.Message,
+                            Success = result.Success
                         };
                     }
                 }
 
-                var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
-                {
-                    RequestType = RequestType.GetHoloInventory,
-                    RequestMessage = new GetHoloInventoryMessage
-                    {
-                        //ItemBeenSeen
-                        //LastTimestampMs
-                    }.ToByteString()
-                });
-
-                GetHoloInventoryResponse inventory = null;
-
                 try
                 {
-                    inventory = GetHoloInventoryResponse.Parser.ParseFrom(response);
-                    List<InventoryItem> items = inventory.InventoryDelta.InventoryItems.ToList();
-                    AllItems = items;
+                    AllItems = _client.ClientSession.Player.Inventory.InventoryItems.ToList();
 
                     await UpdatePlayerStats(false);
                     await UpdatePokemon(false);
@@ -63,19 +50,17 @@ namespace PokemonGoGUI.GoManager
 
                     return new MethodResult<List<InventoryItem>>
                     {
-                        Data = items,
+                        Data = AllItems,
                         Message = "Successfully grabbed inventory items",
                         Success = true
                     };
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-                    if (response.IsEmpty)
-                        LogCaller(new LoggerEventArgs("Failed to get inventory because as empty result", LoggerTypes.Exception, ex));
-
                     return new MethodResult<List<InventoryItem>>
                     {
-                        Message = "Failed to get inventory"
+                        Message = "Failed to get inventory",
+                        Success = false
                     };
                 }
             }
@@ -83,7 +68,8 @@ namespace PokemonGoGUI.GoManager
             {
                 return new MethodResult<List<InventoryItem>>
                 {
-                    Message = "Failed to get inventory"
+                    Message = "Failed to get inventory",
+                    Success = false
                 };
             }
         }
