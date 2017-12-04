@@ -2,18 +2,21 @@
 
 using Newtonsoft.Json;
 using POGOLib.Official;
+using POGOLib.Official.Extensions;
 using POGOLib.Official.Logging;
 using POGOLib.Official.LoginProviders;
 using POGOLib.Official.Net;
 using POGOLib.Official.Net.Authentication;
 using POGOLib.Official.Net.Authentication.Data;
 using POGOLib.Official.Net.Captcha;
+using POGOLib.Official.Util.Device;
 using POGOLib.Official.Util.Hash;
 using PokemonGoGUI.Enums;
 using PokemonGoGUI.Extensions;
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using static POGOProtos.Networking.Envelopes.Signature.Types;
 
 #endregion
 
@@ -33,6 +36,8 @@ namespace PokemonGoGUI
         public bool LoggedIn { get; private set; }
 
         public LocaleInfo LocaleInfo { get; private set; }
+
+        public DeviceWrapper ClientDeviceWrapper { get; private set; }
 
         public uint VersionInt = 8300;
         public string VersionStr = "0.83.2";
@@ -140,7 +145,32 @@ namespace PokemonGoGUI
         public void SetSettings(ISettings settings)
         {
             Settings = settings;
- 
+
+            int osId = OsVersions[settings.FirmwareType.Length].Length;
+            var firmwareUserAgentPart = OsUserAgentParts[osId];
+            var firmwareType = OsVersions[osId];
+
+            ClientDeviceWrapper = new DeviceWrapper
+            {
+                UserAgent = $"pokemongo/1 {firmwareUserAgentPart}",
+                DeviceInfo = new DeviceInfo
+                {
+                    DeviceId = settings.DeviceId,
+                    DeviceBrand = settings.DeviceBrand,
+                    DeviceModelBoot = settings.DeviceModelBoot,
+                    HardwareModel = settings.HardwareModel,
+                    HardwareManufacturer = settings.HardwareManufacturer,
+                    FirmwareBrand = settings.FirmwareBrand,
+                    FirmwareType = settings.FirmwareType,
+                    AndroidBoardName = settings.AndroidBoardName,
+                    AndroidBootloader = settings.AndroidBootloader,
+                    DeviceModel = settings.DeviceModel,
+                    DeviceModelIdentifier = settings.DeviceModelIdentifier,
+                    FirmwareFingerprint = settings.FirmwareFingerprint,
+                    FirmwareTags = settings.FirmwareTags
+                }
+            };
+
             Proxy = new ProxyEx
             {
                 Address = Settings.ProxyIP,
@@ -183,16 +213,65 @@ namespace PokemonGoGUI
                     var accessToken = JsonConvert.DeserializeObject<AccessToken>(File.ReadAllText(fileName));
 
                     if (!accessToken.IsExpired)
-                        return Login.GetSession(loginProvider, accessToken, initLat, initLong);
+                        return Login.GetSession(loginProvider, accessToken, initLat, initLong, ClientDeviceWrapper);
                 }
             }
 
-            var session = await Login.GetSession(loginProvider, initLat, initLong);
+            var session = await Login.GetSession(loginProvider, initLat, initLong, ClientDeviceWrapper);
 
             if (mayCache)
                 SaveAccessToken(session.AccessToken);
 
             return session;
         }
+
+        private static readonly string[] OsUserAgentParts = {
+            "CFNetwork/758.0.2 Darwin/15.0.0",  // 9.0
+            "CFNetwork/758.0.2 Darwin/15.0.0",  // 9.0.1
+            "CFNetwork/758.0.2 Darwin/15.0.0",  // 9.0.2
+            "CFNetwork/758.1.6 Darwin/15.0.0",  // 9.1
+            "CFNetwork/758.2.8 Darwin/15.0.0",  // 9.2
+            "CFNetwork/758.2.8 Darwin/15.0.0",  // 9.2.1
+            "CFNetwork/758.3.15 Darwin/15.4.0", // 9.3
+            "CFNetwork/758.4.3 Darwin/15.5.0", // 9.3.2
+            "CFNetwork/807.2.14 Darwin/16.3.0", // 10.3.3
+            "CFNetwork/889.3 Darwin/17.2.0", // 11.1.0
+            "CFNetwork/893.10 Darwin/17.3.0", // 11.2.0
+        };
+
+        private static readonly string[][] Devices =
+        {
+            new[] {"iPad5,1", "iPad", "J96AP"},
+            new[] {"iPad5,2", "iPad", "J97AP"},
+            new[] {"iPad5,3", "iPad", "J81AP"},
+            new[] {"iPad5,4", "iPad", "J82AP"},
+            new[] {"iPad6,7", "iPad", "J98aAP"},
+            new[] {"iPad6,8", "iPad", "J99aAP"},
+            new[] {"iPhone5,1", "iPhone", "N41AP"},
+            new[] {"iPhone5,2", "iPhone", "N42AP"},
+            new[] {"iPhone5,3", "iPhone", "N48AP"},
+            new[] {"iPhone5,4", "iPhone", "N49AP"},
+            new[] {"iPhone6,1", "iPhone", "N51AP"},
+            new[] {"iPhone6,2", "iPhone", "N53AP"},
+            new[] {"iPhone7,1", "iPhone", "N56AP"},
+            new[] {"iPhone7,2", "iPhone", "N61AP"},
+            new[] {"iPhone8,1", "iPhone", "N71AP"},
+            new[] {"iPhone8,2", "iPhone", "MKTM2"}, //iphone 6s plus
+            new[] {"iPhone9,3", "iPhone", "MN9T2"}
+        };
+
+        private static readonly string[] OsVersions = {
+            "9.0",
+            "9.0.1",
+            "9.0.2",
+            "9.1",
+            "9.2",
+            "9.2.1",
+            "9.3",
+            "9.3.2",
+            "10.3.3",
+            "11.1.0",
+            "11.2.0"
+        };
     }
 }
