@@ -1,5 +1,18 @@
 # Change Log
 
+## [v2.19.2.2](https://github.com/Furtif/GoManager/tree/v2.19.2.2) (2017-12-05)
+
+[Full Changelog](https://github.com/Furtif/GoManager/compare/v2.19.2.1...v2.19.2.2)
+
+**Closed issues:**
+
+- Test Git [\#7](https://github.com/Furtif/GoManager/issues/7)
+
+**Merged pull requests:**
+
+- Fix autoupdate, add more locations, minor fixes [\#10](https://github.com/Furtif/GoManager/pull/10) ([Furtif](https://github.com/Furtif))
+- Urls Discord.... [\#9](https://github.com/Furtif/GoManager/pull/9) ([m3g4mInD](https://github.com/m3g4mInD))
+
 ## [v2.19.2.1](https://github.com/Furtif/GoManager/tree/v2.19.2.1) (2017-12-04)
 
 [Full Changelog](https://github.com/Furtif/GoManager/compare/v2.19.2.0...v2.19.2.1)
