@@ -34,9 +34,9 @@ namespace PokemonGoGUI.GoManager
 
         public static async Task<bool> Execute()
         {
-            await CleanupOldFiles().ConfigureAwait(false);
+            await CleanupOldFiles();
 
-            var isLatest = await IsLatest().ConfigureAwait(false);
+            var isLatest = await IsLatest();
 
             SystemSounds.Asterisk.Play();
 
@@ -94,7 +94,7 @@ namespace PokemonGoGUI.GoManager
             {
                 try
                 {
-                    if (file.Name.Contains("vshost") || file.Name.Contains(".gpx.old") || file.Name.Contains("chromedriver.exe.old"))
+                    if (file.Name.Contains("chromedriver.exe.old"))
                         continue;
                     File.Delete(file.FullName);
                 }
@@ -103,15 +103,15 @@ namespace PokemonGoGUI.GoManager
                     //Logger.Write(e.ToString());
                 }
             }
-            await Task.Delay(200).ConfigureAwait(false);
+            await Task.Delay(200);
         }
         
         private async static Task<string> DownloadServerVersion()
         {
             using (HttpClient client = new HttpClient())
             {
-                var responseContent = await client.GetAsync(VersionUri).ConfigureAwait(false);
-                return await responseContent.Content.ReadAsStringAsync().ConfigureAwait(false);
+                var responseContent = await client.GetAsync(VersionUri);
+                return await responseContent.Content.ReadAsStringAsync();
             }
         }
 
@@ -126,7 +126,7 @@ namespace PokemonGoGUI.GoManager
             try
             {
                 var regex = new Regex(@"\[assembly\: AssemblyVersion\(""(\d{1,})\.(\d{1,})\.(\d{1,})\.(\d{1,})""\)\]");
-                var match = regex.Match(await DownloadServerVersion().ConfigureAwait(false));
+                var match = regex.Match(await DownloadServerVersion());
 
                 if (!match.Success)
                     return false;
