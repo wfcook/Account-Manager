@@ -1,4 +1,5 @@
 ﻿using PokemonGoGUI.Enums;
+using System;
 
 namespace PokemonGoGUI
 {
@@ -33,6 +34,8 @@ namespace PokemonGoGUI
         bool SPF { get; set; }
 
         string AuthAPIKey { get; set; }
+        Uri HashHost { get; set; }
+        string HashEndpoint { get; set; }
         string Country { get; set; }
         string Language { get; set; }
         string TimeZone { get; set; }

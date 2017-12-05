@@ -58,6 +58,7 @@ namespace PokemonGoGUI
         {
             SetSettings(settings);
             Configuration.Hasher = new PokeHashHasher(Settings.AuthAPIKey);
+            Configuration.HasherUrl = Settings.HashHost;
             Configuration.IgnoreHashVersion = true;
 
             ILoginProvider loginProvider;
