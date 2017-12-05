@@ -1022,6 +1022,41 @@ namespace PokemonGoGUI.GoManager
                     Longitude = -73.973184,
                     Name = "Central Park, NY"
                 },
+				
+				new FarmLocation
+                {
+                    Latitude = 45.03009,
+                    Longitude = -93.31934,
+                    Name = "6Pokestop, Cleveland"
+                },
+
+                new FarmLocation
+                {
+                    Latitude = 35.696428,
+                    Longitude = 139.814404,
+                    Name = "9Lures, Tokyo Japan"
+                },
+
+                new FarmLocation
+                {
+                    Latitude = 40.755184,
+                    Longitude = -73.983724,
+                    Name = "7Pokestops, Central Park NY"
+                },
+				
+				new FarmLocation
+                {
+                    Latitude = 51.22505600,
+                    Longitude = 6.80713000,
+                    Name = "Dusseldorf, Germany"
+                },
+
+                new FarmLocation
+                {
+                    Latitude = 46.50759600,
+                    Longitude = 6.62834800,
+                    Name = "Lausanne, Suisse"
+                },
 
                 new FarmLocation
                 {

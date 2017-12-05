@@ -17,12 +17,12 @@ namespace PokemonGoGUI.UI
 
             linkLabelDiscordChat.Links.Add(new LinkLabel.Link
             {
-                LinkData = "https://discord.gg/4qn5gCf"
+                LinkData = "https://discord.gg/nwa2Dx2"
             });
 
             linkLabel1.Links.Add(new LinkLabel.Link
             {
-                LinkData = "https://github.com/SL-x-TnT/GoManager"
+                LinkData = "https://github.com/Furtif/GoManager"
             });
         }
 
