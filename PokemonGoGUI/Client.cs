@@ -9,6 +9,7 @@ using POGOLib.Official.Net;
 using POGOLib.Official.Net.Authentication;
 using POGOLib.Official.Net.Authentication.Data;
 using POGOLib.Official.Net.Captcha;
+using POGOLib.Official.Util;
 using POGOLib.Official.Util.Device;
 using POGOLib.Official.Util.Hash;
 using PokemonGoGUI.Enums;
@@ -35,7 +36,7 @@ namespace PokemonGoGUI
 
         public bool LoggedIn { get; private set; }
 
-        public LocaleInfo LocaleInfo { get; private set; }
+        public ILocaleInfo LocaleInfo { get; private set; }
 
         public DeviceWrapper ClientDeviceWrapper { get; private set; }
 
@@ -179,8 +180,9 @@ namespace PokemonGoGUI
                 Password = Settings.ProxyPassword
             };
 
-            LocaleInfo = new LocaleInfo();
-            LocaleInfo.SetValues(Settings.Country, Settings.Language, Settings.TimeZone, Settings.POSIX);
+            LocaleInfo = new ILocaleInfo();
+            LocaleInfo.SetValues(Settings.Country, Settings.Language, Settings.TimeZone);
+            Configuration.LocaleInfo = LocaleInfo;
         }
 
         private void SaveAccessToken(AccessToken accessToken)
