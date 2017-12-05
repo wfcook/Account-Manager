@@ -38,7 +38,6 @@ namespace PokemonGoGUI.GoManager
         private ManualResetEvent _pauser = new ManualResetEvent(true);
         private bool _proxyIssue = false;
 
-
         //Needs to be saved on close
         public GoProxy CurrentProxy { get; set; }
 
@@ -450,6 +449,20 @@ namespace PokemonGoGUI.GoManager
                     _client.Logout();
                 }
 
+                if (_client.CaptchaInt > 0)
+                {
+                    AccountState = AccountState.CaptchaReceived;
+
+                    LogCaller(new LoggerEventArgs("Potential Captcha received", LoggerTypes.Warning));
+
+                    //Remove proxy
+                    RemoveProxy();
+
+                    Stop();
+
+                    continue;
+                }
+
                 if (_failedInventoryReponses >= _failedInventoryUntilBan)
                 {
                     AccountState = AccountState.PermAccountBan;
@@ -522,8 +535,6 @@ namespace PokemonGoGUI.GoManager
                                     continue;
                                 }
                             }
-
-                            await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
                         }
                         catch (Exception)
                         {
@@ -532,6 +543,8 @@ namespace PokemonGoGUI.GoManager
                             Stop();
                             continue;
                         }
+
+                        await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
                     }
 
                     //Get pokemon settings

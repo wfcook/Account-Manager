@@ -14,9 +14,12 @@ using POGOLib.Official.Util.Device;
 using POGOLib.Official.Util.Hash;
 using PokemonGoGUI.Enums;
 using PokemonGoGUI.Extensions;
+using PokemonGoGUI.GoManager;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using static POGOProtos.Networking.Envelopes.Signature.Types;
 
 #endregion
@@ -39,12 +42,15 @@ namespace PokemonGoGUI
         public ILocaleInfo LocaleInfo { get; private set; }
 
         public DeviceWrapper ClientDeviceWrapper { get; private set; }
+        public int CaptchaInt = 0;
 
         public uint VersionInt = 8300;
         public string VersionStr = "0.83.2";
 
         public void Logout()
         {
+            if (!LoggedIn)
+                return;
             ClientSession.Shutdown();
             LoggedIn = false;
             AccessToken = null;
@@ -58,7 +64,7 @@ namespace PokemonGoGUI
         {
             SetSettings(settings);
             Configuration.Hasher = new PokeHashHasher(Settings.AuthAPIKey);
-            Configuration.HasherUrl = Settings.HashHost;
+            Configuration.HasherUrl = new Uri(Settings.HashHost.ToString());
             Configuration.IgnoreHashVersion = true;
 
             ILoginProvider loginProvider;
@@ -107,8 +113,11 @@ namespace PokemonGoGUI
         private void SessionOnCaptchaReceived(object sender, CaptchaEventArgs e)
         {
             var session = (Session)sender;
+            
+            ++CaptchaInt;
 
-            Logger.Warn("Captcha received: " + e.CaptchaUrl);
+            
+            //Logger.Warn("Captcha received: " + e.CaptchaUrl);
 
             // Solve
             //            var verifyChallengeResponse = await session.RpcClient.SendRemoteProcedureCallAsync(new Request
@@ -131,17 +140,17 @@ namespace PokemonGoGUI
 
             SaveAccessToken(session.AccessToken);
 
-            Logger.Info("Saved access token to file.");
+            //Logger.Info("Saved access token to file.");
         }
 
         private void InventoryOnUpdate(object sender, EventArgs e)
         {
-            Logger.Info("Inventory was updated.");
+            //Logger.Info("Inventory was updated.");
         }
 
         private void MapOnUpdate(object sender, EventArgs e)
         {
-            Logger.Info("Map was updated.");
+            //Logger.Info("Map was updated.");
         }
      
         public void SetSettings(ISettings settings)
