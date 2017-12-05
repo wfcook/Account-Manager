@@ -1023,7 +1023,7 @@ namespace PokemonGoGUI.GoManager
                     Name = "Central Park, NY"
                 },
 				
-				new FarmLocation
+		new FarmLocation
                 {
                     Latitude = 45.03009,
                     Longitude = -93.31934,
@@ -1044,7 +1044,7 @@ namespace PokemonGoGUI.GoManager
                     Name = "7Pokestops, Central Park NY"
                 },
 				
-				new FarmLocation
+		new FarmLocation
                 {
                     Latitude = 51.22505600,
                     Longitude = 6.80713000,
