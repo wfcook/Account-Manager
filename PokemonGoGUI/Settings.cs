@@ -14,6 +14,8 @@ namespace PokemonGoGUI
     public class Settings : ISettings
     {
         public string AuthAPIKey { get; set; }
+        public Uri HashHost { get; set; }
+        public string HashEndpoint { get; set; }
         public string Country { get; set; }
         public string Language { get; set; }
         public string TimeZone { get; set; }

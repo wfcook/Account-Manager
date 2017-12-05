@@ -1,9 +1,5 @@
-﻿using POGOProtos.Networking.Requests.Messages;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PokemonGoGUI.Extensions
 {
@@ -450,36 +446,6 @@ namespace PokemonGoGUI.Extensions
         public Dictionary<string, Tuple<string, string, string>> GetTimeZoneIds()
         {
             return TimeZoneids;
-        }
-    }
-
-    /// <summary>
-    /// Description of LocaleInfo.
-    /// </summary>
-    public class LocaleInfo
-    {
-        public string Country = "US";
-        public string Language = "en";
-        public string TimeZone = "America/New_York";
-        public string POSIX = "en-us";
-
-        public void SetValues(string country, string language, string timezone, string posix)
-        {
-            Country = country;
-            Language = language;
-            TimeZone = timezone;
-            POSIX = posix;
-        }
-
-        public GetPlayerMessage.Types.PlayerLocale PlayerLocale()
-        {
-            var locale = new GetPlayerMessage.Types.PlayerLocale
-            {
-                Country = Country,
-                Language = Language,
-                Timezone = TimeZone
-            };
-            return locale;
         }
     }
 }
