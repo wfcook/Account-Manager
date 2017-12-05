@@ -1022,12 +1022,7 @@ namespace PokemonGoGUI.GoManager
                     Longitude = -73.973184,
                     Name = "Central Park, NY"
                 },
-				new FarmLocation
-                {
-                    Latitude = 37.809979,
-                    Longitude = -122.410426,
-                    Name = "Pier39, San Francisco"
-                },
+
                 new FarmLocation
                 {
                     Latitude = 52.373806,

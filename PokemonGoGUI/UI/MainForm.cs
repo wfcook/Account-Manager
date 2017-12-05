@@ -29,19 +29,19 @@ namespace PokemonGoGUI
         private bool _showStartup = true;
 
         private readonly string _saveFile = "data";
-        private string _versionNumber = $"{Application.ProductVersion} By M3G4MIND & --=FurtiF™=--";
+        private string _versionNumber = $"{Application.ProductVersion} By --=FurtiF™=--";
 
         public MainForm()
         {
             InitializeComponent();
 
-            fastObjectListViewMain.BackColor = Color.FromArgb(0, 0, 0);
+            fastObjectListViewMain.BackColor = Color.FromArgb(43, 43, 43);
             fastObjectListViewMain.ForeColor = Color.LightGray;
 
-            fastObjectListViewProxies.BackColor = Color.FromArgb(0, 0, 0);
+            fastObjectListViewProxies.BackColor = Color.FromArgb(43, 43, 43);
             fastObjectListViewProxies.ForeColor = Color.LightGray;
 
-            fastObjectListViewScheduler.BackColor = Color.FromArgb(0, 0, 0);
+            fastObjectListViewScheduler.BackColor = Color.FromArgb(43, 43, 43);
             fastObjectListViewScheduler.ForeColor = Color.LightGray;
 
             //BackColor = Color.FromArgb(43, 43, 43);
@@ -50,7 +50,7 @@ namespace PokemonGoGUI
             //tabPage1.BackColor = Color.FromArgb(43, 43, 43);
             //fastOjectListViewMain.AlwaysGroupByColumn = olvColumnGroup;
 
-            Text = "Account Manager - " + _versionNumber;
+            Text = "GoManager - " + _versionNumber;
 
             olvColumnProxyAuth.AspectGetter = delegate(object x)
             {
