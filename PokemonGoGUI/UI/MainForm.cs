@@ -15,6 +15,7 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -27,21 +28,21 @@ namespace PokemonGoGUI
         private List<Scheduler> _schedulers = new List<Scheduler>();
         private bool _spf = false;
         private bool _showStartup = true;
-
+        private bool IsLatest = true;
         private readonly string _saveFile = "data";
-        private string _versionNumber = $"{Application.ProductVersion} By --=FurtiF™=--";
+        private string _versionNumber = $"v{Assembly.GetExecutingAssembly().GetName().Version} - Modified GoManager Version";
 
         public MainForm()
         {
             InitializeComponent();
 
-            fastObjectListViewMain.BackColor = Color.FromArgb(43, 43, 43);
+            fastObjectListViewMain.BackColor = Color.FromArgb(0, 0, 0);
             fastObjectListViewMain.ForeColor = Color.LightGray;
 
-            fastObjectListViewProxies.BackColor = Color.FromArgb(43, 43, 43);
+            fastObjectListViewProxies.BackColor = Color.FromArgb(0, 0, 0);
             fastObjectListViewProxies.ForeColor = Color.LightGray;
 
-            fastObjectListViewScheduler.BackColor = Color.FromArgb(43, 43, 43);
+            fastObjectListViewScheduler.BackColor = Color.FromArgb(0, 0, 0);
             fastObjectListViewScheduler.ForeColor = Color.LightGray;
 
             //BackColor = Color.FromArgb(43, 43, 43);
@@ -50,7 +51,7 @@ namespace PokemonGoGUI
             //tabPage1.BackColor = Color.FromArgb(43, 43, 43);
             //fastOjectListViewMain.AlwaysGroupByColumn = olvColumnGroup;
 
-            Text = "GoManager - " + _versionNumber;
+            Text = "Account Manager - " + _versionNumber;
 
             olvColumnProxyAuth.AspectGetter = delegate(object x)
             {
@@ -118,7 +119,9 @@ namespace PokemonGoGUI
         {
             this.Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
 
-            await GoManager.VersionCheckState.Execute();
+            IsLatest = await GoManager.VersionCheckState.IsLatest();
+            if (!IsLatest)
+                await GoManager.VersionCheckState.Execute();
 
             await LoadSettings();
 
