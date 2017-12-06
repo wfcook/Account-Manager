@@ -46,6 +46,8 @@
             this.olvColumnProxy = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnLastLogMessage = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.contextMenuStripAccounts = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
             this.schedulerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.updateDetailsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewDetailsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -127,8 +129,6 @@
             this.toolStripStatusLabelTotalProxies = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel5 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabelBannedProxies = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripStatusLabel7 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripStatusLabelCaptcha = new System.Windows.Forms.ToolStripStatusLabel();
             this.timerStatusBarUpdate = new System.Windows.Forms.Timer(this.components);
             this.tabControlProxies = new System.Windows.Forms.TabControl();
             this.tabPageAccounts = new System.Windows.Forms.TabPage();
@@ -165,8 +165,6 @@
             this.enablelDisableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.manualCheckToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
-            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewMain)).BeginInit();
             this.contextMenuStripAccounts.SuspendLayout();
             this.statusStripStats.SuspendLayout();
@@ -346,8 +344,20 @@
             this.devToolsToolStripMenuItem,
             this.helpInfoToolStripMenuItem});
             this.contextMenuStripAccounts.Name = "contextMenuStrip1";
-            this.contextMenuStripAccounts.Size = new System.Drawing.Size(188, 634);
+            this.contextMenuStripAccounts.Size = new System.Drawing.Size(188, 606);
             this.contextMenuStripAccounts.Opening += new System.ComponentModel.CancelEventHandler(this.ContextMenuStripAccounts_Opening);
+            // 
+            // aboutToolStripMenuItem
+            // 
+            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(187, 26);
+            this.aboutToolStripMenuItem.Text = "About";
+            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.AboutToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator6
+            // 
+            this.toolStripSeparator6.Name = "toolStripSeparator6";
+            this.toolStripSeparator6.Size = new System.Drawing.Size(184, 6);
             // 
             // schedulerToolStripMenuItem
             // 
@@ -649,14 +659,14 @@
             // countsToolStripMenuItem
             // 
             this.countsToolStripMenuItem.Name = "countsToolStripMenuItem";
-            this.countsToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
+            this.countsToolStripMenuItem.Size = new System.Drawing.Size(129, 26);
             this.countsToolStripMenuItem.Text = "Counts";
             this.countsToolStripMenuItem.Click += new System.EventHandler(this.ClearCountsToolStripMenuItem_Click);
             // 
             // logsToolStripMenuItem
             // 
             this.logsToolStripMenuItem.Name = "logsToolStripMenuItem";
-            this.logsToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
+            this.logsToolStripMenuItem.Size = new System.Drawing.Size(129, 26);
             this.logsToolStripMenuItem.Text = "Logs";
             this.logsToolStripMenuItem.Click += new System.EventHandler(this.LogsToolStripMenuItem_Click);
             // 
@@ -879,9 +889,7 @@
             this.toolStripStatusLabel3,
             this.toolStripStatusLabelTotalProxies,
             this.toolStripStatusLabel5,
-            this.toolStripStatusLabelBannedProxies,
-            this.toolStripStatusLabel7,
-            this.toolStripStatusLabelCaptcha});
+            this.toolStripStatusLabelBannedProxies});
             this.statusStripStats.Location = new System.Drawing.Point(0, 457);
             this.statusStripStats.Name = "statusStripStats";
             this.statusStripStats.Size = new System.Drawing.Size(1041, 25);
@@ -964,19 +972,6 @@
             this.toolStripStatusLabelBannedProxies.Name = "toolStripStatusLabelBannedProxies";
             this.toolStripStatusLabelBannedProxies.Size = new System.Drawing.Size(17, 20);
             this.toolStripStatusLabelBannedProxies.Text = "0";
-            // 
-            // toolStripStatusLabel7
-            // 
-            this.toolStripStatusLabel7.Margin = new System.Windows.Forms.Padding(20, 3, 0, 2);
-            this.toolStripStatusLabel7.Name = "toolStripStatusLabel7";
-            this.toolStripStatusLabel7.Size = new System.Drawing.Size(124, 20);
-            this.toolStripStatusLabel7.Text = "Account Captcha:";
-            // 
-            // toolStripStatusLabelCaptcha
-            // 
-            this.toolStripStatusLabelCaptcha.Name = "toolStripStatusLabelCaptcha";
-            this.toolStripStatusLabelCaptcha.Size = new System.Drawing.Size(17, 20);
-            this.toolStripStatusLabelCaptcha.Text = "0";
             // 
             // timerStatusBarUpdate
             // 
@@ -1299,18 +1294,6 @@
             this.deleteToolStripMenuItem2.Text = "Delete";
             this.deleteToolStripMenuItem2.Click += new System.EventHandler(this.DeleteToolStripMenuItem2_Click);
             // 
-            // aboutToolStripMenuItem
-            // 
-            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(187, 26);
-            this.aboutToolStripMenuItem.Text = "About";
-            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.AboutToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator6
-            // 
-            this.toolStripSeparator6.Name = "toolStripSeparator6";
-            this.toolStripSeparator6.Size = new System.Drawing.Size(184, 6);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -1476,8 +1459,6 @@
         private System.Windows.Forms.ToolStripMenuItem claimLevelUpToolStripMenuItem;
         private BrightIdeasSoftware.OLVColumn olvColumnSchedulerLastCall;
         private System.Windows.Forms.ToolStripMenuItem helpInfoToolStripMenuItem;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel7;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelCaptcha;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
     }

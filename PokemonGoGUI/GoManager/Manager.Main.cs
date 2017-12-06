@@ -449,20 +449,6 @@ namespace PokemonGoGUI.GoManager
                     _client.Logout();
                 }
 
-                if (_client.CaptchaInt > 0)
-                {
-                    AccountState = AccountState.CaptchaReceived;
-
-                    LogCaller(new LoggerEventArgs("Potential Captcha received", LoggerTypes.Warning));
-
-                    //Remove proxy
-                    RemoveProxy();
-
-                    Stop();
-
-                    continue;
-                }
-
                 if (_failedInventoryReponses >= _failedInventoryUntilBan)
                 {
                     AccountState = AccountState.PermAccountBan;
