@@ -1,5 +1,13 @@
 # Change Log
 
+## [v2.19.2.5](https://github.com/Furtif/GoManager/tree/v2.19.2.5) (2017-12-06)
+
+[Full Changelog](https://github.com/Furtif/GoManager/compare/v2.19.2.4...v2.19.2.5)
+
+**Merged pull requests:**
+
+- Others fixes [\#13](https://github.com/Furtif/GoManager/pull/13) ([Furtif](https://github.com/Furtif))
+
 ## [v2.19.2.4](https://github.com/Furtif/GoManager/tree/v2.19.2.4) (2017-12-06)
 
 [Full Changelog](https://github.com/Furtif/GoManager/compare/v2.19.2.3...v2.19.2.4)
