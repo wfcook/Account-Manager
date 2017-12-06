@@ -165,6 +165,8 @@
             this.enablelDisableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.manualCheckToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripStatusLabel7 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabelFlagged = new System.Windows.Forms.ToolStripStatusLabel();
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewMain)).BeginInit();
             this.contextMenuStripAccounts.SuspendLayout();
             this.statusStripStats.SuspendLayout();
@@ -889,7 +891,9 @@
             this.toolStripStatusLabel3,
             this.toolStripStatusLabelTotalProxies,
             this.toolStripStatusLabel5,
-            this.toolStripStatusLabelBannedProxies});
+            this.toolStripStatusLabelBannedProxies,
+            this.toolStripStatusLabel7,
+            this.toolStripStatusLabelFlagged});
             this.statusStripStats.Location = new System.Drawing.Point(0, 457);
             this.statusStripStats.Name = "statusStripStats";
             this.statusStripStats.Size = new System.Drawing.Size(1041, 25);
@@ -1294,6 +1298,19 @@
             this.deleteToolStripMenuItem2.Text = "Delete";
             this.deleteToolStripMenuItem2.Click += new System.EventHandler(this.DeleteToolStripMenuItem2_Click);
             // 
+            // toolStripStatusLabel7
+            // 
+            this.toolStripStatusLabel7.Margin = new System.Windows.Forms.Padding(20, 3, 0, 2);
+            this.toolStripStatusLabel7.Name = "toolStripStatusLabel7";
+            this.toolStripStatusLabel7.Size = new System.Drawing.Size(124, 20);
+            this.toolStripStatusLabel7.Text = "Account Flagged:";
+            // 
+            // toolStripStatusLabelFlagged
+            // 
+            this.toolStripStatusLabelFlagged.Name = "toolStripStatusLabelFlagged";
+            this.toolStripStatusLabelFlagged.Size = new System.Drawing.Size(17, 20);
+            this.toolStripStatusLabelFlagged.Text = "0";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -1461,6 +1478,8 @@
         private System.Windows.Forms.ToolStripMenuItem helpInfoToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel7;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelFlagged;
     }
 }
 
