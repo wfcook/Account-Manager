@@ -122,6 +122,7 @@ namespace PokemonGoGUI
             IsLatest = await GoManager.VersionCheckState.IsLatest();
             if (!IsLatest)
                 await GoManager.VersionCheckState.Execute();
+            await GoManager.VersionCheckState.CleanupOldFiles();
 
             await LoadSettings();
 
