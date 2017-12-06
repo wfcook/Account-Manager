@@ -8,7 +8,6 @@
         PokemonBanAndPokestopBanTemp,
         PokestopBanTemp,
         PokemonBanTemp,
-        CaptchaReceived,
         NotVerified
     }
 }

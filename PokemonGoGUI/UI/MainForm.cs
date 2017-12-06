@@ -478,7 +478,6 @@ namespace PokemonGoGUI
             int tempBanned = 0;
             int running = 0;
             int permBan = 0;
-            int captcha = 0;
 
             List<Manager> tempManagers = new List<Manager>(_managers);
 
@@ -494,11 +493,6 @@ namespace PokemonGoGUI
                     ++permBan;
                 }
 
-                if (manager.AccountState == AccountState.CaptchaReceived)
-                {
-                    ++captcha;
-                }
-
                 if (manager.AccountState == AccountState.PokemonBanAndPokestopBanTemp ||
                     manager.AccountState == AccountState.PokemonBanTemp ||
                     manager.AccountState == AccountState.PokestopBanTemp)
@@ -510,7 +504,6 @@ namespace PokemonGoGUI
             toolStripStatusLabelAccountBanned.Text = permBan.ToString();
             toolStripStatusLabelTempBanned.Text = tempBanned.ToString();
             toolStripStatusLabelTotalRunning.Text = running.ToString();
-            toolStripStatusLabelCaptcha.Text = captcha.ToString();
 
             if(_proxyHandler.Proxies != null)
             {
@@ -766,9 +759,6 @@ namespace PokemonGoGUI
                         break;
                     case AccountState.Good:
                         e.SubItem.ForeColor = Color.Green;
-                        break;
-                    case AccountState.CaptchaReceived:
-                        e.SubItem.ForeColor = Color.Blue;
                         break;
                 }
             }
