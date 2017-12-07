@@ -203,7 +203,6 @@
     <Compile Include="GoManager\Manager.Proxy.cs" />
     <Compile Include="GoManager\Manager.Scheduler.cs" />
     <Compile Include="GoManager\Manager.Settings.cs" />
-    <Compile Include="GoManager\Manager.Sniper.cs" />
     <Compile Include="GoManager\Manager.Tutorial.cs" />
     <Compile Include="ISettings.cs" />
     <Compile Include="MethodResult.cs" />

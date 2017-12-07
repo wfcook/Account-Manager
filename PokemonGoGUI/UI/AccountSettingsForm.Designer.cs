@@ -149,6 +149,13 @@
             this.label39 = new System.Windows.Forms.Label();
             this.label33 = new System.Windows.Forms.Label();
             this.label32 = new System.Windows.Forms.Label();
+            this.tabPageHash = new System.Windows.Forms.TabPage();
+            this.cbAuthAPIKey = new System.Windows.Forms.ComboBox();
+            this.label52 = new System.Windows.Forms.Label();
+            this.label51 = new System.Windows.Forms.Label();
+            this.cbHashEndpoint = new System.Windows.Forms.ComboBox();
+            this.cbHashHost = new System.Windows.Forms.ComboBox();
+            this.label50 = new System.Windows.Forms.Label();
             this.buttonImportConfig = new System.Windows.Forms.Button();
             this.buttonExportConfig = new System.Windows.Forms.Button();
             this.buttonDone = new System.Windows.Forms.Button();
@@ -204,6 +211,8 @@
             this.toolTipProxy = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipMinAccountState = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipHumanizeThrows = new System.Windows.Forms.ToolTip(this.components);
+            this.label53 = new System.Windows.Forms.Label();
+            this.cbTimeZones = new System.Windows.Forms.ComboBox();
             this.tabControlMain.SuspendLayout();
             this.tabPageDetails.SuspendLayout();
             this.tabControlSettings.SuspendLayout();
@@ -231,6 +240,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownGeneralDelay)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownPlayerActionDelay)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownInsideReticuleChance)).BeginInit();
+            this.tabPageHash.SuspendLayout();
             this.tabPageRecycling.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewRecycling)).BeginInit();
             this.contextMenuStripRecycling.SuspendLayout();
@@ -285,6 +295,7 @@
             this.tabControlSettings.Controls.Add(this.tabPageSettingsNavigation);
             this.tabControlSettings.Controls.Add(this.tabPageDevice);
             this.tabControlSettings.Controls.Add(this.tabPageHumanization);
+            this.tabControlSettings.Controls.Add(this.tabPageHash);
             this.tabControlSettings.Location = new System.Drawing.Point(-4, 0);
             this.tabControlSettings.Name = "tabControlSettings";
             this.tabControlSettings.SelectedIndex = 0;
@@ -532,7 +543,7 @@
             this.checkBoxSnipePokemon.TabIndex = 30;
             this.checkBoxSnipePokemon.Text = "Snipe Pokemon";
             this.checkBoxSnipePokemon.UseVisualStyleBackColor = true;
-            this.checkBoxSnipePokemon.CheckedChanged += new System.EventHandler(this.checkBoxSnipePokemon_CheckedChanged);
+            this.checkBoxSnipePokemon.CheckedChanged += new System.EventHandler(this.CheckBoxSnipePokemon_CheckedChanged);
             // 
             // checkBoxIncubateEggs
             // 
@@ -766,7 +777,7 @@
             this.radioButtonGoogle.TabIndex = 2;
             this.radioButtonGoogle.Text = "Google";
             this.radioButtonGoogle.UseVisualStyleBackColor = true;
-            this.radioButtonGoogle.CheckedChanged += new System.EventHandler(this.radioButtonPtc_CheckedChanged_1);
+            this.radioButtonGoogle.CheckedChanged += new System.EventHandler(this.RadioButtonPtc_CheckedChanged_1);
             // 
             // radioButtonPtc
             // 
@@ -779,7 +790,7 @@
             this.radioButtonPtc.TabStop = true;
             this.radioButtonPtc.Text = "Ptc";
             this.radioButtonPtc.UseVisualStyleBackColor = true;
-            this.radioButtonPtc.CheckedChanged += new System.EventHandler(this.radioButtonPtc_CheckedChanged_1);
+            this.radioButtonPtc.CheckedChanged += new System.EventHandler(this.RadioButtonPtc_CheckedChanged_1);
             // 
             // label7
             // 
@@ -855,7 +866,7 @@
             this.checkBoxAutoRotateProxies.TabIndex = 59;
             this.checkBoxAutoRotateProxies.Text = "Auto Rotate Proxies";
             this.checkBoxAutoRotateProxies.UseVisualStyleBackColor = true;
-            this.checkBoxAutoRotateProxies.CheckedChanged += new System.EventHandler(this.checkBoxAutoRotateProxies_CheckedChanged);
+            this.checkBoxAutoRotateProxies.CheckedChanged += new System.EventHandler(this.CheckBoxAutoRotateProxies_CheckedChanged);
             // 
             // checkBoxStopOnIPBan
             // 
@@ -908,6 +919,8 @@
             // 
             // tabPageSettingsNavigation
             // 
+            this.tabPageSettingsNavigation.Controls.Add(this.cbTimeZones);
+            this.tabPageSettingsNavigation.Controls.Add(this.label53);
             this.tabPageSettingsNavigation.Controls.Add(this.numericUpDownWalkingOffset);
             this.tabPageSettingsNavigation.Controls.Add(this.comboBoxLocationPresets);
             this.tabPageSettingsNavigation.Controls.Add(this.label10);
@@ -950,7 +963,7 @@
             this.comboBoxLocationPresets.Name = "comboBoxLocationPresets";
             this.comboBoxLocationPresets.Size = new System.Drawing.Size(146, 24);
             this.comboBoxLocationPresets.TabIndex = 0;
-            this.comboBoxLocationPresets.SelectedIndexChanged += new System.EventHandler(this.comboBoxLocationPresets_SelectedIndexChanged);
+            this.comboBoxLocationPresets.SelectedIndexChanged += new System.EventHandler(this.ComboBoxLocationPresets_SelectedIndexChanged);
             // 
             // label10
             // 
@@ -983,7 +996,7 @@
             this.checkBoxMimicWalking.TabIndex = 4;
             this.checkBoxMimicWalking.Text = "Mimic Walking";
             this.checkBoxMimicWalking.UseVisualStyleBackColor = true;
-            this.checkBoxMimicWalking.CheckedChanged += new System.EventHandler(this.checkBoxMimicWalking_CheckedChanged);
+            this.checkBoxMimicWalking.CheckedChanged += new System.EventHandler(this.CheckBoxMimicWalking_CheckedChanged);
             // 
             // textBoxWalkSpeed
             // 
@@ -1106,7 +1119,7 @@
             this.buttonResetDefaults.TabIndex = 13;
             this.buttonResetDefaults.Text = "Reset Defaults";
             this.buttonResetDefaults.UseVisualStyleBackColor = true;
-            this.buttonResetDefaults.Click += new System.EventHandler(this.buttonResetDefaults_Click);
+            this.buttonResetDefaults.Click += new System.EventHandler(this.ButtonResetDefaults_Click);
             // 
             // buttonDeviceRandom
             // 
@@ -1117,7 +1130,7 @@
             this.buttonDeviceRandom.TabIndex = 14;
             this.buttonDeviceRandom.Text = "Randomize";
             this.buttonDeviceRandom.UseVisualStyleBackColor = true;
-            this.buttonDeviceRandom.Click += new System.EventHandler(this.buttonDeviceRandom_Click);
+            this.buttonDeviceRandom.Click += new System.EventHandler(this.ButtonDeviceRandom_Click);
             // 
             // textBoxDeviceModel
             // 
@@ -1637,6 +1650,94 @@
             this.label32.TabIndex = 0;
             this.label32.Text = "Hit inside reticule (%):";
             // 
+            // tabPageHash
+            // 
+            this.tabPageHash.Controls.Add(this.cbAuthAPIKey);
+            this.tabPageHash.Controls.Add(this.label52);
+            this.tabPageHash.Controls.Add(this.label51);
+            this.tabPageHash.Controls.Add(this.cbHashEndpoint);
+            this.tabPageHash.Controls.Add(this.cbHashHost);
+            this.tabPageHash.Controls.Add(this.label50);
+            this.tabPageHash.Location = new System.Drawing.Point(4, 25);
+            this.tabPageHash.Name = "tabPageHash";
+            this.tabPageHash.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageHash.Size = new System.Drawing.Size(496, 428);
+            this.tabPageHash.TabIndex = 5;
+            this.tabPageHash.Text = "Api Config";
+            this.tabPageHash.UseVisualStyleBackColor = true;
+            // 
+            // cbAuthAPIKey
+            // 
+            this.cbAuthAPIKey.FormattingEnabled = true;
+            this.cbAuthAPIKey.Location = new System.Drawing.Point(164, 103);
+            this.cbAuthAPIKey.Name = "cbAuthAPIKey";
+            this.cbAuthAPIKey.Size = new System.Drawing.Size(283, 24);
+            this.cbAuthAPIKey.TabIndex = 5;
+            // 
+            // label52
+            // 
+            this.label52.AutoSize = true;
+            this.label52.Location = new System.Drawing.Point(33, 106);
+            this.label52.Name = "label52";
+            this.label52.Size = new System.Drawing.Size(71, 17);
+            this.label52.TabIndex = 4;
+            this.label52.Text = "Hash key:";
+            // 
+            // label51
+            // 
+            this.label51.AutoSize = true;
+            this.label51.Location = new System.Drawing.Point(33, 66);
+            this.label51.Name = "label51";
+            this.label51.Size = new System.Drawing.Size(104, 17);
+            this.label51.TabIndex = 3;
+            this.label51.Text = "Hash endpoint:";
+            // 
+            // cbHashEndpoint
+            // 
+            this.cbHashEndpoint.FormattingEnabled = true;
+            this.cbHashEndpoint.Items.AddRange(new object[] {
+            "api/v119/hash",
+            "api/v121/hash",
+            "api/v121_2/hash",
+            "api/v123_1/hash",
+            "api/v125/hash",
+            "api/v127_2/hash",
+            "api/v127_3/hash",
+            "api/v127_4/hash",
+            "api/v129_1/hash",
+            "api/v131_0/hash",
+            "api/v133_1/hash",
+            "api/v137_1/hash",
+            "api/v143_1/hash",
+            "api/v147_1/hash",
+            "api/v153_2/hash"});
+            this.cbHashEndpoint.Location = new System.Drawing.Point(164, 63);
+            this.cbHashEndpoint.Name = "cbHashEndpoint";
+            this.cbHashEndpoint.Size = new System.Drawing.Size(283, 24);
+            this.cbHashEndpoint.TabIndex = 2;
+            this.cbHashEndpoint.Text = "api/v153_2/hash";
+            // 
+            // cbHashHost
+            // 
+            this.cbHashHost.FormattingEnabled = true;
+            this.cbHashHost.Items.AddRange(new object[] {
+            "https://pokehash.buddyauth.com/",
+            "http://hash.goman.io/"});
+            this.cbHashHost.Location = new System.Drawing.Point(164, 24);
+            this.cbHashHost.Name = "cbHashHost";
+            this.cbHashHost.Size = new System.Drawing.Size(283, 24);
+            this.cbHashHost.TabIndex = 1;
+            this.cbHashHost.Text = "https://pokehash.buddyauth.com/";
+            // 
+            // label50
+            // 
+            this.label50.AutoSize = true;
+            this.label50.Location = new System.Drawing.Point(33, 27);
+            this.label50.Name = "label50";
+            this.label50.Size = new System.Drawing.Size(125, 17);
+            this.label50.TabIndex = 0;
+            this.label50.Text = "Host hash service:";
+            // 
             // buttonImportConfig
             // 
             this.buttonImportConfig.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -1646,7 +1747,7 @@
             this.buttonImportConfig.TabIndex = 11;
             this.buttonImportConfig.Text = "Import Config";
             this.buttonImportConfig.UseVisualStyleBackColor = true;
-            this.buttonImportConfig.Click += new System.EventHandler(this.buttonImportConfig_Click);
+            this.buttonImportConfig.Click += new System.EventHandler(this.ButtonImportConfig_Click);
             // 
             // buttonExportConfig
             // 
@@ -1657,7 +1758,7 @@
             this.buttonExportConfig.TabIndex = 4;
             this.buttonExportConfig.Text = "Export Config";
             this.buttonExportConfig.UseVisualStyleBackColor = true;
-            this.buttonExportConfig.Click += new System.EventHandler(this.buttonExportConfig_Click);
+            this.buttonExportConfig.Click += new System.EventHandler(this.ButtonExportConfig_Click);
             // 
             // buttonDone
             // 
@@ -1669,7 +1770,7 @@
             this.buttonDone.TabIndex = 3;
             this.buttonDone.Text = "Done";
             this.buttonDone.UseVisualStyleBackColor = true;
-            this.buttonDone.Click += new System.EventHandler(this.buttonDone_Click);
+            this.buttonDone.Click += new System.EventHandler(this.ButtonDone_Click);
             // 
             // label13
             // 
@@ -1691,7 +1792,7 @@
             this.buttonSave.TabIndex = 1;
             this.buttonSave.Text = "Save";
             this.buttonSave.UseVisualStyleBackColor = true;
-            this.buttonSave.Click += new System.EventHandler(this.buttonSave_Click);
+            this.buttonSave.Click += new System.EventHandler(this.ButtonSave_Click);
             // 
             // tabPageRecycling
             // 
@@ -1749,7 +1850,7 @@
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
             this.editToolStripMenuItem.Size = new System.Drawing.Size(104, 24);
             this.editToolStripMenuItem.Text = "Edit";
-            this.editToolStripMenuItem.Click += new System.EventHandler(this.editToolStripMenuItem_Click);
+            this.editToolStripMenuItem.Click += new System.EventHandler(this.EditToolStripMenuItem_Click);
             // 
             // tabPageEvolving
             // 
@@ -1832,7 +1933,7 @@
             this.trueToolStripMenuItem1.Size = new System.Drawing.Size(130, 26);
             this.trueToolStripMenuItem1.Tag = "1";
             this.trueToolStripMenuItem1.Text = "True";
-            this.trueToolStripMenuItem1.Click += new System.EventHandler(this.trueToolStripMenuItem1_Click);
+            this.trueToolStripMenuItem1.Click += new System.EventHandler(this.TrueToolStripMenuItem1_Click);
             // 
             // falseToolStripMenuItem1
             // 
@@ -1840,7 +1941,7 @@
             this.falseToolStripMenuItem1.Size = new System.Drawing.Size(130, 26);
             this.falseToolStripMenuItem1.Tag = "0";
             this.falseToolStripMenuItem1.Text = "False";
-            this.falseToolStripMenuItem1.Click += new System.EventHandler(this.trueToolStripMenuItem1_Click);
+            this.falseToolStripMenuItem1.Click += new System.EventHandler(this.TrueToolStripMenuItem1_Click);
             // 
             // toggleToolStripMenuItem1
             // 
@@ -1848,21 +1949,21 @@
             this.toggleToolStripMenuItem1.Size = new System.Drawing.Size(130, 26);
             this.toggleToolStripMenuItem1.Tag = "2";
             this.toggleToolStripMenuItem1.Text = "Toggle";
-            this.toggleToolStripMenuItem1.Click += new System.EventHandler(this.trueToolStripMenuItem1_Click);
+            this.toggleToolStripMenuItem1.Click += new System.EventHandler(this.TrueToolStripMenuItem1_Click);
             // 
             // editCPToolStripMenuItem
             // 
             this.editCPToolStripMenuItem.Name = "editCPToolStripMenuItem";
             this.editCPToolStripMenuItem.Size = new System.Drawing.Size(187, 24);
             this.editCPToolStripMenuItem.Text = "Edit CP";
-            this.editCPToolStripMenuItem.Click += new System.EventHandler(this.editCPToolStripMenuItem_Click);
+            this.editCPToolStripMenuItem.Click += new System.EventHandler(this.EditCPToolStripMenuItem_Click);
             // 
             // restoreDefaultsToolStripMenuItem1
             // 
             this.restoreDefaultsToolStripMenuItem1.Name = "restoreDefaultsToolStripMenuItem1";
             this.restoreDefaultsToolStripMenuItem1.Size = new System.Drawing.Size(187, 24);
             this.restoreDefaultsToolStripMenuItem1.Text = "Restore Defaults";
-            this.restoreDefaultsToolStripMenuItem1.Click += new System.EventHandler(this.restoreDefaultsToolStripMenuItem1_Click);
+            this.restoreDefaultsToolStripMenuItem1.Click += new System.EventHandler(this.RestoreDefaultsToolStripMenuItem1_Click);
             // 
             // tabPageCatching
             // 
@@ -1944,7 +2045,7 @@
             this.trueToolStripMenuItem.Size = new System.Drawing.Size(130, 26);
             this.trueToolStripMenuItem.Tag = "1";
             this.trueToolStripMenuItem.Text = "True";
-            this.trueToolStripMenuItem.Click += new System.EventHandler(this.trueToolStripMenuItem_Click);
+            this.trueToolStripMenuItem.Click += new System.EventHandler(this.TrueToolStripMenuItem_Click);
             // 
             // falseToolStripMenuItem
             // 
@@ -1952,7 +2053,7 @@
             this.falseToolStripMenuItem.Size = new System.Drawing.Size(130, 26);
             this.falseToolStripMenuItem.Tag = "0";
             this.falseToolStripMenuItem.Text = "False";
-            this.falseToolStripMenuItem.Click += new System.EventHandler(this.trueToolStripMenuItem_Click);
+            this.falseToolStripMenuItem.Click += new System.EventHandler(this.TrueToolStripMenuItem_Click);
             // 
             // toggleToolStripMenuItem
             // 
@@ -1960,7 +2061,7 @@
             this.toggleToolStripMenuItem.Size = new System.Drawing.Size(130, 26);
             this.toggleToolStripMenuItem.Tag = "2";
             this.toggleToolStripMenuItem.Text = "Toggle";
-            this.toggleToolStripMenuItem.Click += new System.EventHandler(this.trueToolStripMenuItem_Click);
+            this.toggleToolStripMenuItem.Click += new System.EventHandler(this.TrueToolStripMenuItem_Click);
             // 
             // setSnipeToolStripMenuItem
             // 
@@ -1978,7 +2079,7 @@
             this.trueToolStripMenuItem2.Size = new System.Drawing.Size(130, 26);
             this.trueToolStripMenuItem2.Tag = "1";
             this.trueToolStripMenuItem2.Text = "True";
-            this.trueToolStripMenuItem2.Click += new System.EventHandler(this.falseToolStripMenuItem2_Click);
+            this.trueToolStripMenuItem2.Click += new System.EventHandler(this.FalseToolStripMenuItem2_Click);
             // 
             // falseToolStripMenuItem2
             // 
@@ -1986,7 +2087,7 @@
             this.falseToolStripMenuItem2.Size = new System.Drawing.Size(130, 26);
             this.falseToolStripMenuItem2.Tag = "0";
             this.falseToolStripMenuItem2.Text = "False";
-            this.falseToolStripMenuItem2.Click += new System.EventHandler(this.falseToolStripMenuItem2_Click);
+            this.falseToolStripMenuItem2.Click += new System.EventHandler(this.FalseToolStripMenuItem2_Click);
             // 
             // toggleToolStripMenuItem2
             // 
@@ -1994,14 +2095,14 @@
             this.toggleToolStripMenuItem2.Size = new System.Drawing.Size(130, 26);
             this.toggleToolStripMenuItem2.Tag = "2";
             this.toggleToolStripMenuItem2.Text = "Toggle";
-            this.toggleToolStripMenuItem2.Click += new System.EventHandler(this.falseToolStripMenuItem2_Click);
+            this.toggleToolStripMenuItem2.Click += new System.EventHandler(this.FalseToolStripMenuItem2_Click);
             // 
             // restoreDefaultsToolStripMenuItem
             // 
             this.restoreDefaultsToolStripMenuItem.Name = "restoreDefaultsToolStripMenuItem";
             this.restoreDefaultsToolStripMenuItem.Size = new System.Drawing.Size(187, 24);
             this.restoreDefaultsToolStripMenuItem.Text = "Restore Defaults";
-            this.restoreDefaultsToolStripMenuItem.Click += new System.EventHandler(this.restoreDefaultsToolStripMenuItem_Click);
+            this.restoreDefaultsToolStripMenuItem.Click += new System.EventHandler(this.RestoreDefaultsToolStripMenuItem_Click);
             // 
             // tabPageTransfer
             // 
@@ -2095,14 +2196,31 @@
             this.editToolStripMenuItem1.Name = "editToolStripMenuItem1";
             this.editToolStripMenuItem1.Size = new System.Drawing.Size(187, 24);
             this.editToolStripMenuItem1.Text = "Edit";
-            this.editToolStripMenuItem1.Click += new System.EventHandler(this.editToolStripMenuItem1_Click);
+            this.editToolStripMenuItem1.Click += new System.EventHandler(this.EditToolStripMenuItem1_Click);
             // 
             // restoreDefaultsToolStripMenuItem2
             // 
             this.restoreDefaultsToolStripMenuItem2.Name = "restoreDefaultsToolStripMenuItem2";
             this.restoreDefaultsToolStripMenuItem2.Size = new System.Drawing.Size(187, 24);
             this.restoreDefaultsToolStripMenuItem2.Text = "Restore Defaults";
-            this.restoreDefaultsToolStripMenuItem2.Click += new System.EventHandler(this.restoreDefaultsToolStripMenuItem2_Click);
+            this.restoreDefaultsToolStripMenuItem2.Click += new System.EventHandler(this.RestoreDefaultsToolStripMenuItem2_Click);
+            // 
+            // label53
+            // 
+            this.label53.AutoSize = true;
+            this.label53.Location = new System.Drawing.Point(20, 224);
+            this.label53.Name = "label53";
+            this.label53.Size = new System.Drawing.Size(138, 17);
+            this.label53.TabIndex = 56;
+            this.label53.Text = "Location Time Zone:";
+            // 
+            // cbTimeZones
+            // 
+            this.cbTimeZones.FormattingEnabled = true;
+            this.cbTimeZones.Location = new System.Drawing.Point(179, 221);
+            this.cbTimeZones.Name = "cbTimeZones";
+            this.cbTimeZones.Size = new System.Drawing.Size(272, 24);
+            this.cbTimeZones.TabIndex = 57;
             // 
             // AccountSettingsForm
             // 
@@ -2147,6 +2265,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownGeneralDelay)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownPlayerActionDelay)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownInsideReticuleChance)).EndInit();
+            this.tabPageHash.ResumeLayout(false);
+            this.tabPageHash.PerformLayout();
             this.tabPageRecycling.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewRecycling)).EndInit();
             this.contextMenuStripRecycling.ResumeLayout(false);
@@ -2340,5 +2460,14 @@
         private System.Windows.Forms.NumericUpDown numericUpDownForceEvolveAbove;
         private System.Windows.Forms.Label label48;
         private System.Windows.Forms.Label label49;
+        private System.Windows.Forms.TabPage tabPageHash;
+        private System.Windows.Forms.ComboBox cbAuthAPIKey;
+        private System.Windows.Forms.Label label52;
+        private System.Windows.Forms.Label label51;
+        private System.Windows.Forms.ComboBox cbHashEndpoint;
+        private System.Windows.Forms.ComboBox cbHashHost;
+        private System.Windows.Forms.Label label50;
+        private System.Windows.Forms.ComboBox cbTimeZones;
+        private System.Windows.Forms.Label label53;
     }
 }

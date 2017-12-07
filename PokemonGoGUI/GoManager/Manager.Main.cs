@@ -89,8 +89,6 @@ namespace PokemonGoGUI.GoManager
             {
                 Stop();
 
-                RemoveProxy();
-
                 LogCaller(new LoggerEventArgs("Ptc server offline. Please try again later.", LoggerTypes.Warning));
 
                 return new MethodResult
@@ -101,7 +99,6 @@ namespace PokemonGoGUI.GoManager
             catch (AccountNotVerifiedException)
             {
                 Stop();
-
                 RemoveProxy();
 
                 LogCaller(new LoggerEventArgs("Account not verified. Stopping ...", LoggerTypes.Warning));
@@ -117,9 +114,7 @@ namespace PokemonGoGUI.GoManager
             {
                 Stop();
 
-                RemoveProxy();
-
-                if (ex.Status == WebExceptionStatus.Timeout)
+                 if (ex.Status == WebExceptionStatus.Timeout)
                 {
                     if (String.IsNullOrEmpty(Proxy))
                     {
@@ -178,8 +173,6 @@ namespace PokemonGoGUI.GoManager
             {
                 Stop();
 
-                RemoveProxy();
-
                 if (String.IsNullOrEmpty(Proxy))
                 {
                     LogCaller(new LoggerEventArgs("Login request has timed out", LoggerTypes.Warning));
@@ -199,7 +192,6 @@ namespace PokemonGoGUI.GoManager
             {
                 //Puts stopping log before other log.
                 Stop();
-
                 RemoveProxy();
 
                 LogCaller(new LoggerEventArgs("Invalid credentials or account lockout. Stopping bot...", LoggerTypes.Warning, ex));
@@ -214,8 +206,6 @@ namespace PokemonGoGUI.GoManager
                 if (UserSettings.StopOnIPBan)
                 {
                     Stop();
-
-                    RemoveProxy();
                 }
 
                 string message = String.Empty;
@@ -258,10 +248,7 @@ namespace PokemonGoGUI.GoManager
             catch (Exception ex)
             {
                 Stop();
-
                 RemoveProxy();
-
-                //_client.Logout();
 
                 LogCaller(new LoggerEventArgs("Failed to login", LoggerTypes.Exception, ex));
 
@@ -465,6 +452,19 @@ namespace PokemonGoGUI.GoManager
                 {
                     currentFails = 0;
                     _client.Logout();
+                }
+
+                if (_client.CaptchaInt > 0)
+                {
+                    AccountState = AccountState.CaptchaReceived;
+                    LogCaller(new LoggerEventArgs("Captcha ceceived", LoggerTypes.Warning));
+
+                    //Remove proxy
+                    RemoveProxy();
+
+                    Stop();
+
+                    continue;
                 }
 
                 if (_failedInventoryReponses >= _failedInventoryUntilBan)
@@ -764,24 +764,6 @@ namespace PokemonGoGUI.GoManager
                             MethodResult luredPokemonResponse = await CatchLuredPokemon(pokestop);
 
                             await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
-                        }
-
-                        //Check sniping
-                        if (Stats.Level >= UserSettings.SnipeAfterLevel)
-                        {
-                            if (UserSettings.SnipePokemon && IsRunning && pokeStopNumber >= UserSettings.SnipeAfterPokestops && pokeStopNumber % UserSettings.SnipeAfterPokestops == 0)
-                            {
-                                if (remainingBalls >= UserSettings.MinBallsToSnipe)
-                                {
-                                    await SnipeAllPokemon();
-                                }
-                                else
-                                {
-                                    LogCaller(new LoggerEventArgs(String.Format("Not enough pokeballs to snipe. Need {0} have {1}", UserSettings.MinBallsToSnipe, remainingBalls), LoggerTypes.Info));
-                                }
-
-                                await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
-                            }
                         }
 
                         //Clean inventory, evolve, transfer, etc on first and every 10 stops
