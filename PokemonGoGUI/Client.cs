@@ -43,8 +43,8 @@ namespace PokemonGoGUI
 
         public DeviceWrapper ClientDeviceWrapper { get; private set; }
 
-        public uint VersionInt = 8300;
-        public string VersionStr = "0.83.2";
+        public uint VersionInt = 8501;
+        public string VersionStr = "0.85.1";
 
         public void Logout()
         {
