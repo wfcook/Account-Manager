@@ -311,9 +311,16 @@ namespace PokemonGoGUI.GoManager
             await Task.Delay(0); //remove warn
             LogCaller(new LoggerEventArgs("Game settings loaded", LoggerTypes.Success));
 
+            bool result = false;
+            Version remote = new Version(_client.ClientSession.GlobalSettings.MinimumClientVersion);
+            Version local = new Version(minVersion);
+
+            if (local >= remote)
+                result = true;
+
             return new MethodResult<bool>
             {
-                Data = _client.ClientSession.GlobalSettings.MinimumClientVersion == minVersion,
+                Data = result,
                 Success = true,
             };
         }

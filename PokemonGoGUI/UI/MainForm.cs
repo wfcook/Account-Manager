@@ -480,6 +480,7 @@ namespace PokemonGoGUI
             int running = 0;
             int permBan = 0;
             int flags = 0;
+            int captcha = 0;
 
             List<Manager> tempManagers = new List<Manager>(_managers);
 
@@ -500,6 +501,11 @@ namespace PokemonGoGUI
                     ++flags;
                 }
 
+                if (manager.AccountState == AccountState.CaptchaReceived)
+                {
+                    ++captcha;
+                }
+
                 if (manager.AccountState == AccountState.PokemonBanAndPokestopBanTemp ||
                     manager.AccountState == AccountState.PokemonBanTemp ||
                     manager.AccountState == AccountState.PokestopBanTemp)
@@ -512,6 +518,7 @@ namespace PokemonGoGUI
             toolStripStatusLabelTempBanned.Text = tempBanned.ToString();
             toolStripStatusLabelTotalRunning.Text = running.ToString();
             toolStripStatusLabelFlagged.Text = flags.ToString();
+            toolStripStatusLabelCaptcha.Text = captcha.ToString();
 
             if(_proxyHandler.Proxies != null)
             {
@@ -770,6 +777,9 @@ namespace PokemonGoGUI
                         break;
                     case AccountState.Flagged:
                         e.SubItem.ForeColor = Color.Magenta;
+                        break;
+                    case AccountState.CaptchaReceived:
+                        e.SubItem.ForeColor = Color.Blue;
                         break;
                 }
             }
@@ -1215,7 +1225,6 @@ namespace PokemonGoGUI
             enableRecycleToolStripMenuItem4.Checked = manager.UserSettings.RecycleItems;
             enableIncubateEggsToolStripMenuItem5.Checked = manager.UserSettings.IncubateEggs;
             enableLuckyEggsToolStripMenuItem6.Checked = manager.UserSettings.UseLuckyEgg;
-            enableSnipePokemonToolStripMenuItem3.Checked = manager.UserSettings.SnipePokemon;
             enableCatchPokemonToolStripMenuItem2.Checked = manager.UserSettings.CatchPokemon;
             enableRotateProxiesToolStripMenuItem.Checked = manager.UserSettings.AutoRotateProxies;
             enableIPBanStopToolStripMenuItem.Checked = manager.UserSettings.StopOnIPBan;
@@ -1324,16 +1333,6 @@ namespace PokemonGoGUI
             foreach (Manager manager in fastObjectListViewMain.SelectedObjects)
             {
                 manager.UserSettings.CatchPokemon = !enableCatchPokemonToolStripMenuItem2.Checked;
-            }
-
-            fastObjectListViewMain.RefreshSelectedObjects();
-        }
-
-        private void EnableSnipePokemonToolStripMenuItem3_Click(object sender, EventArgs e)
-        {
-            foreach (Manager manager in fastObjectListViewMain.SelectedObjects)
-            {
-                manager.UserSettings.SnipePokemon = !enableSnipePokemonToolStripMenuItem3.Checked;
             }
 
             fastObjectListViewMain.RefreshSelectedObjects();
@@ -1578,68 +1577,6 @@ namespace PokemonGoGUI
                 MessageBox.Show(String.Format("Failed to import config file. Ex: {0}", ex.Message));
             }
         }
-
-        private async void SnipeToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            List<string> currentPokemon = new List<string>();
-
-            foreach(PokemonId p in Enum.GetValues(typeof(PokemonId)))
-            {
-                if(p != PokemonId.Missingno)
-                {
-                    currentPokemon.Add(p.ToString());
-                }
-            }
-
-            string pokemon = AutoCompletePrompt.ShowDialog("Pokemon to snipe", "Pokemon", currentPokemon);
-
-            if(String.IsNullOrEmpty(pokemon))
-            {
-                return;
-            }
-
-            PokemonId pokemonToSnipe = PokemonId.Missingno;
-
-            if(!Enum.TryParse<PokemonId>(pokemon, true, out pokemonToSnipe))
-            {
-                MessageBox.Show("Invalid pokemon");
-                return;
-            }
-
-            string data = Prompt.ShowDialog("Location. Format = x.xxx, x.xxx", "Enter Location");
-
-            if(String.IsNullOrEmpty(data))
-            {
-                return;
-            }
-
-            string[] parts = data.Split(',');
-
-            if (!double.TryParse(parts[0], NumberStyles.Any, CultureInfo.InvariantCulture, out double lat))
-            {
-                MessageBox.Show("Invalid latitutde.");
-                return;
-            }
-
-            if (!double.TryParse(parts[1], NumberStyles.Any, CultureInfo.InvariantCulture, out double lon))
-            {
-                MessageBox.Show("Invalid longitude.");
-                return;
-            }
-
-            snipePokemonToolStripMenuItem.Enabled = false;
-
-            foreach(Manager manager in fastObjectListViewMain.SelectedObjects)
-            {
-                //Snipe all at once
-                await manager.ManualSnipe(lat, lon, pokemonToSnipe).ConfigureAwait(false);
-
-                await Task.Delay(100);
-            }
-
-            snipePokemonToolStripMenuItem.Enabled = true;
-        }
-
 
         #region Proxies
 

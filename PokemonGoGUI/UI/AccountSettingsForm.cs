@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -76,6 +77,19 @@ namespace PokemonGoGUI.UI
 
             comboBoxLocationPresets.DataSource = _manager.FarmLocations;
             comboBoxLocationPresets.DisplayMember = "Name";
+
+            //Api config load keys
+            if (File.Exists("HashKeys.txt"))
+            {
+                string[] lineOfContents = File.ReadAllLines("HashKeys.txt");
+                foreach (var line in lineOfContents)
+                {
+                    string[] tokens = line.Split(',');
+                    cbAuthAPIKey.Items.Add(tokens[0]);
+                }
+            }
+            else
+                File.CreateText("HashKeys.txt");
         }
 
         private void UpdateListViews()
@@ -160,6 +174,12 @@ namespace PokemonGoGUI.UI
             textBoxAndroidBootLoader.Text = settings.AndroidBootloader;
             textBoxHardwareManufacturer.Text = settings.HardwareManufacturer;
             textBoxHardwareModel.Text = settings.HardwareModel;
+
+            //Api config
+            cbHashHost.Text = settings.HashHost.ToString();
+            cbHashEndpoint.Text = settings.HashEndpoint;
+            cbAuthAPIKey.Text = settings.AuthAPIKey;
+
             //End device settings
 
             for(int i = 0; i < comboBoxMinAccountState.Items.Count; i++)
@@ -172,7 +192,7 @@ namespace PokemonGoGUI.UI
             }
         }
 
-        private void radioButtonPtc_CheckedChanged_1(object sender, EventArgs e)
+        private void RadioButtonPtc_CheckedChanged_1(object sender, EventArgs e)
         {
             labelUsername.Text = "Username*:";
 
@@ -185,7 +205,7 @@ namespace PokemonGoGUI.UI
             }
         }
 
-        private void checkBoxMimicWalking_CheckedChanged(object sender, EventArgs e)
+        private void CheckBoxMimicWalking_CheckedChanged(object sender, EventArgs e)
         {
             textBoxWalkSpeed.Enabled = false; 
             checkBoxEncounterWhileWalking.Enabled = false;
@@ -197,7 +217,7 @@ namespace PokemonGoGUI.UI
             }
         }
 
-        private void buttonSave_Click(object sender, EventArgs e)
+        private void ButtonSave_Click(object sender, EventArgs e)
         {
             if (SaveSettings())
             {
@@ -209,45 +229,39 @@ namespace PokemonGoGUI.UI
         {
             Settings userSettings = _manager.UserSettings;
 
-            double defaultLat = 0;
-            double defaultLong = 0;
-            int walkingSpeed = 0;
-            int maxTravelDistance = 0;
-            int minPokemonBeforeEvolve = 0;
-            int maxLevel = 0;
             ProxyEx proxyEx = null;
 
-            if (!Int32.TryParse(textBoxMaxLevel.Text, out maxLevel) || maxLevel < 0)
+            if (!Int32.TryParse(textBoxMaxLevel.Text, out int maxLevel) || maxLevel < 0)
             {
                 MessageBox.Show("Invalid Max level", "Warning");
                 return false;
             }
 
-            if (!Int32.TryParse(textBoxPokemonBeforeEvolve.Text, out minPokemonBeforeEvolve) || minPokemonBeforeEvolve < 0)
+            if (!Int32.TryParse(textBoxPokemonBeforeEvolve.Text, out int minPokemonBeforeEvolve) || minPokemonBeforeEvolve < 0)
             {
                 MessageBox.Show("Invalid pokemon before evolve", "Warning");
                 return false;
             }
 
-            if (!Int32.TryParse(textBoxWalkSpeed.Text, out walkingSpeed) || walkingSpeed <= 0)
+            if (!Int32.TryParse(textBoxWalkSpeed.Text, out int walkingSpeed) || walkingSpeed <= 0)
             {
                 MessageBox.Show("Invalid walking speed", "Warning");
                 return false;
             }
 
-            if (!Int32.TryParse(textBoxMaxTravelDistance.Text, out maxTravelDistance) || maxTravelDistance <= 0)
+            if (!Int32.TryParse(textBoxMaxTravelDistance.Text, out int maxTravelDistance) || maxTravelDistance <= 0)
             {
                 MessageBox.Show("Invalid max travel distance", "Warning");
                 return false;
             }
 
-            if (!Double.TryParse(textBoxLat.Text.Replace(",", "."), NumberStyles.Any, CultureInfo.InvariantCulture, out defaultLat))
+            if (!Double.TryParse(textBoxLat.Text.Replace(",", "."), NumberStyles.Any, CultureInfo.InvariantCulture, out double defaultLat))
             {
                 MessageBox.Show("Invalid latitude", "Warning");
                 return false;
             }
 
-            if (!Double.TryParse(textBoxLong.Text.Replace(",", "."), NumberStyles.Any, CultureInfo.InvariantCulture, out defaultLong))
+            if (!Double.TryParse(textBoxLong.Text.Replace(",", "."), NumberStyles.Any, CultureInfo.InvariantCulture, out double defaultLong))
             {
                 MessageBox.Show("Invalid longitude", "Warning");
                 return false;
@@ -349,6 +363,11 @@ namespace PokemonGoGUI.UI
             userSettings.AndroidBootloader = textBoxAndroidBootLoader.Text;
             userSettings.HardwareManufacturer = textBoxHardwareManufacturer.Text;
             userSettings.HardwareModel = textBoxHardwareModel.Text;
+
+            //Api config
+            userSettings.HashHost = new Uri(cbHashHost.Text);
+            userSettings.HashEndpoint = cbHashEndpoint.Text;
+            userSettings.AuthAPIKey = cbAuthAPIKey.Text;
             //End device settings
 
             if (proxyEx != null)
@@ -369,7 +388,7 @@ namespace PokemonGoGUI.UI
             return true;
         }
 
-        private void buttonDone_Click(object sender, EventArgs e)
+        private void ButtonDone_Click(object sender, EventArgs e)
         {
             if (SaveSettings())
             {
@@ -379,7 +398,7 @@ namespace PokemonGoGUI.UI
 
         #region Recycling
 
-        private void editToolStripMenuItem_Click(object sender, EventArgs e)
+        private void EditToolStripMenuItem_Click(object sender, EventArgs e)
         {
             int totalObjects = fastObjectListViewRecycling.SelectedObjects.Count;
 
@@ -402,14 +421,12 @@ namespace PokemonGoGUI.UI
                 return;
             }
 
-            int maxInventory = 0;
-
-            if(!Int32.TryParse(num, out maxInventory))
+            if (!Int32.TryParse(num, out int maxInventory))
             {
                 return;
             }
 
-            foreach(InventoryItemSetting item in fastObjectListViewRecycling.SelectedObjects)
+            foreach (InventoryItemSetting item in fastObjectListViewRecycling.SelectedObjects)
             {
                 item.MaxInventory = maxInventory;
             }
@@ -422,7 +439,7 @@ namespace PokemonGoGUI.UI
         #region CatchPokemon
 
 
-        private void falseToolStripMenuItem2_Click(object sender, EventArgs e)
+        private void FalseToolStripMenuItem2_Click(object sender, EventArgs e)
         {
             ToolStripMenuItem tSMI = sender as ToolStripMenuItem;
 
@@ -453,7 +470,7 @@ namespace PokemonGoGUI.UI
         }
 
 
-        private void trueToolStripMenuItem_Click(object sender, EventArgs e)
+        private void TrueToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ToolStripMenuItem tSMI = sender as ToolStripMenuItem;
  
@@ -483,7 +500,7 @@ namespace PokemonGoGUI.UI
             fastObjectListViewCatch.RefreshSelectedObjects();
         }
 
-        private void restoreDefaultsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void RestoreDefaultsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             DialogResult result = MessageBox.Show("Reset defaults?", "Confirmation", MessageBoxButtons.YesNoCancel);
 
@@ -501,7 +518,7 @@ namespace PokemonGoGUI.UI
 
         #region Evolving
 
-        private void restoreDefaultsToolStripMenuItem1_Click(object sender, EventArgs e)
+        private void RestoreDefaultsToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             DialogResult result = MessageBox.Show("Reset defaults?", "Confirmation", MessageBoxButtons.YesNoCancel);
 
@@ -515,7 +532,7 @@ namespace PokemonGoGUI.UI
             fastObjectListViewEvolve.SetObjects(_manager.UserSettings.EvolveSettings);
         }
 
-        private void editCPToolStripMenuItem_Click(object sender, EventArgs e)
+        private void EditCPToolStripMenuItem_Click(object sender, EventArgs e)
         {
             int count = fastObjectListViewEvolve.SelectedObjects.Count;
 
@@ -533,16 +550,14 @@ namespace PokemonGoGUI.UI
                 return;
             }
 
-            int changeCp = 0;
-
-            if(!Int32.TryParse(cp, out changeCp) || changeCp < 0)
+            if (!Int32.TryParse(cp, out int changeCp) || changeCp < 0)
             {
                 MessageBox.Show("Invalid amount", "Warning");
 
                 return;
             }
 
-            foreach(EvolveSetting setting in fastObjectListViewEvolve.SelectedObjects)
+            foreach (EvolveSetting setting in fastObjectListViewEvolve.SelectedObjects)
             {
                 setting.MinCP = changeCp;
             }
@@ -550,7 +565,7 @@ namespace PokemonGoGUI.UI
             fastObjectListViewEvolve.SetObjects(_manager.UserSettings.EvolveSettings);
         }
 
-        private void trueToolStripMenuItem1_Click(object sender, EventArgs e)
+        private void TrueToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             ToolStripMenuItem tSMI = sender as ToolStripMenuItem;
 
@@ -597,12 +612,12 @@ namespace PokemonGoGUI.UI
             fastObjectListViewTransfer.RefreshObjects(settings);
         }
 
-        private void editToolStripMenuItem1_Click(object sender, EventArgs e)
+        private void EditToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             EditTransferSettings(fastObjectListViewTransfer.SelectedObjects.Cast<TransferSetting>().ToList());
         }
 
-        private void restoreDefaultsToolStripMenuItem2_Click(object sender, EventArgs e)
+        private void RestoreDefaultsToolStripMenuItem2_Click(object sender, EventArgs e)
         {
             DialogResult result = MessageBox.Show("Reset defaults?", "Confirmation", MessageBoxButtons.YesNoCancel);
 
@@ -618,11 +633,9 @@ namespace PokemonGoGUI.UI
 
         #endregion
 
-        private void comboBoxLocationPresets_SelectedIndexChanged(object sender, EventArgs e)
+        private void ComboBoxLocationPresets_SelectedIndexChanged(object sender, EventArgs e)
         {
-            FarmLocation fLocation = comboBoxLocationPresets.SelectedItem as FarmLocation;
-
-            if(fLocation != null)
+            if (comboBoxLocationPresets.SelectedItem is FarmLocation fLocation)
             {
                 if (fLocation.Name == "Current")
                 {
@@ -637,7 +650,7 @@ namespace PokemonGoGUI.UI
             }
         }
 
-        private async void buttonExportConfig_Click(object sender, EventArgs e)
+        private async void ButtonExportConfig_Click(object sender, EventArgs e)
         {
             if(!SaveSettings())
             {
@@ -662,7 +675,7 @@ namespace PokemonGoGUI.UI
             }
         }
 
-        private async void buttonImportConfig_Click(object sender, EventArgs e)
+        private async void ButtonImportConfig_Click(object sender, EventArgs e)
         {
             using (OpenFileDialog ofd = new OpenFileDialog())
             {
@@ -686,7 +699,7 @@ namespace PokemonGoGUI.UI
             }
         }
 
-        private void checkBoxSnipePokemon_CheckedChanged(object sender, EventArgs e)
+        private void CheckBoxSnipePokemon_CheckedChanged(object sender, EventArgs e)
         {
             numericUpDownSnipeAfterStops.Enabled = checkBoxSnipePokemon.Checked;
             numericUpDownMinBallsToSnipe.Enabled = checkBoxSnipePokemon.Checked;
@@ -694,7 +707,7 @@ namespace PokemonGoGUI.UI
             numericUpDownSnipeAfterLevel.Enabled = checkBoxSnipePokemon.Checked;
         }
 
-        private void buttonDeviceRandom_Click(object sender, EventArgs e)
+        private void ButtonDeviceRandom_Click(object sender, EventArgs e)
         {
             _manager.RandomDeviceId();
 
@@ -703,14 +716,14 @@ namespace PokemonGoGUI.UI
             //UpdateDetails(_manager.UserSettings);
         }
 
-        private void buttonResetDefaults_Click(object sender, EventArgs e)
+        private void ButtonResetDefaults_Click(object sender, EventArgs e)
         {
             _manager.RestoreDeviceDefaults();
 
             UpdateDetails(_manager.UserSettings);
         }
 
-        private void checkBoxAutoRotateProxies_CheckedChanged(object sender, EventArgs e)
+        private void CheckBoxAutoRotateProxies_CheckedChanged(object sender, EventArgs e)
         {
             checkBoxRemoveOnStop.Enabled = checkBoxAutoRotateProxies.Checked;
         }

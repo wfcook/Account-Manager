@@ -152,7 +152,7 @@ namespace PokemonGoGUI.GoManager
             var oldfiles = Directory.GetFiles(destFolder);
             foreach (var old in oldfiles)
             {
-                if (old.Contains("data.json.gz") || old.Contains("chromedriver.exe")) continue;
+                if (old.Contains("data.json.gz") || old.Contains("chromedriver.exe") || old.Contains("HashKeys.txt")) continue;
                 if (File.Exists(old + ".old")) continue;
                 File.Move(old, old + ".old");
             }

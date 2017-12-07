@@ -43,6 +43,8 @@ namespace PokemonGoGUI
 
         public DeviceWrapper ClientDeviceWrapper { get; private set; }
 
+        public int CaptchaInt = 0;
+
         public uint VersionInt = 8501;
         public string VersionStr = "0.85.1";
 
@@ -87,6 +89,7 @@ namespace PokemonGoGUI
             ClientSession.AccessTokenUpdated += SessionOnAccessTokenUpdated;
             ClientSession.InventoryUpdate += InventoryOnUpdate;
             ClientSession.MapUpdate += MapOnUpdate;
+            ClientSession.CaptchaReceived += SessionOnCaptchaReceived;
 
             // Send initial requests and start HeartbeatDispatcher.
             // This makes sure that the initial heartbeat request finishes and the "session.Map.Cells" contains stuff.
@@ -106,6 +109,29 @@ namespace PokemonGoGUI
                 Success = LoggedIn,
                 Message = msgStr
             };
+        }
+
+        private void SessionOnCaptchaReceived(object sender, CaptchaEventArgs e)
+        {
+            var session = (Session)sender;
+
+            ++CaptchaInt;
+
+            //Logger.Warn("Captcha received: " + e.CaptchaUrl);
+
+            // Solve
+            //            var verifyChallengeResponse = await session.RpcClient.SendRemoteProcedureCallAsync(new Request
+            //            {
+            //                RequestType = RequestType.VerifyChallenge,
+            //                RequestMessage = new VerifyChallengeMessage
+            //                {
+            //                    Token = "token"
+            //                }.ToByteString()
+            //            }, false);
+            //
+            //            var verifyChallenge = VerifyChallengeResponse.Parser.ParseFrom(verifyChallengeResponse);
+            //            
+            //            Console.WriteLine(JsonConvert.SerializeObject(verifyChallenge, Formatting.Indented));
         }
 
         private void SessionOnAccessTokenUpdated(object sender, EventArgs e)
