@@ -8,6 +8,7 @@
         PokemonBanAndPokestopBanTemp,
         PokestopBanTemp,
         PokemonBanTemp,
+        Flagged,
         NotVerified
     }
 }

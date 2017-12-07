@@ -121,6 +121,12 @@ namespace PokemonGoGUI.GoManager
                 {
                     getPlayerResponse = GetPlayerResponse.Parser.ParseFrom(response);
                     PlayerData = getPlayerResponse.PlayerData;
+
+                    if (getPlayerResponse.Banned)
+                        AccountState = Enums.AccountState.PermAccountBan;
+                    if (getPlayerResponse.Warn)
+                        AccountState = Enums.AccountState.Flagged;
+
                     return new MethodResult
                     {
                         Success = true

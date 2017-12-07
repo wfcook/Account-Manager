@@ -30,7 +30,7 @@ namespace PokemonGoGUI
         private bool _showStartup = true;
         private bool IsLatest = true;
         private readonly string _saveFile = "data";
-        private string _versionNumber = $"v{Assembly.GetExecutingAssembly().GetName().Version} - Modified GoManager Version";
+        private string _versionNumber = $"v{Assembly.GetExecutingAssembly().GetName().Version} - Forked GoManager Version";
 
         public MainForm()
         {
@@ -122,6 +122,7 @@ namespace PokemonGoGUI
             IsLatest = await GoManager.VersionCheckState.IsLatest();
             if (!IsLatest)
                 await GoManager.VersionCheckState.Execute();
+            await GoManager.VersionCheckState.CleanupOldFiles();
 
             await LoadSettings();
 
@@ -223,7 +224,7 @@ namespace PokemonGoGUI
             }
 
             fastObjectListViewMain.SetObjects(_managers);
-
+            
             return true;
         }
 
@@ -478,6 +479,7 @@ namespace PokemonGoGUI
             int tempBanned = 0;
             int running = 0;
             int permBan = 0;
+            int flags = 0;
 
             List<Manager> tempManagers = new List<Manager>(_managers);
 
@@ -488,12 +490,17 @@ namespace PokemonGoGUI
                     ++running;
                 }
 
-                if(manager.AccountState == AccountState.PermAccountBan)
+                if (manager.AccountState == AccountState.PermAccountBan)
                 {
                     ++permBan;
                 }
 
-                if(manager.AccountState == AccountState.PokemonBanAndPokestopBanTemp ||
+                if (manager.AccountState == AccountState.Flagged)
+                {
+                    ++flags;
+                }
+
+                if (manager.AccountState == AccountState.PokemonBanAndPokestopBanTemp ||
                     manager.AccountState == AccountState.PokemonBanTemp ||
                     manager.AccountState == AccountState.PokestopBanTemp)
                 {
@@ -504,6 +511,7 @@ namespace PokemonGoGUI
             toolStripStatusLabelAccountBanned.Text = permBan.ToString();
             toolStripStatusLabelTempBanned.Text = tempBanned.ToString();
             toolStripStatusLabelTotalRunning.Text = running.ToString();
+            toolStripStatusLabelFlagged.Text = flags.ToString();
 
             if(_proxyHandler.Proxies != null)
             {
@@ -759,6 +767,9 @@ namespace PokemonGoGUI
                         break;
                     case AccountState.Good:
                         e.SubItem.ForeColor = Color.Green;
+                        break;
+                    case AccountState.Flagged:
+                        e.SubItem.ForeColor = Color.Magenta;
                         break;
                 }
             }
@@ -2057,6 +2068,15 @@ namespace PokemonGoGUI
             }
         }
 
+        private void AboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            StartupForm startForm = new StartupForm();
+
+            if (startForm.ShowDialog() == DialogResult.OK)
+            {
+                _showStartup = startForm.ShowOnStartUp;
+            }
+        }
         #endregion
     }
 }

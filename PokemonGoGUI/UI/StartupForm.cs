@@ -31,19 +31,24 @@ namespace PokemonGoGUI.UI
             this.Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
         }
 
-        private void buttonOk_Click(object sender, EventArgs e)
+        private void ButtonOk_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.OK;
         }
 
-        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        private void CheckBox1_CheckedChanged(object sender, EventArgs e)
         {
             ShowOnStartUp = checkBoxShowOnStartup.Checked;
         }
 
-        private void linkLabelDiscordChat_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void LinkLabelDiscordChat_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             Process.Start(e.Link.LinkData.ToString());
+        }
+
+        private void PictureBox1_Click(object sender, EventArgs e)
+        {
+            Process.Start("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=SNATC29B4ZJD4");
         }
     }
 }
