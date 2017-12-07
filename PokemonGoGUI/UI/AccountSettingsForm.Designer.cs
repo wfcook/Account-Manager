@@ -211,6 +211,8 @@
             this.toolTipProxy = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipMinAccountState = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipHumanizeThrows = new System.Windows.Forms.ToolTip(this.components);
+            this.label53 = new System.Windows.Forms.Label();
+            this.cbTimeZones = new System.Windows.Forms.ComboBox();
             this.tabControlMain.SuspendLayout();
             this.tabPageDetails.SuspendLayout();
             this.tabControlSettings.SuspendLayout();
@@ -917,6 +919,8 @@
             // 
             // tabPageSettingsNavigation
             // 
+            this.tabPageSettingsNavigation.Controls.Add(this.cbTimeZones);
+            this.tabPageSettingsNavigation.Controls.Add(this.label53);
             this.tabPageSettingsNavigation.Controls.Add(this.numericUpDownWalkingOffset);
             this.tabPageSettingsNavigation.Controls.Add(this.comboBoxLocationPresets);
             this.tabPageSettingsNavigation.Controls.Add(this.label10);
@@ -2201,6 +2205,23 @@
             this.restoreDefaultsToolStripMenuItem2.Text = "Restore Defaults";
             this.restoreDefaultsToolStripMenuItem2.Click += new System.EventHandler(this.RestoreDefaultsToolStripMenuItem2_Click);
             // 
+            // label53
+            // 
+            this.label53.AutoSize = true;
+            this.label53.Location = new System.Drawing.Point(20, 224);
+            this.label53.Name = "label53";
+            this.label53.Size = new System.Drawing.Size(138, 17);
+            this.label53.TabIndex = 56;
+            this.label53.Text = "Location Time Zone:";
+            // 
+            // cbTimeZones
+            // 
+            this.cbTimeZones.FormattingEnabled = true;
+            this.cbTimeZones.Location = new System.Drawing.Point(179, 221);
+            this.cbTimeZones.Name = "cbTimeZones";
+            this.cbTimeZones.Size = new System.Drawing.Size(272, 24);
+            this.cbTimeZones.TabIndex = 57;
+            // 
             // AccountSettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -2446,5 +2467,7 @@
         private System.Windows.Forms.ComboBox cbHashEndpoint;
         private System.Windows.Forms.ComboBox cbHashHost;
         private System.Windows.Forms.Label label50;
+        private System.Windows.Forms.ComboBox cbTimeZones;
+        private System.Windows.Forms.Label label53;
     }
 }

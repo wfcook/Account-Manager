@@ -90,6 +90,15 @@ namespace PokemonGoGUI.UI
             }
             else
                 File.CreateText("HashKeys.txt");
+
+            //Location time zones
+            var zones = new TimeZoneIds().GetTimeZoneIds();
+            foreach (var tz in zones)
+            {
+                cbTimeZones.Items.Add(tz.Key);
+            }
+
+            cbTimeZones.Text = _manager.UserSettings.TimeZone;
         }
 
         private void UpdateListViews()
@@ -368,6 +377,14 @@ namespace PokemonGoGUI.UI
             userSettings.HashHost = new Uri(cbHashHost.Text);
             userSettings.HashEndpoint = cbHashEndpoint.Text;
             userSettings.AuthAPIKey = cbAuthAPIKey.Text;
+
+            //Location time zones
+            var x = new TimeZoneIds().GetTimeZoneIds();
+            userSettings.TimeZone = cbTimeZones.Text;
+            userSettings.Country = x[cbTimeZones.Text].Item1;
+            userSettings.Language = x[cbTimeZones.Text].Item2;
+            userSettings.POSIX = x[cbTimeZones.Text].Item3;
+
             //End device settings
 
             if (proxyEx != null)
