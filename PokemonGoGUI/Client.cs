@@ -2,8 +2,6 @@
 
 using Newtonsoft.Json;
 using POGOLib.Official;
-using POGOLib.Official.Extensions;
-using POGOLib.Official.Logging;
 using POGOLib.Official.LoginProviders;
 using POGOLib.Official.Net;
 using POGOLib.Official.Net.Authentication;
@@ -13,13 +11,9 @@ using POGOLib.Official.Util;
 using POGOLib.Official.Util.Device;
 using POGOLib.Official.Util.Hash;
 using PokemonGoGUI.Enums;
-using PokemonGoGUI.Extensions;
-using PokemonGoGUI.GoManager;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using static POGOProtos.Networking.Envelopes.Signature.Types;
 
 #endregion
@@ -30,6 +24,7 @@ namespace PokemonGoGUI
     {
         public ProxyEx Proxy;
         public ISettings Settings { get; private set; }
+        public Version VersionStr = new Version("0.85.1");
 
         public AuthType AuthType
         { get { return Settings.AuthType; } private set { Settings.AuthType = value; } }
@@ -44,9 +39,6 @@ namespace PokemonGoGUI
         public DeviceWrapper ClientDeviceWrapper { get; private set; }
 
         public int CaptchaInt = 0;
-
-        public uint VersionInt = 8501;
-        public string VersionStr = "0.85.1";
 
         public void Logout()
         {
