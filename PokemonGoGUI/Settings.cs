@@ -44,12 +44,7 @@ namespace PokemonGoGUI
         public bool EvolvePokemon { get; set; }
         public bool CatchPokemon { get; set; }
         public bool IncubateEggs { get; set; }
-        public bool SnipePokemon { get; set; }
         public int MaxLevel { get; set; }
-        public int SnipeAfterPokestops { get; set; }
-        public int MinBallsToSnipe { get; set; }
-        public int MaxPokemonPerSnipe { get; set; }
-        public int SnipeAfterLevel { get; set; }
         public bool SPF { get; set; }
         public double SearchFortBelowPercent { get; set; }
         public double ForceEvolveAbovePercent { get; set; }
@@ -150,8 +145,8 @@ namespace PokemonGoGUI
             GroupName = "Default";
             AuthType = AuthType.Ptc;
             GoogleRefreshToken = String.Empty;
-            DefaultLatitude = -33.870225;
-            DefaultLongitude = 151.208343;
+            DefaultLatitude = 40.764665;
+            DefaultLongitude = -73.973184;
             DefaultAltitude = 10;
             MimicWalking = true;
             CatchPokemon = true;
@@ -161,21 +156,24 @@ namespace PokemonGoGUI
             EnableHumanization = false;
             InsideReticuleChance = 100;
             MinPokemonBeforeEvolve = 0;
-            SnipeAfterPokestops = 5;
             StopAtMinAccountState = AccountState.PokemonBanOrPokestopBanTemp;
             DelayBetweenPlayerActions = 500;
             DelayBetweenLocationUpdates = 1000;
             DelayBetweenSnipes = 7000;
             GeneralDelay = 800;
-            MinBallsToSnipe = 20;
-            MaxPokemonPerSnipe = 100;
-            SnipeAfterLevel = 0;
             MaxLogs = 400;
             MaxFailBeforeReset = 3;
             StopOnIPBan = true;
             SearchFortBelowPercent = 1000;
             ForceEvolveAbovePercent = 1000;
             StopOnAPIUpdate = true;
+            HashHost = new Uri("https://pokehash.buddyauth.com/");
+            HashEndpoint = "api/v153_2/hash";
+            AuthAPIKey = "XXXXXXXXXXXXXXXXXXXX";
+            Country = "US";
+            Language = "en";
+            TimeZone = "America/New_York";
+            POSIX = "en-us";
         }
 
         public void LoadDeviceSettings()
@@ -269,35 +267,13 @@ namespace PokemonGoGUI
 
                 TransferSetting setting = new TransferSetting
                 {
-                    Id = pokemon
+                    Id = pokemon,
+                    Transfer = true
                 };
 
                 TransferSettings.Add(setting);
             }
         }
-
-        /*
-        public void LoadSniperSettings()
-        {
-            SniperSettings = new List<CatchSetting>();
-
-            foreach (PokemonId pokemon in Enum.GetValues(typeof(PokemonId)))
-            {
-                if (pokemon == PokemonId.Missingno)
-                {
-                    continue;
-                }
-
-                CatchSetting setting = new CatchSetting
-                {
-                    Id = pokemon,
-                    Catch = true
-                };
-
-                SniperSettings.Add(setting);
-            }
-        }
-        */
 
         public void RandomizeDevice()
         {

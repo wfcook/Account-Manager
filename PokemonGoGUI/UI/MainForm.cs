@@ -1377,11 +1377,6 @@ namespace PokemonGoGUI
                 return;
             }
 
-            foreach (Manager manager in fastObjectListViewMain.SelectedObjects)
-            {
-                manager.UserSettings.SnipeAfterPokestops = value;
-            }
-
             fastObjectListViewMain.RefreshSelectedObjects();
         }
 
@@ -1398,11 +1393,6 @@ namespace PokemonGoGUI
             {
                 MessageBox.Show("Invalid value");
                 return;
-            }
-
-            foreach (Manager manager in fastObjectListViewMain.SelectedObjects)
-            {
-                manager.UserSettings.MinBallsToSnipe = value;
             }
 
             fastObjectListViewMain.RefreshSelectedObjects();
@@ -1423,11 +1413,6 @@ namespace PokemonGoGUI
                 return;
             }
 
-            foreach (Manager manager in fastObjectListViewMain.SelectedObjects)
-            {
-                manager.UserSettings.MaxPokemonPerSnipe = value;
-            }
-
             fastObjectListViewMain.RefreshSelectedObjects();
         }
 
@@ -1444,11 +1429,6 @@ namespace PokemonGoGUI
             {
                 MessageBox.Show("Invalid value");
                 return;
-            }
-
-            foreach (Manager manager in fastObjectListViewMain.SelectedObjects)
-            {
-                manager.UserSettings.SnipeAfterLevel = value;
             }
 
             fastObjectListViewMain.RefreshSelectedObjects();

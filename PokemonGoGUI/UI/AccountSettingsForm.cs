@@ -134,11 +134,6 @@ namespace PokemonGoGUI.UI
             checkBoxUseLuckyEgg.Checked = settings.UseLuckyEgg;
             checkBoxIncubateEggs.Checked = settings.IncubateEggs;
             checkBoxCatchPokemon.Checked = settings.CatchPokemon;
-            checkBoxSnipePokemon.Checked = settings.SnipePokemon;
-            numericUpDownSnipeAfterStops.Value = settings.SnipeAfterPokestops;
-            numericUpDownMinBallsToSnipe.Value = settings.MinBallsToSnipe;
-            numericUpDownMaxPokemonPerSnipe.Value = settings.MaxPokemonPerSnipe;
-            numericUpDownSnipeAfterLevel.Value = settings.SnipeAfterLevel;
             numericUpDownRunForHours.Value = new Decimal(settings.RunForHours);
             numericUpDownMaxLogs.Value = settings.MaxLogs;
             numericUpDownMaxFailBeforeReset.Value = settings.MaxFailBeforeReset;
@@ -321,11 +316,6 @@ namespace PokemonGoGUI.UI
             userSettings.IncubateEggs = checkBoxIncubateEggs.Checked;
             userSettings.MaxLevel = maxLevel;
             userSettings.CatchPokemon = checkBoxCatchPokemon.Checked;
-            userSettings.SnipePokemon = checkBoxSnipePokemon.Checked;
-            userSettings.SnipeAfterPokestops = (int)numericUpDownSnipeAfterStops.Value;
-            userSettings.MinBallsToSnipe = (int)numericUpDownMinBallsToSnipe.Value;
-            userSettings.MaxPokemonPerSnipe = (int)numericUpDownMaxPokemonPerSnipe.Value;
-            userSettings.SnipeAfterLevel = (int)numericUpDownSnipeAfterLevel.Value;
             userSettings.StopAtMinAccountState = (AccountState)comboBoxMinAccountState.SelectedItem;
             userSettings.SearchFortBelowPercent = (double)numericUpDownSearchFortBelow.Value;
             userSettings.ForceEvolveAbovePercent = (double) numericUpDownForceEvolveAbove.Value;
@@ -372,11 +362,13 @@ namespace PokemonGoGUI.UI
             userSettings.AndroidBootloader = textBoxAndroidBootLoader.Text;
             userSettings.HardwareManufacturer = textBoxHardwareManufacturer.Text;
             userSettings.HardwareModel = textBoxHardwareModel.Text;
+            //End device settings
 
             //Api config
             userSettings.HashHost = new Uri(cbHashHost.Text);
             userSettings.HashEndpoint = cbHashEndpoint.Text;
             userSettings.AuthAPIKey = cbAuthAPIKey.Text;
+            //End api config
 
             //Location time zones
             var x = new TimeZoneIds().GetTimeZoneIds();
@@ -384,8 +376,7 @@ namespace PokemonGoGUI.UI
             userSettings.Country = x[cbTimeZones.Text].Item1;
             userSettings.Language = x[cbTimeZones.Text].Item2;
             userSettings.POSIX = x[cbTimeZones.Text].Item3;
-
-            //End device settings
+            //End location time zones
 
             if (proxyEx != null)
             {
@@ -463,24 +454,6 @@ namespace PokemonGoGUI.UI
             if (tSMI == null)
             {
                 return;
-            }
-
-            CheckType checkType = (CheckType)Int32.Parse(tSMI.Tag.ToString());
-
-            foreach (CatchSetting cSetting in fastObjectListViewCatch.SelectedObjects)
-            {
-                if (checkType == CheckType.Toggle)
-                {
-                    cSetting.Snipe = !cSetting.Snipe;
-                }
-                else if (checkType == CheckType.True)
-                {
-                    cSetting.Snipe = true;
-                }
-                else
-                {
-                    cSetting.Snipe = false;
-                }
             }
 
             fastObjectListViewCatch.RefreshSelectedObjects();
@@ -714,14 +687,6 @@ namespace PokemonGoGUI.UI
                 UpdateDetails(_manager.UserSettings);
                 UpdateListViews();
             }
-        }
-
-        private void CheckBoxSnipePokemon_CheckedChanged(object sender, EventArgs e)
-        {
-            numericUpDownSnipeAfterStops.Enabled = checkBoxSnipePokemon.Checked;
-            numericUpDownMinBallsToSnipe.Enabled = checkBoxSnipePokemon.Checked;
-            numericUpDownMaxPokemonPerSnipe.Enabled = checkBoxSnipePokemon.Checked;
-            numericUpDownSnipeAfterLevel.Enabled = checkBoxSnipePokemon.Checked;
         }
 
         private void ButtonDeviceRandom_Click(object sender, EventArgs e)

@@ -41,11 +41,6 @@
             this.numericUpDownSearchFortBelow = new System.Windows.Forms.NumericUpDown();
             this.numericUpDownRunForHours = new System.Windows.Forms.NumericUpDown();
             this.numericUpDownMaxLogs = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDownSnipeAfterLevel = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDownMaxPokemonPerSnipe = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDownMinBallsToSnipe = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDownSnipeAfterStops = new System.Windows.Forms.NumericUpDown();
-            this.checkBoxSnipePokemon = new System.Windows.Forms.CheckBox();
             this.checkBoxIncubateEggs = new System.Windows.Forms.CheckBox();
             this.checkBoxStopOnAPIUpdate = new System.Windows.Forms.CheckBox();
             this.checkBoxClaimLevelUp = new System.Windows.Forms.CheckBox();
@@ -66,11 +61,6 @@
             this.label41 = new System.Windows.Forms.Label();
             this.label43 = new System.Windows.Forms.Label();
             this.textBoxPtcUsername = new System.Windows.Forms.TextBox();
-            this.label31 = new System.Windows.Forms.Label();
-            this.label14 = new System.Windows.Forms.Label();
-            this.label17 = new System.Windows.Forms.Label();
-            this.label16 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
             this.radioButtonGoogle = new System.Windows.Forms.RadioButton();
             this.radioButtonPtc = new System.Windows.Forms.RadioButton();
             this.label7 = new System.Windows.Forms.Label();
@@ -185,7 +175,6 @@
             this.olvColumnCatchId = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnCatchName = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnCatch = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.olvColumnSnipe = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.contextMenuStripCatching = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.setCatchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.trueToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -221,10 +210,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSearchFortBelow)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownRunForHours)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownMaxLogs)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSnipeAfterLevel)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownMaxPokemonPerSnipe)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownMinBallsToSnipe)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSnipeAfterStops)).BeginInit();
             this.tabPageProxy.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownMaxFailBeforeReset)).BeginInit();
             this.tabPageSettingsNavigation.SuspendLayout();
@@ -312,11 +297,6 @@
             this.tabPageSettingsGeneral.Controls.Add(this.numericUpDownSearchFortBelow);
             this.tabPageSettingsGeneral.Controls.Add(this.numericUpDownRunForHours);
             this.tabPageSettingsGeneral.Controls.Add(this.numericUpDownMaxLogs);
-            this.tabPageSettingsGeneral.Controls.Add(this.numericUpDownSnipeAfterLevel);
-            this.tabPageSettingsGeneral.Controls.Add(this.numericUpDownMaxPokemonPerSnipe);
-            this.tabPageSettingsGeneral.Controls.Add(this.numericUpDownMinBallsToSnipe);
-            this.tabPageSettingsGeneral.Controls.Add(this.numericUpDownSnipeAfterStops);
-            this.tabPageSettingsGeneral.Controls.Add(this.checkBoxSnipePokemon);
             this.tabPageSettingsGeneral.Controls.Add(this.checkBoxIncubateEggs);
             this.tabPageSettingsGeneral.Controls.Add(this.checkBoxStopOnAPIUpdate);
             this.tabPageSettingsGeneral.Controls.Add(this.checkBoxClaimLevelUp);
@@ -337,11 +317,6 @@
             this.tabPageSettingsGeneral.Controls.Add(this.label41);
             this.tabPageSettingsGeneral.Controls.Add(this.label43);
             this.tabPageSettingsGeneral.Controls.Add(this.textBoxPtcUsername);
-            this.tabPageSettingsGeneral.Controls.Add(this.label31);
-            this.tabPageSettingsGeneral.Controls.Add(this.label14);
-            this.tabPageSettingsGeneral.Controls.Add(this.label17);
-            this.tabPageSettingsGeneral.Controls.Add(this.label16);
-            this.tabPageSettingsGeneral.Controls.Add(this.label2);
             this.tabPageSettingsGeneral.Controls.Add(this.radioButtonGoogle);
             this.tabPageSettingsGeneral.Controls.Add(this.radioButtonPtc);
             this.tabPageSettingsGeneral.Controls.Add(this.label7);
@@ -359,7 +334,7 @@
             // numericUpDownForceEvolveAbove
             // 
             this.numericUpDownForceEvolveAbove.DecimalPlaces = 2;
-            this.numericUpDownForceEvolveAbove.Location = new System.Drawing.Point(216, 280);
+            this.numericUpDownForceEvolveAbove.Location = new System.Drawing.Point(226, 211);
             this.numericUpDownForceEvolveAbove.Margin = new System.Windows.Forms.Padding(2);
             this.numericUpDownForceEvolveAbove.Maximum = new decimal(new int[] {
             1000000,
@@ -373,7 +348,7 @@
             // label48
             // 
             this.label48.AutoSize = true;
-            this.label48.Location = new System.Drawing.Point(256, 314);
+            this.label48.Location = new System.Drawing.Point(16, 248);
             this.label48.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label48.Name = "label48";
             this.label48.Size = new System.Drawing.Size(162, 17);
@@ -383,7 +358,7 @@
             // label49
             // 
             this.label49.AutoSize = true;
-            this.label49.Location = new System.Drawing.Point(18, 282);
+            this.label49.Location = new System.Drawing.Point(16, 213);
             this.label49.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label49.Name = "label49";
             this.label49.Size = new System.Drawing.Size(195, 17);
@@ -402,7 +377,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(21, 226);
+            this.label9.Location = new System.Drawing.Point(18, 115);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(163, 17);
             this.label9.TabIndex = 32;
@@ -411,7 +386,7 @@
             // numericUpDownSearchFortBelow
             // 
             this.numericUpDownSearchFortBelow.DecimalPlaces = 2;
-            this.numericUpDownSearchFortBelow.Location = new System.Drawing.Point(187, 252);
+            this.numericUpDownSearchFortBelow.Location = new System.Drawing.Point(103, 177);
             this.numericUpDownSearchFortBelow.Maximum = new decimal(new int[] {
             1000000,
             0,
@@ -424,7 +399,7 @@
             // numericUpDownRunForHours
             // 
             this.numericUpDownRunForHours.DecimalPlaces = 2;
-            this.numericUpDownRunForHours.Location = new System.Drawing.Point(423, 309);
+            this.numericUpDownRunForHours.Location = new System.Drawing.Point(226, 246);
             this.numericUpDownRunForHours.Maximum = new decimal(new int[] {
             99999,
             0,
@@ -436,7 +411,7 @@
             // 
             // numericUpDownMaxLogs
             // 
-            this.numericUpDownMaxLogs.Location = new System.Drawing.Point(368, 224);
+            this.numericUpDownMaxLogs.Location = new System.Drawing.Point(157, 145);
             this.numericUpDownMaxLogs.Maximum = new decimal(new int[] {
             999999,
             0,
@@ -455,95 +430,6 @@
             0,
             0,
             0});
-            // 
-            // numericUpDownSnipeAfterLevel
-            // 
-            this.numericUpDownSnipeAfterLevel.Enabled = false;
-            this.numericUpDownSnipeAfterLevel.Location = new System.Drawing.Point(188, 195);
-            this.numericUpDownSnipeAfterLevel.Maximum = new decimal(new int[] {
-            39,
-            0,
-            0,
-            0});
-            this.numericUpDownSnipeAfterLevel.Name = "numericUpDownSnipeAfterLevel";
-            this.numericUpDownSnipeAfterLevel.Size = new System.Drawing.Size(62, 22);
-            this.numericUpDownSnipeAfterLevel.TabIndex = 8;
-            // 
-            // numericUpDownMaxPokemonPerSnipe
-            // 
-            this.numericUpDownMaxPokemonPerSnipe.Enabled = false;
-            this.numericUpDownMaxPokemonPerSnipe.Location = new System.Drawing.Point(187, 167);
-            this.numericUpDownMaxPokemonPerSnipe.Maximum = new decimal(new int[] {
-            9000,
-            0,
-            0,
-            0});
-            this.numericUpDownMaxPokemonPerSnipe.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.numericUpDownMaxPokemonPerSnipe.Name = "numericUpDownMaxPokemonPerSnipe";
-            this.numericUpDownMaxPokemonPerSnipe.Size = new System.Drawing.Size(62, 22);
-            this.numericUpDownMaxPokemonPerSnipe.TabIndex = 7;
-            this.numericUpDownMaxPokemonPerSnipe.Value = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            // 
-            // numericUpDownMinBallsToSnipe
-            // 
-            this.numericUpDownMinBallsToSnipe.Enabled = false;
-            this.numericUpDownMinBallsToSnipe.Location = new System.Drawing.Point(187, 139);
-            this.numericUpDownMinBallsToSnipe.Maximum = new decimal(new int[] {
-            9000,
-            0,
-            0,
-            0});
-            this.numericUpDownMinBallsToSnipe.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.numericUpDownMinBallsToSnipe.Name = "numericUpDownMinBallsToSnipe";
-            this.numericUpDownMinBallsToSnipe.Size = new System.Drawing.Size(62, 22);
-            this.numericUpDownMinBallsToSnipe.TabIndex = 6;
-            this.numericUpDownMinBallsToSnipe.Value = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            // 
-            // numericUpDownSnipeAfterStops
-            // 
-            this.numericUpDownSnipeAfterStops.Enabled = false;
-            this.numericUpDownSnipeAfterStops.Location = new System.Drawing.Point(188, 111);
-            this.numericUpDownSnipeAfterStops.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.numericUpDownSnipeAfterStops.Name = "numericUpDownSnipeAfterStops";
-            this.numericUpDownSnipeAfterStops.Size = new System.Drawing.Size(62, 22);
-            this.numericUpDownSnipeAfterStops.TabIndex = 5;
-            this.numericUpDownSnipeAfterStops.Value = new decimal(new int[] {
-            5,
-            0,
-            0,
-            0});
-            // 
-            // checkBoxSnipePokemon
-            // 
-            this.checkBoxSnipePokemon.AutoSize = true;
-            this.checkBoxSnipePokemon.Location = new System.Drawing.Point(3, 112);
-            this.checkBoxSnipePokemon.Name = "checkBoxSnipePokemon";
-            this.checkBoxSnipePokemon.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.checkBoxSnipePokemon.Size = new System.Drawing.Size(129, 21);
-            this.checkBoxSnipePokemon.TabIndex = 30;
-            this.checkBoxSnipePokemon.Text = "Snipe Pokemon";
-            this.checkBoxSnipePokemon.UseVisualStyleBackColor = true;
-            this.checkBoxSnipePokemon.CheckedChanged += new System.EventHandler(this.CheckBoxSnipePokemon_CheckedChanged);
             // 
             // checkBoxIncubateEggs
             // 
@@ -627,14 +513,14 @@
             // 
             // textBoxMaxLevel
             // 
-            this.textBoxMaxLevel.Location = new System.Drawing.Point(290, 254);
+            this.textBoxMaxLevel.Location = new System.Drawing.Point(197, 176);
             this.textBoxMaxLevel.Name = "textBoxMaxLevel";
             this.textBoxMaxLevel.Size = new System.Drawing.Size(65, 22);
             this.textBoxMaxLevel.TabIndex = 10;
             // 
             // textBoxPokemonBeforeEvolve
             // 
-            this.textBoxPokemonBeforeEvolve.Location = new System.Drawing.Point(188, 223);
+            this.textBoxPokemonBeforeEvolve.Location = new System.Drawing.Point(181, 112);
             this.textBoxPokemonBeforeEvolve.Name = "textBoxPokemonBeforeEvolve";
             this.textBoxPokemonBeforeEvolve.Size = new System.Drawing.Size(65, 22);
             this.textBoxPokemonBeforeEvolve.TabIndex = 9;
@@ -665,7 +551,7 @@
             // label47
             // 
             this.label47.AutoSize = true;
-            this.label47.Location = new System.Drawing.Point(256, 359);
+            this.label47.Location = new System.Drawing.Point(240, 320);
             this.label47.Name = "label47";
             this.label47.Size = new System.Drawing.Size(99, 17);
             this.label47.TabIndex = 17;
@@ -674,7 +560,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(106, 254);
+            this.label11.Location = new System.Drawing.Point(16, 179);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(75, 17);
             this.label11.TabIndex = 15;
@@ -683,7 +569,7 @@
             // label46
             // 
             this.label46.AutoSize = true;
-            this.label46.Location = new System.Drawing.Point(17, 314);
+            this.label46.Location = new System.Drawing.Point(16, 286);
             this.label46.Name = "label46";
             this.label46.Size = new System.Drawing.Size(204, 17);
             this.label46.TabIndex = 18;
@@ -692,7 +578,7 @@
             // label42
             // 
             this.label42.AutoSize = true;
-            this.label42.Location = new System.Drawing.Point(115, 359);
+            this.label42.Location = new System.Drawing.Point(115, 320);
             this.label42.Name = "label42";
             this.label42.Size = new System.Drawing.Size(44, 17);
             this.label42.TabIndex = 17;
@@ -701,7 +587,7 @@
             // label41
             // 
             this.label41.AutoSize = true;
-            this.label41.Location = new System.Drawing.Point(16, 359);
+            this.label41.Location = new System.Drawing.Point(16, 320);
             this.label41.Name = "label41";
             this.label41.Size = new System.Drawing.Size(55, 17);
             this.label41.TabIndex = 18;
@@ -710,7 +596,7 @@
             // label43
             // 
             this.label43.AutoSize = true;
-            this.label43.Location = new System.Drawing.Point(293, 226);
+            this.label43.Location = new System.Drawing.Point(16, 147);
             this.label43.Name = "label43";
             this.label43.Size = new System.Drawing.Size(72, 17);
             this.label43.TabIndex = 19;
@@ -722,51 +608,6 @@
             this.textBoxPtcUsername.Name = "textBoxPtcUsername";
             this.textBoxPtcUsername.Size = new System.Drawing.Size(146, 22);
             this.textBoxPtcUsername.TabIndex = 3;
-            // 
-            // label31
-            // 
-            this.label31.AutoSize = true;
-            this.label31.Location = new System.Drawing.Point(49, 197);
-            this.label31.Name = "label31";
-            this.label31.Size = new System.Drawing.Size(140, 17);
-            this.label31.TabIndex = 20;
-            this.label31.Text = "Start sniping at level:";
-            // 
-            // label14
-            // 
-            this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(256, 113);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(74, 17);
-            this.label14.TabIndex = 16;
-            this.label14.Text = "Pokestops";
-            // 
-            // label17
-            // 
-            this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(24, 169);
-            this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(162, 17);
-            this.label17.TabIndex = 19;
-            this.label17.Text = "Max pokemon per snipe:";
-            // 
-            // label16
-            // 
-            this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(64, 141);
-            this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(121, 17);
-            this.label16.TabIndex = 19;
-            this.label16.Text = "Min balls to snipe:";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(144, 113);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(38, 17);
-            this.label2.TabIndex = 19;
-            this.label2.Text = "After";
             // 
             // radioButtonGoogle
             // 
@@ -1980,14 +1821,13 @@
             this.fastObjectListViewCatch.AllColumns.Add(this.olvColumnCatchId);
             this.fastObjectListViewCatch.AllColumns.Add(this.olvColumnCatchName);
             this.fastObjectListViewCatch.AllColumns.Add(this.olvColumnCatch);
-            this.fastObjectListViewCatch.AllColumns.Add(this.olvColumnSnipe);
             this.fastObjectListViewCatch.CellEditUseWholeCell = false;
             this.fastObjectListViewCatch.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.olvColumnCatchId,
             this.olvColumnCatchName,
-            this.olvColumnCatch,
-            this.olvColumnSnipe});
+            this.olvColumnCatch});
             this.fastObjectListViewCatch.ContextMenuStrip = this.contextMenuStripCatching;
+            this.fastObjectListViewCatch.Cursor = System.Windows.Forms.Cursors.Default;
             this.fastObjectListViewCatch.Dock = System.Windows.Forms.DockStyle.Fill;
             this.fastObjectListViewCatch.FullRowSelect = true;
             this.fastObjectListViewCatch.Location = new System.Drawing.Point(0, 0);
@@ -2013,11 +1853,6 @@
             // 
             this.olvColumnCatch.AspectName = "Catch";
             this.olvColumnCatch.Text = "Catch";
-            // 
-            // olvColumnSnipe
-            // 
-            this.olvColumnSnipe.AspectName = "Snipe";
-            this.olvColumnSnipe.Text = "Snipe";
             // 
             // contextMenuStripCatching
             // 
@@ -2242,10 +2077,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSearchFortBelow)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownRunForHours)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownMaxLogs)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSnipeAfterLevel)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownMaxPokemonPerSnipe)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownMinBallsToSnipe)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSnipeAfterStops)).EndInit();
             this.tabPageProxy.ResumeLayout(false);
             this.tabPageProxy.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownMaxFailBeforeReset)).EndInit();
@@ -2335,15 +2166,12 @@
         private System.Windows.Forms.Button buttonImportConfig;
         private System.Windows.Forms.ToolTip toolTipProxy;
         private System.Windows.Forms.Label label13;
-        private BrightIdeasSoftware.OLVColumn olvColumnSnipe;
         private System.Windows.Forms.ToolStripMenuItem setSnipeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem trueToolStripMenuItem2;
         private System.Windows.Forms.ToolStripMenuItem falseToolStripMenuItem2;
         private System.Windows.Forms.ToolStripMenuItem toggleToolStripMenuItem2;
         private System.Windows.Forms.TabControl tabControlSettings;
         private System.Windows.Forms.TabPage tabPageSettingsGeneral;
-        private System.Windows.Forms.NumericUpDown numericUpDownSnipeAfterStops;
-        private System.Windows.Forms.CheckBox checkBoxSnipePokemon;
         private System.Windows.Forms.CheckBox checkBoxIncubateEggs;
         private System.Windows.Forms.CheckBox checkBoxUseLuckyEgg;
         private System.Windows.Forms.CheckBox checkBoxRecycle;
@@ -2356,8 +2184,6 @@
         private System.Windows.Forms.TextBox textBoxName;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.TextBox textBoxPtcUsername;
-        private System.Windows.Forms.Label label14;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.RadioButton radioButtonGoogle;
         private System.Windows.Forms.RadioButton radioButtonPtc;
         private System.Windows.Forms.Label label7;
@@ -2381,10 +2207,6 @@
         private System.Windows.Forms.ComboBox comboBoxMinAccountState;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.ToolTip toolTipMinAccountState;
-        private System.Windows.Forms.NumericUpDown numericUpDownMinBallsToSnipe;
-        private System.Windows.Forms.Label label16;
-        private System.Windows.Forms.NumericUpDown numericUpDownMaxPokemonPerSnipe;
-        private System.Windows.Forms.Label label17;
         private System.Windows.Forms.TabPage tabPageDevice;
         private System.Windows.Forms.Button buttonDeviceRandom;
         private System.Windows.Forms.TextBox textBoxDeviceId;
@@ -2414,8 +2236,6 @@
         private System.Windows.Forms.Button buttonResetDefaults;
         private System.Windows.Forms.TextBox textBoxDeviceModel;
         private System.Windows.Forms.Label label26;
-        private System.Windows.Forms.NumericUpDown numericUpDownSnipeAfterLevel;
-        private System.Windows.Forms.Label label31;
         private System.Windows.Forms.TabPage tabPageHumanization;
         private System.Windows.Forms.NumericUpDown numericUpDownInsideReticuleChance;
         private System.Windows.Forms.CheckBox checkBoxHumanizeThrows;

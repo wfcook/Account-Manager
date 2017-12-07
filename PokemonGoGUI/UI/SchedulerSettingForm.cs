@@ -89,7 +89,7 @@ namespace PokemonGoGUI.UI
             return true;
         }
 
-        private void buttonDone_Click(object sender, EventArgs e)
+        private void ButtonDone_Click(object sender, EventArgs e)
         {
             if(SaveValues())
             {
@@ -97,7 +97,7 @@ namespace PokemonGoGUI.UI
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void Button1_Click(object sender, EventArgs e)
         {
             if(colorDialogNameColor.ShowDialog() != DialogResult.OK)
             {
