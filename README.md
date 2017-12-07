@@ -1,4 +1,4 @@
-# GoManager
+# Account Manager forked GoManager Version
 
 <!-- define variables -->
 [1.1]: http://i.imgur.com/M4fJ65n.png (ATTENTION)
@@ -10,10 +10,10 @@
 
 ![alt text][1.1] <strong><em>`The contents of this repo are a proof of concept and are for educational use only`</em></strong>![alt text][1.1]<br/>
 
-<h1>GoManager is now compatible with 0.83.2 API.</h1>
+<h1>Accont Manager is now compatible with 0.85.1 API.</h1>
 
 <p>
-GoManager itself is free but now you will need to purchase an API key to run the bot.
+Accont Manager itself is free but now you will need to purchase an API key to run the bot.
 <br/>
 See https://talk.pogodev.org/d/51-api-hashing-service-by-pokefarmer for pricing for API keys.
 </p>
