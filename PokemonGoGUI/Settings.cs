@@ -13,6 +13,7 @@ namespace PokemonGoGUI
 {
     public class Settings : ISettings
     {
+        public string[] HashKeys { get; set; }
         public string AuthAPIKey { get; set; }
         public Uri HashHost { get; set; }
         public string HashEndpoint { get; set; }
@@ -98,7 +99,6 @@ namespace PokemonGoGUI
         public int MaxFailBeforeReset { get; set; }
 
         public AccountState StopAtMinAccountState { get; set; }
-        public string HashKeys { get; set; }
 
         public ProxyEx Proxy
         {

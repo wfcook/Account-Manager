@@ -56,10 +56,18 @@ namespace PokemonGoGUI
         public async Task<MethodResult<bool>> DoLogin(ISettings settings)
         {
             SetSettings(settings);
-            Configuration.Hasher = new PokeHashHasher(Settings.AuthAPIKey);
-            Configuration.HasherUrl = new Uri(Settings.HashHost.ToString());
-            Configuration.HashEndpoint = Settings.HashEndpoint;
-            Configuration.IgnoreHashVersion = true;
+            // TODO: see how do this only once better.
+            if (!(Configuration.Hasher is PokeHashHasher))
+            {
+                // By default Configuration.Hasher is LegacyHasher type  (see Configuration.cs in the pogolib source code)
+                // -> So this comparation only will run once.
+                Configuration.Hasher = new PokeHashHasher(Settings.HashKeys);
+                Configuration.HasherUrl = Settings.HashHost;
+                Configuration.HashEndpoint = Settings.HashEndpoint;
+                // TODO: make this configurable. To avoid bans (may be with a checkbox in hash keys tab).
+                Configuration.IgnoreHashVersion = true;
+            }
+            // *****
 
             ILoginProvider loginProvider;
 

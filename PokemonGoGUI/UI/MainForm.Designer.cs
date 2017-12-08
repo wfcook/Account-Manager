@@ -162,6 +162,12 @@
             this.enablelDisableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.manualCheckToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.tabPageHashKeys = new System.Windows.Forms.TabPage();
+            this.listViewHashKeys = new System.Windows.Forms.ListView();
+            this.chKey = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.contextMenuStripHashKeys = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.addToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.deleteToolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewMain)).BeginInit();
             this.contextMenuStripAccounts.SuspendLayout();
             this.statusStripStats.SuspendLayout();
@@ -173,6 +179,8 @@
             this.tabPageScheduler.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewScheduler)).BeginInit();
             this.contextMenuStripScheduler.SuspendLayout();
+            this.tabPageHashKeys.SuspendLayout();
+            this.contextMenuStripHashKeys.SuspendLayout();
             this.SuspendLayout();
             // 
             // fastObjectListViewMain
@@ -340,7 +348,7 @@
             this.devToolsToolStripMenuItem,
             this.helpInfoToolStripMenuItem});
             this.contextMenuStripAccounts.Name = "contextMenuStrip1";
-            this.contextMenuStripAccounts.Size = new System.Drawing.Size(188, 608);
+            this.contextMenuStripAccounts.Size = new System.Drawing.Size(188, 580);
             this.contextMenuStripAccounts.Opening += new System.ComponentModel.CancelEventHandler(this.ContextMenuStripAccounts_Opening);
             // 
             // aboutToolStripMenuItem
@@ -600,14 +608,14 @@
             // countsToolStripMenuItem
             // 
             this.countsToolStripMenuItem.Name = "countsToolStripMenuItem";
-            this.countsToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
+            this.countsToolStripMenuItem.Size = new System.Drawing.Size(129, 26);
             this.countsToolStripMenuItem.Text = "Counts";
             this.countsToolStripMenuItem.Click += new System.EventHandler(this.ClearCountsToolStripMenuItem_Click);
             // 
             // logsToolStripMenuItem
             // 
             this.logsToolStripMenuItem.Name = "logsToolStripMenuItem";
-            this.logsToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
+            this.logsToolStripMenuItem.Size = new System.Drawing.Size(129, 26);
             this.logsToolStripMenuItem.Text = "Logs";
             this.logsToolStripMenuItem.Click += new System.EventHandler(this.LogsToolStripMenuItem_Click);
             // 
@@ -637,7 +645,7 @@
             // wConfigToolStripMenuItem
             // 
             this.wConfigToolStripMenuItem.Name = "wConfigToolStripMenuItem";
-            this.wConfigToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
+            this.wConfigToolStripMenuItem.Size = new System.Drawing.Size(149, 26);
             this.wConfigToolStripMenuItem.Tag = "true";
             this.wConfigToolStripMenuItem.Text = "w/ Config";
             this.wConfigToolStripMenuItem.Click += new System.EventHandler(this.WConfigToolStripMenuItem_Click);
@@ -645,7 +653,7 @@
             // defaultToolStripMenuItem
             // 
             this.defaultToolStripMenuItem.Name = "defaultToolStripMenuItem";
-            this.defaultToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
+            this.defaultToolStripMenuItem.Size = new System.Drawing.Size(149, 26);
             this.defaultToolStripMenuItem.Tag = "false";
             this.defaultToolStripMenuItem.Text = "Default";
             this.defaultToolStripMenuItem.Click += new System.EventHandler(this.WConfigToolStripMenuItem_Click);
@@ -952,9 +960,11 @@
             // 
             // tabControlProxies
             // 
+            this.tabControlProxies.ContextMenuStrip = this.contextMenuStripHashKeys;
             this.tabControlProxies.Controls.Add(this.tabPageAccounts);
             this.tabControlProxies.Controls.Add(this.tabPageProxies);
             this.tabControlProxies.Controls.Add(this.tabPageScheduler);
+            this.tabControlProxies.Controls.Add(this.tabPageHashKeys);
             this.tabControlProxies.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControlProxies.Location = new System.Drawing.Point(0, 0);
             this.tabControlProxies.Name = "tabControlProxies";
@@ -1265,6 +1275,60 @@
             this.deleteToolStripMenuItem2.Text = "Delete";
             this.deleteToolStripMenuItem2.Click += new System.EventHandler(this.DeleteToolStripMenuItem2_Click);
             // 
+            // tabPageHashKeys
+            // 
+            this.tabPageHashKeys.Controls.Add(this.listViewHashKeys);
+            this.tabPageHashKeys.Location = new System.Drawing.Point(4, 25);
+            this.tabPageHashKeys.Name = "tabPageHashKeys";
+            this.tabPageHashKeys.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageHashKeys.Size = new System.Drawing.Size(1175, 428);
+            this.tabPageHashKeys.TabIndex = 3;
+            this.tabPageHashKeys.Text = "Hash Keys";
+            this.tabPageHashKeys.UseVisualStyleBackColor = true;
+            // 
+            // listViewHashKeys
+            // 
+            this.listViewHashKeys.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
+            this.listViewHashKeys.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.chKey});
+            this.listViewHashKeys.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listViewHashKeys.ForeColor = System.Drawing.Color.Gainsboro;
+            this.listViewHashKeys.FullRowSelect = true;
+            this.listViewHashKeys.Location = new System.Drawing.Point(3, 3);
+            this.listViewHashKeys.Name = "listViewHashKeys";
+            this.listViewHashKeys.Size = new System.Drawing.Size(1169, 422);
+            this.listViewHashKeys.TabIndex = 0;
+            this.listViewHashKeys.UseCompatibleStateImageBehavior = false;
+            this.listViewHashKeys.View = System.Windows.Forms.View.Details;
+            // 
+            // chKey
+            // 
+            this.chKey.Text = "Key";
+            this.chKey.Width = 220;
+            // 
+            // contextMenuStripHashKeys
+            // 
+            this.contextMenuStripHashKeys.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.contextMenuStripHashKeys.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.addToolStripMenuItem1,
+            this.deleteToolStripMenuItem3});
+            this.contextMenuStripHashKeys.Name = "contextMenuStripHashKeys";
+            this.contextMenuStripHashKeys.Size = new System.Drawing.Size(123, 52);
+            // 
+            // addToolStripMenuItem1
+            // 
+            this.addToolStripMenuItem1.Name = "addToolStripMenuItem1";
+            this.addToolStripMenuItem1.Size = new System.Drawing.Size(175, 24);
+            this.addToolStripMenuItem1.Text = "Add";
+            this.addToolStripMenuItem1.Click += new System.EventHandler(this.AddToolStripMenuItem1_Click);
+            // 
+            // deleteToolStripMenuItem3
+            // 
+            this.deleteToolStripMenuItem3.Name = "deleteToolStripMenuItem3";
+            this.deleteToolStripMenuItem3.Size = new System.Drawing.Size(175, 24);
+            this.deleteToolStripMenuItem3.Text = "Delete";
+            this.deleteToolStripMenuItem3.Click += new System.EventHandler(this.DeleteToolStripMenuItem3_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -1289,6 +1353,8 @@
             this.tabPageScheduler.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewScheduler)).EndInit();
             this.contextMenuStripScheduler.ResumeLayout(false);
+            this.tabPageHashKeys.ResumeLayout(false);
+            this.contextMenuStripHashKeys.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1429,6 +1495,12 @@
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelFlagged;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel8;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelCaptcha;
+        private System.Windows.Forms.TabPage tabPageHashKeys;
+        private System.Windows.Forms.ListView listViewHashKeys;
+        private System.Windows.Forms.ColumnHeader chKey;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStripHashKeys;
+        private System.Windows.Forms.ToolStripMenuItem addToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem3;
     }
 }
 
