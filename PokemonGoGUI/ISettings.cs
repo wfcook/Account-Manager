@@ -40,5 +40,6 @@ namespace PokemonGoGUI
         string Language { get; set; }
         string TimeZone { get; set; }
         string POSIX { get; set; }
+        string HashKeys { get; set; }
     }
 }

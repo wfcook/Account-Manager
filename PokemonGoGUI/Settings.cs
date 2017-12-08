@@ -46,6 +46,7 @@ namespace PokemonGoGUI
         public bool IncubateEggs { get; set; }
         public int MaxLevel { get; set; }
         public bool SPF { get; set; }
+        
         public double SearchFortBelowPercent { get; set; }
         public double ForceEvolveAbovePercent { get; set; }
         public bool StopOnAPIUpdate { get; set; }
@@ -97,6 +98,7 @@ namespace PokemonGoGUI
         public int MaxFailBeforeReset { get; set; }
 
         public AccountState StopAtMinAccountState { get; set; }
+        public string HashKeys { get; set; }
 
         public ProxyEx Proxy
         {

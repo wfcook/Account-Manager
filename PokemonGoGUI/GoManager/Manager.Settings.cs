@@ -191,7 +191,8 @@ namespace PokemonGoGUI.GoManager
             }
 
             //Shouldn't happen
-            if (!PokeSettings.TryGetValue(pokemon, out PokemonSettings pokemonSettings))
+            PokemonSettings pokemonSettings;
+            if (!PokeSettings.TryGetValue(pokemon, out  pokemonSettings))
             {
                 return new MethodResult<PokemonSettings>()
                 {
