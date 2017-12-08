@@ -225,37 +225,39 @@ namespace PokemonGoGUI.UI
 
             ProxyEx proxyEx = null;
 
-            if (!Int32.TryParse(textBoxMaxLevel.Text, out int maxLevel) || maxLevel < 0)
+            int maxLevel;
+            if (!Int32.TryParse(textBoxMaxLevel.Text, out maxLevel) || maxLevel < 0)
             {
                 MessageBox.Show("Invalid Max level", "Warning");
                 return false;
             }
 
-            if (!Int32.TryParse(textBoxPokemonBeforeEvolve.Text, out int minPokemonBeforeEvolve) || minPokemonBeforeEvolve < 0)
+            int minPokemonBeforeEvolve;
+            if (!Int32.TryParse(textBoxPokemonBeforeEvolve.Text, out minPokemonBeforeEvolve) || minPokemonBeforeEvolve < 0)
             {
                 MessageBox.Show("Invalid pokemon before evolve", "Warning");
                 return false;
             }
-
-            if (!Int32.TryParse(textBoxWalkSpeed.Text, out int walkingSpeed) || walkingSpeed <= 0)
+            int walkingSpeed;
+            if (!Int32.TryParse(textBoxWalkSpeed.Text, out  walkingSpeed) || walkingSpeed <= 0)
             {
                 MessageBox.Show("Invalid walking speed", "Warning");
                 return false;
             }
-
-            if (!Int32.TryParse(textBoxMaxTravelDistance.Text, out int maxTravelDistance) || maxTravelDistance <= 0)
+            int maxTravelDistance;
+            if (!Int32.TryParse(textBoxMaxTravelDistance.Text, out maxTravelDistance) || maxTravelDistance <= 0)
             {
                 MessageBox.Show("Invalid max travel distance", "Warning");
                 return false;
             }
-
-            if (!Double.TryParse(textBoxLat.Text.Replace(",", "."), NumberStyles.Any, CultureInfo.InvariantCulture, out double defaultLat))
+            double defaultLat;
+            if (!Double.TryParse(textBoxLat.Text.Replace(",", "."), NumberStyles.Any, CultureInfo.InvariantCulture, out defaultLat))
             {
                 MessageBox.Show("Invalid latitude", "Warning");
                 return false;
             }
-
-            if (!Double.TryParse(textBoxLong.Text.Replace(",", "."), NumberStyles.Any, CultureInfo.InvariantCulture, out double defaultLong))
+            double defaultLong;
+            if (!Double.TryParse(textBoxLong.Text.Replace(",", "."), NumberStyles.Any, CultureInfo.InvariantCulture, out defaultLong))
             {
                 MessageBox.Show("Invalid longitude", "Warning");
                 return false;
@@ -418,8 +420,8 @@ namespace PokemonGoGUI.UI
             {
                 return;
             }
-
-            if (!Int32.TryParse(num, out int maxInventory))
+            int maxInventory;
+            if (!Int32.TryParse(num, out maxInventory))
             {
                 return;
             }
@@ -529,8 +531,8 @@ namespace PokemonGoGUI.UI
             {
                 return;
             }
-
-            if (!Int32.TryParse(cp, out int changeCp) || changeCp < 0)
+            int changeCp;
+            if (!Int32.TryParse(cp, out changeCp) || changeCp < 0)
             {
                 MessageBox.Show("Invalid amount", "Warning");
 
@@ -615,7 +617,8 @@ namespace PokemonGoGUI.UI
 
         private void ComboBoxLocationPresets_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (comboBoxLocationPresets.SelectedItem is FarmLocation fLocation)
+            var fLocation = comboBoxLocationPresets.SelectedItem as FarmLocation;
+            if (fLocation!=null)
             {
                 if (fLocation.Name == "Current")
                 {

@@ -679,8 +679,9 @@ namespace PokemonGoGUI.UI
         private async void RecycleToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string data = Prompt.ShowDialog("Amount to recycle", "Set recycle amount");
+            int amount;
 
-            if (String.IsNullOrEmpty(data) || !Int32.TryParse(data, out int amount) || amount <= 0)
+            if (String.IsNullOrEmpty(data) || !Int32.TryParse(data, out amount) || amount <= 0)
             {
                 return;
             }

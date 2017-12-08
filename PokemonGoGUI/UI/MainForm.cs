@@ -22,10 +22,11 @@ namespace PokemonGoGUI
 {
     public partial class MainForm : System.Windows.Forms.Form
     {
+        
         private List<Manager> _managers = new List<Manager>();
         private ProxyHandler _proxyHandler = new ProxyHandler();
         private List<Scheduler> _schedulers = new List<Scheduler>();
-        private List<string> _hashKeys = new List<string>();
+        private List<HashKey> _hashKeys = new List<HashKey>();
         private bool _spf = false;
         private bool _showStartup = true;
         private bool IsLatest = true;
@@ -156,48 +157,28 @@ namespace PokemonGoGUI
 
         private async Task<bool> LoadSettings()
         {
-            string jsonFile = _saveFile + ".json";
-            string gzipFile = _saveFile + ".json.gz";
+            var gzipFile = _saveFile + ".json.gz";
 
             try
             {
-                bool jsonFileExists = File.Exists(jsonFile);
-                bool gzipFileExists = File.Exists(gzipFile);
 
-                if(!jsonFileExists && !gzipFileExists)
-                {
+                if( !File.Exists(gzipFile))
                     return false;
-                }
 
-                List<Manager> tempManagers = new List<Manager>();
+                var tempManagers = new List<Manager>();
 
-                if (gzipFileExists)
-                {
-                    byte[] byteData = await Task.Run(() => File.ReadAllBytes(gzipFile));
-                    string data = Compression.Unzip(byteData);
+                byte[] byteData = await Task.Run(() => File.ReadAllBytes(gzipFile));
+                string data = Compression.Unzip(byteData);
 
-                    ProgramExportModel model = Serializer.FromJson<ProgramExportModel>(data);
+                ProgramExportModel model = Serializer.FromJson<ProgramExportModel>(data);
 
-                    _proxyHandler = model.ProxyHandler;
-                    tempManagers = model.Managers;
-                    _schedulers = model.Schedulers;
+                _proxyHandler = model.ProxyHandler;
+                tempManagers = model.Managers;
+                _schedulers = model.Schedulers;
+                if (model.HashKeys!=null)
                     _hashKeys = model.HashKeys;
-                    _spf = model.SPF;
-                    _showStartup = model.ShowWelcomeMessage;
-                }
-                else
-                {
-                    string data = await Task.Run(() => File.ReadAllText(jsonFile));
-
-                    tempManagers = Serializer.FromJson<List<Manager>>(data);
-                }
-
-                if(tempManagers == null)
-                {
-                    MessageBox.Show("Failed to load settings");
-                    return true;
-                }
-
+                _spf = model.SPF;
+                _showStartup = model.ShowWelcomeMessage;
                 foreach(Manager manager in tempManagers)
                 {
                     manager.AddSchedulerEvent();
@@ -219,15 +200,16 @@ namespace PokemonGoGUI
 
                     _managers.Add(manager);
                 }
+                fastObjectListViewMain.SetObjects(_managers);
+                fastObjectListViewHashKeys.SetObjects(_hashKeys);
+
             }
             catch
             {
+                
                 MessageBox.Show("Failed to load settings");
                 //Failed to load settings
             }
-
-            fastObjectListViewMain.SetObjects(_managers);
-            fastObjectListViewHashKeys.SetObjects(_hashKeys);
 
             return true;
         }
@@ -399,7 +381,7 @@ namespace PokemonGoGUI
 
             foreach(Manager manager in fastObjectListViewMain.SelectedObjects)
             {
-                manager.UserSettings.HashKeys = _hashKeys.ToArray();
+                manager.UserSettings.HashKeys = _hashKeys.Select(x=>x.Key).ToArray();
                 manager.UserSettings.SPF = _spf;
                 manager.Start();
 
@@ -674,6 +656,15 @@ namespace PokemonGoGUI
 
                 fastObjectListViewScheduler.RefreshObject(_schedulers[0]);
             }
+            else if (tabControlMain.SelectedTab == tabPageHashKeys)
+            {
+                if(_hashKeys.Count == 0)
+                {
+                    return;
+                }
+
+                fastObjectListViewHashKeys.RefreshObject(_hashKeys[0]);
+            }
         }
 
         private void ClearProxiesToolStripMenuItem_Click(object sender, EventArgs e)
@@ -705,9 +696,14 @@ namespace PokemonGoGUI
             enableColorsToolStripMenuItem.Checked = !enableColorsToolStripMenuItem.Checked;
             bool isChecked = enableColorsToolStripMenuItem.Checked;
 
+            fastObjectListViewMain.UseCellFormatEvents = isChecked;
+            fastObjectListViewScheduler.UseCellFormatEvents = isChecked;
+            fastObjectListViewProxies.UseCellFormatEvents = isChecked;
+            fastObjectListViewHashKeys.UseCellFormatEvents = isChecked;
+
             if(isChecked)
             {
-                new Scheduler();
+                new Scheduler(); // <-- What does this?
 
                 fastObjectListViewMain.BackColor = Color.FromArgb(43, 43, 43);
                 fastObjectListViewMain.ForeColor = Color.LightGray;
@@ -718,7 +714,9 @@ namespace PokemonGoGUI
                 fastObjectListViewScheduler.BackColor = Color.FromArgb(43, 43, 43);
                 fastObjectListViewScheduler.ForeColor = Color.LightGray;
 
-                fastObjectListViewMain.UseCellFormatEvents = true;
+                fastObjectListViewHashKeys.BackColor = Color.FromArgb(43, 43, 43);
+                fastObjectListViewHashKeys.ForeColor = Color.LightGray;
+                
             }
             else
             {
@@ -732,8 +730,9 @@ namespace PokemonGoGUI
                 fastObjectListViewScheduler.BackColor = SystemColors.Window;
                 fastObjectListViewScheduler.ForeColor = SystemColors.WindowText;
 
-                fastObjectListViewMain.UseCellFormatEvents = false;
-                fastObjectListViewProxies.UseCellFormatEvents = false;
+                fastObjectListViewHashKeys.BackColor = SystemColors.Window;
+                fastObjectListViewHashKeys.ForeColor = SystemColors.WindowText;
+
             }
         }
 
@@ -1163,8 +1162,8 @@ namespace PokemonGoGUI
             {
                 return;
             }
-
-            if (!Double.TryParse(data, NumberStyles.Any, CultureInfo.InvariantCulture, out double value) || value < 0)
+            double value;
+            if (!Double.TryParse(data, NumberStyles.Any, CultureInfo.InvariantCulture, out value) || value < 0)
             {
                 MessageBox.Show("Invalid runtime value");
             }
@@ -1202,8 +1201,8 @@ namespace PokemonGoGUI
             {
                 return;
             }
-
-            if (!Int32.TryParse(data, out int level) || level < 0)
+            int level;
+            if (!Int32.TryParse(data, out level) || level < 0)
             {
                 MessageBox.Show("Invalid value");
                 return;
@@ -1355,8 +1354,8 @@ namespace PokemonGoGUI
             {
                 return;
             }
-
-            if (!Int32.TryParse(data, out int value) || value >= 500 || value < 0)
+            int value;
+            if (!Int32.TryParse(data, out value) || value >= 500 || value < 0)
             {
                 MessageBox.Show("Invalid value");
                 return;
@@ -1378,8 +1377,8 @@ namespace PokemonGoGUI
             {
                 return;
             }
-
-            if (!Int32.TryParse(data, out int value) || value >= 1000 || value < 0)
+            int value;
+            if (!Int32.TryParse(data, out value) || value >= 1000 || value < 0)
             {
                 MessageBox.Show("Invalid value");
                 return;
@@ -1396,8 +1395,8 @@ namespace PokemonGoGUI
             {
                 return;
             }
-
-            if (!Int32.TryParse(data, out int value) || value >= 1000 || value < 0)
+            int value;
+            if (!Int32.TryParse(data, out value) || value >= 1000 || value < 0)
             {
                 MessageBox.Show("Invalid value");
                 return;
@@ -1414,8 +1413,8 @@ namespace PokemonGoGUI
             {
                 return;
             }
-
-            if (!Int32.TryParse(data, out int value) || value >= 500 || value < 0)
+            int value;
+            if (!Int32.TryParse(data, out value) || value >= 500 || value < 0)
             {
                 MessageBox.Show("Invalid value");
                 return;
@@ -1432,8 +1431,8 @@ namespace PokemonGoGUI
             {
                 return;
             }
-
-            if (!Int32.TryParse(data, out int value) || value >= 40 || value < 0)
+            int value;
+            if (!Int32.TryParse(data, out value) || value >= 40 || value < 0)
             {
                 MessageBox.Show("Invalid value");
                 return;
@@ -1743,8 +1742,8 @@ namespace PokemonGoGUI
             {
                 return;
             }
-
-            if (!Int32.TryParse(data, out int value) || value <= 0)
+            int value;
+            if (!Int32.TryParse(data, out value) || value <= 0)
             {
                 MessageBox.Show("Invalid value", "Warning");
                 return;
@@ -1766,8 +1765,8 @@ namespace PokemonGoGUI
             {
                 return;
             }
-
-            if (!Int32.TryParse(data, out int value) || value <= 0)
+            int value;
+            if (!Int32.TryParse(data, out value) || value <= 0)
             {
                 MessageBox.Show("Invalid value", "Warning");
                 return;
@@ -2017,7 +2016,7 @@ namespace PokemonGoGUI
         {
             foreach (var hashkey in fastObjectListViewHashKeys.SelectedObjects)
             {
-                _hashKeys.Remove(hashkey.ToString());
+                _hashKeys.Remove(hashkey as HashKey);
             }
 
             fastObjectListViewHashKeys.SetObjects(_hashKeys);
@@ -2030,16 +2029,13 @@ namespace PokemonGoGUI
             {
                 return;
             }
-            _hashKeys.Add(data);
+            _hashKeys.Add(new HashKey{ Key = data});
             fastObjectListViewHashKeys.SetObjects(_hashKeys);
         }
 
         private void FastObjectListViewHashKeys_FormatCell(object sender, BrightIdeasSoftware.FormatCellEventArgs e)
         {
-            if (e.Column == olvColumnKeys)
-            {
-                e.SubItem.ForeColor = Color.Green;
-            }
+            e.SubItem.ForeColor = Color.Green;
         }
         #endregion
     }
