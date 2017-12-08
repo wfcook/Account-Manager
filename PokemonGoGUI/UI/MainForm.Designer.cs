@@ -128,6 +128,9 @@
             this.toolStripStatusLabelCaptcha = new System.Windows.Forms.ToolStripStatusLabel();
             this.timerStatusBarUpdate = new System.Windows.Forms.Timer(this.components);
             this.tabControlProxies = new System.Windows.Forms.TabControl();
+            this.contextMenuStripHashKeys = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.addToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.deleteToolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
             this.tabPageAccounts = new System.Windows.Forms.TabPage();
             this.tabPageProxies = new System.Windows.Forms.TabPage();
             this.fastObjectListViewProxies = new BrightIdeasSoftware.FastObjectListView();
@@ -165,13 +168,11 @@
             this.tabPageHashKeys = new System.Windows.Forms.TabPage();
             this.listViewHashKeys = new System.Windows.Forms.ListView();
             this.chKey = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.contextMenuStripHashKeys = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.addToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.deleteToolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewMain)).BeginInit();
             this.contextMenuStripAccounts.SuspendLayout();
             this.statusStripStats.SuspendLayout();
             this.tabControlProxies.SuspendLayout();
+            this.contextMenuStripHashKeys.SuspendLayout();
             this.tabPageAccounts.SuspendLayout();
             this.tabPageProxies.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewProxies)).BeginInit();
@@ -180,7 +181,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewScheduler)).BeginInit();
             this.contextMenuStripScheduler.SuspendLayout();
             this.tabPageHashKeys.SuspendLayout();
-            this.contextMenuStripHashKeys.SuspendLayout();
             this.SuspendLayout();
             // 
             // fastObjectListViewMain
@@ -973,6 +973,29 @@
             this.tabControlProxies.TabIndex = 2;
             this.tabControlProxies.SelectedIndexChanged += new System.EventHandler(this.TabControlProxies_SelectedIndexChanged);
             // 
+            // contextMenuStripHashKeys
+            // 
+            this.contextMenuStripHashKeys.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.contextMenuStripHashKeys.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.addToolStripMenuItem1,
+            this.deleteToolStripMenuItem3});
+            this.contextMenuStripHashKeys.Name = "contextMenuStripHashKeys";
+            this.contextMenuStripHashKeys.Size = new System.Drawing.Size(176, 80);
+            // 
+            // addToolStripMenuItem1
+            // 
+            this.addToolStripMenuItem1.Name = "addToolStripMenuItem1";
+            this.addToolStripMenuItem1.Size = new System.Drawing.Size(175, 24);
+            this.addToolStripMenuItem1.Text = "Add";
+            this.addToolStripMenuItem1.Click += new System.EventHandler(this.AddToolStripMenuItem1_Click);
+            // 
+            // deleteToolStripMenuItem3
+            // 
+            this.deleteToolStripMenuItem3.Name = "deleteToolStripMenuItem3";
+            this.deleteToolStripMenuItem3.Size = new System.Drawing.Size(175, 24);
+            this.deleteToolStripMenuItem3.Text = "Delete";
+            this.deleteToolStripMenuItem3.Click += new System.EventHandler(this.DeleteToolStripMenuItem3_Click);
+            // 
             // tabPageAccounts
             // 
             this.tabPageAccounts.BackColor = System.Drawing.Color.Transparent;
@@ -1306,29 +1329,6 @@
             this.chKey.Text = "Key";
             this.chKey.Width = 220;
             // 
-            // contextMenuStripHashKeys
-            // 
-            this.contextMenuStripHashKeys.ImageScalingSize = new System.Drawing.Size(20, 20);
-            this.contextMenuStripHashKeys.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.addToolStripMenuItem1,
-            this.deleteToolStripMenuItem3});
-            this.contextMenuStripHashKeys.Name = "contextMenuStripHashKeys";
-            this.contextMenuStripHashKeys.Size = new System.Drawing.Size(123, 52);
-            // 
-            // addToolStripMenuItem1
-            // 
-            this.addToolStripMenuItem1.Name = "addToolStripMenuItem1";
-            this.addToolStripMenuItem1.Size = new System.Drawing.Size(175, 24);
-            this.addToolStripMenuItem1.Text = "Add";
-            this.addToolStripMenuItem1.Click += new System.EventHandler(this.AddToolStripMenuItem1_Click);
-            // 
-            // deleteToolStripMenuItem3
-            // 
-            this.deleteToolStripMenuItem3.Name = "deleteToolStripMenuItem3";
-            this.deleteToolStripMenuItem3.Size = new System.Drawing.Size(175, 24);
-            this.deleteToolStripMenuItem3.Text = "Delete";
-            this.deleteToolStripMenuItem3.Click += new System.EventHandler(this.DeleteToolStripMenuItem3_Click);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -1346,6 +1346,7 @@
             this.statusStripStats.ResumeLayout(false);
             this.statusStripStats.PerformLayout();
             this.tabControlProxies.ResumeLayout(false);
+            this.contextMenuStripHashKeys.ResumeLayout(false);
             this.tabPageAccounts.ResumeLayout(false);
             this.tabPageProxies.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewProxies)).EndInit();
@@ -1354,7 +1355,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewScheduler)).EndInit();
             this.contextMenuStripScheduler.ResumeLayout(false);
             this.tabPageHashKeys.ResumeLayout(false);
-            this.contextMenuStripHashKeys.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
