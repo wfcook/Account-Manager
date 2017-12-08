@@ -29,22 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.fastObjectListViewMain = new BrightIdeasSoftware.FastObjectListView();
-            this.olvColumnGroup = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.olvColumnScheduler = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.olvColumnUsername = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.olvColumnLevel = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.olvColumnAccountState = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.olvColumnPokestopsFarmed = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.olvColumnPokemonCaught = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.olvColumnExp = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.olvColumnExpPerHour = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.olvColumnTillRankUp = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.olvColumnBotState = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.olvColumnRunningTime = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnRemainingTime = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.olvColumnProxy = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.olvColumnLastLogMessage = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.contextMenuStripAccounts = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
@@ -127,19 +112,12 @@
             this.toolStripStatusLabel8 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabelCaptcha = new System.Windows.Forms.ToolStripStatusLabel();
             this.timerStatusBarUpdate = new System.Windows.Forms.Timer(this.components);
-            this.tabControlProxies = new System.Windows.Forms.TabControl();
-            this.contextMenuStripHashKeys = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.addToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.deleteToolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
-            this.tabPageAccounts = new System.Windows.Forms.TabPage();
-            this.tabPageProxies = new System.Windows.Forms.TabPage();
-            this.fastObjectListViewProxies = new BrightIdeasSoftware.FastObjectListView();
-            this.olvColumnProxyIP = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.olvColumnProxyPort = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.olvColumnProxyAuth = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.olvColumnUsageCount = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.olvColumnCurrentFails = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.olvColumnProxyBanned = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.contextMenuStripScheduler = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.addNewToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.editToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.enablelDisableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.manualCheckToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.deleteToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStripProxy = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.addToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.singleProxyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -149,6 +127,11 @@
             this.maxAccountsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.resetBanStateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.contextMenuStripHashKeys = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.tabPageHashKeys = new System.Windows.Forms.TabPage();
+            this.fastObjectListViewHashKeys = new BrightIdeasSoftware.FastObjectListView();
             this.tabPageScheduler = new System.Windows.Forms.TabPage();
             this.fastObjectListViewScheduler = new BrightIdeasSoftware.FastObjectListView();
             this.olvColumnSchedulerName = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
@@ -159,144 +142,47 @@
             this.olvColumnSchedulerLastCall = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnSchedulerTime = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnSchedulerEnabled = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.contextMenuStripScheduler = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.addNewToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.editToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.enablelDisableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.manualCheckToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.deleteToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
-            this.tabPageHashKeys = new System.Windows.Forms.TabPage();
-            this.listViewHashKeys = new System.Windows.Forms.ListView();
-            this.chKey = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewMain)).BeginInit();
+            this.tabPageProxies = new System.Windows.Forms.TabPage();
+            this.fastObjectListViewProxies = new BrightIdeasSoftware.FastObjectListView();
+            this.olvColumnProxyIP = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnProxyPort = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnProxyAuth = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnUsageCount = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnCurrentFails = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnProxyBanned = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.tabPageAccounts = new System.Windows.Forms.TabPage();
+            this.fastObjectListViewMain = new BrightIdeasSoftware.FastObjectListView();
+            this.olvColumnGroup = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnScheduler = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnUsername = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnLevel = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnAccountState = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnPokestopsFarmed = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnPokemonCaught = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnExp = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnExpPerHour = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnTillRankUp = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnBotState = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnRunningTime = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnProxy = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnLastLogMessage = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.tabControlMain = new System.Windows.Forms.TabControl();
+            this.olvColumnKeys = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.contextMenuStripAccounts.SuspendLayout();
             this.statusStripStats.SuspendLayout();
-            this.tabControlProxies.SuspendLayout();
-            this.contextMenuStripHashKeys.SuspendLayout();
-            this.tabPageAccounts.SuspendLayout();
-            this.tabPageProxies.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewProxies)).BeginInit();
+            this.contextMenuStripScheduler.SuspendLayout();
             this.contextMenuStripProxy.SuspendLayout();
+            this.contextMenuStripHashKeys.SuspendLayout();
+            this.tabPageHashKeys.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewHashKeys)).BeginInit();
             this.tabPageScheduler.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewScheduler)).BeginInit();
-            this.contextMenuStripScheduler.SuspendLayout();
-            this.tabPageHashKeys.SuspendLayout();
+            this.tabPageProxies.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewProxies)).BeginInit();
+            this.tabPageAccounts.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewMain)).BeginInit();
+            this.tabControlMain.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // fastObjectListViewMain
-            // 
-            this.fastObjectListViewMain.AllColumns.Add(this.olvColumnGroup);
-            this.fastObjectListViewMain.AllColumns.Add(this.olvColumnScheduler);
-            this.fastObjectListViewMain.AllColumns.Add(this.olvColumnUsername);
-            this.fastObjectListViewMain.AllColumns.Add(this.olvColumnLevel);
-            this.fastObjectListViewMain.AllColumns.Add(this.olvColumnAccountState);
-            this.fastObjectListViewMain.AllColumns.Add(this.olvColumnPokestopsFarmed);
-            this.fastObjectListViewMain.AllColumns.Add(this.olvColumnPokemonCaught);
-            this.fastObjectListViewMain.AllColumns.Add(this.olvColumnExp);
-            this.fastObjectListViewMain.AllColumns.Add(this.olvColumnExpPerHour);
-            this.fastObjectListViewMain.AllColumns.Add(this.olvColumnTillRankUp);
-            this.fastObjectListViewMain.AllColumns.Add(this.olvColumnBotState);
-            this.fastObjectListViewMain.AllColumns.Add(this.olvColumnRunningTime);
-            this.fastObjectListViewMain.AllColumns.Add(this.olvColumnRemainingTime);
-            this.fastObjectListViewMain.AllColumns.Add(this.olvColumnProxy);
-            this.fastObjectListViewMain.AllColumns.Add(this.olvColumnLastLogMessage);
-            this.fastObjectListViewMain.AllowColumnReorder = true;
-            this.fastObjectListViewMain.CellEditUseWholeCell = false;
-            this.fastObjectListViewMain.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.olvColumnGroup,
-            this.olvColumnScheduler,
-            this.olvColumnUsername,
-            this.olvColumnLevel,
-            this.olvColumnAccountState,
-            this.olvColumnPokestopsFarmed,
-            this.olvColumnPokemonCaught,
-            this.olvColumnExp,
-            this.olvColumnExpPerHour,
-            this.olvColumnTillRankUp,
-            this.olvColumnBotState,
-            this.olvColumnRunningTime,
-            this.olvColumnProxy,
-            this.olvColumnLastLogMessage});
-            this.fastObjectListViewMain.ContextMenuStrip = this.contextMenuStripAccounts;
-            this.fastObjectListViewMain.Cursor = System.Windows.Forms.Cursors.Default;
-            this.fastObjectListViewMain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.fastObjectListViewMain.FullRowSelect = true;
-            this.fastObjectListViewMain.Location = new System.Drawing.Point(3, 3);
-            this.fastObjectListViewMain.Name = "fastObjectListViewMain";
-            this.fastObjectListViewMain.ShowGroups = false;
-            this.fastObjectListViewMain.Size = new System.Drawing.Size(1169, 422);
-            this.fastObjectListViewMain.TabIndex = 0;
-            this.fastObjectListViewMain.UseCellFormatEvents = true;
-            this.fastObjectListViewMain.UseCompatibleStateImageBehavior = false;
-            this.fastObjectListViewMain.UseFiltering = true;
-            this.fastObjectListViewMain.View = System.Windows.Forms.View.Details;
-            this.fastObjectListViewMain.VirtualMode = true;
-            this.fastObjectListViewMain.FormatCell += new System.EventHandler<BrightIdeasSoftware.FormatCellEventArgs>(this.FastObjectListViewMain_FormatCell);
-            this.fastObjectListViewMain.DoubleClick += new System.EventHandler(this.FastObjectListViewMain_DoubleClick);
-            this.fastObjectListViewMain.KeyDown += new System.Windows.Forms.KeyEventHandler(this.FastObjectListViewMain_KeyDown);
-            // 
-            // olvColumnGroup
-            // 
-            this.olvColumnGroup.AspectName = "GroupName";
-            this.olvColumnGroup.Text = "Group";
-            // 
-            // olvColumnScheduler
-            // 
-            this.olvColumnScheduler.AspectName = "SchedulerName";
-            this.olvColumnScheduler.Text = "Scheduler";
-            // 
-            // olvColumnUsername
-            // 
-            this.olvColumnUsername.AspectName = "AccountName";
-            this.olvColumnUsername.Text = "Name";
-            // 
-            // olvColumnLevel
-            // 
-            this.olvColumnLevel.AspectName = "Level";
-            this.olvColumnLevel.Text = "Level";
-            this.olvColumnLevel.Width = 30;
-            // 
-            // olvColumnAccountState
-            // 
-            this.olvColumnAccountState.AspectName = "AccountState";
-            this.olvColumnAccountState.Text = "Account Status";
-            // 
-            // olvColumnPokestopsFarmed
-            // 
-            this.olvColumnPokestopsFarmed.AspectName = "PokestopsFarmed";
-            this.olvColumnPokestopsFarmed.Text = "Pokestops/23hr";
-            // 
-            // olvColumnPokemonCaught
-            // 
-            this.olvColumnPokemonCaught.AspectName = "PokemonCaught";
-            this.olvColumnPokemonCaught.Text = "Pokemon/23hr";
-            // 
-            // olvColumnExp
-            // 
-            this.olvColumnExp.AspectName = "ExpRatio";
-            this.olvColumnExp.Text = "Exp";
-            this.olvColumnExp.Width = 40;
-            // 
-            // olvColumnExpPerHour
-            // 
-            this.olvColumnExpPerHour.AspectName = "ExpPerHour";
-            this.olvColumnExpPerHour.Text = "Exp/Hr";
-            this.olvColumnExpPerHour.Width = 50;
-            // 
-            // olvColumnTillRankUp
-            // 
-            this.olvColumnTillRankUp.AspectName = "TillLevelUp";
-            this.olvColumnTillRankUp.Text = "Level Up";
-            // 
-            // olvColumnBotState
-            // 
-            this.olvColumnBotState.AspectName = "State";
-            this.olvColumnBotState.Text = "State";
-            // 
-            // olvColumnRunningTime
-            // 
-            this.olvColumnRunningTime.AspectName = "RunningTime";
-            this.olvColumnRunningTime.Text = "Time";
             // 
             // olvColumnRemainingTime
             // 
@@ -304,18 +190,6 @@
             this.olvColumnRemainingTime.DisplayIndex = 11;
             this.olvColumnRemainingTime.IsVisible = false;
             this.olvColumnRemainingTime.Text = "Remaining Time";
-            // 
-            // olvColumnProxy
-            // 
-            this.olvColumnProxy.AspectName = "Proxy";
-            this.olvColumnProxy.Text = "Proxy";
-            // 
-            // olvColumnLastLogMessage
-            // 
-            this.olvColumnLastLogMessage.AspectName = "LastLogMessage";
-            this.olvColumnLastLogMessage.FillsFreeSpace = true;
-            this.olvColumnLastLogMessage.Text = "Last Log";
-            this.olvColumnLastLogMessage.Width = 248;
             // 
             // contextMenuStripAccounts
             // 
@@ -958,55 +832,277 @@
             this.timerStatusBarUpdate.Interval = 5000;
             this.timerStatusBarUpdate.Tick += new System.EventHandler(this.TimerStatusBarUpdate_Tick);
             // 
-            // tabControlProxies
+            // contextMenuStripScheduler
             // 
-            this.tabControlProxies.ContextMenuStrip = this.contextMenuStripHashKeys;
-            this.tabControlProxies.Controls.Add(this.tabPageAccounts);
-            this.tabControlProxies.Controls.Add(this.tabPageProxies);
-            this.tabControlProxies.Controls.Add(this.tabPageScheduler);
-            this.tabControlProxies.Controls.Add(this.tabPageHashKeys);
-            this.tabControlProxies.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControlProxies.Location = new System.Drawing.Point(0, 0);
-            this.tabControlProxies.Name = "tabControlProxies";
-            this.tabControlProxies.SelectedIndex = 0;
-            this.tabControlProxies.Size = new System.Drawing.Size(1183, 457);
-            this.tabControlProxies.TabIndex = 2;
-            this.tabControlProxies.SelectedIndexChanged += new System.EventHandler(this.TabControlProxies_SelectedIndexChanged);
+            this.contextMenuStripScheduler.ImageScalingSize = new System.Drawing.Size(22, 22);
+            this.contextMenuStripScheduler.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.addNewToolStripMenuItem1,
+            this.editToolStripMenuItem1,
+            this.enablelDisableToolStripMenuItem,
+            this.manualCheckToolStripMenuItem,
+            this.deleteToolStripMenuItem2});
+            this.contextMenuStripScheduler.Name = "contextMenuStripScheduler";
+            this.contextMenuStripScheduler.Size = new System.Drawing.Size(180, 124);
+            // 
+            // addNewToolStripMenuItem1
+            // 
+            this.addNewToolStripMenuItem1.Name = "addNewToolStripMenuItem1";
+            this.addNewToolStripMenuItem1.Size = new System.Drawing.Size(179, 24);
+            this.addNewToolStripMenuItem1.Text = "Add New";
+            this.addNewToolStripMenuItem1.Click += new System.EventHandler(this.AddNewToolStripMenuItem1_Click);
+            // 
+            // editToolStripMenuItem1
+            // 
+            this.editToolStripMenuItem1.Name = "editToolStripMenuItem1";
+            this.editToolStripMenuItem1.Size = new System.Drawing.Size(179, 24);
+            this.editToolStripMenuItem1.Text = "Edit";
+            this.editToolStripMenuItem1.Click += new System.EventHandler(this.EditToolStripMenuItem1_Click);
+            // 
+            // enablelDisableToolStripMenuItem
+            // 
+            this.enablelDisableToolStripMenuItem.Name = "enablelDisableToolStripMenuItem";
+            this.enablelDisableToolStripMenuItem.Size = new System.Drawing.Size(179, 24);
+            this.enablelDisableToolStripMenuItem.Text = "Enable/Disable";
+            this.enablelDisableToolStripMenuItem.Click += new System.EventHandler(this.EnablelDisableToolStripMenuItem_Click);
+            // 
+            // manualCheckToolStripMenuItem
+            // 
+            this.manualCheckToolStripMenuItem.Name = "manualCheckToolStripMenuItem";
+            this.manualCheckToolStripMenuItem.Size = new System.Drawing.Size(179, 24);
+            this.manualCheckToolStripMenuItem.Text = "Manual Check";
+            this.manualCheckToolStripMenuItem.Click += new System.EventHandler(this.ManualCheckToolStripMenuItem_Click);
+            // 
+            // deleteToolStripMenuItem2
+            // 
+            this.deleteToolStripMenuItem2.Name = "deleteToolStripMenuItem2";
+            this.deleteToolStripMenuItem2.Size = new System.Drawing.Size(179, 24);
+            this.deleteToolStripMenuItem2.Text = "Delete";
+            this.deleteToolStripMenuItem2.Click += new System.EventHandler(this.DeleteToolStripMenuItem2_Click);
+            // 
+            // contextMenuStripProxy
+            // 
+            this.contextMenuStripProxy.ImageScalingSize = new System.Drawing.Size(22, 22);
+            this.contextMenuStripProxy.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.addToolStripMenuItem,
+            this.setToolStripMenuItem,
+            this.deleteToolStripMenuItem1});
+            this.contextMenuStripProxy.Name = "contextMenuStripProxy";
+            this.contextMenuStripProxy.Size = new System.Drawing.Size(123, 76);
+            // 
+            // addToolStripMenuItem
+            // 
+            this.addToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.singleProxyToolStripMenuItem,
+            this.fromFileToolStripMenuItem});
+            this.addToolStripMenuItem.Name = "addToolStripMenuItem";
+            this.addToolStripMenuItem.Size = new System.Drawing.Size(122, 24);
+            this.addToolStripMenuItem.Text = "Add";
+            // 
+            // singleProxyToolStripMenuItem
+            // 
+            this.singleProxyToolStripMenuItem.Name = "singleProxyToolStripMenuItem";
+            this.singleProxyToolStripMenuItem.Size = new System.Drawing.Size(165, 26);
+            this.singleProxyToolStripMenuItem.Text = "Single Proxy";
+            this.singleProxyToolStripMenuItem.Click += new System.EventHandler(this.SingleProxyToolStripMenuItem_Click);
+            // 
+            // fromFileToolStripMenuItem
+            // 
+            this.fromFileToolStripMenuItem.Name = "fromFileToolStripMenuItem";
+            this.fromFileToolStripMenuItem.Size = new System.Drawing.Size(165, 26);
+            this.fromFileToolStripMenuItem.Text = "From File...";
+            this.fromFileToolStripMenuItem.Click += new System.EventHandler(this.FromFileToolStripMenuItem_Click);
+            // 
+            // setToolStripMenuItem
+            // 
+            this.setToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.maxConcurrentFailsToolStripMenuItem,
+            this.maxAccountsToolStripMenuItem,
+            this.resetBanStateToolStripMenuItem});
+            this.setToolStripMenuItem.Name = "setToolStripMenuItem";
+            this.setToolStripMenuItem.Size = new System.Drawing.Size(122, 24);
+            this.setToolStripMenuItem.Text = "Set";
+            // 
+            // maxConcurrentFailsToolStripMenuItem
+            // 
+            this.maxConcurrentFailsToolStripMenuItem.Name = "maxConcurrentFailsToolStripMenuItem";
+            this.maxConcurrentFailsToolStripMenuItem.Size = new System.Drawing.Size(220, 26);
+            this.maxConcurrentFailsToolStripMenuItem.Text = "Max Concurrent Fails";
+            this.maxConcurrentFailsToolStripMenuItem.Click += new System.EventHandler(this.MaxConcurrentFailsToolStripMenuItem_Click);
+            // 
+            // maxAccountsToolStripMenuItem
+            // 
+            this.maxAccountsToolStripMenuItem.Name = "maxAccountsToolStripMenuItem";
+            this.maxAccountsToolStripMenuItem.Size = new System.Drawing.Size(220, 26);
+            this.maxAccountsToolStripMenuItem.Text = "Max Accounts";
+            this.maxAccountsToolStripMenuItem.Click += new System.EventHandler(this.MaxAccountsToolStripMenuItem_Click);
+            // 
+            // resetBanStateToolStripMenuItem
+            // 
+            this.resetBanStateToolStripMenuItem.Name = "resetBanStateToolStripMenuItem";
+            this.resetBanStateToolStripMenuItem.Size = new System.Drawing.Size(220, 26);
+            this.resetBanStateToolStripMenuItem.Text = "Reset Ban State";
+            this.resetBanStateToolStripMenuItem.Click += new System.EventHandler(this.ResetBanStateToolStripMenuItem_Click);
+            // 
+            // deleteToolStripMenuItem1
+            // 
+            this.deleteToolStripMenuItem1.Name = "deleteToolStripMenuItem1";
+            this.deleteToolStripMenuItem1.Size = new System.Drawing.Size(122, 24);
+            this.deleteToolStripMenuItem1.Text = "Delete";
+            this.deleteToolStripMenuItem1.Click += new System.EventHandler(this.DeleteToolStripMenuItem1_Click);
             // 
             // contextMenuStripHashKeys
             // 
             this.contextMenuStripHashKeys.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.contextMenuStripHashKeys.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.addToolStripMenuItem1,
-            this.deleteToolStripMenuItem3});
+            this.toolStripMenuItem1,
+            this.toolStripMenuItem2});
             this.contextMenuStripHashKeys.Name = "contextMenuStripHashKeys";
             this.contextMenuStripHashKeys.Size = new System.Drawing.Size(123, 52);
             // 
-            // addToolStripMenuItem1
+            // toolStripMenuItem1
             // 
-            this.addToolStripMenuItem1.Name = "addToolStripMenuItem1";
-            this.addToolStripMenuItem1.Size = new System.Drawing.Size(122, 24);
-            this.addToolStripMenuItem1.Text = "Add";
-            this.addToolStripMenuItem1.Click += new System.EventHandler(this.AddToolStripMenuItem1_Click);
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(122, 24);
+            this.toolStripMenuItem1.Text = "Add";
+            this.toolStripMenuItem1.Click += new System.EventHandler(this.AddToolStripMenuItem1_Click);
             // 
-            // deleteToolStripMenuItem3
+            // toolStripMenuItem2
             // 
-            this.deleteToolStripMenuItem3.Name = "deleteToolStripMenuItem3";
-            this.deleteToolStripMenuItem3.Size = new System.Drawing.Size(122, 24);
-            this.deleteToolStripMenuItem3.Text = "Delete";
-            this.deleteToolStripMenuItem3.Click += new System.EventHandler(this.DeleteToolStripMenuItem3_Click);
+            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(122, 24);
+            this.toolStripMenuItem2.Text = "Delete";
+            this.toolStripMenuItem2.Click += new System.EventHandler(this.DeleteToolStripMenuItem3_Click);
             // 
-            // tabPageAccounts
+            // tabPageHashKeys
             // 
-            this.tabPageAccounts.BackColor = System.Drawing.Color.Transparent;
-            this.tabPageAccounts.Controls.Add(this.fastObjectListViewMain);
-            this.tabPageAccounts.Location = new System.Drawing.Point(4, 25);
-            this.tabPageAccounts.Name = "tabPageAccounts";
-            this.tabPageAccounts.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageAccounts.Size = new System.Drawing.Size(1175, 428);
-            this.tabPageAccounts.TabIndex = 0;
-            this.tabPageAccounts.Text = "Accounts";
-            this.tabPageAccounts.UseVisualStyleBackColor = true;
+            this.tabPageHashKeys.Controls.Add(this.fastObjectListViewHashKeys);
+            this.tabPageHashKeys.Location = new System.Drawing.Point(4, 25);
+            this.tabPageHashKeys.Name = "tabPageHashKeys";
+            this.tabPageHashKeys.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageHashKeys.Size = new System.Drawing.Size(1175, 428);
+            this.tabPageHashKeys.TabIndex = 3;
+            this.tabPageHashKeys.Text = "HashKeys";
+            this.tabPageHashKeys.UseVisualStyleBackColor = true;
+            // 
+            // fastObjectListViewHashKeys
+            // 
+            this.fastObjectListViewHashKeys.AllColumns.Add(this.olvColumnKeys);
+            this.fastObjectListViewHashKeys.AllowColumnReorder = true;
+            this.fastObjectListViewHashKeys.CellEditUseWholeCell = false;
+            this.fastObjectListViewHashKeys.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.olvColumnKeys});
+            this.fastObjectListViewHashKeys.ContextMenuStrip = this.contextMenuStripHashKeys;
+            this.fastObjectListViewHashKeys.Cursor = System.Windows.Forms.Cursors.Default;
+            this.fastObjectListViewHashKeys.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.fastObjectListViewHashKeys.FullRowSelect = true;
+            this.fastObjectListViewHashKeys.Location = new System.Drawing.Point(3, 3);
+            this.fastObjectListViewHashKeys.Margin = new System.Windows.Forms.Padding(2);
+            this.fastObjectListViewHashKeys.Name = "fastObjectListViewHashKeys";
+            this.fastObjectListViewHashKeys.ShowGroups = false;
+            this.fastObjectListViewHashKeys.Size = new System.Drawing.Size(1169, 422);
+            this.fastObjectListViewHashKeys.TabIndex = 3;
+            this.fastObjectListViewHashKeys.UseCellFormatEvents = true;
+            this.fastObjectListViewHashKeys.UseCompatibleStateImageBehavior = false;
+            this.fastObjectListViewHashKeys.UseFiltering = true;
+            this.fastObjectListViewHashKeys.View = System.Windows.Forms.View.Details;
+            this.fastObjectListViewHashKeys.VirtualMode = true;
+            this.fastObjectListViewHashKeys.FormatCell += new System.EventHandler<BrightIdeasSoftware.FormatCellEventArgs>(this.FastObjectListViewHashKeys_FormatCell);
+            // 
+            // tabPageScheduler
+            // 
+            this.tabPageScheduler.Controls.Add(this.fastObjectListViewScheduler);
+            this.tabPageScheduler.Location = new System.Drawing.Point(4, 25);
+            this.tabPageScheduler.Name = "tabPageScheduler";
+            this.tabPageScheduler.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageScheduler.Size = new System.Drawing.Size(1175, 428);
+            this.tabPageScheduler.TabIndex = 2;
+            this.tabPageScheduler.Text = "Scheduler";
+            this.tabPageScheduler.UseVisualStyleBackColor = true;
+            // 
+            // fastObjectListViewScheduler
+            // 
+            this.fastObjectListViewScheduler.AllColumns.Add(this.olvColumnSchedulerName);
+            this.fastObjectListViewScheduler.AllColumns.Add(this.olvColumnSchedulerStart);
+            this.fastObjectListViewScheduler.AllColumns.Add(this.olvColumnSchedulerEnd);
+            this.fastObjectListViewScheduler.AllColumns.Add(this.olvColumnSchedulerPokestop);
+            this.fastObjectListViewScheduler.AllColumns.Add(this.olvColumnSchedulerPokemon);
+            this.fastObjectListViewScheduler.AllColumns.Add(this.olvColumnSchedulerLastCall);
+            this.fastObjectListViewScheduler.AllColumns.Add(this.olvColumnSchedulerTime);
+            this.fastObjectListViewScheduler.AllColumns.Add(this.olvColumnSchedulerEnabled);
+            this.fastObjectListViewScheduler.AllowColumnReorder = true;
+            this.fastObjectListViewScheduler.CellEditUseWholeCell = false;
+            this.fastObjectListViewScheduler.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.olvColumnSchedulerName,
+            this.olvColumnSchedulerStart,
+            this.olvColumnSchedulerEnd,
+            this.olvColumnSchedulerPokestop,
+            this.olvColumnSchedulerPokemon,
+            this.olvColumnSchedulerLastCall,
+            this.olvColumnSchedulerTime,
+            this.olvColumnSchedulerEnabled});
+            this.fastObjectListViewScheduler.ContextMenuStrip = this.contextMenuStripScheduler;
+            this.fastObjectListViewScheduler.Cursor = System.Windows.Forms.Cursors.Default;
+            this.fastObjectListViewScheduler.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.fastObjectListViewScheduler.FullRowSelect = true;
+            this.fastObjectListViewScheduler.Location = new System.Drawing.Point(3, 3);
+            this.fastObjectListViewScheduler.Name = "fastObjectListViewScheduler";
+            this.fastObjectListViewScheduler.ShowGroups = false;
+            this.fastObjectListViewScheduler.Size = new System.Drawing.Size(1169, 422);
+            this.fastObjectListViewScheduler.TabIndex = 2;
+            this.fastObjectListViewScheduler.UseCellFormatEvents = true;
+            this.fastObjectListViewScheduler.UseCompatibleStateImageBehavior = false;
+            this.fastObjectListViewScheduler.UseFiltering = true;
+            this.fastObjectListViewScheduler.View = System.Windows.Forms.View.Details;
+            this.fastObjectListViewScheduler.VirtualMode = true;
+            this.fastObjectListViewScheduler.FormatCell += new System.EventHandler<BrightIdeasSoftware.FormatCellEventArgs>(this.FastObjectListViewScheduler_FormatCell);
+            // 
+            // olvColumnSchedulerName
+            // 
+            this.olvColumnSchedulerName.AspectName = "Name";
+            this.olvColumnSchedulerName.Text = "Name";
+            this.olvColumnSchedulerName.Width = 90;
+            // 
+            // olvColumnSchedulerStart
+            // 
+            this.olvColumnSchedulerStart.AspectName = "StartTime";
+            this.olvColumnSchedulerStart.Text = "Start Hour";
+            this.olvColumnSchedulerStart.Width = 50;
+            // 
+            // olvColumnSchedulerEnd
+            // 
+            this.olvColumnSchedulerEnd.AspectName = "EndTime";
+            this.olvColumnSchedulerEnd.Text = "End Hour";
+            this.olvColumnSchedulerEnd.Width = 50;
+            // 
+            // olvColumnSchedulerPokestop
+            // 
+            this.olvColumnSchedulerPokestop.AspectName = "PokestopSettings";
+            this.olvColumnSchedulerPokestop.Text = "Pokestop Settings";
+            this.olvColumnSchedulerPokestop.Width = 145;
+            // 
+            // olvColumnSchedulerPokemon
+            // 
+            this.olvColumnSchedulerPokemon.AspectName = "PokemonSettings";
+            this.olvColumnSchedulerPokemon.Text = "Pokemon Settings";
+            this.olvColumnSchedulerPokemon.Width = 151;
+            // 
+            // olvColumnSchedulerLastCall
+            // 
+            this.olvColumnSchedulerLastCall.AspectName = "TimeSinceLastCall";
+            this.olvColumnSchedulerLastCall.AspectToStringFormat = "{0:0.00}";
+            this.olvColumnSchedulerLastCall.Text = "Since Last Call (Min)";
+            // 
+            // olvColumnSchedulerTime
+            // 
+            this.olvColumnSchedulerTime.AspectName = "CheckTime";
+            this.olvColumnSchedulerTime.Text = "Check Time (Min)";
+            this.olvColumnSchedulerTime.Width = 132;
+            // 
+            // olvColumnSchedulerEnabled
+            // 
+            this.olvColumnSchedulerEnabled.AspectName = "Enabled";
+            this.olvColumnSchedulerEnabled.Text = "Enabled";
+            this.olvColumnSchedulerEnabled.Width = 40;
             // 
             // tabPageProxies
             // 
@@ -1085,304 +1181,210 @@
             this.olvColumnProxyBanned.AspectToStringFormat = "";
             this.olvColumnProxyBanned.Text = "Banned";
             // 
-            // contextMenuStripProxy
+            // tabPageAccounts
             // 
-            this.contextMenuStripProxy.ImageScalingSize = new System.Drawing.Size(22, 22);
-            this.contextMenuStripProxy.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.addToolStripMenuItem,
-            this.setToolStripMenuItem,
-            this.deleteToolStripMenuItem1});
-            this.contextMenuStripProxy.Name = "contextMenuStripProxy";
-            this.contextMenuStripProxy.Size = new System.Drawing.Size(123, 76);
+            this.tabPageAccounts.BackColor = System.Drawing.Color.Transparent;
+            this.tabPageAccounts.Controls.Add(this.fastObjectListViewMain);
+            this.tabPageAccounts.Location = new System.Drawing.Point(4, 25);
+            this.tabPageAccounts.Name = "tabPageAccounts";
+            this.tabPageAccounts.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageAccounts.Size = new System.Drawing.Size(1175, 428);
+            this.tabPageAccounts.TabIndex = 0;
+            this.tabPageAccounts.Text = "Accounts";
+            this.tabPageAccounts.UseVisualStyleBackColor = true;
             // 
-            // addToolStripMenuItem
+            // fastObjectListViewMain
             // 
-            this.addToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.singleProxyToolStripMenuItem,
-            this.fromFileToolStripMenuItem});
-            this.addToolStripMenuItem.Name = "addToolStripMenuItem";
-            this.addToolStripMenuItem.Size = new System.Drawing.Size(122, 24);
-            this.addToolStripMenuItem.Text = "Add";
+            this.fastObjectListViewMain.AllColumns.Add(this.olvColumnGroup);
+            this.fastObjectListViewMain.AllColumns.Add(this.olvColumnScheduler);
+            this.fastObjectListViewMain.AllColumns.Add(this.olvColumnUsername);
+            this.fastObjectListViewMain.AllColumns.Add(this.olvColumnLevel);
+            this.fastObjectListViewMain.AllColumns.Add(this.olvColumnAccountState);
+            this.fastObjectListViewMain.AllColumns.Add(this.olvColumnPokestopsFarmed);
+            this.fastObjectListViewMain.AllColumns.Add(this.olvColumnPokemonCaught);
+            this.fastObjectListViewMain.AllColumns.Add(this.olvColumnExp);
+            this.fastObjectListViewMain.AllColumns.Add(this.olvColumnExpPerHour);
+            this.fastObjectListViewMain.AllColumns.Add(this.olvColumnTillRankUp);
+            this.fastObjectListViewMain.AllColumns.Add(this.olvColumnBotState);
+            this.fastObjectListViewMain.AllColumns.Add(this.olvColumnRunningTime);
+            this.fastObjectListViewMain.AllColumns.Add(this.olvColumnRemainingTime);
+            this.fastObjectListViewMain.AllColumns.Add(this.olvColumnProxy);
+            this.fastObjectListViewMain.AllColumns.Add(this.olvColumnLastLogMessage);
+            this.fastObjectListViewMain.AllowColumnReorder = true;
+            this.fastObjectListViewMain.CellEditUseWholeCell = false;
+            this.fastObjectListViewMain.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.olvColumnGroup,
+            this.olvColumnScheduler,
+            this.olvColumnUsername,
+            this.olvColumnLevel,
+            this.olvColumnAccountState,
+            this.olvColumnPokestopsFarmed,
+            this.olvColumnPokemonCaught,
+            this.olvColumnExp,
+            this.olvColumnExpPerHour,
+            this.olvColumnTillRankUp,
+            this.olvColumnBotState,
+            this.olvColumnRunningTime,
+            this.olvColumnProxy,
+            this.olvColumnLastLogMessage});
+            this.fastObjectListViewMain.ContextMenuStrip = this.contextMenuStripAccounts;
+            this.fastObjectListViewMain.Cursor = System.Windows.Forms.Cursors.Default;
+            this.fastObjectListViewMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.fastObjectListViewMain.FullRowSelect = true;
+            this.fastObjectListViewMain.Location = new System.Drawing.Point(3, 3);
+            this.fastObjectListViewMain.Name = "fastObjectListViewMain";
+            this.fastObjectListViewMain.ShowGroups = false;
+            this.fastObjectListViewMain.Size = new System.Drawing.Size(1169, 422);
+            this.fastObjectListViewMain.TabIndex = 0;
+            this.fastObjectListViewMain.UseCellFormatEvents = true;
+            this.fastObjectListViewMain.UseCompatibleStateImageBehavior = false;
+            this.fastObjectListViewMain.UseFiltering = true;
+            this.fastObjectListViewMain.View = System.Windows.Forms.View.Details;
+            this.fastObjectListViewMain.VirtualMode = true;
+            this.fastObjectListViewMain.FormatCell += new System.EventHandler<BrightIdeasSoftware.FormatCellEventArgs>(this.FastObjectListViewMain_FormatCell);
+            this.fastObjectListViewMain.DoubleClick += new System.EventHandler(this.FastObjectListViewMain_DoubleClick);
+            this.fastObjectListViewMain.KeyDown += new System.Windows.Forms.KeyEventHandler(this.FastObjectListViewMain_KeyDown);
             // 
-            // singleProxyToolStripMenuItem
+            // olvColumnGroup
             // 
-            this.singleProxyToolStripMenuItem.Name = "singleProxyToolStripMenuItem";
-            this.singleProxyToolStripMenuItem.Size = new System.Drawing.Size(165, 26);
-            this.singleProxyToolStripMenuItem.Text = "Single Proxy";
-            this.singleProxyToolStripMenuItem.Click += new System.EventHandler(this.SingleProxyToolStripMenuItem_Click);
+            this.olvColumnGroup.AspectName = "GroupName";
+            this.olvColumnGroup.Text = "Group";
             // 
-            // fromFileToolStripMenuItem
+            // olvColumnScheduler
             // 
-            this.fromFileToolStripMenuItem.Name = "fromFileToolStripMenuItem";
-            this.fromFileToolStripMenuItem.Size = new System.Drawing.Size(165, 26);
-            this.fromFileToolStripMenuItem.Text = "From File...";
-            this.fromFileToolStripMenuItem.Click += new System.EventHandler(this.FromFileToolStripMenuItem_Click);
+            this.olvColumnScheduler.AspectName = "SchedulerName";
+            this.olvColumnScheduler.Text = "Scheduler";
             // 
-            // setToolStripMenuItem
+            // olvColumnUsername
             // 
-            this.setToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.maxConcurrentFailsToolStripMenuItem,
-            this.maxAccountsToolStripMenuItem,
-            this.resetBanStateToolStripMenuItem});
-            this.setToolStripMenuItem.Name = "setToolStripMenuItem";
-            this.setToolStripMenuItem.Size = new System.Drawing.Size(122, 24);
-            this.setToolStripMenuItem.Text = "Set";
+            this.olvColumnUsername.AspectName = "AccountName";
+            this.olvColumnUsername.Text = "Name";
             // 
-            // maxConcurrentFailsToolStripMenuItem
+            // olvColumnLevel
             // 
-            this.maxConcurrentFailsToolStripMenuItem.Name = "maxConcurrentFailsToolStripMenuItem";
-            this.maxConcurrentFailsToolStripMenuItem.Size = new System.Drawing.Size(220, 26);
-            this.maxConcurrentFailsToolStripMenuItem.Text = "Max Concurrent Fails";
-            this.maxConcurrentFailsToolStripMenuItem.Click += new System.EventHandler(this.MaxConcurrentFailsToolStripMenuItem_Click);
+            this.olvColumnLevel.AspectName = "Level";
+            this.olvColumnLevel.Text = "Level";
+            this.olvColumnLevel.Width = 30;
             // 
-            // maxAccountsToolStripMenuItem
+            // olvColumnAccountState
             // 
-            this.maxAccountsToolStripMenuItem.Name = "maxAccountsToolStripMenuItem";
-            this.maxAccountsToolStripMenuItem.Size = new System.Drawing.Size(220, 26);
-            this.maxAccountsToolStripMenuItem.Text = "Max Accounts";
-            this.maxAccountsToolStripMenuItem.Click += new System.EventHandler(this.MaxAccountsToolStripMenuItem_Click);
+            this.olvColumnAccountState.AspectName = "AccountState";
+            this.olvColumnAccountState.Text = "Account Status";
             // 
-            // resetBanStateToolStripMenuItem
+            // olvColumnPokestopsFarmed
             // 
-            this.resetBanStateToolStripMenuItem.Name = "resetBanStateToolStripMenuItem";
-            this.resetBanStateToolStripMenuItem.Size = new System.Drawing.Size(220, 26);
-            this.resetBanStateToolStripMenuItem.Text = "Reset Ban State";
-            this.resetBanStateToolStripMenuItem.Click += new System.EventHandler(this.ResetBanStateToolStripMenuItem_Click);
+            this.olvColumnPokestopsFarmed.AspectName = "PokestopsFarmed";
+            this.olvColumnPokestopsFarmed.Text = "Pokestops/23hr";
             // 
-            // deleteToolStripMenuItem1
+            // olvColumnPokemonCaught
             // 
-            this.deleteToolStripMenuItem1.Name = "deleteToolStripMenuItem1";
-            this.deleteToolStripMenuItem1.Size = new System.Drawing.Size(122, 24);
-            this.deleteToolStripMenuItem1.Text = "Delete";
-            this.deleteToolStripMenuItem1.Click += new System.EventHandler(this.DeleteToolStripMenuItem1_Click);
+            this.olvColumnPokemonCaught.AspectName = "PokemonCaught";
+            this.olvColumnPokemonCaught.Text = "Pokemon/23hr";
             // 
-            // tabPageScheduler
+            // olvColumnExp
             // 
-            this.tabPageScheduler.Controls.Add(this.fastObjectListViewScheduler);
-            this.tabPageScheduler.Location = new System.Drawing.Point(4, 25);
-            this.tabPageScheduler.Name = "tabPageScheduler";
-            this.tabPageScheduler.Size = new System.Drawing.Size(1175, 428);
-            this.tabPageScheduler.TabIndex = 2;
-            this.tabPageScheduler.Text = "Scheduler";
-            this.tabPageScheduler.UseVisualStyleBackColor = true;
+            this.olvColumnExp.AspectName = "ExpRatio";
+            this.olvColumnExp.Text = "Exp";
+            this.olvColumnExp.Width = 40;
             // 
-            // fastObjectListViewScheduler
+            // olvColumnExpPerHour
             // 
-            this.fastObjectListViewScheduler.AllColumns.Add(this.olvColumnSchedulerName);
-            this.fastObjectListViewScheduler.AllColumns.Add(this.olvColumnSchedulerStart);
-            this.fastObjectListViewScheduler.AllColumns.Add(this.olvColumnSchedulerEnd);
-            this.fastObjectListViewScheduler.AllColumns.Add(this.olvColumnSchedulerPokestop);
-            this.fastObjectListViewScheduler.AllColumns.Add(this.olvColumnSchedulerPokemon);
-            this.fastObjectListViewScheduler.AllColumns.Add(this.olvColumnSchedulerLastCall);
-            this.fastObjectListViewScheduler.AllColumns.Add(this.olvColumnSchedulerTime);
-            this.fastObjectListViewScheduler.AllColumns.Add(this.olvColumnSchedulerEnabled);
-            this.fastObjectListViewScheduler.AllowColumnReorder = true;
-            this.fastObjectListViewScheduler.CellEditUseWholeCell = false;
-            this.fastObjectListViewScheduler.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.olvColumnSchedulerName,
-            this.olvColumnSchedulerStart,
-            this.olvColumnSchedulerEnd,
-            this.olvColumnSchedulerPokestop,
-            this.olvColumnSchedulerPokemon,
-            this.olvColumnSchedulerLastCall,
-            this.olvColumnSchedulerTime,
-            this.olvColumnSchedulerEnabled});
-            this.fastObjectListViewScheduler.ContextMenuStrip = this.contextMenuStripScheduler;
-            this.fastObjectListViewScheduler.Cursor = System.Windows.Forms.Cursors.Default;
-            this.fastObjectListViewScheduler.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.fastObjectListViewScheduler.FullRowSelect = true;
-            this.fastObjectListViewScheduler.Location = new System.Drawing.Point(0, 0);
-            this.fastObjectListViewScheduler.Name = "fastObjectListViewScheduler";
-            this.fastObjectListViewScheduler.ShowGroups = false;
-            this.fastObjectListViewScheduler.Size = new System.Drawing.Size(1175, 428);
-            this.fastObjectListViewScheduler.TabIndex = 2;
-            this.fastObjectListViewScheduler.UseCellFormatEvents = true;
-            this.fastObjectListViewScheduler.UseCompatibleStateImageBehavior = false;
-            this.fastObjectListViewScheduler.UseFiltering = true;
-            this.fastObjectListViewScheduler.View = System.Windows.Forms.View.Details;
-            this.fastObjectListViewScheduler.VirtualMode = true;
-            this.fastObjectListViewScheduler.FormatCell += new System.EventHandler<BrightIdeasSoftware.FormatCellEventArgs>(this.FastObjectListViewScheduler_FormatCell);
+            this.olvColumnExpPerHour.AspectName = "ExpPerHour";
+            this.olvColumnExpPerHour.Text = "Exp/Hr";
+            this.olvColumnExpPerHour.Width = 50;
             // 
-            // olvColumnSchedulerName
+            // olvColumnTillRankUp
             // 
-            this.olvColumnSchedulerName.AspectName = "Name";
-            this.olvColumnSchedulerName.Text = "Name";
-            this.olvColumnSchedulerName.Width = 90;
+            this.olvColumnTillRankUp.AspectName = "TillLevelUp";
+            this.olvColumnTillRankUp.Text = "Level Up";
             // 
-            // olvColumnSchedulerStart
+            // olvColumnBotState
             // 
-            this.olvColumnSchedulerStart.AspectName = "StartTime";
-            this.olvColumnSchedulerStart.Text = "Start Hour";
-            this.olvColumnSchedulerStart.Width = 50;
+            this.olvColumnBotState.AspectName = "State";
+            this.olvColumnBotState.Text = "State";
             // 
-            // olvColumnSchedulerEnd
+            // olvColumnRunningTime
             // 
-            this.olvColumnSchedulerEnd.AspectName = "EndTime";
-            this.olvColumnSchedulerEnd.Text = "End Hour";
-            this.olvColumnSchedulerEnd.Width = 50;
+            this.olvColumnRunningTime.AspectName = "RunningTime";
+            this.olvColumnRunningTime.Text = "Time";
             // 
-            // olvColumnSchedulerPokestop
+            // olvColumnProxy
             // 
-            this.olvColumnSchedulerPokestop.AspectName = "PokestopSettings";
-            this.olvColumnSchedulerPokestop.Text = "Pokestop Settings";
-            this.olvColumnSchedulerPokestop.Width = 145;
+            this.olvColumnProxy.AspectName = "Proxy";
+            this.olvColumnProxy.Text = "Proxy";
             // 
-            // olvColumnSchedulerPokemon
+            // olvColumnLastLogMessage
             // 
-            this.olvColumnSchedulerPokemon.AspectName = "PokemonSettings";
-            this.olvColumnSchedulerPokemon.Text = "Pokemon Settings";
-            this.olvColumnSchedulerPokemon.Width = 151;
+            this.olvColumnLastLogMessage.AspectName = "LastLogMessage";
+            this.olvColumnLastLogMessage.FillsFreeSpace = true;
+            this.olvColumnLastLogMessage.Text = "Last Log";
+            this.olvColumnLastLogMessage.Width = 248;
             // 
-            // olvColumnSchedulerLastCall
+            // tabControlMain
             // 
-            this.olvColumnSchedulerLastCall.AspectName = "TimeSinceLastCall";
-            this.olvColumnSchedulerLastCall.AspectToStringFormat = "{0:0.00}";
-            this.olvColumnSchedulerLastCall.Text = "Since Last Call (Min)";
+            this.tabControlMain.ContextMenuStrip = this.contextMenuStripScheduler;
+            this.tabControlMain.Controls.Add(this.tabPageAccounts);
+            this.tabControlMain.Controls.Add(this.tabPageProxies);
+            this.tabControlMain.Controls.Add(this.tabPageScheduler);
+            this.tabControlMain.Controls.Add(this.tabPageHashKeys);
+            this.tabControlMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControlMain.Location = new System.Drawing.Point(0, 0);
+            this.tabControlMain.Name = "tabControlMain";
+            this.tabControlMain.SelectedIndex = 0;
+            this.tabControlMain.Size = new System.Drawing.Size(1183, 457);
+            this.tabControlMain.TabIndex = 2;
+            this.tabControlMain.SelectedIndexChanged += new System.EventHandler(this.TabControlMain_SelectedIndexChanged);
             // 
-            // olvColumnSchedulerTime
+            // olvColumnKeys
             // 
-            this.olvColumnSchedulerTime.AspectName = "CheckTime";
-            this.olvColumnSchedulerTime.Text = "Check Time (Min)";
-            this.olvColumnSchedulerTime.Width = 132;
-            // 
-            // olvColumnSchedulerEnabled
-            // 
-            this.olvColumnSchedulerEnabled.AspectName = "Enabled";
-            this.olvColumnSchedulerEnabled.Text = "Enabled";
-            this.olvColumnSchedulerEnabled.Width = 40;
-            // 
-            // contextMenuStripScheduler
-            // 
-            this.contextMenuStripScheduler.ImageScalingSize = new System.Drawing.Size(22, 22);
-            this.contextMenuStripScheduler.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.addNewToolStripMenuItem1,
-            this.editToolStripMenuItem1,
-            this.enablelDisableToolStripMenuItem,
-            this.manualCheckToolStripMenuItem,
-            this.deleteToolStripMenuItem2});
-            this.contextMenuStripScheduler.Name = "contextMenuStripScheduler";
-            this.contextMenuStripScheduler.Size = new System.Drawing.Size(180, 124);
-            // 
-            // addNewToolStripMenuItem1
-            // 
-            this.addNewToolStripMenuItem1.Name = "addNewToolStripMenuItem1";
-            this.addNewToolStripMenuItem1.Size = new System.Drawing.Size(179, 24);
-            this.addNewToolStripMenuItem1.Text = "Add New";
-            this.addNewToolStripMenuItem1.Click += new System.EventHandler(this.AddNewToolStripMenuItem1_Click);
-            // 
-            // editToolStripMenuItem1
-            // 
-            this.editToolStripMenuItem1.Name = "editToolStripMenuItem1";
-            this.editToolStripMenuItem1.Size = new System.Drawing.Size(179, 24);
-            this.editToolStripMenuItem1.Text = "Edit";
-            this.editToolStripMenuItem1.Click += new System.EventHandler(this.EditToolStripMenuItem1_Click);
-            // 
-            // enablelDisableToolStripMenuItem
-            // 
-            this.enablelDisableToolStripMenuItem.Name = "enablelDisableToolStripMenuItem";
-            this.enablelDisableToolStripMenuItem.Size = new System.Drawing.Size(179, 24);
-            this.enablelDisableToolStripMenuItem.Text = "Enable/Disable";
-            this.enablelDisableToolStripMenuItem.Click += new System.EventHandler(this.EnablelDisableToolStripMenuItem_Click);
-            // 
-            // manualCheckToolStripMenuItem
-            // 
-            this.manualCheckToolStripMenuItem.Name = "manualCheckToolStripMenuItem";
-            this.manualCheckToolStripMenuItem.Size = new System.Drawing.Size(179, 24);
-            this.manualCheckToolStripMenuItem.Text = "Manual Check";
-            this.manualCheckToolStripMenuItem.Click += new System.EventHandler(this.ManualCheckToolStripMenuItem_Click);
-            // 
-            // deleteToolStripMenuItem2
-            // 
-            this.deleteToolStripMenuItem2.Name = "deleteToolStripMenuItem2";
-            this.deleteToolStripMenuItem2.Size = new System.Drawing.Size(179, 24);
-            this.deleteToolStripMenuItem2.Text = "Delete";
-            this.deleteToolStripMenuItem2.Click += new System.EventHandler(this.DeleteToolStripMenuItem2_Click);
-            // 
-            // tabPageHashKeys
-            // 
-            this.tabPageHashKeys.Controls.Add(this.listViewHashKeys);
-            this.tabPageHashKeys.Location = new System.Drawing.Point(4, 25);
-            this.tabPageHashKeys.Name = "tabPageHashKeys";
-            this.tabPageHashKeys.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageHashKeys.Size = new System.Drawing.Size(1175, 428);
-            this.tabPageHashKeys.TabIndex = 3;
-            this.tabPageHashKeys.Text = "Hash Keys";
-            this.tabPageHashKeys.UseVisualStyleBackColor = true;
-            // 
-            // listViewHashKeys
-            // 
-            this.listViewHashKeys.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
-            this.listViewHashKeys.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.chKey});
-            this.listViewHashKeys.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listViewHashKeys.ForeColor = System.Drawing.Color.Gainsboro;
-            this.listViewHashKeys.FullRowSelect = true;
-            this.listViewHashKeys.Location = new System.Drawing.Point(3, 3);
-            this.listViewHashKeys.Name = "listViewHashKeys";
-            this.listViewHashKeys.Size = new System.Drawing.Size(1169, 422);
-            this.listViewHashKeys.TabIndex = 0;
-            this.listViewHashKeys.UseCompatibleStateImageBehavior = false;
-            this.listViewHashKeys.View = System.Windows.Forms.View.Details;
-            // 
-            // chKey
-            // 
-            this.chKey.Text = "Key";
-            this.chKey.Width = 220;
+            this.olvColumnKeys.AspectName = "olvColumnKeys";
+            this.olvColumnKeys.Text = "Keys";
+            this.olvColumnKeys.Width = 220;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1183, 482);
-            this.Controls.Add(this.tabControlProxies);
+            this.Controls.Add(this.tabControlMain);
             this.Controls.Add(this.statusStripStats);
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Account Manager";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.MainForm_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewMain)).EndInit();
             this.contextMenuStripAccounts.ResumeLayout(false);
             this.statusStripStats.ResumeLayout(false);
             this.statusStripStats.PerformLayout();
-            this.tabControlProxies.ResumeLayout(false);
-            this.contextMenuStripHashKeys.ResumeLayout(false);
-            this.tabPageAccounts.ResumeLayout(false);
-            this.tabPageProxies.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewProxies)).EndInit();
+            this.contextMenuStripScheduler.ResumeLayout(false);
             this.contextMenuStripProxy.ResumeLayout(false);
+            this.contextMenuStripHashKeys.ResumeLayout(false);
+            this.tabPageHashKeys.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewHashKeys)).EndInit();
             this.tabPageScheduler.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewScheduler)).EndInit();
-            this.contextMenuStripScheduler.ResumeLayout(false);
-            this.tabPageHashKeys.ResumeLayout(false);
+            this.tabPageProxies.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewProxies)).EndInit();
+            this.tabPageAccounts.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewMain)).EndInit();
+            this.tabControlMain.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-
-        private BrightIdeasSoftware.FastObjectListView fastObjectListViewMain;
-        private BrightIdeasSoftware.OLVColumn olvColumnUsername;
-        private BrightIdeasSoftware.OLVColumn olvColumnLevel;
-        private BrightIdeasSoftware.OLVColumn olvColumnExp;
         private System.Windows.Forms.ContextMenuStrip contextMenuStripAccounts;
         private System.Windows.Forms.ToolStripMenuItem addNewToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem viewDetailsToolStripMenuItem;
-        private BrightIdeasSoftware.OLVColumn olvColumnLastLogMessage;
         private System.Windows.Forms.ToolStripMenuItem startToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem stopToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem importToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem wConfigToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem defaultToolStripMenuItem;
-        private BrightIdeasSoftware.OLVColumn olvColumnExpPerHour;
-        private BrightIdeasSoftware.OLVColumn olvColumnRunningTime;
-        private BrightIdeasSoftware.OLVColumn olvColumnTillRankUp;
         private System.Windows.Forms.Timer timerListViewUpdate;
-        private BrightIdeasSoftware.OLVColumn olvColumnBotState;
-        private BrightIdeasSoftware.OLVColumn olvColumnProxy;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
@@ -1399,9 +1401,6 @@
         private System.Windows.Forms.ToolStripMenuItem garbageCollectionToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem updateDetailsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exportProxiesToolStripMenuItem;
-        private BrightIdeasSoftware.OLVColumn olvColumnAccountState;
-        private BrightIdeasSoftware.OLVColumn olvColumnPokemonCaught;
-        private BrightIdeasSoftware.OLVColumn olvColumnPokestopsFarmed;
         private System.Windows.Forms.ToolStripMenuItem clearCountsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem countsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem logsToolStripMenuItem;
@@ -1424,7 +1423,6 @@
         private System.Windows.Forms.ToolStripMenuItem enableLuckyEggsToolStripMenuItem6;
         private System.Windows.Forms.ToolStripMenuItem setRequiredPokemonToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exportJsonToolStripMenuItem;
-        private BrightIdeasSoftware.OLVColumn olvColumnGroup;
         private System.Windows.Forms.ToolStripMenuItem showGroupsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem setGroupToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem setMaxRuntimeToolStripMenuItem;
@@ -1441,16 +1439,6 @@
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelAccountBanned;
         private System.Windows.Forms.ToolStripMenuItem importConfigToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem largeAddressAwareToolStripMenuItem;
-        private System.Windows.Forms.TabControl tabControlProxies;
-        private System.Windows.Forms.TabPage tabPageAccounts;
-        private System.Windows.Forms.TabPage tabPageProxies;
-        private BrightIdeasSoftware.FastObjectListView fastObjectListViewProxies;
-        private BrightIdeasSoftware.OLVColumn olvColumnProxyIP;
-        private BrightIdeasSoftware.OLVColumn olvColumnProxyPort;
-        private BrightIdeasSoftware.OLVColumn olvColumnProxyAuth;
-        private BrightIdeasSoftware.OLVColumn olvColumnCurrentFails;
-        private BrightIdeasSoftware.OLVColumn olvColumnProxyBanned;
-        private BrightIdeasSoftware.OLVColumn olvColumnUsageCount;
         private System.Windows.Forms.ContextMenuStrip contextMenuStripProxy;
         private System.Windows.Forms.ToolStripMenuItem addToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem singleProxyToolStripMenuItem;
@@ -1469,25 +1457,14 @@
         private System.Windows.Forms.ToolStripMenuItem enableIPBanStopToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem enableRotateProxiesToolStripMenuItem;
         private BrightIdeasSoftware.OLVColumn olvColumnRemainingTime;
-        private System.Windows.Forms.TabPage tabPageScheduler;
-        private BrightIdeasSoftware.FastObjectListView fastObjectListViewScheduler;
-        private BrightIdeasSoftware.OLVColumn olvColumnSchedulerName;
-        private BrightIdeasSoftware.OLVColumn olvColumnSchedulerEnabled;
-        private BrightIdeasSoftware.OLVColumn olvColumnSchedulerTime;
-        private BrightIdeasSoftware.OLVColumn olvColumnSchedulerStart;
-        private BrightIdeasSoftware.OLVColumn olvColumnSchedulerEnd;
-        private BrightIdeasSoftware.OLVColumn olvColumnSchedulerPokemon;
-        private BrightIdeasSoftware.OLVColumn olvColumnSchedulerPokestop;
         private System.Windows.Forms.ContextMenuStrip contextMenuStripScheduler;
         private System.Windows.Forms.ToolStripMenuItem addNewToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem enablelDisableToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem2;
         private System.Windows.Forms.ToolStripMenuItem schedulerToolStripMenuItem;
-        private BrightIdeasSoftware.OLVColumn olvColumnScheduler;
         private System.Windows.Forms.ToolStripMenuItem manualCheckToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem claimLevelUpToolStripMenuItem;
-        private BrightIdeasSoftware.OLVColumn olvColumnSchedulerLastCall;
         private System.Windows.Forms.ToolStripMenuItem helpInfoToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
@@ -1495,12 +1472,47 @@
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelFlagged;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel8;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelCaptcha;
-        private System.Windows.Forms.TabPage tabPageHashKeys;
-        private System.Windows.Forms.ListView listViewHashKeys;
-        private System.Windows.Forms.ColumnHeader chKey;
         private System.Windows.Forms.ContextMenuStrip contextMenuStripHashKeys;
-        private System.Windows.Forms.ToolStripMenuItem addToolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem3;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
+        private System.Windows.Forms.TabPage tabPageHashKeys;
+        private BrightIdeasSoftware.FastObjectListView fastObjectListViewHashKeys;
+        private System.Windows.Forms.TabPage tabPageScheduler;
+        private BrightIdeasSoftware.FastObjectListView fastObjectListViewScheduler;
+        private BrightIdeasSoftware.OLVColumn olvColumnSchedulerName;
+        private BrightIdeasSoftware.OLVColumn olvColumnSchedulerStart;
+        private BrightIdeasSoftware.OLVColumn olvColumnSchedulerEnd;
+        private BrightIdeasSoftware.OLVColumn olvColumnSchedulerPokestop;
+        private BrightIdeasSoftware.OLVColumn olvColumnSchedulerPokemon;
+        private BrightIdeasSoftware.OLVColumn olvColumnSchedulerLastCall;
+        private BrightIdeasSoftware.OLVColumn olvColumnSchedulerTime;
+        private BrightIdeasSoftware.OLVColumn olvColumnSchedulerEnabled;
+        private System.Windows.Forms.TabPage tabPageProxies;
+        private BrightIdeasSoftware.FastObjectListView fastObjectListViewProxies;
+        private BrightIdeasSoftware.OLVColumn olvColumnProxyIP;
+        private BrightIdeasSoftware.OLVColumn olvColumnProxyPort;
+        private BrightIdeasSoftware.OLVColumn olvColumnProxyAuth;
+        private BrightIdeasSoftware.OLVColumn olvColumnUsageCount;
+        private BrightIdeasSoftware.OLVColumn olvColumnCurrentFails;
+        private BrightIdeasSoftware.OLVColumn olvColumnProxyBanned;
+        private System.Windows.Forms.TabPage tabPageAccounts;
+        private BrightIdeasSoftware.FastObjectListView fastObjectListViewMain;
+        private BrightIdeasSoftware.OLVColumn olvColumnGroup;
+        private BrightIdeasSoftware.OLVColumn olvColumnScheduler;
+        private BrightIdeasSoftware.OLVColumn olvColumnUsername;
+        private BrightIdeasSoftware.OLVColumn olvColumnLevel;
+        private BrightIdeasSoftware.OLVColumn olvColumnAccountState;
+        private BrightIdeasSoftware.OLVColumn olvColumnPokestopsFarmed;
+        private BrightIdeasSoftware.OLVColumn olvColumnPokemonCaught;
+        private BrightIdeasSoftware.OLVColumn olvColumnExp;
+        private BrightIdeasSoftware.OLVColumn olvColumnExpPerHour;
+        private BrightIdeasSoftware.OLVColumn olvColumnTillRankUp;
+        private BrightIdeasSoftware.OLVColumn olvColumnBotState;
+        private BrightIdeasSoftware.OLVColumn olvColumnRunningTime;
+        private BrightIdeasSoftware.OLVColumn olvColumnProxy;
+        private BrightIdeasSoftware.OLVColumn olvColumnLastLogMessage;
+        private System.Windows.Forms.TabControl tabControlMain;
+        private BrightIdeasSoftware.OLVColumn olvColumnKeys;
     }
 }
 

@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using POGOProtos.Enums;
 using PokemonGoGUI.AccountScheduler;
 using PokemonGoGUI.Enums;
 using PokemonGoGUI.Extensions;
@@ -45,6 +44,9 @@ namespace PokemonGoGUI
 
             fastObjectListViewScheduler.BackColor = Color.FromArgb(0, 0, 0);
             fastObjectListViewScheduler.ForeColor = Color.LightGray;
+
+            fastObjectListViewHashKeys.BackColor = Color.FromArgb(0, 0, 0);
+            fastObjectListViewHashKeys.ForeColor = Color.LightGray;
 
             //BackColor = Color.FromArgb(43, 43, 43);
 
@@ -127,12 +129,6 @@ namespace PokemonGoGUI
 
             await LoadSettings();
 
-            listViewHashKeys.Items.Clear();
-            foreach (var element in _hashKeys)
-            {
-                listViewHashKeys.Items.Add(element);
-            }
-
             if (_showStartup)
             {
                 StartupForm startForm = new StartupForm();
@@ -185,13 +181,9 @@ namespace PokemonGoGUI
                     _proxyHandler = model.ProxyHandler;
                     tempManagers = model.Managers;
                     _schedulers = model.Schedulers;
-
-                    if (model.HashKeys != null)
-                        _hashKeys = model.HashKeys;
-
+                    _hashKeys = model.HashKeys;
                     _spf = model.SPF;
                     _showStartup = model.ShowWelcomeMessage;
-
                 }
                 else
                 {
@@ -235,7 +227,8 @@ namespace PokemonGoGUI
             }
 
             fastObjectListViewMain.SetObjects(_managers);
-            
+            fastObjectListViewHashKeys.SetObjects(_hashKeys);
+
             return true;
         }
 
@@ -654,7 +647,7 @@ namespace PokemonGoGUI
                 return;
             }
 
-            if (tabControlProxies.SelectedTab == tabPageAccounts)
+            if (tabControlMain.SelectedTab == tabPageAccounts)
             {
                 if (_managers.Count == 0)
                 {
@@ -663,7 +656,7 @@ namespace PokemonGoGUI
 
                 fastObjectListViewMain.RefreshObject(_managers[0]);
             }
-            else if(tabControlProxies.SelectedTab == tabPageProxies)
+            else if(tabControlMain.SelectedTab == tabPageProxies)
             {
                 if(_proxyHandler.Proxies.Count == 0)
                 {
@@ -672,7 +665,7 @@ namespace PokemonGoGUI
 
                 fastObjectListViewProxies.RefreshObject(_proxyHandler.Proxies.First());
             }
-            else if (tabControlProxies.SelectedTab == tabPageScheduler)
+            else if (tabControlMain.SelectedTab == tabPageScheduler)
             {
                 if(_schedulers.Count == 0)
                 {
@@ -1582,20 +1575,27 @@ namespace PokemonGoGUI
                 _showStartup = startForm.ShowOnStartUp;
             }
         }
-
-        #region Proxies
-
-        private void TabControlProxies_SelectedIndexChanged(object sender, EventArgs e)
+        private void TabControlMain_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if(tabControlProxies.SelectedTab == tabPageProxies)
+            if (tabControlMain.SelectedTab == tabPageProxies)
             {
                 fastObjectListViewProxies.SetObjects(_proxyHandler.Proxies);
             }
-            else if(tabControlProxies.SelectedTab == tabPageScheduler)
+            else if (tabControlMain.SelectedTab == tabPageScheduler)
             {
                 fastObjectListViewScheduler.SetObjects(_schedulers);
             }
+            else if (tabControlMain.SelectedTab == tabPageHashKeys)
+            {
+                fastObjectListViewHashKeys.SetObjects(_hashKeys);
+            }
+            else if (tabControlMain.SelectedTab == tabPageAccounts)
+            {
+                fastObjectListViewHashKeys.SetObjects(_managers);
+            }
         }
+
+        #region Proxies
 
         private void ResetBanStateToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -2015,13 +2015,12 @@ namespace PokemonGoGUI
 
         private void DeleteToolStripMenuItem3_Click(object sender, EventArgs e)
         {
-            if (listViewHashKeys.SelectedItems == null || listViewHashKeys.SelectedItems.Count < 1)
-                return;
-            for (var i = listViewHashKeys.SelectedItems.Count - 1; i >= 0; i--)
+            foreach (var hashkey in fastObjectListViewHashKeys.SelectedObjects)
             {
-                _hashKeys.Remove(listViewHashKeys.SelectedItems[i].Text);
-                listViewHashKeys.Items.Remove(listViewHashKeys.SelectedItems[i]);
+                _hashKeys.Remove(hashkey.ToString());
             }
+
+            fastObjectListViewHashKeys.SetObjects(_hashKeys);
         }
 
         private void AddToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -2032,9 +2031,16 @@ namespace PokemonGoGUI
                 return;
             }
             _hashKeys.Add(data);
-            listViewHashKeys.Items.Add(data);
+            fastObjectListViewHashKeys.SetObjects(_hashKeys);
         }
 
+        private void FastObjectListViewHashKeys_FormatCell(object sender, BrightIdeasSoftware.FormatCellEventArgs e)
+        {
+            if (e.Column == olvColumnKeys)
+            {
+                e.SubItem.ForeColor = Color.Green;
+            }
+        }
         #endregion
     }
 }
