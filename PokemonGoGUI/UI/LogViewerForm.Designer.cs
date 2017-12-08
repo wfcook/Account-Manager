@@ -61,7 +61,7 @@
             this.fastObjectListViewLogs.UseFiltering = true;
             this.fastObjectListViewLogs.View = System.Windows.Forms.View.Details;
             this.fastObjectListViewLogs.VirtualMode = true;
-            this.fastObjectListViewLogs.FormatRow += new System.EventHandler<BrightIdeasSoftware.FormatRowEventArgs>(this.fastObjectListViewLogs_FormatRow);
+            this.fastObjectListViewLogs.FormatRow += new System.EventHandler<BrightIdeasSoftware.FormatRowEventArgs>(this.FastObjectListViewLogs_FormatRow);
             // 
             // olvColumnDate
             // 

@@ -291,7 +291,7 @@
             this.buttonDone.TabIndex = 12;
             this.buttonDone.Text = "Done";
             this.buttonDone.UseVisualStyleBackColor = true;
-            this.buttonDone.Click += new System.EventHandler(this.buttonDone_Click);
+            this.buttonDone.Click += new System.EventHandler(this.ButtonDone_Click);
             // 
             // colorDialogNameColor
             // 
@@ -306,7 +306,7 @@
             this.button1.TabIndex = 10;
             this.button1.Text = "Choose ...";
             this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.button1.Click += new System.EventHandler(this.Button1_Click);
             // 
             // label11
             // 

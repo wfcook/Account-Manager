@@ -306,121 +306,22 @@ namespace PokemonGoGUI.GoManager
             }
         }
 
-        public async Task<MethodResult<bool>> GetGameSettings(string minVersion)
+        public async Task<MethodResult<bool>> GetGameSettings(Version minVersion)
         {
             await Task.Delay(0); //remove warn
             LogCaller(new LoggerEventArgs("Game settings loaded", LoggerTypes.Success));
 
+            bool result = false;
+            Version remote = new Version(_client.ClientSession.GlobalSettings.MinimumClientVersion);
+
+            if (minVersion >= remote)
+                result = true;
+
             return new MethodResult<bool>
             {
-                Data = _client.ClientSession.GlobalSettings.MinimumClientVersion == minVersion,
+                Data = result,
                 Success = true,
             };
-        }
-
-        //*************************************************************************************************************//
-        public async Task<MethodResult<bool>> GetRemoteConfigVersion()
-        {
-            var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
-            {
-                RequestType = RequestType.DownloadRemoteConfigVersion,
-                RequestMessage = new DownloadRemoteConfigVersionMessage
-                {
-                    AppVersion = _client.VersionInt,
-                    DeviceManufacturer = _client.Settings.HardwareManufacturer,
-                    DeviceModel = _client.Settings.HardwareModel,
-                    Locale = _client.LocaleInfo.TimeZone,
-                    Platform = Platform.Ios
-                }.ToByteString()
-            });
-
-            DownloadRemoteConfigVersionResponse downloadRemoteConfigVersionResponse = null;
-
-            try
-            {
-                downloadRemoteConfigVersionResponse = DownloadRemoteConfigVersionResponse.Parser.ParseFrom(response);
-                LogCaller(new LoggerEventArgs("Download remote config version loaded", LoggerTypes.Success));
-
-                return new MethodResult<bool>
-                {
-                    Success = true
-                };
-            }
-            catch (Exception ex)
-            {
-                if (response.IsEmpty)
-                    LogCaller(new LoggerEventArgs("Failed to request DownloadRemoteConfigVersionResponse", LoggerTypes.Exception, ex));
-
-                return new MethodResult<bool>();
-            }
-        }
-
-        public async Task<MethodResult<bool>> GetAssetDigest()
-        {
-            var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
-            {
-                RequestType = RequestType.GetAssetDigest,
-                RequestMessage = new GetAssetDigestMessage
-                {
-                    AppVersion = _client.VersionInt,
-                    DeviceManufacturer = _client.Settings.HardwareManufacturer,
-                    DeviceModel = _client.Settings.HardwareModel,
-                    Locale = _client.LocaleInfo.TimeZone,
-                    Platform = Platform.Ios
-                }.ToByteString()
-            });
-
-            GetAssetDigestResponse getAssetDigestResponse = null;
-
-            try
-            {
-                getAssetDigestResponse = GetAssetDigestResponse.Parser.ParseFrom(response);
-                LogCaller(new LoggerEventArgs("Download asset digest loaded", LoggerTypes.Success));
-
-                return new MethodResult<bool>
-                {
-                    Success = true
-                };
-            }
-            catch (Exception ex)
-            {
-                if (response.IsEmpty)
-                    LogCaller(new LoggerEventArgs("Failed to request GetAssetDigestResponse", LoggerTypes.Exception, ex));
-
-                return new MethodResult<bool>();
-            }
-        }
-
-        public async Task<MethodResult<bool>> GetProfile()
-        {
-            var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
-            {
-                RequestType = RequestType.GetPlayerProfile,
-                RequestMessage = new GetPlayerProfileMessage
-                {
-                    PlayerName = _client.ClientSession.Player.Data.Username
-                }.ToByteString()
-            });
-
-            GetPlayerProfileResponse getPlayerProfileResponse = null;
-
-            try
-            {
-                getPlayerProfileResponse = GetPlayerProfileResponse.Parser.ParseFrom(response);
-                LogCaller(new LoggerEventArgs("Download player profile loaded", LoggerTypes.Success));
-
-                return new MethodResult<bool>
-                {
-                    Success = true
-                };
-            }
-            catch (Exception ex)
-            {
-                if (response.IsEmpty)
-                    LogCaller(new LoggerEventArgs("Failed to request GetPlayerProfileResponse", LoggerTypes.Exception, ex));
-
-                return new MethodResult<bool>();
-            }
         }
     }
 }

@@ -61,7 +61,7 @@
             this.buttonSave.TabIndex = 1;
             this.buttonSave.Text = "Save";
             this.buttonSave.UseVisualStyleBackColor = true;
-            this.buttonSave.Click += new System.EventHandler(this.buttonSave_Click);
+            this.buttonSave.Click += new System.EventHandler(this.ButtonSave_Click);
             // 
             // checkBoxTransfer
             // 
@@ -83,7 +83,7 @@
             this.comboBoxTransferType.Name = "comboBoxTransferType";
             this.comboBoxTransferType.Size = new System.Drawing.Size(208, 24);
             this.comboBoxTransferType.TabIndex = 3;
-            this.comboBoxTransferType.SelectedIndexChanged += new System.EventHandler(this.comboBoxTransferType_SelectedIndexChanged);
+            this.comboBoxTransferType.SelectedIndexChanged += new System.EventHandler(this.ComboBoxTransferType_SelectedIndexChanged);
             // 
             // label2
             // 
