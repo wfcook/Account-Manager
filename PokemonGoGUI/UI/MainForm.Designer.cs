@@ -980,19 +980,19 @@
             this.addToolStripMenuItem1,
             this.deleteToolStripMenuItem3});
             this.contextMenuStripHashKeys.Name = "contextMenuStripHashKeys";
-            this.contextMenuStripHashKeys.Size = new System.Drawing.Size(176, 80);
+            this.contextMenuStripHashKeys.Size = new System.Drawing.Size(123, 52);
             // 
             // addToolStripMenuItem1
             // 
             this.addToolStripMenuItem1.Name = "addToolStripMenuItem1";
-            this.addToolStripMenuItem1.Size = new System.Drawing.Size(175, 24);
+            this.addToolStripMenuItem1.Size = new System.Drawing.Size(122, 24);
             this.addToolStripMenuItem1.Text = "Add";
             this.addToolStripMenuItem1.Click += new System.EventHandler(this.AddToolStripMenuItem1_Click);
             // 
             // deleteToolStripMenuItem3
             // 
             this.deleteToolStripMenuItem3.Name = "deleteToolStripMenuItem3";
-            this.deleteToolStripMenuItem3.Size = new System.Drawing.Size(175, 24);
+            this.deleteToolStripMenuItem3.Size = new System.Drawing.Size(122, 24);
             this.deleteToolStripMenuItem3.Text = "Delete";
             this.deleteToolStripMenuItem3.Click += new System.EventHandler(this.DeleteToolStripMenuItem3_Click);
             // 
@@ -1338,7 +1338,7 @@
             this.Controls.Add(this.statusStripStats);
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "GoManager";
+            this.Text = "Account Manager";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.MainForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewMain)).EndInit();
