@@ -70,34 +70,6 @@ namespace PokemonGoGUI.GoManager
                     continue;
                 }                
 
-                if (fort.Type == FortType.Gym)
-                {
-                    var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
-                    {
-                        RequestType = RequestType.GymGetInfo,
-                        RequestMessage = new GymGetInfoMessage
-                        {
-                            GymId = fort.Id,
-                            GymLatDegrees = fort.Latitude,
-                            GymLngDegrees = fort.Longitude,
-                            PlayerLatDegrees = _client.ClientSession.Player.Latitude,
-                            PlayerLngDegrees = _client.ClientSession.Player.Longitude
-                        }.ToByteString()
-                    });
-
-                    GymGetInfoResponse gymGetInfoResponse = null;
-
-                    try
-                    {
-                        gymGetInfoResponse = GymGetInfoResponse.Parser.ParseFrom(response);
-                    }
-                    catch (Exception ex)
-                    {
-                        if (response.IsEmpty)
-                            LogCaller(new LoggerEventArgs("Failed gym get info", LoggerTypes.Exception, ex));
-                    }
-                }
-
                 GeoCoordinate defaultLocation = new GeoCoordinate(UserSettings.DefaultLatitude, UserSettings.DefaultLongitude);
                 GeoCoordinate fortLocation = new GeoCoordinate(fort.Latitude, fort.Longitude);
 

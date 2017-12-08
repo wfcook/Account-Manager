@@ -1,7 +1,11 @@
 ﻿using GeoCoordinatePortable;
+using Google.Protobuf;
 using Newtonsoft.Json;
 using POGOProtos.Data.Player;
 using POGOProtos.Map.Fort;
+using POGOProtos.Networking.Requests;
+using POGOProtos.Networking.Requests.Messages;
+using POGOProtos.Networking.Responses;
 using PokemonGoGUI.AccountScheduler;
 using PokemonGoGUI.Enums;
 using PokemonGoGUI.Exceptions;
@@ -585,7 +589,7 @@ namespace PokemonGoGUI.GoManager
                         LogCaller(new LoggerEventArgs("Grabbing pokemon settings ...", LoggerTypes.Debug));
                         result = await GetItemTemplates();
 
-                        if(!result.Success)
+                        if (!result.Success)
                         {
                             AccountState = AccountState.PokemonBanAndPokestopBanTemp;
                             LogCaller(new LoggerEventArgs("Load pokemon settings failed", LoggerTypes.FatalError, new Exception("Maybe this account is banned ...")));
@@ -737,7 +741,14 @@ namespace PokemonGoGUI.GoManager
 
                         double distance = CalculateDistanceInMeters(currentLocation, fortLocation);
 
-                        string fort = pokestop.Type == FortType.Checkpoint ? "pokestop" : "gym";
+                        string fort = "pokestop";
+
+                        if (pokestop.Type == FortType.Gym)
+                        {
+                            MethodResult<GymGetInfoResponse> _result = await GymGetInfo(pokestop);
+                            if (_result.Success)
+                                fort = "gym";
+                        }
 
                         LogCaller(new LoggerEventArgs(String.Format("Going to {0} {1} of {2}. Distance {3:0.00}m", fort, pokeStopNumber, totalStops, distance), pokestop.Type == FortType.Checkpoint ? LoggerTypes.Info : LoggerTypes.FortGym));
 
