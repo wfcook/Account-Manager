@@ -1,5 +1,13 @@
 # Change Log
 
+## [v2.20.0.1](https://github.com/Furtif/GoManager/tree/v2.20.0.1) (2017-12-08)
+
+[Full Changelog](https://github.com/Furtif/GoManager/compare/v2.20.0.0...v2.20.0.1)
+
+**Merged pull requests:**
+
+- bug on hash keys tab. fixed [\#16](https://github.com/Furtif/GoManager/pull/16) ([Xelwon](https://github.com/Xelwon))
+
 ## [v2.20.0.0](https://github.com/Furtif/GoManager/tree/v2.20.0.0) (2017-12-08)
 
 [Full Changelog](https://github.com/Furtif/GoManager/compare/v2.19.2.5...v2.20.0.0)
