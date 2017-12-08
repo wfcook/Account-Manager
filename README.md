@@ -2,7 +2,6 @@
 
 <!-- define variables -->
 [1.1]: http://i.imgur.com/M4fJ65n.png (ATTENTION)
-[1.2]: https://discordapp.com/api/guilds/208485545439920128/widget.png?style=banner2 (DISCORD)
 
 [![Build status](https://ci.appveyor.com/api/projects/status/n7nks9i63033eup5/branch/master?svg=true)](https://ci.appveyor.com/project/RocketBot/gomanager/branch/master) [![Github All Releases](https://img.shields.io/github/downloads/Furtif/GoManager/total.svg?maxAge=250)](https://github.com/Furtif/GoManager/releases) 
 [![GitHub license](https://img.shields.io/badge/license-AGPL-blue.svg)](https://raw.githubusercontent.com/Furtif/GoManager/master/LICENSE.md) 
@@ -20,11 +19,60 @@ See https://talk.pogodev.org/d/51-api-hashing-service-by-pokefarmer for pricing 
 
 [![Stories in Ready](https://discordapp.com/api/guilds/335455302965002242/widget.png?style=banner3&time-)](https://discord.gg/rkm4xhX)
 
-I'll make this pretty later
+## `Download`
+Download the bot from the [release](https://github.com/Furtif/GoManager/releases) tab.  
+
+### `Dependencies`
+ - Microsoft [.NET 4.5 SDK](https://www.microsoft.com/en-us/download/details.aspx?id=55170&desc=dotnet47)
+ - Windows 7/8/8.1/10 (x86 or x64)
+ - PogoDev ApiKey valid to get one here [Buy](https://talk.pogodev.org/d/51-api-hashing-service-by-pokefarmer)
+
+## `Developers and Contributors`
+
+### `Requirements`
+
+To contribute to development, you will need to download and install the required software first.
+
+- [Git](https://git-scm.com/downloads)
+- [Visual Studio 2017](https://www.visualstudio.com/vs/whatsnew/) - We are using C# 7.0 code so Visual Studio 2017 is required to compile. Visual Studio 2015 or older will not be able to compile the code.
+- [.NET 4.7 SDK](https://www.microsoft.com/en-us/download/details.aspx?id=55170&desc=dotnet47)
+
+### `Cloning Source Code`
+
+Next, you need to get the source code.  This source code repository uses git submodules. So when you clone the source code, you will need to clone recursively:
+
+```
+git clone --recursive https://github.com/Furtif/GoManager.git
+```
+
+ You can contribute in many ways, here are some that you can do to help the project out!
+
+### `Join discord channel and help answer questions`
+ We have more and more users everyday, so we have a lot of questions from new users who haven't fully understand how the bot works yet. If you want to help them out, join our official discord channel :)
+
+### `Answer questions`
+ Same as above, you can help by answering questions in the [issues](https://github.com/Furtif/GoManager/issues) tab!
+
+### `Report bugs`
+ Report bugs you found in [issues](https://github.com/Furtif/GoManager/issues).  
+In order to help us fix the problem, please take a screenshot of the error you get and also attach your log file (under the Logs folder) as well. Add [Bug] to the title to help us quickly identify the category of the issue.
+
+### `Suggestions/ideas`
+ Tell us what you think we can do better in [issues](https://github.com/Furtif/GoManager/issues).  
+Give detailed discription to help us understand what you are looking for. Add [Suggestion] to the title to help us quickly identify the category of the issue. Your suggestion might not be accept, but hey, maybe we will accept your suggestion next time! :)
+
+### `Legal Disclaimer`
+
+This Website and Project is in no way affiliated with, authorized, maintained, sponsored or endorsed by ANYONE. This is an independent and unofficial project for educational use ONLY. Do not use for any other purpose than education, testing and research.
+
+#### Using this project for anything other than education, testing or research is not advised.
+
+This is not a public release, just a project with releases for code testers for education and research on any privacy issues for the end user.
+
+## `A Pokémon Go bot in C#`
 
 
-<h2><a name="credits">Credits</a></h2>
+## Credits
 
 SlxTnT - [GitHub](https://github.com/SL-x-TnT)
-
 AeonLucid - [GitHub](https://github.com/AeonLucid)

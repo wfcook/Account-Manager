@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -68,8 +69,35 @@ namespace PokemonGoGUI.GoManager
             LoadFarmLocations();
         }
 
+        private void TestHashKey()
+        {
+            try
+            {
+                HttpClient client = new HttpClient();
+                string urlcheck = null;
+                client.DefaultRequestHeaders.Add("X-AuthToken", UserSettings.AuthAPIKey);
+                var maskedKey = UserSettings.AuthAPIKey.Substring(0, 4) + "".PadLeft(UserSettings.AuthAPIKey.Length - 8, 'X') + UserSettings.AuthAPIKey.Substring(UserSettings.AuthAPIKey.Length - 4, 4);
+                urlcheck = $"{UserSettings.HashHost}{UserSettings.HashEndpoint}";
+                LogCaller(new LoggerEventArgs($"Hash End-Point Set to '{urlcheck}'", LoggerTypes.Info));
+                HttpResponseMessage response = client.PostAsync(urlcheck, null).Result;
+                string AuthKey = response.Headers.GetValues("X-AuthToken").FirstOrDefault();
+                string MaxRequestCount = response.Headers.GetValues("X-MaxRequestCount").FirstOrDefault();
+                DateTime AuthTokenExpiration = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Unspecified).AddSeconds(Convert.ToDouble(response.Headers.GetValues("X-AuthTokenExpiration").FirstOrDefault())).ToLocalTime();
+                TimeSpan Expiration = AuthTokenExpiration - DateTime.Now;
+                string Result = $"Key: {maskedKey} RPM: {MaxRequestCount} Expires in: {Expiration.Days - 1} days ({AuthTokenExpiration})";
+                LogCaller(new LoggerEventArgs(Result, LoggerTypes.Success));
+            }
+            catch
+            {
+                LogCaller(new LoggerEventArgs("The HashKey is invalid or has expired", LoggerTypes.FatalError));
+                Stop();
+            }
+        }
+
         public async Task<MethodResult> Login()
         {
+            TestHashKey();
+
             LogCaller(new LoggerEventArgs("Attempting to login ...", LoggerTypes.Debug));
 
             try
@@ -248,7 +276,7 @@ namespace PokemonGoGUI.GoManager
             catch (Exception ex)
             {
                 Stop();
-                RemoveProxy();
+                //RemoveProxy();
 
                 LogCaller(new LoggerEventArgs("Failed to login", LoggerTypes.Exception, ex));
 
@@ -709,9 +737,11 @@ namespace PokemonGoGUI.GoManager
 
                         double distance = CalculateDistanceInMeters(currentLocation, fortLocation);
 
-                        LogCaller(new LoggerEventArgs(String.Format("Going to stop {0} of {1}. Distance {2:0.00}m", pokeStopNumber, totalStops, distance), LoggerTypes.Info));
+                        string fort = pokestop.Type == FortType.Checkpoint ? "pokestop" : "gym";
 
-                        //Go to stops
+                        LogCaller(new LoggerEventArgs(String.Format("Going to {0} {1} of {2}. Distance {3:0.00}m", fort, pokeStopNumber, totalStops, distance), pokestop.Type == FortType.Checkpoint ? LoggerTypes.Info : LoggerTypes.FortGym));
+
+                        //Go to pokestops
                         MethodResult walkResult = await GoToLocation(new GeoCoordinate(pokestop.Latitude, pokestop.Longitude));
 
                         if (!walkResult.Success)
