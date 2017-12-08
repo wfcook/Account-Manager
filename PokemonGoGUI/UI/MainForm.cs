@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using POGOProtos.Enums;
 using PokemonGoGUI.AccountScheduler;
 using PokemonGoGUI.Enums;
 using PokemonGoGUI.Extensions;
@@ -26,6 +25,7 @@ namespace PokemonGoGUI
         private List<Manager> _managers = new List<Manager>();
         private ProxyHandler _proxyHandler = new ProxyHandler();
         private List<Scheduler> _schedulers = new List<Scheduler>();
+        private List<string> _hashKeys = new List<string>();
         private bool _spf = false;
         private bool _showStartup = true;
         private bool IsLatest = true;
@@ -44,6 +44,9 @@ namespace PokemonGoGUI
 
             fastObjectListViewScheduler.BackColor = Color.FromArgb(0, 0, 0);
             fastObjectListViewScheduler.ForeColor = Color.LightGray;
+
+            fastObjectListViewHashKeys.BackColor = Color.FromArgb(0, 0, 0);
+            fastObjectListViewHashKeys.ForeColor = Color.LightGray;
 
             //BackColor = Color.FromArgb(43, 43, 43);
 
@@ -126,7 +129,7 @@ namespace PokemonGoGUI
 
             await LoadSettings();
 
-            if(_showStartup)
+            if (_showStartup)
             {
                 StartupForm startForm = new StartupForm();
                 
@@ -178,9 +181,9 @@ namespace PokemonGoGUI
                     _proxyHandler = model.ProxyHandler;
                     tempManagers = model.Managers;
                     _schedulers = model.Schedulers;
+                    _hashKeys = model.HashKeys;
                     _spf = model.SPF;
                     _showStartup = model.ShowWelcomeMessage;
-
                 }
                 else
                 {
@@ -224,7 +227,8 @@ namespace PokemonGoGUI
             }
 
             fastObjectListViewMain.SetObjects(_managers);
-            
+            fastObjectListViewHashKeys.SetObjects(_hashKeys);
+
             return true;
         }
 
@@ -237,6 +241,7 @@ namespace PokemonGoGUI
                     Managers = _managers,
                     ProxyHandler = _proxyHandler,
                     Schedulers = _schedulers,
+                    HashKeys = _hashKeys,
                     SPF = _spf,
                     ShowWelcomeMessage = _showStartup
                 };
@@ -394,6 +399,7 @@ namespace PokemonGoGUI
 
             foreach(Manager manager in fastObjectListViewMain.SelectedObjects)
             {
+                manager.UserSettings.HashKeys = _hashKeys.ToArray();
                 manager.UserSettings.SPF = _spf;
                 manager.Start();
 
@@ -480,6 +486,7 @@ namespace PokemonGoGUI
             int running = 0;
             int permBan = 0;
             int flags = 0;
+            int captcha = 0;
 
             List<Manager> tempManagers = new List<Manager>(_managers);
 
@@ -500,6 +507,11 @@ namespace PokemonGoGUI
                     ++flags;
                 }
 
+                if (manager.AccountState == AccountState.CaptchaReceived)
+                {
+                    ++captcha;
+                }
+
                 if (manager.AccountState == AccountState.PokemonBanAndPokestopBanTemp ||
                     manager.AccountState == AccountState.PokemonBanTemp ||
                     manager.AccountState == AccountState.PokestopBanTemp)
@@ -512,6 +524,7 @@ namespace PokemonGoGUI
             toolStripStatusLabelTempBanned.Text = tempBanned.ToString();
             toolStripStatusLabelTotalRunning.Text = running.ToString();
             toolStripStatusLabelFlagged.Text = flags.ToString();
+            toolStripStatusLabelCaptcha.Text = captcha.ToString();
 
             if(_proxyHandler.Proxies != null)
             {
@@ -524,7 +537,8 @@ namespace PokemonGoGUI
         {
             ToolStripMenuItem tSMI = sender as ToolStripMenuItem;
 
-            if (tSMI == null || !Boolean.TryParse(tSMI.Tag.ToString(), out bool useConfig))
+            bool useConfig;
+            if (tSMI == null || !Boolean.TryParse(tSMI.Tag.ToString(), out useConfig))
             {
                 return;
             }
@@ -633,7 +647,7 @@ namespace PokemonGoGUI
                 return;
             }
 
-            if (tabControlProxies.SelectedTab == tabPageAccounts)
+            if (tabControlMain.SelectedTab == tabPageAccounts)
             {
                 if (_managers.Count == 0)
                 {
@@ -642,7 +656,7 @@ namespace PokemonGoGUI
 
                 fastObjectListViewMain.RefreshObject(_managers[0]);
             }
-            else if(tabControlProxies.SelectedTab == tabPageProxies)
+            else if(tabControlMain.SelectedTab == tabPageProxies)
             {
                 if(_proxyHandler.Proxies.Count == 0)
                 {
@@ -651,7 +665,7 @@ namespace PokemonGoGUI
 
                 fastObjectListViewProxies.RefreshObject(_proxyHandler.Proxies.First());
             }
-            else if (tabControlProxies.SelectedTab == tabPageScheduler)
+            else if (tabControlMain.SelectedTab == tabPageScheduler)
             {
                 if(_schedulers.Count == 0)
                 {
@@ -770,6 +784,9 @@ namespace PokemonGoGUI
                         break;
                     case AccountState.Flagged:
                         e.SubItem.ForeColor = Color.Magenta;
+                        break;
+                    case AccountState.CaptchaReceived:
+                        e.SubItem.ForeColor = Color.Blue;
                         break;
                 }
             }
@@ -920,7 +937,8 @@ namespace PokemonGoGUI
                 return;
             }
 
-            if (!Int32.TryParse(pPerAccount, out int accountsPerProxy) || accountsPerProxy <= 0)
+            int accountsPerProxy;
+            if (!Int32.TryParse(pPerAccount, out accountsPerProxy) || accountsPerProxy <= 0)
             {
                 MessageBox.Show("Invalid input");
 
@@ -1215,7 +1233,6 @@ namespace PokemonGoGUI
             enableRecycleToolStripMenuItem4.Checked = manager.UserSettings.RecycleItems;
             enableIncubateEggsToolStripMenuItem5.Checked = manager.UserSettings.IncubateEggs;
             enableLuckyEggsToolStripMenuItem6.Checked = manager.UserSettings.UseLuckyEgg;
-            enableSnipePokemonToolStripMenuItem3.Checked = manager.UserSettings.SnipePokemon;
             enableCatchPokemonToolStripMenuItem2.Checked = manager.UserSettings.CatchPokemon;
             enableRotateProxiesToolStripMenuItem.Checked = manager.UserSettings.AutoRotateProxies;
             enableIPBanStopToolStripMenuItem.Checked = manager.UserSettings.StopOnIPBan;
@@ -1329,16 +1346,6 @@ namespace PokemonGoGUI
             fastObjectListViewMain.RefreshSelectedObjects();
         }
 
-        private void EnableSnipePokemonToolStripMenuItem3_Click(object sender, EventArgs e)
-        {
-            foreach (Manager manager in fastObjectListViewMain.SelectedObjects)
-            {
-                manager.UserSettings.SnipePokemon = !enableSnipePokemonToolStripMenuItem3.Checked;
-            }
-
-            fastObjectListViewMain.RefreshSelectedObjects();
-        }
-
         private void SetRequiredPokemonToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
@@ -1378,11 +1385,6 @@ namespace PokemonGoGUI
                 return;
             }
 
-            foreach (Manager manager in fastObjectListViewMain.SelectedObjects)
-            {
-                manager.UserSettings.SnipeAfterPokestops = value;
-            }
-
             fastObjectListViewMain.RefreshSelectedObjects();
         }
 
@@ -1399,11 +1401,6 @@ namespace PokemonGoGUI
             {
                 MessageBox.Show("Invalid value");
                 return;
-            }
-
-            foreach (Manager manager in fastObjectListViewMain.SelectedObjects)
-            {
-                manager.UserSettings.MinBallsToSnipe = value;
             }
 
             fastObjectListViewMain.RefreshSelectedObjects();
@@ -1424,11 +1421,6 @@ namespace PokemonGoGUI
                 return;
             }
 
-            foreach (Manager manager in fastObjectListViewMain.SelectedObjects)
-            {
-                manager.UserSettings.MaxPokemonPerSnipe = value;
-            }
-
             fastObjectListViewMain.RefreshSelectedObjects();
         }
 
@@ -1445,11 +1437,6 @@ namespace PokemonGoGUI
             {
                 MessageBox.Show("Invalid value");
                 return;
-            }
-
-            foreach (Manager manager in fastObjectListViewMain.SelectedObjects)
-            {
-                manager.UserSettings.SnipeAfterLevel = value;
             }
 
             fastObjectListViewMain.RefreshSelectedObjects();
@@ -1579,81 +1566,36 @@ namespace PokemonGoGUI
             }
         }
 
-        private async void SnipeToolStripMenuItem_Click(object sender, EventArgs e)
+        private void AboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            List<string> currentPokemon = new List<string>();
+            StartupForm startForm = new StartupForm();
 
-            foreach(PokemonId p in Enum.GetValues(typeof(PokemonId)))
+            if (startForm.ShowDialog() == DialogResult.OK)
             {
-                if(p != PokemonId.Missingno)
-                {
-                    currentPokemon.Add(p.ToString());
-                }
+                _showStartup = startForm.ShowOnStartUp;
             }
-
-            string pokemon = AutoCompletePrompt.ShowDialog("Pokemon to snipe", "Pokemon", currentPokemon);
-
-            if(String.IsNullOrEmpty(pokemon))
-            {
-                return;
-            }
-
-            PokemonId pokemonToSnipe = PokemonId.Missingno;
-
-            if(!Enum.TryParse<PokemonId>(pokemon, true, out pokemonToSnipe))
-            {
-                MessageBox.Show("Invalid pokemon");
-                return;
-            }
-
-            string data = Prompt.ShowDialog("Location. Format = x.xxx, x.xxx", "Enter Location");
-
-            if(String.IsNullOrEmpty(data))
-            {
-                return;
-            }
-
-            string[] parts = data.Split(',');
-
-            if (!double.TryParse(parts[0], NumberStyles.Any, CultureInfo.InvariantCulture, out double lat))
-            {
-                MessageBox.Show("Invalid latitutde.");
-                return;
-            }
-
-            if (!double.TryParse(parts[1], NumberStyles.Any, CultureInfo.InvariantCulture, out double lon))
-            {
-                MessageBox.Show("Invalid longitude.");
-                return;
-            }
-
-            snipePokemonToolStripMenuItem.Enabled = false;
-
-            foreach(Manager manager in fastObjectListViewMain.SelectedObjects)
-            {
-                //Snipe all at once
-                await manager.ManualSnipe(lat, lon, pokemonToSnipe).ConfigureAwait(false);
-
-                await Task.Delay(100);
-            }
-
-            snipePokemonToolStripMenuItem.Enabled = true;
         }
-
-
-        #region Proxies
-
-        private void TabControlProxies_SelectedIndexChanged(object sender, EventArgs e)
+        private void TabControlMain_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if(tabControlProxies.SelectedTab == tabPageProxies)
+            if (tabControlMain.SelectedTab == tabPageProxies)
             {
                 fastObjectListViewProxies.SetObjects(_proxyHandler.Proxies);
             }
-            else if(tabControlProxies.SelectedTab == tabPageScheduler)
+            else if (tabControlMain.SelectedTab == tabPageScheduler)
             {
                 fastObjectListViewScheduler.SetObjects(_schedulers);
             }
+            else if (tabControlMain.SelectedTab == tabPageHashKeys)
+            {
+                fastObjectListViewHashKeys.SetObjects(_hashKeys);
+            }
+            else if (tabControlMain.SelectedTab == tabPageAccounts)
+            {
+                fastObjectListViewHashKeys.SetObjects(_managers);
+            }
         }
+
+        #region Proxies
 
         private void ResetBanStateToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -2067,14 +2009,36 @@ namespace PokemonGoGUI
                 }
             }
         }
+        # endregion
 
-        private void AboutToolStripMenuItem_Click(object sender, EventArgs e)
+        #region HashKeys
+
+        private void DeleteToolStripMenuItem3_Click(object sender, EventArgs e)
         {
-            StartupForm startForm = new StartupForm();
-
-            if (startForm.ShowDialog() == DialogResult.OK)
+            foreach (var hashkey in fastObjectListViewHashKeys.SelectedObjects)
             {
-                _showStartup = startForm.ShowOnStartUp;
+                _hashKeys.Remove(hashkey.ToString());
+            }
+
+            fastObjectListViewHashKeys.SetObjects(_hashKeys);
+        }
+
+        private void AddToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            string data = Prompt.ShowDialog("Add Hash Key", "Hash Key");
+            if (String.IsNullOrEmpty(data))
+            {
+                return;
+            }
+            _hashKeys.Add(data);
+            fastObjectListViewHashKeys.SetObjects(_hashKeys);
+        }
+
+        private void FastObjectListViewHashKeys_FormatCell(object sender, BrightIdeasSoftware.FormatCellEventArgs e)
+        {
+            if (e.Column == olvColumnKeys)
+            {
+                e.SubItem.ForeColor = Color.Green;
             }
         }
         #endregion

@@ -63,14 +63,14 @@ namespace PokemonGoGUI.UI
             checkBoxTransfer.Checked = setting.Transfer;
         }
 
-        private void buttonSave_Click(object sender, EventArgs e)
+        private void ButtonSave_Click(object sender, EventArgs e)
         {
             SetSettings();
 
             DialogResult = DialogResult.OK;
         }
 
-        private void comboBoxTransferType_SelectedIndexChanged(object sender, EventArgs e)
+        private void ComboBoxTransferType_SelectedIndexChanged(object sender, EventArgs e)
         {
             numericUpDownMinCP.Enabled = false;
             numericUpDownKeepMax.Enabled = false;

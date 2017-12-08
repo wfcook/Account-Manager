@@ -416,12 +416,12 @@ namespace PokemonGoGUI.UI
             fastObjectListViewEggs.SetObjects(_manager.Eggs);
         }
 
-        private async void buttonUpdateStats_Click(object sender, EventArgs e)
+        private async void ButtonUpdateStats_Click(object sender, EventArgs e)
         {
             await UpdateDetails();
         }
 
-        private void fastObjectListViewLogs_FormatRow(object sender, FormatRowEventArgs e)
+        private void FastObjectListViewLogs_FormatRow(object sender, FormatRowEventArgs e)
         {
             Log log = e.Model as Log;
 
@@ -433,7 +433,7 @@ namespace PokemonGoGUI.UI
             e.Item.ForeColor = log.GetLogColor();
         }
 
-        private void fastObjectListViewPokemon_FormatCell(object sender, FormatCellEventArgs e)
+        private void FastObjectListViewPokemon_FormatCell(object sender, FormatCellEventArgs e)
         {
             PokemonData pokemonData = (PokemonData)e.Model;
 
@@ -531,7 +531,7 @@ namespace PokemonGoGUI.UI
             }
         }
 
-        private void upgradeToolStripMenuItem_Click(object sender, EventArgs e)
+        private void UpgradeToolStripMenuItem_Click(object sender, EventArgs e)
         {
             DialogResult result = MessageBox.Show(String.Format("Are you sure you want to upgrade {0} pokemon?", fastObjectListViewPokemon.SelectedObjects.Count), "Confirmation", MessageBoxButtons.YesNo);
 
@@ -543,7 +543,7 @@ namespace PokemonGoGUI.UI
             fastObjectListViewPokemon.SetObjects(_manager.Pokemon);
         }
 
-        private async void transferToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void TransferToolStripMenuItem_Click(object sender, EventArgs e)
         {
             DialogResult result = MessageBox.Show(String.Format("Are you sure you want to transfer {0} pokemon?", fastObjectListViewPokemon.SelectedObjects.Count), "Confirmation", MessageBoxButtons.YesNo);
 
@@ -565,7 +565,7 @@ namespace PokemonGoGUI.UI
             MessageBox.Show("Finished transferring pokemon");
         }
 
-        private async void evolveToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void EvolveToolStripMenuItem_Click(object sender, EventArgs e)
         {
             DialogResult result = MessageBox.Show(String.Format("Are you sure you want to evolve {0} pokemon?", fastObjectListViewPokemon.SelectedObjects.Count), "Confirmation", MessageBoxButtons.YesNo);
 
@@ -587,7 +587,7 @@ namespace PokemonGoGUI.UI
             MessageBox.Show("Finished evolving pokemon");
         }
 
-        private void contextMenuStripPokemonDetails_Opening(object sender, CancelEventArgs e)
+        private void ContextMenuStripPokemonDetails_Opening(object sender, CancelEventArgs e)
         {
             /*
             if(_manager.IsRunning)
@@ -600,7 +600,7 @@ namespace PokemonGoGUI.UI
             }*/
         }
 
-        private void tabControlMain_SelectedIndexChanged(object sender, EventArgs e)
+        private void TabControlMain_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (tabControlMain.SelectedTab == tabPageLogs)
             {
@@ -614,7 +614,7 @@ namespace PokemonGoGUI.UI
             }
         }
 
-        private void copyToolStripMenuItem_Click(object sender, EventArgs e)
+        private void CopyToolStripMenuItem_Click(object sender, EventArgs e)
         {
             int total = fastObjectListViewLogs.SelectedObjects.Count;
 
@@ -628,7 +628,7 @@ namespace PokemonGoGUI.UI
             Clipboard.SetText(copiedMessage);
         }
 
-        private async void exportToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void ExportToolStripMenuItem_Click(object sender, EventArgs e)
         {
             using(SaveFileDialog sfd = new SaveFileDialog())
             {
@@ -646,7 +646,7 @@ namespace PokemonGoGUI.UI
             }
         }
 
-        private async void setFavoriteToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void SetFavoriteToolStripMenuItem_Click(object sender, EventArgs e)
         {
             favoriteToolStripMenuItem.Enabled = false;
 
@@ -661,7 +661,7 @@ namespace PokemonGoGUI.UI
 
         }
 
-        private async void setUnfavoriteToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void SetUnfavoriteToolStripMenuItem_Click(object sender, EventArgs e)
         {
             favoriteToolStripMenuItem.Enabled = false;
 
@@ -676,17 +676,16 @@ namespace PokemonGoGUI.UI
 
         }
 
-        private async void recycleToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void RecycleToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string data = Prompt.ShowDialog("Amount to recycle", "Set recycle amount");
-            int amount = 0;
 
-            if(String.IsNullOrEmpty(data) || !Int32.TryParse(data, out amount) || amount <= 0)
+            if (String.IsNullOrEmpty(data) || !Int32.TryParse(data, out int amount) || amount <= 0)
             {
                 return;
             }
 
-            foreach(ItemData item in fastObjectListViewInventory.SelectedObjects)
+            foreach (ItemData item in fastObjectListViewInventory.SelectedObjects)
             {
                 int toDelete = amount;
 
@@ -707,7 +706,7 @@ namespace PokemonGoGUI.UI
             MessageBox.Show("Finished recycling items");
         }
 
-        private void copyStackTraceToolStripMenuItem_Click(object sender, EventArgs e)
+        private void CopyStackTraceToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Log log = fastObjectListViewLogs.SelectedObject as Log;
 
@@ -721,7 +720,7 @@ namespace PokemonGoGUI.UI
             MessageBox.Show("Stack trace copied");
         }
 
-        private async void showFutureTransfersToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void ShowFutureTransfersToolStripMenuItem_Click(object sender, EventArgs e)
         {
             showFutureTransfersToolStripMenuItem.Enabled = false;
 

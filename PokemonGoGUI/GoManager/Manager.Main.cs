@@ -1,7 +1,11 @@
 ﻿using GeoCoordinatePortable;
+using Google.Protobuf;
 using Newtonsoft.Json;
 using POGOProtos.Data.Player;
 using POGOProtos.Map.Fort;
+using POGOProtos.Networking.Requests;
+using POGOProtos.Networking.Requests.Messages;
+using POGOProtos.Networking.Responses;
 using PokemonGoGUI.AccountScheduler;
 using PokemonGoGUI.Enums;
 using PokemonGoGUI.Exceptions;
@@ -12,6 +16,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -89,8 +94,6 @@ namespace PokemonGoGUI.GoManager
             {
                 Stop();
 
-                RemoveProxy();
-
                 LogCaller(new LoggerEventArgs("Ptc server offline. Please try again later.", LoggerTypes.Warning));
 
                 return new MethodResult
@@ -101,7 +104,6 @@ namespace PokemonGoGUI.GoManager
             catch (AccountNotVerifiedException)
             {
                 Stop();
-
                 RemoveProxy();
 
                 LogCaller(new LoggerEventArgs("Account not verified. Stopping ...", LoggerTypes.Warning));
@@ -117,9 +119,7 @@ namespace PokemonGoGUI.GoManager
             {
                 Stop();
 
-                RemoveProxy();
-
-                if (ex.Status == WebExceptionStatus.Timeout)
+                 if (ex.Status == WebExceptionStatus.Timeout)
                 {
                     if (String.IsNullOrEmpty(Proxy))
                     {
@@ -178,8 +178,6 @@ namespace PokemonGoGUI.GoManager
             {
                 Stop();
 
-                RemoveProxy();
-
                 if (String.IsNullOrEmpty(Proxy))
                 {
                     LogCaller(new LoggerEventArgs("Login request has timed out", LoggerTypes.Warning));
@@ -199,7 +197,6 @@ namespace PokemonGoGUI.GoManager
             {
                 //Puts stopping log before other log.
                 Stop();
-
                 RemoveProxy();
 
                 LogCaller(new LoggerEventArgs("Invalid credentials or account lockout. Stopping bot...", LoggerTypes.Warning, ex));
@@ -214,8 +211,6 @@ namespace PokemonGoGUI.GoManager
                 if (UserSettings.StopOnIPBan)
                 {
                     Stop();
-
-                    RemoveProxy();
                 }
 
                 string message = String.Empty;
@@ -258,10 +253,7 @@ namespace PokemonGoGUI.GoManager
             catch (Exception ex)
             {
                 Stop();
-
-                RemoveProxy();
-
-                //_client.Logout();
+                //RemoveProxy();
 
                 LogCaller(new LoggerEventArgs("Failed to login", LoggerTypes.Exception, ex));
 
@@ -467,6 +459,19 @@ namespace PokemonGoGUI.GoManager
                     _client.Logout();
                 }
 
+                if (_client.CaptchaInt > 0)
+                {
+                    AccountState = AccountState.CaptchaReceived;
+                    LogCaller(new LoggerEventArgs("Captcha ceceived", LoggerTypes.Warning));
+
+                    //Remove proxy
+                    RemoveProxy();
+
+                    Stop();
+
+                    continue;
+                }
+
                 if (_failedInventoryReponses >= _failedInventoryUntilBan)
                 {
                     AccountState = AccountState.PermAccountBan;
@@ -557,7 +562,7 @@ namespace PokemonGoGUI.GoManager
                         LogCaller(new LoggerEventArgs("Grabbing pokemon settings ...", LoggerTypes.Debug));
                         result = await GetItemTemplates();
 
-                        if(!result.Success)
+                        if (!result.Success)
                         {
                             AccountState = AccountState.PokemonBanAndPokestopBanTemp;
                             LogCaller(new LoggerEventArgs("Load pokemon settings failed", LoggerTypes.FatalError, new Exception("Maybe this account is banned ...")));
@@ -709,9 +714,18 @@ namespace PokemonGoGUI.GoManager
 
                         double distance = CalculateDistanceInMeters(currentLocation, fortLocation);
 
-                        LogCaller(new LoggerEventArgs(String.Format("Going to stop {0} of {1}. Distance {2:0.00}m", pokeStopNumber, totalStops, distance), LoggerTypes.Info));
+                        string fort = "pokestop";
 
-                        //Go to stops
+                        if (pokestop.Type == FortType.Gym)
+                        {
+                            MethodResult<GymGetInfoResponse> _result = await GymGetInfo(pokestop);
+                            if (_result.Success)
+                                fort = "gym";
+                        }
+
+                        LogCaller(new LoggerEventArgs(String.Format("Going to {0} {1} of {2}. Distance {3:0.00}m", fort, pokeStopNumber, totalStops, distance), pokestop.Type == FortType.Checkpoint ? LoggerTypes.Info : LoggerTypes.FortGym));
+
+                        //Go to pokestops
                         MethodResult walkResult = await GoToLocation(new GeoCoordinate(pokestop.Latitude, pokestop.Longitude));
 
                         if (!walkResult.Success)
@@ -764,24 +778,6 @@ namespace PokemonGoGUI.GoManager
                             MethodResult luredPokemonResponse = await CatchLuredPokemon(pokestop);
 
                             await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
-                        }
-
-                        //Check sniping
-                        if (Stats.Level >= UserSettings.SnipeAfterLevel)
-                        {
-                            if (UserSettings.SnipePokemon && IsRunning && pokeStopNumber >= UserSettings.SnipeAfterPokestops && pokeStopNumber % UserSettings.SnipeAfterPokestops == 0)
-                            {
-                                if (remainingBalls >= UserSettings.MinBallsToSnipe)
-                                {
-                                    await SnipeAllPokemon();
-                                }
-                                else
-                                {
-                                    LogCaller(new LoggerEventArgs(String.Format("Not enough pokeballs to snipe. Need {0} have {1}", UserSettings.MinBallsToSnipe, remainingBalls), LoggerTypes.Info));
-                                }
-
-                                await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
-                            }
                         }
 
                         //Clean inventory, evolve, transfer, etc on first and every 10 stops

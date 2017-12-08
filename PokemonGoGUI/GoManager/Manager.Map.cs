@@ -65,10 +65,10 @@ namespace PokemonGoGUI.GoManager
 
             foreach (FortData fort in allFortsResponse.Data)
             {
-                if(fort.Type != FortType.Checkpoint || fort.CooldownCompleteTimestampMs > DateTime.UtcNow.ToUnixTime())
+                if(fort.CooldownCompleteTimestampMs > DateTime.UtcNow.ToUnixTime())
                 {
                     continue;
-                }
+                }                
 
                 GeoCoordinate defaultLocation = new GeoCoordinate(UserSettings.DefaultLatitude, UserSettings.DefaultLongitude);
                 GeoCoordinate fortLocation = new GeoCoordinate(fort.Latitude, fort.Longitude);
