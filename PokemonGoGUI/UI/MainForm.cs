@@ -26,6 +26,7 @@ namespace PokemonGoGUI
         private List<Manager> _managers = new List<Manager>();
         private ProxyHandler _proxyHandler = new ProxyHandler();
         private List<Scheduler> _schedulers = new List<Scheduler>();
+        private List<string> _hashKeys = new List<string>();
         private bool _spf = false;
         private bool _showStartup = true;
         private bool IsLatest = true;
@@ -125,6 +126,10 @@ namespace PokemonGoGUI
             await GoManager.VersionCheckState.CleanupOldFiles();
 
             await LoadSettings();
+            listViewHashKeys.Items.Clear();
+            foreach (var element in _hashKeys) {
+                listViewHashKeys.Items.Add(element);
+            }
 
             if(_showStartup)
             {
@@ -178,6 +183,9 @@ namespace PokemonGoGUI
                     _proxyHandler = model.ProxyHandler;
                     tempManagers = model.Managers;
                     _schedulers = model.Schedulers;
+                    if (model.HashKeys!=null)
+                        _hashKeys = model.HashKeys;
+                    
                     _spf = model.SPF;
                     _showStartup = model.ShowWelcomeMessage;
 
@@ -237,6 +245,7 @@ namespace PokemonGoGUI
                     Managers = _managers,
                     ProxyHandler = _proxyHandler,
                     Schedulers = _schedulers,
+                    HashKeys = _hashKeys,
                     SPF = _spf,
                     ShowWelcomeMessage = _showStartup
                 };
@@ -395,6 +404,7 @@ namespace PokemonGoGUI
             foreach(Manager manager in fastObjectListViewMain.SelectedObjects)
             {
                 manager.UserSettings.SPF = _spf;
+                manager.UserSettings.HashKeys = string.Join("\n",_hashKeys);
                 manager.Start();
 
                 await Task.Delay(200);
@@ -524,7 +534,8 @@ namespace PokemonGoGUI
         {
             ToolStripMenuItem tSMI = sender as ToolStripMenuItem;
 
-            if (tSMI == null || !Boolean.TryParse(tSMI.Tag.ToString(), out bool useConfig))
+            bool useConfig;
+            if (tSMI == null || !Boolean.TryParse(tSMI.Tag.ToString(), out useConfig))
             {
                 return;
             }
@@ -919,8 +930,8 @@ namespace PokemonGoGUI
             {
                 return;
             }
-
-            if (!Int32.TryParse(pPerAccount, out int accountsPerProxy) || accountsPerProxy <= 0)
+            int accountsPerProxy;
+            if (!Int32.TryParse(pPerAccount, out  accountsPerProxy) || accountsPerProxy <= 0)
             {
                 MessageBox.Show("Invalid input");
 
@@ -1145,8 +1156,8 @@ namespace PokemonGoGUI
             {
                 return;
             }
-
-            if (!Double.TryParse(data, NumberStyles.Any, CultureInfo.InvariantCulture, out double value) || value < 0)
+            double value;
+            if (!Double.TryParse(data, NumberStyles.Any, CultureInfo.InvariantCulture, out  value) || value < 0)
             {
                 MessageBox.Show("Invalid runtime value");
             }
@@ -1184,8 +1195,8 @@ namespace PokemonGoGUI
             {
                 return;
             }
-
-            if (!Int32.TryParse(data, out int level) || level < 0)
+            int level;
+            if (!Int32.TryParse(data, out level) || level < 0)
             {
                 MessageBox.Show("Invalid value");
                 return;
@@ -1348,8 +1359,8 @@ namespace PokemonGoGUI
             {
                 return;
             }
-
-            if (!Int32.TryParse(data, out int value) || value >= 500 || value < 0)
+            int value;
+            if (!Int32.TryParse(data, out value) || value >= 500 || value < 0)
             {
                 MessageBox.Show("Invalid value");
                 return;
@@ -1371,8 +1382,8 @@ namespace PokemonGoGUI
             {
                 return;
             }
-
-            if (!Int32.TryParse(data, out int value) || value >= 1000 || value < 0)
+            int value;
+            if (!Int32.TryParse(data, out value) || value >= 1000 || value < 0)
             {
                 MessageBox.Show("Invalid value");
                 return;
@@ -1394,8 +1405,8 @@ namespace PokemonGoGUI
             {
                 return;
             }
-
-            if (!Int32.TryParse(data, out int value) || value >= 1000 || value < 0)
+            int value;
+            if (!Int32.TryParse(data, out value) || value >= 1000 || value < 0)
             {
                 MessageBox.Show("Invalid value");
                 return;
@@ -1417,8 +1428,8 @@ namespace PokemonGoGUI
             {
                 return;
             }
-
-            if (!Int32.TryParse(data, out int value) || value >= 500 || value < 0)
+            int value;
+            if (!Int32.TryParse(data, out value) || value >= 500 || value < 0)
             {
                 MessageBox.Show("Invalid value");
                 return;
@@ -1440,8 +1451,8 @@ namespace PokemonGoGUI
             {
                 return;
             }
-
-            if (!Int32.TryParse(data, out int value) || value >= 40 || value < 0)
+            int value;
+            if (!Int32.TryParse(data, out value) || value >= 40 || value < 0)
             {
                 MessageBox.Show("Invalid value");
                 return;
@@ -1614,14 +1625,14 @@ namespace PokemonGoGUI
             }
 
             string[] parts = data.Split(',');
-
-            if (!double.TryParse(parts[0], NumberStyles.Any, CultureInfo.InvariantCulture, out double lat))
+            double lat;
+            if (!double.TryParse(parts[0], NumberStyles.Any, CultureInfo.InvariantCulture, out lat))
             {
                 MessageBox.Show("Invalid latitutde.");
                 return;
             }
-
-            if (!double.TryParse(parts[1], NumberStyles.Any, CultureInfo.InvariantCulture, out double lon))
+            double lon;
+            if (!double.TryParse(parts[1], NumberStyles.Any, CultureInfo.InvariantCulture, out lon))
             {
                 MessageBox.Show("Invalid longitude.");
                 return;
@@ -1801,8 +1812,8 @@ namespace PokemonGoGUI
             {
                 return;
             }
-
-            if (!Int32.TryParse(data, out int value) || value <= 0)
+            int value;
+            if (!Int32.TryParse(data, out value) || value <= 0)
             {
                 MessageBox.Show("Invalid value", "Warning");
                 return;
@@ -1824,8 +1835,8 @@ namespace PokemonGoGUI
             {
                 return;
             }
-
-            if (!Int32.TryParse(data, out int value) || value <= 0)
+            int value;
+            if (!Int32.TryParse(data, out value) || value <= 0)
             {
                 MessageBox.Show("Invalid value", "Warning");
                 return;
@@ -2076,6 +2087,25 @@ namespace PokemonGoGUI
             {
                 _showStartup = startForm.ShowOnStartUp;
             }
+        }
+        void deleteToolStripMenuItem3_Click(object sender, EventArgs e)
+        {
+            if (listViewHashKeys.SelectedItems==null || listViewHashKeys.SelectedItems.Count<1)
+                return;
+            for (var i = listViewHashKeys.SelectedItems.Count -1; i>=0;i--){
+                _hashKeys.Remove(listViewHashKeys.SelectedItems[i].Text);
+                listViewHashKeys.Items.Remove(listViewHashKeys.SelectedItems[i]);
+            }
+        }
+        void addToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            string data = Prompt.ShowDialog("Add Hash Key", "Hash Key");
+            if(String.IsNullOrEmpty(data))
+            {
+                return;
+            }
+            _hashKeys.Add(data);
+            listViewHashKeys.Items.Add(data);
         }
         #endregion
     }
