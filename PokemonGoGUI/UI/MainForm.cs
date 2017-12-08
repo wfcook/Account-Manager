@@ -26,6 +26,7 @@ namespace PokemonGoGUI
         private List<Manager> _managers = new List<Manager>();
         private ProxyHandler _proxyHandler = new ProxyHandler();
         private List<Scheduler> _schedulers = new List<Scheduler>();
+        private List<string> _hashKeys = new List<string>();
         private bool _spf = false;
         private bool _showStartup = true;
         private bool IsLatest = true;
@@ -126,7 +127,13 @@ namespace PokemonGoGUI
 
             await LoadSettings();
 
-            if(_showStartup)
+            listViewHashKeys.Items.Clear();
+            foreach (var element in _hashKeys)
+            {
+                listViewHashKeys.Items.Add(element);
+            }
+
+            if (_showStartup)
             {
                 StartupForm startForm = new StartupForm();
                 
@@ -178,6 +185,10 @@ namespace PokemonGoGUI
                     _proxyHandler = model.ProxyHandler;
                     tempManagers = model.Managers;
                     _schedulers = model.Schedulers;
+
+                    if (model.HashKeys != null)
+                        _hashKeys = model.HashKeys;
+
                     _spf = model.SPF;
                     _showStartup = model.ShowWelcomeMessage;
 
@@ -237,6 +248,7 @@ namespace PokemonGoGUI
                     Managers = _managers,
                     ProxyHandler = _proxyHandler,
                     Schedulers = _schedulers,
+                    HashKeys = _hashKeys,
                     SPF = _spf,
                     ShowWelcomeMessage = _showStartup
                 };
@@ -394,6 +406,7 @@ namespace PokemonGoGUI
 
             foreach(Manager manager in fastObjectListViewMain.SelectedObjects)
             {
+                manager.UserSettings.HashKeys = _hashKeys.ToArray();
                 manager.UserSettings.SPF = _spf;
                 manager.Start();
 
@@ -531,7 +544,8 @@ namespace PokemonGoGUI
         {
             ToolStripMenuItem tSMI = sender as ToolStripMenuItem;
 
-            if (tSMI == null || !Boolean.TryParse(tSMI.Tag.ToString(), out bool useConfig))
+            bool useConfig;
+            if (tSMI == null || !Boolean.TryParse(tSMI.Tag.ToString(), out useConfig))
             {
                 return;
             }
@@ -930,7 +944,8 @@ namespace PokemonGoGUI
                 return;
             }
 
-            if (!Int32.TryParse(pPerAccount, out int accountsPerProxy) || accountsPerProxy <= 0)
+            int accountsPerProxy;
+            if (!Int32.TryParse(pPerAccount, out accountsPerProxy) || accountsPerProxy <= 0)
             {
                 MessageBox.Show("Invalid input");
 
@@ -1558,6 +1573,16 @@ namespace PokemonGoGUI
             }
         }
 
+        private void AboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            StartupForm startForm = new StartupForm();
+
+            if (startForm.ShowDialog() == DialogResult.OK)
+            {
+                _showStartup = startForm.ShowOnStartUp;
+            }
+        }
+
         #region Proxies
 
         private void TabControlProxies_SelectedIndexChanged(object sender, EventArgs e)
@@ -1984,16 +2009,32 @@ namespace PokemonGoGUI
                 }
             }
         }
+        # endregion
 
-        private void AboutToolStripMenuItem_Click(object sender, EventArgs e)
+        #region HashKeys
+
+        private void DeleteToolStripMenuItem3_Click(object sender, EventArgs e)
         {
-            StartupForm startForm = new StartupForm();
-
-            if (startForm.ShowDialog() == DialogResult.OK)
+            if (listViewHashKeys.SelectedItems == null || listViewHashKeys.SelectedItems.Count < 1)
+                return;
+            for (var i = listViewHashKeys.SelectedItems.Count - 1; i >= 0; i--)
             {
-                _showStartup = startForm.ShowOnStartUp;
+                _hashKeys.Remove(listViewHashKeys.SelectedItems[i].Text);
+                listViewHashKeys.Items.Remove(listViewHashKeys.SelectedItems[i]);
             }
         }
+
+        private void AddToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            string data = Prompt.ShowDialog("Add Hash Key", "Hash Key");
+            if (String.IsNullOrEmpty(data))
+            {
+                return;
+            }
+            _hashKeys.Add(data);
+            listViewHashKeys.Items.Add(data);
+        }
+
         #endregion
     }
 }

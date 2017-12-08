@@ -13,6 +13,7 @@ namespace PokemonGoGUI
 {
     public class Settings : ISettings
     {
+        public string[] HashKeys { get; set; }
         public string AuthAPIKey { get; set; }
         public Uri HashHost { get; set; }
         public string HashEndpoint { get; set; }
@@ -46,6 +47,7 @@ namespace PokemonGoGUI
         public bool IncubateEggs { get; set; }
         public int MaxLevel { get; set; }
         public bool SPF { get; set; }
+        
         public double SearchFortBelowPercent { get; set; }
         public double ForceEvolveAbovePercent { get; set; }
         public bool StopOnAPIUpdate { get; set; }

@@ -33,6 +33,7 @@ namespace PokemonGoGUI
         string ProxyPassword { get; set; }
         bool SPF { get; set; }
 
+        string[] HashKeys { get; set; }
         string AuthAPIKey { get; set; }
         Uri HashHost { get; set; }
         string HashEndpoint { get; set; }
