@@ -72,7 +72,7 @@ This is not a public release, just a project with releases for code testers for 
 ## `A Pokémon Go bot in C#`
 
 
-## Credits
+### `Credits`
 
-SlxTnT - [GitHub](https://github.com/SL-x-TnT)
-AeonLucid - [GitHub](https://github.com/AeonLucid)
+- SlxTnT - [GitHub](https://github.com/SL-x-TnT)
+- AeonLucid - [GitHub](https://github.com/AeonLucid)
