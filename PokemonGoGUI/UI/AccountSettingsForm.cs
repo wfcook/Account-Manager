@@ -78,18 +78,8 @@ namespace PokemonGoGUI.UI
             comboBoxLocationPresets.DataSource = _manager.FarmLocations;
             comboBoxLocationPresets.DisplayMember = "Name";
 
-            //Api config load keys
-            if (File.Exists("HashKeys.txt"))
-            {
-                string[] lineOfContents = File.ReadAllLines("HashKeys.txt");
-                foreach (var line in lineOfContents)
-                {
-                    string[] tokens = line.Split(',');
-                    cbAuthAPIKey.Items.Add(tokens[0]);
-                }
-            }
-            else
-                File.CreateText("HashKeys.txt");
+            cbUseOnlyThisHashKey.Checked = _manager.UserSettings.UseOnlyOneKey;
+            tbAuthHashKey.Text = _manager.UserSettings.AuthAPIKey;
 
             //Location time zones
             var zones = new TimeZoneIds().GetTimeZoneIds();
@@ -178,13 +168,13 @@ namespace PokemonGoGUI.UI
             textBoxAndroidBootLoader.Text = settings.AndroidBootloader;
             textBoxHardwareManufacturer.Text = settings.HardwareManufacturer;
             textBoxHardwareModel.Text = settings.HardwareModel;
+            //End device settings
 
             //Api config
             cbHashHost.Text = settings.HashHost.ToString();
             cbHashEndpoint.Text = settings.HashEndpoint;
-            cbAuthAPIKey.Text = settings.AuthAPIKey;
-
-            //End device settings
+            tbAuthHashKey.Text = settings.AuthAPIKey;
+            cbUseOnlyThisHashKey.Checked = settings.UseOnlyOneKey;
 
             for(int i = 0; i < comboBoxMinAccountState.Items.Count; i++)
             {
@@ -298,7 +288,6 @@ namespace PokemonGoGUI.UI
                 userSettings.AuthType = AuthType.Google;
             }
 
-
             userSettings.MimicWalking = checkBoxMimicWalking.Checked;
             userSettings.PtcUsername = textBoxPtcUsername.Text.Trim();
             userSettings.PtcPassword = textBoxPtcPassword.Text.Trim();
@@ -367,7 +356,8 @@ namespace PokemonGoGUI.UI
             //Api config
             userSettings.HashHost = new Uri(cbHashHost.Text);
             userSettings.HashEndpoint = cbHashEndpoint.Text;
-            userSettings.AuthAPIKey = cbAuthAPIKey.Text;
+            userSettings.AuthAPIKey = tbAuthHashKey.Text;
+            userSettings.UseOnlyOneKey = cbUseOnlyThisHashKey.Checked;
             //End api config
 
             //Location time zones

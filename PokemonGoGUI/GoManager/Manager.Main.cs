@@ -73,35 +73,8 @@ namespace PokemonGoGUI.GoManager
             LoadFarmLocations();
         }
 
-        private void TestHashKey()
-        {
-            try
-            {
-                HttpClient client = new HttpClient();
-                string urlcheck = null;
-                client.DefaultRequestHeaders.Add("X-AuthToken", UserSettings.AuthAPIKey);
-                var maskedKey = UserSettings.AuthAPIKey.Substring(0, 4) + "".PadLeft(UserSettings.AuthAPIKey.Length - 8, 'X') + UserSettings.AuthAPIKey.Substring(UserSettings.AuthAPIKey.Length - 4, 4);
-                urlcheck = $"{UserSettings.HashHost}{UserSettings.HashEndpoint}";
-                LogCaller(new LoggerEventArgs($"Hash End-Point Set to '{urlcheck}'", LoggerTypes.Info));
-                HttpResponseMessage response = client.PostAsync(urlcheck, null).Result;
-                string AuthKey = response.Headers.GetValues("X-AuthToken").FirstOrDefault();
-                string MaxRequestCount = response.Headers.GetValues("X-MaxRequestCount").FirstOrDefault();
-                DateTime AuthTokenExpiration = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Unspecified).AddSeconds(Convert.ToDouble(response.Headers.GetValues("X-AuthTokenExpiration").FirstOrDefault())).ToLocalTime();
-                TimeSpan Expiration = AuthTokenExpiration - DateTime.Now;
-                string Result = $"Key: {maskedKey} RPM: {MaxRequestCount} Expires in: {Expiration.Days - 1} days ({AuthTokenExpiration})";
-                LogCaller(new LoggerEventArgs(Result, LoggerTypes.Success));
-            }
-            catch
-            {
-                LogCaller(new LoggerEventArgs("The HashKey is invalid or has expired", LoggerTypes.FatalError));
-                Stop();
-            }
-        }
-
         public async Task<MethodResult> Login()
         {
-            TestHashKey();
-
             LogCaller(new LoggerEventArgs("Attempting to login ...", LoggerTypes.Debug));
 
             try

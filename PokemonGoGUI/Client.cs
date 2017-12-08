@@ -61,9 +61,15 @@ namespace PokemonGoGUI
             {
                 // By default Configuration.Hasher is LegacyHasher type  (see Configuration.cs in the pogolib source code)
                 // -> So this comparation only will run once.
-                Configuration.Hasher = new PokeHashHasher(Settings.HashKeys);
-                Configuration.HasherUrl = Settings.HashHost;
-                Configuration.HashEndpoint = Settings.HashEndpoint;
+                if (Settings.UseOnlyOneKey)
+                {
+                    Configuration.Hasher = new PokeHashHasher(Settings.AuthAPIKey);
+                    Configuration.HasherUrl = Settings.HashHost;
+                    Configuration.HashEndpoint = Settings.HashEndpoint;
+                }
+                else
+                    Configuration.Hasher = new PokeHashHasher(Settings.HashKeys);
+
                 // TODO: make this configurable. To avoid bans (may be with a checkbox in hash keys tab).
                 Configuration.IgnoreHashVersion = true;
             }

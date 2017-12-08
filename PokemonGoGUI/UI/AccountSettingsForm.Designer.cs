@@ -76,6 +76,8 @@
             this.label44 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
             this.tabPageSettingsNavigation = new System.Windows.Forms.TabPage();
+            this.cbTimeZones = new System.Windows.Forms.ComboBox();
+            this.label53 = new System.Windows.Forms.Label();
             this.numericUpDownWalkingOffset = new System.Windows.Forms.NumericUpDown();
             this.comboBoxLocationPresets = new System.Windows.Forms.ComboBox();
             this.label10 = new System.Windows.Forms.Label();
@@ -140,8 +142,6 @@
             this.label33 = new System.Windows.Forms.Label();
             this.label32 = new System.Windows.Forms.Label();
             this.tabPageHash = new System.Windows.Forms.TabPage();
-            this.cbAuthAPIKey = new System.Windows.Forms.ComboBox();
-            this.label52 = new System.Windows.Forms.Label();
             this.label51 = new System.Windows.Forms.Label();
             this.cbHashEndpoint = new System.Windows.Forms.ComboBox();
             this.cbHashHost = new System.Windows.Forms.ComboBox();
@@ -200,8 +200,8 @@
             this.toolTipProxy = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipMinAccountState = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipHumanizeThrows = new System.Windows.Forms.ToolTip(this.components);
-            this.label53 = new System.Windows.Forms.Label();
-            this.cbTimeZones = new System.Windows.Forms.ComboBox();
+            this.cbUseOnlyThisHashKey = new System.Windows.Forms.CheckBox();
+            this.tbAuthHashKey = new System.Windows.Forms.TextBox();
             this.tabControlMain.SuspendLayout();
             this.tabPageDetails.SuspendLayout();
             this.tabControlSettings.SuspendLayout();
@@ -783,6 +783,23 @@
             this.tabPageSettingsNavigation.TabIndex = 1;
             this.tabPageSettingsNavigation.Text = "Navigation";
             this.tabPageSettingsNavigation.UseVisualStyleBackColor = true;
+            // 
+            // cbTimeZones
+            // 
+            this.cbTimeZones.FormattingEnabled = true;
+            this.cbTimeZones.Location = new System.Drawing.Point(179, 221);
+            this.cbTimeZones.Name = "cbTimeZones";
+            this.cbTimeZones.Size = new System.Drawing.Size(272, 24);
+            this.cbTimeZones.TabIndex = 57;
+            // 
+            // label53
+            // 
+            this.label53.AutoSize = true;
+            this.label53.Location = new System.Drawing.Point(20, 224);
+            this.label53.Name = "label53";
+            this.label53.Size = new System.Drawing.Size(138, 17);
+            this.label53.TabIndex = 56;
+            this.label53.Text = "Location Time Zone:";
             // 
             // numericUpDownWalkingOffset
             // 
@@ -1493,8 +1510,8 @@
             // 
             // tabPageHash
             // 
-            this.tabPageHash.Controls.Add(this.cbAuthAPIKey);
-            this.tabPageHash.Controls.Add(this.label52);
+            this.tabPageHash.Controls.Add(this.tbAuthHashKey);
+            this.tabPageHash.Controls.Add(this.cbUseOnlyThisHashKey);
             this.tabPageHash.Controls.Add(this.label51);
             this.tabPageHash.Controls.Add(this.cbHashEndpoint);
             this.tabPageHash.Controls.Add(this.cbHashHost);
@@ -1506,23 +1523,6 @@
             this.tabPageHash.TabIndex = 5;
             this.tabPageHash.Text = "Api Config";
             this.tabPageHash.UseVisualStyleBackColor = true;
-            // 
-            // cbAuthAPIKey
-            // 
-            this.cbAuthAPIKey.FormattingEnabled = true;
-            this.cbAuthAPIKey.Location = new System.Drawing.Point(164, 103);
-            this.cbAuthAPIKey.Name = "cbAuthAPIKey";
-            this.cbAuthAPIKey.Size = new System.Drawing.Size(283, 24);
-            this.cbAuthAPIKey.TabIndex = 5;
-            // 
-            // label52
-            // 
-            this.label52.AutoSize = true;
-            this.label52.Location = new System.Drawing.Point(33, 106);
-            this.label52.Name = "label52";
-            this.label52.Size = new System.Drawing.Size(71, 17);
-            this.label52.TabIndex = 4;
-            this.label52.Text = "Hash key:";
             // 
             // label51
             // 
@@ -2040,22 +2040,22 @@
             this.restoreDefaultsToolStripMenuItem2.Text = "Restore Defaults";
             this.restoreDefaultsToolStripMenuItem2.Click += new System.EventHandler(this.RestoreDefaultsToolStripMenuItem2_Click);
             // 
-            // label53
+            // cbUseOnlyThisHashKey
             // 
-            this.label53.AutoSize = true;
-            this.label53.Location = new System.Drawing.Point(20, 224);
-            this.label53.Name = "label53";
-            this.label53.Size = new System.Drawing.Size(138, 17);
-            this.label53.TabIndex = 56;
-            this.label53.Text = "Location Time Zone:";
+            this.cbUseOnlyThisHashKey.AutoSize = true;
+            this.cbUseOnlyThisHashKey.Location = new System.Drawing.Point(36, 105);
+            this.cbUseOnlyThisHashKey.Name = "cbUseOnlyThisHashKey";
+            this.cbUseOnlyThisHashKey.Size = new System.Drawing.Size(141, 21);
+            this.cbUseOnlyThisHashKey.TabIndex = 6;
+            this.cbUseOnlyThisHashKey.Text = "Use only this key:";
+            this.cbUseOnlyThisHashKey.UseVisualStyleBackColor = true;
             // 
-            // cbTimeZones
+            // tbAuthHashKey
             // 
-            this.cbTimeZones.FormattingEnabled = true;
-            this.cbTimeZones.Location = new System.Drawing.Point(179, 221);
-            this.cbTimeZones.Name = "cbTimeZones";
-            this.cbTimeZones.Size = new System.Drawing.Size(272, 24);
-            this.cbTimeZones.TabIndex = 57;
+            this.tbAuthHashKey.Location = new System.Drawing.Point(183, 103);
+            this.tbAuthHashKey.Name = "tbAuthHashKey";
+            this.tbAuthHashKey.Size = new System.Drawing.Size(264, 22);
+            this.tbAuthHashKey.TabIndex = 7;
             // 
             // AccountSettingsForm
             // 
@@ -2281,13 +2281,13 @@
         private System.Windows.Forms.Label label48;
         private System.Windows.Forms.Label label49;
         private System.Windows.Forms.TabPage tabPageHash;
-        private System.Windows.Forms.ComboBox cbAuthAPIKey;
-        private System.Windows.Forms.Label label52;
         private System.Windows.Forms.Label label51;
         private System.Windows.Forms.ComboBox cbHashEndpoint;
         private System.Windows.Forms.ComboBox cbHashHost;
         private System.Windows.Forms.Label label50;
         private System.Windows.Forms.ComboBox cbTimeZones;
         private System.Windows.Forms.Label label53;
+        private System.Windows.Forms.CheckBox cbUseOnlyThisHashKey;
+        private System.Windows.Forms.TextBox tbAuthHashKey;
     }
 }

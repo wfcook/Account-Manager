@@ -34,6 +34,7 @@ namespace PokemonGoGUI
         bool SPF { get; set; }
 
         string[] HashKeys { get; set; }
+        bool UseOnlyOneKey { get; set; }
         string AuthAPIKey { get; set; }
         Uri HashHost { get; set; }
         string HashEndpoint { get; set; }
