@@ -224,7 +224,6 @@
     <Compile Include="Models\TransferSettings.cs" />
     <Compile Include="ProxyEx.cs" />
     <Compile Include="ProxyManager\ProxyHandler.cs" />
-    <Compile Include="Snipers\PokeSniper.cs" />
     <Compile Include="UI\AccountSettingsForm.cs">
       <SubType>Form</SubType>
     </Compile>

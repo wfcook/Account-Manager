@@ -14,6 +14,7 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -166,6 +167,7 @@ namespace PokemonGoGUI
                     return false;
 
                 var tempManagers = new List<Manager>();
+                var tempHashKeys = new List<HashKey>();
 
                 byte[] byteData = await Task.Run(() => File.ReadAllBytes(gzipFile));
                 string data = Compression.Unzip(byteData);
@@ -175,8 +177,7 @@ namespace PokemonGoGUI
                 _proxyHandler = model.ProxyHandler;
                 tempManagers = model.Managers;
                 _schedulers = model.Schedulers;
-                if (model.HashKeys!=null)
-                    _hashKeys = model.HashKeys;
+                tempHashKeys = model.HashKeys;
                 _spf = model.SPF;
                 _showStartup = model.ShowWelcomeMessage;
                 foreach(Manager manager in tempManagers)
@@ -200,9 +201,15 @@ namespace PokemonGoGUI
 
                     _managers.Add(manager);
                 }
+
+                foreach (HashKey key in tempHashKeys)
+                {
+                    key.KeyInfo = Testhashkey(key.Key);
+                    _hashKeys.Add(key);
+                }
+
                 fastObjectListViewMain.SetObjects(_managers);
                 fastObjectListViewHashKeys.SetObjects(_hashKeys);
-
             }
             catch
             {
@@ -2024,18 +2031,80 @@ namespace PokemonGoGUI
 
         private void AddToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            string data = Prompt.ShowDialog("Add Hash Key", "Hash Key");
-            if (String.IsNullOrEmpty(data))
+            string newKew = Prompt.ShowDialog("Add Hash Key", "Hash Key");
+            HashKey data = new HashKey
+            {
+                Key = newKew,
+                KeyInfo = Testhashkey(newKew)
+            };
+
+            if (String.IsNullOrEmpty(data.Key))
             {
                 return;
             }
-            _hashKeys.Add(new HashKey{ Key = data});
+
+            foreach (HashKey key in _hashKeys)
+            {
+                if (key.Key == data.Key)
+                {
+                    MessageBox.Show($"This key already existes {data.Key}, Hash key infos {data.KeyInfo}", "Duplicated key", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+            }
+
+            _hashKeys.Add(data);
             fastObjectListViewHashKeys.SetObjects(_hashKeys);
+        }
+
+        private void TestKeyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (HashKey key in fastObjectListViewHashKeys.SelectedObjects)
+            {
+                key.KeyInfo =  Testhashkey(key.Key);
+            }
         }
 
         private void FastObjectListViewHashKeys_FormatCell(object sender, BrightIdeasSoftware.FormatCellEventArgs e)
         {
-            e.SubItem.ForeColor = Color.Green;
+            if (e.SubItem.Text.Substring(0, 2) == "PH")
+                e.SubItem.ForeColor = Color.Yellow;
+            else
+                e.SubItem.ForeColor = Color.Green;
+        }
+
+        private string Testhashkey(string key)
+        {
+            string result = null;
+            string mode = null;
+            try
+            {
+                HttpClient client = new HttpClient();
+                string urlcheck = null;
+                client.DefaultRequestHeaders.Add("X-AuthToken", key);
+                if (key.Substring(0, 2) == "PH")
+                {
+                    urlcheck = $"http://hash.goman.io/api/v153_2/hash";
+                    mode = "Remaining requests";
+                }
+                else
+                {
+                    urlcheck = $"https://pokehash.buddyauth.com/api/v153_2/hash";
+                    mode = "RPM";
+                }
+                result = $"Hash End-Point Set to '{urlcheck}'";
+                HttpResponseMessage response = client.PostAsync(urlcheck, null).Result;
+                string AuthKey = response.Headers.GetValues("X-AuthToken").FirstOrDefault();
+                string MaxRequestCount = response.Headers.GetValues("X-MaxRequestCount").FirstOrDefault();
+                DateTime AuthTokenExpiration = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Unspecified).AddSeconds(Convert.ToDouble(response.Headers.GetValues("X-AuthTokenExpiration").FirstOrDefault())).ToLocalTime();
+                TimeSpan Expiration = AuthTokenExpiration - DateTime.Now;
+                result = string.Format($"{mode}: {MaxRequestCount} Expires in: {(Convert.ToDecimal(Expiration.Days) + (Convert.ToDecimal(Expiration.Hours) / 24)):0.00} days ({AuthTokenExpiration})");
+            }
+            catch
+            {
+               result = "The HashKey is invalid or has expired";
+            }
+
+            return result;
         }
         #endregion
     }
