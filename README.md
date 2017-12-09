@@ -73,6 +73,7 @@ This is not a public release, just a project with releases for code testers for 
 
 
 ### `Credits`
-
-- SlxTnT - [GitHub](https://github.com/SL-x-TnT)
-- AeonLucid - [GitHub](https://github.com/AeonLucid)
+- [SlxTnT](https://github.com/SL-x-TnT)
+- [AeonLucid](https://github.com/AeonLucid)
+- [Xelwon](https://github.com/Xelwon)
+- [Xelwon](https://github.com/Xelwon)
