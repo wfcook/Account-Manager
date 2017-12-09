@@ -1,4 +1,5 @@
-﻿using PokemonGoGUI.Enums;
+﻿using System.Collections.Generic;
+using PokemonGoGUI.Enums;
 using System;
 
 namespace PokemonGoGUI
@@ -33,7 +34,7 @@ namespace PokemonGoGUI
         string ProxyPassword { get; set; }
         bool SPF { get; set; }
 
-        string[] HashKeys { get; set; }
+        List<string> HashKeys { get; set; }
         bool UseOnlyOneKey { get; set; }
         string AuthAPIKey { get; set; }
         Uri HashHost { get; set; }
