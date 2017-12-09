@@ -691,7 +691,7 @@ namespace PokemonGoGUI.GoManager
                     int currentFailedStops = 0;
 
                     while (pokestopsToFarm.Any())
-                    {
+                    {                        
                         if (!IsRunning || currentFailedStops >= UserSettings.MaxFailBeforeReset)
                         {
                             break;
@@ -708,6 +708,11 @@ namespace PokemonGoGUI.GoManager
 
                         FortData pokestop = pokestopsToFarm[0];
                         pokestopsToFarm.RemoveAt(0);
+
+                        if (!UserSettings.SpinGyms && pokestop.Type == FortType.Gym)
+                        {
+                            continue;
+                        }
 
                         GeoCoordinate currentLocation = new GeoCoordinate(_client.ClientSession.Player.Latitude, _client.ClientSession.Player.Longitude);
                         GeoCoordinate fortLocation = new GeoCoordinate(pokestop.Latitude, pokestop.Longitude);
@@ -883,7 +888,9 @@ namespace PokemonGoGUI.GoManager
                 }
                 catch (Exception ex)
                 {
-                    LogCaller(new LoggerEventArgs("Unknown exception occured. Restarting ...", LoggerTypes.Exception, ex));
+                    //LogCaller(new LoggerEventArgs("Unknown exception occured. Restarting ...", LoggerTypes.Exception, ex));
+                    LogCaller(new LoggerEventArgs("Unknown exception occured. Stopping ...", LoggerTypes.Exception, ex));
+                    Stop();
                 }
 
                 currentFails = 0;

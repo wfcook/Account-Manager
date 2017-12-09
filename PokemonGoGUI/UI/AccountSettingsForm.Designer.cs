@@ -33,8 +33,8 @@
             this.tabPageDetails = new System.Windows.Forms.TabPage();
             this.tabControlSettings = new System.Windows.Forms.TabControl();
             this.tabPageSettingsGeneral = new System.Windows.Forms.TabPage();
+            this.checkBoxSpinGyms = new System.Windows.Forms.CheckBox();
             this.numericUpDownForceEvolveAbove = new System.Windows.Forms.NumericUpDown();
-            this.label48 = new System.Windows.Forms.Label();
             this.label49 = new System.Windows.Forms.Label();
             this.comboBoxMinAccountState = new System.Windows.Forms.ComboBox();
             this.label9 = new System.Windows.Forms.Label();
@@ -54,11 +54,8 @@
             this.textBoxPtcPassword = new System.Windows.Forms.TextBox();
             this.textBoxName = new System.Windows.Forms.TextBox();
             this.label15 = new System.Windows.Forms.Label();
-            this.label47 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
             this.label46 = new System.Windows.Forms.Label();
-            this.label42 = new System.Windows.Forms.Label();
-            this.label41 = new System.Windows.Forms.Label();
             this.label43 = new System.Windows.Forms.Label();
             this.textBoxPtcUsername = new System.Windows.Forms.TextBox();
             this.radioButtonGoogle = new System.Windows.Forms.RadioButton();
@@ -142,6 +139,8 @@
             this.label33 = new System.Windows.Forms.Label();
             this.label32 = new System.Windows.Forms.Label();
             this.tabPageHash = new System.Windows.Forms.TabPage();
+            this.tbAuthHashKey = new System.Windows.Forms.TextBox();
+            this.cbUseOnlyThisHashKey = new System.Windows.Forms.CheckBox();
             this.label51 = new System.Windows.Forms.Label();
             this.cbHashEndpoint = new System.Windows.Forms.ComboBox();
             this.cbHashHost = new System.Windows.Forms.ComboBox();
@@ -200,8 +199,12 @@
             this.toolTipProxy = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipMinAccountState = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipHumanizeThrows = new System.Windows.Forms.ToolTip(this.components);
-            this.cbUseOnlyThisHashKey = new System.Windows.Forms.CheckBox();
-            this.tbAuthHashKey = new System.Windows.Forms.TextBox();
+            this.checkBoxEnableBattles = new System.Windows.Forms.CheckBox();
+            this.label42 = new System.Windows.Forms.Label();
+            this.label41 = new System.Windows.Forms.Label();
+            this.checkBoxDeployToGym = new System.Windows.Forms.CheckBox();
+            this.checkBoxSendBerries = new System.Windows.Forms.CheckBox();
+            this.checkBoxEnabeRaids = new System.Windows.Forms.CheckBox();
             this.tabControlMain.SuspendLayout();
             this.tabPageDetails.SuspendLayout();
             this.tabControlSettings.SuspendLayout();
@@ -289,8 +292,12 @@
             // 
             // tabPageSettingsGeneral
             // 
+            this.tabPageSettingsGeneral.Controls.Add(this.checkBoxEnabeRaids);
+            this.tabPageSettingsGeneral.Controls.Add(this.checkBoxSendBerries);
+            this.tabPageSettingsGeneral.Controls.Add(this.checkBoxDeployToGym);
+            this.tabPageSettingsGeneral.Controls.Add(this.checkBoxEnableBattles);
+            this.tabPageSettingsGeneral.Controls.Add(this.checkBoxSpinGyms);
             this.tabPageSettingsGeneral.Controls.Add(this.numericUpDownForceEvolveAbove);
-            this.tabPageSettingsGeneral.Controls.Add(this.label48);
             this.tabPageSettingsGeneral.Controls.Add(this.label49);
             this.tabPageSettingsGeneral.Controls.Add(this.comboBoxMinAccountState);
             this.tabPageSettingsGeneral.Controls.Add(this.label9);
@@ -310,7 +317,6 @@
             this.tabPageSettingsGeneral.Controls.Add(this.textBoxPtcPassword);
             this.tabPageSettingsGeneral.Controls.Add(this.textBoxName);
             this.tabPageSettingsGeneral.Controls.Add(this.label15);
-            this.tabPageSettingsGeneral.Controls.Add(this.label47);
             this.tabPageSettingsGeneral.Controls.Add(this.label11);
             this.tabPageSettingsGeneral.Controls.Add(this.label46);
             this.tabPageSettingsGeneral.Controls.Add(this.label42);
@@ -331,10 +337,20 @@
             this.tabPageSettingsGeneral.Text = "General";
             this.tabPageSettingsGeneral.UseVisualStyleBackColor = true;
             // 
+            // checkBoxSpinGyms
+            // 
+            this.checkBoxSpinGyms.AutoSize = true;
+            this.checkBoxSpinGyms.Location = new System.Drawing.Point(335, 216);
+            this.checkBoxSpinGyms.Name = "checkBoxSpinGyms";
+            this.checkBoxSpinGyms.Size = new System.Drawing.Size(98, 21);
+            this.checkBoxSpinGyms.TabIndex = 36;
+            this.checkBoxSpinGyms.Text = "Spin Gyms";
+            this.checkBoxSpinGyms.UseVisualStyleBackColor = true;
+            // 
             // numericUpDownForceEvolveAbove
             // 
             this.numericUpDownForceEvolveAbove.DecimalPlaces = 2;
-            this.numericUpDownForceEvolveAbove.Location = new System.Drawing.Point(226, 211);
+            this.numericUpDownForceEvolveAbove.Location = new System.Drawing.Point(223, 195);
             this.numericUpDownForceEvolveAbove.Margin = new System.Windows.Forms.Padding(2);
             this.numericUpDownForceEvolveAbove.Maximum = new decimal(new int[] {
             1000000,
@@ -345,20 +361,10 @@
             this.numericUpDownForceEvolveAbove.Size = new System.Drawing.Size(58, 22);
             this.numericUpDownForceEvolveAbove.TabIndex = 33;
             // 
-            // label48
-            // 
-            this.label48.AutoSize = true;
-            this.label48.Location = new System.Drawing.Point(16, 248);
-            this.label48.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label48.Name = "label48";
-            this.label48.Size = new System.Drawing.Size(162, 17);
-            this.label48.TabIndex = 34;
-            this.label48.Text = "Pokemon inventory filled";
-            // 
             // label49
             // 
             this.label49.AutoSize = true;
-            this.label49.Location = new System.Drawing.Point(16, 213);
+            this.label49.Location = new System.Drawing.Point(16, 197);
             this.label49.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label49.Name = "label49";
             this.label49.Size = new System.Drawing.Size(195, 17);
@@ -377,7 +383,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(18, 115);
+            this.label9.Location = new System.Drawing.Point(16, 115);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(163, 17);
             this.label9.TabIndex = 32;
@@ -386,7 +392,7 @@
             // numericUpDownSearchFortBelow
             // 
             this.numericUpDownSearchFortBelow.DecimalPlaces = 2;
-            this.numericUpDownSearchFortBelow.Location = new System.Drawing.Point(103, 177);
+            this.numericUpDownSearchFortBelow.Location = new System.Drawing.Point(223, 225);
             this.numericUpDownSearchFortBelow.Maximum = new decimal(new int[] {
             1000000,
             0,
@@ -399,7 +405,7 @@
             // numericUpDownRunForHours
             // 
             this.numericUpDownRunForHours.DecimalPlaces = 2;
-            this.numericUpDownRunForHours.Location = new System.Drawing.Point(226, 246);
+            this.numericUpDownRunForHours.Location = new System.Drawing.Point(77, 256);
             this.numericUpDownRunForHours.Maximum = new decimal(new int[] {
             99999,
             0,
@@ -411,7 +417,7 @@
             // 
             // numericUpDownMaxLogs
             // 
-            this.numericUpDownMaxLogs.Location = new System.Drawing.Point(157, 145);
+            this.numericUpDownMaxLogs.Location = new System.Drawing.Point(157, 140);
             this.numericUpDownMaxLogs.Maximum = new decimal(new int[] {
             999999,
             0,
@@ -513,7 +519,7 @@
             // 
             // textBoxMaxLevel
             // 
-            this.textBoxMaxLevel.Location = new System.Drawing.Point(197, 176);
+            this.textBoxMaxLevel.Location = new System.Drawing.Point(181, 168);
             this.textBoxMaxLevel.Name = "textBoxMaxLevel";
             this.textBoxMaxLevel.Size = new System.Drawing.Size(65, 22);
             this.textBoxMaxLevel.TabIndex = 10;
@@ -548,19 +554,10 @@
             this.label15.TabIndex = 14;
             this.label15.Text = "Auto Stop On State:";
             // 
-            // label47
-            // 
-            this.label47.AutoSize = true;
-            this.label47.Location = new System.Drawing.Point(240, 320);
-            this.label47.Name = "label47";
-            this.label47.Size = new System.Drawing.Size(99, 17);
-            this.label47.TabIndex = 17;
-            this.label47.Text = "inventory filled";
-            // 
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(16, 179);
+            this.label11.Location = new System.Drawing.Point(16, 171);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(75, 17);
             this.label11.TabIndex = 15;
@@ -569,34 +566,16 @@
             // label46
             // 
             this.label46.AutoSize = true;
-            this.label46.Location = new System.Drawing.Point(16, 286);
+            this.label46.Location = new System.Drawing.Point(16, 227);
             this.label46.Name = "label46";
             this.label46.Size = new System.Drawing.Size(204, 17);
             this.label46.TabIndex = 18;
             this.label46.Text = "Search Pokestops when below ";
             // 
-            // label42
-            // 
-            this.label42.AutoSize = true;
-            this.label42.Location = new System.Drawing.Point(115, 320);
-            this.label42.Name = "label42";
-            this.label42.Size = new System.Drawing.Size(44, 17);
-            this.label42.TabIndex = 17;
-            this.label42.Text = "hours";
-            // 
-            // label41
-            // 
-            this.label41.AutoSize = true;
-            this.label41.Location = new System.Drawing.Point(16, 320);
-            this.label41.Name = "label41";
-            this.label41.Size = new System.Drawing.Size(55, 17);
-            this.label41.TabIndex = 18;
-            this.label41.Text = "Run for";
-            // 
             // label43
             // 
             this.label43.AutoSize = true;
-            this.label43.Location = new System.Drawing.Point(16, 147);
+            this.label43.Location = new System.Drawing.Point(16, 142);
             this.label43.Name = "label43";
             this.label43.Size = new System.Drawing.Size(72, 17);
             this.label43.TabIndex = 19;
@@ -636,7 +615,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(64, 9);
+            this.label7.Location = new System.Drawing.Point(16, 6);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(42, 17);
             this.label7.TabIndex = 21;
@@ -645,7 +624,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(19, 86);
+            this.label3.Location = new System.Drawing.Point(16, 85);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(78, 17);
             this.label3.TabIndex = 23;
@@ -663,7 +642,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(18, 31);
+            this.label1.Location = new System.Drawing.Point(16, 31);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(138, 17);
             this.label1.TabIndex = 13;
@@ -1524,6 +1503,23 @@
             this.tabPageHash.Text = "Api Config";
             this.tabPageHash.UseVisualStyleBackColor = true;
             // 
+            // tbAuthHashKey
+            // 
+            this.tbAuthHashKey.Location = new System.Drawing.Point(183, 103);
+            this.tbAuthHashKey.Name = "tbAuthHashKey";
+            this.tbAuthHashKey.Size = new System.Drawing.Size(264, 22);
+            this.tbAuthHashKey.TabIndex = 7;
+            // 
+            // cbUseOnlyThisHashKey
+            // 
+            this.cbUseOnlyThisHashKey.AutoSize = true;
+            this.cbUseOnlyThisHashKey.Location = new System.Drawing.Point(36, 105);
+            this.cbUseOnlyThisHashKey.Name = "cbUseOnlyThisHashKey";
+            this.cbUseOnlyThisHashKey.Size = new System.Drawing.Size(141, 21);
+            this.cbUseOnlyThisHashKey.TabIndex = 6;
+            this.cbUseOnlyThisHashKey.Text = "Use only this key:";
+            this.cbUseOnlyThisHashKey.UseVisualStyleBackColor = true;
+            // 
             // label51
             // 
             this.label51.AutoSize = true;
@@ -2040,22 +2036,67 @@
             this.restoreDefaultsToolStripMenuItem2.Text = "Restore Defaults";
             this.restoreDefaultsToolStripMenuItem2.Click += new System.EventHandler(this.RestoreDefaultsToolStripMenuItem2_Click);
             // 
-            // cbUseOnlyThisHashKey
+            // checkBoxEnableBattles
             // 
-            this.cbUseOnlyThisHashKey.AutoSize = true;
-            this.cbUseOnlyThisHashKey.Location = new System.Drawing.Point(36, 105);
-            this.cbUseOnlyThisHashKey.Name = "cbUseOnlyThisHashKey";
-            this.cbUseOnlyThisHashKey.Size = new System.Drawing.Size(141, 21);
-            this.cbUseOnlyThisHashKey.TabIndex = 6;
-            this.cbUseOnlyThisHashKey.Text = "Use only this key:";
-            this.cbUseOnlyThisHashKey.UseVisualStyleBackColor = true;
+            this.checkBoxEnableBattles.AutoSize = true;
+            this.checkBoxEnableBattles.Enabled = false;
+            this.checkBoxEnableBattles.Location = new System.Drawing.Point(335, 243);
+            this.checkBoxEnableBattles.Name = "checkBoxEnableBattles";
+            this.checkBoxEnableBattles.Size = new System.Drawing.Size(106, 21);
+            this.checkBoxEnableBattles.TabIndex = 37;
+            this.checkBoxEnableBattles.Text = "Gym Battles";
+            this.checkBoxEnableBattles.UseVisualStyleBackColor = true;
             // 
-            // tbAuthHashKey
+            // label42
             // 
-            this.tbAuthHashKey.Location = new System.Drawing.Point(183, 103);
-            this.tbAuthHashKey.Name = "tbAuthHashKey";
-            this.tbAuthHashKey.Size = new System.Drawing.Size(264, 22);
-            this.tbAuthHashKey.TabIndex = 7;
+            this.label42.AutoSize = true;
+            this.label42.Location = new System.Drawing.Point(145, 258);
+            this.label42.Name = "label42";
+            this.label42.Size = new System.Drawing.Size(44, 17);
+            this.label42.TabIndex = 17;
+            this.label42.Text = "hours";
+            // 
+            // label41
+            // 
+            this.label41.AutoSize = true;
+            this.label41.Location = new System.Drawing.Point(16, 258);
+            this.label41.Name = "label41";
+            this.label41.Size = new System.Drawing.Size(55, 17);
+            this.label41.TabIndex = 18;
+            this.label41.Text = "Run for";
+            // 
+            // checkBoxDeployToGym
+            // 
+            this.checkBoxDeployToGym.AutoSize = true;
+            this.checkBoxDeployToGym.Enabled = false;
+            this.checkBoxDeployToGym.Location = new System.Drawing.Point(335, 270);
+            this.checkBoxDeployToGym.Name = "checkBoxDeployToGym";
+            this.checkBoxDeployToGym.Size = new System.Drawing.Size(123, 21);
+            this.checkBoxDeployToGym.TabIndex = 38;
+            this.checkBoxDeployToGym.Text = "Deploy to Gym";
+            this.checkBoxDeployToGym.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxSendBerries
+            // 
+            this.checkBoxSendBerries.AutoSize = true;
+            this.checkBoxSendBerries.Enabled = false;
+            this.checkBoxSendBerries.Location = new System.Drawing.Point(335, 297);
+            this.checkBoxSendBerries.Name = "checkBoxSendBerries";
+            this.checkBoxSendBerries.Size = new System.Drawing.Size(161, 21);
+            this.checkBoxSendBerries.TabIndex = 39;
+            this.checkBoxSendBerries.Text = "Send Berries to Gym";
+            this.checkBoxSendBerries.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxEnabeRaids
+            // 
+            this.checkBoxEnabeRaids.AutoSize = true;
+            this.checkBoxEnabeRaids.Enabled = false;
+            this.checkBoxEnabeRaids.Location = new System.Drawing.Point(335, 324);
+            this.checkBoxEnabeRaids.Name = "checkBoxEnabeRaids";
+            this.checkBoxEnabeRaids.Size = new System.Drawing.Size(66, 21);
+            this.checkBoxEnabeRaids.TabIndex = 40;
+            this.checkBoxEnabeRaids.Text = "Raids";
+            this.checkBoxEnabeRaids.UseVisualStyleBackColor = true;
             // 
             // AccountSettingsForm
             // 
@@ -2258,8 +2299,6 @@
         private System.Windows.Forms.Label label40;
         private System.Windows.Forms.Label label39;
         private System.Windows.Forms.NumericUpDown numericUpDownRunForHours;
-        private System.Windows.Forms.Label label42;
-        private System.Windows.Forms.Label label41;
         private System.Windows.Forms.NumericUpDown numericUpDownMaxLogs;
         private System.Windows.Forms.Label label43;
         private System.Windows.Forms.TabPage tabPageProxy;
@@ -2272,13 +2311,11 @@
         private System.Windows.Forms.Label label45;
         private System.Windows.Forms.NumericUpDown numericUpDownWalkingOffset;
         private System.Windows.Forms.NumericUpDown numericUpDownSearchFortBelow;
-        private System.Windows.Forms.Label label47;
         private System.Windows.Forms.Label label46;
         private System.Windows.Forms.CheckBox checkBoxRemoveOnStop;
         private System.Windows.Forms.CheckBox checkBoxClaimLevelUp;
         private System.Windows.Forms.CheckBox checkBoxStopOnAPIUpdate;
         private System.Windows.Forms.NumericUpDown numericUpDownForceEvolveAbove;
-        private System.Windows.Forms.Label label48;
         private System.Windows.Forms.Label label49;
         private System.Windows.Forms.TabPage tabPageHash;
         private System.Windows.Forms.Label label51;
@@ -2289,5 +2326,12 @@
         private System.Windows.Forms.Label label53;
         private System.Windows.Forms.CheckBox cbUseOnlyThisHashKey;
         private System.Windows.Forms.TextBox tbAuthHashKey;
+        private System.Windows.Forms.CheckBox checkBoxSpinGyms;
+        private System.Windows.Forms.CheckBox checkBoxEnableBattles;
+        private System.Windows.Forms.CheckBox checkBoxDeployToGym;
+        private System.Windows.Forms.Label label42;
+        private System.Windows.Forms.Label label41;
+        private System.Windows.Forms.CheckBox checkBoxEnabeRaids;
+        private System.Windows.Forms.CheckBox checkBoxSendBerries;
     }
 }
