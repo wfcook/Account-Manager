@@ -23,6 +23,7 @@ namespace PokemonGoGUI
         public string TimeZone { get; set; }
         public string POSIX { get; set; }
 
+        public bool SpinGyms { get; set; }
         public string GroupName { get; set; }
         public string AccountName { get; set; }
         public AuthType AuthType { get; set; }
@@ -170,6 +171,7 @@ namespace PokemonGoGUI
             SearchFortBelowPercent = 1000;
             ForceEvolveAbovePercent = 1000;
             StopOnAPIUpdate = true;
+            SpinGyms = true;
             HashHost = new Uri("https://pokehash.buddyauth.com/");
             HashEndpoint = "api/v153_2/hash";
             AuthAPIKey = "XXXXXXXXXXXXXXXXXXXX";

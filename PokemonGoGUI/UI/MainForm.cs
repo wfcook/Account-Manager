@@ -2068,10 +2068,17 @@ namespace PokemonGoGUI
         {
             if (e.Column == olvColumnKeys)
             {
-                if (e.SubItem.Text.Substring(0, 2) == "PH")
-                    e.SubItem.ForeColor = Color.Blue;
-                else
-                    e.SubItem.ForeColor = Color.Green;
+                try
+                {
+                    if (e.SubItem.Text.Substring(0, 2) == "PH")
+                        e.SubItem.ForeColor = Color.Blue;
+                    else
+                        e.SubItem.ForeColor = Color.Green;
+                }
+                catch
+                {
+                    //Not keys found
+                }
             }
             else if (e.Column == olvColumnHashInfos)
             {

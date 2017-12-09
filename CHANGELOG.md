@@ -1,5 +1,28 @@
 # Change Log
 
+## [v2.20.0.3](https://github.com/Furtif/GoManager/tree/v2.20.0.3) (2017-12-09)
+
+[Full Changelog](https://github.com/Furtif/GoManager/compare/v2.20.0.2...v2.20.0.3)
+
+**Closed issues:**
+
+- test issue discord bot [\#21](https://github.com/Furtif/GoManager/issues/21)
+
+**Merged pull requests:**
+
+- Update Manager.Main.cs [\#22](https://github.com/Furtif/GoManager/pull/22) ([Furtif](https://github.com/Furtif))
+- Clean Caches on startup [\#20](https://github.com/Furtif/GoManager/pull/20) ([Furtif](https://github.com/Furtif))
+
+## [v2.20.0.2](https://github.com/Furtif/GoManager/tree/v2.20.0.2) (2017-12-09)
+
+[Full Changelog](https://github.com/Furtif/GoManager/compare/v2.20.0.1...v2.20.0.2)
+
+**Merged pull requests:**
+
+-  init other features [\#19](https://github.com/Furtif/GoManager/pull/19) ([Furtif](https://github.com/Furtif))
+- fix problem loading data [\#18](https://github.com/Furtif/GoManager/pull/18) ([Xelwon](https://github.com/Xelwon))
+-  Add keys infos to tab keys [\#17](https://github.com/Furtif/GoManager/pull/17) ([Furtif](https://github.com/Furtif))
+
 ## [v2.20.0.1](https://github.com/Furtif/GoManager/tree/v2.20.0.1) (2017-12-08)
 
 [Full Changelog](https://github.com/Furtif/GoManager/compare/v2.20.0.0...v2.20.0.1)
