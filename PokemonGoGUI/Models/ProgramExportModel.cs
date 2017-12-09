@@ -14,7 +14,9 @@ namespace PokemonGoGUI.Models
         public bool SPF { get; set; }
         public bool ShowWelcomeMessage { get; set; }
     }
+
     public class HashKey {
-         public string Key;
+        public string Key;
+        public string KeyInfo;
     }
 }
