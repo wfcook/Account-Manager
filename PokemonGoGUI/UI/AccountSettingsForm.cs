@@ -134,6 +134,7 @@ namespace PokemonGoGUI.UI
             numericUpDownSearchFortBelow.Value = new Decimal(settings.SearchFortBelowPercent);
             numericUpDownForceEvolveAbove.Value = new Decimal(settings.ForceEvolveAbovePercent);
             checkBoxStopOnAPIUpdate.Checked = settings.StopOnAPIUpdate;
+            checkBoxSpinGyms.Checked = settings.SpinGyms;
 
             //Humanization
             checkBoxHumanizeThrows.Checked = settings.EnableHumanization;
@@ -312,6 +313,7 @@ namespace PokemonGoGUI.UI
             userSettings.ForceEvolveAbovePercent = (double) numericUpDownForceEvolveAbove.Value;
             userSettings.ClaimLevelUpRewards = checkBoxClaimLevelUp.Checked;
             userSettings.StopOnAPIUpdate = checkBoxStopOnAPIUpdate.Checked;
+            userSettings.SpinGyms = checkBoxSpinGyms.Checked;
 
             userSettings.RunForHours = (double)numericUpDownRunForHours.Value;
             userSettings.MaxLogs = (int)numericUpDownMaxLogs.Value;

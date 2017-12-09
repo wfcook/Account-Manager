@@ -204,17 +204,17 @@ namespace PokemonGoGUI
 
                 foreach (HashKey key in tempHashKeys)
                 {
-                    key.KeyInfo = Testhashkey(key.Key);
+                    key.KeyInfo = TestHashKey(key.Key);
                     _hashKeys.Add(key);
                 }
 
                 fastObjectListViewMain.SetObjects(_managers);
                 fastObjectListViewHashKeys.SetObjects(_hashKeys);
             }
-            catch
+            catch (Exception ex1)
             {
                 
-                MessageBox.Show("Failed to load settings");
+                MessageBox.Show("Failed to load settings\nReason: " + ex1.Message);
                 //Failed to load settings
             }
 
@@ -388,7 +388,7 @@ namespace PokemonGoGUI
 
             foreach(Manager manager in fastObjectListViewMain.SelectedObjects)
             {
-                manager.UserSettings.HashKeys = _hashKeys.Select(x=>x.Key).ToArray();
+                manager.UserSettings.HashKeys = _hashKeys.Select(x=>x.Key).ToList();
                 manager.UserSettings.SPF = _spf;
                 manager.Start();
 
@@ -2035,7 +2035,7 @@ namespace PokemonGoGUI
             HashKey data = new HashKey
             {
                 Key = newKew,
-                KeyInfo = Testhashkey(newKew)
+                KeyInfo = TestHashKey(newKew)
             };
 
             if (String.IsNullOrEmpty(data.Key))
@@ -2060,19 +2060,33 @@ namespace PokemonGoGUI
         {
             foreach (HashKey key in fastObjectListViewHashKeys.SelectedObjects)
             {
-                key.KeyInfo =  Testhashkey(key.Key);
+                key.KeyInfo =  TestHashKey(key.Key);
             }
         }
 
         private void FastObjectListViewHashKeys_FormatCell(object sender, BrightIdeasSoftware.FormatCellEventArgs e)
         {
-            if (e.SubItem.Text.Substring(0, 2) == "PH")
-                e.SubItem.ForeColor = Color.Yellow;
-            else
-                e.SubItem.ForeColor = Color.Green;
+            if (e.Column == olvColumnKeys)
+            {
+                try
+                {
+                    if (e.SubItem.Text.Substring(0, 2) == "PH")
+                        e.SubItem.ForeColor = Color.Blue;
+                    else
+                        e.SubItem.ForeColor = Color.Green;
+                }
+                catch
+                {
+                    //Not keys found
+                }
+            }
+            else if (e.Column == olvColumnHashInfos)
+            {
+                e.SubItem.ForeColor = Color.White;
+            }
         }
 
-        private string Testhashkey(string key)
+        private string TestHashKey(string key)
         {
             string result = null;
             string mode = null;
@@ -2091,7 +2105,7 @@ namespace PokemonGoGUI
                     urlcheck = $"https://pokehash.buddyauth.com/api/v153_2/hash";
                     mode = "RPM";
                 }
-                result = $"Hash End-Point Set to '{urlcheck}'";
+                //result = $"Hash End-Point Set to '{urlcheck}'";
                 HttpResponseMessage response = client.PostAsync(urlcheck, null).Result;
                 string AuthKey = response.Headers.GetValues("X-AuthToken").FirstOrDefault();
                 string MaxRequestCount = response.Headers.GetValues("X-MaxRequestCount").FirstOrDefault();
