@@ -13,7 +13,7 @@ namespace PokemonGoGUI
 {
     public class Settings : ISettings
     {
-        public string[] HashKeys { get; set; }
+        public List<string> HashKeys { get; set; }
         public bool UseOnlyOneKey { get; set; }
         public string AuthAPIKey { get; set; }
         public Uri HashHost { get; set; }

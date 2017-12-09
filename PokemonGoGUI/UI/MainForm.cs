@@ -211,10 +211,10 @@ namespace PokemonGoGUI
                 fastObjectListViewMain.SetObjects(_managers);
                 fastObjectListViewHashKeys.SetObjects(_hashKeys);
             }
-            catch
+            catch (Exception ex1)
             {
                 
-                MessageBox.Show("Failed to load settings");
+                MessageBox.Show("Failed to load settings\nReason: " + ex1.Message);
                 //Failed to load settings
             }
 
@@ -388,7 +388,7 @@ namespace PokemonGoGUI
 
             foreach(Manager manager in fastObjectListViewMain.SelectedObjects)
             {
-                manager.UserSettings.HashKeys = _hashKeys.Select(x=>x.Key).ToArray();
+                manager.UserSettings.HashKeys = _hashKeys.Select(x=>x.Key).ToList();
                 manager.UserSettings.SPF = _spf;
                 manager.Start();
 
