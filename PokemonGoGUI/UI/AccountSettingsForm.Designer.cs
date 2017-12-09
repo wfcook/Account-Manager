@@ -33,6 +33,10 @@
             this.tabPageDetails = new System.Windows.Forms.TabPage();
             this.tabControlSettings = new System.Windows.Forms.TabControl();
             this.tabPageSettingsGeneral = new System.Windows.Forms.TabPage();
+            this.checkBoxEnabeRaids = new System.Windows.Forms.CheckBox();
+            this.checkBoxSendBerries = new System.Windows.Forms.CheckBox();
+            this.checkBoxDeployToGym = new System.Windows.Forms.CheckBox();
+            this.checkBoxEnableBattles = new System.Windows.Forms.CheckBox();
             this.checkBoxSpinGyms = new System.Windows.Forms.CheckBox();
             this.numericUpDownForceEvolveAbove = new System.Windows.Forms.NumericUpDown();
             this.label49 = new System.Windows.Forms.Label();
@@ -56,6 +60,8 @@
             this.label15 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
             this.label46 = new System.Windows.Forms.Label();
+            this.label42 = new System.Windows.Forms.Label();
+            this.label41 = new System.Windows.Forms.Label();
             this.label43 = new System.Windows.Forms.Label();
             this.textBoxPtcUsername = new System.Windows.Forms.TextBox();
             this.radioButtonGoogle = new System.Windows.Forms.RadioButton();
@@ -199,12 +205,6 @@
             this.toolTipProxy = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipMinAccountState = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipHumanizeThrows = new System.Windows.Forms.ToolTip(this.components);
-            this.checkBoxEnableBattles = new System.Windows.Forms.CheckBox();
-            this.label42 = new System.Windows.Forms.Label();
-            this.label41 = new System.Windows.Forms.Label();
-            this.checkBoxDeployToGym = new System.Windows.Forms.CheckBox();
-            this.checkBoxSendBerries = new System.Windows.Forms.CheckBox();
-            this.checkBoxEnabeRaids = new System.Windows.Forms.CheckBox();
             this.tabControlMain.SuspendLayout();
             this.tabPageDetails.SuspendLayout();
             this.tabControlSettings.SuspendLayout();
@@ -337,6 +337,50 @@
             this.tabPageSettingsGeneral.Text = "General";
             this.tabPageSettingsGeneral.UseVisualStyleBackColor = true;
             // 
+            // checkBoxEnabeRaids
+            // 
+            this.checkBoxEnabeRaids.AutoSize = true;
+            this.checkBoxEnabeRaids.Enabled = false;
+            this.checkBoxEnabeRaids.Location = new System.Drawing.Point(335, 324);
+            this.checkBoxEnabeRaids.Name = "checkBoxEnabeRaids";
+            this.checkBoxEnabeRaids.Size = new System.Drawing.Size(66, 21);
+            this.checkBoxEnabeRaids.TabIndex = 40;
+            this.checkBoxEnabeRaids.Text = "Raids";
+            this.checkBoxEnabeRaids.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxSendBerries
+            // 
+            this.checkBoxSendBerries.AutoSize = true;
+            this.checkBoxSendBerries.Enabled = false;
+            this.checkBoxSendBerries.Location = new System.Drawing.Point(335, 297);
+            this.checkBoxSendBerries.Name = "checkBoxSendBerries";
+            this.checkBoxSendBerries.Size = new System.Drawing.Size(161, 21);
+            this.checkBoxSendBerries.TabIndex = 39;
+            this.checkBoxSendBerries.Text = "Send Berries to Gym";
+            this.checkBoxSendBerries.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxDeployToGym
+            // 
+            this.checkBoxDeployToGym.AutoSize = true;
+            this.checkBoxDeployToGym.Enabled = false;
+            this.checkBoxDeployToGym.Location = new System.Drawing.Point(335, 270);
+            this.checkBoxDeployToGym.Name = "checkBoxDeployToGym";
+            this.checkBoxDeployToGym.Size = new System.Drawing.Size(123, 21);
+            this.checkBoxDeployToGym.TabIndex = 38;
+            this.checkBoxDeployToGym.Text = "Deploy to Gym";
+            this.checkBoxDeployToGym.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxEnableBattles
+            // 
+            this.checkBoxEnableBattles.AutoSize = true;
+            this.checkBoxEnableBattles.Enabled = false;
+            this.checkBoxEnableBattles.Location = new System.Drawing.Point(335, 243);
+            this.checkBoxEnableBattles.Name = "checkBoxEnableBattles";
+            this.checkBoxEnableBattles.Size = new System.Drawing.Size(106, 21);
+            this.checkBoxEnableBattles.TabIndex = 37;
+            this.checkBoxEnableBattles.Text = "Gym Battles";
+            this.checkBoxEnableBattles.UseVisualStyleBackColor = true;
+            // 
             // checkBoxSpinGyms
             // 
             this.checkBoxSpinGyms.AutoSize = true;
@@ -350,7 +394,7 @@
             // numericUpDownForceEvolveAbove
             // 
             this.numericUpDownForceEvolveAbove.DecimalPlaces = 2;
-            this.numericUpDownForceEvolveAbove.Location = new System.Drawing.Point(223, 195);
+            this.numericUpDownForceEvolveAbove.Location = new System.Drawing.Point(243, 195);
             this.numericUpDownForceEvolveAbove.Margin = new System.Windows.Forms.Padding(2);
             this.numericUpDownForceEvolveAbove.Maximum = new decimal(new int[] {
             1000000,
@@ -417,7 +461,7 @@
             // 
             // numericUpDownMaxLogs
             // 
-            this.numericUpDownMaxLogs.Location = new System.Drawing.Point(157, 140);
+            this.numericUpDownMaxLogs.Location = new System.Drawing.Point(212, 140);
             this.numericUpDownMaxLogs.Maximum = new decimal(new int[] {
             999999,
             0,
@@ -519,28 +563,28 @@
             // 
             // textBoxMaxLevel
             // 
-            this.textBoxMaxLevel.Location = new System.Drawing.Point(181, 168);
+            this.textBoxMaxLevel.Location = new System.Drawing.Point(236, 168);
             this.textBoxMaxLevel.Name = "textBoxMaxLevel";
             this.textBoxMaxLevel.Size = new System.Drawing.Size(65, 22);
             this.textBoxMaxLevel.TabIndex = 10;
             // 
             // textBoxPokemonBeforeEvolve
             // 
-            this.textBoxPokemonBeforeEvolve.Location = new System.Drawing.Point(181, 112);
+            this.textBoxPokemonBeforeEvolve.Location = new System.Drawing.Point(236, 112);
             this.textBoxPokemonBeforeEvolve.Name = "textBoxPokemonBeforeEvolve";
             this.textBoxPokemonBeforeEvolve.Size = new System.Drawing.Size(65, 22);
             this.textBoxPokemonBeforeEvolve.TabIndex = 9;
             // 
             // textBoxPtcPassword
             // 
-            this.textBoxPtcPassword.Location = new System.Drawing.Point(101, 83);
+            this.textBoxPtcPassword.Location = new System.Drawing.Point(155, 83);
             this.textBoxPtcPassword.Name = "textBoxPtcPassword";
             this.textBoxPtcPassword.Size = new System.Drawing.Size(146, 22);
             this.textBoxPtcPassword.TabIndex = 4;
             // 
             // textBoxName
             // 
-            this.textBoxName.Location = new System.Drawing.Point(118, 6);
+            this.textBoxName.Location = new System.Drawing.Point(173, 3);
             this.textBoxName.Name = "textBoxName";
             this.textBoxName.Size = new System.Drawing.Size(128, 22);
             this.textBoxName.TabIndex = 0;
@@ -572,6 +616,24 @@
             this.label46.TabIndex = 18;
             this.label46.Text = "Search Pokestops when below ";
             // 
+            // label42
+            // 
+            this.label42.AutoSize = true;
+            this.label42.Location = new System.Drawing.Point(145, 258);
+            this.label42.Name = "label42";
+            this.label42.Size = new System.Drawing.Size(44, 17);
+            this.label42.TabIndex = 17;
+            this.label42.Text = "hours";
+            // 
+            // label41
+            // 
+            this.label41.AutoSize = true;
+            this.label41.Location = new System.Drawing.Point(16, 258);
+            this.label41.Name = "label41";
+            this.label41.Size = new System.Drawing.Size(55, 17);
+            this.label41.TabIndex = 18;
+            this.label41.Text = "Run for";
+            // 
             // label43
             // 
             this.label43.AutoSize = true;
@@ -583,7 +645,7 @@
             // 
             // textBoxPtcUsername
             // 
-            this.textBoxPtcUsername.Location = new System.Drawing.Point(101, 55);
+            this.textBoxPtcUsername.Location = new System.Drawing.Point(155, 55);
             this.textBoxPtcUsername.Name = "textBoxPtcUsername";
             this.textBoxPtcUsername.Size = new System.Drawing.Size(146, 22);
             this.textBoxPtcUsername.TabIndex = 3;
@@ -2035,68 +2097,6 @@
             this.restoreDefaultsToolStripMenuItem2.Size = new System.Drawing.Size(187, 24);
             this.restoreDefaultsToolStripMenuItem2.Text = "Restore Defaults";
             this.restoreDefaultsToolStripMenuItem2.Click += new System.EventHandler(this.RestoreDefaultsToolStripMenuItem2_Click);
-            // 
-            // checkBoxEnableBattles
-            // 
-            this.checkBoxEnableBattles.AutoSize = true;
-            this.checkBoxEnableBattles.Enabled = false;
-            this.checkBoxEnableBattles.Location = new System.Drawing.Point(335, 243);
-            this.checkBoxEnableBattles.Name = "checkBoxEnableBattles";
-            this.checkBoxEnableBattles.Size = new System.Drawing.Size(106, 21);
-            this.checkBoxEnableBattles.TabIndex = 37;
-            this.checkBoxEnableBattles.Text = "Gym Battles";
-            this.checkBoxEnableBattles.UseVisualStyleBackColor = true;
-            // 
-            // label42
-            // 
-            this.label42.AutoSize = true;
-            this.label42.Location = new System.Drawing.Point(145, 258);
-            this.label42.Name = "label42";
-            this.label42.Size = new System.Drawing.Size(44, 17);
-            this.label42.TabIndex = 17;
-            this.label42.Text = "hours";
-            // 
-            // label41
-            // 
-            this.label41.AutoSize = true;
-            this.label41.Location = new System.Drawing.Point(16, 258);
-            this.label41.Name = "label41";
-            this.label41.Size = new System.Drawing.Size(55, 17);
-            this.label41.TabIndex = 18;
-            this.label41.Text = "Run for";
-            // 
-            // checkBoxDeployToGym
-            // 
-            this.checkBoxDeployToGym.AutoSize = true;
-            this.checkBoxDeployToGym.Enabled = false;
-            this.checkBoxDeployToGym.Location = new System.Drawing.Point(335, 270);
-            this.checkBoxDeployToGym.Name = "checkBoxDeployToGym";
-            this.checkBoxDeployToGym.Size = new System.Drawing.Size(123, 21);
-            this.checkBoxDeployToGym.TabIndex = 38;
-            this.checkBoxDeployToGym.Text = "Deploy to Gym";
-            this.checkBoxDeployToGym.UseVisualStyleBackColor = true;
-            // 
-            // checkBoxSendBerries
-            // 
-            this.checkBoxSendBerries.AutoSize = true;
-            this.checkBoxSendBerries.Enabled = false;
-            this.checkBoxSendBerries.Location = new System.Drawing.Point(335, 297);
-            this.checkBoxSendBerries.Name = "checkBoxSendBerries";
-            this.checkBoxSendBerries.Size = new System.Drawing.Size(161, 21);
-            this.checkBoxSendBerries.TabIndex = 39;
-            this.checkBoxSendBerries.Text = "Send Berries to Gym";
-            this.checkBoxSendBerries.UseVisualStyleBackColor = true;
-            // 
-            // checkBoxEnabeRaids
-            // 
-            this.checkBoxEnabeRaids.AutoSize = true;
-            this.checkBoxEnabeRaids.Enabled = false;
-            this.checkBoxEnabeRaids.Location = new System.Drawing.Point(335, 324);
-            this.checkBoxEnabeRaids.Name = "checkBoxEnabeRaids";
-            this.checkBoxEnabeRaids.Size = new System.Drawing.Size(66, 21);
-            this.checkBoxEnabeRaids.TabIndex = 40;
-            this.checkBoxEnabeRaids.Text = "Raids";
-            this.checkBoxEnabeRaids.UseVisualStyleBackColor = true;
             // 
             // AccountSettingsForm
             // 
