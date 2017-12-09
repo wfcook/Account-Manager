@@ -217,8 +217,8 @@ namespace PokemonGoGUI.GoManager
                     //Don't evolve
                     continue;
                 }
-
-                if (!PokeSettings.TryGetValue(group.Key, out PokemonSettings setting))
+                PokemonSettings setting;
+                if (!PokeSettings.TryGetValue(group.Key, out setting))
                 {
                     LogCaller(new LoggerEventArgs(String.Format("Failed to find settings for pokemon {0}", group.Key), LoggerTypes.Info));
 

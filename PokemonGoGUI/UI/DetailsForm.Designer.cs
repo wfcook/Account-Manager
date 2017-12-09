@@ -153,7 +153,7 @@
             this.tabControlMain.SelectedIndex = 0;
             this.tabControlMain.Size = new System.Drawing.Size(1132, 469);
             this.tabControlMain.TabIndex = 0;
-            this.tabControlMain.SelectedIndexChanged += new System.EventHandler(this.tabControlMain_SelectedIndexChanged);
+            this.tabControlMain.SelectedIndexChanged += new System.EventHandler(this.TabControlMain_SelectedIndexChanged);
             // 
             // tabPageStats
             // 
@@ -203,7 +203,7 @@
             this.buttonUpdateStats.TabIndex = 1;
             this.buttonUpdateStats.Text = "Update Stats";
             this.buttonUpdateStats.UseVisualStyleBackColor = true;
-            this.buttonUpdateStats.Click += new System.EventHandler(this.buttonUpdateStats_Click);
+            this.buttonUpdateStats.Click += new System.EventHandler(this.ButtonUpdateStats_Click);
             // 
             // label5
             // 
@@ -571,7 +571,7 @@
             this.fastObjectListViewPokemon.UseFiltering = true;
             this.fastObjectListViewPokemon.View = System.Windows.Forms.View.Details;
             this.fastObjectListViewPokemon.VirtualMode = true;
-            this.fastObjectListViewPokemon.FormatCell += new System.EventHandler<BrightIdeasSoftware.FormatCellEventArgs>(this.fastObjectListViewPokemon_FormatCell);
+            this.fastObjectListViewPokemon.FormatCell += new System.EventHandler<BrightIdeasSoftware.FormatCellEventArgs>(this.FastObjectListViewPokemon_FormatCell);
             // 
             // olvColumnPokemonIdNumber
             // 
@@ -680,7 +680,7 @@
             this.showFutureTransfersToolStripMenuItem});
             this.contextMenuStripPokemonDetails.Name = "contextMenuStripPokemonDetails";
             this.contextMenuStripPokemonDetails.Size = new System.Drawing.Size(253, 144);
-            this.contextMenuStripPokemonDetails.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStripPokemonDetails_Opening);
+            this.contextMenuStripPokemonDetails.Opening += new System.ComponentModel.CancelEventHandler(this.ContextMenuStripPokemonDetails_Opening);
             // 
             // favoriteToolStripMenuItem
             // 
@@ -696,14 +696,14 @@
             this.setFavoriteToolStripMenuItem.Name = "setFavoriteToolStripMenuItem";
             this.setFavoriteToolStripMenuItem.Size = new System.Drawing.Size(198, 28);
             this.setFavoriteToolStripMenuItem.Text = "Set Favorite";
-            this.setFavoriteToolStripMenuItem.Click += new System.EventHandler(this.setFavoriteToolStripMenuItem_Click);
+            this.setFavoriteToolStripMenuItem.Click += new System.EventHandler(this.SetFavoriteToolStripMenuItem_Click);
             // 
             // setUnfavoriteToolStripMenuItem
             // 
             this.setUnfavoriteToolStripMenuItem.Name = "setUnfavoriteToolStripMenuItem";
             this.setUnfavoriteToolStripMenuItem.Size = new System.Drawing.Size(198, 28);
             this.setUnfavoriteToolStripMenuItem.Text = "Set Unfavorite";
-            this.setUnfavoriteToolStripMenuItem.Click += new System.EventHandler(this.setUnfavoriteToolStripMenuItem_Click);
+            this.setUnfavoriteToolStripMenuItem.Click += new System.EventHandler(this.SetUnfavoriteToolStripMenuItem_Click);
             // 
             // upgradeToolStripMenuItem
             // 
@@ -711,28 +711,28 @@
             this.upgradeToolStripMenuItem.Name = "upgradeToolStripMenuItem";
             this.upgradeToolStripMenuItem.Size = new System.Drawing.Size(252, 28);
             this.upgradeToolStripMenuItem.Text = "Upgrade";
-            this.upgradeToolStripMenuItem.Click += new System.EventHandler(this.upgradeToolStripMenuItem_Click);
+            this.upgradeToolStripMenuItem.Click += new System.EventHandler(this.UpgradeToolStripMenuItem_Click);
             // 
             // evolveToolStripMenuItem
             // 
             this.evolveToolStripMenuItem.Name = "evolveToolStripMenuItem";
             this.evolveToolStripMenuItem.Size = new System.Drawing.Size(252, 28);
             this.evolveToolStripMenuItem.Text = "Evolve";
-            this.evolveToolStripMenuItem.Click += new System.EventHandler(this.evolveToolStripMenuItem_Click);
+            this.evolveToolStripMenuItem.Click += new System.EventHandler(this.EvolveToolStripMenuItem_Click);
             // 
             // transferToolStripMenuItem
             // 
             this.transferToolStripMenuItem.Name = "transferToolStripMenuItem";
             this.transferToolStripMenuItem.Size = new System.Drawing.Size(252, 28);
             this.transferToolStripMenuItem.Text = "Transfer";
-            this.transferToolStripMenuItem.Click += new System.EventHandler(this.transferToolStripMenuItem_Click);
+            this.transferToolStripMenuItem.Click += new System.EventHandler(this.TransferToolStripMenuItem_Click);
             // 
             // showFutureTransfersToolStripMenuItem
             // 
             this.showFutureTransfersToolStripMenuItem.Name = "showFutureTransfersToolStripMenuItem";
             this.showFutureTransfersToolStripMenuItem.Size = new System.Drawing.Size(252, 28);
             this.showFutureTransfersToolStripMenuItem.Text = "Show future transfers";
-            this.showFutureTransfersToolStripMenuItem.Click += new System.EventHandler(this.showFutureTransfersToolStripMenuItem_Click);
+            this.showFutureTransfersToolStripMenuItem.Click += new System.EventHandler(this.ShowFutureTransfersToolStripMenuItem_Click);
             // 
             // tabPageEggs
             // 
@@ -841,7 +841,7 @@
             this.recycleToolStripMenuItem.Name = "recycleToolStripMenuItem";
             this.recycleToolStripMenuItem.Size = new System.Drawing.Size(146, 28);
             this.recycleToolStripMenuItem.Text = "Recycle";
-            this.recycleToolStripMenuItem.Click += new System.EventHandler(this.recycleToolStripMenuItem_Click);
+            this.recycleToolStripMenuItem.Click += new System.EventHandler(this.RecycleToolStripMenuItem_Click);
             // 
             // tabPageCandy
             // 
@@ -918,7 +918,7 @@
             this.fastObjectListViewLogs.UseFiltering = true;
             this.fastObjectListViewLogs.View = System.Windows.Forms.View.Details;
             this.fastObjectListViewLogs.VirtualMode = true;
-            this.fastObjectListViewLogs.FormatRow += new System.EventHandler<BrightIdeasSoftware.FormatRowEventArgs>(this.fastObjectListViewLogs_FormatRow);
+            this.fastObjectListViewLogs.FormatRow += new System.EventHandler<BrightIdeasSoftware.FormatRowEventArgs>(this.FastObjectListViewLogs_FormatRow);
             // 
             // olvColumnDate
             // 
@@ -961,21 +961,21 @@
             this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
             this.copyToolStripMenuItem.Size = new System.Drawing.Size(213, 28);
             this.copyToolStripMenuItem.Text = "Copy";
-            this.copyToolStripMenuItem.Click += new System.EventHandler(this.copyToolStripMenuItem_Click);
+            this.copyToolStripMenuItem.Click += new System.EventHandler(this.CopyToolStripMenuItem_Click);
             // 
             // copyStackTraceToolStripMenuItem
             // 
             this.copyStackTraceToolStripMenuItem.Name = "copyStackTraceToolStripMenuItem";
             this.copyStackTraceToolStripMenuItem.Size = new System.Drawing.Size(213, 28);
             this.copyStackTraceToolStripMenuItem.Text = "Copy StackTrace";
-            this.copyStackTraceToolStripMenuItem.Click += new System.EventHandler(this.copyStackTraceToolStripMenuItem_Click);
+            this.copyStackTraceToolStripMenuItem.Click += new System.EventHandler(this.CopyStackTraceToolStripMenuItem_Click);
             // 
             // exportToolStripMenuItem
             // 
             this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
             this.exportToolStripMenuItem.Size = new System.Drawing.Size(213, 28);
             this.exportToolStripMenuItem.Text = "Export";
-            this.exportToolStripMenuItem.Click += new System.EventHandler(this.exportToolStripMenuItem_Click);
+            this.exportToolStripMenuItem.Click += new System.EventHandler(this.ExportToolStripMenuItem_Click);
             // 
             // DetailsForm
             // 

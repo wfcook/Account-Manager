@@ -15,8 +15,8 @@ namespace PokemonGoGUI.GoManager
         {
             if (AccountScheduler != null)
             {
-                AccountScheduler.OnSchedule -= scheduler_OnSchedule;
-                AccountScheduler.OnSchedule += scheduler_OnSchedule;
+                AccountScheduler.OnSchedule -= Scheduler_OnSchedule;
+                AccountScheduler.OnSchedule += Scheduler_OnSchedule;
             }
         }
 
@@ -27,7 +27,7 @@ namespace PokemonGoGUI.GoManager
                 RemoveScheduler();
             }
 
-            scheduler.OnSchedule += scheduler_OnSchedule;
+            scheduler.OnSchedule += Scheduler_OnSchedule;
 
             AccountScheduler = scheduler;
         }
@@ -36,13 +36,13 @@ namespace PokemonGoGUI.GoManager
         {
             if(AccountScheduler != null)
             {
-                AccountScheduler.OnSchedule -= scheduler_OnSchedule;
+                AccountScheduler.OnSchedule -= Scheduler_OnSchedule;
             }
 
             AccountScheduler = null;
         }
 
-        private async void scheduler_OnSchedule(object sender, SchedulerEventArgs e)
+        private async void Scheduler_OnSchedule(object sender, SchedulerEventArgs e)
         {
             DateTime currentTime = Tracker.GetCurrentHourDateTime();
 
@@ -140,7 +140,6 @@ namespace PokemonGoGUI.GoManager
                             {
                                 LogCaller(new LoggerEventArgs("Max pokemon limit reached. Disabling setting...", LoggerTypes.Debug));
                                 UserSettings.CatchPokemon = false;
-                                UserSettings.SnipePokemon = false;
                             }
                             break;
                         case SchedulerOption.StartStop: //Just stop it
@@ -158,7 +157,6 @@ namespace PokemonGoGUI.GoManager
                             {
                                 LogCaller(new LoggerEventArgs("Min pokemon limit reached. Enabling catching...", LoggerTypes.Debug));
                                 UserSettings.CatchPokemon = true;
-                                UserSettings.SnipePokemon = true;
                             }
                             break;
                         case SchedulerOption.StartStop: //Start only if pokestop is disabled/nothing or pokestops below threshold

@@ -527,11 +527,6 @@ namespace PokemonGoGUI.GoManager
                 return true;
             }
 
-            if (isSnipe)
-            {
-                return catchSettings.Snipe;
-            }
-
             if (!catchSettings.Catch)
             {
                 LogCaller(new LoggerEventArgs(String.Format("Skipping catching {0}", pokemondId), LoggerTypes.Info));

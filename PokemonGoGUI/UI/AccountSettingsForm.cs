@@ -78,18 +78,8 @@ namespace PokemonGoGUI.UI
             comboBoxLocationPresets.DataSource = _manager.FarmLocations;
             comboBoxLocationPresets.DisplayMember = "Name";
 
-            //Api config load keys
-            if (File.Exists("HashKeys.txt"))
-            {
-                string[] lineOfContents = File.ReadAllLines("HashKeys.txt");
-                foreach (var line in lineOfContents)
-                {
-                    string[] tokens = line.Split(',');
-                    cbAuthAPIKey.Items.Add(tokens[0]);
-                }
-            }
-            else
-                File.CreateText("HashKeys.txt");
+            cbUseOnlyThisHashKey.Checked = _manager.UserSettings.UseOnlyOneKey;
+            tbAuthHashKey.Text = _manager.UserSettings.AuthAPIKey;
 
             //Location time zones
             var zones = new TimeZoneIds().GetTimeZoneIds();
@@ -134,11 +124,6 @@ namespace PokemonGoGUI.UI
             checkBoxUseLuckyEgg.Checked = settings.UseLuckyEgg;
             checkBoxIncubateEggs.Checked = settings.IncubateEggs;
             checkBoxCatchPokemon.Checked = settings.CatchPokemon;
-            checkBoxSnipePokemon.Checked = settings.SnipePokemon;
-            numericUpDownSnipeAfterStops.Value = settings.SnipeAfterPokestops;
-            numericUpDownMinBallsToSnipe.Value = settings.MinBallsToSnipe;
-            numericUpDownMaxPokemonPerSnipe.Value = settings.MaxPokemonPerSnipe;
-            numericUpDownSnipeAfterLevel.Value = settings.SnipeAfterLevel;
             numericUpDownRunForHours.Value = new Decimal(settings.RunForHours);
             numericUpDownMaxLogs.Value = settings.MaxLogs;
             numericUpDownMaxFailBeforeReset.Value = settings.MaxFailBeforeReset;
@@ -183,13 +168,13 @@ namespace PokemonGoGUI.UI
             textBoxAndroidBootLoader.Text = settings.AndroidBootloader;
             textBoxHardwareManufacturer.Text = settings.HardwareManufacturer;
             textBoxHardwareModel.Text = settings.HardwareModel;
+            //End device settings
 
             //Api config
             cbHashHost.Text = settings.HashHost.ToString();
             cbHashEndpoint.Text = settings.HashEndpoint;
-            cbAuthAPIKey.Text = settings.AuthAPIKey;
-
-            //End device settings
+            tbAuthHashKey.Text = settings.AuthAPIKey;
+            cbUseOnlyThisHashKey.Checked = settings.UseOnlyOneKey;
 
             for(int i = 0; i < comboBoxMinAccountState.Items.Count; i++)
             {
@@ -240,37 +225,39 @@ namespace PokemonGoGUI.UI
 
             ProxyEx proxyEx = null;
 
-            if (!Int32.TryParse(textBoxMaxLevel.Text, out int maxLevel) || maxLevel < 0)
+            int maxLevel;
+            if (!Int32.TryParse(textBoxMaxLevel.Text, out maxLevel) || maxLevel < 0)
             {
                 MessageBox.Show("Invalid Max level", "Warning");
                 return false;
             }
 
-            if (!Int32.TryParse(textBoxPokemonBeforeEvolve.Text, out int minPokemonBeforeEvolve) || minPokemonBeforeEvolve < 0)
+            int minPokemonBeforeEvolve;
+            if (!Int32.TryParse(textBoxPokemonBeforeEvolve.Text, out minPokemonBeforeEvolve) || minPokemonBeforeEvolve < 0)
             {
                 MessageBox.Show("Invalid pokemon before evolve", "Warning");
                 return false;
             }
-
-            if (!Int32.TryParse(textBoxWalkSpeed.Text, out int walkingSpeed) || walkingSpeed <= 0)
+            int walkingSpeed;
+            if (!Int32.TryParse(textBoxWalkSpeed.Text, out  walkingSpeed) || walkingSpeed <= 0)
             {
                 MessageBox.Show("Invalid walking speed", "Warning");
                 return false;
             }
-
-            if (!Int32.TryParse(textBoxMaxTravelDistance.Text, out int maxTravelDistance) || maxTravelDistance <= 0)
+            int maxTravelDistance;
+            if (!Int32.TryParse(textBoxMaxTravelDistance.Text, out maxTravelDistance) || maxTravelDistance <= 0)
             {
                 MessageBox.Show("Invalid max travel distance", "Warning");
                 return false;
             }
-
-            if (!Double.TryParse(textBoxLat.Text.Replace(",", "."), NumberStyles.Any, CultureInfo.InvariantCulture, out double defaultLat))
+            double defaultLat;
+            if (!Double.TryParse(textBoxLat.Text.Replace(",", "."), NumberStyles.Any, CultureInfo.InvariantCulture, out defaultLat))
             {
                 MessageBox.Show("Invalid latitude", "Warning");
                 return false;
             }
-
-            if (!Double.TryParse(textBoxLong.Text.Replace(",", "."), NumberStyles.Any, CultureInfo.InvariantCulture, out double defaultLong))
+            double defaultLong;
+            if (!Double.TryParse(textBoxLong.Text.Replace(",", "."), NumberStyles.Any, CultureInfo.InvariantCulture, out defaultLong))
             {
                 MessageBox.Show("Invalid longitude", "Warning");
                 return false;
@@ -303,7 +290,6 @@ namespace PokemonGoGUI.UI
                 userSettings.AuthType = AuthType.Google;
             }
 
-
             userSettings.MimicWalking = checkBoxMimicWalking.Checked;
             userSettings.PtcUsername = textBoxPtcUsername.Text.Trim();
             userSettings.PtcPassword = textBoxPtcPassword.Text.Trim();
@@ -321,11 +307,6 @@ namespace PokemonGoGUI.UI
             userSettings.IncubateEggs = checkBoxIncubateEggs.Checked;
             userSettings.MaxLevel = maxLevel;
             userSettings.CatchPokemon = checkBoxCatchPokemon.Checked;
-            userSettings.SnipePokemon = checkBoxSnipePokemon.Checked;
-            userSettings.SnipeAfterPokestops = (int)numericUpDownSnipeAfterStops.Value;
-            userSettings.MinBallsToSnipe = (int)numericUpDownMinBallsToSnipe.Value;
-            userSettings.MaxPokemonPerSnipe = (int)numericUpDownMaxPokemonPerSnipe.Value;
-            userSettings.SnipeAfterLevel = (int)numericUpDownSnipeAfterLevel.Value;
             userSettings.StopAtMinAccountState = (AccountState)comboBoxMinAccountState.SelectedItem;
             userSettings.SearchFortBelowPercent = (double)numericUpDownSearchFortBelow.Value;
             userSettings.ForceEvolveAbovePercent = (double) numericUpDownForceEvolveAbove.Value;
@@ -372,11 +353,14 @@ namespace PokemonGoGUI.UI
             userSettings.AndroidBootloader = textBoxAndroidBootLoader.Text;
             userSettings.HardwareManufacturer = textBoxHardwareManufacturer.Text;
             userSettings.HardwareModel = textBoxHardwareModel.Text;
+            //End device settings
 
             //Api config
             userSettings.HashHost = new Uri(cbHashHost.Text);
             userSettings.HashEndpoint = cbHashEndpoint.Text;
-            userSettings.AuthAPIKey = cbAuthAPIKey.Text;
+            userSettings.AuthAPIKey = tbAuthHashKey.Text;
+            userSettings.UseOnlyOneKey = cbUseOnlyThisHashKey.Checked;
+            //End api config
 
             //Location time zones
             var x = new TimeZoneIds().GetTimeZoneIds();
@@ -384,8 +368,7 @@ namespace PokemonGoGUI.UI
             userSettings.Country = x[cbTimeZones.Text].Item1;
             userSettings.Language = x[cbTimeZones.Text].Item2;
             userSettings.POSIX = x[cbTimeZones.Text].Item3;
-
-            //End device settings
+            //End location time zones
 
             if (proxyEx != null)
             {
@@ -437,8 +420,8 @@ namespace PokemonGoGUI.UI
             {
                 return;
             }
-
-            if (!Int32.TryParse(num, out int maxInventory))
+            int maxInventory;
+            if (!Int32.TryParse(num, out maxInventory))
             {
                 return;
             }
@@ -463,24 +446,6 @@ namespace PokemonGoGUI.UI
             if (tSMI == null)
             {
                 return;
-            }
-
-            CheckType checkType = (CheckType)Int32.Parse(tSMI.Tag.ToString());
-
-            foreach (CatchSetting cSetting in fastObjectListViewCatch.SelectedObjects)
-            {
-                if (checkType == CheckType.Toggle)
-                {
-                    cSetting.Snipe = !cSetting.Snipe;
-                }
-                else if (checkType == CheckType.True)
-                {
-                    cSetting.Snipe = true;
-                }
-                else
-                {
-                    cSetting.Snipe = false;
-                }
             }
 
             fastObjectListViewCatch.RefreshSelectedObjects();
@@ -566,8 +531,8 @@ namespace PokemonGoGUI.UI
             {
                 return;
             }
-
-            if (!Int32.TryParse(cp, out int changeCp) || changeCp < 0)
+            int changeCp;
+            if (!Int32.TryParse(cp, out changeCp) || changeCp < 0)
             {
                 MessageBox.Show("Invalid amount", "Warning");
 
@@ -652,7 +617,8 @@ namespace PokemonGoGUI.UI
 
         private void ComboBoxLocationPresets_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (comboBoxLocationPresets.SelectedItem is FarmLocation fLocation)
+            var fLocation = comboBoxLocationPresets.SelectedItem as FarmLocation;
+            if (fLocation!=null)
             {
                 if (fLocation.Name == "Current")
                 {
@@ -714,14 +680,6 @@ namespace PokemonGoGUI.UI
                 UpdateDetails(_manager.UserSettings);
                 UpdateListViews();
             }
-        }
-
-        private void CheckBoxSnipePokemon_CheckedChanged(object sender, EventArgs e)
-        {
-            numericUpDownSnipeAfterStops.Enabled = checkBoxSnipePokemon.Checked;
-            numericUpDownMinBallsToSnipe.Enabled = checkBoxSnipePokemon.Checked;
-            numericUpDownMaxPokemonPerSnipe.Enabled = checkBoxSnipePokemon.Checked;
-            numericUpDownSnipeAfterLevel.Enabled = checkBoxSnipePokemon.Checked;
         }
 
         private void ButtonDeviceRandom_Click(object sender, EventArgs e)

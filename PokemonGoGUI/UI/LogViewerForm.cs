@@ -40,7 +40,7 @@ namespace PokemonGoGUI.UI
                 MessageBox.Show(String.Format("Failed to import log. Ex: {0}", ex.Message));
             }
         }
-        private void fastObjectListViewLogs_FormatRow(object sender, BrightIdeasSoftware.FormatRowEventArgs e)
+        private void FastObjectListViewLogs_FormatRow(object sender, BrightIdeasSoftware.FormatRowEventArgs e)
         {
             Log log = e.Model as Log;
 
