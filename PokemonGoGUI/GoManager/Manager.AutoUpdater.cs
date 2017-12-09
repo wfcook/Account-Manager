@@ -87,6 +87,13 @@ namespace PokemonGoGUI.GoManager
                 Directory.Delete(tmpDir, true);
             }
 
+            var cacheDir = Path.Combine(Directory.GetCurrentDirectory(), "Cache");
+
+            if (Directory.Exists(cacheDir))
+            {
+                Directory.Delete(cacheDir, true);
+            }
+
             var di = new DirectoryInfo(Directory.GetCurrentDirectory());
             var files = di.GetFiles("*.old", SearchOption.AllDirectories);
 
