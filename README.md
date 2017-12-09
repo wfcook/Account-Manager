@@ -76,4 +76,3 @@ This is not a public release, just a project with releases for code testers for 
 - [SlxTnT](https://github.com/SL-x-TnT)
 - [AeonLucid](https://github.com/AeonLucid)
 - [Xelwon](https://github.com/Xelwon)
-- [Xelwon](https://github.com/Xelwon)
