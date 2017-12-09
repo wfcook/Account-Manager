@@ -888,9 +888,9 @@ namespace PokemonGoGUI.GoManager
                 }
                 catch (Exception ex)
                 {
-                    //LogCaller(new LoggerEventArgs("Unknown exception occured. Restarting ...", LoggerTypes.Exception, ex));
-                    LogCaller(new LoggerEventArgs("Unknown exception occured. Stopping ...", LoggerTypes.Exception, ex));
-                    Stop();
+                    LogCaller(new LoggerEventArgs("Unknown exception occured. Restarting ...", LoggerTypes.Exception, ex));
+                    //LogCaller(new LoggerEventArgs("Unknown exception occured. Stopping ...", LoggerTypes.Exception, ex));
+                    //Stop();
                 }
 
                 currentFails = 0;
