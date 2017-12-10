@@ -68,7 +68,7 @@ namespace PokemonGoGUI
                     Configuration.HashEndpoint = Settings.HashEndpoint;
                 }
                 else
-                    Configuration.Hasher = new PokeHashHasher(Settings.HashKeys.ToArray());
+                    Configuration.Hasher = new PokeHashHasher(Settings.HashKeys);
 
                 // TODO: make this configurable. To avoid bans (may be with a checkbox in hash keys tab).
                 Configuration.IgnoreHashVersion = true;

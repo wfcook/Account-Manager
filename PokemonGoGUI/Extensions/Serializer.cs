@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Bson;
+using System;
 using System.IO;
 using System.Runtime.Serialization.Formatters;
 
@@ -12,7 +13,7 @@ namespace PokemonGoGUI.Extensions
             return JsonConvert.SerializeObject(data, Formatting.None, new JsonSerializerSettings
             {
                 TypeNameHandling = TypeNameHandling.Auto,
-                TypeNameAssemblyFormat = FormatterAssemblyStyle.Simple,
+                TypeNameAssemblyFormatHandling = TypeNameAssemblyFormatHandling.Simple,
                 PreserveReferencesHandling = PreserveReferencesHandling.All
             });
         }
@@ -22,11 +23,13 @@ namespace PokemonGoGUI.Extensions
             return JsonConvert.DeserializeObject<T>(data, new JsonSerializerSettings
             {
                 TypeNameHandling = TypeNameHandling.Auto,
-                TypeNameAssemblyFormat = FormatterAssemblyStyle.Simple,
+                TypeNameAssemblyFormatHandling = TypeNameAssemblyFormatHandling.Simple,
                 PreserveReferencesHandling = PreserveReferencesHandling.All
             });
         }
 
+        /* [Obsolete("BSON reading and writing has been moved to its own package. See https://www.nuget.org/packages/Newtonsoft.Json.Bson for more details.")]
+         * 
         public static byte[] ToBson<T>(T data)
         {
             MemoryStream ms = new MemoryStream();
@@ -59,5 +62,6 @@ namespace PokemonGoGUI.Extensions
 
             return responseObject;
         }
+        */
     }
 }
