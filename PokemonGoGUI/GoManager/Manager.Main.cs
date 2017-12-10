@@ -1,10 +1,7 @@
 ﻿using GeoCoordinatePortable;
-using Google.Protobuf;
 using Newtonsoft.Json;
 using POGOProtos.Data.Player;
 using POGOProtos.Map.Fort;
-using POGOProtos.Networking.Requests;
-using POGOProtos.Networking.Requests.Messages;
 using POGOProtos.Networking.Responses;
 using PokemonGoGUI.AccountScheduler;
 using PokemonGoGUI.Enums;
@@ -16,7 +13,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
