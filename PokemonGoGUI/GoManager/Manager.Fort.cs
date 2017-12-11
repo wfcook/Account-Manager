@@ -353,7 +353,7 @@ namespace PokemonGoGUI.GoManager
                 if (response.IsEmpty)
                     LogCaller(new LoggerEventArgs("Failed gym get info response", LoggerTypes.Exception, ex));
 
-                return new MethodResult<GymGetInfoResponse>();
+                return new MethodResult<GymGetInfoResponse>() { Success = false, Data = new GymGetInfoResponse() { Result = GymGetInfoResponse.Types.Result.Unset } };
             }
         }
     }

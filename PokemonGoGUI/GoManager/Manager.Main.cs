@@ -722,6 +722,8 @@ namespace PokemonGoGUI.GoManager
                             MethodResult<GymGetInfoResponse> _result = await GymGetInfo(pokestop);
                             if (_result.Success)
                                 fort = "gym";
+                            else
+                                continue;
                         }
 
                         LogCaller(new LoggerEventArgs(String.Format("Going to {0} {1} of {2}. Distance {3:0.00}m", fort, pokeStopNumber, totalStops, distance), pokestop.Type == FortType.Checkpoint ? LoggerTypes.Info : LoggerTypes.FortGym));
