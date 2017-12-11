@@ -21,7 +21,6 @@ namespace PokemonGoGUI.GoManager
     public partial class Manager
     {
         private Client _client = new Client();
-        private DateTime _lastMapRequest = new DateTime();
         private Random _rand = new Random();
 
         private int _totalZeroExpStops = 0;
