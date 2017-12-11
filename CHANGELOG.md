@@ -1,11 +1,12 @@
 # Change Log
 
-## [v2.20.0.4](https://github.com/Furtif/GoManager/tree/v2.20.0.4) (2017-12-10)
+## [v2.20.0.4](https://github.com/Furtif/GoManager/tree/v2.20.0.4) (2017-12-11)
 
 [Full Changelog](https://github.com/Furtif/GoManager/compare/v2.20.0.3...v2.20.0.4)
 
 **Merged pull requests:**
 
+- Fixes bugs pogolib [\#24](https://github.com/Furtif/GoManager/pull/24) ([Furtif](https://github.com/Furtif))
 -  Update pogolib [\#23](https://github.com/Furtif/GoManager/pull/23) ([Furtif](https://github.com/Furtif))
 
 ## [v2.20.0.3](https://github.com/Furtif/GoManager/tree/v2.20.0.3) (2017-12-09)
