@@ -51,6 +51,7 @@ namespace PokemonGoGUI
 
         public Client()
         {
+            VersionStr = new Version("0.85.1");
         }
 
         public async Task<MethodResult<bool>> DoLogin(ISettings settings)
