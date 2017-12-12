@@ -24,7 +24,7 @@ namespace PokemonGoGUI
     {
         public ProxyEx Proxy;
         public ISettings Settings { get; private set; }
-        public Version VersionStr = new Version("0.85.1");
+        public Version VersionStr { get; private set; }
 
         public AuthType AuthType
         { get { return Settings.AuthType; } private set { Settings.AuthType = value; } }
@@ -72,6 +72,7 @@ namespace PokemonGoGUI
 
                 // TODO: make this configurable. To avoid bans (may be with a checkbox in hash keys tab).
                 Configuration.IgnoreHashVersion = true;
+                VersionStr = Configuration.Hasher.PokemonVersion;
             }
             // *****
 
