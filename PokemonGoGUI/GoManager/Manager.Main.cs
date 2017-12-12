@@ -679,7 +679,7 @@ namespace PokemonGoGUI.GoManager
                         continue;
                     }
 
-                    GeoCoordinate defaultLocation = new GeoCoordinate(UserSettings.DefaultLatitude, UserSettings.DefaultLongitude);
+                    GeoCoordinate defaultLocation = new GeoCoordinate(_client.ClientSession.Player.Latitude, _client.ClientSession.Player.Longitude);
 
                     List<FortData> pokestopsToFarm = pokestops.Data.ToList();
 

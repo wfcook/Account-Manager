@@ -105,6 +105,5 @@ namespace PokemonGoGUI.UI
                     break;
             }
         }
-
     }
 }

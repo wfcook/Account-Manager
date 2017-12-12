@@ -40,8 +40,6 @@ namespace PokemonGoGUI.GoManager
                 }
             }
 
-            await GetPlayer(); //Don't care if it fails
-
             await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
             bool potentialAccountban = false;
@@ -94,61 +92,22 @@ namespace PokemonGoGUI.GoManager
 
         public async Task<MethodResult> GetPlayer()
         {
-            try
+            if (!_client.LoggedIn)
             {
-                if (!_client.LoggedIn)
+                MethodResult result = await Login();
+
+                if (!result.Success)
                 {
-                    MethodResult result = await Login();
-
-                    if (!result.Success)
-                    {
-                        return result;
-                    }
-                }
-
-                var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
-                {
-                    RequestType = RequestType.GetPlayer,
-                    RequestMessage = new GetPlayerMessage
-                    {
-                        PlayerLocale = _client.LocaleInfo.PlayerLocale()
-                    }.ToByteString()
-                });
-
-                GetPlayerResponse getPlayerResponse = null;
-
-                try
-                {
-                    getPlayerResponse = GetPlayerResponse.Parser.ParseFrom(response);
-                    PlayerData = getPlayerResponse.PlayerData;
-
-                    if (getPlayerResponse.Banned)
-                        AccountState = Enums.AccountState.PermAccountBan;
-                    if (getPlayerResponse.Warn)
-                        AccountState = Enums.AccountState.Flagged;
-
-                    return new MethodResult
-                    {
-                        Success = true
-                    };
-                }
-                catch (Exception ex)
-                {
-                    if (response.IsEmpty)
-                        LogCaller(new LoggerEventArgs("Failed to get player stats", LoggerTypes.Exception, ex));
-
-                    return new MethodResult();
+                    return result;
                 }
             }
-            catch (Exception ex)
-            {
-                LogCaller(new LoggerEventArgs("Failed to get player stats", LoggerTypes.Exception, ex));
 
-                return new MethodResult
-                {
-                    Message = "Failed to get player stats"
-                };
-            }
+            PlayerData = _client.ClientSession.Player.Data;
+
+            return new MethodResult
+            {
+                Success = true
+            };
         }
 
         public async Task<MethodResult> ExportStats()
@@ -204,7 +163,6 @@ namespace PokemonGoGUI.GoManager
                             candy = pCandy.Candy_.ToString("N0");
                         }
                     }
-
 
                     MethodResult<double> perfectResult = CalculateIVPerfection(pokemon);
                     string iv = "Unknown";

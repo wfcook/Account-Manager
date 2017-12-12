@@ -34,9 +34,9 @@ namespace PokemonGoGUI
 
         public bool LoggedIn { get; private set; }
 
-        public ILocaleInfo LocaleInfo { get; private set; }
+        private ILocaleInfo LocaleInfo { get; set; }
 
-        public DeviceWrapper ClientDeviceWrapper { get; private set; }
+        private DeviceWrapper ClientDeviceWrapper { get; set; }
 
         public int CaptchaInt = 0;
 
@@ -97,6 +97,11 @@ namespace PokemonGoGUI
             ClientSession.InventoryUpdate += InventoryOnUpdate;
             ClientSession.MapUpdate += MapOnUpdate;
             ClientSession.CaptchaReceived += SessionOnCaptchaReceived;
+
+            /*//TODO: Check this:
+            ClientSession.RpcClient.CheckAwardedBadgesReceived += myfunc;
+            ClientSession.RpcClient.HatchedEggsReceived += myfunc;
+            */
 
             // Send initial requests and start HeartbeatDispatcher.
             // This makes sure that the initial heartbeat request finishes and the "session.Map.Cells" contains stuff.
