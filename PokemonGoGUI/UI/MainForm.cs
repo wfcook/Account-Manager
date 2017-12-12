@@ -1450,7 +1450,7 @@ namespace PokemonGoGUI
 
         #endregion
 
-        private async void ExportJsonToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ExportJsonToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string fileName = String.Empty;
             List<AccountExportModel> exportModels = new List<AccountExportModel>();
@@ -1478,7 +1478,7 @@ namespace PokemonGoGUI
 
             IEnumerable<Manager> selectedManagers = fastObjectListViewMain.SelectedObjects.Cast<Manager>();
 
-            await Task.Run(() =>
+            Task.Run(() =>
                 {
                     ParallelOptions options = new ParallelOptions
                     {

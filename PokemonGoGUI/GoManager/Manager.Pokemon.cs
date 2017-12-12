@@ -174,6 +174,9 @@ namespace PokemonGoGUI.GoManager
                         pokemonToTransfer.AddRange(GetPokemonBelowCP(group, settings.MinCP));
                         pokemonToTransfer = pokemonToTransfer.DistinctBy(x => x.Id).ToList();
                         break;
+                    case TransferType.Slashed:
+                        pokemonToTransfer = pokemonToTransfer.DistinctBy(x => x.IsBad).ToList();
+                        break;
                 }
             }
 
