@@ -575,6 +575,7 @@ namespace PokemonGoGUI.GoManager
             ItemData greatBalls = Items.FirstOrDefault(x => x.ItemId == ItemId.ItemGreatBall);
             ItemData ultraBalls = Items.FirstOrDefault(x => x.ItemId == ItemId.ItemUltraBall);
             ItemData masterBalls = Items.FirstOrDefault(x => x.ItemId == ItemId.ItemMasterBall);
+            ItemData premierBalls = Items.FirstOrDefault(x => x.ItemId == ItemId.ItemPremierBall);
 
             if (masterBalls != null && masterBalls.Count > 0 && pokemonCp >= 1200)
             {
@@ -625,12 +626,19 @@ namespace PokemonGoGUI.GoManager
                 return ItemId.ItemMasterBall;
             }
 
+            if (premierBalls != null && premierBalls.Count > 0)
+            {
+                premierBalls.Count--;
+
+                return ItemId.ItemPremierBall;
+            }
+
             return ItemId.ItemUnknown;
         }
 
         private async Task UseBerry(ulong encounterId, string spawnId)
         {
-            ItemData berryData = Items.Where(x => x.ItemId == ItemId.ItemRazzBerry).FirstOrDefault();
+            ItemData berryData = Items.Where(x => x.ItemId == ItemId.ItemRazzBerry || x.ItemId == ItemId.ItemBlukBerry || x.ItemId == ItemId.ItemNanabBerry || x.ItemId == ItemId.ItemPinapBerry).FirstOrDefault();
 
             if (berryData == null || berryData.Count <= 0)
             {
@@ -643,7 +651,7 @@ namespace PokemonGoGUI.GoManager
                 RequestMessage = new UseItemCaptureMessage
                 {
                     EncounterId = encounterId,
-                    ItemId = ItemId.ItemRazzBerry,
+                    ItemId = berryData.ItemId,
                     SpawnPointId = spawnId
                 }.ToByteString()
             });

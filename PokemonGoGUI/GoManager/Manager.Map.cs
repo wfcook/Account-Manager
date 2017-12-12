@@ -26,20 +26,20 @@ namespace PokemonGoGUI.GoManager
             {
                 return new MethodResult<List<MapPokemon>>
                 {
-                    Message = mapCellResponse.Message
+                    Message = mapCellResponse.Message,
+                    Data = new List<MapPokemon>(),
+                    Success = mapCellResponse.Success
                 };
             }
 
-            List<MapPokemon> pokemon = mapCellResponse.Data.
-                                        SelectMany(x => x.CatchablePokemons).
-                                        Where(x => PokemonWithinCatchSettings(x)).
-                                        ToList();
-
             return new MethodResult<List<MapPokemon>>
             {
-                Data = pokemon,
-                Success = true,
-                Message = "Succes"
+                Data = mapCellResponse.Data.
+                                        SelectMany(x => x.CatchablePokemons).
+                                        Where(x => PokemonWithinCatchSettings(x)).
+                                        ToList(),
+                Success = mapCellResponse.Success,
+                Message = mapCellResponse.Message
             };
         }
 
@@ -71,7 +71,7 @@ namespace PokemonGoGUI.GoManager
                     continue;
                 }
 
-                GeoCoordinate defaultLocation = new GeoCoordinate(UserSettings.DefaultLatitude, UserSettings.DefaultLongitude);
+                GeoCoordinate defaultLocation = new GeoCoordinate(_client.ClientSession.Player.Latitude, _client.ClientSession.Player.Longitude);
                 GeoCoordinate fortLocation = new GeoCoordinate(fort.Latitude, fort.Longitude);
 
                 double distance = CalculateDistanceInMeters(defaultLocation, fortLocation);
@@ -94,7 +94,7 @@ namespace PokemonGoGUI.GoManager
                 };
             }
 
-            fortData = fortData.OrderBy(x => CalculateDistanceInMeters(UserSettings.DefaultLatitude, UserSettings.DefaultLongitude, x.Latitude, x.Longitude)).ToList();
+            fortData = fortData.OrderBy(x => CalculateDistanceInMeters(_client.ClientSession.Player.Latitude, _client.ClientSession.Player.Longitude, x.Latitude, x.Longitude)).ToList();
 
             return new MethodResult<List<FortData>>
             {
@@ -122,7 +122,7 @@ namespace PokemonGoGUI.GoManager
                     continue;
                 }
 
-                GeoCoordinate defaultLocation = new GeoCoordinate(UserSettings.DefaultLatitude, UserSettings.DefaultLongitude);
+                GeoCoordinate defaultLocation = new GeoCoordinate(_client.ClientSession.Player.Latitude, _client.ClientSession.Player.Longitude);
                 GeoCoordinate fortLocation = new GeoCoordinate(fort.Latitude, fort.Longitude);
 
                 double distance = CalculateDistanceInMeters(defaultLocation, fortLocation);
@@ -138,8 +138,8 @@ namespace PokemonGoGUI.GoManager
             return new MethodResult<List<FortData>>
             {
                 Data = fortData,
-                Message = "Success",
-                Success = true
+                Message = allFortsResponse.Message,
+                Success = allFortsResponse.Success
             };
         }
 
@@ -151,26 +151,44 @@ namespace PokemonGoGUI.GoManager
             {
                 return new MethodResult<List<FortData>>
                 {
+                    Data = new List<FortData>(),
                     Message = mapCellResponse.Message,
-                    Success = false
+                    Success = mapCellResponse.Success
                 };
             }
 
             return new MethodResult<List<FortData>>
             {
                 Data = mapCellResponse.Data.SelectMany(x => x.Forts).ToList(),
-                Success = true,
-                Message = "Success"
+                Success = mapCellResponse.Success,
+                Message = mapCellResponse.Message
             };
         }
 
         private async Task<MethodResult<RepeatedField<MapCell>>> GetMapObjects()
         {
+            if (!_client.LoggedIn)
+            {
+                MethodResult result = await Login();
+
+                if (!result.Success)
+                {
+                    return new MethodResult<RepeatedField<MapCell>> { Success = false, Message = "Failed to get map objets.", Data = new RepeatedField<MapCell>() };
+                }
+            }
+
             await Task.Delay(0); //Remove warn
+
+            if (_client.ClientSession.Map.Cells.Count < 0)
+            {
+                return new MethodResult<RepeatedField<MapCell>> { Success = false, Message = "Failed to get map objets.", Data = new RepeatedField<MapCell>() };
+            }
+
             return new MethodResult<RepeatedField<MapCell>>
             {
                 Data = _client.ClientSession.Map.Cells,
-                Success = true
+                Success = true,
+                Message = "Success"
             };
         }
     }

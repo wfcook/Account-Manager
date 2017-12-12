@@ -24,7 +24,7 @@ namespace PokemonGoGUI
     {
         public ProxyEx Proxy;
         public ISettings Settings { get; private set; }
-        public Version VersionStr = new Version("0.85.1");
+        public Version VersionStr { get; private set; }
 
         public AuthType AuthType
         { get { return Settings.AuthType; } private set { Settings.AuthType = value; } }
@@ -34,9 +34,9 @@ namespace PokemonGoGUI
 
         public bool LoggedIn { get; private set; }
 
-        public ILocaleInfo LocaleInfo { get; private set; }
+        private ILocaleInfo LocaleInfo { get; set; }
 
-        public DeviceWrapper ClientDeviceWrapper { get; private set; }
+        private DeviceWrapper ClientDeviceWrapper { get; set; }
 
         public int CaptchaInt = 0;
 
@@ -51,6 +51,7 @@ namespace PokemonGoGUI
 
         public Client()
         {
+            VersionStr = new Version("0.85.1");
         }
 
         public async Task<MethodResult<bool>> DoLogin(ISettings settings)
@@ -72,6 +73,7 @@ namespace PokemonGoGUI
 
                 // TODO: make this configurable. To avoid bans (may be with a checkbox in hash keys tab).
                 Configuration.IgnoreHashVersion = true;
+                VersionStr = Configuration.Hasher.PokemonVersion;
             }
             // *****
 
@@ -97,6 +99,11 @@ namespace PokemonGoGUI
             ClientSession.InventoryUpdate += InventoryOnUpdate;
             ClientSession.MapUpdate += MapOnUpdate;
             ClientSession.CaptchaReceived += SessionOnCaptchaReceived;
+
+            /*//TODO: Check this:
+            ClientSession.RpcClient.CheckAwardedBadgesReceived += myfunc;
+            ClientSession.RpcClient.HatchedEggsReceived += myfunc;
+            */
 
             // Send initial requests and start HeartbeatDispatcher.
             // This makes sure that the initial heartbeat request finishes and the "session.Map.Cells" contains stuff.
