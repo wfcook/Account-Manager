@@ -21,7 +21,6 @@ namespace PokemonGoGUI.GoManager
     public partial class Manager
     {
         private Client _client = new Client();
-        private DateTime _lastMapRequest = new DateTime();
         private Random _rand = new Random();
 
         private int _totalZeroExpStops = 0;
@@ -722,6 +721,8 @@ namespace PokemonGoGUI.GoManager
                             MethodResult<GymGetInfoResponse> _result = await GymGetInfo(pokestop);
                             if (_result.Success)
                                 fort = "gym";
+                            else
+                                continue;
                         }
 
                         LogCaller(new LoggerEventArgs(String.Format("Going to {0} {1} of {2}. Distance {3:0.00}m", fort, pokeStopNumber, totalStops, distance), pokestop.Type == FortType.Checkpoint ? LoggerTypes.Info : LoggerTypes.FortGym));
