@@ -91,7 +91,7 @@ namespace PokemonGoGUI.Extensions
            { "America/Boa_Vista", new Tuple<string, string, string>("US", "en", "en-us") },
            { "America/Bogota", new Tuple<string, string, string>("US", "en", "en-us") },
            { "America/Boise", new Tuple<string, string, string>("US", "en", "en-us") },
-            		{ "America/Brasil", new Tuple<string, string, string>("BR", "pt", "pt-br") },
+           { "America/Brasil", new Tuple<string, string, string>("BR", "pt", "pt-br") },
            { "America/Cambridge_Bay", new Tuple<string, string, string>("US", "en", "en-us") },
            { "America/Campo_Grande", new Tuple<string, string, string>("US", "en", "en-us") },
            { "America/Cancun", new Tuple<string, string, string>("US", "en", "en-us") },
