@@ -10,6 +10,7 @@ using POGOLib.Official.Net.Captcha;
 using POGOLib.Official.Util;
 using POGOLib.Official.Util.Device;
 using POGOLib.Official.Util.Hash;
+using POGOProtos.Networking.Requests.Messages;
 using PokemonGoGUI.Enums;
 using System;
 using System.IO;
@@ -34,7 +35,7 @@ namespace PokemonGoGUI
 
         public bool LoggedIn { get; private set; }
 
-        private ILocaleInfo LocaleInfo { get; set; }
+        private GetPlayerMessage.Types.PlayerLocale PlayerLocale { get; set; }
 
         private DeviceWrapper ClientDeviceWrapper { get; set; }
 
@@ -72,7 +73,7 @@ namespace PokemonGoGUI
                     Configuration.Hasher = new PokeHashHasher(Settings.HashKeys.ToArray());
 
                 // TODO: make this configurable. To avoid bans (may be with a checkbox in hash keys tab).
-                Configuration.IgnoreHashVersion = true;
+                //Configuration.IgnoreHashVersion = true;
                 VersionStr = Configuration.Hasher.PokemonVersion;
             }
             // *****
@@ -95,16 +96,6 @@ namespace PokemonGoGUI
 
             SaveAccessToken(ClientSession.AccessToken);
 
-            ClientSession.AccessTokenUpdated += SessionOnAccessTokenUpdated;
-            ClientSession.InventoryUpdate += InventoryOnUpdate;
-            ClientSession.MapUpdate += MapOnUpdate;
-            ClientSession.CaptchaReceived += SessionOnCaptchaReceived;
-
-            /*//TODO: Check this:
-            ClientSession.RpcClient.CheckAwardedBadgesReceived += myfunc;
-            ClientSession.RpcClient.HatchedEggsReceived += myfunc;
-            */
-
             // Send initial requests and start HeartbeatDispatcher.
             // This makes sure that the initial heartbeat request finishes and the "session.Map.Cells" contains stuff.
             string msgStr = null;
@@ -118,6 +109,7 @@ namespace PokemonGoGUI
                 LoggedIn = true;
                 msgStr = "Successfully logged into server.";
             }
+
             return new MethodResult<bool>()
             {
                 Success = LoggedIn,
@@ -125,7 +117,7 @@ namespace PokemonGoGUI
             };
         }
 
-        private void SessionOnCaptchaReceived(object sender, CaptchaEventArgs e)
+        public void SessionOnCaptchaReceived(object sender, CaptchaEventArgs e)
         {
             var session = (Session)sender;
 
@@ -148,7 +140,7 @@ namespace PokemonGoGUI
             //            Console.WriteLine(JsonConvert.SerializeObject(verifyChallenge, Formatting.Indented));
         }
 
-        private void SessionOnAccessTokenUpdated(object sender, EventArgs e)
+        public void SessionOnAccessTokenUpdated(object sender, EventArgs e)
         {
             var session = (Session)sender;
 
@@ -157,16 +149,6 @@ namespace PokemonGoGUI
             //Logger.Info("Saved access token to file.");
         }
 
-        private void InventoryOnUpdate(object sender, EventArgs e)
-        {
-            //Logger.Info("Inventory was updated.");
-        }
-
-        private void MapOnUpdate(object sender, EventArgs e)
-        {
-            //Logger.Info("Map was updated.");
-        }
-     
         public void SetSettings(ISettings settings)
         {
             Settings = settings;
@@ -204,9 +186,12 @@ namespace PokemonGoGUI
                 Password = Settings.ProxyPassword
             };
 
-            LocaleInfo = new ILocaleInfo();
-            LocaleInfo.SetValues(Settings.Country, Settings.Language, Settings.TimeZone);
-            Configuration.LocaleInfo = LocaleInfo;
+            PlayerLocale = new GetPlayerMessage.Types.PlayerLocale
+            {
+                Country = Settings.Country,
+                Language = Settings.Language,
+                Timezone = Settings.TimeZone
+            };
         }
 
         private void SaveAccessToken(AccessToken accessToken)
@@ -239,16 +224,21 @@ namespace PokemonGoGUI
                     var accessToken = JsonConvert.DeserializeObject<AccessToken>(File.ReadAllText(fileName));
 
                     if (!accessToken.IsExpired)
-                        return Login.GetSession(loginProvider, accessToken, initLat, initLong, ClientDeviceWrapper);
+                        return Login.GetSession(loginProvider, accessToken, initLat, initLong, ClientDeviceWrapper, PlayerLocale);
                 }
             }
 
-            var session = await Login.GetSession(loginProvider, initLat, initLong, ClientDeviceWrapper);
+            var session = await Login.GetSession(loginProvider, initLat, initLong, ClientDeviceWrapper, PlayerLocale);
 
             if (mayCache)
                 SaveAccessToken(session.AccessToken);
 
             return session;
+        }
+
+        public void Dispose()
+        {
+            this.Dispose();
         }
 
         private static readonly string[] OsUserAgentParts = {

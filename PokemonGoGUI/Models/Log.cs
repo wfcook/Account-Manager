@@ -72,7 +72,7 @@ namespace PokemonGoGUI.GoManager.Models
                 case LoggerTypes.Debug:
                     return Color.DarkGray;
                 case LoggerTypes.LocationUpdate:
-                    return Color.DarkGray;
+                    return Color.LightGreen;
                 case LoggerTypes.FortGym:
                     return Color.Magenta;
             }
