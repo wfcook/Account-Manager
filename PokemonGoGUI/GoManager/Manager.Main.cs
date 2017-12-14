@@ -1,5 +1,6 @@
 ﻿using GeoCoordinatePortable;
 using Newtonsoft.Json;
+using POGOLib.Official.Net;
 using POGOProtos.Data.Player;
 using POGOProtos.Map.Fort;
 using POGOProtos.Networking.Responses;
@@ -77,6 +78,31 @@ namespace PokemonGoGUI.GoManager
                 MethodResult result = null;
                 result = await _client.DoLogin(UserSettings);
                 LogCaller(new LoggerEventArgs(result.Message, LoggerTypes.Debug));
+
+                _client.ClientSession.AccessTokenUpdated += _client.SessionOnAccessTokenUpdated;
+                _client.ClientSession.CaptchaReceived += _client.SessionOnCaptchaReceived;
+
+                /*//TODO: Check this:
+                _client.ClientSession.InventoryUpdate += async delegate
+                {
+                    LogCaller(new LoggerEventArgs("Updating inventory items ...", LoggerTypes.Debug));
+                    await UpdateInventory();
+                };
+                _client.ClientSession.MapUpdate += async delegate 
+                {
+                    LogCaller(new LoggerEventArgs("Updating MapObjects ...", LoggerTypes.Debug));
+                    await GetCatchablePokemon();
+                    await GetPokeStops();
+                };
+                _client.ClientSession.RpcClient.CheckAwardedBadgesReceived += delegate
+                {
+                    //
+                };
+                _client.ClientSession.RpcClient.HatchedEggsReceived += delegate
+                {
+                    //
+                }; 
+                //*/
 
                 if (CurrentProxy != null)
                 {
@@ -343,13 +369,14 @@ namespace PokemonGoGUI.GoManager
 
             _pauser.Reset();
             _runningStopwatch.Stop();
+            _client.ClientSession.Pause();
 
             LogCaller(new LoggerEventArgs("Pausing bot ...", LoggerTypes.Info));
 
             State = BotState.Pausing;
         }
 
-        public void UnPause()
+        public async void UnPause()
         {
             if (!IsRunning)
             {
@@ -358,6 +385,7 @@ namespace PokemonGoGUI.GoManager
 
             _pauser.Set();
             _runningStopwatch.Start();
+            await _client.ClientSession.ResumeAsync();
 
             LogCaller(new LoggerEventArgs("Unpausing bot ...", LoggerTypes.Info));
 
@@ -503,6 +531,25 @@ namespace PokemonGoGUI.GoManager
                         }
                     }
 
+                    if (_client.ClientSession.Player.Warn)
+                    { 
+                        AccountState = AccountState.Flagged;
+                        LogCaller(new LoggerEventArgs("Account seen flegged.", LoggerTypes.Warning));
+                    }
+
+                    if (_client.ClientSession.Player.Banned)
+                    {
+                        AccountState = AccountState.PermAccountBan;
+                        LogCaller(new LoggerEventArgs("Account seen banned.", LoggerTypes.FatalError));
+
+                        //Remove proxy
+                        RemoveProxy();
+
+                        Stop();
+
+                        continue;
+                    }
+
                     //LogCaller(new LoggerEventArgs("Sending echo test ...", LoggerTypes.Debug));
 
                     result = await CheckReauthentication();
@@ -592,7 +639,7 @@ namespace PokemonGoGUI.GoManager
 
                         continue;
                     }
-
+                    
                     if (UserSettings.ClaimLevelUpRewards)
                     {
                         LogCaller(new LoggerEventArgs("Getting level up rewards ...", LoggerTypes.Debug));
