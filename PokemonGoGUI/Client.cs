@@ -236,11 +236,6 @@ namespace PokemonGoGUI
             return session;
         }
 
-        public void Dispose()
-        {
-            this.Dispose();
-        }
-
         private static readonly string[] OsUserAgentParts = {
             "CFNetwork/758.0.2 Darwin/15.0.0",  // 9.0
             "CFNetwork/758.0.2 Darwin/15.0.0",  // 9.0.1
