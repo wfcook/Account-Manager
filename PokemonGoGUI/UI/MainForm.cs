@@ -885,7 +885,7 @@ namespace PokemonGoGUI
             }
         }
 
-        private async void ExportStatsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ExportStatsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ParallelOptions options = new ParallelOptions
             {
@@ -894,16 +894,16 @@ namespace PokemonGoGUI
 
             IEnumerable<Manager> managers = fastObjectListViewMain.SelectedObjects.Cast<Manager>();
 
-            await Task.Run(() =>
-                {
-                    Parallel.ForEach(managers, (manager) =>
-                    {
-                        manager.ExportStats().Wait();
-                    });
-                });
+            Task.Run(() =>
+                 {
+                     Parallel.ForEach(managers, options, (manager) =>
+                     {
+                         manager.ExportStats().Wait();
+                     });
+                 });
         }
 
-        private async void UpdateDetailsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void UpdateDetailsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             updateDetailsToolStripMenuItem.Enabled = false;
 
@@ -914,7 +914,7 @@ namespace PokemonGoGUI
 
             IEnumerable<Manager> selectedManager = fastObjectListViewMain.SelectedObjects.Cast<Manager>();
 
-            await Task.Run(() =>
+            Task.Run(() =>
                 {
                     Parallel.ForEach(selectedManager, options, (manager) =>
                     {
@@ -1476,32 +1476,32 @@ namespace PokemonGoGUI
                 }
             }
 
+            ParallelOptions options = new ParallelOptions
+            {
+                MaxDegreeOfParallelism = 10
+            };
+
             IEnumerable<Manager> selectedManagers = fastObjectListViewMain.SelectedObjects.Cast<Manager>();
 
             Task.Run(() =>
-                {
-                    ParallelOptions options = new ParallelOptions
-                    {
-                        MaxDegreeOfParallelism = 10
-                    };
+                  {
+                      Parallel.ForEach(selectedManagers, options, (manager) =>
+                       {
+                          if (dialogResult == DialogResult.Yes)
+                          {
+                              manager.UpdateDetails().Wait();
+                          }
 
-                    Parallel.ForEach(selectedManagers, options, (manager) =>
-                    {
-                        if (dialogResult == DialogResult.Yes)
-                        {
-                            manager.UpdateDetails().Wait();
-                        }
+                          MethodResult<AccountExportModel> result = manager.GetAccountExport();
 
-                        MethodResult<AccountExportModel> result = manager.GetAccountExport();
+                          if (!result.Success)
+                          {
+                              return;
+                          }
 
-                        if (!result.Success)
-                        {
-                            return;
-                        }
-
-                        exportModels.Add(result.Data);
-                    });
-                });
+                          exportModels.Add(result.Data);
+                      });
+                  });
 
             try
             {
@@ -1510,7 +1510,6 @@ namespace PokemonGoGUI
                 File.WriteAllText(fileName, data);
 
                 MessageBox.Show(String.Format("Successfully exported {0} of {1} accounts", exportModels.Count, fastObjectListViewMain.SelectedObjects.Count));
-
             }
             catch(Exception ex)
             {

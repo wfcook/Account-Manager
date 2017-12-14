@@ -2,6 +2,8 @@
 using System;
 using GeoCoordinatePortable;
 using System.Threading.Tasks;
+using System.Globalization;
+using System.Windows.Forms;
 
 namespace PokemonGoGUI.GoManager
 {
@@ -158,7 +160,8 @@ namespace PokemonGoGUI.GoManager
                     };
                 }
 
-                _client.ClientSession.Player.SetCoordinates(location.Latitude, location.Longitude, location.Altitude);
+                _client.ClientSession.Player.SetCoordinates(location);
+                
                 UserSettings.DefaultLatitude = _client.ClientSession.Player.Latitude;
                 UserSettings.DefaultLongitude = _client.ClientSession.Player.Longitude;
 
