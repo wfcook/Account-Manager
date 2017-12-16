@@ -73,6 +73,26 @@ namespace PokemonGoGUI.GoManager
         {
             GetPokeStops().Wait();
             GetCatchablePokemon().Wait();
+
+            // Update BuddyPokemon Stats
+            if (PlayerData.BuddyPokemon.Id != 0)
+            {
+                MethodResult<GetBuddyWalkedResponse> buddyWalkedResponse = GetBuddyWalked().Result;
+                if (buddyWalkedResponse.Success)
+                {
+                    LogCaller(new LoggerEventArgs($"BuddyWalked CandyID: {buddyWalkedResponse.Data.FamilyCandyId}, CandyCount: {buddyWalkedResponse.Data.CandyEarnedCount}", Models.LoggerTypes.Success));
+                };
+            }
+        }
+
+        private void OnHatchedEggsReceived(object sender, GetHatchedEggsResponse hatchedEggResponse)
+        {
+            //
+        }
+
+        private void OnCheckAwardedBadgesReceived(object sender, CheckAwardedBadgesResponse e)
+        {
+            //
         }
 
         public async Task<MethodResult> Login()
@@ -89,13 +109,10 @@ namespace PokemonGoGUI.GoManager
                 {
                     _client.ClientSession.AccessTokenUpdated += _client.SessionOnAccessTokenUpdated;
                     _client.ClientSession.CaptchaReceived += _client.SessionOnCaptchaReceived;
-
-                    ///TODO: Check this:
                     _client.ClientSession.InventoryUpdate += OnInventoryUpdate.Invoke;
                     _client.ClientSession.MapUpdate += MapUpdate;
-                    //_client.ClientSession.RpcClient.CheckAwardedBadgesReceived += 
-                    //_client.ClientSession.RpcClient.HatchedEggsReceived += 
-                    //*/
+                    _client.ClientSession.RpcClient.CheckAwardedBadgesReceived += OnCheckAwardedBadgesReceived;
+                    _client.ClientSession.RpcClient.HatchedEggsReceived += OnHatchedEggsReceived;
                 }
 
                 if (CurrentProxy != null)
@@ -632,7 +649,7 @@ namespace PokemonGoGUI.GoManager
                         await Task.Delay(failedWaitTime);
 
                         continue;
-                    }
+                    }                   
                     
                     if (UserSettings.ClaimLevelUpRewards)
                     {
@@ -760,7 +777,7 @@ namespace PokemonGoGUI.GoManager
                         if (pokestop.Type == FortType.Gym)
                         {
                             MethodResult<GymGetInfoResponse> _result = await GymGetInfo(pokestop);
-                            if (_result.Success)
+                            if (_result.Success && _result.Data.Result == GymGetInfoResponse.Types.Result.Success)
                                 fort = "gym";
                             else
                                 continue;

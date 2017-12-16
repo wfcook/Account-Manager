@@ -111,9 +111,9 @@ namespace PokemonGoGUI.GoManager
                     RequestType = RequestType.DownloadItemTemplates,
                     RequestMessage = new DownloadItemTemplatesMessage
                     {
-                        //PageOffset
-                        //PageTimestamp
-                        //Paginate
+                        PageOffset = 0,
+                        Paginate = false,
+                        PageTimestamp = 0
                     }.ToByteString()
                 });
 

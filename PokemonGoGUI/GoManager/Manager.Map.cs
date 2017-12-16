@@ -2,6 +2,7 @@
 using Google.Common.Geometry;
 using Google.Protobuf;
 using Google.Protobuf.Collections;
+using POGOLib.Official.Pokemon;
 using POGOProtos.Map;
 using POGOProtos.Map.Fort;
 using POGOProtos.Map.Pokemon;
@@ -11,6 +12,7 @@ using POGOProtos.Networking.Responses;
 using PokemonGoGUI.Extensions;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -176,8 +178,6 @@ namespace PokemonGoGUI.GoManager
                     return new MethodResult<RepeatedField<MapCell>> { Success = false, Message = "Failed to get map objets.", Data = new RepeatedField<MapCell>() };
                 }
             }
-
-            await Task.Delay(0); //Remove warn
 
             if (_client.ClientSession.Map.Cells.Count < 0)
             {
