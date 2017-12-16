@@ -69,6 +69,12 @@ namespace PokemonGoGUI.GoManager
             LoadFarmLocations();
         }
 
+        private void MapUpdate(object sender, EventArgs e)
+        {
+            GetPokeStops().Wait();
+            GetCatchablePokemon().Wait();
+        }
+
         public async Task<MethodResult> Login()
         {
             LogCaller(new LoggerEventArgs("Attempting to login ...", LoggerTypes.Debug));
@@ -79,30 +85,18 @@ namespace PokemonGoGUI.GoManager
                 result = await _client.DoLogin(UserSettings);
                 LogCaller(new LoggerEventArgs(result.Message, LoggerTypes.Debug));
 
-                _client.ClientSession.AccessTokenUpdated += _client.SessionOnAccessTokenUpdated;
-                _client.ClientSession.CaptchaReceived += _client.SessionOnCaptchaReceived;
+                if (result.Success)
+                {
+                    _client.ClientSession.AccessTokenUpdated += _client.SessionOnAccessTokenUpdated;
+                    _client.ClientSession.CaptchaReceived += _client.SessionOnCaptchaReceived;
 
-                /*//TODO: Check this:
-                _client.ClientSession.InventoryUpdate += async delegate
-                {
-                    LogCaller(new LoggerEventArgs("Updating inventory items ...", LoggerTypes.Debug));
-                    await UpdateInventory();
-                };
-                _client.ClientSession.MapUpdate += async delegate 
-                {
-                    LogCaller(new LoggerEventArgs("Updating MapObjects ...", LoggerTypes.Debug));
-                    await GetCatchablePokemon();
-                    await GetPokeStops();
-                };
-                _client.ClientSession.RpcClient.CheckAwardedBadgesReceived += delegate
-                {
-                    //
-                };
-                _client.ClientSession.RpcClient.HatchedEggsReceived += delegate
-                {
-                    //
-                }; 
-                //*/
+                    ///TODO: Check this:
+                    _client.ClientSession.InventoryUpdate += OnInventoryUpdate.Invoke;
+                    _client.ClientSession.MapUpdate += MapUpdate;
+                    //_client.ClientSession.RpcClient.CheckAwardedBadgesReceived += 
+                    //_client.ClientSession.RpcClient.HatchedEggsReceived += 
+                    //*/
+                }
 
                 if (CurrentProxy != null)
                 {
