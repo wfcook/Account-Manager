@@ -23,8 +23,8 @@ namespace PokemonGoGUI
 {
     public class Client
     {
-        public ProxyEx Proxy;
-        public ISettings Settings { get; private set; }
+        private ProxyEx Proxy;
+        private ISettings Settings { get; set; }
         public Version VersionStr { get; private set; }
 
         public AuthType AuthType
@@ -119,34 +119,16 @@ namespace PokemonGoGUI
 
         public void SessionOnCaptchaReceived(object sender, CaptchaEventArgs e)
         {
-            var session = (Session)sender;
+            //var session = (Session)sender;
 
             ++CaptchaInt;
-
-            //Logger.Warn("Captcha received: " + e.CaptchaUrl);
-
-            // Solve
-            //            var verifyChallengeResponse = await session.RpcClient.SendRemoteProcedureCallAsync(new Request
-            //            {
-            //                RequestType = RequestType.VerifyChallenge,
-            //                RequestMessage = new VerifyChallengeMessage
-            //                {
-            //                    Token = "token"
-            //                }.ToByteString()
-            //            }, false);
-            //
-            //            var verifyChallenge = VerifyChallengeResponse.Parser.ParseFrom(verifyChallengeResponse);
-            //            
-            //            Console.WriteLine(JsonConvert.SerializeObject(verifyChallenge, Formatting.Indented));
         }
 
         public void SessionOnAccessTokenUpdated(object sender, EventArgs e)
         {
-            var session = (Session)sender;
+            //var session = (Session)sender;
 
-            SaveAccessToken(session.AccessToken);
-
-            //Logger.Info("Saved access token to file.");
+            SaveAccessToken(ClientSession.AccessToken);
         }
 
         public void SetSettings(ISettings settings)
