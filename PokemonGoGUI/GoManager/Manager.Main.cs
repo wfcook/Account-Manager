@@ -69,15 +69,15 @@ namespace PokemonGoGUI.GoManager
             LoadFarmLocations();
         }
 
-        private void MapUpdate(object sender, EventArgs e)
+        private async void MapUpdate(object sender, EventArgs e)
         {
-            GetPokeStops().Wait();
-            GetCatchablePokemon().Wait();
+            await GetPokeStops();
+            await GetCatchablePokemon();
 
             // Update BuddyPokemon Stats
             if (PlayerData.BuddyPokemon.Id != 0)
             {
-                MethodResult<GetBuddyWalkedResponse> buddyWalkedResponse = GetBuddyWalked().Result;
+                MethodResult<GetBuddyWalkedResponse> buddyWalkedResponse = await GetBuddyWalked();
                 if (buddyWalkedResponse.Success)
                 {
                     LogCaller(new LoggerEventArgs($"BuddyWalked CandyID: {buddyWalkedResponse.Data.FamilyCandyId}, CandyCount: {buddyWalkedResponse.Data.CandyEarnedCount}", Models.LoggerTypes.Success));
@@ -107,12 +107,22 @@ namespace PokemonGoGUI.GoManager
 
                 if (result.Success)
                 {
-                    _client.ClientSession.AccessTokenUpdated += _client.SessionOnAccessTokenUpdated;
-                    _client.ClientSession.CaptchaReceived += _client.SessionOnCaptchaReceived;
-                    _client.ClientSession.InventoryUpdate += OnInventoryUpdate.Invoke;
-                    _client.ClientSession.MapUpdate += MapUpdate;
-                    _client.ClientSession.RpcClient.CheckAwardedBadgesReceived += OnCheckAwardedBadgesReceived;
-                    _client.ClientSession.RpcClient.HatchedEggsReceived += OnHatchedEggsReceived;
+                    await Task.Run(() =>
+                    {
+                        try
+                        {
+                            _client.ClientSession.AccessTokenUpdated += _client.SessionOnAccessTokenUpdated;
+                            _client.ClientSession.CaptchaReceived += _client.SessionOnCaptchaReceived;
+                            _client.ClientSession.InventoryUpdate += OnInventoryUpdate.Invoke;
+                            _client.ClientSession.MapUpdate += MapUpdate;
+                            _client.ClientSession.RpcClient.CheckAwardedBadgesReceived += OnCheckAwardedBadgesReceived;
+                            _client.ClientSession.RpcClient.HatchedEggsReceived += OnHatchedEggsReceived;
+                        }
+                        catch
+                        {
+                            //not used
+                        }
+                    });
                 }
 
                 if (CurrentProxy != null)
@@ -546,6 +556,13 @@ namespace PokemonGoGUI.GoManager
                     { 
                         AccountState = AccountState.Flagged;
                         LogCaller(new LoggerEventArgs("Account seen flegged.", LoggerTypes.Warning));
+
+                        //Remove proxy
+                        RemoveProxy();
+
+                        Stop();
+
+                        continue;
                     }
 
                     if (_client.ClientSession.Player.Banned)

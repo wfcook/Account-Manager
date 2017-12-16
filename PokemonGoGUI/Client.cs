@@ -95,7 +95,7 @@ namespace PokemonGoGUI
 
             ClientSession = await GetSession(loginProvider, Settings.DefaultLatitude, Settings.DefaultLongitude, true);
 
-            //SaveAccessToken(ClientSession.AccessToken);
+            SaveAccessToken(ClientSession.AccessToken);
 
             // Send initial requests and start HeartbeatDispatcher.
             // This makes sure that the initial heartbeat request finishes and the "session.Map.Cells" contains stuff.
