@@ -27,8 +27,8 @@ namespace PokemonGoGUI
         private ISettings Settings { get; set; }
         public Version VersionStr { get; private set; }
 
-        public AuthType AuthType
-        { get { return Settings.AuthType; } private set { Settings.AuthType = value; } }
+        private AuthType AuthType
+        { get { return Settings.AuthType; } set { Settings.AuthType = value; } }
 
         public AccessToken AccessToken { get; private set; }
         public Session ClientSession { get; private set; }
@@ -75,6 +75,7 @@ namespace PokemonGoGUI
                 // TODO: make this configurable. To avoid bans (may be with a checkbox in hash keys tab).
                 //Configuration.IgnoreHashVersion = true;
                 VersionStr = Configuration.Hasher.PokemonVersion;
+                ((PokeHashHasher)Configuration.Hasher).PokehashSleeping += OnPokehashSleeping;
             }
             // *****
 
@@ -94,7 +95,7 @@ namespace PokemonGoGUI
 
             ClientSession = await GetSession(loginProvider, Settings.DefaultLatitude, Settings.DefaultLongitude, true);
 
-            SaveAccessToken(ClientSession.AccessToken);
+            //SaveAccessToken(ClientSession.AccessToken);
 
             // Send initial requests and start HeartbeatDispatcher.
             // This makes sure that the initial heartbeat request finishes and the "session.Map.Cells" contains stuff.
@@ -115,6 +116,13 @@ namespace PokemonGoGUI
                 Success = LoggedIn,
                 Message = msgStr
             };
+        }
+
+        private event EventHandler<int> OnPokehashSleeping;
+
+        private void PokehashSleeping(object sender, int sleepTime)
+        {
+            OnPokehashSleeping?.Invoke(sender, sleepTime);
         }
 
         public void SessionOnCaptchaReceived(object sender, CaptchaEventArgs e)

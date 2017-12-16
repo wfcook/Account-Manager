@@ -75,6 +75,16 @@ namespace PokemonGoGUI.GoManager
             GetCatchablePokemon().Wait();
         }
 
+        private void OnHatchedEggsReceived(object sender, GetHatchedEggsResponse hatchedEggResponse)
+        {
+            //
+        }
+
+        private void OnCheckAwardedBadgesReceived(object sender, CheckAwardedBadgesResponse e)
+        {
+            //
+        }
+
         public async Task<MethodResult> Login()
         {
             LogCaller(new LoggerEventArgs("Attempting to login ...", LoggerTypes.Debug));
@@ -89,13 +99,10 @@ namespace PokemonGoGUI.GoManager
                 {
                     _client.ClientSession.AccessTokenUpdated += _client.SessionOnAccessTokenUpdated;
                     _client.ClientSession.CaptchaReceived += _client.SessionOnCaptchaReceived;
-
-                    ///TODO: Check this:
                     _client.ClientSession.InventoryUpdate += OnInventoryUpdate.Invoke;
                     _client.ClientSession.MapUpdate += MapUpdate;
-                    //_client.ClientSession.RpcClient.CheckAwardedBadgesReceived += 
-                    //_client.ClientSession.RpcClient.HatchedEggsReceived += 
-                    //*/
+                    _client.ClientSession.RpcClient.CheckAwardedBadgesReceived += OnCheckAwardedBadgesReceived;
+                    _client.ClientSession.RpcClient.HatchedEggsReceived += OnHatchedEggsReceived;
                 }
 
                 if (CurrentProxy != null)
