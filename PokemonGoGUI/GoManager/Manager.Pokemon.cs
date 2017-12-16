@@ -21,60 +21,77 @@ namespace PokemonGoGUI.GoManager
     {
         public async Task<MethodResult> TransferPokemon(IEnumerable<PokemonData> pokemonToTransfer)
         {
+            List<ulong> pokemons = new List<ulong>();
+
             foreach (PokemonData pokemon in pokemonToTransfer)
             {
-                if(pokemon.Favorite == 1)
+                if (pokemon.Favorite == 1)
                 {
                     continue;
                 }
+                pokemons.Add(pokemon.Id);
+            }
+
+            ReleasePokemonMessage message = new ReleasePokemonMessage();
+
+            if (pokemons.Count > 1)
+            {
+                message.PokemonIds.AddRange(pokemons);
+            }
+            else
+            {
+                message.PokemonId = pokemons.FirstOrDefault();
+            }
+
+            try
+            {
+                var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
+                {
+                    RequestType = RequestType.ReleasePokemon,
+                    RequestMessage = message.ToByteString()
+                });
+
+                ReleasePokemonResponse releasePokemonResponse = null;
 
                 try
                 {
-                    var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
+                    releasePokemonResponse = ReleasePokemonResponse.Parser.ParseFrom(response);
+                    if (pokemons.Count > 1)
                     {
-                        RequestType = RequestType.ReleasePokemon,
-                        RequestMessage = new ReleasePokemonMessage
-                        {
-                            PokemonId = pokemon.Id
-                            //PokemonIds
-                        }.ToByteString()
-                    });
-
-                    ReleasePokemonResponse releasePokemonResponse = null;
-
-                    try
+                        LogCaller(new LoggerEventArgs(
+                            String.Format("Successully transferred {0} pokemons.", pokemons.Count), LoggerTypes.Transfer));
+                    }
+                    else
                     {
-                        releasePokemonResponse = ReleasePokemonResponse.Parser.ParseFrom(response);
                         LogCaller(new LoggerEventArgs(
                             String.Format("Successully transferred {0}. Cp: {1}. IV: {2:0.00}%",
-                                        pokemon.PokemonId,
-                                        pokemon.Cp,
-                                        CalculateIVPerfection(pokemon).Data),
+                                        pokemonToTransfer.FirstOrDefault().PokemonId,
+                                        pokemonToTransfer.FirstOrDefault().Cp,
+                                        CalculateIVPerfection(pokemonToTransfer.FirstOrDefault()).Data),
                                         LoggerTypes.Transfer));
 
-                        await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
-
-                        return new MethodResult
-                        {
-                            Success = true
-                        };
                     }
-                    catch (Exception ex)
+
+                    await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+
+                    return new MethodResult
                     {
-                        if (response.IsEmpty)
-                            LogCaller(new LoggerEventArgs("ReleasePokemonResponse parsing failed because response was empty", LoggerTypes.Exception, ex));
-
-                        return new MethodResult();
-                    }
+                        Success = true
+                    };
                 }
                 catch (Exception ex)
                 {
-                    LogCaller(new LoggerEventArgs("Transfer request failed", LoggerTypes.Exception, ex));
+                    if (response.IsEmpty)
+                        LogCaller(new LoggerEventArgs("ReleasePokemonResponse parsing failed because response was empty", LoggerTypes.Exception, ex));
+
                     return new MethodResult();
                 }
             }
-
-            return new MethodResult();
+            catch (Exception ex)
+            {
+                LogCaller(new LoggerEventArgs("Transfer request failed", LoggerTypes.Exception, ex));
+                return new MethodResult();
+            }
         }
 
         private async Task<MethodResult> TransferFilteredPokemon()

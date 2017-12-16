@@ -632,7 +632,7 @@ namespace PokemonGoGUI.GoManager
                         await Task.Delay(failedWaitTime);
 
                         continue;
-                    }
+                    }                   
                     
                     if (UserSettings.ClaimLevelUpRewards)
                     {
@@ -760,7 +760,7 @@ namespace PokemonGoGUI.GoManager
                         if (pokestop.Type == FortType.Gym)
                         {
                             MethodResult<GymGetInfoResponse> _result = await GymGetInfo(pokestop);
-                            if (_result.Success)
+                            if (_result.Success && _result.Data.Result == GymGetInfoResponse.Types.Result.Success)
                                 fort = "gym";
                             else
                                 continue;
