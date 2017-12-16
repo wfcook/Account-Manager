@@ -73,6 +73,16 @@ namespace PokemonGoGUI.GoManager
         {
             GetPokeStops().Wait();
             GetCatchablePokemon().Wait();
+
+            // Update BuddyPokemon Stats
+            if (PlayerData.BuddyPokemon.Id != 0)
+            {
+                MethodResult<GetBuddyWalkedResponse> buddyWalkedResponse = GetBuddyWalked().Result;
+                if (buddyWalkedResponse.Success)
+                {
+                    LogCaller(new LoggerEventArgs($"BuddyWalked CandyID: {buddyWalkedResponse.Data.FamilyCandyId}, CandyCount: {buddyWalkedResponse.Data.CandyEarnedCount}", Models.LoggerTypes.Success));
+                };
+            }
         }
 
         private void OnHatchedEggsReceived(object sender, GetHatchedEggsResponse hatchedEggResponse)

@@ -184,16 +184,6 @@ namespace PokemonGoGUI.GoManager
                 return new MethodResult<RepeatedField<MapCell>> { Success = false, Message = "Failed to get map objets.", Data = new RepeatedField<MapCell>() };
             }
 
-            // Update BuddyPokemon Stats
-            if (PlayerData.BuddyPokemon.Id != 0)
-            {
-                var buddyWalkedResponse = await GetBuddyWalked();
-                if (buddyWalkedResponse.Success)
-                {
-                    LogCaller(new LoggerEventArgs($"BuddyWalked CandyID: {buddyWalkedResponse.Data.FamilyCandyId}, CandyCount: {buddyWalkedResponse.Data.CandyEarnedCount}", Models.LoggerTypes.Success));
-                };
-            }
-
             return new MethodResult<RepeatedField<MapCell>>
             {
                 Data = _client.ClientSession.Map.Cells,
