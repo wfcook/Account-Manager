@@ -124,12 +124,6 @@
     <Reference Include="ObjectListView, Version=2.9.1.1072, Culture=neutral, PublicKeyToken=b1c5bf581481bcd4, processorArchitecture=MSIL">
       <HintPath>..\packages\ObjectListView.Official.2.9.1\lib\net20\ObjectListView.dll</HintPath>
     </Reference>
-    <Reference Include="POGOLib.Core, Version=1.7.6.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\POGOLib.Core.1.7.6\lib\netstandard1.1\POGOLib.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="POGOLib.Core.Google, Version=1.7.6.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\POGOLib.Core.Google.1.7.6\lib\netstandard1.1\POGOLib.Core.Google.dll</HintPath>
-    </Reference>
     <Reference Include="POGOProtos.Core, Version=2.20.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\POGOProtos.Core.2.20.0\lib\net45\POGOProtos.Core.dll</HintPath>
     </Reference>
@@ -341,6 +335,16 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\POGOLib.Core.Google\POGOLib.Core.Google.csproj">
+      <Project>{a5701c9a-ad7f-4948-8644-bba0aea8bbe0}</Project>
+      <Name>POGOLib.Core.Google</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\POGOLib.Core\POGOLib.Core.csproj">
+      <Project>{5f845fbb-b3c9-44ab-a660-f71461b499c3}</Project>
+      <Name>POGOLib.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
