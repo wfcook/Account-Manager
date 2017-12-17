@@ -1,5 +1,29 @@
 # Change Log
 
+## [v2.20.0.9](https://github.com/Furtif/GoManager/tree/v2.20.0.9) (2017-12-16)
+
+[Full Changelog](https://github.com/Furtif/GoManager/compare/v2.20.0.8...v2.20.0.9)
+
+**Merged pull requests:**
+
+- Fix crash [\#37](https://github.com/Furtif/GoManager/pull/37) ([Furtif](https://github.com/Furtif))
+
+## [v2.20.0.8](https://github.com/Furtif/GoManager/tree/v2.20.0.8) (2017-12-16)
+
+[Full Changelog](https://github.com/Furtif/GoManager/compare/v2.20.0.7...v2.20.0.8)
+
+**Merged pull requests:**
+
+- Fix transfert [\#36](https://github.com/Furtif/GoManager/pull/36) ([Furtif](https://github.com/Furtif))
+
+## [v2.20.0.7](https://github.com/Furtif/GoManager/tree/v2.20.0.7) (2017-12-16)
+
+[Full Changelog](https://github.com/Furtif/GoManager/compare/v2.20.0.6...v2.20.0.7)
+
+**Merged pull requests:**
+
+- others [\#35](https://github.com/Furtif/GoManager/pull/35) ([Furtif](https://github.com/Furtif))
+
 ## [v2.20.0.6](https://github.com/Furtif/GoManager/tree/v2.20.0.6) (2017-12-14)
 
 [Full Changelog](https://github.com/Furtif/GoManager/compare/v2.20.0.5...v2.20.0.6)

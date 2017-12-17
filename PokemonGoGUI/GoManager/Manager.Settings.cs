@@ -63,7 +63,7 @@ namespace PokemonGoGUI.GoManager
             AccountExportModel exportModel = new AccountExportModel
             {
                 Level = Stats.Level,
-                Type = UserSettings.AuthType.ToString(),
+                Type = UserSettings.AuthType,
                 Username = UserSettings.PtcUsername,
                 Password = UserSettings.PtcPassword,
                 Pokedex = Pokedex.Select(x => new PokedexEntryExportModel(x)).ToList(),
@@ -111,9 +111,9 @@ namespace PokemonGoGUI.GoManager
                     RequestType = RequestType.DownloadItemTemplates,
                     RequestMessage = new DownloadItemTemplatesMessage
                     {
-                        //PageOffset
-                        //PageTimestamp
-                        //Paginate
+                        PageOffset = 0,
+                        Paginate = false,
+                        PageTimestamp = 0
                     }.ToByteString()
                 });
 

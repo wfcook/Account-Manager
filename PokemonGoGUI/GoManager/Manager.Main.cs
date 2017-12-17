@@ -69,6 +69,32 @@ namespace PokemonGoGUI.GoManager
             LoadFarmLocations();
         }
 
+        private async void MapUpdate(object sender, EventArgs e)
+        {
+            await GetPokeStops();
+            await GetCatchablePokemon();
+
+            // Update BuddyPokemon Stats
+            if (PlayerData.BuddyPokemon.Id != 0)
+            {
+                MethodResult<GetBuddyWalkedResponse> buddyWalkedResponse = await GetBuddyWalked();
+                if (buddyWalkedResponse.Success)
+                {
+                    LogCaller(new LoggerEventArgs($"BuddyWalked CandyID: {buddyWalkedResponse.Data.FamilyCandyId}, CandyCount: {buddyWalkedResponse.Data.CandyEarnedCount}", Models.LoggerTypes.Success));
+                };
+            }
+        }
+
+        private void OnHatchedEggsReceived(object sender, GetHatchedEggsResponse hatchedEggResponse)
+        {
+            //
+        }
+
+        private void OnCheckAwardedBadgesReceived(object sender, CheckAwardedBadgesResponse e)
+        {
+            //
+        }
+
         public async Task<MethodResult> Login()
         {
             LogCaller(new LoggerEventArgs("Attempting to login ...", LoggerTypes.Debug));
@@ -79,30 +105,25 @@ namespace PokemonGoGUI.GoManager
                 result = await _client.DoLogin(UserSettings);
                 LogCaller(new LoggerEventArgs(result.Message, LoggerTypes.Debug));
 
-                _client.ClientSession.AccessTokenUpdated += _client.SessionOnAccessTokenUpdated;
-                _client.ClientSession.CaptchaReceived += _client.SessionOnCaptchaReceived;
-
-                /*//TODO: Check this:
-                _client.ClientSession.InventoryUpdate += async delegate
+                if (result.Success)
                 {
-                    LogCaller(new LoggerEventArgs("Updating inventory items ...", LoggerTypes.Debug));
-                    await UpdateInventory();
-                };
-                _client.ClientSession.MapUpdate += async delegate 
-                {
-                    LogCaller(new LoggerEventArgs("Updating MapObjects ...", LoggerTypes.Debug));
-                    await GetCatchablePokemon();
-                    await GetPokeStops();
-                };
-                _client.ClientSession.RpcClient.CheckAwardedBadgesReceived += delegate
-                {
-                    //
-                };
-                _client.ClientSession.RpcClient.HatchedEggsReceived += delegate
-                {
-                    //
-                }; 
-                //*/
+                    await Task.Run(() =>
+                    {
+                        try
+                        {
+                            _client.ClientSession.AccessTokenUpdated += _client.SessionOnAccessTokenUpdated;
+                            _client.ClientSession.CaptchaReceived += _client.SessionOnCaptchaReceived;
+                            _client.ClientSession.InventoryUpdate += OnInventoryUpdate.Invoke;
+                            _client.ClientSession.MapUpdate += MapUpdate;
+                            _client.ClientSession.RpcClient.CheckAwardedBadgesReceived += OnCheckAwardedBadgesReceived;
+                            _client.ClientSession.RpcClient.HatchedEggsReceived += OnHatchedEggsReceived;
+                        }
+                        catch
+                        {
+                            //not used
+                        }
+                    });
+                }
 
                 if (CurrentProxy != null)
                 {
@@ -535,6 +556,13 @@ namespace PokemonGoGUI.GoManager
                     { 
                         AccountState = AccountState.Flagged;
                         LogCaller(new LoggerEventArgs("Account seen flegged.", LoggerTypes.Warning));
+
+                        //Remove proxy
+                        RemoveProxy();
+
+                        Stop();
+
+                        continue;
                     }
 
                     if (_client.ClientSession.Player.Banned)
@@ -638,7 +666,7 @@ namespace PokemonGoGUI.GoManager
                         await Task.Delay(failedWaitTime);
 
                         continue;
-                    }
+                    }                   
                     
                     if (UserSettings.ClaimLevelUpRewards)
                     {
@@ -766,7 +794,7 @@ namespace PokemonGoGUI.GoManager
                         if (pokestop.Type == FortType.Gym)
                         {
                             MethodResult<GymGetInfoResponse> _result = await GymGetInfo(pokestop);
-                            if (_result.Success)
+                            if (_result.Success && _result.Data.Result == GymGetInfoResponse.Types.Result.Success)
                                 fort = "gym";
                             else
                                 continue;

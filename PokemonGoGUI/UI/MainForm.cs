@@ -898,7 +898,8 @@ namespace PokemonGoGUI
                  {
                      Parallel.ForEach(managers, options, (manager) =>
                      {
-                         manager.ExportStats().Wait();
+                         if (manager.IsRunning)
+                             manager.ExportStats().Wait();
                      });
                  });
         }
@@ -918,7 +919,8 @@ namespace PokemonGoGUI
                 {
                     Parallel.ForEach(selectedManager, options, (manager) =>
                     {
-                        manager.UpdateDetails().Wait();
+                        if (manager.IsRunning)
+                            manager.UpdateDetails().Wait();
                     });
                 });
 
@@ -1485,22 +1487,23 @@ namespace PokemonGoGUI
 
             Task.Run(() =>
                   {
-                      Parallel.ForEach(selectedManagers, options, (manager) =>
+                     Parallel.ForEach(selectedManagers, options, (manager) =>
                        {
-                          if (dialogResult == DialogResult.Yes)
-                          {
-                              manager.UpdateDetails().Wait();
-                          }
+                           if (dialogResult == DialogResult.Yes)
+                           {
+                               if (manager.IsRunning)
+                                   manager.UpdateDetails().Wait();
+                           }
 
-                          MethodResult<AccountExportModel> result = manager.GetAccountExport();
+                           MethodResult<AccountExportModel> result = manager.GetAccountExport();
 
-                          if (!result.Success)
-                          {
-                              return;
-                          }
+                           if (!result.Success)
+                           {
+                               return;
+                           }
 
-                          exportModels.Add(result.Data);
-                      });
+                           exportModels.Add(result.Data);
+                       });
                   });
 
             try

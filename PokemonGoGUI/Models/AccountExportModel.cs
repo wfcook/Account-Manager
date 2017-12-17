@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using POGOProtos.Data;
 using POGOProtos.Inventory.Item;
+using PokemonGoGUI.Enums;
 using System;
 using System.Collections.Generic;
 
@@ -9,7 +10,7 @@ namespace PokemonGoGUI.Models
     public class AccountExportModel
     {
         [JsonProperty("type")]
-        public string Type { get; set; }
+        public AuthType Type { get; set; }
         [JsonProperty("username")]
         public string Username { get; set; }
         [JsonProperty("password")]

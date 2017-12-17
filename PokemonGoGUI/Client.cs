@@ -23,12 +23,12 @@ namespace PokemonGoGUI
 {
     public class Client
     {
-        public ProxyEx Proxy;
-        public ISettings Settings { get; private set; }
+        private ProxyEx Proxy;
+        private ISettings Settings { get; set; }
         public Version VersionStr { get; private set; }
 
-        public AuthType AuthType
-        { get { return Settings.AuthType; } private set { Settings.AuthType = value; } }
+        private AuthType AuthType
+        { get { return Settings.AuthType; } set { Settings.AuthType = value; } }
 
         public AccessToken AccessToken { get; private set; }
         public Session ClientSession { get; private set; }
@@ -75,6 +75,7 @@ namespace PokemonGoGUI
                 // TODO: make this configurable. To avoid bans (may be with a checkbox in hash keys tab).
                 //Configuration.IgnoreHashVersion = true;
                 VersionStr = Configuration.Hasher.PokemonVersion;
+                ((PokeHashHasher)Configuration.Hasher).PokehashSleeping += OnPokehashSleeping;
             }
             // *****
 
@@ -117,36 +118,25 @@ namespace PokemonGoGUI
             };
         }
 
+        private event EventHandler<int> OnPokehashSleeping;
+
+        private void PokehashSleeping(object sender, int sleepTime)
+        {
+            OnPokehashSleeping?.Invoke(sender, sleepTime);
+        }
+
         public void SessionOnCaptchaReceived(object sender, CaptchaEventArgs e)
         {
-            var session = (Session)sender;
+            //var session = (Session)sender;
 
             ++CaptchaInt;
-
-            //Logger.Warn("Captcha received: " + e.CaptchaUrl);
-
-            // Solve
-            //            var verifyChallengeResponse = await session.RpcClient.SendRemoteProcedureCallAsync(new Request
-            //            {
-            //                RequestType = RequestType.VerifyChallenge,
-            //                RequestMessage = new VerifyChallengeMessage
-            //                {
-            //                    Token = "token"
-            //                }.ToByteString()
-            //            }, false);
-            //
-            //            var verifyChallenge = VerifyChallengeResponse.Parser.ParseFrom(verifyChallengeResponse);
-            //            
-            //            Console.WriteLine(JsonConvert.SerializeObject(verifyChallenge, Formatting.Indented));
         }
 
         public void SessionOnAccessTokenUpdated(object sender, EventArgs e)
         {
-            var session = (Session)sender;
+            //var session = (Session)sender;
 
-            SaveAccessToken(session.AccessToken);
-
-            //Logger.Info("Saved access token to file.");
+            SaveAccessToken(ClientSession.AccessToken);
         }
 
         public void SetSettings(ISettings settings)

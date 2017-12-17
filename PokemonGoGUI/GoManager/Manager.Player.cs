@@ -281,5 +281,36 @@ namespace PokemonGoGUI.GoManager
                 Success = true,
             };
         }
+
+        public async Task<MethodResult<GetBuddyWalkedResponse>> GetBuddyWalked()
+        {
+            var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
+            {
+                RequestType = RequestType.GetBuddyWalked,
+                RequestMessage = new GetBuddyWalkedMessage
+                {
+
+                }.ToByteString()
+            });
+
+            GetBuddyWalkedResponse getBuddyWalkedResponse = null;
+            try
+            {
+                getBuddyWalkedResponse = GetBuddyWalkedResponse.Parser.ParseFrom(response);
+            }
+            catch (Exception ex)
+            {
+                if (response.IsEmpty)
+                    throw new Exception("GetBuddyWalked parsing failed because response was empty", ex);
+
+                return new MethodResult<GetBuddyWalkedResponse>();
+            }
+
+            return new MethodResult<GetBuddyWalkedResponse>
+            {
+                Data = getBuddyWalkedResponse,
+                Success = true
+            };
+        }
     }
 }
