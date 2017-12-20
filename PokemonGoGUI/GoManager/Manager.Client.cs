@@ -1,5 +1,6 @@
 ﻿#region using directives
 
+using GeoCoordinatePortable;
 using Newtonsoft.Json;
 using POGOLib.Official;
 using POGOLib.Official.LoginProviders;
@@ -25,7 +26,7 @@ namespace PokemonGoGUI.GoManager
     {
         private Version VersionStr = new Version("0.85.1");
         private AccessToken AccessToken = new AccessToken();
-        private Session ClientSession;
+        private Session ClientSession { get; set; }
         private bool LoggedIn = false;
         private GetPlayerMessage.Types.PlayerLocale PlayerLocale = new GetPlayerMessage.Types.PlayerLocale();
         private DeviceWrapper ClientDeviceWrapper = new DeviceWrapper();
@@ -97,7 +98,7 @@ namespace PokemonGoGUI.GoManager
             {
                 ClientSession.AccessTokenUpdated += SessionOnAccessTokenUpdated;
                 ClientSession.CaptchaReceived += SessionOnCaptchaReceived;
-                ClientSession.InventoryUpdate += OnInventoryUpdate.Invoke;
+                ClientSession.InventoryUpdate += SessionInventoryUpdate;
                 ClientSession.MapUpdate += MapUpdate;
                 ClientSession.RpcClient.CheckAwardedBadgesReceived += OnCheckAwardedBadgesReceived;
                 ClientSession.RpcClient.HatchedEggsReceived += OnHatchedEggsReceived;
@@ -121,8 +122,12 @@ namespace PokemonGoGUI.GoManager
 
         private void MapUpdate(object sender, EventArgs e)
         {
-            //GetPokeStops().Wait();
-            //GetCatchablePokemon().Wait();
+            //var session = (Session)sender;
+            //GeoCoordinate loc = new GeoCoordinate(session.Player.Latitude, session.Player.Longitude);
+            //UpdateLocation(loc).Wait();
+
+            GetPokeStops().Wait();
+            GetCatchablePokemon().Wait();
 
             // Update BuddyPokemon Stats
             if (PlayerData.BuddyPokemon.Id != 0)
@@ -140,6 +145,11 @@ namespace PokemonGoGUI.GoManager
             AccountState = AccountState.CaptchaReceived;
             //2captcha needed to solve or chrome drive for solve url manual
             //e.CaptchaUrl;
+        }
+
+        private void SessionInventoryUpdate(object sender, EventArgs e)
+        {
+            UpdateInventory().Wait();
         }
 
         private void OnHatchedEggsReceived(object sender, GetHatchedEggsResponse hatchedEggResponse)

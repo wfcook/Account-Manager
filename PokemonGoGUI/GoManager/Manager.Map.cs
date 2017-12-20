@@ -1,5 +1,4 @@
 ﻿using GeoCoordinatePortable;
-using Google.Protobuf.Collections;
 using POGOProtos.Map;
 using POGOProtos.Map.Fort;
 using POGOProtos.Map.Pokemon;
@@ -15,7 +14,7 @@ namespace PokemonGoGUI.GoManager
     {
         private async Task<MethodResult<List<MapPokemon>>> GetCatchablePokemon()
         {
-            MethodResult<RepeatedField<MapCell>> mapCellResponse = await GetMapObjects();
+            MethodResult<List<MapCell>> mapCellResponse = await GetMapObjects();
 
             if (!mapCellResponse.Success)
             {
@@ -142,7 +141,7 @@ namespace PokemonGoGUI.GoManager
 
         private async Task<MethodResult<List<FortData>>> GetAllForts()
         {
-            MethodResult<RepeatedField<MapCell>> mapCellResponse = await GetMapObjects();
+            MethodResult<List<MapCell>> mapCellResponse = await GetMapObjects();
 
             if (!mapCellResponse.Success)
             {
@@ -162,7 +161,7 @@ namespace PokemonGoGUI.GoManager
             };
         }
 
-        private async Task<MethodResult<RepeatedField<MapCell>>> GetMapObjects()
+        private async Task<MethodResult<List<MapCell>>> GetMapObjects()
         {
             if (!LoggedIn)
             {
@@ -170,20 +169,20 @@ namespace PokemonGoGUI.GoManager
 
                 if (!result.Success)
                 {
-                    return new MethodResult<RepeatedField<MapCell>> { Message = "Failed to get map objets.", Data = new RepeatedField<MapCell>() };
+                    return new MethodResult<List<MapCell>> { Message = "Failed to get map objets.", Data = new List<MapCell>() };
                 }
             }
 
             if (ClientSession.Map.Cells.Count < 0)
             {
-                return new MethodResult<RepeatedField<MapCell>> { Message = "Failed to get map objets.", Data = new RepeatedField<MapCell>() };
+                return new MethodResult<List<MapCell>> { Message = "Failed to get map objets.", Data = new List<MapCell>() };
             }
 
             //await Task.Delay(3000);
 
-            return new MethodResult<RepeatedField<MapCell>>
+            return new MethodResult<List<MapCell>>
             {
-                Data = ClientSession.Map.Cells,
+                Data = ClientSession.Map.Cells.ToList(),
                 Success = true,
                 Message = "Success"
             };

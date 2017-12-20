@@ -479,9 +479,9 @@ namespace PokemonGoGUI.GoManager
 
                 #region Startup
 
-                //try
-                //{
-                if (!LoggedIn)
+                try
+                {
+                    if (!LoggedIn)
                     {
                         //Login
                         result = await Login();
@@ -496,7 +496,7 @@ namespace PokemonGoGUI.GoManager
                     }
 
                     if (ClientSession.Player.Warn)
-                    { 
+                    {
                         AccountState = AccountState.Flagged;
                         LogCaller(new LoggerEventArgs("Account seen flegged.", LoggerTypes.Warning));
 
@@ -751,7 +751,7 @@ namespace PokemonGoGUI.GoManager
                     int currentFailedStops = 0;
 
                     while (pokestopsToFarm.Any())
-                    {                        
+                    {
                         if (!IsRunning || currentFailedStops >= UserSettings.MaxFailBeforeReset)
                         {
                             break;
@@ -768,7 +768,7 @@ namespace PokemonGoGUI.GoManager
 
                         FortData pokestop = pokestopsToFarm[0];
                         pokestopsToFarm.RemoveAt(0);
-                      
+
                         GeoCoordinate currentLocation = new GeoCoordinate(ClientSession.Player.Latitude, ClientSession.Player.Longitude);
                         GeoCoordinate fortLocation = new GeoCoordinate(pokestop.Latitude, pokestop.Longitude);
 
@@ -776,21 +776,21 @@ namespace PokemonGoGUI.GoManager
 
                         string fort = "pokestop";
 
-                    if (pokestop.Type == FortType.Gym)
-                    {
-                        if (!UserSettings.SpinGyms)
+                        if (pokestop.Type == FortType.Gym)
                         {
-                            continue;
-                        }
+                            if (!UserSettings.SpinGyms)
+                            {
+                                continue;
+                            }
 
-                        MethodResult<GymGetInfoResponse> _result = await GymGetInfo(pokestop);
-                        if (_result.Success && _result.Data.Result == GymGetInfoResponse.Types.Result.Success)
-                        {
-                            fort = "gym";
+                            MethodResult<GymGetInfoResponse> _result = await GymGetInfo(pokestop);
+                            if (_result.Success && _result.Data.Result == GymGetInfoResponse.Types.Result.Success)
+                            {
+                                fort = "gym";
+                            }
+                            else
+                                continue;
                         }
-                        else
-                            continue;
-                    }
 
                         LogCaller(new LoggerEventArgs(String.Format("Going to {0} {1} of {2}. Distance {3:0.00}m", fort, pokeStopNumber, totalStops, distance), pokestop.Type == FortType.Checkpoint ? LoggerTypes.Info : LoggerTypes.FortGym));
 
@@ -948,13 +948,13 @@ namespace PokemonGoGUI.GoManager
                         }
                     }
 
-                /* }
-                 catch (Exception ex)
-                 {
-                     LogCaller(new LoggerEventArgs("Unknown exception occured. Restarting ...", LoggerTypes.Exception, ex));
-                     //LogCaller(new LoggerEventArgs("Unknown exception occured. Stopping ...", LoggerTypes.Exception, ex));
-                     //Stop();
-                 }*/
+                }
+                catch (Exception ex)
+                {
+                    LogCaller(new LoggerEventArgs("Unknown exception occured. Restarting ...", LoggerTypes.Exception, ex));
+                    //LogCaller(new LoggerEventArgs("Unknown exception occured. Stopping ...", LoggerTypes.Exception, ex));
+                    //Stop();
+                }
 
                 #endregion
 

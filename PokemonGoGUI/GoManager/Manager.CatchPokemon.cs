@@ -198,72 +198,59 @@ namespace PokemonGoGUI.GoManager
                     }
 
                     //End humanization
-                    try
+                    var catchresponse = await ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                     {
-                        var catchresponse = await ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
+                        RequestType = RequestType.CatchPokemon,
+                        RequestMessage = new CatchPokemonMessage
                         {
-                            RequestType = RequestType.CatchPokemon,
-                            RequestMessage = new CatchPokemonMessage
-                            {
-                                EncounterId = fortData.LureInfo.EncounterId,
-                                HitPokemon = hitInsideReticule,
-                                NormalizedHitPosition = 1,
-                                NormalizedReticleSize = reticuleSize,
-                                Pokeball = pokeBall,
-                                SpawnPointId = fortData.Id,
-                                SpinModifier = 1
-                            }.ToByteString()
-                        });
+                            EncounterId = fortData.LureInfo.EncounterId,
+                            HitPokemon = hitInsideReticule,
+                            NormalizedHitPosition = 1,
+                            NormalizedReticleSize = reticuleSize,
+                            Pokeball = pokeBall,
+                            SpawnPointId = fortData.Id,
+                            SpinModifier = 1
+                        }.ToByteString()
+                    });
 
-                        catchPokemonResponse = CatchPokemonResponse.Parser.ParseFrom(catchresponse);
-                        string pokemon = String.Format("Name: {0}, CP: {1}, IV: {2:0.00}%", fortData.LureInfo.ActivePokemonId, eResponse.PokemonData.Cp, CalculateIVPerfection(eResponse.PokemonData).Data);
+                    catchPokemonResponse = CatchPokemonResponse.Parser.ParseFrom(catchresponse);
+                    string pokemon = String.Format("Name: {0}, CP: {1}, IV: {2:0.00}%", fortData.LureInfo.ActivePokemonId, eResponse.PokemonData.Cp, CalculateIVPerfection(eResponse.PokemonData).Data);
 
-                        if (catchPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchSuccess)
-                        {
-                            int expGained = catchPokemonResponse.CaptureAward.Xp.Sum();
-
-                            Tracker.AddValues(1, 0);
-
-                            ExpIncrease(expGained);
-
-                            //_expGained += expGained;
-
-                            LogCaller(new LoggerEventArgs(String.Format("Lured Pokemon Caught. {0}. Exp {1}. Attempt #{2}", pokemon, expGained, attemptCount), LoggerTypes.Success));
-
-                            return new MethodResult
-                            {
-                                Message = "Pokemon caught",
-                                Success = true
-                            };
-                        }
-                        else if (catchPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchFlee)
-                        {
-                            LogCaller(new LoggerEventArgs(String.Format("Pokemon fled. {0}. Attempt #{1}", pokemon, attemptCount), LoggerTypes.PokemonFlee));
-                        }
-                        else if (catchPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchEscape)
-                        {
-                            LogCaller(new LoggerEventArgs(String.Format("Escaped ball. {0}. Attempt #{1}.", pokemon, attemptCount), LoggerTypes.PokemonEscape));
-                        }
-                        else
-                        {
-                            LogCaller(new LoggerEventArgs(String.Format("Unknown Error. {0}. Attempt #{1}. Status: {2}", pokemon, attemptCount, catchPokemonResponse.Status), LoggerTypes.Warning));
-                        }
-
-                        ++attemptCount;
-
-                        await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
-                    }
-                    catch (Exception ex)
+                    if (catchPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchSuccess)
                     {
-                        LogCaller(new LoggerEventArgs("Failed to catch lured pokemon due to error", LoggerTypes.Exception, ex));
+                        int expGained = catchPokemonResponse.CaptureAward.Xp.Sum();
+
+                        Tracker.AddValues(1, 0);
+
+                        ExpIncrease(expGained);
+
+                        //_expGained += expGained;
+
+                        LogCaller(new LoggerEventArgs(String.Format("Lured Pokemon Caught. {0}. Exp {1}. Attempt #{2}", pokemon, expGained, attemptCount), LoggerTypes.Success));
 
                         return new MethodResult
                         {
-                            Message = "Failed to catch lured pokemon"
+                            Message = "Pokemon caught",
+                            Success = true
                         };
                     }
-                } while (catchPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchMissed || catchPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchEscape);
+                    else if (catchPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchFlee)
+                    {
+                        LogCaller(new LoggerEventArgs(String.Format("Pokemon fled. {0}. Attempt #{1}", pokemon, attemptCount), LoggerTypes.PokemonFlee));
+                    }
+                    else if (catchPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchEscape)
+                    {
+                        LogCaller(new LoggerEventArgs(String.Format("Escaped ball. {0}. Attempt #{1}.", pokemon, attemptCount), LoggerTypes.PokemonEscape));
+                    }
+                    else
+                    {
+                        LogCaller(new LoggerEventArgs(String.Format("Unknown Error. {0}. Attempt #{1}. Status: {2}", pokemon, attemptCount, catchPokemonResponse.Status), LoggerTypes.Warning));
+                    }
 
+                    ++attemptCount;
+
+                    await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+                } while (catchPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchMissed || catchPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchEscape);
             }
             catch (Exception ex)
             {
@@ -284,59 +271,47 @@ namespace PokemonGoGUI.GoManager
 
         private async Task<MethodResult<EncounterResponse>> EncounterPokemon(MapPokemon mapPokemon)
         {
-            try
+            var response = await ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
-                var response = await ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
+                RequestType = RequestType.Encounter,
+                RequestMessage = new EncounterMessage
                 {
-                    RequestType = RequestType.Encounter,
-                    RequestMessage = new EncounterMessage
-                    {
-                        EncounterId = mapPokemon.EncounterId,
-                        PlayerLatitude = ClientSession.Player.Latitude,
-                        PlayerLongitude = ClientSession.Player.Longitude,
-                        SpawnPointId = mapPokemon.SpawnPointId
-                    }.ToByteString()
-                });
+                    EncounterId = mapPokemon.EncounterId,
+                    PlayerLatitude = ClientSession.Player.Latitude,
+                    PlayerLongitude = ClientSession.Player.Longitude,
+                    SpawnPointId = mapPokemon.SpawnPointId
+                }.ToByteString()
+            });
 
-                EncounterResponse eResponse = null;
+            EncounterResponse eResponse = null;
 
-                eResponse = EncounterResponse.Parser.ParseFrom(response);
+            eResponse = EncounterResponse.Parser.ParseFrom(response);
 
-                if (eResponse.Status == EncounterResponse.Types.Status.PokemonInventoryFull)
-                {
-                    LogCaller(new LoggerEventArgs("Encounter failed. Pokemon inventory full", LoggerTypes.Warning));
-
-                    return new MethodResult<EncounterResponse>
-                    {
-                        Message = "Encounter failed. Pokemon inventory full"
-                    };
-                }
-                else if (eResponse.Status != EncounterResponse.Types.Status.EncounterSuccess)
-                {
-                    LogCaller(new LoggerEventArgs(String.Format("Encounter failed with response {0}", eResponse.Status), LoggerTypes.Warning));
-
-                    return new MethodResult<EncounterResponse>
-                    {
-                        Message = "Encounter failed"
-                    };
-                }
+            if (eResponse.Status == EncounterResponse.Types.Status.PokemonInventoryFull)
+            {
+                LogCaller(new LoggerEventArgs("Encounter failed. Pokemon inventory full", LoggerTypes.Warning));
 
                 return new MethodResult<EncounterResponse>
                 {
-                    Data = eResponse,
-                    Success = true,
-                    Message = "Success"
+                    Message = "Encounter failed. Pokemon inventory full"
                 };
             }
-            catch (Exception ex)
+            else if (eResponse.Status != EncounterResponse.Types.Status.EncounterSuccess)
             {
-                LogCaller(new LoggerEventArgs("Failed to encounter pokemon due to error", LoggerTypes.Exception, ex));
+                LogCaller(new LoggerEventArgs(String.Format("Encounter failed with response {0}", eResponse.Status), LoggerTypes.Warning));
 
                 return new MethodResult<EncounterResponse>
                 {
-                    Message = "Failed to encounter pokemon"
+                    Message = "Encounter failed"
                 };
             }
+
+            return new MethodResult<EncounterResponse>
+            {
+                Data = eResponse,
+                Success = true,
+                Message = "Success"
+            };
         }
 
         //Catch encountered pokemon
@@ -387,25 +362,23 @@ namespace PokemonGoGUI.GoManager
                         hitInsideReticule = HitInsideReticle();
                     }
 
-                    try
+                    var catchresponse = await ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                     {
-                        var catchresponse = await ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
+                        RequestType = RequestType.CatchPokemon,
+                        RequestMessage = new CatchPokemonMessage
                         {
-                            RequestType = RequestType.CatchPokemon,
-                            RequestMessage = new CatchPokemonMessage
-                            {
-                                EncounterId = mapPokemon.EncounterId,
-                                HitPokemon = hitInsideReticule,
-                                NormalizedHitPosition = 1,
-                                NormalizedReticleSize = reticuleSize,
-                                Pokeball = pokeBall,
-                                SpawnPointId = mapPokemon.SpawnPointId,
-                                SpinModifier = 1
-                            }.ToByteString()
-                        });
+                            EncounterId = mapPokemon.EncounterId,
+                            HitPokemon = hitInsideReticule,
+                            NormalizedHitPosition = 1,
+                            NormalizedReticleSize = reticuleSize,
+                            Pokeball = pokeBall,
+                            SpawnPointId = mapPokemon.SpawnPointId,
+                            SpinModifier = 1
+                        }.ToByteString()
+                    });
 
-                        catchPokemonResponse = CatchPokemonResponse.Parser.ParseFrom(catchresponse);
- 
+                    catchPokemonResponse = CatchPokemonResponse.Parser.ParseFrom(catchresponse);
+
                     string pokemon = String.Format("Name: {0}, CP: {1}, IV: {2:0.00}%", mapPokemon.PokemonId, eResponse.WildPokemon.PokemonData.Cp, CalculateIVPerfection(eResponse.WildPokemon.PokemonData).Data);
                     string pokeBallName = pokeBall.ToString().Replace("Item", "");
 
@@ -466,17 +439,6 @@ namespace PokemonGoGUI.GoManager
                     ++attemptCount;
 
                     await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
-                    }
-                    catch (Exception ex)
-                    {
-                        LogCaller(new LoggerEventArgs("Failed to catch pokemon due to error", LoggerTypes.Exception, ex));
-
-                        return new MethodResult
-                        {
-                            Message = "Failed to catch pokemon",
-                            Success = true
-                        };
-                    }
                 } while (catchPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchMissed || catchPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchEscape);
             }
             catch (Exception ex)
@@ -493,7 +455,6 @@ namespace PokemonGoGUI.GoManager
             return new MethodResult
             {
                 Message = "Failed to catch pokemon",
-                Success = true
             };
         }
 

@@ -21,8 +21,7 @@ namespace PokemonGoGUI.GoManager
     {
         public async Task<MethodResult> TransferPokemon(IEnumerable<PokemonData> pokemonToTransfer)
         {
-            await Task.Run(async () =>
-            {
+            //return new MethodResult();
                 foreach (PokemonData pokemon in pokemonToTransfer)
                 {
                     if (pokemon.Favorite == 1
@@ -74,7 +73,6 @@ namespace PokemonGoGUI.GoManager
                 {
                     Success = true
                 };
-            });
 
             return new MethodResult
             {
