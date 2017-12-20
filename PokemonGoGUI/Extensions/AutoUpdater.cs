@@ -1,7 +1,6 @@
 ﻿#region using directives
 
 using Newtonsoft.Json.Linq;
-using POGOLib.Official.Net;
 using PokemonGoGUI.UI;
 using System;
 using System.Diagnostics;
@@ -11,13 +10,12 @@ using System.Media;
 using System.Net.Http;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
 #endregion
 
-namespace PokemonGoGUI.GoManager
+namespace PokemonGoGUI.Extensions
 {
     public class VersionCheckState
     {

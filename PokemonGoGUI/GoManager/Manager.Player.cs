@@ -22,17 +22,17 @@ namespace PokemonGoGUI.GoManager
         public async Task<MethodResult> UpdateDetails()
         {
             LogCaller(new LoggerEventArgs("Updating details", LoggerTypes.Debug));
-
+            
             MethodResult echoResult = await CheckReauthentication();
 
             if (!echoResult.Success)
             {
-                _client.Logout();
+                Logout();
             }
-
-            if (!_client.LoggedIn)
+            
+            if (!LoggedIn)
             {
-                MethodResult loginResult = await Login();
+                MethodResult loginResult = await Login_();
 
                 if (!loginResult.Success)
                 {
@@ -92,9 +92,9 @@ namespace PokemonGoGUI.GoManager
 
         public async Task<MethodResult> GetPlayer()
         {
-            if (!_client.LoggedIn)
+            if (!LoggedIn)
             {
-                MethodResult result = await Login();
+                MethodResult result = await Login_();
 
                 if (!result.Success)
                 {
@@ -102,7 +102,7 @@ namespace PokemonGoGUI.GoManager
                 }
             }
 
-            PlayerData = _client.ClientSession.Player.Data;
+            PlayerData = ClientSession.Player.Data;
 
             return new MethodResult
             {
@@ -129,8 +129,8 @@ namespace PokemonGoGUI.GoManager
             if (Stats != null && PlayerData != null)
             {
                 builder.AppendLine(String.Format("Group: {0}", UserSettings.GroupName));
-                builder.AppendLine(String.Format("Username: {0}", UserSettings.PtcUsername));
-                builder.AppendLine(String.Format("Password: {0}", UserSettings.PtcPassword));
+                builder.AppendLine(String.Format("Username: {0}", UserSettings.Username));
+                builder.AppendLine(String.Format("Password: {0}", UserSettings.Password));
                 builder.AppendLine(String.Format("Level: {0}", Stats.Level));
                 builder.AppendLine(String.Format("Current Trainer Name: {0}", PlayerData.Username));
                 builder.AppendLine(String.Format("Team: {0}", PlayerData.Team));
@@ -186,7 +186,7 @@ namespace PokemonGoGUI.GoManager
                     Directory.CreateDirectory(directoryName);
                 }
 
-                string fileName = UserSettings.PtcUsername.Split('@').First();
+                string fileName = UserSettings.Username.Split('@').First();
 
                 string filePath = Path.Combine(directoryName, fileName) + ".txt";
 
@@ -217,9 +217,9 @@ namespace PokemonGoGUI.GoManager
 
             try
             {
-                if (!_client.LoggedIn)
+                if (!LoggedIn)
                 {
-                    MethodResult result = await Login();
+                    MethodResult result = await Login_();
 
                     if (!result.Success)
                     {
@@ -227,7 +227,7 @@ namespace PokemonGoGUI.GoManager
                     }
                 }
 
-                var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
+                var response = await ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                 {
                     RequestType = RequestType.LevelUpRewards,
                     RequestMessage = new LevelUpRewardsMessage
@@ -238,24 +238,14 @@ namespace PokemonGoGUI.GoManager
 
                 LevelUpRewardsResponse levelUpRewardsResponse = null;
 
-                try
-                {
-                    levelUpRewardsResponse = LevelUpRewardsResponse.Parser.ParseFrom(response);
-                    string rewards = StringUtil.GetSummedFriendlyNameOfItemAwardList(levelUpRewardsResponse.ItemsAwarded);
-                    LogCaller(new LoggerEventArgs(String.Format("Grabbed rewards for level {0}. Rewards: {1}", level, rewards), LoggerTypes.Info));
+                levelUpRewardsResponse = LevelUpRewardsResponse.Parser.ParseFrom(response);
+                string rewards = StringUtil.GetSummedFriendlyNameOfItemAwardList(levelUpRewardsResponse.ItemsAwarded);
+                LogCaller(new LoggerEventArgs(String.Format("Grabbed rewards for level {0}. Rewards: {1}", level, rewards), LoggerTypes.Info));
 
-                    return new MethodResult
-                    {
-                        Success = true
-                    };
-                }
-                catch (Exception ex)
+                return new MethodResult
                 {
-                    if (response.IsEmpty)
-                        LogCaller(new LoggerEventArgs("Failed to get level up rewards", LoggerTypes.Exception, ex));
-
-                    return new MethodResult();
-                }
+                    Success = true
+                };
             }
             catch (Exception ex)
             {
@@ -264,46 +254,31 @@ namespace PokemonGoGUI.GoManager
             }
         }
 
-        public async Task<MethodResult<bool>> GetGameSettings(Version minVersion)
-        {
-            await Task.Delay(0); //remove warn
-            LogCaller(new LoggerEventArgs("Game settings loaded", LoggerTypes.Success));
-
-            bool result = false;
-            Version remote = new Version(_client.ClientSession.GlobalSettings.MinimumClientVersion);
-
-            if (minVersion >= remote)
-                result = true;
-
-            return new MethodResult<bool>
-            {
-                Data = result,
-                Success = true,
-            };
-        }
-
         public async Task<MethodResult<GetBuddyWalkedResponse>> GetBuddyWalked()
         {
-            var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
-            {
-                RequestType = RequestType.GetBuddyWalked,
-                RequestMessage = new GetBuddyWalkedMessage
-                {
-
-                }.ToByteString()
-            });
-
             GetBuddyWalkedResponse getBuddyWalkedResponse = null;
+
             try
             {
+                var response = await ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
+                {
+                    RequestType = RequestType.GetBuddyWalked,
+                    RequestMessage = new GetBuddyWalkedMessage
+                    {
+
+                    }.ToByteString()
+                });
+
                 getBuddyWalkedResponse = GetBuddyWalkedResponse.Parser.ParseFrom(response);
             }
             catch (Exception ex)
             {
-                if (response.IsEmpty)
-                    throw new Exception("GetBuddyWalked parsing failed because response was empty", ex);
+                LogCaller(new LoggerEventArgs("GetBuddyWalkedResponse is empty", LoggerTypes.Exception, ex));
 
-                return new MethodResult<GetBuddyWalkedResponse>();
+                return new MethodResult<GetBuddyWalkedResponse>
+                {
+                    Data = getBuddyWalkedResponse
+                };
             }
 
             return new MethodResult<GetBuddyWalkedResponse>
