@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using POGOLib.Official.Net;
 using POGOProtos.Data.Player;
+using POGOProtos.Enums;
 using POGOProtos.Map.Fort;
 using POGOProtos.Networking.Responses;
 using PokemonGoGUI.AccountScheduler;
@@ -666,8 +667,49 @@ namespace PokemonGoGUI.GoManager
                         await Task.Delay(failedWaitTime);
 
                         continue;
-                    }                   
-                    
+                    }
+
+                    //Auto complete tutorials
+                    if (!PlayerData.TutorialState.Contains(TutorialState.AvatarSelection))
+                    {
+                        result = await MarkStartUpTutorialsComplete(true);
+
+                        if (!result.Success)
+                        {
+                            LogCaller(new LoggerEventArgs("Failed. Marking startup tutorials completed..", LoggerTypes.Warning));
+
+                            Stop();
+
+                            await Task.Delay(failedWaitTime);
+
+                            continue;
+                        }
+
+                        LogCaller(new LoggerEventArgs("Marking startup tutorials completed.", LoggerTypes.Success));
+
+                        await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
+                    }
+
+                    if (!PlayerData.TutorialState.Contains(TutorialState.PokestopTutorial))
+                    {
+                        result = await MarkTutorialsComplete(new List<TutorialState> { TutorialState.PokestopTutorial, TutorialState.PokemonBerry, TutorialState.UseItem });
+
+                        if (!result.Success)
+                        {
+                            LogCaller(new LoggerEventArgs("Failed. Marking pokestop, pokemonberry, useitem, pokemoncapture tutorials completed..", LoggerTypes.Warning));
+
+                            Stop();
+
+                            await Task.Delay(failedWaitTime);
+
+                            continue;
+                        }
+
+                        LogCaller(new LoggerEventArgs("Marking pokestop, pokemonberry, useitem, pokemoncapture tutorials completed.", LoggerTypes.Success));
+
+                        await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
+                    }
+
                     if (UserSettings.ClaimLevelUpRewards)
                     {
                         LogCaller(new LoggerEventArgs("Getting level up rewards ...", LoggerTypes.Debug));
