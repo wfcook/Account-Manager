@@ -122,8 +122,10 @@ namespace PokemonGoGUI.GoManager
                     {
                         EncounterId = fortData.LureInfo.EncounterId,
                         FortId = fortData.Id,
+                        GymLatDegrees = fortData.Latitude,
+                        GymLngDegrees = fortData.Longitude,
                         PlayerLatitude = ClientSession.Player.Latitude,
-                        PlayerLongitude = ClientSession.Player.Longitude
+                        PlayerLongitude = ClientSession.Player.Longitude                        
                     }.ToByteString()
                 });
 

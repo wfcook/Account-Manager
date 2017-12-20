@@ -18,6 +18,7 @@ using POGOProtos.Settings;
 using System.Diagnostics;
 using POGOProtos.Networking.Requests.Messages;
 using POGOProtos.Networking.Responses;
+using POGOLib.Official.Extensions;
 
 namespace POGOLib.Official.Net
 {
@@ -57,10 +58,16 @@ namespace POGOLib.Official.Net
             State = SessionState.Stopped;
             Device = deviceWrapper ?? DeviceInfoUtil.GetRandomDevice();
 
-            HttpClient = new HttpClient(new HttpClientHandler
+            HttpClientHandler handler = new HttpClientHandler
             {
                 AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
-            });
+            };
+            if (!string.IsNullOrEmpty(Device.ProxyAddress)) {
+                handler.Proxy = new WebProxy(Device.ProxyAddress, true);
+            }
+            HttpClient = new HttpClient(handler);
+            
+            
             HttpClient.DefaultRequestHeaders.UserAgent.TryParseAdd(Constants.ApiUserAgent);
             HttpClient.DefaultRequestHeaders.ExpectContinue = false;
 
