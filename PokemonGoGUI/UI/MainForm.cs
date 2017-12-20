@@ -156,6 +156,29 @@ namespace PokemonGoGUI
             SaveSettings();
         }
 
+        private void MainForm_Resize(object sender, EventArgs e)
+        {
+            Trayicon.Visible = false;
+            Trayicon.Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
+            if (FormWindowState.Minimized == this.WindowState)
+            {
+                Trayicon.BalloonTipIcon = ToolTipIcon.Info; //Shows the info icon so the user doesn't thing there is an error.
+                Trayicon.BalloonTipTitle = $"Account Manager is minimized";
+                Trayicon.BalloonTipText = "Click on this icon to restore";
+                Trayicon.Text = $"Account Manager, Click here to restore";
+                Trayicon.Visible = true;
+                Trayicon.ShowBalloonTip(5000);
+                Hide();
+            }
+        }
+
+        private void TrayIcon_MouseClick(object sender, MouseEventArgs e)
+        {
+            this.Show();
+            this.WindowState = FormWindowState.Normal;
+            this.Refresh();
+        }
+
         private async Task<bool> LoadSettings()
         {
             var gzipFile = _saveFile + ".json.gz";
