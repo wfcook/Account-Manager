@@ -845,7 +845,9 @@ namespace PokemonGoGUI.GoManager
                         {
                             MethodResult<GymGetInfoResponse> _result = await GymGetInfo(pokestop);
                             if (_result.Success && _result.Data.Result == GymGetInfoResponse.Types.Result.Success)
+                            {
                                 fort = "gym";
+                            }
                             else
                                 continue;
                         }

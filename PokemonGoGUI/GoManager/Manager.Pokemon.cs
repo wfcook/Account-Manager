@@ -21,8 +21,6 @@ namespace PokemonGoGUI.GoManager
     {
         public async Task<MethodResult> TransferPokemon(IEnumerable<PokemonData> pokemonToTransfer)
         {
-            List<ulong> pokemons = new List<ulong>();
-
             foreach (PokemonData pokemon in pokemonToTransfer)
             {
                 if (pokemon.Favorite == 1
@@ -32,22 +30,9 @@ namespace PokemonGoGUI.GoManager
                 {
                     continue;
                 }
-                pokemons.Add(pokemon.Id);
-            }
 
-            ReleasePokemonMessage message = new ReleasePokemonMessage();
+                ReleasePokemonMessage message = new ReleasePokemonMessage { PokemonId = pokemon.Id };
 
-            if (pokemons.Count > 1)
-            {
-                message.PokemonIds.AddRange(pokemons);
-            }
-            else
-            {
-                message.PokemonId = pokemons.FirstOrDefault();
-            }
-
-            try
-            {
                 var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                 {
                     RequestType = RequestType.ReleasePokemon,
@@ -59,28 +44,14 @@ namespace PokemonGoGUI.GoManager
                 try
                 {
                     releasePokemonResponse = ReleasePokemonResponse.Parser.ParseFrom(response);
-                    if (pokemons.Count > 1)
-                    {
-                        LogCaller(new LoggerEventArgs(
-                            String.Format("Successully transferred {0} pokemons.", pokemons.Count), LoggerTypes.Transfer));
-                    }
-                    else
-                    {
-                        LogCaller(new LoggerEventArgs(
-                            String.Format("Successully transferred {0}. Cp: {1}. IV: {2:0.00}%",
-                                        pokemonToTransfer.FirstOrDefault().PokemonId,
-                                        pokemonToTransfer.FirstOrDefault().Cp,
-                                        CalculateIVPerfection(pokemonToTransfer.FirstOrDefault()).Data),
-                                        LoggerTypes.Transfer));
-
-                    }
+                    LogCaller(new LoggerEventArgs(
+                         String.Format("Successully transferred {0}. Cp: {1}. IV: {2:0.00}%",
+                                     pokemon.PokemonId,
+                                     pokemon.Cp,
+                                     CalculateIVPerfection(pokemon).Data),
+                                     LoggerTypes.Transfer));
 
                     await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
-
-                    return new MethodResult
-                    {
-                        Success = true
-                    };
                 }
                 catch (Exception ex)
                 {
@@ -90,11 +61,11 @@ namespace PokemonGoGUI.GoManager
                     return new MethodResult();
                 }
             }
-            catch (Exception ex)
+
+            return new MethodResult
             {
-                LogCaller(new LoggerEventArgs("Transfer request failed", LoggerTypes.Exception, ex));
-                return new MethodResult();
-            }
+                Success = true
+            };
         }
 
         private async Task<MethodResult> TransferFilteredPokemon()
