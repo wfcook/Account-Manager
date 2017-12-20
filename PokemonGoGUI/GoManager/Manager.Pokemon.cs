@@ -21,77 +21,63 @@ namespace PokemonGoGUI.GoManager
     {
         public async Task<MethodResult> TransferPokemon(IEnumerable<PokemonData> pokemonToTransfer)
         {
-            List<ulong> pokemons = new List<ulong>();
-
-            foreach (PokemonData pokemon in pokemonToTransfer)
-            {
-                if (pokemon.Favorite == 1)
+            //return new MethodResult();
+                foreach (PokemonData pokemon in pokemonToTransfer)
                 {
-                    continue;
-                }
-                pokemons.Add(pokemon.Id);
-            }
-
-            ReleasePokemonMessage message = new ReleasePokemonMessage();
-
-            if (pokemons.Count > 1)
-            {
-                message.PokemonIds.AddRange(pokemons);
-            }
-            else
-            {
-                message.PokemonId = pokemons.FirstOrDefault();
-            }
-
-            try
-            {
-                var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
-                {
-                    RequestType = RequestType.ReleasePokemon,
-                    RequestMessage = message.ToByteString()
-                });
-
-                ReleasePokemonResponse releasePokemonResponse = null;
-
-                try
-                {
-                    releasePokemonResponse = ReleasePokemonResponse.Parser.ParseFrom(response);
-                    if (pokemons.Count > 1)
+                    if (pokemon.Favorite == 1
+                        || pokemon.IsEgg
+                        || !string.IsNullOrEmpty(pokemon.DeployedFortId)
+                        || PlayerData.BuddyPokemon.Id == pokemon.Id)
                     {
-                        LogCaller(new LoggerEventArgs(
-                            String.Format("Successully transferred {0} pokemons.", pokemons.Count), LoggerTypes.Transfer));
-                    }
-                    else
-                    {
-                        LogCaller(new LoggerEventArgs(
-                            String.Format("Successully transferred {0}. Cp: {1}. IV: {2:0.00}%",
-                                        pokemonToTransfer.FirstOrDefault().PokemonId,
-                                        pokemonToTransfer.FirstOrDefault().Cp,
-                                        CalculateIVPerfection(pokemonToTransfer.FirstOrDefault()).Data),
-                                        LoggerTypes.Transfer));
-
+                        continue;
                     }
 
-                    await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
-
-                    return new MethodResult
+                    ReleasePokemonMessage message = new ReleasePokemonMessage { PokemonId = pokemon.Id };
+                    try
                     {
-                        Success = true
-                    };
-                }
-                catch (Exception ex)
-                {
-                    if (response.IsEmpty)
+                        var response = await ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
+                        {
+                            RequestType = RequestType.ReleasePokemon,
+                            RequestMessage = message.ToByteString()
+                        });
+
+                        ReleasePokemonResponse releasePokemonResponse = null;
+
+                        releasePokemonResponse = ReleasePokemonResponse.Parser.ParseFrom(response);
+                        if (releasePokemonResponse.Result == ReleasePokemonResponse.Types.Result.Success)
+                        {
+                            LogCaller(new LoggerEventArgs(
+                                 String.Format("Successully transferred {0}. Cp: {1}. IV: {2:0.00}%",
+                                             pokemon.PokemonId,
+                                             pokemon.Cp,
+                                             CalculateIVPerfection(pokemon).Data),
+                                             LoggerTypes.Transfer));
+
+                            await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+                        }
+                        else
+                        {
+                            LogCaller(new LoggerEventArgs(String.Format("Faill to transfer {0}. Because: {1}.",
+                                             pokemon.PokemonId,
+                                             releasePokemonResponse.Result), LoggerTypes.Warning));
+                        }
+                    }
+                    catch (Exception ex)
+                    {
                         LogCaller(new LoggerEventArgs("ReleasePokemonResponse parsing failed because response was empty", LoggerTypes.Exception, ex));
 
-                    return new MethodResult();
+                        return new MethodResult();
+                    }
                 }
-            }
-            catch (Exception ex)
+                return new MethodResult
+                {
+                    Success = true
+                };
+
+            return new MethodResult
             {
-                LogCaller(new LoggerEventArgs("Transfer request failed", LoggerTypes.Exception, ex));
-                return new MethodResult();
-            }
+                Success = true
+            };
         }
 
         private async Task<MethodResult> TransferFilteredPokemon()
@@ -192,6 +178,7 @@ namespace PokemonGoGUI.GoManager
                         pokemonToTransfer = pokemonToTransfer.DistinctBy(x => x.Id).ToList();
                         break;
                     case TransferType.Slashed:
+                        pokemonToTransfer.AddRange(group.ToList());
                         pokemonToTransfer = pokemonToTransfer.DistinctBy(x => x.IsBad).ToList();
                         break;
                 }
@@ -357,20 +344,20 @@ namespace PokemonGoGUI.GoManager
                 bool isFavorited = true;
                 string message = "unfavorited";
 
-                if(pokemon.Favorite == 0)
+                if (pokemon.Favorite == 0)
                 {
                     isFavorited = false;
                     message = "favorited";
                 }
 
-                if(isFavorited == favorite)
+                if (isFavorited == favorite)
                 {
                     continue;
                 }
 
                 try
                 {
-                    var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
+                    var response = await ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                     {
                         RequestType = RequestType.SetFavoritePokemon,
                         RequestMessage = new SetFavoritePokemonMessage
@@ -382,30 +369,20 @@ namespace PokemonGoGUI.GoManager
 
                     SetFavoritePokemonResponse setFavoritePokemonResponse = null;
 
-                    try
+                    setFavoritePokemonResponse = SetFavoritePokemonResponse.Parser.ParseFrom(response);
+                    LogCaller(new LoggerEventArgs(
+                        String.Format("Successully {3} {0}. Cp: {1}. IV: {2:0.00}%",
+                                    pokemon.PokemonId,
+                                    pokemon.Cp,
+                                    CalculateIVPerfection(pokemon).Data, message),
+                                    LoggerTypes.Info));
+
+                    await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+
+                    return new MethodResult
                     {
-                        setFavoritePokemonResponse = SetFavoritePokemonResponse.Parser.ParseFrom(response);
-                        LogCaller(new LoggerEventArgs(
-                            String.Format("Successully {3} {0}. Cp: {1}. IV: {2:0.00}%",
-                                        pokemon.PokemonId,
-                                        pokemon.Cp,
-                                        CalculateIVPerfection(pokemon).Data, message),
-                                        LoggerTypes.Info));
-
-                        await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
-
-                        return new MethodResult
-                        {
-                            Success = true
-                        };
-                    }
-                    catch (Exception ex)
-                    {
-                        if (response.IsEmpty)
-                            LogCaller(new LoggerEventArgs("SetFavoritePokemonResponse parsing failed because response was empty", LoggerTypes.Exception, ex));
-
-                        return new MethodResult();
-                    }
+                        Success = true
+                    };
                 }
                 catch (Exception ex)
                 {

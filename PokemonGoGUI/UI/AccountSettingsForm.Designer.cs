@@ -125,17 +125,13 @@
             this.label19 = new System.Windows.Forms.Label();
             this.label18 = new System.Windows.Forms.Label();
             this.tabPageHumanization = new System.Windows.Forms.TabPage();
-            this.numericUpDownDelayBetweenSnipes = new System.Windows.Forms.NumericUpDown();
             this.numericUpDownLocationUpdateDelay = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDownDelayBetweenSnipeRandom = new System.Windows.Forms.NumericUpDown();
             this.numericUpDownLocationUpdateRandom = new System.Windows.Forms.NumericUpDown();
             this.numericUpDownGeneralDelayRandom = new System.Windows.Forms.NumericUpDown();
             this.numericUpDownPlayerActionRandomiz = new System.Windows.Forms.NumericUpDown();
             this.numericUpDownGeneralDelay = new System.Windows.Forms.NumericUpDown();
             this.numericUpDownPlayerActionDelay = new System.Windows.Forms.NumericUpDown();
-            this.label37 = new System.Windows.Forms.Label();
             this.numericUpDownInsideReticuleChance = new System.Windows.Forms.NumericUpDown();
-            this.label38 = new System.Windows.Forms.Label();
             this.label34 = new System.Windows.Forms.Label();
             this.label36 = new System.Windows.Forms.Label();
             this.label40 = new System.Windows.Forms.Label();
@@ -185,10 +181,6 @@
             this.trueToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.falseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toggleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.setSnipeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.trueToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
-            this.falseToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toggleToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.restoreDefaultsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabPageTransfer = new System.Windows.Forms.TabPage();
             this.fastObjectListViewTransfer = new BrightIdeasSoftware.FastObjectListView();
@@ -205,6 +197,7 @@
             this.toolTipProxy = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipMinAccountState = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipHumanizeThrows = new System.Windows.Forms.ToolTip(this.components);
+            this.cbAutoUpdate = new System.Windows.Forms.CheckBox();
             this.tabControlMain.SuspendLayout();
             this.tabPageDetails.SuspendLayout();
             this.tabControlSettings.SuspendLayout();
@@ -219,9 +212,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownWalkingOffset)).BeginInit();
             this.tabPageDevice.SuspendLayout();
             this.tabPageHumanization.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDelayBetweenSnipes)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownLocationUpdateDelay)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDelayBetweenSnipeRandom)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownLocationUpdateRandom)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownGeneralDelayRandom)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownPlayerActionRandomiz)).BeginInit();
@@ -292,6 +283,7 @@
             // 
             // tabPageSettingsGeneral
             // 
+            this.tabPageSettingsGeneral.Controls.Add(this.cbAutoUpdate);
             this.tabPageSettingsGeneral.Controls.Add(this.checkBoxEnabeRaids);
             this.tabPageSettingsGeneral.Controls.Add(this.checkBoxSendBerries);
             this.tabPageSettingsGeneral.Controls.Add(this.checkBoxDeployToGym);
@@ -418,9 +410,9 @@
             // comboBoxMinAccountState
             // 
             this.comboBoxMinAccountState.FormattingEnabled = true;
-            this.comboBoxMinAccountState.Location = new System.Drawing.Point(188, 386);
+            this.comboBoxMinAccountState.Location = new System.Drawing.Point(148, 390);
             this.comboBoxMinAccountState.Name = "comboBoxMinAccountState";
-            this.comboBoxMinAccountState.Size = new System.Drawing.Size(232, 24);
+            this.comboBoxMinAccountState.Size = new System.Drawing.Size(222, 24);
             this.comboBoxMinAccountState.TabIndex = 11;
             this.toolTipMinAccountState.SetToolTip(this.comboBoxMinAccountState, "This setting will auto stop the bot when the specific state is reached");
             // 
@@ -1267,17 +1259,13 @@
             // 
             // tabPageHumanization
             // 
-            this.tabPageHumanization.Controls.Add(this.numericUpDownDelayBetweenSnipes);
             this.tabPageHumanization.Controls.Add(this.numericUpDownLocationUpdateDelay);
-            this.tabPageHumanization.Controls.Add(this.numericUpDownDelayBetweenSnipeRandom);
             this.tabPageHumanization.Controls.Add(this.numericUpDownLocationUpdateRandom);
             this.tabPageHumanization.Controls.Add(this.numericUpDownGeneralDelayRandom);
             this.tabPageHumanization.Controls.Add(this.numericUpDownPlayerActionRandomiz);
             this.tabPageHumanization.Controls.Add(this.numericUpDownGeneralDelay);
             this.tabPageHumanization.Controls.Add(this.numericUpDownPlayerActionDelay);
-            this.tabPageHumanization.Controls.Add(this.label37);
             this.tabPageHumanization.Controls.Add(this.numericUpDownInsideReticuleChance);
-            this.tabPageHumanization.Controls.Add(this.label38);
             this.tabPageHumanization.Controls.Add(this.label34);
             this.tabPageHumanization.Controls.Add(this.label36);
             this.tabPageHumanization.Controls.Add(this.label40);
@@ -1292,28 +1280,6 @@
             this.tabPageHumanization.TabIndex = 3;
             this.tabPageHumanization.Text = "Humanization";
             this.tabPageHumanization.UseVisualStyleBackColor = true;
-            // 
-            // numericUpDownDelayBetweenSnipes
-            // 
-            this.numericUpDownDelayBetweenSnipes.Location = new System.Drawing.Point(197, 164);
-            this.numericUpDownDelayBetweenSnipes.Maximum = new decimal(new int[] {
-            1000000,
-            0,
-            0,
-            0});
-            this.numericUpDownDelayBetweenSnipes.Minimum = new decimal(new int[] {
-            200,
-            0,
-            0,
-            0});
-            this.numericUpDownDelayBetweenSnipes.Name = "numericUpDownDelayBetweenSnipes";
-            this.numericUpDownDelayBetweenSnipes.Size = new System.Drawing.Size(97, 22);
-            this.numericUpDownDelayBetweenSnipes.TabIndex = 8;
-            this.numericUpDownDelayBetweenSnipes.Value = new decimal(new int[] {
-            200,
-            0,
-            0,
-            0});
             // 
             // numericUpDownLocationUpdateDelay
             // 
@@ -1332,23 +1298,6 @@
             this.numericUpDownLocationUpdateDelay.Size = new System.Drawing.Size(97, 22);
             this.numericUpDownLocationUpdateDelay.TabIndex = 6;
             this.numericUpDownLocationUpdateDelay.Value = new decimal(new int[] {
-            200,
-            0,
-            0,
-            0});
-            // 
-            // numericUpDownDelayBetweenSnipeRandom
-            // 
-            this.numericUpDownDelayBetweenSnipeRandom.Location = new System.Drawing.Point(329, 164);
-            this.numericUpDownDelayBetweenSnipeRandom.Maximum = new decimal(new int[] {
-            1000000,
-            0,
-            0,
-            0});
-            this.numericUpDownDelayBetweenSnipeRandom.Name = "numericUpDownDelayBetweenSnipeRandom";
-            this.numericUpDownDelayBetweenSnipeRandom.Size = new System.Drawing.Size(97, 22);
-            this.numericUpDownDelayBetweenSnipeRandom.TabIndex = 9;
-            this.numericUpDownDelayBetweenSnipeRandom.Value = new decimal(new int[] {
             200,
             0,
             0,
@@ -1449,30 +1398,12 @@
             0,
             0});
             // 
-            // label37
-            // 
-            this.label37.AutoSize = true;
-            this.label37.Location = new System.Drawing.Point(15, 166);
-            this.label37.Name = "label37";
-            this.label37.Size = new System.Drawing.Size(185, 17);
-            this.label37.TabIndex = 0;
-            this.label37.Text = "Delay Between Snipes (ms):";
-            // 
             // numericUpDownInsideReticuleChance
             // 
             this.numericUpDownInsideReticuleChance.Location = new System.Drawing.Point(215, 50);
             this.numericUpDownInsideReticuleChance.Name = "numericUpDownInsideReticuleChance";
             this.numericUpDownInsideReticuleChance.Size = new System.Drawing.Size(79, 22);
             this.numericUpDownInsideReticuleChance.TabIndex = 1;
-            // 
-            // label38
-            // 
-            this.label38.AutoSize = true;
-            this.label38.Location = new System.Drawing.Point(300, 166);
-            this.label38.Name = "label38";
-            this.label38.Size = new System.Drawing.Size(25, 17);
-            this.label38.TabIndex = 0;
-            this.label38.Text = "+/-";
             // 
             // label34
             // 
@@ -1917,10 +1848,9 @@
             this.contextMenuStripCatching.ImageScalingSize = new System.Drawing.Size(22, 22);
             this.contextMenuStripCatching.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.setCatchToolStripMenuItem,
-            this.setSnipeToolStripMenuItem,
             this.restoreDefaultsToolStripMenuItem});
             this.contextMenuStripCatching.Name = "contextMenuStripCatching";
-            this.contextMenuStripCatching.Size = new System.Drawing.Size(188, 76);
+            this.contextMenuStripCatching.Size = new System.Drawing.Size(188, 52);
             // 
             // setCatchToolStripMenuItem
             // 
@@ -1955,40 +1885,6 @@
             this.toggleToolStripMenuItem.Tag = "2";
             this.toggleToolStripMenuItem.Text = "Toggle";
             this.toggleToolStripMenuItem.Click += new System.EventHandler(this.TrueToolStripMenuItem_Click);
-            // 
-            // setSnipeToolStripMenuItem
-            // 
-            this.setSnipeToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.trueToolStripMenuItem2,
-            this.falseToolStripMenuItem2,
-            this.toggleToolStripMenuItem2});
-            this.setSnipeToolStripMenuItem.Name = "setSnipeToolStripMenuItem";
-            this.setSnipeToolStripMenuItem.Size = new System.Drawing.Size(187, 24);
-            this.setSnipeToolStripMenuItem.Text = "Set Snipe";
-            // 
-            // trueToolStripMenuItem2
-            // 
-            this.trueToolStripMenuItem2.Name = "trueToolStripMenuItem2";
-            this.trueToolStripMenuItem2.Size = new System.Drawing.Size(130, 26);
-            this.trueToolStripMenuItem2.Tag = "1";
-            this.trueToolStripMenuItem2.Text = "True";
-            this.trueToolStripMenuItem2.Click += new System.EventHandler(this.FalseToolStripMenuItem2_Click);
-            // 
-            // falseToolStripMenuItem2
-            // 
-            this.falseToolStripMenuItem2.Name = "falseToolStripMenuItem2";
-            this.falseToolStripMenuItem2.Size = new System.Drawing.Size(130, 26);
-            this.falseToolStripMenuItem2.Tag = "0";
-            this.falseToolStripMenuItem2.Text = "False";
-            this.falseToolStripMenuItem2.Click += new System.EventHandler(this.FalseToolStripMenuItem2_Click);
-            // 
-            // toggleToolStripMenuItem2
-            // 
-            this.toggleToolStripMenuItem2.Name = "toggleToolStripMenuItem2";
-            this.toggleToolStripMenuItem2.Size = new System.Drawing.Size(130, 26);
-            this.toggleToolStripMenuItem2.Tag = "2";
-            this.toggleToolStripMenuItem2.Text = "Toggle";
-            this.toggleToolStripMenuItem2.Click += new System.EventHandler(this.FalseToolStripMenuItem2_Click);
             // 
             // restoreDefaultsToolStripMenuItem
             // 
@@ -2098,6 +1994,16 @@
             this.restoreDefaultsToolStripMenuItem2.Text = "Restore Defaults";
             this.restoreDefaultsToolStripMenuItem2.Click += new System.EventHandler(this.RestoreDefaultsToolStripMenuItem2_Click);
             // 
+            // cbAutoUpdate
+            // 
+            this.cbAutoUpdate.AutoSize = true;
+            this.cbAutoUpdate.Location = new System.Drawing.Point(379, 392);
+            this.cbAutoUpdate.Name = "cbAutoUpdate";
+            this.cbAutoUpdate.Size = new System.Drawing.Size(109, 21);
+            this.cbAutoUpdate.TabIndex = 41;
+            this.cbAutoUpdate.Text = "Auto Update";
+            this.cbAutoUpdate.UseVisualStyleBackColor = true;
+            // 
             // AccountSettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -2128,9 +2034,7 @@
             this.tabPageDevice.PerformLayout();
             this.tabPageHumanization.ResumeLayout(false);
             this.tabPageHumanization.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDelayBetweenSnipes)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownLocationUpdateDelay)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDelayBetweenSnipeRandom)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownLocationUpdateRandom)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownGeneralDelayRandom)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownPlayerActionRandomiz)).EndInit();
@@ -2207,10 +2111,6 @@
         private System.Windows.Forms.Button buttonImportConfig;
         private System.Windows.Forms.ToolTip toolTipProxy;
         private System.Windows.Forms.Label label13;
-        private System.Windows.Forms.ToolStripMenuItem setSnipeToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem trueToolStripMenuItem2;
-        private System.Windows.Forms.ToolStripMenuItem falseToolStripMenuItem2;
-        private System.Windows.Forms.ToolStripMenuItem toggleToolStripMenuItem2;
         private System.Windows.Forms.TabControl tabControlSettings;
         private System.Windows.Forms.TabPage tabPageSettingsGeneral;
         private System.Windows.Forms.CheckBox checkBoxIncubateEggs;
@@ -2290,10 +2190,6 @@
         private System.Windows.Forms.NumericUpDown numericUpDownPlayerActionRandomiz;
         private System.Windows.Forms.Label label36;
         private System.Windows.Forms.Label label35;
-        private System.Windows.Forms.NumericUpDown numericUpDownDelayBetweenSnipes;
-        private System.Windows.Forms.NumericUpDown numericUpDownDelayBetweenSnipeRandom;
-        private System.Windows.Forms.Label label37;
-        private System.Windows.Forms.Label label38;
         private System.Windows.Forms.NumericUpDown numericUpDownGeneralDelayRandom;
         private System.Windows.Forms.NumericUpDown numericUpDownGeneralDelay;
         private System.Windows.Forms.Label label40;
@@ -2333,5 +2229,6 @@
         private System.Windows.Forms.Label label41;
         private System.Windows.Forms.CheckBox checkBoxEnabeRaids;
         private System.Windows.Forms.CheckBox checkBoxSendBerries;
+        private System.Windows.Forms.CheckBox cbAutoUpdate;
     }
 }

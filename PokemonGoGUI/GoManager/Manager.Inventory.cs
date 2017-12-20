@@ -5,7 +5,7 @@ using POGOProtos.Inventory.Item;
 using POGOProtos.Networking.Requests;
 using POGOProtos.Networking.Requests.Messages;
 using POGOProtos.Networking.Responses;
-using PokemonGoGUI.Exceptions;
+using PokemonGoGUI.Extensions;
 using PokemonGoGUI.GoManager.Models;
 using PokemonGoGUI.Models;
 using System;
@@ -21,9 +21,9 @@ namespace PokemonGoGUI.GoManager
         {
             try
             {
-                if (!_client.LoggedIn)
+                if (!LoggedIn)
                 {
-                    MethodResult result = await Login();
+                    MethodResult result = await Login_();
 
                     if (!result.Success)
                     {
@@ -37,7 +37,7 @@ namespace PokemonGoGUI.GoManager
 
                 try
                 {
-                    AllItems = _client.ClientSession.Player.Inventory.InventoryItems.ToList();
+                    AllItems = ClientSession.Player.Inventory.InventoryItems.ToList();
 
                     await UpdatePlayerStats(false);
                     await UpdatePokemon(false);
@@ -226,20 +226,20 @@ namespace PokemonGoGUI.GoManager
 
         public async Task<MethodResult> RecycleItem(InventoryItemSetting itemSetting, int toDelete)
         {
-            var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
-            {
-                RequestType = RequestType.RecycleInventoryItem,
-                RequestMessage = new RecycleInventoryItemMessage
-                {
-                    Count = toDelete,
-                    ItemId = itemSetting.Id
-                }.ToByteString()
-            });
-
-            RecycleInventoryItemResponse recycleInventoryItemResponse = null;
-
             try
             {
+                var response = await ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
+                {
+                    RequestType = RequestType.RecycleInventoryItem,
+                    RequestMessage = new RecycleInventoryItemMessage
+                    {
+                        Count = toDelete,
+                        ItemId = itemSetting.Id
+                    }.ToByteString()
+                });
+
+                RecycleInventoryItemResponse recycleInventoryItemResponse = null;
+
                 recycleInventoryItemResponse = RecycleInventoryItemResponse.Parser.ParseFrom(response);
                 LogCaller(new LoggerEventArgs(String.Format("Deleted {0} {1}. Remaining {2}", toDelete, itemSetting.FriendlyName, recycleInventoryItemResponse.NewCount), LoggerTypes.Recycle));
 
@@ -250,8 +250,7 @@ namespace PokemonGoGUI.GoManager
             }
             catch (Exception ex)
             {
-                if (response.IsEmpty)
-                    LogCaller(new LoggerEventArgs(String.Format("Failed to recycle iventory item {0}", itemSetting.FriendlyName), LoggerTypes.Warning, ex));
+                LogCaller(new LoggerEventArgs(String.Format("Failed to recycle iventory item {0}", itemSetting.FriendlyName), LoggerTypes.Warning, ex));
 
                 return new MethodResult();
             }

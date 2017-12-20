@@ -13,6 +13,7 @@ namespace PokemonGoGUI.Models
         public List<HashKey> HashKeys { get; set; }
         public bool SPF { get; set; }
         public bool ShowWelcomeMessage { get; set; }
+        public bool AutoUpdate { get; set; }
     }
 
     public class HashKey {

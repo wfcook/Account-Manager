@@ -131,6 +131,9 @@
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.testKeyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
+            this.importToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.tabPageHashKeys = new System.Windows.Forms.TabPage();
             this.fastObjectListViewHashKeys = new BrightIdeasSoftware.FastObjectListView();
             this.olvColumnKeys = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
@@ -170,6 +173,7 @@
             this.olvColumnProxy = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnLastLogMessage = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.tabControlMain = new System.Windows.Forms.TabControl();
+            this.Trayicon = new System.Windows.Forms.NotifyIcon(this.components);
             this.contextMenuStripAccounts.SuspendLayout();
             this.statusStripStats.SuspendLayout();
             this.contextMenuStripScheduler.SuspendLayout();
@@ -959,9 +963,12 @@
             this.contextMenuStripHashKeys.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItem1,
             this.toolStripMenuItem2,
-            this.testKeyToolStripMenuItem});
+            this.testKeyToolStripMenuItem,
+            this.toolStripSeparator7,
+            this.importToolStripMenuItem1,
+            this.exportToolStripMenuItem1});
             this.contextMenuStripHashKeys.Name = "contextMenuStripHashKeys";
-            this.contextMenuStripHashKeys.Size = new System.Drawing.Size(131, 76);
+            this.contextMenuStripHashKeys.Size = new System.Drawing.Size(131, 130);
             // 
             // toolStripMenuItem1
             // 
@@ -983,6 +990,25 @@
             this.testKeyToolStripMenuItem.Size = new System.Drawing.Size(130, 24);
             this.testKeyToolStripMenuItem.Text = "Test key";
             this.testKeyToolStripMenuItem.Click += new System.EventHandler(this.TestKeyToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator7
+            // 
+            this.toolStripSeparator7.Name = "toolStripSeparator7";
+            this.toolStripSeparator7.Size = new System.Drawing.Size(127, 6);
+            // 
+            // importToolStripMenuItem1
+            // 
+            this.importToolStripMenuItem1.Name = "importToolStripMenuItem1";
+            this.importToolStripMenuItem1.Size = new System.Drawing.Size(130, 24);
+            this.importToolStripMenuItem1.Text = "Import";
+            this.importToolStripMenuItem1.Click += new System.EventHandler(this.ImportToolStripMenuItem1_Click);
+            // 
+            // exportToolStripMenuItem1
+            // 
+            this.exportToolStripMenuItem1.Name = "exportToolStripMenuItem1";
+            this.exportToolStripMenuItem1.Size = new System.Drawing.Size(130, 24);
+            this.exportToolStripMenuItem1.Text = "Export";
+            this.exportToolStripMenuItem1.Click += new System.EventHandler(this.ExportToolStripMenuItem1_Click);
             // 
             // tabPageHashKeys
             // 
@@ -1369,6 +1395,12 @@
             this.tabControlMain.TabIndex = 2;
             this.tabControlMain.SelectedIndexChanged += new System.EventHandler(this.TabControlMain_SelectedIndexChanged);
             // 
+            // Trayicon
+            // 
+            this.Trayicon.Text = "Account Manager";
+            this.Trayicon.Visible = true;
+            this.Trayicon.MouseClick += new System.Windows.Forms.MouseEventHandler(this.TrayIcon_MouseClick);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -1382,6 +1414,7 @@
             this.Text = "Account Manager";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.MainForm_Load);
+            this.Resize += new System.EventHandler(this.MainForm_Resize);
             this.contextMenuStripAccounts.ResumeLayout(false);
             this.statusStripStats.ResumeLayout(false);
             this.statusStripStats.PerformLayout();
@@ -1544,6 +1577,10 @@
         private BrightIdeasSoftware.OLVColumn olvColumnKeys;
         private System.Windows.Forms.ToolStripMenuItem testKeyToolStripMenuItem;
         private BrightIdeasSoftware.OLVColumn olvColumnHashInfos;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
+        private System.Windows.Forms.ToolStripMenuItem importToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem exportToolStripMenuItem1;
+        private System.Windows.Forms.NotifyIcon Trayicon;
     }
 }
 
