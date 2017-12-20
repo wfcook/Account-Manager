@@ -516,7 +516,7 @@ namespace PokemonGoGUI.GoManager
             };
         }
 
-        private bool PokemonWithinCatchSettings(PokemonId pokemondId, bool isSnipe = false)
+        private bool PokemonWithinCatchSettings(PokemonId pokemondId)
         {
             CatchSetting catchSettings = UserSettings.CatchSettings.FirstOrDefault(x => x.Id == pokemondId);
 

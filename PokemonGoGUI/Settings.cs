@@ -67,9 +67,6 @@ namespace PokemonGoGUI
         public int DelayBetweenLocationUpdates { get; set; }
         public int LocationupdateDelayRandom { get; set; }
 
-        public int DelayBetweenSnipes { get; set; }
-        public int BetweenSnipesDelayRandom { get; set; }
-
         public int GeneralDelay { get; set; }
         public int GeneralDelayRandom { get; set; }
 
@@ -163,7 +160,6 @@ namespace PokemonGoGUI
             StopAtMinAccountState = AccountState.PokemonBanOrPokestopBanTemp;
             DelayBetweenPlayerActions = 500;
             DelayBetweenLocationUpdates = 1000;
-            DelayBetweenSnipes = 7000;
             GeneralDelay = 800;
             MaxLogs = 400;
             MaxFailBeforeReset = 3;
