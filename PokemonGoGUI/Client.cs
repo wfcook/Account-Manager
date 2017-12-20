@@ -73,7 +73,7 @@ namespace PokemonGoGUI
                 // TODO: make this configurable. To avoid bans (may be with a checkbox in hash keys tab).
                 //Configuration.IgnoreHashVersion = true;
                 VersionStr = Configuration.Hasher.PokemonVersion;
-                ((PokeHashHasher)Configuration.Hasher).PokehashSleeping += OnPokehashSleeping;
+                //((PokeHashHasher)Configuration.Hasher).PokehashSleeping += OnPokehashSleeping;
             }
             // *****
 
@@ -82,10 +82,10 @@ namespace PokemonGoGUI
             switch (Settings.AuthType)
             {
                 case AuthType.Google:
-                    loginProvider = new GoogleLoginProvider(Settings.GoogleUsername, Settings.GooglePassword);
+                    loginProvider = new GoogleLoginProvider(Settings.Username, Settings.Password);
                     break;
                 case AuthType.Ptc:
-                    loginProvider = new PtcLoginProvider(Settings.PtcUsername, Settings.PtcPassword);
+                    loginProvider = new PtcLoginProvider(Settings.Username, Settings.Password);
                     break;
                 default:
                     throw new ArgumentException("Login provider must be either \"google\" or \"ptc\".");

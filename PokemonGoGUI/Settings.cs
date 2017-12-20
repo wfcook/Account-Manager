@@ -27,11 +27,8 @@ namespace PokemonGoGUI
         public string GroupName { get; set; }
         public string AccountName { get; set; }
         public AuthType AuthType { get; set; }
-        public string PtcUsername { get; set; }
-        public string PtcPassword { get; set; }
-        public string GoogleRefreshToken { get; set; }
-        public string GooglePassword { get; set; }
-        public string GoogleUsername { get; set; }
+        public string Username { get; set; }
+        public string Password { get; set; }
         public double DefaultLatitude { get; set; }
         public double DefaultLongitude { get; set; }
         public double DefaultAltitude { get; set; }
@@ -117,8 +114,6 @@ namespace PokemonGoGUI
         public List<CatchSetting> CatchSettings { get; set; }
         public List<EvolveSetting> EvolveSettings { get; set; }
         public List<TransferSetting> TransferSettings { get; set; }
-        //public List<CatchSetting> SniperSettings { get; set; }
-
 
         [JsonConstructor]
         public Settings(bool jsonConstructor = true)
@@ -145,7 +140,6 @@ namespace PokemonGoGUI
         {
             GroupName = "Default";
             AuthType = AuthType.Ptc;
-            GoogleRefreshToken = String.Empty;
             DefaultLatitude = 40.764665;
             DefaultLongitude = -73.973184;
             DefaultAltitude = 10;

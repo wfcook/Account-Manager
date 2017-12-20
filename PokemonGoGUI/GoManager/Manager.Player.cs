@@ -129,8 +129,8 @@ namespace PokemonGoGUI.GoManager
             if (Stats != null && PlayerData != null)
             {
                 builder.AppendLine(String.Format("Group: {0}", UserSettings.GroupName));
-                builder.AppendLine(String.Format("Username: {0}", UserSettings.PtcUsername));
-                builder.AppendLine(String.Format("Password: {0}", UserSettings.PtcPassword));
+                builder.AppendLine(String.Format("Username: {0}", UserSettings.Username));
+                builder.AppendLine(String.Format("Password: {0}", UserSettings.Password));
                 builder.AppendLine(String.Format("Level: {0}", Stats.Level));
                 builder.AppendLine(String.Format("Current Trainer Name: {0}", PlayerData.Username));
                 builder.AppendLine(String.Format("Team: {0}", PlayerData.Team));
@@ -186,7 +186,7 @@ namespace PokemonGoGUI.GoManager
                     Directory.CreateDirectory(directoryName);
                 }
 
-                string fileName = UserSettings.PtcUsername.Split('@').First();
+                string fileName = UserSettings.Username.Split('@').First();
 
                 string filePath = Path.Combine(directoryName, fileName) + ".txt";
 

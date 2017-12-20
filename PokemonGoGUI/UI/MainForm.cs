@@ -180,6 +180,7 @@ namespace PokemonGoGUI
                 tempHashKeys = model.HashKeys;
                 _spf = model.SPF;
                 _showStartup = model.ShowWelcomeMessage;
+
                 foreach(Manager manager in tempManagers)
                 {
                     manager.AddSchedulerEvent();
@@ -591,8 +592,8 @@ namespace PokemonGoGUI
                     }
 
                     manager.UserSettings.AccountName = importModel.Username.Trim();
-                    manager.UserSettings.PtcUsername = importModel.Username.Trim();
-                    manager.UserSettings.PtcPassword = importModel.Password.Trim();
+                    manager.UserSettings.Username = importModel.Username.Trim();
+                    manager.UserSettings.Password = importModel.Password.Trim();
                     manager.UserSettings.ProxyIP = importModel.Address;
                     manager.UserSettings.ProxyPort = importModel.Port;
                     manager.UserSettings.ProxyUsername = importModel.ProxyUsername;
@@ -1046,7 +1047,7 @@ namespace PokemonGoGUI
 
             try
             {
-                IEnumerable<string> accounts = fastObjectListViewMain.SelectedObjects.Cast<Manager>().Select(x => String.Format("{0}:{1}", x.UserSettings.PtcUsername, x.UserSettings.PtcPassword));
+                IEnumerable<string> accounts = fastObjectListViewMain.SelectedObjects.Cast<Manager>().Select(x => String.Format("{0}:{1}", x.UserSettings.Username, x.UserSettings.Password));
 
                 File.WriteAllLines(filename, accounts);
 

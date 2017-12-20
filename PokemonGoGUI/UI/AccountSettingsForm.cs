@@ -106,8 +106,8 @@ namespace PokemonGoGUI.UI
                 radioButtonGoogle.Checked = true;
             }
 
-            textBoxPtcPassword.Text = settings.PtcPassword;
-            textBoxPtcUsername.Text = settings.PtcUsername;
+            textBoxPtcPassword.Text = settings.Password;
+            textBoxPtcUsername.Text = settings.Username;
             textBoxLat.Text = settings.DefaultLatitude.ToString();
             textBoxLong.Text = settings.DefaultLongitude.ToString();
             textBoxName.Text = settings.AccountName;
@@ -289,8 +289,8 @@ namespace PokemonGoGUI.UI
             }
 
             userSettings.MimicWalking = checkBoxMimicWalking.Checked;
-            userSettings.PtcUsername = textBoxPtcUsername.Text.Trim();
-            userSettings.PtcPassword = textBoxPtcPassword.Text.Trim();
+            userSettings.Username = textBoxPtcUsername.Text.Trim();
+            userSettings.Password = textBoxPtcPassword.Text.Trim();
             userSettings.DefaultLatitude = defaultLat;
             userSettings.DefaultLongitude = defaultLong;
             userSettings.WalkingSpeed = walkingSpeed;
