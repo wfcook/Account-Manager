@@ -2084,7 +2084,96 @@ namespace PokemonGoGUI
             }
             else if (e.Column == olvColumnHashInfos)
             {
-                e.SubItem.ForeColor = Color.White;
+                if (e.SubItem.Text == "The HashKey is invalid or has expired" || e.SubItem.Text.Contains("RPM: 0"))
+                    e.SubItem.ForeColor = Color.Red;
+                else
+                    e.SubItem.ForeColor = Color.White;
+            }
+        }
+
+        private void ImportToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog ofd = new OpenFileDialog())
+            {
+                ofd.Title = "Open Keys file";
+                ofd.Filter = "Json Files (*.json)|*.json|All Files (*.*)|*.*";
+
+                if (ofd.ShowDialog() == DialogResult.OK)
+                {
+                    if (String.IsNullOrEmpty(ofd.FileName))
+                    {
+                        return;
+                    }
+
+                    List<HashKey> newKeys = JsonConvert.DeserializeObject<List<HashKey>>(File.ReadAllText(ofd.FileName));
+                    int totalSuccess = 0;
+                    int total = newKeys.Count;
+                    List<string> existKeys = new List<string>();
+
+                    foreach (HashKey key in _hashKeys)
+                        existKeys.Add(key.Key);
+
+                    foreach (HashKey key in newKeys)
+                    {
+                        if (existKeys.Contains(key.Key))
+                            continue;
+                        key.KeyInfo = TestHashKey(key.Key);
+                        _hashKeys.Add(key);
+                        ++totalSuccess;
+                    }
+
+                    fastObjectListViewHashKeys.SetObjects(_hashKeys);
+
+                    MessageBox.Show(String.Format("Successfully imported {0} out of {1} keys", totalSuccess, total));
+                }
+            }
+        }
+
+        private void ExportToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            string fileName = String.Empty;
+            List<HashKey> keysToExport = new List<HashKey>();
+
+            using (SaveFileDialog sfd = new SaveFileDialog())
+            {
+                sfd.Filter = "Json Files (*.json)|*.json|All Files (*.*)|*.*";
+
+                if (sfd.ShowDialog() == DialogResult.OK)
+                {
+                    fileName = sfd.FileName;
+                }
+                else
+                {
+                    return;
+                }
+            }
+
+            ParallelOptions options = new ParallelOptions
+            {
+                MaxDegreeOfParallelism = 10
+            };
+
+            IEnumerable<HashKey> selectedKeys = fastObjectListViewHashKeys.SelectedObjects.Cast<HashKey>();
+
+            Task.Run(() =>
+            {
+                Parallel.ForEach(selectedKeys, options, (HashKey) =>
+                {
+                    keysToExport.Add(HashKey);
+                });
+            });
+
+            try
+            {
+                string data = JsonConvert.SerializeObject(keysToExport, Formatting.Indented);
+
+                File.WriteAllText(fileName, data);
+
+                MessageBox.Show(String.Format("Successfully exported {0} of {1} keys", keysToExport.Count, fastObjectListViewHashKeys.SelectedObjects.Count));
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(String.Format("Failed to save to file. Ex: {0}", ex.Message));
             }
         }
 
@@ -2123,5 +2212,6 @@ namespace PokemonGoGUI
             return result;
         }
         #endregion
+
     }
 }
