@@ -39,8 +39,6 @@ namespace PokemonGoGUI
 
         private DeviceWrapper ClientDeviceWrapper { get; set; }
 
-        public int CaptchaInt = 0;
-
         public void Logout()
         {
             if (!LoggedIn)
@@ -123,13 +121,6 @@ namespace PokemonGoGUI
         private void PokehashSleeping(object sender, int sleepTime)
         {
             OnPokehashSleeping?.Invoke(sender, sleepTime);
-        }
-
-        public void SessionOnCaptchaReceived(object sender, CaptchaEventArgs e)
-        {
-            //var session = (Session)sender;
-
-            ++CaptchaInt;
         }
 
         public void SessionOnAccessTokenUpdated(object sender, EventArgs e)
