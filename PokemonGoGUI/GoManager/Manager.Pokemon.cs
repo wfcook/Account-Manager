@@ -25,7 +25,10 @@ namespace PokemonGoGUI.GoManager
 
             foreach (PokemonData pokemon in pokemonToTransfer)
             {
-                if (pokemon.Favorite == 1)
+                if (pokemon.Favorite == 1
+                    || pokemon.IsEgg
+                    || !string.IsNullOrEmpty(pokemon.DeployedFortId)
+                    || PlayerData.BuddyPokemon.Id == pokemon.Id)
                 {
                     continue;
                 }
@@ -192,6 +195,7 @@ namespace PokemonGoGUI.GoManager
                         pokemonToTransfer = pokemonToTransfer.DistinctBy(x => x.Id).ToList();
                         break;
                     case TransferType.Slashed:
+                        pokemonToTransfer.AddRange(group.ToList());
                         pokemonToTransfer = pokemonToTransfer.DistinctBy(x => x.IsBad).ToList();
                         break;
                 }
