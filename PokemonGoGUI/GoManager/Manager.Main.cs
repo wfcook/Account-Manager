@@ -1,6 +1,7 @@
 ﻿using GeoCoordinatePortable;
 using Newtonsoft.Json;
 using POGOLib.Official.Net;
+using POGOLib.Official.Net.Captcha;
 using POGOProtos.Data.Player;
 using POGOProtos.Enums;
 using POGOProtos.Map.Fort;
@@ -70,20 +71,27 @@ namespace PokemonGoGUI.GoManager
             LoadFarmLocations();
         }
 
-        private async void MapUpdate(object sender, EventArgs e)
+        private void MapUpdate(object sender, EventArgs e)
         {
-            await GetPokeStops();
-            await GetCatchablePokemon();
+            //GetPokeStops().Wait();
+            //GetCatchablePokemon().Wait();
 
             // Update BuddyPokemon Stats
             if (PlayerData.BuddyPokemon.Id != 0)
             {
-                MethodResult<GetBuddyWalkedResponse> buddyWalkedResponse = await GetBuddyWalked();
+                MethodResult<GetBuddyWalkedResponse> buddyWalkedResponse = GetBuddyWalked().Result;
                 if (buddyWalkedResponse.Success)
                 {
                     LogCaller(new LoggerEventArgs($"BuddyWalked CandyID: {buddyWalkedResponse.Data.FamilyCandyId}, CandyCount: {buddyWalkedResponse.Data.CandyEarnedCount}", Models.LoggerTypes.Success));
                 };
             }
+        }
+
+        public void SessionOnCaptchaReceived(object sender, CaptchaEventArgs e)
+        {
+            AccountState = AccountState.CaptchaReceived;
+            //2captcha needed to solve or chrome drive for solve url manual
+            //e.CaptchaUrl;
         }
 
         private void OnHatchedEggsReceived(object sender, GetHatchedEggsResponse hatchedEggResponse)
@@ -113,7 +121,7 @@ namespace PokemonGoGUI.GoManager
                         try
                         {
                             _client.ClientSession.AccessTokenUpdated += _client.SessionOnAccessTokenUpdated;
-                            _client.ClientSession.CaptchaReceived += _client.SessionOnCaptchaReceived;
+                            _client.ClientSession.CaptchaReceived += SessionOnCaptchaReceived;
                             _client.ClientSession.InventoryUpdate += OnInventoryUpdate.Invoke;
                             _client.ClientSession.MapUpdate += MapUpdate;
                             _client.ClientSession.RpcClient.CheckAwardedBadgesReceived += OnCheckAwardedBadgesReceived;
@@ -504,19 +512,6 @@ namespace PokemonGoGUI.GoManager
                     _client.Logout();
                 }
 
-                if (_client.CaptchaInt > 0)
-                {
-                    AccountState = AccountState.CaptchaReceived;
-                    LogCaller(new LoggerEventArgs("Captcha ceceived", LoggerTypes.Warning));
-
-                    //Remove proxy
-                    RemoveProxy();
-
-                    Stop();
-
-                    continue;
-                }
-
                 if (_failedInventoryReponses >= _failedInventoryUntilBan)
                 {
                     AccountState = AccountState.PermAccountBan;
@@ -570,6 +565,19 @@ namespace PokemonGoGUI.GoManager
                     {
                         AccountState = AccountState.PermAccountBan;
                         LogCaller(new LoggerEventArgs("Account seen banned.", LoggerTypes.FatalError));
+
+                        //Remove proxy
+                        RemoveProxy();
+
+                        Stop();
+
+                        continue;
+                    }
+
+                    //Closes bot on captcha received need utils for solve
+                    if (AccountState == AccountState.CaptchaReceived)
+                    {
+                        LogCaller(new LoggerEventArgs("Captcha ceceived", LoggerTypes.Warning));
 
                         //Remove proxy
                         RemoveProxy();
@@ -1157,7 +1165,7 @@ namespace PokemonGoGUI.GoManager
                     Name = "Central Park, NY"
                 },
 				
-		new FarmLocation
+		        new FarmLocation
                 {
                     Latitude = 45.03009,
                     Longitude = -93.31934,
@@ -1178,7 +1186,7 @@ namespace PokemonGoGUI.GoManager
                     Name = "7Pokestops, Central Park NY"
                 },
 				
-		new FarmLocation
+		        new FarmLocation
                 {
                     Latitude = 51.22505600,
                     Longitude = 6.80713000,
