@@ -32,7 +32,7 @@ namespace PokemonGoGUI.GoManager
             
             if (!LoggedIn)
             {
-                MethodResult loginResult = await Login();
+                MethodResult loginResult = await Login_();
 
                 if (!loginResult.Success)
                 {
@@ -94,7 +94,7 @@ namespace PokemonGoGUI.GoManager
         {
             if (!LoggedIn)
             {
-                MethodResult result = await Login();
+                MethodResult result = await Login_();
 
                 if (!result.Success)
                 {
@@ -219,7 +219,7 @@ namespace PokemonGoGUI.GoManager
             {
                 if (!LoggedIn)
                 {
-                    MethodResult result = await Login();
+                    MethodResult result = await Login_();
 
                     if (!result.Success)
                     {

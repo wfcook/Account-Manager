@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using POGOLib.Official;
 using POGOLib.Official.LoginProviders;
 using POGOLib.Official.Net;
+using POGOLib.Official.Net.Authentication;
 using POGOLib.Official.Net.Authentication.Data;
 using POGOLib.Official.Net.Captcha;
 using POGOLib.Official.Util.Device;
@@ -232,11 +233,11 @@ namespace PokemonGoGUI.GoManager
                     var accessToken = JsonConvert.DeserializeObject<AccessToken>(File.ReadAllText(fileName));
 
                     if (!accessToken.IsExpired)
-                        return POGOLib.Official.Net.Authentication.Login.GetSession(loginProvider, accessToken, initLat, initLong, ClientDeviceWrapper, PlayerLocale);
+                        return Login.GetSession(loginProvider, accessToken, initLat, initLong, ClientDeviceWrapper, PlayerLocale);
                 }
             }
 
-            var session = await POGOLib.Official.Net.Authentication.Login.GetSession(loginProvider, initLat, initLong, ClientDeviceWrapper, PlayerLocale);
+            var session = await Login.GetSession(loginProvider, initLat, initLong, ClientDeviceWrapper, PlayerLocale);
 
             if (mayCache)
                 SaveAccessToken(session.AccessToken);

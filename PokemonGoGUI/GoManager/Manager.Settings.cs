@@ -95,7 +95,7 @@ namespace PokemonGoGUI.GoManager
             {
                 if (!LoggedIn)
                 {
-                    MethodResult result = await Login();
+                    MethodResult result = await Login_();
 
                     if (!result.Success)
                     {

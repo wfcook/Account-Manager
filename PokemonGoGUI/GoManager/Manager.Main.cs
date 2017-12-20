@@ -71,7 +71,7 @@ namespace PokemonGoGUI.GoManager
 
 
 
-        public async Task<MethodResult> Login()
+        public async Task<MethodResult> Login_()
         {
             LogCaller(new LoggerEventArgs("Attempting to login ...", LoggerTypes.Debug));
 
@@ -484,7 +484,7 @@ namespace PokemonGoGUI.GoManager
                     if (!LoggedIn)
                     {
                         //Login
-                        result = await Login();
+                        result = await Login_();
 
                         if (!result.Success)
                         {
