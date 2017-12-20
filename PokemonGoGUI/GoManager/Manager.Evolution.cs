@@ -7,6 +7,7 @@ using POGOProtos.Networking.Requests;
 using POGOProtos.Networking.Requests.Messages;
 using POGOProtos.Networking.Responses;
 using POGOProtos.Settings.Master;
+using PokemonGoGUI.Extensions;
 using PokemonGoGUI.GoManager.Models;
 using PokemonGoGUI.Models;
 using System;
@@ -65,7 +66,7 @@ namespace PokemonGoGUI.GoManager
         public async Task<MethodResult> EvolvePokemon(IEnumerable<PokemonData> pokemonToEvolve)
         {
             //Shouldn't happen
-            if(pokemonToEvolve == null)
+            if (pokemonToEvolve == null)
             {
                 LogCaller(new LoggerEventArgs("Null value sent to evolve pokemon", LoggerTypes.Debug));
 
@@ -74,7 +75,7 @@ namespace PokemonGoGUI.GoManager
 
             foreach (PokemonData pokemon in pokemonToEvolve)
             {
-                if(pokemon == null)
+                if (pokemon == null)
                 {
                     LogCaller(new LoggerEventArgs("Null pokemon data in IEnumerable", LoggerTypes.Debug));
 
@@ -83,7 +84,7 @@ namespace PokemonGoGUI.GoManager
 
                 try
                 {
-                    var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
+                    var response = await ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                     {
                         RequestType = RequestType.EvolvePokemon,
                         RequestMessage = new EvolvePokemonMessage
@@ -94,37 +95,27 @@ namespace PokemonGoGUI.GoManager
 
                     EvolvePokemonResponse evolvePokemonResponse = null;
 
-                    try
-                    {
-                        evolvePokemonResponse = EvolvePokemonResponse.Parser.ParseFrom(response);
-                        ExpIncrease(evolvePokemonResponse.ExperienceAwarded);
-                        //_expGained += evolveResponse.ExperienceAwarded;
+                    evolvePokemonResponse = EvolvePokemonResponse.Parser.ParseFrom(response);
+                    ExpIncrease(evolvePokemonResponse.ExperienceAwarded);
+                    //_expGained += evolveResponse.ExperienceAwarded;
 
-                        LogCaller(new LoggerEventArgs(
-                            String.Format("Successully evolved {0}. Experience: {1}. Cp: {2} -> {3}. IV: {4:0.00}%",
-                                        pokemon.PokemonId,
-                                        evolvePokemonResponse.ExperienceAwarded,
-                                        pokemon.Cp,
-                                        evolvePokemonResponse.EvolvedPokemonData.Cp,
-                                        CalculateIVPerfection(evolvePokemonResponse.EvolvedPokemonData).Data),
-                                        LoggerTypes.Evolve));                    
+                    LogCaller(new LoggerEventArgs(
+                        String.Format("Successully evolved {0}. Experience: {1}. Cp: {2} -> {3}. IV: {4:0.00}%",
+                                    pokemon.PokemonId,
+                                    evolvePokemonResponse.ExperienceAwarded,
+                                    pokemon.Cp,
+                                    evolvePokemonResponse.EvolvedPokemonData.Cp,
+                                    CalculateIVPerfection(evolvePokemonResponse.EvolvedPokemonData).Data),
+                                    LoggerTypes.Evolve));
 
                     await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
 
                     return new MethodResult
-                        {
-                            Success = true
-                        };
-                    }
-                    catch (Exception ex)
                     {
-                        if (response.IsEmpty)
-                            LogCaller(new LoggerEventArgs("EvolvePokemonResponse parsing failed because response was empty", LoggerTypes.Exception, ex));
-
-                        return new MethodResult();
-                    }
+                        Success = true
+                    };
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     LogCaller(new LoggerEventArgs("Evolve request failed", LoggerTypes.Exception, ex));
                     return new MethodResult();
@@ -263,7 +254,7 @@ namespace PokemonGoGUI.GoManager
 
         private async Task<MethodResult> UseLuckyEgg()
         {
-            if(LuckyEggActive)
+            if (LuckyEggActive)
             {
                 return new MethodResult
                 {
@@ -273,7 +264,7 @@ namespace PokemonGoGUI.GoManager
 
             ItemData data = Items.FirstOrDefault(x => x.ItemId == POGOProtos.Inventory.Item.ItemId.ItemLuckyEgg);
 
-            if(data == null || data.Count == 0)
+            if (data == null || data.Count == 0)
             {
                 LogCaller(new LoggerEventArgs("No lucky eggs left", LoggerTypes.Info));
 
@@ -285,28 +276,18 @@ namespace PokemonGoGUI.GoManager
 
             try
             {
-                var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
+                var response = await ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                 {
                     RequestType = RequestType.UseItemXpBoost,
                     RequestMessage = new UseItemXpBoostMessage
                     {
-                       ItemId = ItemId.ItemLuckyEgg
+                        ItemId = ItemId.ItemLuckyEgg
                     }.ToByteString()
                 });
 
                 UseItemXpBoostResponse useItemXpBoostResponse = null;
 
-                try
-                {
-                    useItemXpBoostResponse = UseItemXpBoostResponse.Parser.ParseFrom(response);
-                }
-                catch (Exception ex)
-                {
-                    if (response.IsEmpty)
-                        LogCaller(new LoggerEventArgs("UseItemXpBoostResponse parsing failed because response was empty", LoggerTypes.Exception, ex));
-
-                    return new MethodResult();
-                }
+                useItemXpBoostResponse = UseItemXpBoostResponse.Parser.ParseFrom(response);
 
                 if (useItemXpBoostResponse.Result == UseItemXpBoostResponse.Types.Result.Success)
                 {
@@ -349,7 +330,7 @@ namespace PokemonGoGUI.GoManager
                     };
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 LogCaller(new LoggerEventArgs("Lucky egg request failed", LoggerTypes.Exception, ex));
 

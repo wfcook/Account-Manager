@@ -357,7 +357,7 @@ namespace PokemonGoGUI.UI
             {
                 MessageBox.Show("Failed to login");
             }
-
+            
 
             buttonUpdateStats.Enabled = true;
         }

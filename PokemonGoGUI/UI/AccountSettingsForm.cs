@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -15,6 +14,8 @@ namespace PokemonGoGUI.UI
     public partial class AccountSettingsForm : Form
     {
         private Manager _manager;
+
+        public bool AutoUpdate { get; set; }
 
         public AccountSettingsForm(Manager manager)
         {
@@ -80,6 +81,7 @@ namespace PokemonGoGUI.UI
 
             cbUseOnlyThisHashKey.Checked = _manager.UserSettings.UseOnlyOneKey;
             tbAuthHashKey.Text = _manager.UserSettings.AuthAPIKey;
+            cbAutoUpdate.Checked = AutoUpdate;
 
             //Location time zones
             var zones = new TimeZoneIds().GetTimeZoneIds();
@@ -311,6 +313,7 @@ namespace PokemonGoGUI.UI
             userSettings.ClaimLevelUpRewards = checkBoxClaimLevelUp.Checked;
             userSettings.StopOnAPIUpdate = checkBoxStopOnAPIUpdate.Checked;
             userSettings.SpinGyms = checkBoxSpinGyms.Checked;
+            AutoUpdate = cbAutoUpdate.Checked;
 
             userSettings.RunForHours = (double)numericUpDownRunForHours.Value;
             userSettings.MaxLogs = (int)numericUpDownMaxLogs.Value;

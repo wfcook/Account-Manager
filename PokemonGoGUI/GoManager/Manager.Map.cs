@@ -1,5 +1,4 @@
 ﻿using GeoCoordinatePortable;
-using Google.Protobuf.Collections;
 using POGOProtos.Map;
 using POGOProtos.Map.Fort;
 using POGOProtos.Map.Pokemon;
@@ -13,11 +12,9 @@ namespace PokemonGoGUI.GoManager
 {
     public partial class Manager
     {
-        private static DateTime LastClearLog = DateTime.Now;
-
         private async Task<MethodResult<List<MapPokemon>>> GetCatchablePokemon()
         {
-            MethodResult<RepeatedField<MapCell>> mapCellResponse = await GetMapObjects();
+            MethodResult<List<MapCell>> mapCellResponse = await GetMapObjects();
 
             if (!mapCellResponse.Success)
             {
@@ -34,24 +31,9 @@ namespace PokemonGoGUI.GoManager
                                         Where(x => PokemonWithinCatchSettings(x)).ToList();
             //LogCaller(new LoggerEventArgs($"Found {newCatchablePokemons.Count} catchable pokemons", Models.LoggerTypes.Success));
 
-            List<MapPokemon> fixEncounter = new List<MapPokemon>();
-
-            foreach (MapPokemon pok in newCatchablePokemons)
-            {
-                if (recentCatchedPokemons.Contains(pok.EncounterId))
-                    continue;
-                fixEncounter.Add(pok);
-            }
-
-            if (LastClearLog.AddMinutes(5) < DateTime.Now)
-            {
-                recentCatchedPokemons = new List<ulong>();
-                LastClearLog = DateTime.Now;
-            }
-
             return new MethodResult<List<MapPokemon>>
             {
-                Data = fixEncounter,
+                Data = newCatchablePokemons,
                 Success = mapCellResponse.Success,
                 Message = mapCellResponse.Message
             };
@@ -85,7 +67,7 @@ namespace PokemonGoGUI.GoManager
                     continue;
                 }
 
-                GeoCoordinate defaultLocation = new GeoCoordinate(_client.ClientSession.Player.Latitude, _client.ClientSession.Player.Longitude);
+                GeoCoordinate defaultLocation = new GeoCoordinate(ClientSession.Player.Latitude, ClientSession.Player.Longitude);
                 GeoCoordinate fortLocation = new GeoCoordinate(fort.Latitude, fort.Longitude);
 
                 double distance = CalculateDistanceInMeters(defaultLocation, fortLocation);
@@ -108,7 +90,7 @@ namespace PokemonGoGUI.GoManager
                 };
             }
 
-            fortData = fortData.OrderBy(x => CalculateDistanceInMeters(_client.ClientSession.Player.Latitude, _client.ClientSession.Player.Longitude, x.Latitude, x.Longitude)).ToList();
+            fortData = fortData.OrderBy(x => CalculateDistanceInMeters(ClientSession.Player.Latitude, ClientSession.Player.Longitude, x.Latitude, x.Longitude)).ToList();
 
             return new MethodResult<List<FortData>>
             {
@@ -136,7 +118,7 @@ namespace PokemonGoGUI.GoManager
                     continue;
                 }
 
-                GeoCoordinate defaultLocation = new GeoCoordinate(_client.ClientSession.Player.Latitude, _client.ClientSession.Player.Longitude);
+                GeoCoordinate defaultLocation = new GeoCoordinate(ClientSession.Player.Latitude, ClientSession.Player.Longitude);
                 GeoCoordinate fortLocation = new GeoCoordinate(fort.Latitude, fort.Longitude);
 
                 double distance = CalculateDistanceInMeters(defaultLocation, fortLocation);
@@ -159,7 +141,7 @@ namespace PokemonGoGUI.GoManager
 
         private async Task<MethodResult<List<FortData>>> GetAllForts()
         {
-            MethodResult<RepeatedField<MapCell>> mapCellResponse = await GetMapObjects();
+            MethodResult<List<MapCell>> mapCellResponse = await GetMapObjects();
 
             if (!mapCellResponse.Success)
             {
@@ -179,26 +161,28 @@ namespace PokemonGoGUI.GoManager
             };
         }
 
-        private async Task<MethodResult<RepeatedField<MapCell>>> GetMapObjects()
+        private async Task<MethodResult<List<MapCell>>> GetMapObjects()
         {
-            if (!_client.LoggedIn)
+            if (!LoggedIn)
             {
-                MethodResult result = await Login();
+                MethodResult result = await Login_();
 
                 if (!result.Success)
                 {
-                    return new MethodResult<RepeatedField<MapCell>> { Success = false, Message = "Failed to get map objets.", Data = new RepeatedField<MapCell>() };
+                    return new MethodResult<List<MapCell>> { Message = "Failed to get map objets.", Data = new List<MapCell>() };
                 }
             }
 
-            if (_client.ClientSession.Map.Cells.Count < 0)
+            if (ClientSession.Map.Cells.Count < 0)
             {
-                return new MethodResult<RepeatedField<MapCell>> { Success = false, Message = "Failed to get map objets.", Data = new RepeatedField<MapCell>() };
+                return new MethodResult<List<MapCell>> { Message = "Failed to get map objets.", Data = new List<MapCell>() };
             }
 
-            return new MethodResult<RepeatedField<MapCell>>
+            //await Task.Delay(3000);
+
+            return new MethodResult<List<MapCell>>
             {
-                Data = _client.ClientSession.Map.Cells,
+                Data = ClientSession.Map.Cells.ToList(),
                 Success = true,
                 Message = "Success"
             };

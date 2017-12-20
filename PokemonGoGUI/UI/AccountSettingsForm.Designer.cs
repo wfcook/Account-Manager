@@ -197,6 +197,7 @@
             this.toolTipProxy = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipMinAccountState = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipHumanizeThrows = new System.Windows.Forms.ToolTip(this.components);
+            this.cbAutoUpdate = new System.Windows.Forms.CheckBox();
             this.tabControlMain.SuspendLayout();
             this.tabPageDetails.SuspendLayout();
             this.tabControlSettings.SuspendLayout();
@@ -282,6 +283,7 @@
             // 
             // tabPageSettingsGeneral
             // 
+            this.tabPageSettingsGeneral.Controls.Add(this.cbAutoUpdate);
             this.tabPageSettingsGeneral.Controls.Add(this.checkBoxEnabeRaids);
             this.tabPageSettingsGeneral.Controls.Add(this.checkBoxSendBerries);
             this.tabPageSettingsGeneral.Controls.Add(this.checkBoxDeployToGym);
@@ -408,9 +410,9 @@
             // comboBoxMinAccountState
             // 
             this.comboBoxMinAccountState.FormattingEnabled = true;
-            this.comboBoxMinAccountState.Location = new System.Drawing.Point(188, 386);
+            this.comboBoxMinAccountState.Location = new System.Drawing.Point(148, 390);
             this.comboBoxMinAccountState.Name = "comboBoxMinAccountState";
-            this.comboBoxMinAccountState.Size = new System.Drawing.Size(232, 24);
+            this.comboBoxMinAccountState.Size = new System.Drawing.Size(222, 24);
             this.comboBoxMinAccountState.TabIndex = 11;
             this.toolTipMinAccountState.SetToolTip(this.comboBoxMinAccountState, "This setting will auto stop the bot when the specific state is reached");
             // 
@@ -1992,6 +1994,16 @@
             this.restoreDefaultsToolStripMenuItem2.Text = "Restore Defaults";
             this.restoreDefaultsToolStripMenuItem2.Click += new System.EventHandler(this.RestoreDefaultsToolStripMenuItem2_Click);
             // 
+            // cbAutoUpdate
+            // 
+            this.cbAutoUpdate.AutoSize = true;
+            this.cbAutoUpdate.Location = new System.Drawing.Point(379, 392);
+            this.cbAutoUpdate.Name = "cbAutoUpdate";
+            this.cbAutoUpdate.Size = new System.Drawing.Size(109, 21);
+            this.cbAutoUpdate.TabIndex = 41;
+            this.cbAutoUpdate.Text = "Auto Update";
+            this.cbAutoUpdate.UseVisualStyleBackColor = true;
+            // 
             // AccountSettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -2217,5 +2229,6 @@
         private System.Windows.Forms.Label label41;
         private System.Windows.Forms.CheckBox checkBoxEnabeRaids;
         private System.Windows.Forms.CheckBox checkBoxSendBerries;
+        private System.Windows.Forms.CheckBox cbAutoUpdate;
     }
 }

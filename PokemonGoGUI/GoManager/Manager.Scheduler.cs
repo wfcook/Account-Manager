@@ -2,7 +2,6 @@
 using PokemonGoGUI.Enums;
 using PokemonGoGUI.GoManager.Models;
 using System;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace PokemonGoGUI.GoManager
@@ -105,7 +104,6 @@ namespace PokemonGoGUI.GoManager
                     Stop();
                 }
             }
-
 
             if (!IsRunning)
             {

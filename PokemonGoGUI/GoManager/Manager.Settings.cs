@@ -93,9 +93,9 @@ namespace PokemonGoGUI.GoManager
 
             try
             {
-                if (!_client.LoggedIn)
+                if (!LoggedIn)
                 {
-                    MethodResult result = await Login();
+                    MethodResult result = await Login_();
 
                     if (!result.Success)
                     {
@@ -106,7 +106,7 @@ namespace PokemonGoGUI.GoManager
                     }
                 }
 
-                var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
+                var response = await ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                 {
                     RequestType = RequestType.DownloadItemTemplates,
                     RequestMessage = new DownloadItemTemplatesMessage
@@ -119,47 +119,34 @@ namespace PokemonGoGUI.GoManager
 
                 DownloadItemTemplatesResponse downloadItemTemplatesResponse = null;
 
-                try
+                downloadItemTemplatesResponse = DownloadItemTemplatesResponse.Parser.ParseFrom(response);
+                Dictionary<PokemonId, PokemonSettings> pokemonSettings = new Dictionary<PokemonId, PokemonSettings>();
+
+                foreach (DownloadItemTemplatesResponse.Types.ItemTemplate template in downloadItemTemplatesResponse.ItemTemplates)
                 {
-                    downloadItemTemplatesResponse = DownloadItemTemplatesResponse.Parser.ParseFrom(response);
-                    Dictionary<PokemonId, PokemonSettings> pokemonSettings = new Dictionary<PokemonId, PokemonSettings>();
-
-                    foreach (DownloadItemTemplatesResponse.Types.ItemTemplate template in downloadItemTemplatesResponse.ItemTemplates)
+                    if (template.PlayerLevel != null)
                     {
-                        if (template.PlayerLevel != null)
-                        {
-                            LevelSettings = template.PlayerLevel;
+                        LevelSettings = template.PlayerLevel;
 
-                            continue;
-                        }
-
-                        if (template.PokemonSettings == null)
-                        {
-                            continue;
-                        }
-
-                        pokemonSettings.Add(template.PokemonSettings.PokemonId, template.PokemonSettings);
+                        continue;
                     }
 
-                    PokeSettings = pokemonSettings;
-
-                    return new MethodResult<Dictionary<PokemonId, PokemonSettings>>
+                    if (template.PokemonSettings == null)
                     {
-                        Data = pokemonSettings,
-                        Message = "Success",
-                        Success = true
-                    };
+                        continue;
+                    }
+
+                    pokemonSettings.Add(template.PokemonSettings.PokemonId, template.PokemonSettings);
                 }
-                catch (Exception ex)
+
+                PokeSettings = pokemonSettings;
+
+                return new MethodResult<Dictionary<PokemonId, PokemonSettings>>
                 {
-                    if (response.IsEmpty)
-                        LogCaller(new LoggerEventArgs("Failed to get setting templates", LoggerTypes.Exception, ex));
-
-                    return new MethodResult<Dictionary<PokemonId, PokemonSettings>>
-                    {
-                        Message = "Failed to get setting templates"
-                    };
-                }
+                    Data = pokemonSettings,
+                    Message = "Success",
+                    Success = true
+                };
             }
             catch (Exception ex)
             {

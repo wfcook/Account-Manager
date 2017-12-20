@@ -30,7 +30,7 @@ namespace PokemonGoGUI
         private List<HashKey> _hashKeys = new List<HashKey>();
         private bool _spf = false;
         private bool _showStartup = true;
-        private bool IsLatest = true;
+        private bool _autoupdate = true;
         private readonly string _saveFile = "data";
         private string _versionNumber = $"v{Assembly.GetExecutingAssembly().GetName().Version} - Forked GoManager Version";
 
@@ -100,13 +100,10 @@ namespace PokemonGoGUI
                 }
             }
 
-            foreach(Manager manager in managers)
+            foreach (Manager manager in managers)
             {
-                if (manager.IsRunning)
-                {
-                    DetailsForm dForm = new DetailsForm(manager);
-                    dForm.Show();
-                }
+                DetailsForm dForm = new DetailsForm(manager);
+                dForm.Show();
             }
         }
 
@@ -124,12 +121,16 @@ namespace PokemonGoGUI
         {
             this.Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
 
-            IsLatest = await GoManager.VersionCheckState.IsLatest();
-            if (!IsLatest)
-                await GoManager.VersionCheckState.Execute();
-            await GoManager.VersionCheckState.CleanupOldFiles();
-
             await LoadSettings();
+
+            if (_autoupdate)
+            {
+                bool IsLatest = await VersionCheckState.IsLatest();
+                if (!IsLatest)
+                    await VersionCheckState.Execute();
+            }
+
+            await VersionCheckState.CleanupOldFiles();
 
             if (_showStartup)
             {
@@ -203,6 +204,7 @@ namespace PokemonGoGUI
                 tempHashKeys = model.HashKeys;
                 _spf = model.SPF;
                 _showStartup = model.ShowWelcomeMessage;
+                _autoupdate = model.AutoUpdate;
 
                 foreach(Manager manager in tempManagers)
                 {
@@ -256,7 +258,8 @@ namespace PokemonGoGUI
                     Schedulers = _schedulers,
                     HashKeys = _hashKeys,
                     SPF = _spf,
-                    ShowWelcomeMessage = _showStartup
+                    ShowWelcomeMessage = _showStartup,
+                    AutoUpdate = _autoupdate
                 };
 
                 string data = Serializer.ToJson(model);
@@ -303,10 +306,14 @@ namespace PokemonGoGUI
         {
             Manager manager = new Manager(_proxyHandler);
 
-            AccountSettingsForm asForm = new AccountSettingsForm(manager);
-            
-            if(asForm.ShowDialog() == DialogResult.OK)
+            AccountSettingsForm asForm = new AccountSettingsForm(manager)
             {
+                AutoUpdate = _autoupdate
+            };
+
+            if (asForm.ShowDialog() == DialogResult.OK)
+            {
+                _autoupdate = asForm.AutoUpdate;
                 AddManager(manager);
             }
 
@@ -359,20 +366,27 @@ namespace PokemonGoGUI
         {
             int count = fastObjectListViewMain.SelectedObjects.Count;
 
-            if(count > 1)
+            if (count > 1)
             {
                 DialogResult result = MessageBox.Show(String.Format("Are you sure you want to open {0} edit forms?", count), "Confirmation", MessageBoxButtons.YesNo);
 
-                if(result != DialogResult.Yes)
+                if (result != DialogResult.Yes)
                 {
                     return;
                 }
             }
 
-            foreach(Manager manager in fastObjectListViewMain.SelectedObjects)
+            foreach (Manager manager in fastObjectListViewMain.SelectedObjects)
             {
-                AccountSettingsForm asForm = new AccountSettingsForm(manager);
-                asForm.ShowDialog();
+                AccountSettingsForm asForm = new AccountSettingsForm(manager)
+                {
+                    AutoUpdate = _autoupdate
+                };
+
+                if (asForm.ShowDialog() == DialogResult.OK)
+                {
+                    _autoupdate = asForm.AutoUpdate;
+                }
             }
 
             fastObjectListViewMain.RefreshSelectedObjects();
@@ -922,7 +936,6 @@ namespace PokemonGoGUI
                  {
                      Parallel.ForEach(managers, options, (manager) =>
                      {
-                         if (manager.IsRunning)
                              manager.ExportStats().Wait();
                      });
                  });
@@ -943,7 +956,6 @@ namespace PokemonGoGUI
                 {
                     Parallel.ForEach(selectedManager, options, (manager) =>
                     {
-                        if (manager.IsRunning)
                             manager.UpdateDetails().Wait();
                     });
                 });
@@ -1515,7 +1527,6 @@ namespace PokemonGoGUI
                        {
                            if (dialogResult == DialogResult.Yes)
                            {
-                               if (manager.IsRunning)
                                    manager.UpdateDetails().Wait();
                            }
 
@@ -1604,7 +1615,7 @@ namespace PokemonGoGUI
 
             if (startForm.ShowDialog() == DialogResult.OK)
             {
-                _showStartup = startForm.ShowOnStartUp;
+                startForm.ShowOnStartUp = _showStartup;
             }
         }
         private void TabControlMain_SelectedIndexChanged(object sender, EventArgs e)
