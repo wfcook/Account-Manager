@@ -41,21 +41,21 @@ namespace PokemonGoGUI.GoManager
         {
             if(Stats == null)
             {
-                LogCaller(new LoggerEventArgs(String.Format("No stats found for {0}. Please update details", UserSettings.PtcUsername), LoggerTypes.Warning));
+                LogCaller(new LoggerEventArgs(String.Format("No stats found for {0}. Please update details", UserSettings.Username), LoggerTypes.Warning));
 
                 return new MethodResult<AccountExportModel>();
             }
 
             if (AllItems == null || AllItems.Count == 0)
             {
-                LogCaller(new LoggerEventArgs(String.Format("No items found for {0}. Please update details", UserSettings.PtcUsername), LoggerTypes.Warning));
+                LogCaller(new LoggerEventArgs(String.Format("No items found for {0}. Please update details", UserSettings.Username), LoggerTypes.Warning));
 
                 return new MethodResult<AccountExportModel>();
             }
 
             if (Pokedex == null || Pokedex.Count == 0)
             {
-                LogCaller(new LoggerEventArgs(String.Format("No pokedex found for {0}. Please update details", UserSettings.PtcUsername), LoggerTypes.Warning));
+                LogCaller(new LoggerEventArgs(String.Format("No pokedex found for {0}. Please update details", UserSettings.Username), LoggerTypes.Warning));
 
                 return new MethodResult<AccountExportModel>();
             }
@@ -64,8 +64,8 @@ namespace PokemonGoGUI.GoManager
             {
                 Level = Stats.Level,
                 Type = UserSettings.AuthType,
-                Username = UserSettings.PtcUsername,
-                Password = UserSettings.PtcPassword,
+                Username = UserSettings.Username,
+                Password = UserSettings.Password,
                 Pokedex = Pokedex.Select(x => new PokedexEntryExportModel(x)).ToList(),
                 Pokemon = Pokemon.Select(x => new PokemonDataExportModel(x, CalculateIVPerfection(x).Data)).ToList(),
                 Items = Items.Select(x => new ItemDataExportModel(x)).ToList(),
@@ -212,19 +212,19 @@ namespace PokemonGoGUI.GoManager
         {
             try
             {
-                string usernameTemp = UserSettings.PtcUsername;
-                string passwordTemp = UserSettings.PtcPassword;
+                string usernameTemp = UserSettings.Username;
+                string passwordTemp = UserSettings.Password;
                 string nameTemp = UserSettings.AccountName;
 
                 UserSettings.AccountName = String.Empty;
-                UserSettings.PtcPassword = String.Empty;
-                UserSettings.PtcUsername = String.Empty;
+                UserSettings.Password = String.Empty;
+                UserSettings.Username = String.Empty;
 
                 string data = Serializer.ToJson<Settings>(UserSettings);
 
                 UserSettings.AccountName = nameTemp;
-                UserSettings.PtcPassword = passwordTemp;
-                UserSettings.PtcUsername = usernameTemp;
+                UserSettings.Password = passwordTemp;
+                UserSettings.Username = usernameTemp;
 
                 await Task.Run(() => File.WriteAllText(filename, data));
 
@@ -252,8 +252,8 @@ namespace PokemonGoGUI.GoManager
             {
                 Settings settings = Serializer.FromJson<Settings>(data);
                 settings.AccountName = UserSettings.AccountName;
-                settings.PtcPassword = UserSettings.PtcPassword;
-                settings.PtcUsername = UserSettings.PtcUsername;
+                settings.Password = UserSettings.Password;
+                settings.Username = UserSettings.Username;
                 settings.AuthType = UserSettings.AuthType;
                 settings.ProxyIP = UserSettings.ProxyIP;
                 settings.ProxyPassword = UserSettings.ProxyPassword;
@@ -361,12 +361,12 @@ namespace PokemonGoGUI.GoManager
                 return base.Equals(obj);
             }
 
-            return tempManager.UserSettings.PtcUsername == this.UserSettings.PtcUsername;
+            return tempManager.UserSettings.Username == this.UserSettings.Username;
         }
 
         public override int GetHashCode()
         {
-            return this.UserSettings.PtcUsername.GetHashCode();
+            return this.UserSettings.Username.GetHashCode();
         }
     }
 }

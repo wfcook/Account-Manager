@@ -106,8 +106,8 @@ namespace PokemonGoGUI.UI
                 radioButtonGoogle.Checked = true;
             }
 
-            textBoxPtcPassword.Text = settings.PtcPassword;
-            textBoxPtcUsername.Text = settings.PtcUsername;
+            textBoxPtcPassword.Text = settings.Password;
+            textBoxPtcUsername.Text = settings.Username;
             textBoxLat.Text = settings.DefaultLatitude.ToString();
             textBoxLong.Text = settings.DefaultLongitude.ToString();
             textBoxName.Text = settings.AccountName;
@@ -142,9 +142,6 @@ namespace PokemonGoGUI.UI
 
             numericUpDownGeneralDelay.Value = settings.GeneralDelay;
             numericUpDownGeneralDelayRandom.Value = settings.GeneralDelayRandom;
-
-            numericUpDownDelayBetweenSnipes.Value = settings.DelayBetweenSnipes;
-            numericUpDownDelayBetweenSnipeRandom.Value = settings.BetweenSnipesDelayRandom;
 
             numericUpDownLocationUpdateDelay.Value = settings.DelayBetweenLocationUpdates;
             numericUpDownLocationUpdateRandom.Value = settings.LocationupdateDelayRandom;
@@ -292,8 +289,8 @@ namespace PokemonGoGUI.UI
             }
 
             userSettings.MimicWalking = checkBoxMimicWalking.Checked;
-            userSettings.PtcUsername = textBoxPtcUsername.Text.Trim();
-            userSettings.PtcPassword = textBoxPtcPassword.Text.Trim();
+            userSettings.Username = textBoxPtcUsername.Text.Trim();
+            userSettings.Password = textBoxPtcPassword.Text.Trim();
             userSettings.DefaultLatitude = defaultLat;
             userSettings.DefaultLongitude = defaultLong;
             userSettings.WalkingSpeed = walkingSpeed;
@@ -328,9 +325,6 @@ namespace PokemonGoGUI.UI
 
             userSettings.GeneralDelay = (int)numericUpDownGeneralDelay.Value;
             userSettings.GeneralDelayRandom = (int)numericUpDownGeneralDelayRandom.Value;
-
-            userSettings.DelayBetweenSnipes = (int)numericUpDownDelayBetweenSnipes.Value;
-            userSettings.BetweenSnipesDelayRandom = (int)numericUpDownDelayBetweenSnipeRandom.Value;
 
             userSettings.DelayBetweenLocationUpdates = (int)numericUpDownLocationUpdateDelay.Value;
             userSettings.LocationupdateDelayRandom = (int)numericUpDownLocationUpdateRandom.Value;
@@ -439,20 +433,6 @@ namespace PokemonGoGUI.UI
         #endregion
 
         #region CatchPokemon
-
-
-        private void FalseToolStripMenuItem2_Click(object sender, EventArgs e)
-        {
-            ToolStripMenuItem tSMI = sender as ToolStripMenuItem;
-
-            if (tSMI == null)
-            {
-                return;
-            }
-
-            fastObjectListViewCatch.RefreshSelectedObjects();
-        }
-
 
         private void TrueToolStripMenuItem_Click(object sender, EventArgs e)
         {

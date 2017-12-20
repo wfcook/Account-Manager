@@ -10,11 +10,8 @@ namespace PokemonGoGUI
         double DefaultLatitude { get; set; }
         double DefaultLongitude { get; set; }
         double DefaultAltitude { get; set; }
-        string GoogleRefreshToken { get; set; }
-        string PtcPassword { get; set; }
-        string PtcUsername { get; set; }
-        string GoogleUsername { get; set; }
-        string GooglePassword { get; set; }
+        string Password { get; set; }
+        string Username { get; set; }
         string DeviceId { get; set; }
         string AndroidBoardName { get; set; }
         string AndroidBootloader { get; set; }

@@ -1,4 +1,5 @@
 ﻿using Google.Protobuf;
+using Google.Protobuf.Collections;
 using POGOProtos.Data.Player;
 using POGOProtos.Enums;
 using POGOProtos.Networking.Requests;
@@ -17,8 +18,6 @@ namespace PokemonGoGUI.GoManager
     {
         public async Task<MethodResult> MarkStartUpTutorialsComplete(bool forceAvatarUpdate)
         {
-            LogCaller(new LoggerEventArgs("Marking startup tutorials completed", LoggerTypes.Debug));
-
             MethodResult reauthResult = await CheckReauthentication();
 
             if (!reauthResult.Success)
@@ -43,9 +42,12 @@ namespace PokemonGoGUI.GoManager
 
             List<TutorialState> startupTutorials = new List<TutorialState>
             {
+                TutorialState.AccountCreation,
+                TutorialState.AvatarSelection,
+                TutorialState.FirstTimeExperienceComplete,
                 TutorialState.LegalScreen,
                 TutorialState.NameSelection,
-                TutorialState.FirstTimeExperienceComplete
+                TutorialState.PokemonCapture
             };
 
             List<TutorialState> completedTutorials = PlayerData.TutorialState.ToList();
@@ -145,9 +147,11 @@ namespace PokemonGoGUI.GoManager
             try
             {
                 markTutorialCompleteResponse = MarkTutorialCompleteResponse.Parser.ParseFrom(response);
-                LogCaller(new LoggerEventArgs("Tutorial completion request wasn't successful", LoggerTypes.Warning));
+                LogCaller(new LoggerEventArgs("Tutorial completion request wasn't successful", LoggerTypes.Success));
 
-                PlayerData = markTutorialCompleteResponse.PlayerData;
+                _client.ClientSession.Player.Data = markTutorialCompleteResponse.PlayerData;
+                PlayerData = _client.ClientSession.Player.Data;
+
                 return new MethodResult
                 {
                     Success = true
@@ -214,6 +218,7 @@ namespace PokemonGoGUI.GoManager
                 setAvatarResponse = SetAvatarResponse.Parser.ParseFrom(response);
                 LogCaller(new LoggerEventArgs("Avatar set to defaults", LoggerTypes.Success));
 
+
                 return new MethodResult
                 {
                     Success = true
@@ -223,6 +228,39 @@ namespace PokemonGoGUI.GoManager
             {
                 if (response.IsEmpty)
                     LogCaller(new LoggerEventArgs("Failed to set avatar", LoggerTypes.Exception, ex));
+
+                return new MethodResult();
+            }
+        }
+
+        public async Task<MethodResult> SetAvatarItemAsViewed()
+        {
+            var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
+            {
+                RequestType = RequestType.SetAvatarItemAsViewed,
+                RequestMessage = new SetAvatarItemAsViewedMessage
+                {
+                    //TODO: get avatarids 
+                    //AvatarTemplateId = { }
+                }.ToByteString()
+            });
+
+            SetAvatarItemAsViewedResponse setAvatarItemAsViewedResponse = null;
+
+            try
+            {
+                setAvatarItemAsViewedResponse = SetAvatarItemAsViewedResponse.Parser.ParseFrom(response);
+                LogCaller(new LoggerEventArgs("Set avatar item as viewed", LoggerTypes.Success));
+
+                return new MethodResult
+                {
+                    Success = true
+                };
+            }
+            catch (Exception ex)
+            {
+                if (response.IsEmpty)
+                    LogCaller(new LoggerEventArgs("SetAvatarItemAsViewedResponse parsing failed because response was empty", LoggerTypes.Exception, ex));
 
                 return new MethodResult();
             }

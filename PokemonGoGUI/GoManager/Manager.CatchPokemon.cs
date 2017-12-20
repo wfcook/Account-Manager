@@ -18,6 +18,8 @@ namespace PokemonGoGUI.GoManager
 {
     public partial class Manager
     {
+        private List<ulong> recentCatchedPokemons = new List<ulong>();
+
         private async Task<MethodResult> CatchNeabyPokemon()
         {
             if(!UserSettings.CatchPokemon)
@@ -132,6 +134,7 @@ namespace PokemonGoGUI.GoManager
                 try
                 {
                     eResponse = DiskEncounterResponse.Parser.ParseFrom(response);
+                    recentCatchedPokemons.Add(fortData.LureInfo.EncounterId);
                 }
                 catch (Exception ex)
                 {
@@ -228,6 +231,7 @@ namespace PokemonGoGUI.GoManager
                     try
                     {
                         catchPokemonResponse = CatchPokemonResponse.Parser.ParseFrom(catchresponse);
+                        recentCatchedPokemons.Add(fortData.LureInfo.EncounterId);
                     }
                     catch (Exception ex)
                     {
@@ -315,6 +319,7 @@ namespace PokemonGoGUI.GoManager
                 try
                 {
                     eResponse = EncounterResponse.Parser.ParseFrom(response);
+                    recentCatchedPokemons.Add(mapPokemon.EncounterId);
                 }
                 catch (Exception ex)
                 {
@@ -427,6 +432,7 @@ namespace PokemonGoGUI.GoManager
                     try
                     {
                         catchPokemonResponse = CatchPokemonResponse.Parser.ParseFrom(catchresponse);
+                        recentCatchedPokemons.Add(mapPokemon.EncounterId);
                     }
                     catch (Exception ex)
                     {
@@ -516,7 +522,7 @@ namespace PokemonGoGUI.GoManager
             };
         }
 
-        private bool PokemonWithinCatchSettings(PokemonId pokemondId, bool isSnipe = false)
+        private bool PokemonWithinCatchSettings(PokemonId pokemondId)
         {
             CatchSetting catchSettings = UserSettings.CatchSettings.FirstOrDefault(x => x.Id == pokemondId);
 

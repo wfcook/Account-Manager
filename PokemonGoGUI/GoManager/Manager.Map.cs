@@ -1,18 +1,11 @@
 ﻿using GeoCoordinatePortable;
-using Google.Common.Geometry;
-using Google.Protobuf;
 using Google.Protobuf.Collections;
-using POGOLib.Official.Pokemon;
 using POGOProtos.Map;
 using POGOProtos.Map.Fort;
 using POGOProtos.Map.Pokemon;
-using POGOProtos.Networking.Requests;
-using POGOProtos.Networking.Requests.Messages;
-using POGOProtos.Networking.Responses;
 using PokemonGoGUI.Extensions;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -20,6 +13,8 @@ namespace PokemonGoGUI.GoManager
 {
     public partial class Manager
     {
+        private static DateTime LastClearLog = DateTime.Now;
+
         private async Task<MethodResult<List<MapPokemon>>> GetCatchablePokemon()
         {
             MethodResult<RepeatedField<MapCell>> mapCellResponse = await GetMapObjects();
@@ -34,12 +29,29 @@ namespace PokemonGoGUI.GoManager
                 };
             }
 
+            // update catchable pokemons
+            List<MapPokemon> newCatchablePokemons = mapCellResponse.Data.SelectMany(x => x.CatchablePokemons).
+                                        Where(x => PokemonWithinCatchSettings(x)).ToList();
+            //LogCaller(new LoggerEventArgs($"Found {newCatchablePokemons.Count} catchable pokemons", Models.LoggerTypes.Success));
+
+            List<MapPokemon> fixEncounter = new List<MapPokemon>();
+
+            foreach (MapPokemon pok in newCatchablePokemons)
+            {
+                if (recentCatchedPokemons.Contains(pok.EncounterId))
+                    continue;
+                fixEncounter.Add(pok);
+            }
+
+            if (LastClearLog.AddMinutes(5) < DateTime.Now)
+            {
+                recentCatchedPokemons = new List<ulong>();
+                LastClearLog = DateTime.Now;
+            }
+
             return new MethodResult<List<MapPokemon>>
             {
-                Data = mapCellResponse.Data.
-                                        SelectMany(x => x.CatchablePokemons).
-                                        Where(x => PokemonWithinCatchSettings(x)).
-                                        ToList(),
+                Data = fixEncounter,
                 Success = mapCellResponse.Success,
                 Message = mapCellResponse.Message
             };
