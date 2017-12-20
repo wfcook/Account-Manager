@@ -25,206 +25,208 @@ namespace PokemonGoGUI.GoManager
 
                 for (int i = 0; i < maxFortAttempts; i++)
                 {
-                    var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
-                    {
-                        RequestType = RequestType.FortSearch,
-                        RequestMessage = new FortSearchMessage
-                        {
-                            FortId = pokestop.Id,
-                            FortLatitude = pokestop.Latitude,
-                            FortLongitude = pokestop.Longitude,
-                            PlayerLatitude = _client.ClientSession.Player.Latitude,
-                            PlayerLongitude = _client.ClientSession.Player.Longitude
-                        }.ToByteString()
-                    });
-
                     try
                     {
-                        fortResponse = FortSearchResponse.Parser.ParseFrom(response);
-                    }
-                    catch (Exception ex)
-                    {
-                        if (response.IsEmpty)
-                            LogCaller(new LoggerEventArgs("FortSearchResponse parsing failed because response was empty", LoggerTypes.Exception, ex));
-
-                        return new MethodResult();
-                    }
-
-                    if (fortResponse.Result == FortSearchResponse.Types.Result.OutOfRange)
-                    {
-                        if (_potentialPokeStopBan)
+                        var response = await ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                         {
-                            if (AccountState != Enums.AccountState.PokestopBanTemp && AccountState != Enums.AccountState.PokemonBanAndPokestopBanTemp)
+                            RequestType = RequestType.FortSearch,
+                            RequestMessage = new FortSearchMessage
                             {
-                                LogCaller(new LoggerEventArgs("Pokestop ban detected. Marking state", LoggerTypes.Warning));
+                                FortId = pokestop.Id,
+                                FortLatitude = pokestop.Latitude,
+                                FortLongitude = pokestop.Longitude,
+                                PlayerLatitude = ClientSession.Player.Latitude,
+                                PlayerLongitude = ClientSession.Player.Longitude
+                            }.ToByteString()
+                        });
+
+                        fortResponse = FortSearchResponse.Parser.ParseFrom(response);
+
+                        if (fortResponse.Result == FortSearchResponse.Types.Result.OutOfRange)
+                        {
+                            if (_potentialPokeStopBan)
+                            {
+                                if (AccountState != Enums.AccountState.PokestopBanTemp && AccountState != Enums.AccountState.PokemonBanAndPokestopBanTemp)
+                                {
+                                    LogCaller(new LoggerEventArgs("Pokestop ban detected. Marking state", LoggerTypes.Warning));
+                                }
+
+                                //Already pokemon banned
+                                if (AccountState == Enums.AccountState.PokemonBanTemp || AccountState == Enums.AccountState.PokemonBanAndPokestopBanTemp)
+                                {
+                                    AccountState = Enums.AccountState.PokemonBanAndPokestopBanTemp;
+                                }
+                                else
+                                {
+                                    AccountState = Enums.AccountState.PokestopBanTemp;
+                                }
+
+                                //Check for auto stop bot
+                                if ((UserSettings.StopAtMinAccountState == Enums.AccountState.PokestopBanTemp ||
+                                    UserSettings.StopAtMinAccountState == Enums.AccountState.PokemonBanOrPokestopBanTemp) ||
+                                    (UserSettings.StopAtMinAccountState == Enums.AccountState.PokemonBanAndPokestopBanTemp && AccountState == Enums.AccountState.PokemonBanAndPokestopBanTemp))
+                                {
+                                    LogCaller(new LoggerEventArgs("Auto stopping bot ...", LoggerTypes.Info));
+
+                                    Stop();
+                                }
+                            }
+                            else //This error should never happen normally, so assume temp ban
+                            {
+                                _potentialPokeStopBan = true;
+                                _proxyIssue = true;
+                                //Display error only on first notice
+                                LogCaller(new LoggerEventArgs("Pokestop out of range. Potential temp pokestop ban or IP ban", LoggerTypes.Warning));
                             }
 
-                            //Already pokemon banned
-                            if (AccountState == Enums.AccountState.PokemonBanTemp || AccountState == Enums.AccountState.PokemonBanAndPokestopBanTemp)
+                            //Let it continue down
+                        }
+                        else if (fortResponse.Result != FortSearchResponse.Types.Result.Success && fortResponse.Result != FortSearchResponse.Types.Result.InventoryFull)
+                        {
+                            LogCaller(new LoggerEventArgs(String.Format("Failed to search fort. Response: {0}", fortResponse.Result), LoggerTypes.Warning));
+
+                            return new MethodResult
                             {
-                                AccountState = Enums.AccountState.PokemonBanAndPokestopBanTemp;
+                                Message = "Failed to search fort"
+                            };
+                        }
+
+                        string message = String.Format("Searched Fort. Exp: {0}. Items: {1}.",
+                            fortResponse.ExperienceAwarded,
+                            StringUtil.GetSummedFriendlyNameOfItemAwardList(fortResponse.ItemsAwarded.ToList()));
+
+                        Dictionary<ItemId, ItemData> itemDictionary = new Dictionary<ItemId, ItemData>();
+
+                        foreach (ItemData item in Items)
+                        {
+                            itemDictionary.Add(item.ItemId, item);
+                        }
+
+                        foreach (ItemAward item in fortResponse.ItemsAwarded)
+                        {
+                            if (itemDictionary.ContainsKey(item.ItemId))
+                            {
+                                itemDictionary[item.ItemId].Count += item.ItemCount;
                             }
                             else
                             {
-                                AccountState = Enums.AccountState.PokestopBanTemp;
-                            }
-
-                            //Check for auto stop bot
-                            if ((UserSettings.StopAtMinAccountState == Enums.AccountState.PokestopBanTemp ||
-                                UserSettings.StopAtMinAccountState == Enums.AccountState.PokemonBanOrPokestopBanTemp) ||
-                                (UserSettings.StopAtMinAccountState == Enums.AccountState.PokemonBanAndPokestopBanTemp && AccountState == Enums.AccountState.PokemonBanAndPokestopBanTemp))
-                            {
-                                LogCaller(new LoggerEventArgs("Auto stopping bot ...", LoggerTypes.Info));
-
-                                Stop();
-                            }
-                        }
-                        else //This error should never happen normally, so assume temp ban
-                        {
-                            _potentialPokeStopBan = true;
-                            _proxyIssue = true;
-                            //Display error only on first notice
-                            LogCaller(new LoggerEventArgs("Pokestop out of range. Potential temp pokestop ban or IP ban", LoggerTypes.Warning));
-                        }
-
-                        //Let it continue down
-                    }
-                    else if (fortResponse.Result != FortSearchResponse.Types.Result.Success && fortResponse.Result != FortSearchResponse.Types.Result.InventoryFull)
-                    {
-                        LogCaller(new LoggerEventArgs(String.Format("Failed to search fort. Response: {0}", fortResponse.Result), LoggerTypes.Warning));
-
-                        return new MethodResult
-                        {
-                            Message = "Failed to search fort"
-                        };
-                    }
-
-                    string message = String.Format("Searched Fort. Exp: {0}. Items: {1}.",
-                        fortResponse.ExperienceAwarded,
-                        StringUtil.GetSummedFriendlyNameOfItemAwardList(fortResponse.ItemsAwarded.ToList()));
-
-                    Dictionary<ItemId, ItemData> itemDictionary = new Dictionary<ItemId, ItemData>();
-
-                    foreach(ItemData item in Items)
-                    {
-                        itemDictionary.Add(item.ItemId, item);
-                    }
-
-                    foreach(ItemAward item in fortResponse.ItemsAwarded)
-                    {
-                        if(itemDictionary.ContainsKey(item.ItemId))
-                        {
-                            itemDictionary[item.ItemId].Count += item.ItemCount;
-                        }
-                        else
-                        {
-                            Items.Add(new ItemData
+                                Items.Add(new ItemData
                                 {
                                     ItemId = item.ItemId,
                                     Unseen = true,
                                     Count = item.ItemCount
                                 });
-                        }
-                    }
-
-                    if (fortResponse.Result != FortSearchResponse.Types.Result.OutOfRange)
-                    {
-                        //Successfully grabbed stop
-                        if(AccountState == Enums.AccountState.PokemonBanAndPokestopBanTemp || AccountState == Enums.AccountState.PokestopBanTemp)
-                        {
-                            if(AccountState == Enums.AccountState.PokemonBanAndPokestopBanTemp)
-                            {
-                                AccountState = Enums.AccountState.PokemonBanTemp;
                             }
-                            else
-                            {
-                                AccountState = Enums.AccountState.Good;
-                            }
-
-                            LogCaller(new LoggerEventArgs("Pokestop ban was removed", LoggerTypes.Info));
                         }
 
-                        ExpIncrease(fortResponse.ExperienceAwarded);
-                        TotalPokeStopExp += fortResponse.ExperienceAwarded;
-
-                        Tracker.AddValues(0, 1);
-
-                        if (fortResponse.ExperienceAwarded == 0)
+                        if (fortResponse.Result != FortSearchResponse.Types.Result.OutOfRange)
                         {
-                            //Softban on the fleeing pokemon. Reset.
-                            _fleeingPokemonResponses = 0;
-                            _potentialPokemonBan = false;
-
-                            ++_totalZeroExpStops;
-                            message += String.Format(" No exp gained. Attempt {0} of {1}", i + 1, maxFortAttempts);
-                        }
-
-                        LogCaller(new LoggerEventArgs(message, LoggerTypes.Success));
-                    }
-
-                    if(fortResponse.ExperienceAwarded != 0 || fortResponse.Result == FortSearchResponse.Types.Result.OutOfRange)
-                    {
-                        if (!_potentialPokemonBan && _fleeingPokemonResponses >= _fleeingPokemonUntilBan)
-                        {
-                            LogCaller(new LoggerEventArgs("Potential pokemon ban detected. Setting flee count to 0 avoid false positives", LoggerTypes.Warning));
-
-                            _potentialPokemonBan = true;
-                            _fleeingPokemonResponses = 0;
-                        }
-                        else if (_fleeingPokemonResponses >= _fleeingPokemonUntilBan)
-                        {
-                            //Already pokestop banned
-                            if (AccountState == Enums.AccountState.PokestopBanTemp || AccountState == Enums.AccountState.PokemonBanAndPokestopBanTemp)
+                            //Successfully grabbed stop
+                            if (AccountState == Enums.AccountState.PokemonBanAndPokestopBanTemp || AccountState == Enums.AccountState.PokestopBanTemp)
                             {
-                                _potentialPokemonBan = false;
-                                AccountState = Enums.AccountState.PokemonBanAndPokestopBanTemp;
-                            }
-                            else
-                            {
-                                _potentialPokemonBan = false;
-                                AccountState = Enums.AccountState.PokemonBanTemp;
-                            }
-
-                            if (AccountState != Enums.AccountState.PokemonBanTemp)
-                            {
-                                //Only occurs when out of range is found
-                                if (fortResponse.ExperienceAwarded == 0)
+                                if (AccountState == Enums.AccountState.PokemonBanAndPokestopBanTemp)
                                 {
-                                    LogCaller(new LoggerEventArgs("Pokemon fleeing and failing to grab stops. Potential pokemon & pokestop ban.", LoggerTypes.Warning));
+                                    AccountState = Enums.AccountState.PokemonBanTemp;
                                 }
                                 else
                                 {
-                                    LogCaller(new LoggerEventArgs("Pokemon fleeing, yet grabbing stops. Potential pokemon ban.", LoggerTypes.Warning));
+                                    AccountState = Enums.AccountState.Good;
                                 }
+
+                                LogCaller(new LoggerEventArgs("Pokestop ban was removed", LoggerTypes.Info));
                             }
 
-                            if(UserSettings.StopAtMinAccountState == Enums.AccountState.PokemonBanTemp || 
-                                UserSettings.StopAtMinAccountState == Enums.AccountState.PokemonBanOrPokestopBanTemp || 
-                                (UserSettings.StopAtMinAccountState == Enums.AccountState.PokemonBanAndPokestopBanTemp && AccountState == Enums.AccountState.PokemonBanAndPokestopBanTemp))
-                            {
-                                LogCaller(new LoggerEventArgs("Auto stopping bot ...", LoggerTypes.Info));
+                            ExpIncrease(fortResponse.ExperienceAwarded);
+                            TotalPokeStopExp += fortResponse.ExperienceAwarded;
 
-                                Stop();
+                            Tracker.AddValues(0, 1);
+
+                            if (fortResponse.ExperienceAwarded == 0)
+                            {
+                                //Softban on the fleeing pokemon. Reset.
+                                _fleeingPokemonResponses = 0;
+                                _potentialPokemonBan = false;
+
+                                ++_totalZeroExpStops;
+                                message += String.Format(" No exp gained. Attempt {0} of {1}", i + 1, maxFortAttempts);
                             }
 
-                            return new MethodResult
-                            {
-                                Message = "Bans detected",
-                                Success = true
-                            };
+                            LogCaller(new LoggerEventArgs(message, LoggerTypes.Success));
                         }
 
-                        break;
-                    }
+                        if (fortResponse.ExperienceAwarded != 0 || fortResponse.Result == FortSearchResponse.Types.Result.OutOfRange)
+                        {
+                            if (!_potentialPokemonBan && _fleeingPokemonResponses >= _fleeingPokemonUntilBan)
+                            {
+                                LogCaller(new LoggerEventArgs("Potential pokemon ban detected. Setting flee count to 0 avoid false positives", LoggerTypes.Warning));
 
-                    await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+                                _potentialPokemonBan = true;
+                                _fleeingPokemonResponses = 0;
+                            }
+                            else if (_fleeingPokemonResponses >= _fleeingPokemonUntilBan)
+                            {
+                                //Already pokestop banned
+                                if (AccountState == Enums.AccountState.PokestopBanTemp || AccountState == Enums.AccountState.PokemonBanAndPokestopBanTemp)
+                                {
+                                    _potentialPokemonBan = false;
+                                    AccountState = Enums.AccountState.PokemonBanAndPokestopBanTemp;
+                                }
+                                else
+                                {
+                                    _potentialPokemonBan = false;
+                                    AccountState = Enums.AccountState.PokemonBanTemp;
+                                }
+
+                                if (AccountState != Enums.AccountState.PokemonBanTemp)
+                                {
+                                    //Only occurs when out of range is found
+                                    if (fortResponse.ExperienceAwarded == 0)
+                                    {
+                                        LogCaller(new LoggerEventArgs("Pokemon fleeing and failing to grab stops. Potential pokemon & pokestop ban.", LoggerTypes.Warning));
+                                    }
+                                    else
+                                    {
+                                        LogCaller(new LoggerEventArgs("Pokemon fleeing, yet grabbing stops. Potential pokemon ban.", LoggerTypes.Warning));
+                                    }
+                                }
+
+                                if (UserSettings.StopAtMinAccountState == Enums.AccountState.PokemonBanTemp ||
+                                    UserSettings.StopAtMinAccountState == Enums.AccountState.PokemonBanOrPokestopBanTemp ||
+                                    (UserSettings.StopAtMinAccountState == Enums.AccountState.PokemonBanAndPokestopBanTemp && AccountState == Enums.AccountState.PokemonBanAndPokestopBanTemp))
+                                {
+                                    LogCaller(new LoggerEventArgs("Auto stopping bot ...", LoggerTypes.Info));
+
+                                    Stop();
+                                }
+
+                                return new MethodResult
+                                {
+                                    Message = "Bans detected",
+                                    Success = true
+                                };
+                            }
+
+                            break;
+                        }
+
+                        await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+                    }
+                    catch (Exception ex)
+                    {
+                        LogCaller(new LoggerEventArgs("FortSearchResponse parsing failed because response was empty", LoggerTypes.Exception, ex));
+
+                        return new MethodResult
+                        {
+                            Message = "FortSearchResponse parsing failed because response was empty"
+                        };
+                    }
                 }
-                
-                if(fortResponse != null && fortResponse.ExperienceAwarded == 0)
+
+                if (fortResponse != null && fortResponse.ExperienceAwarded == 0)
                 {
                     ++_totalZeroExpStops;
 
-                    if(_totalZeroExpStops >= 15 || _fleeingPokemonResponses >= _fleeingPokemonUntilBan)
+                    if (_totalZeroExpStops >= 15 || _fleeingPokemonResponses >= _fleeingPokemonUntilBan)
                     {
                         _totalZeroExpStops = 0;
 
@@ -239,40 +241,42 @@ namespace PokemonGoGUI.GoManager
                         {
                             ++totalAttempts;
 
-                            if(totalAttempts >= 5 && totalAttempts % 5 == 0)
+                            if (totalAttempts >= 5 && totalAttempts % 5 == 0)
                             {
                                 LogCaller(new LoggerEventArgs(String.Format("Softban bypass attempt {0} of {1}", totalAttempts, maxAttempts), LoggerTypes.Info));
                             }
 
-                            var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
-                            {
-                                RequestType = RequestType.FortSearch,
-                                RequestMessage = new FortSearchMessage
-                                {
-                                    FortId = pokestop.Id,
-                                    FortLatitude = pokestop.Latitude,
-                                    FortLongitude = pokestop.Longitude,
-                                    PlayerLatitude = _client.ClientSession.Player.Latitude,
-                                    PlayerLongitude = _client.ClientSession.Player.Longitude
-                                }.ToByteString()
-                            });
-
                             try
                             {
+                                var response = await ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
+                                {
+                                    RequestType = RequestType.FortSearch,
+                                    RequestMessage = new FortSearchMessage
+                                    {
+                                        FortId = pokestop.Id,
+                                        FortLatitude = pokestop.Latitude,
+                                        FortLongitude = pokestop.Longitude,
+                                        PlayerLatitude = ClientSession.Player.Latitude,
+                                        PlayerLongitude = ClientSession.Player.Longitude
+                                    }.ToByteString()
+                                });
+
                                 bypassResponse = FortSearchResponse.Parser.ParseFrom(response);
+
+                                await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
                             }
                             catch (Exception ex)
                             {
-                                if (response.IsEmpty)
-                                    LogCaller(new LoggerEventArgs("FortSearchResponse parsing failed because response was empty", LoggerTypes.Exception, ex));
+                                LogCaller(new LoggerEventArgs("FortSearchResponse parsing failed because response was empty", LoggerTypes.Exception, ex));
 
-                                return new MethodResult();
+                                return new MethodResult
+                                {
+                                    Message = "FortSearchResponse parsing failed because response was empty"
+                                };
                             }
-
-                            await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
                         } while (bypassResponse.ExperienceAwarded == 0 && totalAttempts <= maxAttempts);
 
-                        if(bypassResponse.ExperienceAwarded != 0)
+                        if (bypassResponse.ExperienceAwarded != 0)
                         {
                             //Fleeing pokemon was a softban, reset count
                             _fleeingPokemonResponses = 0;
@@ -310,7 +314,7 @@ namespace PokemonGoGUI.GoManager
                     Message = "Success"
                 };
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 LogCaller(new LoggerEventArgs("Failed to search fort", LoggerTypes.Exception, ex));
 
@@ -323,23 +327,23 @@ namespace PokemonGoGUI.GoManager
 
         private async Task<MethodResult<GymGetInfoResponse>> GymGetInfo(FortData pokestop)
         {
-            var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
-            {
-                RequestType = RequestType.GymGetInfo,
-                RequestMessage = new GymGetInfoMessage
-                {
-                    GymId = pokestop.Id,
-                    GymLatDegrees = pokestop.Latitude,
-                    GymLngDegrees = pokestop.Longitude,
-                    PlayerLatDegrees = _client.ClientSession.Player.Latitude,
-                    PlayerLngDegrees = _client.ClientSession.Player.Longitude
-                }.ToByteString()
-            });
-
-            GymGetInfoResponse gymGetInfoResponse = null;
-
             try
             {
+                var response = await ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
+                {
+                    RequestType = RequestType.GymGetInfo,
+                    RequestMessage = new GymGetInfoMessage
+                    {
+                        GymId = pokestop.Id,
+                        GymLatDegrees = pokestop.Latitude,
+                        GymLngDegrees = pokestop.Longitude,
+                        PlayerLatDegrees = ClientSession.Player.Latitude,
+                        PlayerLngDegrees = ClientSession.Player.Longitude
+                    }.ToByteString()
+                });
+
+                GymGetInfoResponse gymGetInfoResponse = null;
+
                 gymGetInfoResponse = GymGetInfoResponse.Parser.ParseFrom(response);
 
                 return new MethodResult<GymGetInfoResponse>
@@ -350,10 +354,13 @@ namespace PokemonGoGUI.GoManager
             }
             catch (Exception ex)
             {
-                if (response.IsEmpty)
-                    LogCaller(new LoggerEventArgs("Failed gym get info response", LoggerTypes.Exception, ex));
+                LogCaller(new LoggerEventArgs("Failed gym get info response", LoggerTypes.Exception, ex));
 
-                return new MethodResult<GymGetInfoResponse>() { Success = false, Data = new GymGetInfoResponse() { Result = GymGetInfoResponse.Types.Result.Unset } };
+                return new MethodResult<GymGetInfoResponse>
+                {
+                    Data = new GymGetInfoResponse { Result = GymGetInfoResponse.Types.Result.Unset },
+                    Message = "Failed gym get info response"
+                };
             }
         }
     }

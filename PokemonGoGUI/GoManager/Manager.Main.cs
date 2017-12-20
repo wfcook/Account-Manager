@@ -1,7 +1,5 @@
 ﻿using GeoCoordinatePortable;
 using Newtonsoft.Json;
-using POGOLib.Official.Net;
-using POGOLib.Official.Net.Captcha;
 using POGOProtos.Data.Player;
 using POGOProtos.Enums;
 using POGOProtos.Map.Fort;
@@ -9,6 +7,7 @@ using POGOProtos.Networking.Responses;
 using PokemonGoGUI.AccountScheduler;
 using PokemonGoGUI.Enums;
 using PokemonGoGUI.Exceptions;
+using PokemonGoGUI.Extensions;
 using PokemonGoGUI.GoManager.Models;
 using PokemonGoGUI.Models;
 using PokemonGoGUI.ProxyManager;
@@ -23,7 +22,6 @@ namespace PokemonGoGUI.GoManager
 {
     public partial class Manager
     {
-        private Client _client = new Client();
         private Random _rand = new Random();
 
         private int _totalZeroExpStops = 0;
@@ -71,38 +69,7 @@ namespace PokemonGoGUI.GoManager
             LoadFarmLocations();
         }
 
-        private void MapUpdate(object sender, EventArgs e)
-        {
-            //GetPokeStops().Wait();
-            //GetCatchablePokemon().Wait();
 
-            // Update BuddyPokemon Stats
-            if (PlayerData.BuddyPokemon.Id != 0)
-            {
-                MethodResult<GetBuddyWalkedResponse> buddyWalkedResponse = GetBuddyWalked().Result;
-                if (buddyWalkedResponse.Success)
-                {
-                    LogCaller(new LoggerEventArgs($"BuddyWalked CandyID: {buddyWalkedResponse.Data.FamilyCandyId}, CandyCount: {buddyWalkedResponse.Data.CandyEarnedCount}", Models.LoggerTypes.Success));
-                };
-            }
-        }
-
-        public void SessionOnCaptchaReceived(object sender, CaptchaEventArgs e)
-        {
-            AccountState = AccountState.CaptchaReceived;
-            //2captcha needed to solve or chrome drive for solve url manual
-            //e.CaptchaUrl;
-        }
-
-        private void OnHatchedEggsReceived(object sender, GetHatchedEggsResponse hatchedEggResponse)
-        {
-            //
-        }
-
-        private void OnCheckAwardedBadgesReceived(object sender, CheckAwardedBadgesResponse e)
-        {
-            //
-        }
 
         public async Task<MethodResult> Login()
         {
@@ -111,28 +78,8 @@ namespace PokemonGoGUI.GoManager
             try
             {
                 MethodResult result = null;
-                result = await _client.DoLogin(UserSettings);
+                result = await DoLogin();
                 LogCaller(new LoggerEventArgs(result.Message, LoggerTypes.Debug));
-
-                if (result.Success)
-                {
-                    await Task.Run(() =>
-                    {
-                        try
-                        {
-                            _client.ClientSession.AccessTokenUpdated += _client.SessionOnAccessTokenUpdated;
-                            _client.ClientSession.CaptchaReceived += SessionOnCaptchaReceived;
-                            _client.ClientSession.InventoryUpdate += OnInventoryUpdate.Invoke;
-                            _client.ClientSession.MapUpdate += MapUpdate;
-                            _client.ClientSession.RpcClient.CheckAwardedBadgesReceived += OnCheckAwardedBadgesReceived;
-                            _client.ClientSession.RpcClient.HatchedEggsReceived += OnHatchedEggsReceived;
-                        }
-                        catch
-                        {
-                            //not used
-                        }
-                    });
-                }
 
                 if (CurrentProxy != null)
                 {
@@ -170,7 +117,7 @@ namespace PokemonGoGUI.GoManager
             {
                 Stop();
 
-                 if (ex.Status == WebExceptionStatus.Timeout)
+                if (ex.Status == WebExceptionStatus.Timeout)
                 {
                     if (String.IsNullOrEmpty(Proxy))
                     {
@@ -347,7 +294,7 @@ namespace PokemonGoGUI.GoManager
 
             IsRunning = true;
             _totalZeroExpStops = 0;
-            _client.SetSettings(UserSettings);
+            SetSettings();
             _pauser.Set();
             _autoRestart = false;
             //_wasAutoRestarted = false;
@@ -399,7 +346,7 @@ namespace PokemonGoGUI.GoManager
 
             _pauser.Reset();
             _runningStopwatch.Stop();
-            _client.ClientSession.Pause();
+            ClientSession.Pause();
 
             LogCaller(new LoggerEventArgs("Pausing bot ...", LoggerTypes.Info));
 
@@ -415,7 +362,7 @@ namespace PokemonGoGUI.GoManager
 
             _pauser.Set();
             _runningStopwatch.Start();
-            await _client.ClientSession.ResumeAsync();
+            await ClientSession.ResumeAsync();
 
             LogCaller(new LoggerEventArgs("Unpausing bot ...", LoggerTypes.Info));
 
@@ -509,7 +456,7 @@ namespace PokemonGoGUI.GoManager
                 if (currentFails >= UserSettings.MaxFailBeforeReset)
                 {
                     currentFails = 0;
-                    _client.Logout();
+                    Logout();
                 }
 
                 if (_failedInventoryReponses >= _failedInventoryUntilBan)
@@ -530,11 +477,11 @@ namespace PokemonGoGUI.GoManager
 
                 MethodResult result = new MethodResult();
 
-                try
-                {
-                    #region Startup
+                #region Startup
 
-                    if (!_client.LoggedIn)
+                //try
+                //{
+                if (!LoggedIn)
                     {
                         //Login
                         result = await Login();
@@ -548,7 +495,7 @@ namespace PokemonGoGUI.GoManager
                         }
                     }
 
-                    if (_client.ClientSession.Player.Warn)
+                    if (ClientSession.Player.Warn)
                     { 
                         AccountState = AccountState.Flagged;
                         LogCaller(new LoggerEventArgs("Account seen flegged.", LoggerTypes.Warning));
@@ -561,7 +508,7 @@ namespace PokemonGoGUI.GoManager
                         continue;
                     }
 
-                    if (_client.ClientSession.Player.Banned)
+                    if (ClientSession.Player.Banned)
                     {
                         AccountState = AccountState.PermAccountBan;
                         LogCaller(new LoggerEventArgs("Account seen banned.", LoggerTypes.FatalError));
@@ -595,7 +542,7 @@ namespace PokemonGoGUI.GoManager
                     {
                         LogCaller(new LoggerEventArgs("Echo failed. Logging out before retry.", LoggerTypes.Debug));
 
-                        _client.Logout();
+                        Logout();
 
                         await Task.Delay(failedWaitTime);
 
@@ -608,20 +555,14 @@ namespace PokemonGoGUI.GoManager
                     {
                         //Get Game settings
                         LogCaller(new LoggerEventArgs("Grabbing game settings ...", LoggerTypes.Debug));
-
                         try
                         {
-                            MethodResult<bool> minClientResponse = await GetGameSettings(_client.VersionStr);
-
-                            if (result.Success)
+                            Version remote = new Version(ClientSession.GlobalSettings.MinimumClientVersion);
+                            if (VersionStr < remote)
                             {
-                                //Version isn't 0.xx.x
-                                if (!minClientResponse.Data)
-                                {
-                                    LogCaller(new LoggerEventArgs($"Emulates API {_client.VersionStr} ...", LoggerTypes.FatalError, new Exception($"New API needed {_client.ClientSession.GlobalSettings.MinimumClientVersion}. Stopping ...")));
-                                    Stop();
-                                    continue;
-                                }
+                                LogCaller(new LoggerEventArgs($"Emulates API {VersionStr} ...", LoggerTypes.FatalError, new Exception($"New API needed {remote}. Stopping ...")));
+                                Stop();
+                                continue;
                             }
                         }
                         catch (Exception)
@@ -631,7 +572,6 @@ namespace PokemonGoGUI.GoManager
                             Stop();
                             continue;
                         }
-
                         await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
                     }
 
@@ -804,7 +744,7 @@ namespace PokemonGoGUI.GoManager
                         continue;
                     }
 
-                    GeoCoordinate defaultLocation = new GeoCoordinate(_client.ClientSession.Player.Latitude, _client.ClientSession.Player.Longitude);
+                    GeoCoordinate defaultLocation = new GeoCoordinate(ClientSession.Player.Latitude, ClientSession.Player.Longitude);
 
                     List<FortData> pokestopsToFarm = pokestops.Data.ToList();
 
@@ -824,33 +764,33 @@ namespace PokemonGoGUI.GoManager
 
                         WaitPaused();
 
-                        pokestopsToFarm = pokestopsToFarm.OrderBy(x => CalculateDistanceInMeters(_client.ClientSession.Player.Latitude, _client.ClientSession.Player.Longitude, x.Latitude, x.Longitude)).ToList();
+                        pokestopsToFarm = pokestopsToFarm.OrderBy(x => CalculateDistanceInMeters(ClientSession.Player.Latitude, ClientSession.Player.Longitude, x.Latitude, x.Longitude)).ToList();
 
                         FortData pokestop = pokestopsToFarm[0];
                         pokestopsToFarm.RemoveAt(0);
-
-                        if (!UserSettings.SpinGyms && pokestop.Type == FortType.Gym)
-                        {
-                            continue;
-                        }
-
-                        GeoCoordinate currentLocation = new GeoCoordinate(_client.ClientSession.Player.Latitude, _client.ClientSession.Player.Longitude);
+                      
+                        GeoCoordinate currentLocation = new GeoCoordinate(ClientSession.Player.Latitude, ClientSession.Player.Longitude);
                         GeoCoordinate fortLocation = new GeoCoordinate(pokestop.Latitude, pokestop.Longitude);
 
                         double distance = CalculateDistanceInMeters(currentLocation, fortLocation);
 
                         string fort = "pokestop";
 
-                        if (pokestop.Type == FortType.Gym)
+                    if (pokestop.Type == FortType.Gym)
+                    {
+                        if (!UserSettings.SpinGyms)
                         {
-                            MethodResult<GymGetInfoResponse> _result = await GymGetInfo(pokestop);
-                            if (_result.Success && _result.Data.Result == GymGetInfoResponse.Types.Result.Success)
-                            {
-                                fort = "gym";
-                            }
-                            else
-                                continue;
+                            continue;
                         }
+
+                        MethodResult<GymGetInfoResponse> _result = await GymGetInfo(pokestop);
+                        if (_result.Success && _result.Data.Result == GymGetInfoResponse.Types.Result.Success)
+                        {
+                            fort = "gym";
+                        }
+                        else
+                            continue;
+                    }
 
                         LogCaller(new LoggerEventArgs(String.Format("Going to {0} {1} of {2}. Distance {3:0.00}m", fort, pokeStopNumber, totalStops, distance), pokestop.Type == FortType.Checkpoint ? LoggerTypes.Info : LoggerTypes.FortGym));
 
@@ -1008,21 +948,22 @@ namespace PokemonGoGUI.GoManager
                         }
                     }
 
-                    #endregion
-                }
-                catch (Exception ex)
-                {
-                    LogCaller(new LoggerEventArgs("Unknown exception occured. Restarting ...", LoggerTypes.Exception, ex));
-                    //LogCaller(new LoggerEventArgs("Unknown exception occured. Stopping ...", LoggerTypes.Exception, ex));
-                    //Stop();
-                }
+                /* }
+                 catch (Exception ex)
+                 {
+                     LogCaller(new LoggerEventArgs("Unknown exception occured. Restarting ...", LoggerTypes.Exception, ex));
+                     //LogCaller(new LoggerEventArgs("Unknown exception occured. Stopping ...", LoggerTypes.Exception, ex));
+                     //Stop();
+                 }*/
+
+                #endregion
 
                 currentFails = 0;
                 _firstRun = false;
             }
 
             State = BotState.Stopped;
-            _client.Logout();
+            Logout();
             LogCaller(new LoggerEventArgs(String.Format("Bot fully stopped at {0}", DateTime.Now), LoggerTypes.Info));
 
             if (_autoRestart)
@@ -1040,7 +981,7 @@ namespace PokemonGoGUI.GoManager
         {
             if (!IsRunning)
             {
-                _client.Logout();
+                Logout();
                 return;
             }
 
@@ -1101,7 +1042,7 @@ namespace PokemonGoGUI.GoManager
 
         private async Task<MethodResult> CheckReauthentication()
         {
-            if (!_client.AccessToken.IsExpired)
+            if (!AccessToken.IsExpired)
             {
                 return new MethodResult
                 {
@@ -1113,7 +1054,7 @@ namespace PokemonGoGUI.GoManager
             {
                 LogCaller(new LoggerEventArgs("Session expired. Logging back in", LoggerTypes.Debug));
 
-                await _client.DoLogin(UserSettings);
+                await DoLogin();
 
                 return new MethodResult
                 {
@@ -1166,8 +1107,8 @@ namespace PokemonGoGUI.GoManager
                     Longitude = -73.973184,
                     Name = "Central Park, NY"
                 },
-				
-		        new FarmLocation
+
+                new FarmLocation
                 {
                     Latitude = 45.03009,
                     Longitude = -93.31934,
@@ -1187,8 +1128,8 @@ namespace PokemonGoGUI.GoManager
                     Longitude = -73.983724,
                     Name = "7Pokestops, Central Park NY"
                 },
-				
-		        new FarmLocation
+
+                new FarmLocation
                 {
                     Latitude = 51.22505600,
                     Longitude = 6.80713000,

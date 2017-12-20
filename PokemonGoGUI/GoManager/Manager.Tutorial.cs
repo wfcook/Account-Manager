@@ -1,15 +1,14 @@
 ﻿using Google.Protobuf;
-using Google.Protobuf.Collections;
 using POGOProtos.Data.Player;
 using POGOProtos.Enums;
 using POGOProtos.Networking.Requests;
 using POGOProtos.Networking.Requests.Messages;
 using POGOProtos.Networking.Responses;
+using PokemonGoGUI.Extensions;
 using PokemonGoGUI.GoManager.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace PokemonGoGUI.GoManager
@@ -131,26 +130,26 @@ namespace PokemonGoGUI.GoManager
 
         public async Task<MethodResult> MarkTutorialsComplete(List<TutorialState> tutorials)
         {
-            var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
-            {
-                RequestType = RequestType.MarkTutorialComplete,
-                RequestMessage = new MarkTutorialCompleteMessage
-                {
-                    SendMarketingEmails = false,
-                    SendPushNotifications = false,
-                    TutorialsCompleted = { tutorials }
-                }.ToByteString()
-            });
-
-            MarkTutorialCompleteResponse markTutorialCompleteResponse = null;
-
             try
             {
+                var response = await ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
+                {
+                    RequestType = RequestType.MarkTutorialComplete,
+                    RequestMessage = new MarkTutorialCompleteMessage
+                    {
+                        SendMarketingEmails = false,
+                        SendPushNotifications = false,
+                        TutorialsCompleted = { tutorials }
+                    }.ToByteString()
+                });
+
+                MarkTutorialCompleteResponse markTutorialCompleteResponse = null;
+
                 markTutorialCompleteResponse = MarkTutorialCompleteResponse.Parser.ParseFrom(response);
                 LogCaller(new LoggerEventArgs("Tutorial completion request wasn't successful", LoggerTypes.Success));
 
-                _client.ClientSession.Player.Data = markTutorialCompleteResponse.PlayerData;
-                PlayerData = _client.ClientSession.Player.Data;
+                ClientSession.Player.Data = markTutorialCompleteResponse.PlayerData;
+                PlayerData = ClientSession.Player.Data;
 
                 return new MethodResult
                 {
@@ -159,8 +158,7 @@ namespace PokemonGoGUI.GoManager
             }
             catch (Exception ex)
             {
-                if (response.IsEmpty)
-                    LogCaller(new LoggerEventArgs("Failed to mark tutorials as complete", LoggerTypes.Exception, ex));
+                LogCaller(new LoggerEventArgs("Failed to mark tutorials as complete", LoggerTypes.Exception, ex));
 
                 return new MethodResult();
             }
@@ -168,19 +166,19 @@ namespace PokemonGoGUI.GoManager
 
         public async Task<MethodResult> CompleteEncounterTutorial(PokemonId pokemon)
         {
-            var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
-            {
-                RequestType = RequestType.EncounterTutorialComplete,
-                RequestMessage = new EncounterTutorialCompleteMessage
-                {
-                    PokemonId = pokemon
-                }.ToByteString()
-            });
-
-            EncounterTutorialCompleteResponse encounterTutorialCompleteResponse = null;
-
             try
             {
+                var response = await ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
+                {
+                    RequestType = RequestType.EncounterTutorialComplete,
+                    RequestMessage = new EncounterTutorialCompleteMessage
+                    {
+                        PokemonId = pokemon
+                    }.ToByteString()
+                });
+
+                EncounterTutorialCompleteResponse encounterTutorialCompleteResponse = null;
+
                 encounterTutorialCompleteResponse = EncounterTutorialCompleteResponse.Parser.ParseFrom(response);
                 LogCaller(new LoggerEventArgs(String.Format("Caught a {0}", pokemon), LoggerTypes.Success));
 
@@ -191,8 +189,7 @@ namespace PokemonGoGUI.GoManager
             }
             catch (Exception ex)
             {
-                if (response.IsEmpty)
-                    LogCaller(new LoggerEventArgs("EncounterTutorialCompleteResponse parsing failed because response was empty", LoggerTypes.Exception, ex));
+                LogCaller(new LoggerEventArgs("EncounterTutorialCompleteResponse parsing failed because response was empty", LoggerTypes.Exception, ex));
 
                 return new MethodResult();
             }
@@ -200,21 +197,21 @@ namespace PokemonGoGUI.GoManager
 
         public async Task<MethodResult> SetPlayerAvatar()
         {
-            PlayerAvatar avatar = new PlayerAvatar();
-
-            var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
-            {
-                RequestType = RequestType.SetAvatar,
-                RequestMessage = new SetAvatarMessage
-                {
-                    PlayerAvatar = avatar
-                }.ToByteString()
-            });
-
-            SetAvatarResponse setAvatarResponse = null;
-
             try
             {
+                PlayerAvatar avatar = new PlayerAvatar();
+
+                var response = await ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
+                {
+                    RequestType = RequestType.SetAvatar,
+                    RequestMessage = new SetAvatarMessage
+                    {
+                        PlayerAvatar = avatar
+                    }.ToByteString()
+                });
+
+                SetAvatarResponse setAvatarResponse = null;
+
                 setAvatarResponse = SetAvatarResponse.Parser.ParseFrom(response);
                 LogCaller(new LoggerEventArgs("Avatar set to defaults", LoggerTypes.Success));
 
@@ -226,8 +223,7 @@ namespace PokemonGoGUI.GoManager
             }
             catch (Exception ex)
             {
-                if (response.IsEmpty)
-                    LogCaller(new LoggerEventArgs("Failed to set avatar", LoggerTypes.Exception, ex));
+                LogCaller(new LoggerEventArgs("Failed to set avatar", LoggerTypes.Exception, ex));
 
                 return new MethodResult();
             }
@@ -235,20 +231,20 @@ namespace PokemonGoGUI.GoManager
 
         public async Task<MethodResult> SetAvatarItemAsViewed()
         {
-            var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
-            {
-                RequestType = RequestType.SetAvatarItemAsViewed,
-                RequestMessage = new SetAvatarItemAsViewedMessage
-                {
-                    //TODO: get avatarids 
-                    //AvatarTemplateId = { }
-                }.ToByteString()
-            });
-
-            SetAvatarItemAsViewedResponse setAvatarItemAsViewedResponse = null;
-
             try
             {
+                var response = await ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
+                {
+                    RequestType = RequestType.SetAvatarItemAsViewed,
+                    RequestMessage = new SetAvatarItemAsViewedMessage
+                    {
+                        //TODO: get avatarids 
+                        //AvatarTemplateId = { }
+                    }.ToByteString()
+                });
+
+                SetAvatarItemAsViewedResponse setAvatarItemAsViewedResponse = null;
+
                 setAvatarItemAsViewedResponse = SetAvatarItemAsViewedResponse.Parser.ParseFrom(response);
                 LogCaller(new LoggerEventArgs("Set avatar item as viewed", LoggerTypes.Success));
 
@@ -259,8 +255,7 @@ namespace PokemonGoGUI.GoManager
             }
             catch (Exception ex)
             {
-                if (response.IsEmpty)
-                    LogCaller(new LoggerEventArgs("SetAvatarItemAsViewedResponse parsing failed because response was empty", LoggerTypes.Exception, ex));
+                LogCaller(new LoggerEventArgs("SetAvatarItemAsViewedResponse parsing failed because response was empty", LoggerTypes.Exception, ex));
 
                 return new MethodResult();
             }

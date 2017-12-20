@@ -3,6 +3,7 @@ using POGOLib.Official.Util.Device;
 using POGOProtos.Enums;
 using POGOProtos.Inventory.Item;
 using PokemonGoGUI.Enums;
+using PokemonGoGUI.Extensions;
 using PokemonGoGUI.Models;
 using System;
 using System.Collections.Generic;

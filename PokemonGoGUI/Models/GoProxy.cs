@@ -1,4 +1,6 @@
-﻿namespace PokemonGoGUI.Models
+﻿using PokemonGoGUI.Extensions;
+
+namespace PokemonGoGUI.Models
 {
     public class GoProxy : ProxyEx
     {

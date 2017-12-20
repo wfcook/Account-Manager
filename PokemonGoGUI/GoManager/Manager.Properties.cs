@@ -7,6 +7,7 @@ using POGOProtos.Inventory.Item;
 using POGOProtos.Settings.Master;
 using PokemonGoGUI.AccountScheduler;
 using PokemonGoGUI.Enums;
+using PokemonGoGUI.Extensions;
 using PokemonGoGUI.GoManager.Models;
 using PokemonGoGUI.Models;
 using System;
