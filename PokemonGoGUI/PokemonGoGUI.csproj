@@ -217,7 +217,6 @@
     <Compile Include="GoManager\Manager.Events.cs" />
     <Compile Include="GoManager\Manager.Inventory.cs" />
     <Compile Include="GoManager\Manager.Log.cs" />
-    <Compile Include="Models\PokeSniperResult.cs" />
     <Compile Include="Models\ProgramExportModel.cs" />
     <Compile Include="Models\TransferSettings.cs" />
     <Compile Include="ProxyEx.cs" />

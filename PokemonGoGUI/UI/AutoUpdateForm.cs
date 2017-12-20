@@ -16,6 +16,7 @@ namespace PokemonGoGUI.UI
         public string DownloadLink { get; set; }
         public string ChangelogLink { get; set; }
         public string Destination { get; set; }
+        private WebClient Client = new WebClient();
 
         public AutoUpdateForm()
         {
@@ -56,22 +57,21 @@ namespace PokemonGoGUI.UI
 
         public bool DownloadFile(string url, string dest)
         {
-            using (var client = new WebClient())
+            try
             {
-                try
-                {
-                    client.DownloadFileCompleted += Client_DownloadFileCompleted;
-                    client.DownloadProgressChanged += Client_DownloadProgressChanged;
+                Client.DownloadFileCompleted += Client_DownloadFileCompleted;
+                Client.DownloadProgressChanged += Client_DownloadProgressChanged;
 
-                    client.DownloadFileAsync(new Uri(url), dest);
-                    //Client. (dest, LogLevel.Info);
-                }
-                catch
-                {
-                    Close();
-                }
-                return true;
+                Client.DownloadFileAsync(new Uri(url), dest);
+                //Client. (dest, LogLevel.Info);
             }
+            catch
+            {
+                Client.DownloadFileCompleted -= Client_DownloadFileCompleted;
+                Client.DownloadProgressChanged -= Client_DownloadProgressChanged;
+                Close();
+            }
+                return true;
         }
 
         private void Client_DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
@@ -79,6 +79,8 @@ namespace PokemonGoGUI.UI
             Invoke(new Action(() =>
             {
                 DialogResult = DialogResult.OK;
+                Client.DownloadFileCompleted -= Client_DownloadFileCompleted;
+                Client.DownloadProgressChanged -= Client_DownloadProgressChanged;
                 Close();
             }));
         }
@@ -90,7 +92,6 @@ namespace PokemonGoGUI.UI
                 lblMessage.Text = $"Updating {Application.ProductName} from v{CurrentVersion} to v{LatestVersion} ({e.ProgressPercentage}% Completed)";
             }));
         }
-
 
         public void StartDownload()
         {
@@ -107,6 +108,8 @@ namespace PokemonGoGUI.UI
 
         private void Btncancel_Click(object sender, EventArgs e)
         {
+            Client.DownloadFileCompleted -= Client_DownloadFileCompleted;
+            Client.DownloadProgressChanged -= Client_DownloadProgressChanged;
             Close();
         }
     }
