@@ -1,5 +1,14 @@
 # Change Log
 
+## [v2.21.0.0](https://github.com/Furtif/GoManager/tree/v2.21.0.0) (2017-12-21)
+
+[Full Changelog](https://github.com/Furtif/GoManager/compare/v2.20.0.9...v2.21.0.0)
+
+**Merged pull requests:**
+
+- New api [\#40](https://github.com/Furtif/GoManager/pull/40) ([Furtif](https://github.com/Furtif))
+- Big update [\#39](https://github.com/Furtif/GoManager/pull/39) ([Furtif](https://github.com/Furtif))
+
 ## [v2.20.0.9](https://github.com/Furtif/GoManager/tree/v2.20.0.9) (2017-12-16)
 
 [Full Changelog](https://github.com/Furtif/GoManager/compare/v2.20.0.8...v2.20.0.9)
