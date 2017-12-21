@@ -3,6 +3,7 @@ using POGOLib.Official.Util.Device;
 using POGOProtos.Enums;
 using POGOProtos.Inventory.Item;
 using PokemonGoGUI.Enums;
+using PokemonGoGUI.Extensions;
 using PokemonGoGUI.Models;
 using System;
 using System.Collections.Generic;
@@ -27,11 +28,8 @@ namespace PokemonGoGUI
         public string GroupName { get; set; }
         public string AccountName { get; set; }
         public AuthType AuthType { get; set; }
-        public string PtcUsername { get; set; }
-        public string PtcPassword { get; set; }
-        public string GoogleRefreshToken { get; set; }
-        public string GooglePassword { get; set; }
-        public string GoogleUsername { get; set; }
+        public string Username { get; set; }
+        public string Password { get; set; }
         public double DefaultLatitude { get; set; }
         public double DefaultLongitude { get; set; }
         public double DefaultAltitude { get; set; }
@@ -66,9 +64,6 @@ namespace PokemonGoGUI
 
         public int DelayBetweenLocationUpdates { get; set; }
         public int LocationupdateDelayRandom { get; set; }
-
-        public int DelayBetweenSnipes { get; set; }
-        public int BetweenSnipesDelayRandom { get; set; }
 
         public int GeneralDelay { get; set; }
         public int GeneralDelayRandom { get; set; }
@@ -120,8 +115,6 @@ namespace PokemonGoGUI
         public List<CatchSetting> CatchSettings { get; set; }
         public List<EvolveSetting> EvolveSettings { get; set; }
         public List<TransferSetting> TransferSettings { get; set; }
-        //public List<CatchSetting> SniperSettings { get; set; }
-
 
         [JsonConstructor]
         public Settings(bool jsonConstructor = true)
@@ -148,7 +141,6 @@ namespace PokemonGoGUI
         {
             GroupName = "Default";
             AuthType = AuthType.Ptc;
-            GoogleRefreshToken = String.Empty;
             DefaultLatitude = 40.764665;
             DefaultLongitude = -73.973184;
             DefaultAltitude = 10;
@@ -163,7 +155,6 @@ namespace PokemonGoGUI
             StopAtMinAccountState = AccountState.PokemonBanOrPokestopBanTemp;
             DelayBetweenPlayerActions = 500;
             DelayBetweenLocationUpdates = 1000;
-            DelayBetweenSnipes = 7000;
             GeneralDelay = 800;
             MaxLogs = 400;
             MaxFailBeforeReset = 3;

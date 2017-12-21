@@ -1,13 +1,8 @@
 ﻿using GeoCoordinatePortable;
-using Google.Protobuf;
 using POGOProtos.Map;
 using POGOProtos.Map.Fort;
 using POGOProtos.Map.Pokemon;
-using POGOProtos.Networking.Requests;
-using POGOProtos.Networking.Requests.Messages;
-using POGOProtos.Networking.Responses;
 using PokemonGoGUI.Extensions;
-using PokemonGoGUI.GoManager.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,20 +20,22 @@ namespace PokemonGoGUI.GoManager
             {
                 return new MethodResult<List<MapPokemon>>
                 {
-                    Message = mapCellResponse.Message
+                    Message = mapCellResponse.Message,
+                    Data = new List<MapPokemon>(),
+                    Success = mapCellResponse.Success
                 };
             }
 
-            List<MapPokemon> pokemon = mapCellResponse.Data.
-                                        SelectMany(x => x.CatchablePokemons).
-                                        Where(x => PokemonWithinCatchSettings(x)).
-                                        ToList();
+            // update catchable pokemons
+            List<MapPokemon> newCatchablePokemons = mapCellResponse.Data.SelectMany(x => x.CatchablePokemons).
+                                        Where(x => PokemonWithinCatchSettings(x)).ToList();
+            //LogCaller(new LoggerEventArgs($"Found {newCatchablePokemons.Count} catchable pokemons", Models.LoggerTypes.Success));
 
             return new MethodResult<List<MapPokemon>>
             {
-                Data = pokemon,
-                Success = true,
-                Message = "Succes"
+                Data = newCatchablePokemons,
+                Success = mapCellResponse.Success,
+                Message = mapCellResponse.Message
             };
         }
 
@@ -65,17 +62,17 @@ namespace PokemonGoGUI.GoManager
 
             foreach (FortData fort in allFortsResponse.Data)
             {
-                if(fort.CooldownCompleteTimestampMs > DateTime.UtcNow.ToUnixTime())
+                if (fort.CooldownCompleteTimestampMs > DateTime.UtcNow.ToUnixTime())
                 {
                     continue;
-                }                
+                }
 
-                GeoCoordinate defaultLocation = new GeoCoordinate(UserSettings.DefaultLatitude, UserSettings.DefaultLongitude);
+                GeoCoordinate defaultLocation = new GeoCoordinate(ClientSession.Player.Latitude, ClientSession.Player.Longitude);
                 GeoCoordinate fortLocation = new GeoCoordinate(fort.Latitude, fort.Longitude);
 
                 double distance = CalculateDistanceInMeters(defaultLocation, fortLocation);
 
-                if(distance > UserSettings.MaxTravelDistance)
+                if (distance > UserSettings.MaxTravelDistance)
                 {
                     continue;
                 }
@@ -83,7 +80,7 @@ namespace PokemonGoGUI.GoManager
                 fortData.Add(fort);
             }
 
-            if(fortData.Count == 0)
+            if (fortData.Count == 0)
             {
                 return new MethodResult<List<FortData>>
                 {
@@ -93,7 +90,7 @@ namespace PokemonGoGUI.GoManager
                 };
             }
 
-            fortData = fortData.OrderBy(x => CalculateDistanceInMeters(UserSettings.DefaultLatitude, UserSettings.DefaultLongitude, x.Latitude, x.Longitude)).ToList();
+            fortData = fortData.OrderBy(x => CalculateDistanceInMeters(ClientSession.Player.Latitude, ClientSession.Player.Longitude, x.Latitude, x.Longitude)).ToList();
 
             return new MethodResult<List<FortData>>
             {
@@ -121,7 +118,7 @@ namespace PokemonGoGUI.GoManager
                     continue;
                 }
 
-                GeoCoordinate defaultLocation = new GeoCoordinate(UserSettings.DefaultLatitude, UserSettings.DefaultLongitude);
+                GeoCoordinate defaultLocation = new GeoCoordinate(ClientSession.Player.Latitude, ClientSession.Player.Longitude);
                 GeoCoordinate fortLocation = new GeoCoordinate(fort.Latitude, fort.Longitude);
 
                 double distance = CalculateDistanceInMeters(defaultLocation, fortLocation);
@@ -137,8 +134,8 @@ namespace PokemonGoGUI.GoManager
             return new MethodResult<List<FortData>>
             {
                 Data = fortData,
-                Message = "Success",
-                Success = true
+                Message = allFortsResponse.Message,
+                Success = allFortsResponse.Success
             };
         }
 
@@ -150,90 +147,45 @@ namespace PokemonGoGUI.GoManager
             {
                 return new MethodResult<List<FortData>>
                 {
-                    Message = mapCellResponse.Message
+                    Data = new List<FortData>(),
+                    Message = mapCellResponse.Message,
+                    Success = mapCellResponse.Success
                 };
             }
 
             return new MethodResult<List<FortData>>
             {
                 Data = mapCellResponse.Data.SelectMany(x => x.Forts).ToList(),
-                Success = true,
-                Message = "Success"
+                Success = mapCellResponse.Success,
+                Message = mapCellResponse.Message
             };
         }
 
         private async Task<MethodResult<List<MapCell>>> GetMapObjects()
         {
-            TimeSpan secondsSinceLastRequest = DateTime.Now - _lastMapRequest;
-
-            if (secondsSinceLastRequest < TimeSpan.FromSeconds(6))
+            if (!LoggedIn)
             {
-                return new MethodResult<List<MapCell>>
+                MethodResult result = await Login_();
+
+                if (!result.Success)
                 {
-                    Data = new List<MapCell>(),
-                    Success = true
-                };
+                    return new MethodResult<List<MapCell>> { Message = "Failed to get map objets.", Data = new List<MapCell>() };
+                }
             }
 
-            await Task.Delay(0);           
-            var cells = _client.ClientSession.Map.Cells.ToList();
-            if (cells.Count > 1)
+            if (ClientSession.Map.Cells.Count < 0)
             {
-                _lastMapRequest = DateTime.Now;
+                return new MethodResult<List<MapCell>> { Message = "Failed to get map objets.", Data = new List<MapCell>() };
+            }
 
-                return new MethodResult<List<MapCell>>
-                {
-                    Data = cells,
-                    Message = "Success",
-                    Success = true
-                };
-            }
-            else
-            {
-                return new MethodResult<List<MapCell>>
-                {
-                    Data = new List<MapCell>(),
-                    Message = "Failed to get map objects"
-                };
-            }
-            /*/ Retrieve the closest fort to your current player coordinates.
-            var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
-            {
-                RequestType = RequestType.GetMapObjects,
-                RequestMessage = new GetMapObjectsMessage
-                {
-                    //CellId,
-                    Latitude = _client.ClientSession.Player.Latitude,
-                    Longitude = _client.ClientSession.Player.Longitude,
-                    //SinceTimestampMs 
-                }.ToByteString()
-            });
+            //await Task.Delay(3000);
 
-            GetMapObjectsResponse getMapObjectsResponse = null;
-            try
+            return new MethodResult<List<MapCell>>
             {
-                getMapObjectsResponse = GetMapObjectsResponse.Parser.ParseFrom(response);
-                _lastMapRequest = DateTime.Now;
- 
-                return new MethodResult<List<MapCell>>
-                {
-                    Data = getMapObjectsResponse.MapCells.ToList(),
-                    Message = "Success",
-                    Success = true
-                };
-            }
-            catch (Exception ex)
-            {
-                if (response.IsEmpty)
-                    LogCaller(new LoggerEventArgs("Failed to get map objects", Models.LoggerTypes.Exception, ex));
-
-                return new MethodResult<List<MapCell>>
-                {
-                    Data = new List<MapCell>(),
-                    Message = "Failed to get map objects"
-                };
-            }
-            */
+                Data = ClientSession.Map.Cells.ToList(),
+                Success = true,
+                Message = "Success"
+            };
         }
     }
 }

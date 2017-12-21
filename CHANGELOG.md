@@ -1,11 +1,62 @@
 # Change Log
 
-## [v2.20.0.4](https://github.com/Furtif/GoManager/tree/v2.20.0.4) (2017-12-10)
+## [v2.21.0.0](https://github.com/Furtif/GoManager/tree/v2.21.0.0) (2017-12-21)
+
+[Full Changelog](https://github.com/Furtif/GoManager/compare/v2.20.0.9...v2.21.0.0)
+
+**Merged pull requests:**
+
+- New api [\#40](https://github.com/Furtif/GoManager/pull/40) ([Furtif](https://github.com/Furtif))
+- Big update [\#39](https://github.com/Furtif/GoManager/pull/39) ([Furtif](https://github.com/Furtif))
+
+## [v2.20.0.9](https://github.com/Furtif/GoManager/tree/v2.20.0.9) (2017-12-16)
+
+[Full Changelog](https://github.com/Furtif/GoManager/compare/v2.20.0.8...v2.20.0.9)
+
+**Merged pull requests:**
+
+- Fix crash [\#37](https://github.com/Furtif/GoManager/pull/37) ([Furtif](https://github.com/Furtif))
+
+## [v2.20.0.8](https://github.com/Furtif/GoManager/tree/v2.20.0.8) (2017-12-16)
+
+[Full Changelog](https://github.com/Furtif/GoManager/compare/v2.20.0.7...v2.20.0.8)
+
+**Merged pull requests:**
+
+- Fix transfert [\#36](https://github.com/Furtif/GoManager/pull/36) ([Furtif](https://github.com/Furtif))
+
+## [v2.20.0.7](https://github.com/Furtif/GoManager/tree/v2.20.0.7) (2017-12-16)
+
+[Full Changelog](https://github.com/Furtif/GoManager/compare/v2.20.0.6...v2.20.0.7)
+
+**Merged pull requests:**
+
+- others [\#35](https://github.com/Furtif/GoManager/pull/35) ([Furtif](https://github.com/Furtif))
+
+## [v2.20.0.6](https://github.com/Furtif/GoManager/tree/v2.20.0.6) (2017-12-14)
+
+[Full Changelog](https://github.com/Furtif/GoManager/compare/v2.20.0.5...v2.20.0.6)
+
+**Merged pull requests:**
+
+- Fix some bugs [\#31](https://github.com/Furtif/GoManager/pull/31) ([Furtif](https://github.com/Furtif))
+
+## [v2.20.0.5](https://github.com/Furtif/GoManager/tree/v2.20.0.5) (2017-12-12)
+
+[Full Changelog](https://github.com/Furtif/GoManager/compare/v2.20.0.4...v2.20.0.5)
+
+**Merged pull requests:**
+
+-  Other fix [\#27](https://github.com/Furtif/GoManager/pull/27) ([Furtif](https://github.com/Furtif))
+- Review load mapcells [\#25](https://github.com/Furtif/GoManager/pull/25) ([Furtif](https://github.com/Furtif))
+
+## [v2.20.0.4](https://github.com/Furtif/GoManager/tree/v2.20.0.4) (2017-12-11)
 
 [Full Changelog](https://github.com/Furtif/GoManager/compare/v2.20.0.3...v2.20.0.4)
 
 **Merged pull requests:**
 
+- Fixes bugs pogolib [\#24](https://github.com/Furtif/GoManager/pull/24) ([Furtif](https://github.com/Furtif))
 -  Update pogolib [\#23](https://github.com/Furtif/GoManager/pull/23) ([Furtif](https://github.com/Furtif))
 
 ## [v2.20.0.3](https://github.com/Furtif/GoManager/tree/v2.20.0.3) (2017-12-09)

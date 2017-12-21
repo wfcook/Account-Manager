@@ -30,7 +30,7 @@ namespace PokemonGoGUI
         private List<HashKey> _hashKeys = new List<HashKey>();
         private bool _spf = false;
         private bool _showStartup = true;
-        private bool IsLatest = true;
+        private bool _autoupdate = true;
         private readonly string _saveFile = "data";
         private string _versionNumber = $"v{Assembly.GetExecutingAssembly().GetName().Version} - Forked GoManager Version";
 
@@ -100,13 +100,10 @@ namespace PokemonGoGUI
                 }
             }
 
-            foreach(Manager manager in managers)
+            foreach (Manager manager in managers)
             {
-                if (manager.IsRunning)
-                {
-                    DetailsForm dForm = new DetailsForm(manager);
-                    dForm.Show();
-                }
+                DetailsForm dForm = new DetailsForm(manager);
+                dForm.Show();
             }
         }
 
@@ -124,12 +121,16 @@ namespace PokemonGoGUI
         {
             this.Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
 
-            IsLatest = await GoManager.VersionCheckState.IsLatest();
-            if (!IsLatest)
-                await GoManager.VersionCheckState.Execute();
-            await GoManager.VersionCheckState.CleanupOldFiles();
-
             await LoadSettings();
+
+            if (_autoupdate)
+            {
+                bool IsLatest = await VersionCheckState.IsLatest();
+                if (!IsLatest)
+                    await VersionCheckState.Execute();
+            }
+
+            await VersionCheckState.CleanupOldFiles();
 
             if (_showStartup)
             {
@@ -156,6 +157,29 @@ namespace PokemonGoGUI
             SaveSettings();
         }
 
+        private void MainForm_Resize(object sender, EventArgs e)
+        {
+            Trayicon.Visible = false;
+            Trayicon.Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
+            if (FormWindowState.Minimized == this.WindowState)
+            {
+                Trayicon.BalloonTipIcon = ToolTipIcon.Info; //Shows the info icon so the user doesn't thing there is an error.
+                Trayicon.BalloonTipTitle = $"Account Manager is minimized";
+                Trayicon.BalloonTipText = "Click on this icon to restore";
+                Trayicon.Text = $"Account Manager, Click here to restore";
+                Trayicon.Visible = true;
+                Trayicon.ShowBalloonTip(5000);
+                Hide();
+            }
+        }
+
+        private void TrayIcon_MouseClick(object sender, MouseEventArgs e)
+        {
+            this.Show();
+            this.WindowState = FormWindowState.Normal;
+            this.Refresh();
+        }
+
         private async Task<bool> LoadSettings()
         {
             var gzipFile = _saveFile + ".json.gz";
@@ -180,6 +204,8 @@ namespace PokemonGoGUI
                 tempHashKeys = model.HashKeys;
                 _spf = model.SPF;
                 _showStartup = model.ShowWelcomeMessage;
+                _autoupdate = model.AutoUpdate;
+
                 foreach(Manager manager in tempManagers)
                 {
                     manager.AddSchedulerEvent();
@@ -232,7 +258,8 @@ namespace PokemonGoGUI
                     Schedulers = _schedulers,
                     HashKeys = _hashKeys,
                     SPF = _spf,
-                    ShowWelcomeMessage = _showStartup
+                    ShowWelcomeMessage = _showStartup,
+                    AutoUpdate = _autoupdate
                 };
 
                 string data = Serializer.ToJson(model);
@@ -279,10 +306,14 @@ namespace PokemonGoGUI
         {
             Manager manager = new Manager(_proxyHandler);
 
-            AccountSettingsForm asForm = new AccountSettingsForm(manager);
-            
-            if(asForm.ShowDialog() == DialogResult.OK)
+            AccountSettingsForm asForm = new AccountSettingsForm(manager)
             {
+                AutoUpdate = _autoupdate
+            };
+
+            if (asForm.ShowDialog() == DialogResult.OK)
+            {
+                _autoupdate = asForm.AutoUpdate;
                 AddManager(manager);
             }
 
@@ -335,20 +366,27 @@ namespace PokemonGoGUI
         {
             int count = fastObjectListViewMain.SelectedObjects.Count;
 
-            if(count > 1)
+            if (count > 1)
             {
                 DialogResult result = MessageBox.Show(String.Format("Are you sure you want to open {0} edit forms?", count), "Confirmation", MessageBoxButtons.YesNo);
 
-                if(result != DialogResult.Yes)
+                if (result != DialogResult.Yes)
                 {
                     return;
                 }
             }
 
-            foreach(Manager manager in fastObjectListViewMain.SelectedObjects)
+            foreach (Manager manager in fastObjectListViewMain.SelectedObjects)
             {
-                AccountSettingsForm asForm = new AccountSettingsForm(manager);
-                asForm.ShowDialog();
+                AccountSettingsForm asForm = new AccountSettingsForm(manager)
+                {
+                    AutoUpdate = _autoupdate
+                };
+
+                if (asForm.ShowDialog() == DialogResult.OK)
+                {
+                    _autoupdate = asForm.AutoUpdate;
+                }
             }
 
             fastObjectListViewMain.RefreshSelectedObjects();
@@ -591,8 +629,8 @@ namespace PokemonGoGUI
                     }
 
                     manager.UserSettings.AccountName = importModel.Username.Trim();
-                    manager.UserSettings.PtcUsername = importModel.Username.Trim();
-                    manager.UserSettings.PtcPassword = importModel.Password.Trim();
+                    manager.UserSettings.Username = importModel.Username.Trim();
+                    manager.UserSettings.Password = importModel.Password.Trim();
                     manager.UserSettings.ProxyIP = importModel.Address;
                     manager.UserSettings.ProxyPort = importModel.Port;
                     manager.UserSettings.ProxyUsername = importModel.ProxyUsername;
@@ -885,7 +923,7 @@ namespace PokemonGoGUI
             }
         }
 
-        private async void ExportStatsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ExportStatsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ParallelOptions options = new ParallelOptions
             {
@@ -894,16 +932,16 @@ namespace PokemonGoGUI
 
             IEnumerable<Manager> managers = fastObjectListViewMain.SelectedObjects.Cast<Manager>();
 
-            await Task.Run(() =>
-                {
-                    Parallel.ForEach(managers, (manager) =>
-                    {
-                        manager.ExportStats().Wait();
-                    });
-                });
+            Task.Run(() =>
+                 {
+                     Parallel.ForEach(managers, options, (manager) =>
+                     {
+                             manager.ExportStats().Wait();
+                     });
+                 });
         }
 
-        private async void UpdateDetailsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void UpdateDetailsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             updateDetailsToolStripMenuItem.Enabled = false;
 
@@ -914,11 +952,11 @@ namespace PokemonGoGUI
 
             IEnumerable<Manager> selectedManager = fastObjectListViewMain.SelectedObjects.Cast<Manager>();
 
-            await Task.Run(() =>
+            Task.Run(() =>
                 {
                     Parallel.ForEach(selectedManager, options, (manager) =>
                     {
-                        manager.UpdateDetails().Wait();
+                            manager.UpdateDetails().Wait();
                     });
                 });
 
@@ -1044,7 +1082,7 @@ namespace PokemonGoGUI
 
             try
             {
-                IEnumerable<string> accounts = fastObjectListViewMain.SelectedObjects.Cast<Manager>().Select(x => String.Format("{0}:{1}", x.UserSettings.PtcUsername, x.UserSettings.PtcPassword));
+                IEnumerable<string> accounts = fastObjectListViewMain.SelectedObjects.Cast<Manager>().Select(x => String.Format("{0}:{1}", x.UserSettings.Username, x.UserSettings.Password));
 
                 File.WriteAllLines(filename, accounts);
 
@@ -1450,7 +1488,7 @@ namespace PokemonGoGUI
 
         #endregion
 
-        private async void ExportJsonToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ExportJsonToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string fileName = String.Empty;
             List<AccountExportModel> exportModels = new List<AccountExportModel>();
@@ -1476,32 +1514,32 @@ namespace PokemonGoGUI
                 }
             }
 
+            ParallelOptions options = new ParallelOptions
+            {
+                MaxDegreeOfParallelism = 10
+            };
+
             IEnumerable<Manager> selectedManagers = fastObjectListViewMain.SelectedObjects.Cast<Manager>();
 
-            await Task.Run(() =>
-                {
-                    ParallelOptions options = new ParallelOptions
-                    {
-                        MaxDegreeOfParallelism = 10
-                    };
+            Task.Run(() =>
+                  {
+                     Parallel.ForEach(selectedManagers, options, (manager) =>
+                       {
+                           if (dialogResult == DialogResult.Yes)
+                           {
+                                   manager.UpdateDetails().Wait();
+                           }
 
-                    Parallel.ForEach(selectedManagers, options, (manager) =>
-                    {
-                        if (dialogResult == DialogResult.Yes)
-                        {
-                            manager.UpdateDetails().Wait();
-                        }
+                           MethodResult<AccountExportModel> result = manager.GetAccountExport();
 
-                        MethodResult<AccountExportModel> result = manager.GetAccountExport();
+                           if (!result.Success)
+                           {
+                               return;
+                           }
 
-                        if (!result.Success)
-                        {
-                            return;
-                        }
-
-                        exportModels.Add(result.Data);
-                    });
-                });
+                           exportModels.Add(result.Data);
+                       });
+                  });
 
             try
             {
@@ -1510,7 +1548,6 @@ namespace PokemonGoGUI
                 File.WriteAllText(fileName, data);
 
                 MessageBox.Show(String.Format("Successfully exported {0} of {1} accounts", exportModels.Count, fastObjectListViewMain.SelectedObjects.Count));
-
             }
             catch(Exception ex)
             {
@@ -1578,7 +1615,7 @@ namespace PokemonGoGUI
 
             if (startForm.ShowDialog() == DialogResult.OK)
             {
-                _showStartup = startForm.ShowOnStartUp;
+                startForm.ShowOnStartUp = _showStartup;
             }
         }
         private void TabControlMain_SelectedIndexChanged(object sender, EventArgs e)
@@ -2082,7 +2119,96 @@ namespace PokemonGoGUI
             }
             else if (e.Column == olvColumnHashInfos)
             {
-                e.SubItem.ForeColor = Color.White;
+                if (e.SubItem.Text == "The HashKey is invalid or has expired" || e.SubItem.Text.Contains("RPM: 0"))
+                    e.SubItem.ForeColor = Color.Red;
+                else
+                    e.SubItem.ForeColor = Color.White;
+            }
+        }
+
+        private void ImportToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog ofd = new OpenFileDialog())
+            {
+                ofd.Title = "Open Keys file";
+                ofd.Filter = "Json Files (*.json)|*.json|All Files (*.*)|*.*";
+
+                if (ofd.ShowDialog() == DialogResult.OK)
+                {
+                    if (String.IsNullOrEmpty(ofd.FileName))
+                    {
+                        return;
+                    }
+
+                    List<HashKey> newKeys = JsonConvert.DeserializeObject<List<HashKey>>(File.ReadAllText(ofd.FileName));
+                    int totalSuccess = 0;
+                    int total = newKeys.Count;
+                    List<string> existKeys = new List<string>();
+
+                    foreach (HashKey key in _hashKeys)
+                        existKeys.Add(key.Key);
+
+                    foreach (HashKey key in newKeys)
+                    {
+                        if (existKeys.Contains(key.Key))
+                            continue;
+                        key.KeyInfo = TestHashKey(key.Key);
+                        _hashKeys.Add(key);
+                        ++totalSuccess;
+                    }
+
+                    fastObjectListViewHashKeys.SetObjects(_hashKeys);
+
+                    MessageBox.Show(String.Format("Successfully imported {0} out of {1} keys", totalSuccess, total));
+                }
+            }
+        }
+
+        private void ExportToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            string fileName = String.Empty;
+            List<HashKey> keysToExport = new List<HashKey>();
+
+            using (SaveFileDialog sfd = new SaveFileDialog())
+            {
+                sfd.Filter = "Json Files (*.json)|*.json|All Files (*.*)|*.*";
+
+                if (sfd.ShowDialog() == DialogResult.OK)
+                {
+                    fileName = sfd.FileName;
+                }
+                else
+                {
+                    return;
+                }
+            }
+
+            ParallelOptions options = new ParallelOptions
+            {
+                MaxDegreeOfParallelism = 10
+            };
+
+            IEnumerable<HashKey> selectedKeys = fastObjectListViewHashKeys.SelectedObjects.Cast<HashKey>();
+
+            Task.Run(() =>
+            {
+                Parallel.ForEach(selectedKeys, options, (HashKey) =>
+                {
+                    keysToExport.Add(HashKey);
+                });
+            });
+
+            try
+            {
+                string data = JsonConvert.SerializeObject(keysToExport, Formatting.Indented);
+
+                File.WriteAllText(fileName, data);
+
+                MessageBox.Show(String.Format("Successfully exported {0} of {1} keys", keysToExport.Count, fastObjectListViewHashKeys.SelectedObjects.Count));
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(String.Format("Failed to save to file. Ex: {0}", ex.Message));
             }
         }
 
@@ -2121,5 +2247,6 @@ namespace PokemonGoGUI
             return result;
         }
         #endregion
+
     }
 }

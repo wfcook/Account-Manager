@@ -9,11 +9,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 
-[assembly: AssemblyTitle("GoManager")]
+[assembly: AssemblyTitle("Account Manager")]
 [assembly: AssemblyDescription("Pokemon Go Bot")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("GoManager")]
+[assembly: AssemblyProduct("Account Manager")]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -37,8 +37,8 @@ using System.Runtime.InteropServices;
 //
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
-// [assembly: AssemblyVersion("2.20.0.3")]
+// [assembly: AssemblyVersion("2.21.0.0")]
 
-[assembly: AssemblyVersion("2.20.0.3")]
+[assembly: AssemblyVersion("2.21.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
-[assembly: AssemblyInformationalVersion("v2.20.0.3")]
+[assembly: AssemblyInformationalVersion("v2.21.0.0")]
