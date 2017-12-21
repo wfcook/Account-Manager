@@ -33,6 +33,7 @@
             this.tabPageDetails = new System.Windows.Forms.TabPage();
             this.tabControlSettings = new System.Windows.Forms.TabControl();
             this.tabPageSettingsGeneral = new System.Windows.Forms.TabPage();
+            this.cbAutoUpdate = new System.Windows.Forms.CheckBox();
             this.checkBoxEnabeRaids = new System.Windows.Forms.CheckBox();
             this.checkBoxSendBerries = new System.Windows.Forms.CheckBox();
             this.checkBoxDeployToGym = new System.Windows.Forms.CheckBox();
@@ -197,7 +198,6 @@
             this.toolTipProxy = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipMinAccountState = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipHumanizeThrows = new System.Windows.Forms.ToolTip(this.components);
-            this.cbAutoUpdate = new System.Windows.Forms.CheckBox();
             this.tabControlMain.SuspendLayout();
             this.tabPageDetails.SuspendLayout();
             this.tabControlSettings.SuspendLayout();
@@ -328,6 +328,16 @@
             this.tabPageSettingsGeneral.TabIndex = 0;
             this.tabPageSettingsGeneral.Text = "General";
             this.tabPageSettingsGeneral.UseVisualStyleBackColor = true;
+            // 
+            // cbAutoUpdate
+            // 
+            this.cbAutoUpdate.AutoSize = true;
+            this.cbAutoUpdate.Location = new System.Drawing.Point(379, 392);
+            this.cbAutoUpdate.Name = "cbAutoUpdate";
+            this.cbAutoUpdate.Size = new System.Drawing.Size(109, 21);
+            this.cbAutoUpdate.TabIndex = 41;
+            this.cbAutoUpdate.Text = "Auto Update";
+            this.cbAutoUpdate.UseVisualStyleBackColor = true;
             // 
             // checkBoxEnabeRaids
             // 
@@ -1540,12 +1550,13 @@
             "api/v137_1/hash",
             "api/v143_1/hash",
             "api/v147_1/hash",
-            "api/v153_2/hash"});
+            "api/v153_2/hash",
+            "api/v157_5/hash"});
             this.cbHashEndpoint.Location = new System.Drawing.Point(164, 63);
             this.cbHashEndpoint.Name = "cbHashEndpoint";
             this.cbHashEndpoint.Size = new System.Drawing.Size(283, 24);
             this.cbHashEndpoint.TabIndex = 2;
-            this.cbHashEndpoint.Text = "api/v153_2/hash";
+            this.cbHashEndpoint.Text = "api/v157_5/hash";
             // 
             // cbHashHost
             // 
@@ -1993,16 +2004,6 @@
             this.restoreDefaultsToolStripMenuItem2.Size = new System.Drawing.Size(187, 24);
             this.restoreDefaultsToolStripMenuItem2.Text = "Restore Defaults";
             this.restoreDefaultsToolStripMenuItem2.Click += new System.EventHandler(this.RestoreDefaultsToolStripMenuItem2_Click);
-            // 
-            // cbAutoUpdate
-            // 
-            this.cbAutoUpdate.AutoSize = true;
-            this.cbAutoUpdate.Location = new System.Drawing.Point(379, 392);
-            this.cbAutoUpdate.Name = "cbAutoUpdate";
-            this.cbAutoUpdate.Size = new System.Drawing.Size(109, 21);
-            this.cbAutoUpdate.TabIndex = 41;
-            this.cbAutoUpdate.Text = "Auto Update";
-            this.cbAutoUpdate.UseVisualStyleBackColor = true;
             // 
             // AccountSettingsForm
             // 

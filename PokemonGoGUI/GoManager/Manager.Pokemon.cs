@@ -21,7 +21,8 @@ namespace PokemonGoGUI.GoManager
     {
         public async Task<MethodResult> TransferPokemon(IEnumerable<PokemonData> pokemonToTransfer)
         {
-            //return new MethodResult();
+            //TODO: Revise
+            return new MethodResult { Message = "Dev mode sorry" };
                 foreach (PokemonData pokemon in pokemonToTransfer)
                 {
                     if (pokemon.Favorite == 1
