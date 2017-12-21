@@ -25,7 +25,7 @@ namespace PokemonGoGUI.GoManager
 {
     public partial class Manager
     {
-        private Version VersionStr = new Version("0.85.1");
+        private Version VersionStr = new Version("0.87.5");
         private AccessToken AccessToken = new AccessToken();
         private Session ClientSession { get; set; }
         private bool LoggedIn = false;
@@ -61,7 +61,8 @@ namespace PokemonGoGUI.GoManager
                 // TODO: make this configurable. To avoid bans (may be with a checkbox in hash keys tab).
                 //Configuration.IgnoreHashVersion = true;
                 VersionStr = Configuration.Hasher.PokemonVersion;
-                ((PokeHashHasher)Configuration.Hasher).PokehashSleeping += OnPokehashSleeping;
+                //Revise sleeping line 118
+                //((PokeHashHasher)Configuration.Hasher).PokehashSleeping += OnPokehashSleeping;
             }
             // *****
 
@@ -94,7 +95,7 @@ namespace PokemonGoGUI.GoManager
                 LoggedIn = true;
                 msgStr = "Successfully logged into server.";
             }
-
+            /*
             if (LoggedIn)
             {
                 ClientSession.AccessTokenUpdated += SessionOnAccessTokenUpdated;
@@ -105,7 +106,7 @@ namespace PokemonGoGUI.GoManager
                 ClientSession.RpcClient.HatchedEggsReceived += OnHatchedEggsReceived;
 
                 SaveAccessToken(ClientSession.AccessToken);
-            }
+            }*/
 
             return new MethodResult<bool>()
             {
