@@ -74,7 +74,7 @@ namespace PokemonGoGUI.GoManager
                     loginProvider = new GoogleLoginProvider(UserSettings.Username, UserSettings.Password);
                     break;
                 case AuthType.Ptc:
-                    loginProvider = new PtcLoginProvider(UserSettings.Username, UserSettings.Password);
+                    loginProvider = new PtcLoginProvider(UserSettings.Username, UserSettings.Password, UserSettings.Proxy.AsWebProxy());
                     break;
                 default:
                     throw new ArgumentException("Login provider must be either \"google\" or \"ptc\".");
@@ -193,7 +193,8 @@ namespace PokemonGoGUI.GoManager
                     DeviceModelIdentifier = UserSettings.DeviceModelIdentifier,
                     FirmwareFingerprint = UserSettings.FirmwareFingerprint,
                     FirmwareTags = UserSettings.FirmwareTags
-                }
+                },
+                Proxy = UserSettings.Proxy.AsWebProxy()
             };
 
             PlayerLocale = new GetPlayerMessage.Types.PlayerLocale
