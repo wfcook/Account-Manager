@@ -22,59 +22,54 @@ namespace PokemonGoGUI.GoManager
         public async Task<MethodResult> TransferPokemon(IEnumerable<PokemonData> pokemonToTransfer)
         {
             //TODO: Revise
-            return new MethodResult { Message = "Dev mode sorry" };
-                foreach (PokemonData pokemon in pokemonToTransfer)
+            //return new MethodResult { Message = "Dev mode sorry" };
+            foreach (PokemonData pokemon in pokemonToTransfer)
+            {
+                if (pokemon.Favorite == 1
+                    || pokemon.IsEgg
+                    || !string.IsNullOrEmpty(pokemon.DeployedFortId)
+                    || PlayerData.BuddyPokemon.Id == pokemon.Id)
                 {
-                    if (pokemon.Favorite == 1
-                        || pokemon.IsEgg
-                        || !string.IsNullOrEmpty(pokemon.DeployedFortId)
-                        || PlayerData.BuddyPokemon.Id == pokemon.Id)
+                    continue;
+                }
+
+                ReleasePokemonMessage message = new ReleasePokemonMessage { PokemonId = pokemon.Id };
+                try
+                {
+                    var response = await ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                     {
-                        continue;
+                        RequestType = RequestType.ReleasePokemon,
+                        RequestMessage = message.ToByteString()
+                    });
+
+                    ReleasePokemonResponse releasePokemonResponse = null;
+
+                    releasePokemonResponse = ReleasePokemonResponse.Parser.ParseFrom(response);
+                    if (releasePokemonResponse.Result == ReleasePokemonResponse.Types.Result.Success)
+                    {
+                        LogCaller(new LoggerEventArgs(
+                             String.Format("Successully transferred {0}. Cp: {1}. IV: {2:0.00}%",
+                                         pokemon.PokemonId,
+                                         pokemon.Cp,
+                                         CalculateIVPerfection(pokemon).Data),
+                                         LoggerTypes.Transfer));
+
+                        await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
                     }
-
-                    ReleasePokemonMessage message = new ReleasePokemonMessage { PokemonId = pokemon.Id };
-                    try
+                    else
                     {
-                        var response = await ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
-                        {
-                            RequestType = RequestType.ReleasePokemon,
-                            RequestMessage = message.ToByteString()
-                        });
-
-                        ReleasePokemonResponse releasePokemonResponse = null;
-
-                        releasePokemonResponse = ReleasePokemonResponse.Parser.ParseFrom(response);
-                        if (releasePokemonResponse.Result == ReleasePokemonResponse.Types.Result.Success)
-                        {
-                            LogCaller(new LoggerEventArgs(
-                                 String.Format("Successully transferred {0}. Cp: {1}. IV: {2:0.00}%",
-                                             pokemon.PokemonId,
-                                             pokemon.Cp,
-                                             CalculateIVPerfection(pokemon).Data),
-                                             LoggerTypes.Transfer));
-
-                            await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
-                        }
-                        else
-                        {
-                            LogCaller(new LoggerEventArgs(String.Format("Faill to transfer {0}. Because: {1}.",
-                                             pokemon.PokemonId,
-                                             releasePokemonResponse.Result), LoggerTypes.Warning));
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        LogCaller(new LoggerEventArgs("ReleasePokemonResponse parsing failed because response was empty", LoggerTypes.Exception, ex));
-
-                        return new MethodResult();
+                        LogCaller(new LoggerEventArgs(String.Format("Faill to transfer {0}. Because: {1}.",
+                                         pokemon.PokemonId,
+                                         releasePokemonResponse.Result), LoggerTypes.Warning));
                     }
                 }
-                return new MethodResult
+                catch (Exception ex)
                 {
-                    Success = true
-                };
+                    LogCaller(new LoggerEventArgs("ReleasePokemonResponse parsing failed because response was empty", LoggerTypes.Exception, ex));
 
+                    return new MethodResult();
+                }
+            }
             return new MethodResult
             {
                 Success = true

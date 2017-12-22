@@ -26,19 +26,23 @@ namespace PokemonGoGUI.GoManager
     public partial class Manager
     {
         private Version VersionStr = new Version("0.87.5");
-        private AccessToken AccessToken = new AccessToken();
-        private Session ClientSession { get; set; }
+        private Session ClientSession;
         private bool LoggedIn = false;
-        private GetPlayerMessage.Types.PlayerLocale PlayerLocale = new GetPlayerMessage.Types.PlayerLocale();
-        private DeviceWrapper ClientDeviceWrapper = new DeviceWrapper();
+        private GetPlayerMessage.Types.PlayerLocale PlayerLocale;
+        private DeviceWrapper ClientDeviceWrapper;
 
         private void Logout()
         {
             if (!LoggedIn)
                 return;
-            ClientSession.Shutdown();
             LoggedIn = false;
-            AccessToken = new AccessToken();
+            ClientSession.AccessTokenUpdated -= SessionOnAccessTokenUpdated;
+            ClientSession.CaptchaReceived -= SessionOnCaptchaReceived;
+            ClientSession.InventoryUpdate -= SessionInventoryUpdate;
+            ClientSession.MapUpdate -= MapUpdate;
+            ClientSession.RpcClient.CheckAwardedBadgesReceived -= OnCheckAwardedBadgesReceived;
+            ClientSession.RpcClient.HatchedEggsReceived -= OnHatchedEggsReceived;
+            ClientSession.Shutdown();
         }
 
         private async Task<MethodResult<bool>> DoLogin()
@@ -95,7 +99,7 @@ namespace PokemonGoGUI.GoManager
                 LoggedIn = true;
                 msgStr = "Successfully logged into server.";
             }
-            /*
+            
             if (LoggedIn)
             {
                 ClientSession.AccessTokenUpdated += SessionOnAccessTokenUpdated;
@@ -106,7 +110,7 @@ namespace PokemonGoGUI.GoManager
                 ClientSession.RpcClient.HatchedEggsReceived += OnHatchedEggsReceived;
 
                 SaveAccessToken(ClientSession.AccessToken);
-            }*/
+            }
 
             return new MethodResult<bool>()
             {
@@ -210,7 +214,6 @@ namespace PokemonGoGUI.GoManager
             var fileName = Path.Combine(Directory.GetCurrentDirectory(), "Cache", $"{accessToken.Uid}.json");
 
             File.WriteAllText(fileName, JsonConvert.SerializeObject(accessToken, Formatting.Indented));
-            AccessToken = accessToken;
         }
 
         /// <summary>
@@ -221,7 +224,7 @@ namespace PokemonGoGUI.GoManager
         /// <param name="initLong">The initial longitude.</param>
         /// <param name="mayCache">Can we cache the <see cref="AccessToken" /> to a local file?</param>
         private async Task<Session> GetSession(ILoginProvider loginProvider, double initLat, double initLong, bool mayCache = false)
-        {
+        {            
             var cacheDir = Path.Combine(Directory.GetCurrentDirectory(), "Cache");
             var fileName = Path.Combine(cacheDir, $"{loginProvider.UserId}-{loginProvider.ProviderId}.json");
 
