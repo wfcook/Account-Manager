@@ -227,7 +227,7 @@ namespace PokemonGoGUI.GoManager
         public async Task<MethodResult> RecycleItem(InventoryItemSetting itemSetting, int toDelete)
         {
             //TODO: revise
-            return new MethodResult { Message = "Dev mode sorry" };
+            //return new MethodResult { Message = "Dev mode sorry" };
             try
             {
                 var response = await ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
