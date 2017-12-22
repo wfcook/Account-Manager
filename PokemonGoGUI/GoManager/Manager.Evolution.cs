@@ -22,7 +22,7 @@ namespace PokemonGoGUI.GoManager
         private async Task<MethodResult> EvolveFilteredPokemon()
         {
             //TODO: Revise
-            return new MethodResult { Message = "Dev mode sorry" };
+            //return new MethodResult { Message = "Dev mode sorry" };
             MethodResult<List<PokemonData>> response = await GetPokemonToEvolve();
 
             if(response.Data.Count == 0)

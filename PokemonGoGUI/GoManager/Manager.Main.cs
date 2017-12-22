@@ -1042,7 +1042,7 @@ namespace PokemonGoGUI.GoManager
 
         private async Task<MethodResult> CheckReauthentication()
         {
-            if (!AccessToken.IsExpired)
+            if (!ClientSession.AccessToken.IsExpired)
             {
                 return new MethodResult
                 {

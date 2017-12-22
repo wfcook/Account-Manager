@@ -26,7 +26,6 @@ namespace PokemonGoGUI.GoManager
     public partial class Manager
     {
         private Version VersionStr = new Version("0.87.5");
-        private AccessToken AccessToken = new AccessToken();
         private Session ClientSession { get; set; }
         private bool LoggedIn = false;
         private GetPlayerMessage.Types.PlayerLocale PlayerLocale = new GetPlayerMessage.Types.PlayerLocale();
@@ -38,7 +37,6 @@ namespace PokemonGoGUI.GoManager
                 return;
             ClientSession.Shutdown();
             LoggedIn = false;
-            AccessToken = new AccessToken();
         }
 
         private async Task<MethodResult<bool>> DoLogin()
@@ -209,7 +207,6 @@ namespace PokemonGoGUI.GoManager
             var fileName = Path.Combine(Directory.GetCurrentDirectory(), "Cache", $"{accessToken.Uid}.json");
 
             File.WriteAllText(fileName, JsonConvert.SerializeObject(accessToken, Formatting.Indented));
-            AccessToken = accessToken;
         }
 
         /// <summary>
