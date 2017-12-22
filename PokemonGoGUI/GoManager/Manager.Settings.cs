@@ -93,7 +93,7 @@ namespace PokemonGoGUI.GoManager
 
             try
             {
-                if (!LoggedIn)
+                if (!_client.LoggedIn)
                 {
                     MethodResult result = await Login_();
 
@@ -106,7 +106,7 @@ namespace PokemonGoGUI.GoManager
                     }
                 }
 
-                var response = await ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
+                var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                 {
                     RequestType = RequestType.DownloadItemTemplates,
                     RequestMessage = new DownloadItemTemplatesMessage

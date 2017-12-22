@@ -21,7 +21,7 @@ namespace PokemonGoGUI.GoManager
         {
             try
             {
-                if (!LoggedIn)
+                if (!_client.LoggedIn)
                 {
                     MethodResult result = await Login_();
 
@@ -37,7 +37,7 @@ namespace PokemonGoGUI.GoManager
 
                 try
                 {
-                    AllItems = ClientSession.Player.Inventory.InventoryItems.ToList();
+                    AllItems = _client.ClientSession.Player.Inventory.InventoryItems.ToList();
 
                     await UpdatePlayerStats(false);
                     await UpdatePokemon(false);
@@ -230,7 +230,7 @@ namespace PokemonGoGUI.GoManager
             //return new MethodResult { Message = "Dev mode sorry" };
             try
             {
-                var response = await ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
+                var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                 {
                     RequestType = RequestType.RecycleInventoryItem,
                     RequestMessage = new RecycleInventoryItemMessage

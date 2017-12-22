@@ -132,7 +132,7 @@ namespace PokemonGoGUI.GoManager
         {
             try
             {
-                var response = await ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
+                var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                 {
                     RequestType = RequestType.MarkTutorialComplete,
                     RequestMessage = new MarkTutorialCompleteMessage
@@ -148,8 +148,8 @@ namespace PokemonGoGUI.GoManager
                 markTutorialCompleteResponse = MarkTutorialCompleteResponse.Parser.ParseFrom(response);
                 LogCaller(new LoggerEventArgs("Tutorial completion request wasn't successful", LoggerTypes.Success));
 
-                ClientSession.Player.Data = markTutorialCompleteResponse.PlayerData;
-                PlayerData = ClientSession.Player.Data;
+                _client.ClientSession.Player.Data = markTutorialCompleteResponse.PlayerData;
+                PlayerData = _client.ClientSession.Player.Data;
 
                 return new MethodResult
                 {
@@ -168,7 +168,7 @@ namespace PokemonGoGUI.GoManager
         {
             try
             {
-                var response = await ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
+                var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                 {
                     RequestType = RequestType.EncounterTutorialComplete,
                     RequestMessage = new EncounterTutorialCompleteMessage
@@ -201,7 +201,7 @@ namespace PokemonGoGUI.GoManager
             {
                 PlayerAvatar avatar = new PlayerAvatar();
 
-                var response = await ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
+                var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                 {
                     RequestType = RequestType.SetAvatar,
                     RequestMessage = new SetAvatarMessage
@@ -233,7 +233,7 @@ namespace PokemonGoGUI.GoManager
         {
             try
             {
-                var response = await ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
+                var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                 {
                     RequestType = RequestType.SetAvatarItemAsViewed,
                     RequestMessage = new SetAvatarItemAsViewedMessage

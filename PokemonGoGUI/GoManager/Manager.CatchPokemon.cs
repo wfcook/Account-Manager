@@ -115,7 +115,7 @@ namespace PokemonGoGUI.GoManager
         {
             try
             {
-                var response = await ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
+                var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                 {
                     RequestType = RequestType.DiskEncounter,
                     RequestMessage = new DiskEncounterMessage
@@ -124,8 +124,8 @@ namespace PokemonGoGUI.GoManager
                         FortId = fortData.Id,
                         GymLatDegrees = fortData.Latitude,
                         GymLngDegrees = fortData.Longitude,
-                        PlayerLatitude = ClientSession.Player.Latitude,
-                        PlayerLongitude = ClientSession.Player.Longitude
+                        PlayerLatitude = _client.ClientSession.Player.Latitude,
+                        PlayerLongitude = _client.ClientSession.Player.Longitude
                     }.ToByteString()
                 });
 
@@ -200,7 +200,7 @@ namespace PokemonGoGUI.GoManager
                     }
 
                     //End humanization
-                    var catchresponse = await ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
+                    var catchresponse = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                     {
                         RequestType = RequestType.CatchPokemon,
                         RequestMessage = new CatchPokemonMessage
@@ -273,14 +273,14 @@ namespace PokemonGoGUI.GoManager
 
         private async Task<MethodResult<EncounterResponse>> EncounterPokemon(MapPokemon mapPokemon)
         {
-            var response = await ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
+            var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
                 RequestType = RequestType.Encounter,
                 RequestMessage = new EncounterMessage
                 {
                     EncounterId = mapPokemon.EncounterId,
-                    PlayerLatitude = ClientSession.Player.Latitude,
-                    PlayerLongitude = ClientSession.Player.Longitude,
+                    PlayerLatitude = _client.ClientSession.Player.Latitude,
+                    PlayerLongitude = _client.ClientSession.Player.Longitude,
                     SpawnPointId = mapPokemon.SpawnPointId
                 }.ToByteString()
             });
@@ -364,7 +364,7 @@ namespace PokemonGoGUI.GoManager
                         hitInsideReticule = HitInsideReticle();
                     }
 
-                    var catchresponse = await ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
+                    var catchresponse = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                     {
                         RequestType = RequestType.CatchPokemon,
                         RequestMessage = new CatchPokemonMessage
@@ -591,7 +591,7 @@ namespace PokemonGoGUI.GoManager
 
             try
             {
-                var response = await ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
+                var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                 {
                     RequestType = RequestType.UseItemCapture,
                     RequestMessage = new UseItemCaptureMessage

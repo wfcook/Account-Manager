@@ -89,7 +89,7 @@ namespace PokemonGoGUI.GoManager
 
                 try
                 {
-                    var response = await ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
+                    var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                     {
                         RequestType = RequestType.EvolvePokemon,
                         RequestMessage = new EvolvePokemonMessage
@@ -281,7 +281,7 @@ namespace PokemonGoGUI.GoManager
 
             try
             {
-                var response = await ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
+                var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                 {
                     RequestType = RequestType.UseItemXpBoost,
                     RequestMessage = new UseItemXpBoostMessage

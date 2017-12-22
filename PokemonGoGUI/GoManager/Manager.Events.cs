@@ -15,7 +15,7 @@ namespace PokemonGoGUI.GoManager
             OnInventoryUpdate?.Invoke(this, args);
         }
 
-        private void LogCaller(LoggerEventArgs args)
+        public void LogCaller(LoggerEventArgs args)
         {
             string eMessage = String.Empty;
 

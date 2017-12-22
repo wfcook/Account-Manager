@@ -27,10 +27,10 @@ namespace PokemonGoGUI.GoManager
 
             if (!echoResult.Success)
             {
-                Logout();
+                _client.Logout();
             }
             
-            if (!LoggedIn)
+            if (!_client.LoggedIn)
             {
                 MethodResult loginResult = await Login_();
 
@@ -92,7 +92,7 @@ namespace PokemonGoGUI.GoManager
 
         public async Task<MethodResult> GetPlayer()
         {
-            if (!LoggedIn)
+            if (!_client.LoggedIn)
             {
                 MethodResult result = await Login_();
 
@@ -102,7 +102,7 @@ namespace PokemonGoGUI.GoManager
                 }
             }
 
-            PlayerData = ClientSession.Player.Data;
+            PlayerData = _client.ClientSession.Player.Data;
 
             return new MethodResult
             {
@@ -217,7 +217,7 @@ namespace PokemonGoGUI.GoManager
 
             try
             {
-                if (!LoggedIn)
+                if (!_client.LoggedIn)
                 {
                     MethodResult result = await Login_();
 
@@ -227,7 +227,7 @@ namespace PokemonGoGUI.GoManager
                     }
                 }
 
-                var response = await ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
+                var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                 {
                     RequestType = RequestType.LevelUpRewards,
                     RequestMessage = new LevelUpRewardsMessage
@@ -260,7 +260,7 @@ namespace PokemonGoGUI.GoManager
 
             try
             {
-                var response = await ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
+                var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                 {
                     RequestType = RequestType.GetBuddyWalked,
                     RequestMessage = new GetBuddyWalkedMessage

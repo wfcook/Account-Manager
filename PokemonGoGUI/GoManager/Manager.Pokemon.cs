@@ -36,7 +36,7 @@ namespace PokemonGoGUI.GoManager
                 ReleasePokemonMessage message = new ReleasePokemonMessage { PokemonId = pokemon.Id };
                 try
                 {
-                    var response = await ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
+                    var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                     {
                         RequestType = RequestType.ReleasePokemon,
                         RequestMessage = message.ToByteString()
@@ -353,7 +353,7 @@ namespace PokemonGoGUI.GoManager
 
                 try
                 {
-                    var response = await ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
+                    var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                     {
                         RequestType = RequestType.SetFavoritePokemon,
                         RequestMessage = new SetFavoritePokemonMessage
