@@ -40,8 +40,8 @@ namespace PokemonGoGUI.GoManager
             ClientSession.CaptchaReceived -= SessionOnCaptchaReceived;
             ClientSession.InventoryUpdate -= SessionInventoryUpdate;
             ClientSession.MapUpdate -= MapUpdate;
-            ClientSession.RpcClient.CheckAwardedBadgesReceived -= OnCheckAwardedBadgesReceived;
-            ClientSession.RpcClient.HatchedEggsReceived -= OnHatchedEggsReceived;
+            ClientSession.CheckAwardedBadgesReceived -= OnCheckAwardedBadgesReceived;
+            ClientSession.HatchedEggsReceived -= OnHatchedEggsReceived;
             ClientSession.Shutdown();
         }
 
@@ -106,8 +106,8 @@ namespace PokemonGoGUI.GoManager
                 ClientSession.CaptchaReceived += SessionOnCaptchaReceived;
                 ClientSession.InventoryUpdate += SessionInventoryUpdate;
                 ClientSession.MapUpdate += MapUpdate;
-                ClientSession.RpcClient.CheckAwardedBadgesReceived += OnCheckAwardedBadgesReceived;
-                ClientSession.RpcClient.HatchedEggsReceived += OnHatchedEggsReceived;
+                ClientSession.CheckAwardedBadgesReceived += OnCheckAwardedBadgesReceived;
+                ClientSession.HatchedEggsReceived += OnHatchedEggsReceived;
 
                 SaveAccessToken(ClientSession.AccessToken);
             }
