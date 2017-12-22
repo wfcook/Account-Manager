@@ -68,7 +68,7 @@ namespace PokemonGoGUI.GoManager
         public async Task<MethodResult> EvolvePokemon(IEnumerable<PokemonData> pokemonToEvolve)
         {
             //TODO: revise
-            return new MethodResult { Message = "Dev mode sorry" };
+            //return new MethodResult { Message = "Dev mode sorry" };
 
             //Shouldn't happen
             if (pokemonToEvolve == null)
