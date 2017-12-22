@@ -12,7 +12,7 @@ namespace PokemonGoGUI.GoManager
 {
     public partial class Manager
     {
-        private async Task<MethodResult<List<MapPokemon>>> GetCatchablePokemon()
+        public async Task<MethodResult<List<MapPokemon>>> GetCatchablePokemon()
         {
             MethodResult<List<MapCell>> mapCellResponse = await GetMapObjects();
 
@@ -39,7 +39,7 @@ namespace PokemonGoGUI.GoManager
             };
         }
 
-        private async Task<MethodResult<List<FortData>>> GetPokeStops()
+        public async Task<MethodResult<List<FortData>>> GetPokeStops()
         {
             MethodResult<List<FortData>> allFortsResponse = await GetAllForts();
 
@@ -67,7 +67,7 @@ namespace PokemonGoGUI.GoManager
                     continue;
                 }
 
-                GeoCoordinate defaultLocation = new GeoCoordinate(ClientSession.Player.Latitude, ClientSession.Player.Longitude);
+                GeoCoordinate defaultLocation = new GeoCoordinate(_client.ClientSession.Player.Latitude, _client.ClientSession.Player.Longitude);
                 GeoCoordinate fortLocation = new GeoCoordinate(fort.Latitude, fort.Longitude);
 
                 double distance = CalculateDistanceInMeters(defaultLocation, fortLocation);
@@ -90,7 +90,7 @@ namespace PokemonGoGUI.GoManager
                 };
             }
 
-            fortData = fortData.OrderBy(x => CalculateDistanceInMeters(ClientSession.Player.Latitude, ClientSession.Player.Longitude, x.Latitude, x.Longitude)).ToList();
+            fortData = fortData.OrderBy(x => CalculateDistanceInMeters(_client.ClientSession.Player.Latitude, _client.ClientSession.Player.Longitude, x.Latitude, x.Longitude)).ToList();
 
             return new MethodResult<List<FortData>>
             {
@@ -118,7 +118,7 @@ namespace PokemonGoGUI.GoManager
                     continue;
                 }
 
-                GeoCoordinate defaultLocation = new GeoCoordinate(ClientSession.Player.Latitude, ClientSession.Player.Longitude);
+                GeoCoordinate defaultLocation = new GeoCoordinate(_client.ClientSession.Player.Latitude, _client.ClientSession.Player.Longitude);
                 GeoCoordinate fortLocation = new GeoCoordinate(fort.Latitude, fort.Longitude);
 
                 double distance = CalculateDistanceInMeters(defaultLocation, fortLocation);
@@ -163,7 +163,7 @@ namespace PokemonGoGUI.GoManager
 
         private async Task<MethodResult<List<MapCell>>> GetMapObjects()
         {
-            if (!LoggedIn)
+            if (!_client.LoggedIn)
             {
                 MethodResult result = await Login_();
 
@@ -173,7 +173,7 @@ namespace PokemonGoGUI.GoManager
                 }
             }
 
-            if (ClientSession.Map.Cells.Count < 0)
+            if (_client.ClientSession.Map.Cells.Count < 0)
             {
                 return new MethodResult<List<MapCell>> { Message = "Failed to get map objets.", Data = new List<MapCell>() };
             }
@@ -182,7 +182,7 @@ namespace PokemonGoGUI.GoManager
 
             return new MethodResult<List<MapCell>>
             {
-                Data = ClientSession.Map.Cells.ToList(),
+                Data = _client.ClientSession.Map.Cells.ToList(),
                 Success = true,
                 Message = "Success"
             };

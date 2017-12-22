@@ -22,6 +22,7 @@ namespace PokemonGoGUI.GoManager
 {
     public partial class Manager
     {
+        private Client _client = new Client();
         private Random _rand = new Random();
 
         private int _totalZeroExpStops = 0;
@@ -78,7 +79,7 @@ namespace PokemonGoGUI.GoManager
             try
             {
                 MethodResult result = null;
-                result = await DoLogin();
+                result = await _client.DoLogin(this);
                 LogCaller(new LoggerEventArgs(result.Message, LoggerTypes.Debug));
 
                 if (CurrentProxy != null)
@@ -294,7 +295,7 @@ namespace PokemonGoGUI.GoManager
 
             IsRunning = true;
             _totalZeroExpStops = 0;
-            SetSettings();
+            _client.SetSettings(this);
             _pauser.Set();
             _autoRestart = false;
             //_wasAutoRestarted = false;
@@ -346,7 +347,7 @@ namespace PokemonGoGUI.GoManager
 
             _pauser.Reset();
             _runningStopwatch.Stop();
-            ClientSession.Pause();
+            _client.ClientSession.Pause();
 
             LogCaller(new LoggerEventArgs("Pausing bot ...", LoggerTypes.Info));
 
@@ -362,7 +363,7 @@ namespace PokemonGoGUI.GoManager
 
             _pauser.Set();
             _runningStopwatch.Start();
-            await ClientSession.ResumeAsync();
+            await _client.ClientSession.ResumeAsync();
 
             LogCaller(new LoggerEventArgs("Unpausing bot ...", LoggerTypes.Info));
 
@@ -456,7 +457,7 @@ namespace PokemonGoGUI.GoManager
                 if (currentFails >= UserSettings.MaxFailBeforeReset)
                 {
                     currentFails = 0;
-                    Logout();
+                    _client.Logout();
                 }
 
                 if (_failedInventoryReponses >= _failedInventoryUntilBan)
@@ -481,7 +482,7 @@ namespace PokemonGoGUI.GoManager
 
                 try
                 {
-                    if (!LoggedIn)
+                    if (!_client.LoggedIn)
                     {
                         //Login
                         result = await Login_();
@@ -495,7 +496,7 @@ namespace PokemonGoGUI.GoManager
                         }
                     }
 
-                    if (ClientSession.Player.Warn)
+                    if (_client.ClientSession.Player.Warn)
                     {
                         AccountState = AccountState.Flagged;
                         LogCaller(new LoggerEventArgs("Account seen flegged.", LoggerTypes.Warning));
@@ -508,7 +509,7 @@ namespace PokemonGoGUI.GoManager
                         continue;
                     }
 
-                    if (ClientSession.Player.Banned)
+                    if (_client.ClientSession.Player.Banned)
                     {
                         AccountState = AccountState.PermAccountBan;
                         LogCaller(new LoggerEventArgs("Account seen banned.", LoggerTypes.FatalError));
@@ -542,7 +543,7 @@ namespace PokemonGoGUI.GoManager
                     {
                         LogCaller(new LoggerEventArgs("Echo failed. Logging out before retry.", LoggerTypes.Debug));
 
-                        Logout();
+                        _client.Logout();
 
                         await Task.Delay(failedWaitTime);
 
@@ -557,10 +558,10 @@ namespace PokemonGoGUI.GoManager
                         LogCaller(new LoggerEventArgs("Grabbing game settings ...", LoggerTypes.Debug));
                         try
                         {
-                            Version remote = new Version(ClientSession.GlobalSettings.MinimumClientVersion);
-                            if (VersionStr < remote)
+                            Version remote = new Version(_client.ClientSession.GlobalSettings.MinimumClientVersion);
+                            if (_client.VersionStr < remote)
                             {
-                                LogCaller(new LoggerEventArgs($"Emulates API {VersionStr} ...", LoggerTypes.FatalError, new Exception($"New API needed {remote}. Stopping ...")));
+                                LogCaller(new LoggerEventArgs($"Emulates API {_client.VersionStr} ...", LoggerTypes.FatalError, new Exception($"New API needed {remote}. Stopping ...")));
                                 Stop();
                                 continue;
                             }
@@ -744,7 +745,7 @@ namespace PokemonGoGUI.GoManager
                         continue;
                     }
 
-                    GeoCoordinate defaultLocation = new GeoCoordinate(ClientSession.Player.Latitude, ClientSession.Player.Longitude);
+                    GeoCoordinate defaultLocation = new GeoCoordinate(_client.ClientSession.Player.Latitude, _client.ClientSession.Player.Longitude);
 
                     List<FortData> pokestopsToFarm = pokestops.Data.ToList();
 
@@ -764,12 +765,12 @@ namespace PokemonGoGUI.GoManager
 
                         WaitPaused();
 
-                        pokestopsToFarm = pokestopsToFarm.OrderBy(x => CalculateDistanceInMeters(ClientSession.Player.Latitude, ClientSession.Player.Longitude, x.Latitude, x.Longitude)).ToList();
+                        pokestopsToFarm = pokestopsToFarm.OrderBy(x => CalculateDistanceInMeters(_client.ClientSession.Player.Latitude, _client.ClientSession.Player.Longitude, x.Latitude, x.Longitude)).ToList();
 
                         FortData pokestop = pokestopsToFarm[0];
                         pokestopsToFarm.RemoveAt(0);
 
-                        GeoCoordinate currentLocation = new GeoCoordinate(ClientSession.Player.Latitude, ClientSession.Player.Longitude);
+                        GeoCoordinate currentLocation = new GeoCoordinate(_client.ClientSession.Player.Latitude, _client.ClientSession.Player.Longitude);
                         GeoCoordinate fortLocation = new GeoCoordinate(pokestop.Latitude, pokestop.Longitude);
 
                         double distance = CalculateDistanceInMeters(currentLocation, fortLocation);
@@ -963,7 +964,7 @@ namespace PokemonGoGUI.GoManager
             }
 
             State = BotState.Stopped;
-            Logout();
+            _client.Logout();
             LogCaller(new LoggerEventArgs(String.Format("Bot fully stopped at {0}", DateTime.Now), LoggerTypes.Info));
 
             if (_autoRestart)
@@ -981,7 +982,7 @@ namespace PokemonGoGUI.GoManager
         {
             if (!IsRunning)
             {
-                Logout();
+                _client.Logout();
                 return;
             }
 
@@ -1042,7 +1043,7 @@ namespace PokemonGoGUI.GoManager
 
         private async Task<MethodResult> CheckReauthentication()
         {
-            if (!ClientSession.AccessToken.IsExpired)
+            if (!_client.ClientSession.AccessToken.IsExpired)
             {
                 return new MethodResult
                 {
@@ -1054,7 +1055,7 @@ namespace PokemonGoGUI.GoManager
             {
                 LogCaller(new LoggerEventArgs("Session expired. Logging back in", LoggerTypes.Debug));
 
-                await DoLogin();
+                await _client.DoLogin(_client.ClientManager);
 
                 return new MethodResult
                 {
