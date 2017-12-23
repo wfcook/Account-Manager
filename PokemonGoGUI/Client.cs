@@ -146,7 +146,7 @@ namespace PokemonGoGUI
             ClientManager.GetCatchablePokemon().Wait();
 
             // Update BuddyPokemon Stats
-            if (ClientManager.PlayerData.BuddyPokemon.Id != 0)
+            if (ClientManager.PlayerData.BuddyPokemon!=null && ClientManager.PlayerData.BuddyPokemon.Id != 0)
             {
                 MethodResult<GetBuddyWalkedResponse> buddyWalkedResponse = ClientManager.GetBuddyWalked().Result;
                 if (buddyWalkedResponse.Success)

@@ -28,12 +28,12 @@ namespace PokemonGoGUI.GoManager
                 if (pokemon.Favorite == 1
                     || pokemon.IsEgg
                     || !string.IsNullOrEmpty(pokemon.DeployedFortId)
-                    || PlayerData.BuddyPokemon.Id == pokemon.Id)
+                    || (PlayerData.BuddyPokemon!=null && PlayerData.BuddyPokemon.Id == pokemon.Id))
                 {
                     continue;
                 }
 
-                ReleasePokemonMessage message = new ReleasePokemonMessage { PokemonId = pokemon.Id };
+                var message = new ReleasePokemonMessage { PokemonId = pokemon.Id };
                 try
                 {
                     var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
@@ -125,7 +125,7 @@ namespace PokemonGoGUI.GoManager
                 };
             }
 
-            List<PokemonData> pokemonToTransfer = new List<PokemonData>();
+            var pokemonToTransfer = new List<PokemonData>();
 
             IEnumerable<IGrouping<PokemonId, PokemonData>> groupedPokemon = Pokemon.GroupBy(x => x.PokemonId);
 
@@ -190,7 +190,7 @@ namespace PokemonGoGUI.GoManager
 
         private List<PokemonData> GetPokemonBelowCPIVAmount(IGrouping<PokemonId, PokemonData> pokemon, int minCp, double percent)
         {
-            List<PokemonData> toTransfer = new List<PokemonData>();
+            var toTransfer = new List<PokemonData>();
 
             foreach (PokemonData pData in pokemon)
             {
@@ -217,7 +217,7 @@ namespace PokemonGoGUI.GoManager
 
         private List<PokemonData> GetPokemonBelowIVPercent(IGrouping<PokemonId, PokemonData> pokemon, double percent)
         {
-            List<PokemonData> toTransfer = new List<PokemonData>();
+            var toTransfer = new List<PokemonData>();
 
             foreach(PokemonData pData in pokemon)
             {
@@ -244,8 +244,7 @@ namespace PokemonGoGUI.GoManager
 
         private List<PokemonData> GetPokemonByIV(IGrouping<PokemonId, PokemonData> pokemon, int amount)
         {
-            if(pokemon.Count() == 0)
-            {
+            if (!pokemon.Any()) {
                 return new List<PokemonData>();
             }
 
@@ -293,7 +292,32 @@ namespace PokemonGoGUI.GoManager
             return pokemon.OrderByDescending(x => x.Cp).Skip(maxPokemon).ToList();
         }
 
+        // NOTE: this is the real IV Percent, using only Individual values.
         public MethodResult<double> CalculateIVPerfection(PokemonData pokemon)
+        {
+            MethodResult<PokemonSettings> settingResult = GetPokemonSetting(pokemon.PokemonId);
+
+            if (!settingResult.Success)
+            {
+                return new MethodResult<double>
+                {
+                    Data = -1,
+                    Message = settingResult.Message
+                };
+            }
+            // NOTE: 45 points = 15 at points + 15 def points + 15 sta points
+            double perfectPercent = (pokemon.IndividualAttack + pokemon.IndividualDefense + pokemon.IndividualStamina / 45) * 100.0;
+
+            return new MethodResult<double>
+            {
+                Data = perfectPercent,
+                Message = "Success",
+                Success = true
+            };
+        }
+
+        // This other Percent gives different IV % for the same IVs depending of the pokemon level.
+        public MethodResult<double> CalculateIVPerfectionUsingMaxCP(PokemonData pokemon)
         {
             MethodResult<PokemonSettings> settingResult = GetPokemonSetting(pokemon.PokemonId);
 
