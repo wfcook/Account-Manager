@@ -99,6 +99,16 @@ namespace PokemonGoGUI
             get;
             set;
         }
+
+        public bool OnlyUnlimitedIncubator {
+            get;
+            set;
+        }
+
+        public bool TransferSlashPokemons {
+            get;
+            set;
+        }
         public AccountState StopAtMinAccountState { get; set; }
 
         public ProxyEx Proxy

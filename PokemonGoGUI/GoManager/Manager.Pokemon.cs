@@ -179,6 +179,16 @@ namespace PokemonGoGUI.GoManager
                         break;
                 }
             }
+            
+            if (UserSettings.TransferSlashPokemons){
+                var slashPokemons = Pokemon.Where(x => x.IsBad );
+                foreach (var slashPokemon in slashPokemons) {
+                    var inlist = pokemonToTransfer.FirstOrDefault(x => x.Id == slashPokemon.Id);
+                    if (inlist==null){
+                        pokemonToTransfer.Add(slashPokemon);
+                    }
+                }
+            }
 
             return new MethodResult<List<PokemonData>>
             {

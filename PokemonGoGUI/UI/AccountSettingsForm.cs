@@ -27,7 +27,7 @@ namespace PokemonGoGUI.UI
 
             olvColumnCatchId.AspectGetter = delegate(object x)
             {
-                CatchSetting setting = (CatchSetting)x;
+                var setting = (CatchSetting)x;
 
                 return (int)setting.Id;
             };
@@ -38,7 +38,7 @@ namespace PokemonGoGUI.UI
 
             olvColumnEvolveId.AspectGetter = delegate(object x)
             {
-                EvolveSetting setting = (EvolveSetting)x;
+                var setting = (EvolveSetting)x;
 
                 return (int)setting.Id;
             };
@@ -49,7 +49,7 @@ namespace PokemonGoGUI.UI
 
             olvColumnTransferId.AspectGetter = delegate(object x)
             {
-                TransferSetting setting = (TransferSetting)x;
+                var setting = (TransferSetting)x;
 
                 return (int)setting.Id;
             };
@@ -120,8 +120,10 @@ namespace PokemonGoGUI.UI
             checkBoxRecycle.Checked = settings.RecycleItems;
             checkBoxEvolve.Checked = settings.EvolvePokemon;
             checkBoxTransfers.Checked = settings.TransferPokemon;
+            checkBoxTransferSlashPokemons.Checked = settings.TransferSlashPokemons;
             checkBoxUseLuckyEgg.Checked = settings.UseLuckyEgg;
             checkBoxIncubateEggs.Checked = settings.IncubateEggs;
+            checkBoxOnlyUnlimitedIncubator.Checked = settings.OnlyUnlimitedIncubator;
             checkBoxCatchPokemon.Checked = settings.CatchPokemon;
             numericUpDownRunForHours.Value = new Decimal(settings.RunForHours);
             numericUpDownMaxLogs.Value = settings.MaxLogs;
@@ -273,11 +275,13 @@ namespace PokemonGoGUI.UI
             userSettings.EncounterWhileWalking = checkBoxEncounterWhileWalking.Checked;
             userSettings.AccountName = textBoxName.Text;
             userSettings.TransferPokemon = checkBoxTransfers.Checked;
+            userSettings.TransferSlashPokemons = checkBoxTransferSlashPokemons.Checked;
             userSettings.EvolvePokemon = checkBoxEvolve.Checked;
             userSettings.RecycleItems = checkBoxRecycle.Checked;
             userSettings.MinPokemonBeforeEvolve = minPokemonBeforeEvolve;
             userSettings.UseLuckyEgg = checkBoxUseLuckyEgg.Checked;
             userSettings.IncubateEggs = checkBoxIncubateEggs.Checked;
+            userSettings.OnlyUnlimitedIncubator = checkBoxOnlyUnlimitedIncubator.Checked;
             userSettings.MaxLevel = maxLevel;
             userSettings.CatchPokemon = checkBoxCatchPokemon.Checked;
             userSettings.StopAtMinAccountState = (AccountState)comboBoxMinAccountState.SelectedItem;
@@ -375,7 +379,7 @@ namespace PokemonGoGUI.UI
                 return;
             }
 
-            InventoryItemSetting iiSettings = fastObjectListViewRecycling.SelectedObjects[0] as InventoryItemSetting;
+            var iiSettings = fastObjectListViewRecycling.SelectedObjects[0] as InventoryItemSetting;
 
             if(iiSettings == null)
             {
@@ -408,14 +412,14 @@ namespace PokemonGoGUI.UI
 
         private void TrueToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ToolStripMenuItem tSMI = sender as ToolStripMenuItem;
+            var tSMI = sender as ToolStripMenuItem;
  
             if(tSMI == null)
             {
                 return;
             }
 
-            CheckType checkType = (CheckType)Int32.Parse(tSMI.Tag.ToString());
+            var checkType = (CheckType)Int32.Parse(tSMI.Tag.ToString());
 
             foreach(CatchSetting cSetting in fastObjectListViewCatch.SelectedObjects)
             {
@@ -503,14 +507,14 @@ namespace PokemonGoGUI.UI
 
         private void TrueToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            ToolStripMenuItem tSMI = sender as ToolStripMenuItem;
+            var tSMI = sender as ToolStripMenuItem;
 
             if (tSMI == null)
             {
                 return;
             }
 
-            CheckType checkType = (CheckType)Int32.Parse(tSMI.Tag.ToString());
+            var checkType = (CheckType)Int32.Parse(tSMI.Tag.ToString());
 
             foreach (EvolveSetting eSetting in fastObjectListViewEvolve.SelectedObjects)
             {
@@ -542,7 +546,7 @@ namespace PokemonGoGUI.UI
                 return;
             }
 
-            TransferSettingsForm transferSettingForm = new TransferSettingsForm(settings);
+            var transferSettingForm = new TransferSettingsForm(settings);
             transferSettingForm.ShowDialog();
 
             fastObjectListViewTransfer.RefreshObjects(settings);
@@ -594,7 +598,7 @@ namespace PokemonGoGUI.UI
                 return;
             }
 
-            using (SaveFileDialog sfd = new SaveFileDialog())
+            using (var sfd = new SaveFileDialog())
             {
                 sfd.Filter = "Json Files (*.json)|*.json|All Files (*.*)|*.*";
 
@@ -614,7 +618,7 @@ namespace PokemonGoGUI.UI
 
         private async void ButtonImportConfig_Click(object sender, EventArgs e)
         {
-            using (OpenFileDialog ofd = new OpenFileDialog())
+            using (var ofd = new OpenFileDialog())
             {
                 ofd.Title = "Open config file";
                 ofd.Filter = "Json Files (*.json)|*.json|All Files (*.*)|*.*";
