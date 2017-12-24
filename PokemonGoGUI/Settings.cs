@@ -95,6 +95,10 @@ namespace PokemonGoGUI
         public bool StopOnIPBan { get; set; }
         public int MaxFailBeforeReset { get; set; }
 
+        public bool UseBerries {
+            get;
+            set;
+        }
         public AccountState StopAtMinAccountState { get; set; }
 
         public ProxyEx Proxy
@@ -261,7 +265,7 @@ namespace PokemonGoGUI
                     continue;
                 }
 
-                TransferSetting setting = new TransferSetting
+                var setting = new TransferSetting
                 {
                     Id = pokemon,
                     Transfer = true
@@ -271,11 +275,24 @@ namespace PokemonGoGUI
             }
         }
 
+        public void RandomizeDeviceId()
+        {
+            var device = DeviceInfoUtil.GetRandomDevice();
+            DeviceId = device.DeviceInfo.DeviceId;
+        }
+        
         public void RandomizeDevice()
         {
             var device = DeviceInfoUtil.GetRandomDevice();
             DeviceId = device.DeviceInfo.DeviceId;
-         }
+            DeviceBrand = device.DeviceInfo.DeviceBrand;
+            DeviceModel = device.DeviceInfo.DeviceModel;
+            DeviceModelBoot = device.DeviceInfo.DeviceModelBoot;
+            HardwareManufacturer = device.DeviceInfo.HardwareManufacturer;
+            HardwareModel = device.DeviceInfo.HardwareModel;
+            FirmwareBrand = device.DeviceInfo.FirmwareBrand;
+            FirmwareType = device.DeviceInfo.FirmwareType;
+        }
 
         private byte RandomByte()
         {

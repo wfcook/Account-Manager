@@ -187,20 +187,22 @@ namespace PokemonGoGUI.GoManager
                         };
                     }
 
-                    bool isLowProbability = probability < 0.35;
-                    bool isHighCp = eResponse.PokemonData.Cp > 700;
-                    bool isHighPerfection = CalculateIVPerfection(eResponse.PokemonData).Data > 90;
-
-                    if ((isLowProbability && isHighCp) || isHighPerfection)
-                    {
-                        await UseBerry(fortData.LureInfo.EncounterId, fortData.Id, ItemId.ItemRazzBerry);
-                    }else{
-                        bool isHighProbability = probability > 0.65;
-                        if (isHighProbability)
-                            await UseBerry(fortData.LureInfo.EncounterId, fortData.Id, ItemId.ItemPinapBerry);
-                        else if ( new Random().Next(0,100) < 50){
-                            // IF we dont use razz neither use pinap, then we will use nanab randomly the 50% of times.
-                            await UseBerry(fortData.LureInfo.EncounterId, fortData.Id, ItemId.ItemNanabBerry);
+                    if (UserSettings.UseBerries){
+                        bool isLowProbability = probability < 0.35;
+                        bool isHighCp = eResponse.PokemonData.Cp > 700;
+                        bool isHighPerfection = CalculateIVPerfection(eResponse.PokemonData).Data > 90;
+    
+                        if ((isLowProbability && isHighCp) || isHighPerfection)
+                        {
+                            await UseBerry(fortData.LureInfo.EncounterId, fortData.Id, ItemId.ItemRazzBerry);
+                        }else{
+                            bool isHighProbability = probability > 0.65;
+                            if (isHighProbability)
+                                await UseBerry(fortData.LureInfo.EncounterId, fortData.Id, ItemId.ItemPinapBerry);
+                            else if ( new Random().Next(0,100) < 50){
+                                // IF we dont use razz neither use pinap, then we will use nanab randomly the 50% of times.
+                                await UseBerry(fortData.LureInfo.EncounterId, fortData.Id, ItemId.ItemNanabBerry);
+                            }
                         }
                     }
 
@@ -360,18 +362,20 @@ namespace PokemonGoGUI.GoManager
                     bool isHighCp = eResponse.WildPokemon.PokemonData.Cp > 800;
                     bool isHighPerfection = CalculateIVPerfection(eResponse.WildPokemon.PokemonData).Data > 95;
 
-                    if ((isLowProbability && isHighCp) || isHighPerfection)
-                    {
-                        await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
-
-                        await UseBerry(mapPokemon,  ItemId.ItemRazzBerry);
-                    }else{
-                        bool isHighProbability = probability > 0.65;
-                        if (isHighProbability)
-                            await UseBerry(mapPokemon, ItemId.ItemPinapBerry);
-                        else if ( new Random().Next(0,100) < 50){
-                            // IF we dont use razz neither use pinap, then we will use nanab randomly the 50% of times.
-                            await UseBerry(mapPokemon, ItemId.ItemNanabBerry);
+                    if (UserSettings.UseBerries){
+                        if ((isLowProbability && isHighCp) || isHighPerfection)
+                        {
+                            await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+    
+                            await UseBerry(mapPokemon,  ItemId.ItemRazzBerry);
+                        }else{
+                            bool isHighProbability = probability > 0.65;
+                            if (isHighProbability)
+                                await UseBerry(mapPokemon, ItemId.ItemPinapBerry);
+                            else if ( new Random().Next(0,100) < 50){
+                                // IF we dont use razz neither use pinap, then we will use nanab randomly the 50% of times.
+                                await UseBerry(mapPokemon, ItemId.ItemNanabBerry);
+                            }
                         }
                     }
 

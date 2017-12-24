@@ -1,4 +1,4 @@
-﻿#region using directives
+#region using directives
 
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -39,6 +39,6 @@ using System.Runtime.InteropServices;
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("2.21.1.0")]
 
-[assembly: AssemblyVersion("2.21.1.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
-[assembly: AssemblyInformationalVersion("v2.21.1.0")]
+[assembly: AssemblyVersion("2.21.2.0")]
+[assembly: AssemblyFileVersion("2.21.2.0")]
+[assembly: AssemblyInformationalVersion("")]

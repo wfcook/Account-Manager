@@ -336,12 +336,16 @@ namespace PokemonGoGUI.GoManager
 
         public void RandomDeviceId()
         {
+            UserSettings.RandomizeDeviceId();
+        }
+        public void RandomDevice()
+        {
             UserSettings.RandomizeDevice();
         }
         
         public override bool Equals(object obj)
         {
-            Manager tempManager = obj as Manager;
+            var tempManager = obj as Manager;
 
             if(tempManager == null)
             {

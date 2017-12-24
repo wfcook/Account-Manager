@@ -82,6 +82,7 @@ namespace PokemonGoGUI.UI
             cbUseOnlyThisHashKey.Checked = _manager.UserSettings.UseOnlyOneKey;
             tbAuthHashKey.Text = _manager.UserSettings.AuthAPIKey;
             cbAutoUpdate.Checked = AutoUpdate;
+            checkBoxUseBerries.Checked = _manager.UserSettings.UseBerries;
 
             //Location time zones
             var zones = new TimeZoneIds().GetTimeZoneIds();
@@ -103,10 +104,6 @@ namespace PokemonGoGUI.UI
 
         private void UpdateDetails(Settings settings)
         {
-            if (settings.AuthType == AuthType.Google)
-            {
-                radioButtonGoogle.Checked = true;
-            }
 
             textBoxPtcPassword.Text = settings.Password;
             textBoxPtcUsername.Text = settings.Username;
@@ -159,13 +156,8 @@ namespace PokemonGoGUI.UI
             textBoxDeviceModel.Text = settings.DeviceModel;
             textBoxDeviceBrand.Text = settings.DeviceBrand;
             textBoxDeviceModelBoot.Text = settings.DeviceModelBoot;
-            textBoxDeviceModelIdentifier.Text = settings.DeviceModelIdentifier;
             textBoxFirmwareBrand.Text = settings.FirmwareBrand;
-            textBoxFirmwareFingerprint.Text = settings.FirmwareFingerprint;
-            textBoxFirmwareTags.Text = settings.FirmwareTags;
             textBoxFirmwareType.Text = settings.FirmwareType;
-            textBoxAnroidBoardName.Text = settings.AndroidBoardName;
-            textBoxAndroidBootLoader.Text = settings.AndroidBootloader;
             textBoxHardwareManufacturer.Text = settings.HardwareManufacturer;
             textBoxHardwareModel.Text = settings.HardwareModel;
             //End device settings
@@ -186,18 +178,6 @@ namespace PokemonGoGUI.UI
             }
         }
 
-        private void RadioButtonPtc_CheckedChanged_1(object sender, EventArgs e)
-        {
-            labelUsername.Text = "Username*:";
-
-            textBoxPtcPassword.Enabled = true;
-            textBoxPtcUsername.Enabled = true;
-
-            if(radioButtonGoogle.Checked)
-            {
-                labelUsername.Text = "Email*:";
-            }
-        }
 
         private void CheckBoxMimicWalking_CheckedChanged(object sender, EventArgs e)
         {
@@ -281,14 +261,7 @@ namespace PokemonGoGUI.UI
                 return false;
             }
 
-            if (radioButtonPtc.Checked)
-            {
-                userSettings.AuthType = AuthType.Ptc;
-            }
-            else
-            {
-                userSettings.AuthType = AuthType.Google;
-            }
+            userSettings.AuthType = textBoxPtcUsername.Text.Contains("@") ?  AuthType.Google : AuthType.Ptc;
 
             userSettings.MimicWalking = checkBoxMimicWalking.Checked;
             userSettings.Username = textBoxPtcUsername.Text.Trim();
@@ -314,6 +287,7 @@ namespace PokemonGoGUI.UI
             userSettings.StopOnAPIUpdate = checkBoxStopOnAPIUpdate.Checked;
             userSettings.SpinGyms = checkBoxSpinGyms.Checked;
             AutoUpdate = cbAutoUpdate.Checked;
+            userSettings.UseBerries = checkBoxUseBerries.Checked;
 
             userSettings.RunForHours = (double)numericUpDownRunForHours.Value;
             userSettings.MaxLogs = (int)numericUpDownMaxLogs.Value;
@@ -343,13 +317,8 @@ namespace PokemonGoGUI.UI
             userSettings.DeviceModel = textBoxDeviceModel.Text;
             userSettings.DeviceBrand = textBoxDeviceBrand.Text;
             userSettings.DeviceModelBoot = textBoxDeviceModelBoot.Text;
-            userSettings.DeviceModelIdentifier = textBoxDeviceModelIdentifier.Text;
             userSettings.FirmwareBrand = textBoxFirmwareBrand.Text;
-            userSettings.FirmwareFingerprint = textBoxFirmwareFingerprint.Text;
-            userSettings.FirmwareTags = textBoxFirmwareTags.Text;
             userSettings.FirmwareType = textBoxFirmwareType.Text;
-            userSettings.AndroidBoardName = textBoxAnroidBoardName.Text;
-            userSettings.AndroidBootloader = textBoxAndroidBootLoader.Text;
             userSettings.HardwareManufacturer = textBoxHardwareManufacturer.Text;
             userSettings.HardwareModel = textBoxHardwareModel.Text;
             //End device settings
@@ -678,7 +647,7 @@ namespace PokemonGoGUI.UI
 
         private void ButtonResetDefaults_Click(object sender, EventArgs e)
         {
-            _manager.RestoreDeviceDefaults();
+            _manager.RandomDevice();
 
             UpdateDetails(_manager.UserSettings);
         }
@@ -686,6 +655,14 @@ namespace PokemonGoGUI.UI
         private void CheckBoxAutoRotateProxies_CheckedChanged(object sender, EventArgs e)
         {
             checkBoxRemoveOnStop.Enabled = checkBoxAutoRotateProxies.Checked;
+        }
+        void checkBoxClaimLevelUp_CheckedChanged(object sender, EventArgs e)
+        {
+          
+        }
+        void textBoxDeviceModel_TextChanged(object sender, EventArgs e)
+        {
+          
         }
     }
 }

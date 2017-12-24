@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -307,6 +307,7 @@
     <EmbeddedResource Include="UI\TransferSettingsForm.resx">
       <DependentUpon>TransferSettingsForm.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="FodyWeavers.xml" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -319,7 +320,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="FodyWeavers.xml" />
     <Content Include="Resources\icon.ico" />
     <Content Include="Resources\PayPalDonateNow.png" />
   </ItemGroup>
@@ -349,11 +349,10 @@
     <PropertyGroup>
       <ErrorText>Ce projet fait référence à des packages NuGet qui sont manquants sur cet ordinateur. Utilisez l'option de restauration des packages NuGet pour les télécharger. Pour plus d'informations, consultez http://go.microsoft.com/fwlink/?LinkID=322105. Le fichier manquant est : {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Costura.Fody.1.6.2\build\dotnet\Costura.Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Costura.Fody.1.6.2\build\dotnet\Costura.Fody.targets'))" />
-    <Error Condition="!Exists('..\packages\Fody.2.3.5\build\netstandard1.0\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Fody.2.3.5\build\netstandard1.0\Fody.targets'))" />
   </Target>
+  <!-- NOTE: fody 2.3.3 and greater are not compatible with sharpdeveolop because they use dotnet 4.6 to compile -->
+  <Import Project="..\packages\Fody.2.0.4\build\dotnet\Fody.targets" Condition="Exists('..\packages\Fody.2.0.4\build\dotnet\Fody.targets')" />
   <Import Project="..\packages\Costura.Fody.1.6.2\build\dotnet\Costura.Fody.targets" Condition="Exists('..\packages\Costura.Fody.1.6.2\build\dotnet\Costura.Fody.targets')" />
-  <Import Project="..\packages\Fody.2.3.5\build\netstandard1.0\Fody.targets" Condition="Exists('..\packages\Fody.2.3.5\build\netstandard1.0\Fody.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
