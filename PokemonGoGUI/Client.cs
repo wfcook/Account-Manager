@@ -108,8 +108,6 @@ namespace PokemonGoGUI
             {
                 LoggedIn = true;
                 msgStr = "Successfully logged into server.";
-                //Load PlayeData for next events
-                await ClientManager.GetPlayer();
 
                 ClientSession.AccessTokenUpdated += SessionOnAccessTokenUpdated;
                 ClientSession.CaptchaReceived += SessionOnCaptchaReceived;
@@ -137,34 +135,43 @@ namespace PokemonGoGUI
 
         private void MapUpdate(object sender, EventArgs e)
         {
-            //var session = (Session)sender;
-            //GeoCoordinate loc = new GeoCoordinate(session.Player.Latitude, session.Player.Longitude);
-            //UpdateLocation(loc).Wait();
-
-            ClientManager.GetPokeStops().Wait();
-            ClientManager.GetCatchablePokemon().Wait();
-
-            // Update BuddyPokemon Stats
-            if (ClientManager.PlayerData.BuddyPokemon!=null && ClientManager.PlayerData.BuddyPokemon.Id != 0)
+            if (ClientManager.IsRunning)
             {
-                MethodResult<GetBuddyWalkedResponse> buddyWalkedResponse = ClientManager.GetBuddyWalked().Result;
-                if (buddyWalkedResponse.Success)
+                //var session = (Session)sender;
+                //GeoCoordinate loc = new GeoCoordinate(session.Player.Latitude, session.Player.Longitude);
+                //UpdateLocation(loc).Wait();
+
+                ClientManager.GetPokeStops().Wait();
+                ClientManager.GetCatchablePokemon().Wait();
+
+                // Update BuddyPokemon Stats
+                if (ClientManager.PlayerData.BuddyPokemon != null && ClientManager.PlayerData.BuddyPokemon.Id != 0)
                 {
-                    ClientManager.LogCaller(new LoggerEventArgs($"BuddyWalked CandyID: {buddyWalkedResponse.Data.FamilyCandyId}, CandyCount: {buddyWalkedResponse.Data.CandyEarnedCount}", LoggerTypes.Success));
-                };
+                    MethodResult<GetBuddyWalkedResponse> buddyWalkedResponse = ClientManager.GetBuddyWalked().Result;
+                    if (buddyWalkedResponse.Success)
+                    {
+                        ClientManager.LogCaller(new LoggerEventArgs($"BuddyWalked CandyID: {buddyWalkedResponse.Data.FamilyCandyId}, CandyCount: {buddyWalkedResponse.Data.CandyEarnedCount}", LoggerTypes.Success));
+                    };
+                }
             }
         }
 
         public void SessionOnCaptchaReceived(object sender, CaptchaEventArgs e)
         {
-            ClientManager.AccountState = AccountState.CaptchaReceived;
-            //2captcha needed to solve or chrome drive for solve url manual
-            //e.CaptchaUrl;
+            if (ClientManager.IsRunning)
+            {
+                ClientManager.AccountState = AccountState.CaptchaReceived;
+                //2captcha needed to solve or chrome drive for solve url manual
+                //e.CaptchaUrl;
+            }
         }
 
         private void SessionInventoryUpdate(object sender, EventArgs e)
         {
-            ClientManager.UpdateInventory().Wait();
+            if (ClientManager.IsRunning)
+            {
+                ClientManager.UpdateInventory().Wait();
+            }
         }
 
         private void OnHatchedEggsReceived(object sender, GetHatchedEggsResponse hatchedEggResponse)
