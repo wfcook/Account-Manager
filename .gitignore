@@ -189,3 +189,6 @@ _Pvt_Extensions/
 ModelManifest.xml
 /.vs/
 /packages/
+packages
+PokemonGoGUI/PokemonGoGUI_sharpdev.sln
+

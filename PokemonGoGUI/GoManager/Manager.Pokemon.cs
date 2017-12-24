@@ -306,7 +306,8 @@ namespace PokemonGoGUI.GoManager
                 };
             }
             // NOTE: 45 points = 15 at points + 15 def points + 15 sta points
-            double perfectPercent = (pokemon.IndividualAttack + pokemon.IndividualDefense + pokemon.IndividualStamina / 45) * 100.0;
+            //  100/45 simplifying is 20/9
+            var perfectPercent = ( (double) pokemon.IndividualAttack + pokemon.IndividualDefense + pokemon.IndividualStamina ) * 20 / 9;
 
             return new MethodResult<double>
             {
