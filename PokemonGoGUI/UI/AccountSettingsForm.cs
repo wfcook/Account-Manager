@@ -664,5 +664,10 @@ namespace PokemonGoGUI.UI
         {
           
         }
+
+        private void AccountSettingsForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            DialogResult = DialogResult.OK;
+        }
     }
 }
