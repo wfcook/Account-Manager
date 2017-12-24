@@ -109,7 +109,7 @@ namespace PokemonGoGUI
                 LoggedIn = true;
                 msgStr = "Successfully logged into server.";
                 //Load PlayeData for next events
-                ClientManager.PlayerData = ClientSession.Player.Data;
+                await ClientManager.GetPlayer();
 
                 ClientSession.AccessTokenUpdated += SessionOnAccessTokenUpdated;
                 ClientSession.CaptchaReceived += SessionOnCaptchaReceived;
