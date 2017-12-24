@@ -135,43 +135,35 @@ namespace PokemonGoGUI
 
         private void MapUpdate(object sender, EventArgs e)
         {
-            if (ClientManager.IsRunning)
+            //var session = (Session)sender;
+            //GeoCoordinate loc = new GeoCoordinate(session.Player.Latitude, session.Player.Longitude);
+            //UpdateLocation(loc).Wait();
+
+            ClientManager.GetPokeStops().Wait();
+            ClientManager.GetCatchablePokemon().Wait();
+
+            // Update BuddyPokemon Stats
+            if (ClientManager?.PlayerData.BuddyPokemon != null && ClientManager?.PlayerData.BuddyPokemon.Id != 0)
             {
-                //var session = (Session)sender;
-                //GeoCoordinate loc = new GeoCoordinate(session.Player.Latitude, session.Player.Longitude);
-                //UpdateLocation(loc).Wait();
-
-                ClientManager.GetPokeStops().Wait();
-                ClientManager.GetCatchablePokemon().Wait();
-
-                // Update BuddyPokemon Stats
-                if (ClientManager.PlayerData.BuddyPokemon != null && ClientManager.PlayerData.BuddyPokemon.Id != 0)
+                MethodResult<GetBuddyWalkedResponse> buddyWalkedResponse = ClientManager.GetBuddyWalked().Result;
+                if (buddyWalkedResponse.Success)
                 {
-                    MethodResult<GetBuddyWalkedResponse> buddyWalkedResponse = ClientManager.GetBuddyWalked().Result;
-                    if (buddyWalkedResponse.Success)
-                    {
-                        ClientManager.LogCaller(new LoggerEventArgs($"BuddyWalked CandyID: {buddyWalkedResponse.Data.FamilyCandyId}, CandyCount: {buddyWalkedResponse.Data.CandyEarnedCount}", LoggerTypes.Success));
-                    };
-                }
+                    ClientManager.LogCaller(new LoggerEventArgs($"BuddyWalked CandyID: {buddyWalkedResponse.Data.FamilyCandyId}, CandyCount: {buddyWalkedResponse.Data.CandyEarnedCount}", LoggerTypes.Success));
+                };
             }
+
         }
 
         public void SessionOnCaptchaReceived(object sender, CaptchaEventArgs e)
         {
-            if (ClientManager.IsRunning)
-            {
-                ClientManager.AccountState = AccountState.CaptchaReceived;
-                //2captcha needed to solve or chrome drive for solve url manual
-                //e.CaptchaUrl;
-            }
+            ClientManager.AccountState = AccountState.CaptchaReceived;
+            //2captcha needed to solve or chrome drive for solve url manual
+            //e.CaptchaUrl;
         }
 
         private void SessionInventoryUpdate(object sender, EventArgs e)
         {
-            if (ClientManager.IsRunning)
-            {
-                ClientManager.UpdateInventory().Wait();
-            }
+            ClientManager.UpdateInventory().Wait();
         }
 
         private void OnHatchedEggsReceived(object sender, GetHatchedEggsResponse hatchedEggResponse)
