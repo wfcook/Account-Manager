@@ -103,7 +103,7 @@ namespace PokemonGoGUI.GoManager
         public BotState State { get; set; }
 
         [JsonIgnore]
-        public PlayerData PlayerData { get; private set; }
+        public PlayerData PlayerData { get; set; }
 
         [JsonIgnore]
         public List<Log> Logs { get; private set; }
