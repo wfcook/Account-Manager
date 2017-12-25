@@ -644,7 +644,6 @@ namespace PokemonGoGUI.GoManager
                     {
                         EncounterId = encounterId,
                         ItemId = berryData.ItemId,
-                        
                         SpawnPointId = spawnId
                     }.ToByteString()
                 });
@@ -659,9 +658,10 @@ namespace PokemonGoGUI.GoManager
 
                 await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
             }
-            catch (Exception)
+            catch (Exception ex1)
             {
-                LogCaller(new LoggerEventArgs(String.Format("Failed to use berry. Remaining: {0}", berryData.Count), LoggerTypes.Warning));
+                LogCaller(new LoggerEventArgs(String.Format("Failed using berry {0}. Remaining: {1}",berryData.ItemId, berryData.Count), LoggerTypes.Warning));
+                LogCaller(new LoggerEventArgs(String.Format("Exception Message:" + ex1.Message), LoggerTypes.Debug));
             }
         }
 
