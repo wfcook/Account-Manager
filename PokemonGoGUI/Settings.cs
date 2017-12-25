@@ -221,7 +221,7 @@ namespace PokemonGoGUI
                     continue;
                 }
 
-                CatchSetting cSettings = new CatchSetting
+                var cSettings = new CatchSetting
                 {
                     Id = pokemon
                 };
@@ -241,7 +241,7 @@ namespace PokemonGoGUI
                     continue;
                 }
 
-                InventoryItemSetting itemSetting = new InventoryItemSetting
+                var itemSetting = new InventoryItemSetting
                 {
                     Id = item
                 };
@@ -261,7 +261,7 @@ namespace PokemonGoGUI
                     continue;
                 }
 
-                EvolveSetting setting = new EvolveSetting
+                var setting = new EvolveSetting
                 {
                     Id = pokemon
                 };
