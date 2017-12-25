@@ -263,6 +263,17 @@ namespace PokemonGoGUI.UI
                 return false;
             }
 
+            if (String.IsNullOrEmpty(textBoxPtcUsername.Text))
+            {
+                MessageBox.Show("Invalid Username", "Warning");
+                return false;
+            }
+            if (String.IsNullOrEmpty(textBoxPtcPassword.Text))
+            {
+                MessageBox.Show("Invalid Password", "Warning");
+                return false;
+            }
+
             userSettings.AuthType = textBoxPtcUsername.Text.Contains("@") ?  AuthType.Google : AuthType.Ptc;
 
             userSettings.MimicWalking = checkBoxMimicWalking.Checked;

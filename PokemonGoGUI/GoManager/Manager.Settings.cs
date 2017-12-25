@@ -357,7 +357,7 @@ namespace PokemonGoGUI.GoManager
 
         public override int GetHashCode()
         {
-            return this.UserSettings.Username.GetHashCode();
+            return UserSettings.Username == null ? 0 : UserSettings.Username.GetHashCode();
         }
     }
 }
