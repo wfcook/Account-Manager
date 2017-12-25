@@ -20,7 +20,7 @@ See https://talk.pogodev.org/d/51-api-hashing-service-by-pokefarmer for pricing 
 [![Stories in Ready](https://discordapp.com/api/guilds/335455302965002242/widget.png?style=banner3&time-)](https://discord.gg/rkm4xhX)
 
 ## `Download`
-Download the bot from the [release](https://github.com/Furtif/GoManager/releases) tab.  
+Download the bot from the [release](https://github.com/Furtif/Account-Manager/releases) tab.  
 
 ### `Dependencies`
  - Microsoft [.NET 4.5 SDK](https://www.microsoft.com/en-us/download/details.aspx?id=55170&desc=dotnet47)
@@ -42,7 +42,7 @@ To contribute to development, you will need to download and install the required
 Next, you need to get the source code.  This source code repository uses git submodules. So when you clone the source code, you will need to clone recursively:
 
 ```
-git clone --recursive https://github.com/Furtif/GoManager.git
+git clone --recursive https://github.com/Furtif/Account-Manager.git
 ```
 
  You can contribute in many ways, here are some that you can do to help the project out!
@@ -51,14 +51,14 @@ git clone --recursive https://github.com/Furtif/GoManager.git
  We have more and more users everyday, so we have a lot of questions from new users who haven't fully understand how the bot works yet. If you want to help them out, join our official discord channel :)
 
 ### `Answer questions`
- Same as above, you can help by answering questions in the [issues](https://github.com/Furtif/GoManager/issues) tab!
+ Same as above, you can help by answering questions in the [issues](https://github.com/Furtif/Account-Manager/issues) tab!
 
 ### `Report bugs`
- Report bugs you found in [issues](https://github.com/Furtif/GoManager/issues).  
+ Report bugs you found in [issues](https://github.com/Furtif/Account-Manager/issues).  
 In order to help us fix the problem, please take a screenshot of the error you get and also attach your log file (under the Logs folder) as well. Add [Bug] to the title to help us quickly identify the category of the issue.
 
 ### `Suggestions/ideas`
- Tell us what you think we can do better in [issues](https://github.com/Furtif/GoManager/issues).  
+ Tell us what you think we can do better in [issues](https://github.com/Furtif/Account-Manager/issues).  
 Give detailed discription to help us understand what you are looking for. Add [Suggestion] to the title to help us quickly identify the category of the issue. Your suggestion might not be accept, but hey, maybe we will accept your suggestion next time! :)
 
 ### `Legal Disclaimer`
