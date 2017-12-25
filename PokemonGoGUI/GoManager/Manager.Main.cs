@@ -615,24 +615,26 @@ namespace PokemonGoGUI.GoManager
                     }
 
                     //Auto complete tutorials
-                    if (!PlayerData.TutorialState.Contains(TutorialState.AvatarSelection))
-                    {
-                        result = await MarkStartUpTutorialsComplete(true);
-
-                        if (!result.Success)
+                    if (UserSettings.CompleteTutorial){
+                        if (!PlayerData.TutorialState.Contains(TutorialState.AvatarSelection))
                         {
-                            LogCaller(new LoggerEventArgs("Failed. Marking startup tutorials completed..", LoggerTypes.Warning));
-
-                            Stop();
-
-                            await Task.Delay(failedWaitTime);
-
-                            continue;
+                            result = await MarkStartUpTutorialsComplete(true);
+    
+                            if (!result.Success)
+                            {
+                                LogCaller(new LoggerEventArgs("Failed. Marking startup tutorials completed..", LoggerTypes.Warning));
+    
+                                Stop();
+    
+                                await Task.Delay(failedWaitTime);
+    
+                                continue;
+                            }
+    
+                            LogCaller(new LoggerEventArgs("Marking startup tutorials completed.", LoggerTypes.Success));
+    
+                            await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
                         }
-
-                        LogCaller(new LoggerEventArgs("Marking startup tutorials completed.", LoggerTypes.Success));
-
-                        await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
                     }
 
                     if (!PlayerData.TutorialState.Contains(TutorialState.PokestopTutorial))
