@@ -100,15 +100,18 @@ namespace PokemonGoGUI.GoManager
                 };
             }
 
-            IEnumerable<EggIncubator> incubators = Incubators.Where(x => x.ItemId == ItemId.ItemIncubatorBasic && x.PokemonId == 0);
-
-            foreach(EggIncubator incubator in incubators)
+            if (!UserSettings.OnlyUnlimitedIncubator)
             {
-                return new MethodResult<EggIncubator>
+                IEnumerable<EggIncubator> incubators = Incubators.Where(x => x.ItemId == ItemId.ItemIncubatorBasic && x.PokemonId == 0);
+    
+                foreach(EggIncubator incubator in incubators)
                 {
-                    Data = incubator,
-                    Success = true
-                };
+                    return new MethodResult<EggIncubator>
+                    {
+                        Data = incubator,
+                        Success = true
+                    };
+                }
             }
 
             return new MethodResult<EggIncubator>
