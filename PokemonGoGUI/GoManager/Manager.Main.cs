@@ -575,6 +575,7 @@ namespace PokemonGoGUI.GoManager
                     //Get pokemon settings
                     if (PokeSettings == null)
                     {
+                        
                         LogCaller(new LoggerEventArgs("Grabbing pokemon settings ...", LoggerTypes.Debug));
                         result = await GetItemTemplates();
 
@@ -598,7 +599,7 @@ namespace PokemonGoGUI.GoManager
                     //Update inventory
                     LogCaller(new LoggerEventArgs("Updating inventory items ...", LoggerTypes.Debug));
 
-                    result = await UpdateInventory();
+                    result = UpdateInventory();
 
                     await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
@@ -866,7 +867,7 @@ namespace PokemonGoGUI.GoManager
 
                             int prevLevel = Level;
 
-                            await UpdateInventory();
+                            UpdateInventory();
 
                             if (Level > prevLevel)
                             {
@@ -894,7 +895,7 @@ namespace PokemonGoGUI.GoManager
                                 {
                                     await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
-                                    await UpdateInventory();
+                                    UpdateInventory();
 
                                     await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
                                 }
@@ -926,7 +927,7 @@ namespace PokemonGoGUI.GoManager
 
                             if (secondInventoryUpdate)
                             {
-                                await UpdateInventory();
+                                UpdateInventory();
                             }
                         }
 

@@ -164,7 +164,7 @@ namespace PokemonGoGUI
 
         private void SessionInventoryUpdate(object sender, EventArgs e)
         {
-            ClientManager.UpdateInventory().Wait();
+            ClientManager.UpdateInventory();
         }
 
         private void OnHatchedEggsReceived(object sender, GetHatchedEggsResponse hatchedEggResponse)

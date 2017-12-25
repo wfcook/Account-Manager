@@ -17,40 +17,23 @@ namespace PokemonGoGUI.GoManager
 {
     public partial class Manager
     {
-        public async Task<MethodResult<List<InventoryItem>>> UpdateInventory()
+        public MethodResult<List<InventoryItem>> UpdateInventory()
         {
             try
             {
-                if (!_client.LoggedIn)
-                {
-                    MethodResult result = await Login_();
-
-                    if (!result.Success)
-                    {
-                        return new MethodResult<List<InventoryItem>>
-                        {
-                            Message = result.Message,
-                            Success = result.Success
-                        };
-                    }
-                }
 
                 try
                 {
-                    AllItems = _client.ClientSession.Player.Inventory.InventoryItems.ToList();
-
-                    await UpdatePlayerStats(false);
-                    await UpdatePokemon(false);
-                    await UpdatePokedex(false);
-                    await UpdatePokemonCandy(false);
-                    await UpdateItemList(false);
-                    await UpdateIncubators(false);
-
+                    UpdatePlayerStats();
+                    UpdatePokemon();
+                    UpdatePokedex();
+                    UpdatePokemonCandy();
+                    UpdateItemList();
+                    UpdateIncubators();
                     InventoryUpdateCaller(EventArgs.Empty);
 
                     return new MethodResult<List<InventoryItem>>
                     {
-                        Data = AllItems,
                         Message = "Successfully grabbed inventory items",
                         Success = true
                     };
@@ -74,93 +57,40 @@ namespace PokemonGoGUI.GoManager
             }
         }
 
-        public async Task UpdateItemList(bool updateInventory)
+        public void UpdateItemList()
         {
-            if (!updateInventory && AllItems != null)
-            {
-                List<ItemData> items = AllItems.Where(x => x.InventoryItemData.Item != null).Select(x => x.InventoryItemData.Item).ToList();
+                Items = _client.ClientSession.Player.Inventory.InventoryItems.Where(x => x.InventoryItemData.Item != null).Select(x => x.InventoryItemData.Item).ToList();
 
-                Items = items;
-            }
-            else
-            {
-                await UpdateInventory();
-            }
         }
 
-        public async Task UpdatePlayerStats(bool updateInventory)
+        public void UpdatePlayerStats()
         {
-            if (!updateInventory && AllItems != null)
-            {
-                InventoryItem item = AllItems.FirstOrDefault(
+                InventoryItem item = _client.ClientSession.Player.Inventory.InventoryItems.FirstOrDefault(
                     x => x.InventoryItemData.PlayerStats != null);
 
-                //Saves for viewing
                 Stats = item.InventoryItemData.PlayerStats;
-            }
-            else
-            {
-                await UpdateInventory();
-            }
         }
 
-        public async Task UpdatePokemon(bool updateInventory)
+
+        public void UpdatePokemon()
         {
-            if (!updateInventory && AllItems != null)
-            {
-                List<PokemonData> pokemon = AllItems.Where(x => x.InventoryItemData.PokemonData != null && !x.InventoryItemData.PokemonData.IsEgg).Select(x => x.InventoryItemData.PokemonData).ToList();
-                List<PokemonData> eggs = AllItems.Where(x => x.InventoryItemData.PokemonData != null && x.InventoryItemData.PokemonData.IsEgg).Select(x => x.InventoryItemData.PokemonData).ToList();
-
-                Pokemon = pokemon;
-                Eggs = eggs;
-
-            }
-            else
-            {
-                await UpdateInventory();
-            }
+            Pokemon = _client.ClientSession.Player.Inventory.InventoryItems.Where(x => x.InventoryItemData.PokemonData != null && !x.InventoryItemData.PokemonData.IsEgg).Select(x => x.InventoryItemData.PokemonData).ToList();
+            Eggs = _client.ClientSession.Player.Inventory.InventoryItems.Where(x => x.InventoryItemData.PokemonData != null && x.InventoryItemData.PokemonData.IsEgg).Select(x => x.InventoryItemData.PokemonData).ToList();
         }
 
-        public async Task UpdatePokedex(bool updateInventory)
+        public void UpdatePokedex()
         {
-            if (!updateInventory && AllItems != null)
-            {
-                List<PokedexEntry> pokedex = AllItems.Where(x => x.InventoryItemData.PokedexEntry != null).Select(x => x.InventoryItemData.PokedexEntry).ToList();
-
-                Pokedex = pokedex;
-            }
-            else
-            {
-                await UpdateInventory();
-            }
+            Pokedex = _client.ClientSession.Player.Inventory.InventoryItems.Where(x => x.InventoryItemData.PokedexEntry != null).Select(x => x.InventoryItemData.PokedexEntry).ToList();
         }
 
-        public async Task UpdateIncubators(bool updateInventory)
+        public void UpdateIncubators()
         {
-            if (!updateInventory && AllItems != null)
-            {
-                List<EggIncubator> incubators = AllItems.First(x => x.InventoryItemData.EggIncubators != null).InventoryItemData.EggIncubators.EggIncubator.ToList();
-
-                Incubators = incubators;
-            }
-            else
-            {
-                await UpdateInventory();
-            }
+            Incubators = _client.ClientSession.Player.Inventory.InventoryItems.First(x => x.InventoryItemData.EggIncubators != null).InventoryItemData.EggIncubators.EggIncubator.ToList();
         }
 
-        public async Task UpdatePokemonCandy(bool updateInventory)
+        public void UpdatePokemonCandy()
         {
-            if (!updateInventory && AllItems != null)
-            {
-                List<Candy> pokemonCandy = AllItems.Where(x => x.InventoryItemData.Candy != null).Select(x => x.InventoryItemData.Candy).ToList();
-
-                PokemonCandy = pokemonCandy;
-            }
-            else
-            {
-                await UpdateInventory();
-            }
+                PokemonCandy = _client.ClientSession.Player.Inventory.InventoryItems.Where(x => x.InventoryItemData.Candy != null).Select(x => x.InventoryItemData.Candy).ToList();
         }
 
         public async Task<MethodResult> RecycleFilteredItems()
@@ -173,7 +103,7 @@ namespace PokemonGoGUI.GoManager
                 };
             }
 
-            MethodResult<List<InventoryItem>> inventoryResponse = await UpdateInventory();
+            MethodResult<List<InventoryItem>> inventoryResponse = UpdateInventory();
 
             if (!inventoryResponse.Success)
             {
@@ -181,7 +111,7 @@ namespace PokemonGoGUI.GoManager
             }
 
 
-            await UpdateItemList(false);
+            UpdateItemList();
 
             foreach (ItemData item in Items)
             {

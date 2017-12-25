@@ -172,7 +172,7 @@ namespace PokemonGoGUI.GoManager
                 {
                     //Uses lowest capture probability
                     float probability = eResponse.CaptureProbability.CaptureProbability_[0];
-                    ItemId pokeBall = await GetBestBall(eResponse.PokemonData);
+                    ItemId pokeBall = GetBestBall(eResponse.PokemonData);
 
                     if (pokeBall == ItemId.ItemUnknown)
                     {
@@ -359,7 +359,7 @@ namespace PokemonGoGUI.GoManager
                 {
                     //Uses lowest capture probability
                     float probability = eResponse.CaptureProbability.CaptureProbability_[0];
-                    ItemId pokeBall = await GetBestBall(eResponse.WildPokemon.PokemonData);
+                    ItemId pokeBall = GetBestBall(eResponse.WildPokemon.PokemonData);
 
                     if (pokeBall == ItemId.ItemUnknown)
                     {
@@ -544,13 +544,13 @@ namespace PokemonGoGUI.GoManager
             return catchSettings.Catch;
         }
 
-        private async Task<ItemId> GetBestBall(PokemonData pokemonData)
+        private  ItemId GetBestBall(PokemonData pokemonData)
         {
             if(Items == null)
             {
                 LogCaller(new LoggerEventArgs("Item list is empty ... Regrabbing", LoggerTypes.Debug));
 
-                MethodResult result = await UpdateInventory();
+                MethodResult result = UpdateInventory();
 
                 if(!result.Success)
                 {

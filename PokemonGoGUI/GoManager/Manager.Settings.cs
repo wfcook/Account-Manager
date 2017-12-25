@@ -46,6 +46,7 @@ namespace PokemonGoGUI.GoManager
                 return new MethodResult<AccountExportModel>();
             }
 
+            var AllItems =  _client.ClientSession.Player.Inventory.InventoryItems;
             if (AllItems == null || AllItems.Count == 0)
             {
                 LogCaller(new LoggerEventArgs(String.Format("No items found for {0}. Please update details", UserSettings.Username), LoggerTypes.Warning));
@@ -60,7 +61,7 @@ namespace PokemonGoGUI.GoManager
                 return new MethodResult<AccountExportModel>();
             }
 
-            AccountExportModel exportModel = new AccountExportModel
+            var exportModel = new AccountExportModel
             {
                 Level = Stats.Level,
                 Type = UserSettings.AuthType,

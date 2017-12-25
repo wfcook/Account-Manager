@@ -78,7 +78,7 @@ namespace PokemonGoGUI.GoManager
 
         private async Task<MethodResult> TransferFilteredPokemon()
         {
-            MethodResult<List<PokemonData>> transferResult = await GetPokemonToTransfer();
+            MethodResult<List<PokemonData>> transferResult = GetPokemonToTransfer();
 
             if(!transferResult.Success || transferResult.Data.Count == 0)
             {
@@ -97,7 +97,7 @@ namespace PokemonGoGUI.GoManager
             };
         }
 
-        public async Task<MethodResult<List<PokemonData>>> GetPokemonToTransfer()
+        public MethodResult<List<PokemonData>> GetPokemonToTransfer()
         {
             if (!UserSettings.TransferPokemon)
             {
@@ -111,9 +111,8 @@ namespace PokemonGoGUI.GoManager
                 };
             }
 
-            await UpdatePokemon(false);
-            await UpdatePokemonCandy(false);
-            await GetItemTemplates();
+            UpdatePokemon();
+            UpdatePokemonCandy();
 
             if(Pokemon == null || Pokemon.Count == 0)
             {

@@ -111,8 +111,6 @@ namespace PokemonGoGUI.GoManager
         [JsonIgnore]
         public PlayerStats Stats { get; private set; }
 
-        [JsonIgnore]
-        public List<InventoryItem> AllItems { get; private set; }
 
         [JsonIgnore]
         public List<ItemData> Items { get; private set; }

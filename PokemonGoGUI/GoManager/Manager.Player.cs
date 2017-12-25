@@ -22,38 +22,11 @@ namespace PokemonGoGUI.GoManager
         public async Task<MethodResult> UpdateDetails()
         {
             LogCaller(new LoggerEventArgs("Updating details", LoggerTypes.Debug));
-            
-            MethodResult echoResult = await CheckReauthentication();
-
-            if (!echoResult.Success)
-            {
-                _client.Logout();
-            }
-            
-            if (!_client.LoggedIn)
-            {
-                MethodResult loginResult = await Login_();
-
-                if (!loginResult.Success)
-                {
-                    return loginResult;
-                }
-            }
 
             await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
-            bool potentialAccountban = false;
 
-            MethodResult<Dictionary<PokemonId, PokemonSettings>> result = await GetItemTemplates();
-
-            if (result.Success && result.Data != null && result.Data.Count == 0)
-            {
-                potentialAccountban = true;
-            }
-
-            await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
-
-            MethodResult inventoryResult = await UpdateInventory();
+            MethodResult inventoryResult = UpdateInventory();
 
             if (inventoryResult.Success)
             {
@@ -63,16 +36,7 @@ namespace PokemonGoGUI.GoManager
                 }
             }
 
-            if (!inventoryResult.Success)
-            {
-                if (inventoryResult.Message == "Failed to get inventory." && potentialAccountban)
-                {
-                    AccountState = Enums.AccountState.PermAccountBan;
-
-                    LogCaller(new LoggerEventArgs("Potential account ban", LoggerTypes.Warning));
-                }
-            }
-            else
+            if (inventoryResult.Success)
             {
                 if (AccountState == Enums.AccountState.PermAccountBan)
                 {
@@ -82,7 +46,8 @@ namespace PokemonGoGUI.GoManager
                 LogCaller(new LoggerEventArgs("Finished updating details", LoggerTypes.Debug));
             }
 
-            await ClaimLevelUpRewards(Level);
+            // TODO: is really needed this?
+            //await ClaimLevelUpRewards(Level);
 
             return new MethodResult
             {
