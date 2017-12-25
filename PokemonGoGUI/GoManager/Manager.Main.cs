@@ -742,7 +742,7 @@ namespace PokemonGoGUI.GoManager
 
                     var defaultLocation = new GeoCoordinate(_client.ClientSession.Player.Latitude, _client.ClientSession.Player.Longitude);
 
-                    List<FortData> pokestopsToFarm = pokestops.Data.ToList();
+                    var pokestopsToFarm = new Queue<FortData>(pokestops.Data);
 
                     int currentFailedStops = 0;
 
@@ -760,10 +760,7 @@ namespace PokemonGoGUI.GoManager
 
                         WaitPaused();
 
-                        pokestopsToFarm = pokestopsToFarm.OrderBy(x => CalculateDistanceInMeters(_client.ClientSession.Player.Latitude, _client.ClientSession.Player.Longitude, x.Latitude, x.Longitude)).ToList();
-
-                        FortData pokestop = pokestopsToFarm[0];
-                        pokestopsToFarm.RemoveAt(0);
+                        FortData pokestop = pokestopsToFarm.Dequeue();
 
                         var currentLocation = new GeoCoordinate(_client.ClientSession.Player.Latitude, _client.ClientSession.Player.Longitude);
                         var fortLocation = new GeoCoordinate(pokestop.Latitude, pokestop.Longitude);
@@ -807,21 +804,19 @@ namespace PokemonGoGUI.GoManager
 
                         if (filledInventorySpace < UserSettings.SearchFortBelowPercent)
                         {
-                            if (pokestop.CooldownCompleteTimestampMs >= DateTime.UtcNow.ToUnixTime()){
-                                // NOTE: this condition should  never happen, it is only to be sure that we don't repeat the search of this fort.
-                                break;
-                            }
-                                
-                            MethodResult searchResult = await SearchPokestop(pokestop);
-
-                            //OutOfRange will show up as a success
-                            if (searchResult.Success)
-                            {
-                                currentFailedStops = 0;
-                            }
-                            else
-                            {
-                                ++currentFailedStops;
+                            // NOTE: the contrary of this condition should  never happen, it is only to be sure that we don't repeat the search of this fort.
+                            if (pokestop.CooldownCompleteTimestampMs < DateTime.UtcNow.ToUnixTime()){
+                                MethodResult searchResult = await SearchPokestop(pokestop);
+    
+                                //OutOfRange will show up as a success
+                                if (searchResult.Success)
+                                {
+                                    currentFailedStops = 0;
+                                }
+                                else
+                                {
+                                    ++currentFailedStops;
+                                }
                             }
                         }
                         else
