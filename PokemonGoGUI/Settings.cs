@@ -119,6 +119,12 @@ namespace PokemonGoGUI
             get;
             set;
         }
+
+        public bool CompleteTutorial {
+            get;
+            set;
+        }
+
         public AccountState StopAtMinAccountState { get; set; }
 
         public ProxyEx Proxy

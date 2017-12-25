@@ -1951,7 +1951,7 @@
             this.restoreDefaultsToolStripMenuItem,
             this.setUsePinapToolStripMenuItem});
             this.contextMenuStripCatching.Name = "contextMenuStripCatching";
-            this.contextMenuStripCatching.Size = new System.Drawing.Size(167, 92);
+            this.contextMenuStripCatching.Size = new System.Drawing.Size(167, 70);
             // 
             // setCatchToolStripMenuItem
             // 

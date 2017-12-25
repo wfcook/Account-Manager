@@ -172,6 +172,7 @@ namespace PokemonGoGUI.UI
             
             checkBoxUseBerries.Checked = settings.UseBerries;
             checkBoxGetARBonus.Checked = settings.GetArBonus;
+            checkBoxCompleteTutorial.Checked = settings.CompleteTutorial;
             
 
             for(int i = 0; i < comboBoxMinAccountState.Items.Count; i++)
@@ -360,6 +361,7 @@ namespace PokemonGoGUI.UI
             //End location time zones
             
             userSettings.GetArBonus = checkBoxGetARBonus.Checked;
+            userSettings.CompleteTutorial = checkBoxCompleteTutorial.Checked;
 
             if (proxyEx != null)
             {
