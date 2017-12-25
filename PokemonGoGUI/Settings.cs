@@ -115,6 +115,10 @@ namespace PokemonGoGUI
             set;
         }
 
+        public bool GetArBonus {
+            get;
+            set;
+        }
         public AccountState StopAtMinAccountState { get; set; }
 
         public ProxyEx Proxy

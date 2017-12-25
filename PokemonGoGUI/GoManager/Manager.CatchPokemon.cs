@@ -166,6 +166,7 @@ namespace PokemonGoGUI.GoManager
 
                 CatchPokemonResponse catchPokemonResponse = null;
                 int attemptCount = 1;
+                var berryUsed = false;
 
                 do
                 {
@@ -188,18 +189,24 @@ namespace PokemonGoGUI.GoManager
                         bool isHighCp = eResponse.PokemonData.Cp > 700;
                         bool isHighPerfection = CalculateIVPerfection(eResponse.PokemonData).Data > 90;
     
-                        if ((isLowProbability && isHighCp) || isHighPerfection)
-                        {
-                            await UseBerry(fortData.LureInfo.EncounterId, fortData.Id, ItemId.ItemRazzBerry);
-                        }else{
-                            bool isHighProbability = probability > 0.65;
-                            var catchSettings = UserSettings.CatchSettings.FirstOrDefault( x=> x.Id == eResponse.PokemonData.PokemonId);
-                            var usePinap = catchSettings != null && catchSettings.UsePinap;
-                            if (isHighProbability && usePinap)
-                                await UseBerry(fortData.LureInfo.EncounterId, fortData.Id, ItemId.ItemPinapBerry);
-                            else if ( new Random().Next(0,100) < 50){
-                                // IF we dont use razz neither use pinap, then we will use nanab randomly the 50% of times.
-                                await UseBerry(fortData.LureInfo.EncounterId, fortData.Id, ItemId.ItemNanabBerry);
+                        if (!berryUsed){
+                            if ((isLowProbability && isHighCp) || isHighPerfection)
+                            {
+                                await UseBerry(fortData.LureInfo.EncounterId, fortData.Id, ItemId.ItemRazzBerry);
+                                berryUsed = true;
+                            }else{
+                                bool isHighProbability = probability > 0.65;
+                                var catchSettings = UserSettings.CatchSettings.FirstOrDefault( x=> x.Id == eResponse.PokemonData.PokemonId);
+                                var usePinap = catchSettings != null && catchSettings.UsePinap;
+                                if (isHighProbability && usePinap){
+                                    await UseBerry(fortData.LureInfo.EncounterId, fortData.Id, ItemId.ItemPinapBerry);
+                                    berryUsed = true;
+                                }
+                                else if ( new Random().Next(0,100) < 50){
+                                    // IF we dont use razz neither use pinap, then we will use nanab randomly the 50% of times.
+                                    await UseBerry(fortData.LureInfo.EncounterId, fortData.Id, ItemId.ItemNanabBerry);
+                                    berryUsed = true;
+                                }
                             }
                         }
                     }
@@ -215,6 +222,13 @@ namespace PokemonGoGUI.GoManager
                     }
 
                     //End humanization
+                    var arPlusValues = new ARPlusEncounterValues();
+                    if (UserSettings.GetArBonus ){
+                        arPlusValues.Awareness = 1;
+                        arPlusValues.Proximity = 0;
+                        arPlusValues.PokemonFrightened = false;
+                    }
+                        
                     var catchresponse = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                     {
                         RequestType = RequestType.CatchPokemon,
@@ -226,7 +240,8 @@ namespace PokemonGoGUI.GoManager
                             NormalizedReticleSize = reticuleSize,
                             Pokeball = pokeBall,
                             SpawnPointId = fortData.Id,
-                            SpinModifier = 1
+                            SpinModifier = 1,
+                            ArPlusValues = arPlusValues
                         }.ToByteString()
                     });
 
@@ -261,6 +276,7 @@ namespace PokemonGoGUI.GoManager
                     else if (catchPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchEscape)
                     {
                         LogCaller(new LoggerEventArgs(String.Format("Escaped ball. {0}. Attempt #{1}.", pokemon, attemptCount), LoggerTypes.PokemonEscape));
+                        berryUsed = false;
                     }
                     else
                     {
@@ -456,14 +472,7 @@ namespace PokemonGoGUI.GoManager
 
                         if (AccountState == Enums.AccountState.PokemonBanAndPokestopBanTemp || AccountState == Enums.AccountState.PokemonBanTemp)
                         {
-                            if (AccountState == Enums.AccountState.PokemonBanAndPokestopBanTemp)
-                            {
-                                AccountState = Enums.AccountState.PokestopBanTemp;
-                            }
-                            else
-                            {
-                                AccountState = Enums.AccountState.Good;
-                            }
+                            AccountState = AccountState == Enums.AccountState.PokemonBanAndPokestopBanTemp ? Enums.AccountState.PokestopBanTemp : Enums.AccountState.Good;
 
                             LogCaller(new LoggerEventArgs("Pokemon ban was lifted", LoggerTypes.Info));
                         }
@@ -635,6 +644,7 @@ namespace PokemonGoGUI.GoManager
                     {
                         EncounterId = encounterId,
                         ItemId = berryData.ItemId,
+                        
                         SpawnPointId = spawnId
                     }.ToByteString()
                 });
@@ -642,6 +652,7 @@ namespace PokemonGoGUI.GoManager
                 UseItemCaptureResponse useItemCaptureResponse = null;
 
                 useItemCaptureResponse = UseItemCaptureResponse.Parser.ParseFrom(response);
+                LogCaller(new LoggerEventArgs("Success: " +useItemCaptureResponse.Success, LoggerTypes.Debug));
                 int remaining = berryData.Count - 1;
                 berryData.Count = remaining;
                 LogCaller(new LoggerEventArgs(String.Format("Successfully used berry. Remaining: {0}", remaining), LoggerTypes.Info));
@@ -663,12 +674,8 @@ namespace PokemonGoGUI.GoManager
         {
             lock(_rand)
             {
-                if (_rand.Next(1, 101) <= UserSettings.InsideReticuleChance)
-                {
-                    return true;
-                }
+                return _rand.Next(1, 101) <= UserSettings.InsideReticuleChance;
 
-                return false;
             }
         }
     }

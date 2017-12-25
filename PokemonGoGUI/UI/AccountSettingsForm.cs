@@ -82,7 +82,6 @@ namespace PokemonGoGUI.UI
             cbUseOnlyThisHashKey.Checked = _manager.UserSettings.UseOnlyOneKey;
             tbAuthHashKey.Text = _manager.UserSettings.AuthAPIKey;
             cbAutoUpdate.Checked = AutoUpdate;
-            checkBoxUseBerries.Checked = _manager.UserSettings.UseBerries;
 
             //Location time zones
             var zones = new TimeZoneIds().GetTimeZoneIds();
@@ -170,6 +169,10 @@ namespace PokemonGoGUI.UI
             cbHashEndpoint.Text = settings.HashEndpoint;
             tbAuthHashKey.Text = settings.AuthAPIKey;
             cbUseOnlyThisHashKey.Checked = settings.UseOnlyOneKey;
+            
+            checkBoxUseBerries.Checked = settings.UseBerries;
+            checkBoxGetARBonus.Checked = settings.GetArBonus;
+            
 
             for(int i = 0; i < comboBoxMinAccountState.Items.Count; i++)
             {
@@ -355,6 +358,8 @@ namespace PokemonGoGUI.UI
             userSettings.Language = x[cbTimeZones.Text].Item2;
             userSettings.POSIX = x[cbTimeZones.Text].Item3;
             //End location time zones
+            
+            userSettings.GetArBonus = checkBoxGetARBonus.Checked;
 
             if (proxyEx != null)
             {
@@ -687,5 +692,17 @@ namespace PokemonGoGUI.UI
         {
             DialogResult = DialogResult.OK;
         }
+
+        void setUsePinapToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (fastObjectListViewCatch.SelectedObjects== null)
+                return;
+
+            foreach(CatchSetting cSetting in fastObjectListViewCatch.SelectedObjects)
+                cSetting.UsePinap = !cSetting.UsePinap;
+
+            fastObjectListViewCatch.RefreshSelectedObjects();
+        }
+
     }
 }

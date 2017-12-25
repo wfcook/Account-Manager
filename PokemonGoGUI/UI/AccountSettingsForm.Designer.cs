@@ -43,7 +43,8 @@
             this.labelUsername = new System.Windows.Forms.Label();
             this.tabPageActions = new System.Windows.Forms.TabPage();
             this.checkBoxCompleteTutorial = new System.Windows.Forms.CheckBox();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.groupBoxPlayerActions = new System.Windows.Forms.GroupBox();
+            this.checkBoxGetARBonus = new System.Windows.Forms.CheckBox();
             this.checkBoxCatchPokemon = new System.Windows.Forms.CheckBox();
             this.checkBoxUseBerries = new System.Windows.Forms.CheckBox();
             this.numericUpDownForceEvolveAbove = new System.Windows.Forms.NumericUpDown();
@@ -83,6 +84,7 @@
             this.label44 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
             this.tabPageSettingsNavigation = new System.Windows.Forms.TabPage();
+            this.checkBoxShufflePokestops = new System.Windows.Forms.CheckBox();
             this.cbTimeZones = new System.Windows.Forms.ComboBox();
             this.label53 = new System.Windows.Forms.Label();
             this.numericUpDownWalkingOffset = new System.Windows.Forms.NumericUpDown();
@@ -177,6 +179,7 @@
             this.falseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toggleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.restoreDefaultsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.setUsePinapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabPageTransfer = new System.Windows.Forms.TabPage();
             this.fastObjectListViewTransfer = new BrightIdeasSoftware.FastObjectListView();
             this.olvColumnTransferId = new BrightIdeasSoftware.OLVColumn();
@@ -192,14 +195,13 @@
             this.toolTipProxy = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipMinAccountState = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipHumanizeThrows = new System.Windows.Forms.ToolTip(this.components);
-            this.checkBoxShufflePokestops = new System.Windows.Forms.CheckBox();
             this.tabControlMain.SuspendLayout();
             this.tabPageDetails.SuspendLayout();
             this.tabControlSettings.SuspendLayout();
             this.tabPageSettingsGeneral.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownMaxLogs)).BeginInit();
             this.tabPageActions.SuspendLayout();
-            this.groupBox1.SuspendLayout();
+            this.groupBoxPlayerActions.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownForceEvolveAbove)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSearchFortBelow)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownRunForHours)).BeginInit();
@@ -391,7 +393,7 @@
             // tabPageActions
             // 
             this.tabPageActions.Controls.Add(this.checkBoxCompleteTutorial);
-            this.tabPageActions.Controls.Add(this.groupBox1);
+            this.tabPageActions.Controls.Add(this.groupBoxPlayerActions);
             this.tabPageActions.Controls.Add(this.cbAutoUpdate);
             this.tabPageActions.Controls.Add(this.comboBoxMinAccountState);
             this.tabPageActions.Controls.Add(this.numericUpDownRunForHours);
@@ -426,29 +428,41 @@
             this.checkBoxCompleteTutorial.Text = "Complete Tutorial";
             this.checkBoxCompleteTutorial.UseVisualStyleBackColor = true;
             // 
-            // groupBox1
+            // groupBoxPlayerActions
             // 
-            this.groupBox1.Controls.Add(this.checkBoxCatchPokemon);
-            this.groupBox1.Controls.Add(this.checkBoxUseBerries);
-            this.groupBox1.Controls.Add(this.numericUpDownForceEvolveAbove);
-            this.groupBox1.Controls.Add(this.checkBoxTransfers);
-            this.groupBox1.Controls.Add(this.label49);
-            this.groupBox1.Controls.Add(this.checkBoxOnlyUnlimitedIncubator);
-            this.groupBox1.Controls.Add(this.checkBoxEvolve);
-            this.groupBox1.Controls.Add(this.label9);
-            this.groupBox1.Controls.Add(this.checkBoxTransferSlashPokemons);
-            this.groupBox1.Controls.Add(this.numericUpDownSearchFortBelow);
-            this.groupBox1.Controls.Add(this.checkBoxRecycle);
-            this.groupBox1.Controls.Add(this.checkBoxUseLuckyEgg);
-            this.groupBox1.Controls.Add(this.checkBoxIncubateEggs);
-            this.groupBox1.Controls.Add(this.textBoxPokemonBeforeEvolve);
-            this.groupBox1.Controls.Add(this.label46);
-            this.groupBox1.Location = new System.Drawing.Point(6, 9);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(239, 336);
-            this.groupBox1.TabIndex = 73;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Player Actions";
+            this.groupBoxPlayerActions.Controls.Add(this.checkBoxGetARBonus);
+            this.groupBoxPlayerActions.Controls.Add(this.checkBoxCatchPokemon);
+            this.groupBoxPlayerActions.Controls.Add(this.checkBoxUseBerries);
+            this.groupBoxPlayerActions.Controls.Add(this.numericUpDownForceEvolveAbove);
+            this.groupBoxPlayerActions.Controls.Add(this.checkBoxTransfers);
+            this.groupBoxPlayerActions.Controls.Add(this.label49);
+            this.groupBoxPlayerActions.Controls.Add(this.checkBoxOnlyUnlimitedIncubator);
+            this.groupBoxPlayerActions.Controls.Add(this.checkBoxEvolve);
+            this.groupBoxPlayerActions.Controls.Add(this.label9);
+            this.groupBoxPlayerActions.Controls.Add(this.checkBoxTransferSlashPokemons);
+            this.groupBoxPlayerActions.Controls.Add(this.numericUpDownSearchFortBelow);
+            this.groupBoxPlayerActions.Controls.Add(this.checkBoxRecycle);
+            this.groupBoxPlayerActions.Controls.Add(this.checkBoxUseLuckyEgg);
+            this.groupBoxPlayerActions.Controls.Add(this.checkBoxIncubateEggs);
+            this.groupBoxPlayerActions.Controls.Add(this.textBoxPokemonBeforeEvolve);
+            this.groupBoxPlayerActions.Controls.Add(this.label46);
+            this.groupBoxPlayerActions.Location = new System.Drawing.Point(6, 9);
+            this.groupBoxPlayerActions.Name = "groupBoxPlayerActions";
+            this.groupBoxPlayerActions.Size = new System.Drawing.Size(239, 336);
+            this.groupBoxPlayerActions.TabIndex = 73;
+            this.groupBoxPlayerActions.TabStop = false;
+            this.groupBoxPlayerActions.Text = "Player Actions";
+            // 
+            // checkBoxGetARBonus
+            // 
+            this.checkBoxGetARBonus.AutoSize = true;
+            this.checkBoxGetARBonus.Location = new System.Drawing.Point(131, 18);
+            this.checkBoxGetARBonus.Margin = new System.Windows.Forms.Padding(2);
+            this.checkBoxGetARBonus.Name = "checkBoxGetARBonus";
+            this.checkBoxGetARBonus.Size = new System.Drawing.Size(94, 17);
+            this.checkBoxGetARBonus.TabIndex = 73;
+            this.checkBoxGetARBonus.Text = "Get AR Bonus";
+            this.checkBoxGetARBonus.UseVisualStyleBackColor = true;
             // 
             // checkBoxCatchPokemon
             // 
@@ -913,6 +927,18 @@
             this.tabPageSettingsNavigation.TabIndex = 1;
             this.tabPageSettingsNavigation.Text = "Navigation";
             this.tabPageSettingsNavigation.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxShufflePokestops
+            // 
+            this.checkBoxShufflePokestops.AutoSize = true;
+            this.checkBoxShufflePokestops.Location = new System.Drawing.Point(172, 109);
+            this.checkBoxShufflePokestops.Margin = new System.Windows.Forms.Padding(2);
+            this.checkBoxShufflePokestops.Name = "checkBoxShufflePokestops";
+            this.checkBoxShufflePokestops.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.checkBoxShufflePokestops.Size = new System.Drawing.Size(112, 17);
+            this.checkBoxShufflePokestops.TabIndex = 58;
+            this.checkBoxShufflePokestops.Text = "Shuffle Pokestops";
+            this.checkBoxShufflePokestops.UseVisualStyleBackColor = true;
             // 
             // cbTimeZones
             // 
@@ -1922,9 +1948,10 @@
             this.contextMenuStripCatching.ImageScalingSize = new System.Drawing.Size(22, 22);
             this.contextMenuStripCatching.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.setCatchToolStripMenuItem,
-            this.restoreDefaultsToolStripMenuItem});
+            this.restoreDefaultsToolStripMenuItem,
+            this.setUsePinapToolStripMenuItem});
             this.contextMenuStripCatching.Name = "contextMenuStripCatching";
-            this.contextMenuStripCatching.Size = new System.Drawing.Size(160, 48);
+            this.contextMenuStripCatching.Size = new System.Drawing.Size(167, 92);
             // 
             // setCatchToolStripMenuItem
             // 
@@ -1933,7 +1960,7 @@
             this.falseToolStripMenuItem,
             this.toggleToolStripMenuItem});
             this.setCatchToolStripMenuItem.Name = "setCatchToolStripMenuItem";
-            this.setCatchToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
+            this.setCatchToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
             this.setCatchToolStripMenuItem.Text = "Set Catch";
             // 
             // trueToolStripMenuItem
@@ -1963,9 +1990,16 @@
             // restoreDefaultsToolStripMenuItem
             // 
             this.restoreDefaultsToolStripMenuItem.Name = "restoreDefaultsToolStripMenuItem";
-            this.restoreDefaultsToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
+            this.restoreDefaultsToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
             this.restoreDefaultsToolStripMenuItem.Text = "Restore Defaults";
             this.restoreDefaultsToolStripMenuItem.Click += new System.EventHandler(this.RestoreDefaultsToolStripMenuItem_Click);
+            // 
+            // setUsePinapToolStripMenuItem
+            // 
+            this.setUsePinapToolStripMenuItem.Name = "setUsePinapToolStripMenuItem";
+            this.setUsePinapToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
+            this.setUsePinapToolStripMenuItem.Text = "Toggle Use Pinap";
+            this.setUsePinapToolStripMenuItem.Click += new System.EventHandler(this.setUsePinapToolStripMenuItem_Click);
             // 
             // tabPageTransfer
             // 
@@ -2071,18 +2105,6 @@
             this.restoreDefaultsToolStripMenuItem2.Text = "Restore Defaults";
             this.restoreDefaultsToolStripMenuItem2.Click += new System.EventHandler(this.RestoreDefaultsToolStripMenuItem2_Click);
             // 
-            // checkBoxShufflePokestops
-            // 
-            this.checkBoxShufflePokestops.AutoSize = true;
-            this.checkBoxShufflePokestops.Location = new System.Drawing.Point(172, 109);
-            this.checkBoxShufflePokestops.Margin = new System.Windows.Forms.Padding(2);
-            this.checkBoxShufflePokestops.Name = "checkBoxShufflePokestops";
-            this.checkBoxShufflePokestops.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.checkBoxShufflePokestops.Size = new System.Drawing.Size(112, 17);
-            this.checkBoxShufflePokestops.TabIndex = 58;
-            this.checkBoxShufflePokestops.Text = "Shuffle Pokestops";
-            this.checkBoxShufflePokestops.UseVisualStyleBackColor = true;
-            // 
             // AccountSettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2104,8 +2126,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownMaxLogs)).EndInit();
             this.tabPageActions.ResumeLayout(false);
             this.tabPageActions.PerformLayout();
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
+            this.groupBoxPlayerActions.ResumeLayout(false);
+            this.groupBoxPlayerActions.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownForceEvolveAbove)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSearchFortBelow)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownRunForHours)).EndInit();
@@ -2306,9 +2328,11 @@
         private System.Windows.Forms.CheckBox checkBoxTransferSlashPokemons;
         private System.Windows.Forms.CheckBox checkBoxUseBerries;
         private System.Windows.Forms.CheckBox checkBoxOnlyUnlimitedIncubator;
-        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.GroupBox groupBoxPlayerActions;
         private System.Windows.Forms.CheckBox checkBoxCompleteTutorial;
         private BrightIdeasSoftware.OLVColumn olvColumnPinap;
         private System.Windows.Forms.CheckBox checkBoxShufflePokestops;
+        private System.Windows.Forms.CheckBox checkBoxGetARBonus;
+        private System.Windows.Forms.ToolStripMenuItem setUsePinapToolStripMenuItem;
     }
 }
