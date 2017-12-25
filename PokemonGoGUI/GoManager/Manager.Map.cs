@@ -28,7 +28,7 @@ namespace PokemonGoGUI.GoManager
 
             // update catchable pokemons
             List<MapPokemon> newCatchablePokemons = mapCellResponse.Data.SelectMany(x => x.CatchablePokemons).
-                                        Where(x => PokemonWithinCatchSettings(x)).ToList();
+                                        Where(PokemonWithinCatchSettings).ToList();
             //LogCaller(new LoggerEventArgs($"Found {newCatchablePokemons.Count} catchable pokemons", Models.LoggerTypes.Success));
 
             return new MethodResult<List<MapPokemon>>
@@ -48,7 +48,7 @@ namespace PokemonGoGUI.GoManager
                 return allFortsResponse;
             }
 
-            List<FortData> fortData = new List<FortData>();
+            var fortData = new List<FortData>();
 
             if (allFortsResponse.Data.Count == 0)
             {
@@ -67,8 +67,8 @@ namespace PokemonGoGUI.GoManager
                     continue;
                 }
 
-                GeoCoordinate defaultLocation = new GeoCoordinate(_client.ClientSession.Player.Latitude, _client.ClientSession.Player.Longitude);
-                GeoCoordinate fortLocation = new GeoCoordinate(fort.Latitude, fort.Longitude);
+                var defaultLocation = new GeoCoordinate(_client.ClientSession.Player.Latitude, _client.ClientSession.Player.Longitude);
+                var fortLocation = new GeoCoordinate(fort.Latitude, fort.Longitude);
 
                 double distance = CalculateDistanceInMeters(defaultLocation, fortLocation);
 
@@ -90,7 +90,12 @@ namespace PokemonGoGUI.GoManager
                 };
             }
 
-            fortData = fortData.OrderBy(x => CalculateDistanceInMeters(_client.ClientSession.Player.Latitude, _client.ClientSession.Player.Longitude, x.Latitude, x.Longitude)).ToList();
+            if (UserSettings.ShufflePokestops){
+                var rnd = new Random();
+                fortData = fortData.OrderBy(x => rnd.Next()).ToList();
+            }else{
+                fortData = fortData.OrderBy(x => CalculateDistanceInMeters(_client.ClientSession.Player.Latitude, _client.ClientSession.Player.Longitude, x.Latitude, x.Longitude)).ToList();
+            }
 
             return new MethodResult<List<FortData>>
             {
@@ -109,7 +114,7 @@ namespace PokemonGoGUI.GoManager
                 return allFortsResponse;
             }
 
-            List<FortData> fortData = new List<FortData>();
+            var fortData = new List<FortData>();
 
             foreach (FortData fort in allFortsResponse.Data)
             {
@@ -118,8 +123,8 @@ namespace PokemonGoGUI.GoManager
                     continue;
                 }
 
-                GeoCoordinate defaultLocation = new GeoCoordinate(_client.ClientSession.Player.Latitude, _client.ClientSession.Player.Longitude);
-                GeoCoordinate fortLocation = new GeoCoordinate(fort.Latitude, fort.Longitude);
+                var defaultLocation = new GeoCoordinate(_client.ClientSession.Player.Latitude, _client.ClientSession.Player.Longitude);
+                var fortLocation = new GeoCoordinate(fort.Latitude, fort.Longitude);
 
                 double distance = CalculateDistanceInMeters(defaultLocation, fortLocation);
 

@@ -19,7 +19,7 @@ namespace PokemonGoGUI.GoManager
                 return result;
             }
 
-            int maxTries = 3;
+            const int maxTries = 3;
             int currentTries = 0;
 
             while (currentTries < maxTries)
@@ -71,7 +71,7 @@ namespace PokemonGoGUI.GoManager
                 speedInMetersPerSecond = 0;
             }
 
-            GeoCoordinate sourceLocation = new GeoCoordinate(_client.ClientSession.Player.Latitude, _client.ClientSession.Player.Longitude);
+            var sourceLocation = new GeoCoordinate(_client.ClientSession.Player.Latitude, _client.ClientSession.Player.Longitude);
             double distanceToTarget = CalculateDistanceInMeters(sourceLocation, location);
 
             double nextWaypointBearing = DegreeBearing(sourceLocation, location);
@@ -146,7 +146,7 @@ namespace PokemonGoGUI.GoManager
             await Task.Delay(0);
             try
             {
-                GeoCoordinate previousLocation = new GeoCoordinate(_client.ClientSession.Player.Latitude, _client.ClientSession.Player.Longitude);
+                var previousLocation = new GeoCoordinate(_client.ClientSession.Player.Latitude, _client.ClientSession.Player.Longitude);
 
                 double distance = CalculateDistanceInMeters(previousLocation, location);
 

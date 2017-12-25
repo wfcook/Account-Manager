@@ -192,6 +192,7 @@
             this.toolTipProxy = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipMinAccountState = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipHumanizeThrows = new System.Windows.Forms.ToolTip(this.components);
+            this.checkBoxShufflePokestops = new System.Windows.Forms.CheckBox();
             this.tabControlMain.SuspendLayout();
             this.tabPageDetails.SuspendLayout();
             this.tabControlSettings.SuspendLayout();
@@ -887,6 +888,7 @@
             // 
             // tabPageSettingsNavigation
             // 
+            this.tabPageSettingsNavigation.Controls.Add(this.checkBoxShufflePokestops);
             this.tabPageSettingsNavigation.Controls.Add(this.cbTimeZones);
             this.tabPageSettingsNavigation.Controls.Add(this.label53);
             this.tabPageSettingsNavigation.Controls.Add(this.numericUpDownWalkingOffset);
@@ -915,7 +917,7 @@
             // cbTimeZones
             // 
             this.cbTimeZones.FormattingEnabled = true;
-            this.cbTimeZones.Location = new System.Drawing.Point(124, 190);
+            this.cbTimeZones.Location = new System.Drawing.Point(143, 191);
             this.cbTimeZones.Margin = new System.Windows.Forms.Padding(2);
             this.cbTimeZones.Name = "cbTimeZones";
             this.cbTimeZones.Size = new System.Drawing.Size(205, 21);
@@ -923,7 +925,7 @@
             // 
             // label53
             // 
-            this.label53.Location = new System.Drawing.Point(15, 193);
+            this.label53.Location = new System.Drawing.Point(34, 194);
             this.label53.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label53.Name = "label53";
             this.label53.Size = new System.Drawing.Size(105, 13);
@@ -934,7 +936,7 @@
             // numericUpDownWalkingOffset
             // 
             this.numericUpDownWalkingOffset.DecimalPlaces = 2;
-            this.numericUpDownWalkingOffset.Location = new System.Drawing.Point(266, 130);
+            this.numericUpDownWalkingOffset.Location = new System.Drawing.Point(285, 131);
             this.numericUpDownWalkingOffset.Margin = new System.Windows.Forms.Padding(2);
             this.numericUpDownWalkingOffset.Maximum = new decimal(new int[] {
             999999,
@@ -948,7 +950,7 @@
             // comboBoxLocationPresets
             // 
             this.comboBoxLocationPresets.FormattingEnabled = true;
-            this.comboBoxLocationPresets.Location = new System.Drawing.Point(124, 15);
+            this.comboBoxLocationPresets.Location = new System.Drawing.Point(143, 15);
             this.comboBoxLocationPresets.Margin = new System.Windows.Forms.Padding(2);
             this.comboBoxLocationPresets.Name = "comboBoxLocationPresets";
             this.comboBoxLocationPresets.Size = new System.Drawing.Size(110, 21);
@@ -957,7 +959,7 @@
             // 
             // label10
             // 
-            this.label10.Location = new System.Drawing.Point(37, 18);
+            this.label10.Location = new System.Drawing.Point(56, 18);
             this.label10.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(83, 13);
@@ -969,7 +971,7 @@
             // 
             this.checkBoxEncounterWhileWalking.AutoSize = true;
             this.checkBoxEncounterWhileWalking.Enabled = false;
-            this.checkBoxEncounterWhileWalking.Location = new System.Drawing.Point(87, 160);
+            this.checkBoxEncounterWhileWalking.Location = new System.Drawing.Point(106, 161);
             this.checkBoxEncounterWhileWalking.Margin = new System.Windows.Forms.Padding(2);
             this.checkBoxEncounterWhileWalking.Name = "checkBoxEncounterWhileWalking";
             this.checkBoxEncounterWhileWalking.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
@@ -981,7 +983,7 @@
             // checkBoxMimicWalking
             // 
             this.checkBoxMimicWalking.AutoSize = true;
-            this.checkBoxMimicWalking.Location = new System.Drawing.Point(43, 109);
+            this.checkBoxMimicWalking.Location = new System.Drawing.Point(62, 109);
             this.checkBoxMimicWalking.Margin = new System.Windows.Forms.Padding(2);
             this.checkBoxMimicWalking.Name = "checkBoxMimicWalking";
             this.checkBoxMimicWalking.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
@@ -994,7 +996,7 @@
             // textBoxWalkSpeed
             // 
             this.textBoxWalkSpeed.Enabled = false;
-            this.textBoxWalkSpeed.Location = new System.Drawing.Point(124, 129);
+            this.textBoxWalkSpeed.Location = new System.Drawing.Point(143, 130);
             this.textBoxWalkSpeed.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxWalkSpeed.Name = "textBoxWalkSpeed";
             this.textBoxWalkSpeed.Size = new System.Drawing.Size(110, 20);
@@ -1002,7 +1004,7 @@
             // 
             // textBoxMaxTravelDistance
             // 
-            this.textBoxMaxTravelDistance.Location = new System.Drawing.Point(124, 85);
+            this.textBoxMaxTravelDistance.Location = new System.Drawing.Point(143, 85);
             this.textBoxMaxTravelDistance.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxMaxTravelDistance.Name = "textBoxMaxTravelDistance";
             this.textBoxMaxTravelDistance.Size = new System.Drawing.Size(110, 20);
@@ -1010,7 +1012,7 @@
             // 
             // textBoxLong
             // 
-            this.textBoxLong.Location = new System.Drawing.Point(124, 62);
+            this.textBoxLong.Location = new System.Drawing.Point(143, 62);
             this.textBoxLong.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxLong.Name = "textBoxLong";
             this.textBoxLong.Size = new System.Drawing.Size(110, 20);
@@ -1018,7 +1020,7 @@
             // 
             // textBoxLat
             // 
-            this.textBoxLat.Location = new System.Drawing.Point(124, 39);
+            this.textBoxLat.Location = new System.Drawing.Point(143, 39);
             this.textBoxLat.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxLat.Name = "textBoxLat";
             this.textBoxLat.Size = new System.Drawing.Size(110, 20);
@@ -1027,7 +1029,7 @@
             // label45
             // 
             this.label45.AutoSize = true;
-            this.label45.Location = new System.Drawing.Point(244, 132);
+            this.label45.Location = new System.Drawing.Point(263, 133);
             this.label45.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label45.Name = "label45";
             this.label45.Size = new System.Drawing.Size(21, 13);
@@ -1036,7 +1038,7 @@
             // 
             // label6
             // 
-            this.label6.Location = new System.Drawing.Point(21, 132);
+            this.label6.Location = new System.Drawing.Point(33, 130);
             this.label6.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(106, 13);
@@ -1046,7 +1048,7 @@
             // 
             // label8
             // 
-            this.label8.Location = new System.Drawing.Point(15, 88);
+            this.label8.Location = new System.Drawing.Point(34, 88);
             this.label8.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(105, 13);
@@ -1056,7 +1058,7 @@
             // 
             // label5
             // 
-            this.label5.Location = new System.Drawing.Point(18, 65);
+            this.label5.Location = new System.Drawing.Point(37, 65);
             this.label5.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(102, 13);
@@ -1066,7 +1068,7 @@
             // 
             // label4
             // 
-            this.label4.Location = new System.Drawing.Point(27, 43);
+            this.label4.Location = new System.Drawing.Point(46, 43);
             this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(93, 13);
@@ -2069,6 +2071,18 @@
             this.restoreDefaultsToolStripMenuItem2.Text = "Restore Defaults";
             this.restoreDefaultsToolStripMenuItem2.Click += new System.EventHandler(this.RestoreDefaultsToolStripMenuItem2_Click);
             // 
+            // checkBoxShufflePokestops
+            // 
+            this.checkBoxShufflePokestops.AutoSize = true;
+            this.checkBoxShufflePokestops.Location = new System.Drawing.Point(172, 109);
+            this.checkBoxShufflePokestops.Margin = new System.Windows.Forms.Padding(2);
+            this.checkBoxShufflePokestops.Name = "checkBoxShufflePokestops";
+            this.checkBoxShufflePokestops.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.checkBoxShufflePokestops.Size = new System.Drawing.Size(112, 17);
+            this.checkBoxShufflePokestops.TabIndex = 58;
+            this.checkBoxShufflePokestops.Text = "Shuffle Pokestops";
+            this.checkBoxShufflePokestops.UseVisualStyleBackColor = true;
+            // 
             // AccountSettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2295,5 +2309,6 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.CheckBox checkBoxCompleteTutorial;
         private BrightIdeasSoftware.OLVColumn olvColumnPinap;
+        private System.Windows.Forms.CheckBox checkBoxShufflePokestops;
     }
 }

@@ -109,6 +109,12 @@ namespace PokemonGoGUI
             get;
             set;
         }
+
+        public bool ShufflePokestops {
+            get;
+            set;
+        }
+
         public AccountState StopAtMinAccountState { get; set; }
 
         public ProxyEx Proxy

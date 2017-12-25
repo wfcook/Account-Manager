@@ -116,6 +116,7 @@ namespace PokemonGoGUI.UI
             textBoxMaxLevel.Text = settings.MaxLevel.ToString();
             textBoxProxy.Text = settings.Proxy.ToString();
             checkBoxMimicWalking.Checked = settings.MimicWalking;
+            checkBoxShufflePokestops.Checked = settings.ShufflePokestops;
             checkBoxEncounterWhileWalking.Checked = settings.EncounterWhileWalking;
             checkBoxRecycle.Checked = settings.RecycleItems;
             checkBoxEvolve.Checked = settings.EvolvePokemon;
@@ -277,6 +278,8 @@ namespace PokemonGoGUI.UI
             userSettings.AuthType = textBoxPtcUsername.Text.Contains("@") ?  AuthType.Google : AuthType.Ptc;
 
             userSettings.MimicWalking = checkBoxMimicWalking.Checked;
+            userSettings.ShufflePokestops = checkBoxShufflePokestops.Checked;
+            
             userSettings.Username = textBoxPtcUsername.Text.Trim();
             userSettings.Password = textBoxPtcPassword.Text.Trim();
             userSettings.DefaultLatitude = defaultLat;
