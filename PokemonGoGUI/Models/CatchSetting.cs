@@ -6,6 +6,7 @@ namespace PokemonGoGUI.Models
     {
         public PokemonId Id { get; set; }
         public bool Catch { get; set; }
+        public bool UsePinap { get; set; }
 
         public CatchSetting()
         {

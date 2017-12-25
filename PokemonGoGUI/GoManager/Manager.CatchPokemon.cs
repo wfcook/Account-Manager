@@ -197,7 +197,9 @@ namespace PokemonGoGUI.GoManager
                             await UseBerry(fortData.LureInfo.EncounterId, fortData.Id, ItemId.ItemRazzBerry);
                         }else{
                             bool isHighProbability = probability > 0.65;
-                            if (isHighProbability)
+                            var catchSettings = UserSettings.CatchSettings.FirstOrDefault( x=> x.Id == eResponse.PokemonData.PokemonId);
+                            var usePinap = catchSettings != null && catchSettings.UsePinap;
+                            if (isHighProbability && usePinap)
                                 await UseBerry(fortData.LureInfo.EncounterId, fortData.Id, ItemId.ItemPinapBerry);
                             else if ( new Random().Next(0,100) < 50){
                                 // IF we dont use razz neither use pinap, then we will use nanab randomly the 50% of times.
