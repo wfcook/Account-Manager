@@ -161,10 +161,7 @@ namespace PokemonGoGUI.GoManager
                     }
                 }
 
-                if (!String.IsNullOrEmpty(Proxy))
-                {
-                    _proxyIssue = true;
-                }
+                _proxyIssue |= !String.IsNullOrEmpty(Proxy);
 
                 LogCaller(new LoggerEventArgs("Failed to login due to request error", LoggerTypes.Exception, ex.InnerException));
 
@@ -303,7 +300,7 @@ namespace PokemonGoGUI.GoManager
 
             State = BotState.Starting;
 
-            Thread t = new Thread(RunningThread)
+            var t = new Thread(RunningThread)
             {
                 IsBackground = true
             };
@@ -399,8 +396,7 @@ namespace PokemonGoGUI.GoManager
 
         private bool CheckTime()
         {
-            if (UserSettings.RunForHours == 0)
-            {
+            if (Math.Abs(UserSettings.RunForHours) < 0.001) {
                 return false;
             }
 
@@ -418,7 +414,7 @@ namespace PokemonGoGUI.GoManager
 
         private async void RunningThread()
         {
-            int failedWaitTime = 5000;
+            const int failedWaitTime = 5000;
             int currentFails = 0;
 
             //Reset account state
@@ -476,7 +472,7 @@ namespace PokemonGoGUI.GoManager
 
                 ++currentFails;
 
-                MethodResult result = new MethodResult();
+                var result = new MethodResult();
 
                 #region Startup
 
@@ -558,7 +554,7 @@ namespace PokemonGoGUI.GoManager
                         LogCaller(new LoggerEventArgs("Grabbing game settings ...", LoggerTypes.Debug));
                         try
                         {
-                            Version remote = new Version(_client.ClientSession.GlobalSettings.MinimumClientVersion);
+                            var remote = new Version(_client.ClientSession.GlobalSettings.MinimumClientVersion);
                             if (_client.VersionStr < remote)
                             {
                                 LogCaller(new LoggerEventArgs($"Emulates API {_client.VersionStr} ...", LoggerTypes.FatalError, new Exception($"New API needed {remote}. Stopping ...")));
@@ -733,8 +729,7 @@ namespace PokemonGoGUI.GoManager
 
                         if (UserSettings.AutoRotateProxies && currentFails >= UserSettings.MaxFailBeforeReset)
                         {
-                            if (pokestops.Message.StartsWith("No pokestop data found."))
-                            {
+                            if (pokestops.Message.StartsWith("No pokestop data found.", StringComparison.Ordinal)) {
                                 _proxyIssue = true;
                                 await ChangeProxy();
                             }
@@ -745,7 +740,7 @@ namespace PokemonGoGUI.GoManager
                         continue;
                     }
 
-                    GeoCoordinate defaultLocation = new GeoCoordinate(_client.ClientSession.Player.Latitude, _client.ClientSession.Player.Longitude);
+                    var defaultLocation = new GeoCoordinate(_client.ClientSession.Player.Latitude, _client.ClientSession.Player.Longitude);
 
                     List<FortData> pokestopsToFarm = pokestops.Data.ToList();
 
@@ -770,8 +765,8 @@ namespace PokemonGoGUI.GoManager
                         FortData pokestop = pokestopsToFarm[0];
                         pokestopsToFarm.RemoveAt(0);
 
-                        GeoCoordinate currentLocation = new GeoCoordinate(_client.ClientSession.Player.Latitude, _client.ClientSession.Player.Longitude);
-                        GeoCoordinate fortLocation = new GeoCoordinate(pokestop.Latitude, pokestop.Longitude);
+                        var currentLocation = new GeoCoordinate(_client.ClientSession.Player.Latitude, _client.ClientSession.Player.Longitude);
+                        var fortLocation = new GeoCoordinate(pokestop.Latitude, pokestop.Longitude);
 
                         double distance = CalculateDistanceInMeters(currentLocation, fortLocation);
 
@@ -812,6 +807,11 @@ namespace PokemonGoGUI.GoManager
 
                         if (filledInventorySpace < UserSettings.SearchFortBelowPercent)
                         {
+                            if (pokestop.CooldownCompleteTimestampMs >= DateTime.UtcNow.ToUnixTime()){
+                                // NOTE: this condition should  never happen, it is only to be sure that we don't repeat the search of this fort.
+                                break;
+                            }
+                                
                             MethodResult searchResult = await SearchPokestop(pokestop);
 
                             //OutOfRange will show up as a success

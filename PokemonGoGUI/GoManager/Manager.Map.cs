@@ -62,7 +62,7 @@ namespace PokemonGoGUI.GoManager
 
             foreach (FortData fort in allFortsResponse.Data)
             {
-                if (fort.CooldownCompleteTimestampMs > DateTime.UtcNow.ToUnixTime())
+                if (fort.CooldownCompleteTimestampMs >= DateTime.UtcNow.ToUnixTime())
                 {
                     continue;
                 }

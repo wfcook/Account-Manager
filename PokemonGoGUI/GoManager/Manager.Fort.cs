@@ -20,7 +20,7 @@ namespace PokemonGoGUI.GoManager
             try
             {
                 FortSearchResponse fortResponse = null;
-                int maxFortAttempts = 5;
+                const int maxFortAttempts = 5;
 
                 for (int i = 0; i < maxFortAttempts; i++)
                 {
@@ -81,6 +81,9 @@ namespace PokemonGoGUI.GoManager
                     else if (fortResponse.Result != FortSearchResponse.Types.Result.Success && fortResponse.Result != FortSearchResponse.Types.Result.InventoryFull)
                     {
                         LogCaller(new LoggerEventArgs(String.Format("Failed to search fort. Response: {0}", fortResponse.Result), LoggerTypes.Warning));
+                        
+                        //NOTE: To be sure that we don't repeat the search of this fort
+                        pokestop.CooldownCompleteTimestampMs = DateTime.UtcNow.ToUnixTime() + 300000;
 
                         return new MethodResult
                         {
@@ -92,7 +95,7 @@ namespace PokemonGoGUI.GoManager
                         fortResponse.ExperienceAwarded,
                         StringUtil.GetSummedFriendlyNameOfItemAwardList(fortResponse.ItemsAwarded.ToList()));
 
-                    Dictionary<ItemId, ItemData> itemDictionary = new Dictionary<ItemId, ItemData>();
+                    var itemDictionary = new Dictionary<ItemId, ItemData>();
 
                     foreach (ItemData item in Items)
                     {
@@ -121,14 +124,7 @@ namespace PokemonGoGUI.GoManager
                         //Successfully grabbed stop
                         if (AccountState == Enums.AccountState.PokemonBanAndPokestopBanTemp || AccountState == Enums.AccountState.PokestopBanTemp)
                         {
-                            if (AccountState == Enums.AccountState.PokemonBanAndPokestopBanTemp)
-                            {
-                                AccountState = Enums.AccountState.PokemonBanTemp;
-                            }
-                            else
-                            {
-                                AccountState = Enums.AccountState.Good;
-                            }
+                            AccountState = AccountState == Enums.AccountState.PokemonBanAndPokestopBanTemp ? Enums.AccountState.PokemonBanTemp : Enums.AccountState.Good;
 
                             LogCaller(new LoggerEventArgs("Pokestop ban was removed", LoggerTypes.Info));
                         }
@@ -219,7 +215,7 @@ namespace PokemonGoGUI.GoManager
                         LogCaller(new LoggerEventArgs("Potential softban detected. Attempting to bypass ...", LoggerTypes.Warning));
 
                         int totalAttempts = 0;
-                        int maxAttempts = 40;
+                        const int maxAttempts = 40;
 
                         FortSearchResponse bypassResponse = null;
 

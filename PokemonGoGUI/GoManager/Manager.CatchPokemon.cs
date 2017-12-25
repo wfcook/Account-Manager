@@ -19,7 +19,6 @@ namespace PokemonGoGUI.GoManager
 {
     public partial class Manager
     {
-        private List<ulong> encountersDone = new List<ulong>();
         
         private async Task<MethodResult> CatchNeabyPokemon()
         {
@@ -38,16 +37,13 @@ namespace PokemonGoGUI.GoManager
                 return new MethodResult();
             }
 
-            encountersDone.Clear();
             foreach(MapPokemon pokemon in catchableResponse.Data)
             {
                 if(!PokemonWithinCatchSettings(pokemon))
                 {
                     continue;
                 }
-                if (encountersDone.Contains(pokemon.EncounterId))
-                    continue;
-                
+
 
                 MethodResult<EncounterResponse> result = await EncounterPokemon(pokemon);
 
@@ -246,9 +242,8 @@ namespace PokemonGoGUI.GoManager
                         ExpIncrease(expGained);
 
                         //_expGained += expGained;
-                        
-                        encountersDone.Add(fortData.LureInfo.EncounterId);
 
+                        fortData.LureInfo = null;
 
                         LogCaller(new LoggerEventArgs(String.Format("Lured Pokemon Caught. {0}. Exp {1}. Attempt #{2}", pokemon, expGained, attemptCount), LoggerTypes.Success));
 
@@ -427,8 +422,16 @@ namespace PokemonGoGUI.GoManager
                         ExpIncrease(expGained);
 
                         //_expGained += expGained;
-                        
-                        encountersDone.Add(eResponse.WildPokemon.EncounterId);
+
+                        //NOTE: To be sure that we don't repeat this encounter, we will delete it from the cell
+                        var cell =_client.ClientSession.Map.Cells.FirstOrDefault(x => x.CatchablePokemons.FirstOrDefault(y => y.EncounterId == mapPokemon.EncounterId)!=null);
+                        if (cell!=null){
+                            var mapPokemonFound = cell.CatchablePokemons.FirstOrDefault(y => y.EncounterId == mapPokemon.EncounterId);
+                            if (mapPokemonFound!=null){
+                                cell.CatchablePokemons.Remove(mapPokemonFound);
+                            }
+                        }
+
 
                         LogCaller(new LoggerEventArgs(String.Format("Caught. {0}. Exp {1}. Attempt #{2}. Ball: {3}", pokemon, expGained, attemptCount, pokeBallName), LoggerTypes.Success));
 
