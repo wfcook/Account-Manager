@@ -3,7 +3,7 @@
 #---------------------------------#
 
 # version format
-version: 1.dev-build.{build}
+version:  v2.0.0.{build}-alpha
 
 branches:
   only:
