@@ -1,5 +1,6 @@
 ﻿using GeoCoordinatePortable;
 using Newtonsoft.Json;
+using POGOLib.Official.Exceptions;
 using POGOProtos.Data.Player;
 using POGOProtos.Enums;
 using POGOProtos.Map.Fort;
@@ -234,7 +235,7 @@ namespace PokemonGoGUI.GoManager
                     Message = message
                 };
             }
-            catch (GoogleException ex)
+            catch (GoogleLoginException ex)
             {
                 Stop();
                 RemoveProxy();
