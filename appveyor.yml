@@ -3,7 +3,7 @@
 #---------------------------------#
 
 # version format
-version: 0.0.0.{build}
+version: 1.dev-build.{build}
 
 branches:
   only:
@@ -46,7 +46,7 @@ init:
     }
 
 # clone directory
-clone_folder: c:\projects\Goman
+clone_folder: c:\projects\Account-Manager
 
 # fetch repository as zip archive
 shallow_clone: false
@@ -108,12 +108,15 @@ platform:
 - x64
 
 # build Configuration, i.e. Debug, Release, etc.
-configuration: Release
 
 # to add several configurations to build matrix:
 #configuration:
 #  - Debug
 #  - Release
+
+configuration:
+  - Debug
+  - Release
 
 build:
   # MSBuild verbosity level
