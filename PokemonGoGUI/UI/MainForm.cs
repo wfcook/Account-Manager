@@ -196,12 +196,16 @@ namespace PokemonGoGUI
                 byte[] byteData = await Task.Run(() => File.ReadAllBytes(gzipFile));
                 string data = Compression.Unzip(byteData);
 
-                ProgramExportModel model = Serializer.FromJson<ProgramExportModel>(data);
+                ProgramExportModel  model = Serializer.FromJson<ProgramExportModel>(data);
 
-                _proxyHandler = model.ProxyHandler;
-                tempManagers = model.Managers;
-                _schedulers = model.Schedulers;
-                tempHashKeys = model.HashKeys;
+                if (model.ProxyHandler!=null)
+                    _proxyHandler = model.ProxyHandler;
+                if (model.Managers!=null)
+                    tempManagers = model.Managers;
+                if (model.Schedulers!=null)
+                    _schedulers = model.Schedulers;
+                if (model.HashKeys!=null)
+                    tempHashKeys = model.HashKeys;
                 _spf = model.SPF;
                 _showStartup = model.ShowWelcomeMessage;
                 _autoupdate = model.AutoUpdate;
@@ -545,7 +549,7 @@ namespace PokemonGoGUI
             toolStripStatusLabelFlagged.Text = flags.ToString();
             toolStripStatusLabelCaptcha.Text = captcha.ToString();
 
-            if(_proxyHandler.Proxies != null)
+            if(_proxyHandler?.Proxies != null)
             {
                 toolStripStatusLabelTotalProxies.Text = _proxyHandler.Proxies.Count.ToString();
                 toolStripStatusLabelBannedProxies.Text = _proxyHandler.Proxies.Count(x => x.IsBanned).ToString();
