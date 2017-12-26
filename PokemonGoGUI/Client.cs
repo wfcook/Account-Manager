@@ -29,6 +29,7 @@ namespace PokemonGoGUI
     {
         public ProxyEx Proxy;
         public Version VersionStr;
+        public uint AppVersion;
         public Session ClientSession;
         public bool LoggedIn = false;
         private GetPlayerMessage.Types.PlayerLocale PlayerLocale;
@@ -39,6 +40,7 @@ namespace PokemonGoGUI
         public Client()
         {
             VersionStr = new Version("0.87.5");
+            AppVersion = 8700;
         }
 
         public void Logout()
@@ -75,6 +77,7 @@ namespace PokemonGoGUI
                 // TODO: make this configurable. To avoid bans (may be with a checkbox in hash keys tab).
                 //Configuration.IgnoreHashVersion = true;
                 VersionStr = Configuration.Hasher.PokemonVersion;
+                AppVersion = Configuration.Hasher.AppVersion;
                 //Revise sleeping line 118
                 //((PokeHashHasher)Configuration.Hasher).PokehashSleeping += OnPokehashSleeping;
             }
