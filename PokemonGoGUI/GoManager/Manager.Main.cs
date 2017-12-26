@@ -499,6 +499,7 @@ namespace PokemonGoGUI.GoManager
                         AccountState = AccountState.Flagged;
                         LogCaller(new LoggerEventArgs("Account seen flegged.", LoggerTypes.Warning));
 
+                        if(UserSettings.StopAtMinAccountState ==  AccountState.Flagged){
                             //Remove proxy
                             RemoveProxy();
                             Stop();
