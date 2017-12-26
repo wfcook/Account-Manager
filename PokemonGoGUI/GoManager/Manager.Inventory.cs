@@ -27,15 +27,14 @@ namespace PokemonGoGUI.GoManager
                 UpdatePokemonCandy();
                 UpdateItemList();
                 UpdateIncubators();
-                InventoryUpdateCaller(EventArgs.Empty);
 
                 return new MethodResult<List<InventoryItem>> {
-                    Message = "Successfully grabbed inventory items",
+                    Message = "Inventory updated successfully",
                     Success = true
                 };
             } catch (Exception) {
                 return new MethodResult<List<InventoryItem>> {
-                    Message = "Failed to get inventory",
+                    Message = "Failed to update inventory",
                     Success = false
                 };
             }

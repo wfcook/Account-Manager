@@ -257,7 +257,6 @@ namespace PokemonGoGUI.UI
 
             Text = _manager.AccountName;
 
-            _manager.OnInventoryUpdate += _manager_OnInventoryUpdate;
             _manager.OnLog += _manager_OnLog;
 
             DisplayDetails();
@@ -307,7 +306,6 @@ namespace PokemonGoGUI.UI
 
         private void DetailsForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            _manager.OnInventoryUpdate -= _manager_OnInventoryUpdate;
             _manager.OnLog -= _manager_OnLog;
 
             _manager.LogHeaderSettings = fastObjectListViewLogs.SaveState();

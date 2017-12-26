@@ -8,12 +8,6 @@ namespace PokemonGoGUI.GoManager
         public delegate void LoggerHandler(object sender, LoggerEventArgs e);
         public event LoggerHandler OnLog;
 
-        public event EventHandler OnInventoryUpdate;
-
-        private void InventoryUpdateCaller(EventArgs args)
-        {
-            OnInventoryUpdate?.Invoke(this, args);
-        }
 
         public void LogCaller(LoggerEventArgs args)
         {
