@@ -278,7 +278,8 @@ namespace PokemonGoGUI.GoManager
                     Message = "Bot already running"
                 };
             }
-            else if (State != BotState.Stopped)
+
+            if (State != BotState.Stopped)
             {
                 return new MethodResult
                 {
@@ -498,12 +499,11 @@ namespace PokemonGoGUI.GoManager
                         AccountState = AccountState.Flagged;
                         LogCaller(new LoggerEventArgs("Account seen flegged.", LoggerTypes.Warning));
 
-                        //Remove proxy
-                        RemoveProxy();
-
-                        Stop();
-
-                        continue;
+                            //Remove proxy
+                            RemoveProxy();
+                            Stop();
+                            continue;
+                        }
                     }
 
                     if (_client.ClientSession.Player.Banned)

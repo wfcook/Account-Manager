@@ -480,7 +480,7 @@
             this.checkBoxUseBerries.AutoSize = true;
             this.checkBoxUseBerries.Checked = true;
             this.checkBoxUseBerries.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxUseBerries.Location = new System.Drawing.Point(12, 190);
+            this.checkBoxUseBerries.Location = new System.Drawing.Point(11, 190);
             this.checkBoxUseBerries.Margin = new System.Windows.Forms.Padding(2);
             this.checkBoxUseBerries.Name = "checkBoxUseBerries";
             this.checkBoxUseBerries.Size = new System.Drawing.Size(80, 17);
@@ -558,7 +558,7 @@
             // checkBoxTransferSlashPokemons
             // 
             this.checkBoxTransferSlashPokemons.AutoSize = true;
-            this.checkBoxTransferSlashPokemons.Location = new System.Drawing.Point(12, 169);
+            this.checkBoxTransferSlashPokemons.Location = new System.Drawing.Point(11, 169);
             this.checkBoxTransferSlashPokemons.Margin = new System.Windows.Forms.Padding(2);
             this.checkBoxTransferSlashPokemons.Name = "checkBoxTransferSlashPokemons";
             this.checkBoxTransferSlashPokemons.Size = new System.Drawing.Size(147, 17);
@@ -644,6 +644,7 @@
             // 
             // comboBoxMinAccountState
             // 
+            this.comboBoxMinAccountState.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxMinAccountState.FormattingEnabled = true;
             this.comboBoxMinAccountState.Location = new System.Drawing.Point(252, 51);
             this.comboBoxMinAccountState.Margin = new System.Windows.Forms.Padding(2);
@@ -817,7 +818,7 @@
             // 
             this.checkBoxRemoveOnStop.AutoSize = true;
             this.checkBoxRemoveOnStop.Enabled = false;
-            this.checkBoxRemoveOnStop.Location = new System.Drawing.Point(94, 107);
+            this.checkBoxRemoveOnStop.Location = new System.Drawing.Point(118, 103);
             this.checkBoxRemoveOnStop.Margin = new System.Windows.Forms.Padding(2);
             this.checkBoxRemoveOnStop.Name = "checkBoxRemoveOnStop";
             this.checkBoxRemoveOnStop.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
@@ -829,7 +830,7 @@
             // checkBoxAutoRotateProxies
             // 
             this.checkBoxAutoRotateProxies.AutoSize = true;
-            this.checkBoxAutoRotateProxies.Location = new System.Drawing.Point(142, 86);
+            this.checkBoxAutoRotateProxies.Location = new System.Drawing.Point(166, 82);
             this.checkBoxAutoRotateProxies.Margin = new System.Windows.Forms.Padding(2);
             this.checkBoxAutoRotateProxies.Name = "checkBoxAutoRotateProxies";
             this.checkBoxAutoRotateProxies.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
@@ -844,7 +845,7 @@
             this.checkBoxStopOnIPBan.AutoSize = true;
             this.checkBoxStopOnIPBan.Checked = true;
             this.checkBoxStopOnIPBan.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxStopOnIPBan.Location = new System.Drawing.Point(164, 65);
+            this.checkBoxStopOnIPBan.Location = new System.Drawing.Point(188, 61);
             this.checkBoxStopOnIPBan.Margin = new System.Windows.Forms.Padding(2);
             this.checkBoxStopOnIPBan.Name = "checkBoxStopOnIPBan";
             this.checkBoxStopOnIPBan.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
@@ -855,7 +856,7 @@
             // 
             // numericUpDownMaxFailBeforeReset
             // 
-            this.numericUpDownMaxFailBeforeReset.Location = new System.Drawing.Point(168, 42);
+            this.numericUpDownMaxFailBeforeReset.Location = new System.Drawing.Point(201, 37);
             this.numericUpDownMaxFailBeforeReset.Margin = new System.Windows.Forms.Padding(2);
             this.numericUpDownMaxFailBeforeReset.Maximum = new decimal(new int[] {
             999999,
@@ -873,7 +874,7 @@
             // 
             // textBoxProxy
             // 
-            this.textBoxProxy.Location = new System.Drawing.Point(118, 20);
+            this.textBoxProxy.Location = new System.Drawing.Point(150, 13);
             this.textBoxProxy.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxProxy.Name = "textBoxProxy";
             this.textBoxProxy.Size = new System.Drawing.Size(136, 20);
@@ -883,7 +884,7 @@
             // label44
             // 
             this.label44.AutoSize = true;
-            this.label44.Location = new System.Drawing.Point(14, 44);
+            this.label44.Location = new System.Drawing.Point(40, 39);
             this.label44.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label44.Name = "label44";
             this.label44.Size = new System.Drawing.Size(157, 13);
@@ -893,7 +894,7 @@
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(76, 22);
+            this.label12.Location = new System.Drawing.Point(108, 15);
             this.label12.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(40, 13);
