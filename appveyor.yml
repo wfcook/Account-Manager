@@ -96,16 +96,16 @@ assembly_info:
 
 # build platform, i.e. x86, x64, Any CPU. This setting is optional.
 #platform: x86
-platform:
-- Any CPU
-- x86
-- x64
-- ARM
 
 # to add several platforms to build matrix:
 #platform:
 #  - x86
 #  - Any CPU
+
+platform:
+- Any CPU
+- x86
+- x64
 
 # build Configuration, i.e. Debug, Release, etc.
 configuration: Release
@@ -148,18 +148,6 @@ after_build:
     {
         Move-Item -Path "$($env:APPVEYOR_BUILD_FOLDER)\PokemonGoGUI\bin\$($env:CONFIGURATION)" -Destination "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\PokemonGoGUI" -Force;
     }
-#    Move-Item -Path "$($env:APPVEYOR_BUILD_FOLDER)\PokeEase\build\android-debug.apk" -Destination "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\android-debug.apk" -Force;
-#    Move-Item -Path "$($env:APPVEYOR_BUILD_FOLDER)\PokeEase\build\android-debug-unaligned.apk" -Destination "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\android-debug-unaligned.apk" -Force;
-#    Move-Item -Path "$($env:APPVEYOR_BUILD_FOLDER)\PokeEase\build\android-release-unsigned.apk" -Destination "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\android-release-unsigned.apk" -Force;
-#    Move-Item -Path "$($env:APPVEYOR_BUILD_FOLDER)\PokeEase\dist\win-ia32-unpacked" -Destination "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\PokeEase" -Force;
-        
-#    New-Item -ItemType Directory -Force -Path "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\Goman\Android";
-#    New-Item -ItemType Directory -Force -Path "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\Goman\PokeEase";
-#    Move-Item -Path "$($env:APPVEYOR_BUILD_FOLDER)\PokeEase\build\android-debug.apk" -Destination "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\Goman\Android\android-debug.apk" -Force;
-#    Move-Item -Path "$($env:APPVEYOR_BUILD_FOLDER)\PokeEase\build\android-debug-unaligned.apk" -Destination "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\Goman\Android\android-debug-unaligned.apk" -Force;
-#    Move-Item -Path "$($env:APPVEYOR_BUILD_FOLDER)\PokeEase\build\android-release-unsigned.apk" -Destination "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\Goman\Android\android-release-unsigned.apk" -Force;
-#    Move-Item -Path "$($env:APPVEYOR_BUILD_FOLDER)\PokeEase\dist\win-ia32-unpacked\*" -Destination "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\Goman\PokeEase" -Force;
-        
 
 # to run your custom scripts instead of automatic MSBuild
 build_script:
@@ -180,18 +168,6 @@ artifacts:
   - path: '\$(PLATFORM)\$(CONFIGURATION)\PokemonGoGUI'
     name: PokemonGoGUI
     
-#  - path: '\$(PLATFORM)\$(CONFIGURATION)\android-debug.apk'
-#    name: android-debug
-
-#  - path: '\$(PLATFORM)\$(CONFIGURATION)\android-debug-unaligned.apk'
-#    name: android-debug-unaligned
-    
-#  - path: '\$(PLATFORM)\$(CONFIGURATION)\android-release-unsigned.apk'
-#    name: android-release-unsigned
-    
-#  - path: '\$(PLATFORM)\$(CONFIGURATION)\PokeEase'
-#    name: PokeEase
-
 #---------------------------------#
 #     deployment configuration    #
 #---------------------------------#
@@ -203,10 +179,10 @@ deploy:
   # Deploy to GitHub Releases
   - provider: GitHub
     tag: $(APPVEYOR_REPO_TAG_NAME)
-    description: '[CHANGELOG.md](https://github.com/Furtif/GoManager/blob/master/CHANGELOG.md)'
+    description: '[CHANGELOG.md](https://github.com/Furtif/Account-Manager/blob/master/CHANGELOG.md)'
     release: PokemonGoGUI $(APPVEYOR_REPO_TAG_NAME)
     auth_token: $(auth_token)
-    artifact: PokemonGoGUI #;android-debug;android-debug-unaligned;android-release-unsigned;PokeEase
+    artifact: PokemonGoGUI
     draft: false
     prerelease: false
     force_update: true
