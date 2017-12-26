@@ -141,11 +141,11 @@ after_build:
     New-Item -ItemType Directory -Force -Path "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)";
     if ($env:PLATFORM -eq "x86")
     {
-        Move-Item -Path "$($env:APPVEYOR_BUILD_FOLDER)\PokemonGoGUI\bin\$($env:PLATFORM)\$($env:CONFIGURATION)" -Destination "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\PokemonGoGUI" -Force;
+        Move-Item -Path "$($env:APPVEYOR_BUILD_FOLDER)\PokemonGoGUI\bin\$($env:PLATFORM)\$($env:CONFIGURATION)" -Destination "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\PokemonGoGUI-x86" -Force;
     }  
     elseif ($env:PLATFORM -eq "x64")
     {
-        Move-Item -Path "$($env:APPVEYOR_BUILD_FOLDER)\PokemonGoGUI\bin\$($env:PLATFORM)\$($env:CONFIGURATION)" -Destination "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\PokemonGoGUI" -Force;
+        Move-Item -Path "$($env:APPVEYOR_BUILD_FOLDER)\PokemonGoGUI\bin\$($env:PLATFORM)\$($env:CONFIGURATION)" -Destination "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\PokemonGoGUI-x64" -Force;
     }
     elseif ($env:PLATFORM -eq "Any CPU")
     {
@@ -171,6 +171,12 @@ artifacts:
   - path: '\$(PLATFORM)\$(CONFIGURATION)\PokemonGoGUI'
     name: PokemonGoGUI
     
+  - path: '\$(PLATFORM)\$(CONFIGURATION)\PokemonGoGUI-x86'
+    name: PokemonGoGUI-x86
+    
+  - path: '\$(PLATFORM)\$(CONFIGURATION)\PokemonGoGUI-x64'
+    name: PokemonGoGUI-x64
+       
 #---------------------------------#
 #     deployment configuration    #
 #---------------------------------#
