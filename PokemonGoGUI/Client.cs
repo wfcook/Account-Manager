@@ -135,12 +135,7 @@ namespace PokemonGoGUI
 
         private void MapUpdate(object sender, EventArgs e)
         {
-            //var session = (Session)sender;
-            //GeoCoordinate loc = new GeoCoordinate(session.Player.Latitude, session.Player.Longitude);
-            //UpdateLocation(loc).Wait();
 
-            ClientManager.GetPokeStops().Wait();
-            ClientManager.GetCatchablePokemon().Wait();
 
             // Update BuddyPokemon Stats
             var buddyID =  ClientManager?.PlayerData?.BuddyPokemon.Id;
@@ -149,7 +144,8 @@ namespace PokemonGoGUI
                 MethodResult<GetBuddyWalkedResponse> buddyWalkedResponse = ClientManager.GetBuddyWalked().Result;
                 if (buddyWalkedResponse.Success)
                 {
-                    ClientManager.LogCaller(new LoggerEventArgs($"BuddyWalked CandyID: {buddyWalkedResponse.Data.FamilyCandyId}, CandyCount: {buddyWalkedResponse.Data.CandyEarnedCount}", LoggerTypes.Success));
+                    var msg = $"BuddyWalked CandyID: {buddyWalkedResponse.Data.FamilyCandyId}, CandyCount: {buddyWalkedResponse.Data.CandyEarnedCount}";
+                    ClientManager.LogCaller(new LoggerEventArgs(msg, LoggerTypes.Success));
                 };
             }
 

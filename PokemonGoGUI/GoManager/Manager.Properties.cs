@@ -31,12 +31,8 @@ namespace PokemonGoGUI.GoManager
         {
             get
             {
-                if(AccountScheduler == null)
-                {
-                    return String.Empty;
-                }
+                return AccountScheduler == null ? String.Empty : AccountScheduler.Name;
 
-                return AccountScheduler.Name;
             }
         }
 
@@ -45,12 +41,8 @@ namespace PokemonGoGUI.GoManager
         {
             get
             {
-                if(Tracker == null)
-                {
-                    return 0;
-                }
+                return Tracker == null ? 0 : Tracker.PokemonCaught;
 
-                return Tracker.PokemonCaught;
             }
         }
 
@@ -59,12 +51,8 @@ namespace PokemonGoGUI.GoManager
         {
             get
             {
-                if (Tracker == null)
-                {
-                    return 0;
-                }
+                return Tracker == null ? 0 : Tracker.PokestopsFarmed;
 
-                return Tracker.PokestopsFarmed;
             }
         }
 
@@ -73,12 +61,8 @@ namespace PokemonGoGUI.GoManager
         {
             get
             {
-                if (String.IsNullOrEmpty(UserSettings.GroupName))
-                {
-                    return String.Empty;
-                }
+                return String.IsNullOrEmpty(UserSettings.GroupName) ? String.Empty : UserSettings.GroupName;
 
-                return UserSettings.GroupName;
             }
         }
 
@@ -87,7 +71,7 @@ namespace PokemonGoGUI.GoManager
         {
             get
             {
-                ProxyEx proxyEx = new ProxyEx
+                var proxyEx = new ProxyEx
                 {
                     Address = UserSettings.ProxyIP,
                     Port = UserSettings.ProxyPort,
@@ -150,12 +134,8 @@ namespace PokemonGoGUI.GoManager
         {
             get
             {
-                if (Logs == null)
-                {
-                    return 0;
-                }
+                return Logs == null ? 0 : Logs.Count;
 
-                return Logs.Count;
             }
         }
 
@@ -173,12 +153,8 @@ namespace PokemonGoGUI.GoManager
                 {
                     string message = Logs.Last().Message;
 
-                    if (String.IsNullOrEmpty(message))
-                    {
-                        return String.Empty;
-                    }
+                    return String.IsNullOrEmpty(message) ? String.Empty : message;
 
-                    return message;
                 }
             }
         }
@@ -188,12 +164,8 @@ namespace PokemonGoGUI.GoManager
         {
             get
             {
-                if (UserSettings == null)
-                {
-                    return "???";
-                }
+                return UserSettings == null ? "???" : UserSettings.AccountName;
 
-                return UserSettings.AccountName;
             }
         }
 
@@ -202,12 +174,8 @@ namespace PokemonGoGUI.GoManager
         {
             get
             {
-                if (Stats == null)
-                {
-                    return 0;
-                }
+                return Stats == null ? 0 : Stats.Level;
 
-                return Stats.Level;
             }
         }
 
@@ -216,12 +184,8 @@ namespace PokemonGoGUI.GoManager
         {
             get
             {
-                if(UserSettings == null)
-                {
-                    return 0;
-                }
+                return UserSettings == null ? 0 : UserSettings.MaxLevel;
 
-                return UserSettings.MaxLevel;
             }
         }
 
@@ -255,12 +219,8 @@ namespace PokemonGoGUI.GoManager
                     return String.Format("{0:0}m {1:00}s", time.Minutes, time.Seconds);
                 }
 
-                if(time.TotalHours >= 24)
-                {
-                    return String.Format("{0:0}d {1:0}h {2:00}m", time.Days, time.Hours, time.Seconds);
-                }
+                return time.TotalHours >= 24 ? String.Format("{0:0}d {1:0}h {2:00}m", time.Days, time.Hours, time.Seconds) : String.Format("{0:0}h {1:00}m {2:00}s", time.Hours, time.Minutes, time.Seconds);
 
-                return String.Format("{0:0}h {1:00}m {2:00}s", time.Hours, time.Minutes, time.Seconds);
             }
         }
 
@@ -269,8 +229,7 @@ namespace PokemonGoGUI.GoManager
         {
             get
             {
-                if (MaxRuntime == 0)
-                {
+                if (Math.Abs(MaxRuntime) < 0.0001) {
                     return "Unlimited";
                 }
 
@@ -283,12 +242,8 @@ namespace PokemonGoGUI.GoManager
                     return String.Format("{0:0}m {1:00}s", time.Minutes, time.Seconds);
                 }
 
-                if (time.TotalHours >= 24)
-                {
-                    return String.Format("{0:0}d {1:0}h {2:00}m", time.Days, time.Hours, time.Seconds);
-                }
+                return time.TotalHours >= 24 ? String.Format("{0:0}d {1:0}h {2:00}m", time.Days, time.Hours, time.Seconds) : String.Format("{0:0}h {1:00}m {2:00}s", time.Hours, time.Minutes, time.Seconds);
 
-                return String.Format("{0:0}h {1:00}m {2:00}s", time.Hours, time.Minutes, time.Seconds);
             }
         }
 
@@ -321,12 +276,8 @@ namespace PokemonGoGUI.GoManager
         {
             get
             {
-                if (PlayerData == null)
-                {
-                    return 350;
-                }
+                return PlayerData == null ? 350 : PlayerData.MaxItemStorage;
 
-                return PlayerData.MaxItemStorage;
             }
         }
 
@@ -335,12 +286,8 @@ namespace PokemonGoGUI.GoManager
         {
             get
             {
-                if(PlayerData == null)
-                {
-                    return 250;
-                }
+                return PlayerData == null ? 250 : PlayerData.MaxPokemonStorage;
 
-                return PlayerData.MaxPokemonStorage;
             }
         }
 
@@ -356,12 +303,8 @@ namespace PokemonGoGUI.GoManager
 
                 Currency stardust = PlayerData.Currencies.FirstOrDefault(x => x.Name == "STARDUST");
 
-                if(stardust == null)
-                {
-                    return 0;
-                }
+                return stardust == null ? 0 : stardust.Amount;
 
-                return stardust.Amount;
             }
         }
 
@@ -372,8 +315,7 @@ namespace PokemonGoGUI.GoManager
             {
                 double totalHours = _runningStopwatch.Elapsed.TotalHours;
 
-                if(totalHours == 0)
-                {
+                if (Math.Abs(totalHours) < 0.0001) {
                     return 0;
                 }
 
@@ -410,12 +352,8 @@ namespace PokemonGoGUI.GoManager
         {
             get
             {
-                if(UserSettings == null)
-                {
-                    return 0;
-                }
+                return UserSettings == null ? 0 : UserSettings.RunForHours;
 
-                return UserSettings.RunForHours;
             }
         }
 
@@ -424,12 +362,8 @@ namespace PokemonGoGUI.GoManager
         {
             get
             {
-                if(DateTime.Now < LastLuckyEgg.AddMinutes(30))
-                {
-                    return true;
-                }
+                return DateTime.Now < LastLuckyEgg.AddMinutes(30);
 
-                return false;
             }
         }
 

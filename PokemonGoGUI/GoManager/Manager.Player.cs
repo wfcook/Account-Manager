@@ -88,7 +88,7 @@ namespace PokemonGoGUI.GoManager
             }
 
             //Possible some objects were empty.
-            StringBuilder builder = new StringBuilder();
+            var builder = new StringBuilder();
             builder.AppendLine("=== Trainer Stats ===");
 
             if (Stats != null && PlayerData != null)

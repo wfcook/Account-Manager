@@ -713,7 +713,7 @@ namespace PokemonGoGUI.GoManager
                     //Get pokestops
                     LogCaller(new LoggerEventArgs("Grabbing pokestops...", LoggerTypes.Debug));
 
-                    MethodResult<List<FortData>> pokestops = await GetPokeStops();
+                    MethodResult<List<FortData>> pokestops = GetPokeStops();
 
                     if (!pokestops.Success)
                     {
@@ -766,6 +766,7 @@ namespace PokemonGoGUI.GoManager
                         WaitPaused();
 
                         FortData pokestop = pokestopsToFarm.Dequeue();
+                        LogCaller(new LoggerEventArgs("fort Dequeued: {pokestop.Id}", LoggerTypes.Debug));
 
                         var currentLocation = new GeoCoordinate(_client.ClientSession.Player.Latitude, _client.ClientSession.Player.Longitude);
                         var fortLocation = new GeoCoordinate(pokestop.Latitude, pokestop.Longitude);
@@ -798,6 +799,7 @@ namespace PokemonGoGUI.GoManager
                         if (!walkResult.Success)
                         {
                             LogCaller(new LoggerEventArgs("Too many failed walking attempts. Restarting to fix ...", LoggerTypes.Warning));
+                            LogCaller(new LoggerEventArgs("Result: "+ walkResult.Message, LoggerTypes.Debug));
 
                             break;
                         }

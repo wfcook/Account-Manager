@@ -30,7 +30,7 @@ namespace PokemonGoGUI.GoManager
                 };
             }
             
-            MethodResult<List<MapPokemon>> catchableResponse = await GetCatchablePokemon();
+            MethodResult<List<MapPokemon>> catchableResponse = GetCatchablePokemon();
 
             if(!catchableResponse.Success)
             {

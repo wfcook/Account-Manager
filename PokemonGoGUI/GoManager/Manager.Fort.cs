@@ -82,8 +82,6 @@ namespace PokemonGoGUI.GoManager
                     {
                         LogCaller(new LoggerEventArgs(String.Format("Failed to search fort. Response: {0}", fortResponse.Result), LoggerTypes.Warning));
                         
-                        //NOTE: To be sure that we don't repeat the search of this fort
-                        pokestop.CooldownCompleteTimestampMs = DateTime.UtcNow.ToUnixTime() + 300000;
 
                         return new MethodResult
                         {
@@ -261,6 +259,9 @@ namespace PokemonGoGUI.GoManager
                             Tracker.AddValues(0, 1);
 
                             //_expGained += fortResponse.ExperienceAwarded;
+
+                            //NOTE: To be sure that we don't repeat the search of this fort
+                            pokestop.CooldownCompleteTimestampMs = DateTime.UtcNow.ToUnixTime() + 300000;
 
                             LogCaller(new LoggerEventArgs(message, LoggerTypes.Success));
                             LogCaller(new LoggerEventArgs("Softban removed", LoggerTypes.Success));

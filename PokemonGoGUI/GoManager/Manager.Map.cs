@@ -2,6 +2,7 @@
 using POGOProtos.Map;
 using POGOProtos.Map.Fort;
 using POGOProtos.Map.Pokemon;
+using POGOProtos.Networking.Responses;
 using PokemonGoGUI.Extensions;
 using System;
 using System.Collections.Generic;
@@ -12,55 +13,36 @@ namespace PokemonGoGUI.GoManager
 {
     public partial class Manager
     {
-        public async Task<MethodResult<List<MapPokemon>>> GetCatchablePokemon()
+        public MethodResult<List<MapPokemon>> GetCatchablePokemon()
         {
-            MethodResult<List<MapCell>> mapCellResponse = await GetMapObjects();
 
-            if (!mapCellResponse.Success)
-            {
-                return new MethodResult<List<MapPokemon>>
-                {
-                    Message = mapCellResponse.Message,
-                    Data = new List<MapPokemon>(),
-                    Success = mapCellResponse.Success
-                };
-            }
-
-            // update catchable pokemons
-            List<MapPokemon> newCatchablePokemons = mapCellResponse.Data.SelectMany(x => x.CatchablePokemons).
+            var cells = _client.ClientSession.Map.Cells;
+            List<MapPokemon> newCatchablePokemons = cells.SelectMany(x => x.CatchablePokemons).
                                         Where(PokemonWithinCatchSettings).ToList();
-            //LogCaller(new LoggerEventArgs($"Found {newCatchablePokemons.Count} catchable pokemons", Models.LoggerTypes.Success));
 
             return new MethodResult<List<MapPokemon>>
             {
                 Data = newCatchablePokemons,
-                Success = mapCellResponse.Success,
-                Message = mapCellResponse.Message
+                Success = true,
+                Message = "Success"
             };
         }
 
-        public async Task<MethodResult<List<FortData>>> GetPokeStops()
+        public MethodResult<List<FortData>> GetPokeStops()
         {
-            MethodResult<List<FortData>> allFortsResponse = await GetAllForts();
-
-            if (!allFortsResponse.Success)
-            {
-                return allFortsResponse;
-            }
+            var forts = _client.ClientSession.Map.Cells.SelectMany(x => x.Forts);
 
             var fortData = new List<FortData>();
 
-            if (allFortsResponse.Data.Count == 0)
-            {
-                return new MethodResult<List<FortData>>
-                {
+            if (!forts.Any()) {
+                return new MethodResult<List<FortData>> {
                     Data = fortData,
                     Message = "No pokestop data found. Potential temp IP ban or bad location",
                     Success = true
                 };
             }
 
-            foreach (FortData fort in allFortsResponse.Data)
+            foreach (FortData fort in forts)
             {
                 if (fort.CooldownCompleteTimestampMs >= DateTime.UtcNow.ToUnixTime())
                 {
@@ -105,23 +87,13 @@ namespace PokemonGoGUI.GoManager
             };
         }
 
-        private async Task<MethodResult<List<FortData>>> GetGyms()
+        private MethodResult<List<FortData>> GetGyms()
         {
-            MethodResult<List<FortData>> allFortsResponse = await GetAllForts();
-
-            if (!allFortsResponse.Success)
-            {
-                return allFortsResponse;
-            }
-
+            var forts = _client.ClientSession.Map.Cells.SelectMany(x => x.Forts).Where(y => y.Type == FortType.Gym);
+            
             var fortData = new List<FortData>();
-
-            foreach (FortData fort in allFortsResponse.Data)
+            foreach (FortData fort in forts)
             {
-                if (fort.Type != FortType.Gym)
-                {
-                    continue;
-                }
 
                 var defaultLocation = new GeoCoordinate(_client.ClientSession.Player.Latitude, _client.ClientSession.Player.Longitude);
                 var fortLocation = new GeoCoordinate(fort.Latitude, fort.Longitude);
@@ -139,58 +111,11 @@ namespace PokemonGoGUI.GoManager
             return new MethodResult<List<FortData>>
             {
                 Data = fortData,
-                Message = allFortsResponse.Message,
-                Success = allFortsResponse.Success
+                Message = "Success",
+                Success = true
             };
         }
 
-        private async Task<MethodResult<List<FortData>>> GetAllForts()
-        {
-            MethodResult<List<MapCell>> mapCellResponse = await GetMapObjects();
 
-            if (!mapCellResponse.Success)
-            {
-                return new MethodResult<List<FortData>>
-                {
-                    Data = new List<FortData>(),
-                    Message = mapCellResponse.Message,
-                    Success = mapCellResponse.Success
-                };
-            }
-
-            return new MethodResult<List<FortData>>
-            {
-                Data = mapCellResponse.Data.SelectMany(x => x.Forts).ToList(),
-                Success = mapCellResponse.Success,
-                Message = mapCellResponse.Message
-            };
-        }
-
-        private async Task<MethodResult<List<MapCell>>> GetMapObjects()
-        {
-            if (!_client.LoggedIn)
-            {
-                MethodResult result = await Login_();
-
-                if (!result.Success)
-                {
-                    return new MethodResult<List<MapCell>> { Message = "Failed to get map objets.", Data = new List<MapCell>() };
-                }
-            }
-
-            if (_client.ClientSession.Map.Cells.Count < 0)
-            {
-                return new MethodResult<List<MapCell>> { Message = "Failed to get map objets.", Data = new List<MapCell>() };
-            }
-
-            //await Task.Delay(3000);
-
-            return new MethodResult<List<MapCell>>
-            {
-                Data = _client.ClientSession.Map.Cells.ToList(),
-                Success = true,
-                Message = "Success"
-            };
-        }
     }
 }

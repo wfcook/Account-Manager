@@ -19,38 +19,22 @@ namespace PokemonGoGUI.GoManager
     {
         public MethodResult<List<InventoryItem>> UpdateInventory()
         {
-            try
-            {
 
-                try
-                {
-                    UpdatePlayerStats();
-                    UpdatePokemon();
-                    UpdatePokedex();
-                    UpdatePokemonCandy();
-                    UpdateItemList();
-                    UpdateIncubators();
-                    InventoryUpdateCaller(EventArgs.Empty);
+            try {
+                UpdatePlayerStats();
+                UpdatePokemon();
+                UpdatePokedex();
+                UpdatePokemonCandy();
+                UpdateItemList();
+                UpdateIncubators();
+                InventoryUpdateCaller(EventArgs.Empty);
 
-                    return new MethodResult<List<InventoryItem>>
-                    {
-                        Message = "Successfully grabbed inventory items",
-                        Success = true
-                    };
-                }
-                catch (Exception)
-                {
-                    return new MethodResult<List<InventoryItem>>
-                    {
-                        Message = "Failed to get inventory",
-                        Success = false
-                    };
-                }
-            }
-            catch (Exception)
-            {
-                return new MethodResult<List<InventoryItem>>
-                {
+                return new MethodResult<List<InventoryItem>> {
+                    Message = "Successfully grabbed inventory items",
+                    Success = true
+                };
+            } catch (Exception) {
+                return new MethodResult<List<InventoryItem>> {
                     Message = "Failed to get inventory",
                     Success = false
                 };
@@ -59,16 +43,15 @@ namespace PokemonGoGUI.GoManager
 
         public void UpdateItemList()
         {
-                Items = _client.ClientSession.Player.Inventory.InventoryItems.Where(x => x.InventoryItemData.Item != null).Select(x => x.InventoryItemData.Item).ToList();
-
+            Items = _client.ClientSession.Player.Inventory.InventoryItems.Where(x => x.InventoryItemData.Item != null).Select(x => x.InventoryItemData.Item).ToList();
         }
 
         public void UpdatePlayerStats()
         {
-                InventoryItem item = _client.ClientSession.Player.Inventory.InventoryItems.FirstOrDefault(
-                    x => x.InventoryItemData.PlayerStats != null);
+            InventoryItem item = _client.ClientSession.Player.Inventory.InventoryItems.FirstOrDefault(
+                                     x => x.InventoryItemData.PlayerStats != null);
 
-                Stats = item.InventoryItemData.PlayerStats;
+            Stats = item.InventoryItemData.PlayerStats;
         }
 
 
@@ -90,42 +73,36 @@ namespace PokemonGoGUI.GoManager
 
         public void UpdatePokemonCandy()
         {
-                PokemonCandy = _client.ClientSession.Player.Inventory.InventoryItems.Where(x => x.InventoryItemData.Candy != null).Select(x => x.InventoryItemData.Candy).ToList();
+            PokemonCandy = _client.ClientSession.Player.Inventory.InventoryItems.Where(x => x.InventoryItemData.Candy != null).Select(x => x.InventoryItemData.Candy).ToList();
         }
 
         public async Task<MethodResult> RecycleFilteredItems()
         {
-            if (!UserSettings.RecycleItems)
-            {
-                return new MethodResult
-                {
+            if (!UserSettings.RecycleItems) {
+                return new MethodResult {
                     Message = "Item deletion not enabled"
                 };
             }
 
             MethodResult<List<InventoryItem>> inventoryResponse = UpdateInventory();
 
-            if (!inventoryResponse.Success)
-            {
+            if (!inventoryResponse.Success) {
                 return inventoryResponse;
             }
 
 
             UpdateItemList();
 
-            foreach (ItemData item in Items)
-            {
+            foreach (ItemData item in Items) {
                 InventoryItemSetting itemSetting = UserSettings.ItemSettings.FirstOrDefault(x => x.Id == item.ItemId);
 
-                if (itemSetting == null)
-                {
+                if (itemSetting == null) {
                     continue;
                 }
 
                 int toDelete = item.Count - itemSetting.MaxInventory;
 
-                if (toDelete <= 0)
-                {
+                if (toDelete <= 0) {
                     continue;
                 }
 
@@ -135,8 +112,7 @@ namespace PokemonGoGUI.GoManager
             }
 
 
-            return new MethodResult
-            {
+            return new MethodResult {
                 Message = "Success",
                 Success = true
             };
@@ -146,25 +122,18 @@ namespace PokemonGoGUI.GoManager
         {
             InventoryItemSetting itemSetting = UserSettings.ItemSettings.FirstOrDefault(x => x.Id == item.ItemId);
 
-            if(itemSetting == null)
-            {
-                return new MethodResult();
-            }
+            return itemSetting == null ? new MethodResult() : await RecycleItem(itemSetting, toDelete);
 
-            return await RecycleItem(itemSetting, toDelete);
         }
 
         public async Task<MethodResult> RecycleItem(InventoryItemSetting itemSetting, int toDelete)
         {
             //TODO: revise
             //return new MethodResult { Message = "Dev mode sorry" };
-            try
-            {
-                var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
-                {
+            try {
+                var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request {
                     RequestType = RequestType.RecycleInventoryItem,
-                    RequestMessage = new RecycleInventoryItemMessage
-                    {
+                    RequestMessage = new RecycleInventoryItemMessage {
                         Count = toDelete,
                         ItemId = itemSetting.Id
                     }.ToByteString()
@@ -175,13 +144,10 @@ namespace PokemonGoGUI.GoManager
                 recycleInventoryItemResponse = RecycleInventoryItemResponse.Parser.ParseFrom(response);
                 LogCaller(new LoggerEventArgs(String.Format("Deleted {0} {1}. Remaining {2}", toDelete, itemSetting.FriendlyName, recycleInventoryItemResponse.NewCount), LoggerTypes.Recycle));
 
-                return new MethodResult
-                {
+                return new MethodResult {
                     Success = true
                 };
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 LogCaller(new LoggerEventArgs(String.Format("Failed to recycle iventory item {0}", itemSetting.FriendlyName), LoggerTypes.Warning, ex));
 
                 return new MethodResult();
@@ -190,8 +156,7 @@ namespace PokemonGoGUI.GoManager
 
         public double FilledInventorySpace()
         {
-            if(Items == null || PlayerData == null)
-            {
+            if (Items == null || PlayerData == null) {
                 return 100;
             }
 
