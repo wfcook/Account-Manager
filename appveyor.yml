@@ -96,7 +96,11 @@ assembly_info:
 
 # build platform, i.e. x86, x64, Any CPU. This setting is optional.
 #platform: x86
-platform: Any CPU
+platform:
+- Any CPU
+- x86
+- x64
+- ARM
 
 # to add several platforms to build matrix:
 #platform:
@@ -114,6 +118,9 @@ configuration: Release
 build:
   # MSBuild verbosity level
   verbosity: quiet
+  # Parallel builds
+  parallel: true
+
 
 # scripts to run before build
 before_build:
