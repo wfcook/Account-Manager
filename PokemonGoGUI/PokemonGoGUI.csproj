@@ -162,7 +162,6 @@
     <Compile Include="Enums\CheckType.cs" />
     <Compile Include="Enums\SchedulerOption.cs" />
     <Compile Include="Enums\TransferType.cs" />
-    <Compile Include="Exceptions\AccessTokenExpiredException.cs" />
     <Compile Include="Exceptions\AccountNotVerifiedException.cs" />
     <Compile Include="Exceptions\APIBadRequestExceltion.cs" />
     <Compile Include="Exceptions\AuthConfigException.cs" />
