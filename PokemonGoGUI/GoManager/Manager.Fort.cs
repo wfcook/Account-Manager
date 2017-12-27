@@ -296,6 +296,43 @@ namespace PokemonGoGUI.GoManager
             }
         }
 
+        private async Task<MethodResult<FortDetailsResponse>> FortDetails(FortData pokestop)
+        {
+            try
+            {
+                var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
+                {
+                    RequestType = RequestType.FortDetails,
+                    RequestMessage = new FortDetailsMessage
+                    {
+                        FortId = pokestop.Id,
+                        Latitude = pokestop.Latitude,
+                        Longitude = pokestop.Longitude,
+                    }.ToByteString()
+                });
+
+                FortDetailsResponse fortDetailsResponse = null;
+
+                fortDetailsResponse = FortDetailsResponse.Parser.ParseFrom(response);
+
+                return new MethodResult<FortDetailsResponse>
+                {
+                    Data = fortDetailsResponse,
+                    Success = true
+                };
+            }
+            catch (Exception ex)
+            {
+                LogCaller(new LoggerEventArgs("Failed gym get info response", LoggerTypes.Exception, ex));
+
+                return new MethodResult<FortDetailsResponse>
+                {
+                    Data = new FortDetailsResponse () ,
+                    Message = "Failed gym get info response"
+                };
+            }
+        }
+
         private async Task<MethodResult<GymGetInfoResponse>> GymGetInfo(FortData pokestop)
         {
             try

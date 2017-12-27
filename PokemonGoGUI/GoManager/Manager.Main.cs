@@ -556,7 +556,10 @@ namespace PokemonGoGUI.GoManager
                         LogCaller(new LoggerEventArgs("Grabbing game settings ...", LoggerTypes.Debug));
                         try
                         {
-                            var remote = new Version(_client.ClientSession.GlobalSettings.MinimumClientVersion);
+                            // TODO: Is failing here. Globalsetting should not be null in this point.
+                            var remote = new Version();
+                            if (_client.ClientSession.GlobalSettings!=null)
+                                remote = new Version(_client.ClientSession.GlobalSettings?.MinimumClientVersion);
                             if (_client.VersionStr < remote)
                             {
                                 LogCaller(new LoggerEventArgs($"Emulates API {_client.VersionStr} ...", LoggerTypes.FatalError, new Exception($"New API needed {remote}. Stopping ...")));
@@ -564,9 +567,10 @@ namespace PokemonGoGUI.GoManager
                                 continue;
                             }
                         }
-                        catch (Exception)
+                        catch (Exception ex1)
                         {
                             AccountState = AccountState.PokemonBanAndPokestopBanTemp;
+                            LogCaller(new LoggerEventArgs("Exception: " + ex1,LoggerTypes.Debug));
                             LogCaller(new LoggerEventArgs("Game settings failed", LoggerTypes.FatalError, new Exception("Maybe this account is banned ...")));
                             Stop();
                             continue;
@@ -768,30 +772,14 @@ namespace PokemonGoGUI.GoManager
                         WaitPaused();
 
                         FortData pokestop = pokestopsToFarm.Dequeue();
-                        LogCaller(new LoggerEventArgs("fort Dequeued: {pokestop.Id}", LoggerTypes.Debug));
+                        LogCaller(new LoggerEventArgs("fort Dequeued: " +pokestop.Id, LoggerTypes.Debug));
 
                         var currentLocation = new GeoCoordinate(_client.ClientSession.Player.Latitude, _client.ClientSession.Player.Longitude);
                         var fortLocation = new GeoCoordinate(pokestop.Latitude, pokestop.Longitude);
 
                         double distance = CalculateDistanceInMeters(currentLocation, fortLocation);
 
-                        string fort = "pokestop";
-
-                        if (pokestop.Type == FortType.Gym)
-                        {
-                            if (!UserSettings.SpinGyms)
-                            {
-                                continue;
-                            }
-
-                            MethodResult<GymGetInfoResponse> _result = await GymGetInfo(pokestop);
-                            if (_result.Success && _result.Data.Result == GymGetInfoResponse.Types.Result.Success)
-                            {
-                                fort = "gym";
-                            }
-                            else
-                                continue;
-                        }
+                        string fort = (pokestop.Type == FortType.Gym)?"gym":"pokestop";
 
                         LogCaller(new LoggerEventArgs(String.Format("Going to {0} {1} of {2}. Distance {3:0.00}m", fort, pokeStopNumber, totalStops, distance), pokestop.Type == FortType.Checkpoint ? LoggerTypes.Info : LoggerTypes.FortGym));
 
@@ -802,8 +790,20 @@ namespace PokemonGoGUI.GoManager
                         {
                             LogCaller(new LoggerEventArgs("Too many failed walking attempts. Restarting to fix ...", LoggerTypes.Warning));
                             LogCaller(new LoggerEventArgs("Result: "+ walkResult.Message, LoggerTypes.Debug));
-
                             break;
+                        }
+
+                        if (pokestop.Type == FortType.Gym)
+                        {
+                            if (!UserSettings.SpinGyms)
+                                continue;
+                            MethodResult<GymGetInfoResponse> _result = await GymGetInfo(pokestop);
+                            LogCaller(new LoggerEventArgs("Gym Name: "+ _result.Data.Name, LoggerTypes.Info));
+                        }
+                        else
+                        {
+                            var fortDetails = await FortDetails(pokestop);
+                            LogCaller(new LoggerEventArgs("Fort Name: "+ fortDetails.Data.Name, LoggerTypes.Info));
                         }
 
                         await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
