@@ -630,7 +630,6 @@
             this.label46.TabIndex = 63;
             this.label46.Text = "Search Pokestops when below ";
             this.label46.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.label46.Click += new System.EventHandler(this.label46_Click);
             // 
             // cbAutoUpdate
             // 
