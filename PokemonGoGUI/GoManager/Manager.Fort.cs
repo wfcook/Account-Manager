@@ -77,12 +77,9 @@ namespace PokemonGoGUI.GoManager
                         }
 
                         //Let it continue down
-                    }
-                    else if (fortResponse.Result != FortSearchResponse.Types.Result.Success && fortResponse.Result != FortSearchResponse.Types.Result.InventoryFull)
+                    }else if (fortResponse.Result != FortSearchResponse.Types.Result.Success )
                     {
                         LogCaller(new LoggerEventArgs(String.Format("Failed to search fort. Response: {0}", fortResponse.Result), LoggerTypes.Warning));
-                        
-
                         return new MethodResult
                         {
                             Message = "Failed to search fort"
@@ -200,84 +197,17 @@ namespace PokemonGoGUI.GoManager
                     }
 
                     await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
-                }
 
-                if (fortResponse != null && fortResponse.ExperienceAwarded == 0)
-                {
-                    ++_totalZeroExpStops;
-
-                    if (_totalZeroExpStops >= 15 || _fleeingPokemonResponses >= _fleeingPokemonUntilBan)
+                    if (fortResponse.Result == FortSearchResponse.Types.Result.Success)
                     {
-                        _totalZeroExpStops = 0;
-
-                        LogCaller(new LoggerEventArgs("Potential softban detected. Attempting to bypass ...", LoggerTypes.Warning));
-
-                        int totalAttempts = 0;
-                        const int maxAttempts = 40;
-
-                        FortSearchResponse bypassResponse = null;
-
-                        do
+                        return new MethodResult
                         {
-                            ++totalAttempts;
-
-                            if (totalAttempts >= 5 && totalAttempts % 5 == 0)
-                            {
-                                LogCaller(new LoggerEventArgs(String.Format("Softban bypass attempt {0} of {1}", totalAttempts, maxAttempts), LoggerTypes.Info));
-                            }
-
-                            var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
-                            {
-                                RequestType = RequestType.FortSearch,
-                                RequestMessage = new FortSearchMessage
-                                {
-                                    FortId = pokestop.Id,
-                                    FortLatitude = pokestop.Latitude,
-                                    FortLongitude = pokestop.Longitude,
-                                    PlayerLatitude = _client.ClientSession.Player.Latitude,
-                                    PlayerLongitude = _client.ClientSession.Player.Longitude
-                                }.ToByteString()
-                            });
-
-                            bypassResponse = FortSearchResponse.Parser.ParseFrom(response);
-
-                            await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
-                        } while (bypassResponse.ExperienceAwarded == 0 && totalAttempts <= maxAttempts);
-
-                        if (bypassResponse.ExperienceAwarded != 0)
-                        {
-                            //Fleeing pokemon was a softban, reset count
-                            _fleeingPokemonResponses = 0;
-                            _potentialPokemonBan = false;
-
-                            string message = String.Format("Searched Fort. Exp: {0}. Items: {1}.",
-                                                    bypassResponse.ExperienceAwarded,
-                                                    StringUtil.GetSummedFriendlyNameOfItemAwardList(bypassResponse.ItemsAwarded.ToList()));
-
-                            ExpIncrease(fortResponse.ExperienceAwarded);
-
-                            Tracker.AddValues(0, 1);
-
-                            //_expGained += fortResponse.ExperienceAwarded;
-
-                            //NOTE: To be sure that we don't repeat the search of this fort
-                            pokestop.CooldownCompleteTimestampMs = DateTime.UtcNow.ToUnixTime() + 300000;
-
-                            LogCaller(new LoggerEventArgs(message, LoggerTypes.Success));
-                            LogCaller(new LoggerEventArgs("Softban removed", LoggerTypes.Success));
-                        }
-                        else
-                        {
-                            LogCaller(new LoggerEventArgs("Softban still active. Continuing ...", LoggerTypes.Info));
-                        }
+                            Success = true,
+                            Message = "Success"
+                        };
                     }
+                    
                 }
-                else
-                {
-                    _totalZeroExpStops = 0;
-                }
-
-                await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
 
                 return new MethodResult
                 {
