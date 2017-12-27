@@ -623,13 +623,14 @@
             // 
             // label46
             // 
-            this.label46.Location = new System.Drawing.Point(12, 289);
+            this.label46.Location = new System.Drawing.Point(5, 287);
             this.label46.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label46.Name = "label46";
-            this.label46.Size = new System.Drawing.Size(151, 13);
+            this.label46.Size = new System.Drawing.Size(158, 19);
             this.label46.TabIndex = 63;
             this.label46.Text = "Search Pokestops when below ";
             this.label46.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.label46.Click += new System.EventHandler(this.label46_Click);
             // 
             // cbAutoUpdate
             // 

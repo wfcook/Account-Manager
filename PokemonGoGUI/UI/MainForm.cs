@@ -141,8 +141,7 @@ namespace PokemonGoGUI
                     _showStartup = startForm.ShowOnStartUp;
                 }
             }
-
-            UpdateStatusBar();
+             UpdateStatusBar();
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -656,12 +655,15 @@ namespace PokemonGoGUI
             }
         }
 
-        private void TimerListViewUpdate_Tick(object sender, EventArgs e)
+        private void TimerUpdate_Tick(object sender, EventArgs e)
         {
             if(WindowState == FormWindowState.Minimized)
             {
                 return;
             }
+
+            if (statusStripStats.Visible)
+                UpdateStatusBar();
 
             if (tabControlMain.SelectedTab == tabPageAccounts)
             {
@@ -1553,7 +1555,6 @@ namespace PokemonGoGUI
             bool showGroups = !statusStripStats.Visible;
 
             statusStripStats.Visible = showGroups;
-            timerStatusBarUpdate.Enabled = showGroups;
 
             const int scrollBarHeight = 38;
 
@@ -1568,10 +1569,7 @@ namespace PokemonGoGUI
             }
         }
 
-        private void TimerStatusBarUpdate_Tick(object sender, EventArgs e)
-        {
-            UpdateStatusBar();
-        }
+
 
         private void ImportConfigToolStripMenuItem_Click(object sender, EventArgs e)
         {

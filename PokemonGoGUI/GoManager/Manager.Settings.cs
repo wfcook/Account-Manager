@@ -121,9 +121,9 @@ namespace PokemonGoGUI.GoManager
                 DownloadItemTemplatesResponse downloadItemTemplatesResponse = null;
 
                 downloadItemTemplatesResponse = DownloadItemTemplatesResponse.Parser.ParseFrom(response);
-                Dictionary<PokemonId, PokemonSettings> pokemonSettings = new Dictionary<PokemonId, PokemonSettings>();
+                var pokemonSettings = new Dictionary<PokemonId, PokemonSettings>();
 
-                foreach (DownloadItemTemplatesResponse.Types.ItemTemplate template in downloadItemTemplatesResponse.ItemTemplates)
+                foreach (var template in downloadItemTemplatesResponse.ItemTemplates)
                 {
                     if (template.PlayerLevel != null)
                     {
