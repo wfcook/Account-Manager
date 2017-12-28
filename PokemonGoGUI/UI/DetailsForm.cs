@@ -270,10 +270,11 @@ namespace PokemonGoGUI.UI
             DisplayDetails();
             UpdateListViews();
 
-            if (_manager.PokeSettings !=null )
-                foreach (var element in _manager.PokeSettings) {
-                    _manager.LogCaller(new LoggerEventArgs(String.Format("Pokemon: {0}, Family: {1}", element.Key, element.Value.FamilyId), LoggerTypes.Debug));
-                }
+            // TODO: review it, but seems that now is working well the pokesetting with 3rd gen.
+            //if (_manager.PokeSettings !=null )
+            //    foreach (var element in _manager.PokeSettings) {
+            //        _manager.LogCaller(new LoggerEventArgs(String.Format("Pokemon: {0}, Family: {1}", element.Key, element.Value.FamilyId), LoggerTypes.Debug));
+            //    }
         }
 
         private void _manager_OnLog(object sender, LoggerEventArgs e)
