@@ -270,9 +270,10 @@ namespace PokemonGoGUI.UI
             DisplayDetails();
             UpdateListViews();
 
-            foreach (var element in _manager.PokeSettings) {
-                _manager.LogCaller(new LoggerEventArgs(String.Format("Pokemon: {0}, Family: {1}", element.Key, element.Value.FamilyId), LoggerTypes.Debug));
-            }
+            if (_manager.PokeSettings !=null )
+                foreach (var element in _manager.PokeSettings) {
+                    _manager.LogCaller(new LoggerEventArgs(String.Format("Pokemon: {0}, Family: {1}", element.Key, element.Value.FamilyId), LoggerTypes.Debug));
+                }
         }
 
         private void _manager_OnLog(object sender, LoggerEventArgs e)

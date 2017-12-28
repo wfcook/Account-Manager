@@ -808,37 +808,6 @@ namespace PokemonGoGUI.GoManager
 
                         await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
-                        //Search
-                        double filledInventorySpace = FilledInventorySpace();
-
-                        if (filledInventorySpace < UserSettings.SearchFortBelowPercent)
-                        {
-                            // NOTE: the contrary of this condition should  never happen, it is only to be sure that we don't repeat the search of this fort.
-                            if (pokestop.CooldownCompleteTimestampMs < DateTime.UtcNow.ToUnixTime()){
-                                MethodResult searchResult = await SearchPokestop(pokestop);
-    
-                                //OutOfRange will show up as a success
-                                if (searchResult.Success)
-                                {
-                                    currentFailedStops = 0;
-                                }
-                                else
-                                {
-                                    ++currentFailedStops;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            LogCaller(new LoggerEventArgs(String.Format("Skipping fort. Currently at {0:0.00}% filled", filledInventorySpace), LoggerTypes.Info));
-                        }
-
-                        //Stop bot instantly
-                        if (!IsRunning)
-                        {
-                            continue;
-                        }
-
                         int remainingBalls = RemainingPokeballs();
 
                         if (remainingBalls > 0)
@@ -854,7 +823,56 @@ namespace PokemonGoGUI.GoManager
                             await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
                         }
 
-                        //Clean inventory, evolve, transfer, etc on first and every 10 stops
+                        //Stop bot instantly
+                        if (!IsRunning)
+                        {
+                            continue;
+                        }
+                        
+                        //Clean inventory,
+                        if (UserSettings.RecycleItems)
+                        {
+                            await RecycleFilteredItems();
+                            await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
+                        }
+
+                        UpdateInventory();
+
+                        //Search
+                        double filledInventorySpace = FilledInventorySpace();
+
+                        if ( (filledInventorySpace < UserSettings.SearchFortBelowPercent) && (filledInventorySpace <= 100) )
+                        {
+                                // NOTE: the contrary of this condition should  never happen, it is only to be sure that we don't repeat the search of this fort.
+                                if (pokestop.CooldownCompleteTimestampMs < DateTime.UtcNow.ToUnixTime()){
+                                    MethodResult searchResult = await SearchPokestop(pokestop);
+        
+                                    //OutOfRange will show up as a success
+                                    if (searchResult.Success)
+                                    {
+                                        currentFailedStops = 0;
+                                    }
+                                    else
+                                    {
+                                        ++currentFailedStops;
+                                    }
+                                }else{
+                                    LogCaller(new LoggerEventArgs(String.Format("Skipping fort. In cooldown"), LoggerTypes.Info));
+                                }
+                        }
+                        else
+                        {
+                            LogCaller(new LoggerEventArgs(String.Format("Skipping fort. Inventory Currently at {0:0.00}% filled", filledInventorySpace), LoggerTypes.Info));
+                        }
+
+                        //Stop bot instantly
+                        if (!IsRunning)
+                        {
+                            continue;
+                        }
+
+
+                        // evolve, transfer, etc on first and every 10 stops
                         if (IsRunning && ((pokeStopNumber > 4 && pokeStopNumber % 10 == 0) || pokeStopNumber == 1))
                         {
                             MethodResult echoResult = await CheckReauthentication();
@@ -867,11 +885,9 @@ namespace PokemonGoGUI.GoManager
 
                             await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
-                            bool secondInventoryUpdate = false;
 
                             int prevLevel = Level;
 
-                            UpdateInventory();
 
                             if (Level > prevLevel)
                             {
@@ -882,25 +898,12 @@ namespace PokemonGoGUI.GoManager
 
                             await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
-                            if (UserSettings.RecycleItems)
-                            {
-                                secondInventoryUpdate = true;
-
-                                await RecycleFilteredItems();
-
-                                await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
-                            }
-
                             if (UserSettings.EvolvePokemon)
                             {
                                 MethodResult evolveResult = await EvolveFilteredPokemon();
 
                                 if (evolveResult.Success)
                                 {
-                                    await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
-
-                                    UpdateInventory();
-
                                     await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
                                 }
                             }
@@ -911,8 +914,6 @@ namespace PokemonGoGUI.GoManager
 
                                 if (transferResult.Success)
                                 {
-                                    secondInventoryUpdate = true;
-
                                     await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
                                 }
                             }
@@ -923,16 +924,11 @@ namespace PokemonGoGUI.GoManager
 
                                 if (incubateResult.Success)
                                 {
-                                    secondInventoryUpdate = true;
-
                                     await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
                                 }
                             }
 
-                            if (secondInventoryUpdate)
-                            {
-                                UpdateInventory();
-                            }
+                            UpdateInventory();
                         }
 
                         ++pokeStopNumber;

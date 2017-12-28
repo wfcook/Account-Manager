@@ -101,25 +101,25 @@ namespace PokemonGoGUI
 
             // Send initial requests and start HeartbeatDispatcher.
             // This makes sure that the initial heartbeat request finishes and the "session.Map.Cells" contains stuff.
-            string msgStr = null;
-            if (!await ClientSession.StartupAsync())
-            {
-                msgStr = "Session couldn't start up.";
-                LoggedIn = false;
-            }
-            else
-            {
-                LoggedIn = true;
-                msgStr = "Successfully logged into server.";
-
-                ClientSession.AccessTokenUpdated += SessionOnAccessTokenUpdated;
-                ClientSession.CaptchaReceived += SessionOnCaptchaReceived;
-                ClientSession.InventoryUpdate += SessionInventoryUpdate;
-                ClientSession.MapUpdate += MapUpdate;
-                ClientSession.CheckAwardedBadgesReceived += OnCheckAwardedBadgesReceived;
-                ClientSession.HatchedEggsReceived += OnHatchedEggsReceived;
-
-                SaveAccessToken(ClientSession.AccessToken);
+            var msgStr = "Session couldn't start up.";
+            LoggedIn = false;
+            try {
+                if (await ClientSession.StartupAsync())
+                {
+                    LoggedIn = true;
+                    msgStr = "Successfully logged into server.";
+    
+                    ClientSession.AccessTokenUpdated += SessionOnAccessTokenUpdated;
+                    ClientSession.CaptchaReceived += SessionOnCaptchaReceived;
+                    ClientSession.InventoryUpdate += SessionInventoryUpdate;
+                    ClientSession.MapUpdate += MapUpdate;
+                    ClientSession.CheckAwardedBadgesReceived += OnCheckAwardedBadgesReceived;
+                    ClientSession.HatchedEggsReceived += OnHatchedEggsReceived;
+    
+                    SaveAccessToken(ClientSession.AccessToken);
+                }
+            } catch (Exception ex1) {
+                ClientManager.LogCaller(new LoggerEventArgs("exception: " +ex1, LoggerTypes.Debug));
             }
 
             return new MethodResult<bool>()
