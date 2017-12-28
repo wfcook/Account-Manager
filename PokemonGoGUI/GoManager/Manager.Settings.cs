@@ -1,4 +1,5 @@
 ﻿using Google.Protobuf;
+using Google.Protobuf.Collections;
 using POGOProtos.Enums;
 using POGOProtos.Networking.Requests;
 using POGOProtos.Networking.Requests.Messages;
@@ -107,23 +108,65 @@ namespace PokemonGoGUI.GoManager
                     }
                 }
 
+                int PageOff = 0;
+                ulong LastTime = 0;
+
                 var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                 {
                     RequestType = RequestType.DownloadItemTemplates,
                     RequestMessage = new DownloadItemTemplatesMessage
                     {
-                        PageOffset = 0,
-                        Paginate = false,
-                        PageTimestamp = 0
+                        /*
+                        PageOffset = PageOff,
+                        Paginate = true,
+                        PageTimestamp = LastTime
+                        */
                     }.ToByteString()
                 });
 
                 DownloadItemTemplatesResponse downloadItemTemplatesResponse = null;
+                RepeatedField<DownloadItemTemplatesResponse.Types.ItemTemplate> item_templates = new RepeatedField<DownloadItemTemplatesResponse.Types.ItemTemplate>();
 
                 downloadItemTemplatesResponse = DownloadItemTemplatesResponse.Parser.ParseFrom(response);
+
+                item_templates.AddRange(downloadItemTemplatesResponse.ItemTemplates);
+                LastTime = downloadItemTemplatesResponse.TimestampMs;
+                PageOff = downloadItemTemplatesResponse.PageOffset;
+                
+                if (LastTime != 0 || LastTime < downloadItemTemplatesResponse.TimestampMs)
+                {
+                    while (downloadItemTemplatesResponse.PageOffset != 0)
+                    {
+                        var other = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
+                        {
+                            RequestType = RequestType.DownloadItemTemplates,
+                            RequestMessage = new DownloadItemTemplatesMessage
+                            {
+                                PageOffset = PageOff,
+                                Paginate = true,
+                                PageTimestamp = LastTime
+                            }.ToByteString()
+                        });
+
+                        downloadItemTemplatesResponse = DownloadItemTemplatesResponse.Parser.ParseFrom(other);
+                        foreach (var template in downloadItemTemplatesResponse.ItemTemplates) {
+                            //foreach (var name in item_templates) {
+                                //if (!template.Equals(name)) continue;
+                                if (item_templates.Contains(template))
+                                    item_templates.Remove(template);
+                                item_templates.Add(template);
+                            //}
+                        }
+
+                        //item_templates.AddRange(downloadItemTemplatesResponse.ItemTemplates);
+                        LastTime = downloadItemTemplatesResponse.TimestampMs;
+                        PageOff = downloadItemTemplatesResponse.PageOffset;
+                    };
+                }
+
                 var pokemonSettings = new Dictionary<PokemonId, PokemonSettings>();
 
-                foreach (var template in downloadItemTemplatesResponse.ItemTemplates)
+                foreach (var template in item_templates)
                 {
                     if (template.PlayerLevel != null)
                     {
