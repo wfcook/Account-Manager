@@ -1,4 +1,5 @@
-﻿using Google.Protobuf;
+﻿using System.Windows.Forms.VisualStyles;
+using Google.Protobuf;
 using POGOProtos.Data;
 using POGOProtos.Enums;
 using POGOProtos.Inventory.Item;
@@ -234,7 +235,7 @@ namespace PokemonGoGUI.GoManager
                     var arPlusValues = new ARPlusEncounterValues();
                     if (UserSettings.GetArBonus ){
                         arPlusValues.Awareness = 1;
-                        arPlusValues.Proximity = 0;
+                        arPlusValues.Proximity = 1;
                         arPlusValues.PokemonFrightened = false;
                     }
                         
@@ -641,19 +642,19 @@ namespace PokemonGoGUI.GoManager
             {
                 var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                 {
-                    RequestType = RequestType.UseItemCapture,
-                    RequestMessage = new UseItemCaptureMessage
+                    RequestType = RequestType.UseItemEncounter,
+                    RequestMessage = new UseItemEncounterMessage
                     {
                         EncounterId = encounterId,
-                        ItemId = berryData.ItemId,
-                        SpawnPointId = spawnId
+                        Item = berryData.ItemId,
+                        SpawnPointGuid = spawnId
                     }.ToByteString()
                 });
 
-                UseItemCaptureResponse useItemCaptureResponse = null;
+                UseItemEncounterResponse useItemEncounterResponse = null;
 
-                useItemCaptureResponse = UseItemCaptureResponse.Parser.ParseFrom(response);
-                LogCaller(new LoggerEventArgs("Success: " +useItemCaptureResponse.Success, LoggerTypes.Debug));
+                useItemEncounterResponse = UseItemEncounterResponse.Parser.ParseFrom(response);
+                LogCaller(new LoggerEventArgs("Success: " +useItemEncounterResponse.Status, LoggerTypes.Debug));
                 int remaining = berryData.Count - 1;
                 berryData.Count = remaining;
                 LogCaller(new LoggerEventArgs(String.Format("Successfully used berry. Remaining: {0}", remaining), LoggerTypes.Info));
