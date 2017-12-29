@@ -1,4 +1,5 @@
 ﻿using Google.Protobuf;
+using Google.Protobuf.Collections;
 using POGOProtos.Enums;
 using POGOProtos.Networking.Requests;
 using POGOProtos.Networking.Requests.Messages;
@@ -46,6 +47,7 @@ namespace PokemonGoGUI.GoManager
                 return new MethodResult<AccountExportModel>();
             }
 
+            var AllItems =  _client.ClientSession.Player.Inventory.InventoryItems;
             if (AllItems == null || AllItems.Count == 0)
             {
                 LogCaller(new LoggerEventArgs(String.Format("No items found for {0}. Please update details", UserSettings.Username), LoggerTypes.Warning));
@@ -60,7 +62,7 @@ namespace PokemonGoGUI.GoManager
                 return new MethodResult<AccountExportModel>();
             }
 
-            AccountExportModel exportModel = new AccountExportModel
+            var exportModel = new AccountExportModel
             {
                 Level = Stats.Level,
                 Type = UserSettings.AuthType,
@@ -93,7 +95,7 @@ namespace PokemonGoGUI.GoManager
 
             try
             {
-                if (!LoggedIn)
+                if (!_client.LoggedIn)
                 {
                     MethodResult result = await Login_();
 
@@ -106,23 +108,65 @@ namespace PokemonGoGUI.GoManager
                     }
                 }
 
-                var response = await ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
+                int PageOff = 0;
+                ulong LastTime = 0;
+
+                var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                 {
                     RequestType = RequestType.DownloadItemTemplates,
                     RequestMessage = new DownloadItemTemplatesMessage
                     {
-                        PageOffset = 0,
-                        Paginate = false,
-                        PageTimestamp = 0
+                        /*
+                        PageOffset = PageOff,
+                        Paginate = true,
+                        PageTimestamp = LastTime
+                        */
                     }.ToByteString()
                 });
 
                 DownloadItemTemplatesResponse downloadItemTemplatesResponse = null;
+                RepeatedField<DownloadItemTemplatesResponse.Types.ItemTemplate> item_templates = new RepeatedField<DownloadItemTemplatesResponse.Types.ItemTemplate>();
 
                 downloadItemTemplatesResponse = DownloadItemTemplatesResponse.Parser.ParseFrom(response);
-                Dictionary<PokemonId, PokemonSettings> pokemonSettings = new Dictionary<PokemonId, PokemonSettings>();
 
-                foreach (DownloadItemTemplatesResponse.Types.ItemTemplate template in downloadItemTemplatesResponse.ItemTemplates)
+                item_templates.AddRange(downloadItemTemplatesResponse.ItemTemplates);
+                LastTime = downloadItemTemplatesResponse.TimestampMs;
+                PageOff = downloadItemTemplatesResponse.PageOffset;
+                
+                if (LastTime != 0 || LastTime < downloadItemTemplatesResponse.TimestampMs)
+                {
+                    while (downloadItemTemplatesResponse.PageOffset != 0)
+                    {
+                        var other = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
+                        {
+                            RequestType = RequestType.DownloadItemTemplates,
+                            RequestMessage = new DownloadItemTemplatesMessage
+                            {
+                                PageOffset = PageOff,
+                                Paginate = true,
+                                PageTimestamp = LastTime
+                            }.ToByteString()
+                        });
+
+                        downloadItemTemplatesResponse = DownloadItemTemplatesResponse.Parser.ParseFrom(other);
+                        foreach (var template in downloadItemTemplatesResponse.ItemTemplates) {
+                            //foreach (var name in item_templates) {
+                                //if (!template.Equals(name)) continue;
+                                if (item_templates.Contains(template))
+                                    item_templates.Remove(template);
+                                item_templates.Add(template);
+                            //}
+                        }
+
+                        //item_templates.AddRange(downloadItemTemplatesResponse.ItemTemplates);
+                        LastTime = downloadItemTemplatesResponse.TimestampMs;
+                        PageOff = downloadItemTemplatesResponse.PageOffset;
+                    };
+                }
+
+                var pokemonSettings = new Dictionary<PokemonId, PokemonSettings>();
+
+                foreach (var template in item_templates)
                 {
                     if (template.PlayerLevel != null)
                     {
@@ -336,12 +380,16 @@ namespace PokemonGoGUI.GoManager
 
         public void RandomDeviceId()
         {
+            UserSettings.RandomizeDeviceId();
+        }
+        public void RandomDevice()
+        {
             UserSettings.RandomizeDevice();
         }
         
         public override bool Equals(object obj)
         {
-            Manager tempManager = obj as Manager;
+            var tempManager = obj as Manager;
 
             if(tempManager == null)
             {
@@ -353,7 +401,7 @@ namespace PokemonGoGUI.GoManager
 
         public override int GetHashCode()
         {
-            return this.UserSettings.Username.GetHashCode();
+            return UserSettings.Username == null ? 0 : UserSettings.Username.GetHashCode();
         }
     }
 }

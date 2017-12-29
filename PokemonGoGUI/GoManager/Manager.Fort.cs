@@ -20,11 +20,11 @@ namespace PokemonGoGUI.GoManager
             try
             {
                 FortSearchResponse fortResponse = null;
-                int maxFortAttempts = 5;
+                const int maxFortAttempts = 5;
 
                 for (int i = 0; i < maxFortAttempts; i++)
                 {
-                    var response = await ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
+                    var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                     {
                         RequestType = RequestType.FortSearch,
                         RequestMessage = new FortSearchMessage
@@ -32,8 +32,8 @@ namespace PokemonGoGUI.GoManager
                             FortId = pokestop.Id,
                             FortLatitude = pokestop.Latitude,
                             FortLongitude = pokestop.Longitude,
-                            PlayerLatitude = ClientSession.Player.Latitude,
-                            PlayerLongitude = ClientSession.Player.Longitude
+                            PlayerLatitude = _client.ClientSession.Player.Latitude,
+                            PlayerLongitude = _client.ClientSession.Player.Longitude
                         }.ToByteString()
                     });
 
@@ -77,11 +77,9 @@ namespace PokemonGoGUI.GoManager
                         }
 
                         //Let it continue down
-                    }
-                    else if (fortResponse.Result != FortSearchResponse.Types.Result.Success && fortResponse.Result != FortSearchResponse.Types.Result.InventoryFull)
+                    }else if (fortResponse.Result != FortSearchResponse.Types.Result.Success )
                     {
                         LogCaller(new LoggerEventArgs(String.Format("Failed to search fort. Response: {0}", fortResponse.Result), LoggerTypes.Warning));
-
                         return new MethodResult
                         {
                             Message = "Failed to search fort"
@@ -92,7 +90,7 @@ namespace PokemonGoGUI.GoManager
                         fortResponse.ExperienceAwarded,
                         StringUtil.GetSummedFriendlyNameOfItemAwardList(fortResponse.ItemsAwarded.ToList()));
 
-                    Dictionary<ItemId, ItemData> itemDictionary = new Dictionary<ItemId, ItemData>();
+                    var itemDictionary = new Dictionary<ItemId, ItemData>();
 
                     foreach (ItemData item in Items)
                     {
@@ -121,14 +119,7 @@ namespace PokemonGoGUI.GoManager
                         //Successfully grabbed stop
                         if (AccountState == Enums.AccountState.PokemonBanAndPokestopBanTemp || AccountState == Enums.AccountState.PokestopBanTemp)
                         {
-                            if (AccountState == Enums.AccountState.PokemonBanAndPokestopBanTemp)
-                            {
-                                AccountState = Enums.AccountState.PokemonBanTemp;
-                            }
-                            else
-                            {
-                                AccountState = Enums.AccountState.Good;
-                            }
+                            AccountState = AccountState == Enums.AccountState.PokemonBanAndPokestopBanTemp ? Enums.AccountState.PokemonBanTemp : Enums.AccountState.Good;
 
                             LogCaller(new LoggerEventArgs("Pokestop ban was removed", LoggerTypes.Info));
                         }
@@ -206,81 +197,17 @@ namespace PokemonGoGUI.GoManager
                     }
 
                     await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
-                }
 
-                if (fortResponse != null && fortResponse.ExperienceAwarded == 0)
-                {
-                    ++_totalZeroExpStops;
-
-                    if (_totalZeroExpStops >= 15 || _fleeingPokemonResponses >= _fleeingPokemonUntilBan)
+                    if (fortResponse.Result == FortSearchResponse.Types.Result.Success)
                     {
-                        _totalZeroExpStops = 0;
-
-                        LogCaller(new LoggerEventArgs("Potential softban detected. Attempting to bypass ...", LoggerTypes.Warning));
-
-                        int totalAttempts = 0;
-                        int maxAttempts = 40;
-
-                        FortSearchResponse bypassResponse = null;
-
-                        do
+                        return new MethodResult
                         {
-                            ++totalAttempts;
-
-                            if (totalAttempts >= 5 && totalAttempts % 5 == 0)
-                            {
-                                LogCaller(new LoggerEventArgs(String.Format("Softban bypass attempt {0} of {1}", totalAttempts, maxAttempts), LoggerTypes.Info));
-                            }
-
-                            var response = await ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
-                            {
-                                RequestType = RequestType.FortSearch,
-                                RequestMessage = new FortSearchMessage
-                                {
-                                    FortId = pokestop.Id,
-                                    FortLatitude = pokestop.Latitude,
-                                    FortLongitude = pokestop.Longitude,
-                                    PlayerLatitude = ClientSession.Player.Latitude,
-                                    PlayerLongitude = ClientSession.Player.Longitude
-                                }.ToByteString()
-                            });
-
-                            bypassResponse = FortSearchResponse.Parser.ParseFrom(response);
-
-                            await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
-                        } while (bypassResponse.ExperienceAwarded == 0 && totalAttempts <= maxAttempts);
-
-                        if (bypassResponse.ExperienceAwarded != 0)
-                        {
-                            //Fleeing pokemon was a softban, reset count
-                            _fleeingPokemonResponses = 0;
-                            _potentialPokemonBan = false;
-
-                            string message = String.Format("Searched Fort. Exp: {0}. Items: {1}.",
-                                                    bypassResponse.ExperienceAwarded,
-                                                    StringUtil.GetSummedFriendlyNameOfItemAwardList(bypassResponse.ItemsAwarded.ToList()));
-
-                            ExpIncrease(fortResponse.ExperienceAwarded);
-
-                            Tracker.AddValues(0, 1);
-
-                            //_expGained += fortResponse.ExperienceAwarded;
-
-                            LogCaller(new LoggerEventArgs(message, LoggerTypes.Success));
-                            LogCaller(new LoggerEventArgs("Softban removed", LoggerTypes.Success));
-                        }
-                        else
-                        {
-                            LogCaller(new LoggerEventArgs("Softban still active. Continuing ...", LoggerTypes.Info));
-                        }
+                            Success = true,
+                            Message = "Success"
+                        };
                     }
+                    
                 }
-                else
-                {
-                    _totalZeroExpStops = 0;
-                }
-
-                await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
 
                 return new MethodResult
                 {
@@ -299,11 +226,48 @@ namespace PokemonGoGUI.GoManager
             }
         }
 
+        private async Task<MethodResult<FortDetailsResponse>> FortDetails(FortData pokestop)
+        {
+            try
+            {
+                var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
+                {
+                    RequestType = RequestType.FortDetails,
+                    RequestMessage = new FortDetailsMessage
+                    {
+                        FortId = pokestop.Id,
+                        Latitude = pokestop.Latitude,
+                        Longitude = pokestop.Longitude,
+                    }.ToByteString()
+                });
+
+                FortDetailsResponse fortDetailsResponse = null;
+
+                fortDetailsResponse = FortDetailsResponse.Parser.ParseFrom(response);
+
+                return new MethodResult<FortDetailsResponse>
+                {
+                    Data = fortDetailsResponse,
+                    Success = true
+                };
+            }
+            catch (Exception ex)
+            {
+                LogCaller(new LoggerEventArgs("Failed gym get info response", LoggerTypes.Exception, ex));
+
+                return new MethodResult<FortDetailsResponse>
+                {
+                    Data = new FortDetailsResponse () ,
+                    Message = "Failed gym get info response"
+                };
+            }
+        }
+
         private async Task<MethodResult<GymGetInfoResponse>> GymGetInfo(FortData pokestop)
         {
             try
             {
-                var response = await ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
+                var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                 {
                     RequestType = RequestType.GymGetInfo,
                     RequestMessage = new GymGetInfoMessage
@@ -311,8 +275,8 @@ namespace PokemonGoGUI.GoManager
                         GymId = pokestop.Id,
                         GymLatDegrees = pokestop.Latitude,
                         GymLngDegrees = pokestop.Longitude,
-                        PlayerLatDegrees = ClientSession.Player.Latitude,
-                        PlayerLngDegrees = ClientSession.Player.Longitude
+                        PlayerLatDegrees = _client.ClientSession.Player.Latitude,
+                        PlayerLngDegrees = _client.ClientSession.Player.Longitude
                     }.ToByteString()
                 });
 

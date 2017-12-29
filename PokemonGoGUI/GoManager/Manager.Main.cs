@@ -1,5 +1,6 @@
 ﻿using GeoCoordinatePortable;
 using Newtonsoft.Json;
+using POGOLib.Official.Exceptions;
 using POGOProtos.Data.Player;
 using POGOProtos.Enums;
 using POGOProtos.Map.Fort;
@@ -22,6 +23,7 @@ namespace PokemonGoGUI.GoManager
 {
     public partial class Manager
     {
+        private Client _client = new Client();
         private Random _rand = new Random();
 
         private int _totalZeroExpStops = 0;
@@ -78,7 +80,7 @@ namespace PokemonGoGUI.GoManager
             try
             {
                 MethodResult result = null;
-                result = await DoLogin();
+                result = await _client.DoLogin(this);
                 LogCaller(new LoggerEventArgs(result.Message, LoggerTypes.Debug));
 
                 if (CurrentProxy != null)
@@ -160,10 +162,7 @@ namespace PokemonGoGUI.GoManager
                     }
                 }
 
-                if (!String.IsNullOrEmpty(Proxy))
-                {
-                    _proxyIssue = true;
-                }
+                _proxyIssue |= !String.IsNullOrEmpty(Proxy);
 
                 LogCaller(new LoggerEventArgs("Failed to login due to request error", LoggerTypes.Exception, ex.InnerException));
 
@@ -236,7 +235,7 @@ namespace PokemonGoGUI.GoManager
                     Message = message
                 };
             }
-            catch (GoogleException ex)
+            catch (GoogleLoginException ex)
             {
                 Stop();
                 RemoveProxy();
@@ -279,7 +278,8 @@ namespace PokemonGoGUI.GoManager
                     Message = "Bot already running"
                 };
             }
-            else if (State != BotState.Stopped)
+
+            if (State != BotState.Stopped)
             {
                 return new MethodResult
                 {
@@ -294,7 +294,7 @@ namespace PokemonGoGUI.GoManager
 
             IsRunning = true;
             _totalZeroExpStops = 0;
-            SetSettings();
+            _client.SetSettings(this);
             _pauser.Set();
             _autoRestart = false;
             //_wasAutoRestarted = false;
@@ -302,7 +302,7 @@ namespace PokemonGoGUI.GoManager
 
             State = BotState.Starting;
 
-            Thread t = new Thread(RunningThread)
+            var t = new Thread(RunningThread)
             {
                 IsBackground = true
             };
@@ -346,7 +346,7 @@ namespace PokemonGoGUI.GoManager
 
             _pauser.Reset();
             _runningStopwatch.Stop();
-            ClientSession.Pause();
+            _client.ClientSession.Pause();
 
             LogCaller(new LoggerEventArgs("Pausing bot ...", LoggerTypes.Info));
 
@@ -362,7 +362,7 @@ namespace PokemonGoGUI.GoManager
 
             _pauser.Set();
             _runningStopwatch.Start();
-            await ClientSession.ResumeAsync();
+            await _client.ClientSession.ResumeAsync();
 
             LogCaller(new LoggerEventArgs("Unpausing bot ...", LoggerTypes.Info));
 
@@ -398,8 +398,7 @@ namespace PokemonGoGUI.GoManager
 
         private bool CheckTime()
         {
-            if (UserSettings.RunForHours == 0)
-            {
+            if (Math.Abs(UserSettings.RunForHours) < 0.001) {
                 return false;
             }
 
@@ -417,7 +416,7 @@ namespace PokemonGoGUI.GoManager
 
         private async void RunningThread()
         {
-            int failedWaitTime = 5000;
+            const int failedWaitTime = 5000;
             int currentFails = 0;
 
             //Reset account state
@@ -456,7 +455,7 @@ namespace PokemonGoGUI.GoManager
                 if (currentFails >= UserSettings.MaxFailBeforeReset)
                 {
                     currentFails = 0;
-                    Logout();
+                    _client.Logout();
                 }
 
                 if (_failedInventoryReponses >= _failedInventoryUntilBan)
@@ -475,13 +474,13 @@ namespace PokemonGoGUI.GoManager
 
                 ++currentFails;
 
-                MethodResult result = new MethodResult();
+                var result = new MethodResult();
 
                 #region Startup
 
                 try
                 {
-                    if (!LoggedIn)
+                    if (!_client.LoggedIn)
                     {
                         //Login
                         result = await Login_();
@@ -495,20 +494,20 @@ namespace PokemonGoGUI.GoManager
                         }
                     }
 
-                    if (ClientSession.Player.Warn)
+                    if (_client.ClientSession.Player.Warn)
                     {
                         AccountState = AccountState.Flagged;
                         LogCaller(new LoggerEventArgs("Account seen flegged.", LoggerTypes.Warning));
 
-                        //Remove proxy
-                        RemoveProxy();
-
-                        Stop();
-
-                        continue;
+                        if(UserSettings.StopAtMinAccountState ==  AccountState.Flagged){
+                            //Remove proxy
+                            RemoveProxy();
+                            Stop();
+                            continue;
+                        }
                     }
 
-                    if (ClientSession.Player.Banned)
+                    if (_client.ClientSession.Player.Banned)
                     {
                         AccountState = AccountState.PermAccountBan;
                         LogCaller(new LoggerEventArgs("Account seen banned.", LoggerTypes.FatalError));
@@ -542,7 +541,7 @@ namespace PokemonGoGUI.GoManager
                     {
                         LogCaller(new LoggerEventArgs("Echo failed. Logging out before retry.", LoggerTypes.Debug));
 
-                        Logout();
+                        _client.Logout();
 
                         await Task.Delay(failedWaitTime);
 
@@ -557,17 +556,21 @@ namespace PokemonGoGUI.GoManager
                         LogCaller(new LoggerEventArgs("Grabbing game settings ...", LoggerTypes.Debug));
                         try
                         {
-                            Version remote = new Version(ClientSession.GlobalSettings.MinimumClientVersion);
-                            if (VersionStr < remote)
+                            // TODO: Is failing here. Globalsetting should not be null in this point.
+                            var remote = new Version();
+                            if (_client.ClientSession.GlobalSettings!=null)
+                                remote = new Version(_client.ClientSession.GlobalSettings?.MinimumClientVersion);
+                            if (_client.VersionStr < remote)
                             {
-                                LogCaller(new LoggerEventArgs($"Emulates API {VersionStr} ...", LoggerTypes.FatalError, new Exception($"New API needed {remote}. Stopping ...")));
+                                LogCaller(new LoggerEventArgs($"Emulates API {_client.VersionStr} ...", LoggerTypes.FatalError, new Exception($"New API needed {remote}. Stopping ...")));
                                 Stop();
                                 continue;
                             }
                         }
-                        catch (Exception)
+                        catch (Exception ex1)
                         {
                             AccountState = AccountState.PokemonBanAndPokestopBanTemp;
+                            LogCaller(new LoggerEventArgs("Exception: " + ex1,LoggerTypes.Debug));
                             LogCaller(new LoggerEventArgs("Game settings failed", LoggerTypes.FatalError, new Exception("Maybe this account is banned ...")));
                             Stop();
                             continue;
@@ -578,6 +581,7 @@ namespace PokemonGoGUI.GoManager
                     //Get pokemon settings
                     if (PokeSettings == null)
                     {
+                        
                         LogCaller(new LoggerEventArgs("Grabbing pokemon settings ...", LoggerTypes.Debug));
                         result = await GetItemTemplates();
 
@@ -598,64 +602,49 @@ namespace PokemonGoGUI.GoManager
 
                     await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
-                    //Update inventory
-                    LogCaller(new LoggerEventArgs("Updating inventory items ...", LoggerTypes.Debug));
-
-                    result = await UpdateInventory();
-
-                    await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
-
-                    if (!result.Success)
-                    {
-                        if (result.Message == "Failed to get inventory.")
-                        {
-                            ++_failedInventoryReponses;
-                        }
-
-                        await Task.Delay(failedWaitTime);
-
-                        continue;
-                    }
-
                     //Auto complete tutorials
-                    if (!PlayerData.TutorialState.Contains(TutorialState.AvatarSelection))
+                    if (UserSettings.CompleteTutorial)
                     {
-                        result = await MarkStartUpTutorialsComplete(true);
-
-                        if (!result.Success)
+                        if (!PlayerData.TutorialState.Contains(TutorialState.AvatarSelection))
                         {
-                            LogCaller(new LoggerEventArgs("Failed. Marking startup tutorials completed..", LoggerTypes.Warning));
+                            result = await MarkStartUpTutorialsComplete(true);
 
-                            Stop();
+                            if (!result.Success)
+                            {
+                                LogCaller(new LoggerEventArgs("Failed. Marking startup tutorials completed..", LoggerTypes.Warning));
 
-                            await Task.Delay(failedWaitTime);
+                                Stop();
 
-                            continue;
+                                await Task.Delay(failedWaitTime);
+
+                                continue;
+                            }
+
+                            LogCaller(new LoggerEventArgs("Marking startup tutorials completed.", LoggerTypes.Success));
+
+                            await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
                         }
 
-                        LogCaller(new LoggerEventArgs("Marking startup tutorials completed.", LoggerTypes.Success));
 
-                        await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
-                    }
-
-                    if (!PlayerData.TutorialState.Contains(TutorialState.PokestopTutorial))
-                    {
-                        result = await MarkTutorialsComplete(new List<TutorialState> { TutorialState.PokestopTutorial, TutorialState.PokemonBerry, TutorialState.UseItem });
-
-                        if (!result.Success)
+                        if (!PlayerData.TutorialState.Contains(TutorialState.PokestopTutorial))
                         {
-                            LogCaller(new LoggerEventArgs("Failed. Marking pokestop, pokemonberry, useitem, pokemoncapture tutorials completed..", LoggerTypes.Warning));
+                            result = await MarkTutorialsComplete(new List<TutorialState> { TutorialState.PokestopTutorial, TutorialState.PokemonBerry, TutorialState.UseItem });
 
-                            Stop();
+                            if (!result.Success)
+                            {
+                                LogCaller(new LoggerEventArgs("Failed. Marking pokestop, pokemonberry, useitem, pokemoncapture tutorials completed..", LoggerTypes.Warning));
 
-                            await Task.Delay(failedWaitTime);
+                                Stop();
 
-                            continue;
+                                await Task.Delay(failedWaitTime);
+
+                                continue;
+                            }
+
+                            LogCaller(new LoggerEventArgs("Marking pokestop, pokemonberry, useitem, pokemoncapture tutorials completed.", LoggerTypes.Success));
+
+                            await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
                         }
-
-                        LogCaller(new LoggerEventArgs("Marking pokestop, pokemonberry, useitem, pokemoncapture tutorials completed.", LoggerTypes.Success));
-
-                        await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
                     }
 
                     if (UserSettings.ClaimLevelUpRewards)
@@ -709,9 +698,9 @@ namespace PokemonGoGUI.GoManager
                     #region PokeStopTask
 
                     //Get pokestops
-                    LogCaller(new LoggerEventArgs("Grabbing pokestops...", LoggerTypes.Debug));
+                    LogCaller(new LoggerEventArgs("getting pokestops...", LoggerTypes.Debug));
 
-                    MethodResult<List<FortData>> pokestops = await GetPokeStops();
+                    MethodResult<List<FortData>> pokestops = GetPokeStops();
 
                     if (!pokestops.Success)
                     {
@@ -732,8 +721,7 @@ namespace PokemonGoGUI.GoManager
 
                         if (UserSettings.AutoRotateProxies && currentFails >= UserSettings.MaxFailBeforeReset)
                         {
-                            if (pokestops.Message.StartsWith("No pokestop data found."))
-                            {
+                            if (pokestops.Message.StartsWith("No pokestop data found.", StringComparison.Ordinal)) {
                                 _proxyIssue = true;
                                 await ChangeProxy();
                             }
@@ -744,9 +732,9 @@ namespace PokemonGoGUI.GoManager
                         continue;
                     }
 
-                    GeoCoordinate defaultLocation = new GeoCoordinate(ClientSession.Player.Latitude, ClientSession.Player.Longitude);
+                    var defaultLocation = new GeoCoordinate(_client.ClientSession.Player.Latitude, _client.ClientSession.Player.Longitude);
 
-                    List<FortData> pokestopsToFarm = pokestops.Data.ToList();
+                    var pokestopsToFarm = new Queue<FortData>(pokestops.Data);
 
                     int currentFailedStops = 0;
 
@@ -764,33 +752,15 @@ namespace PokemonGoGUI.GoManager
 
                         WaitPaused();
 
-                        pokestopsToFarm = pokestopsToFarm.OrderBy(x => CalculateDistanceInMeters(ClientSession.Player.Latitude, ClientSession.Player.Longitude, x.Latitude, x.Longitude)).ToList();
+                        FortData pokestop = pokestopsToFarm.Dequeue();
+                        LogCaller(new LoggerEventArgs("fort Dequeued: " +pokestop.Id, LoggerTypes.Debug));
 
-                        FortData pokestop = pokestopsToFarm[0];
-                        pokestopsToFarm.RemoveAt(0);
-
-                        GeoCoordinate currentLocation = new GeoCoordinate(ClientSession.Player.Latitude, ClientSession.Player.Longitude);
-                        GeoCoordinate fortLocation = new GeoCoordinate(pokestop.Latitude, pokestop.Longitude);
+                        var currentLocation = new GeoCoordinate(_client.ClientSession.Player.Latitude, _client.ClientSession.Player.Longitude);
+                        var fortLocation = new GeoCoordinate(pokestop.Latitude, pokestop.Longitude);
 
                         double distance = CalculateDistanceInMeters(currentLocation, fortLocation);
 
-                        string fort = "pokestop";
-
-                        if (pokestop.Type == FortType.Gym)
-                        {
-                            if (!UserSettings.SpinGyms)
-                            {
-                                continue;
-                            }
-
-                            MethodResult<GymGetInfoResponse> _result = await GymGetInfo(pokestop);
-                            if (_result.Success && _result.Data.Result == GymGetInfoResponse.Types.Result.Success)
-                            {
-                                fort = "gym";
-                            }
-                            else
-                                continue;
-                        }
+                        string fort = (pokestop.Type == FortType.Gym)?"gym":"pokestop";
 
                         LogCaller(new LoggerEventArgs(String.Format("Going to {0} {1} of {2}. Distance {3:0.00}m", fort, pokeStopNumber, totalStops, distance), pokestop.Type == FortType.Checkpoint ? LoggerTypes.Info : LoggerTypes.FortGym));
 
@@ -800,39 +770,24 @@ namespace PokemonGoGUI.GoManager
                         if (!walkResult.Success)
                         {
                             LogCaller(new LoggerEventArgs("Too many failed walking attempts. Restarting to fix ...", LoggerTypes.Warning));
-
+                            LogCaller(new LoggerEventArgs("Result: "+ walkResult.Message, LoggerTypes.Debug));
                             break;
                         }
 
-                        await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
-
-                        //Search
-                        double filledInventorySpace = FilledInventorySpace();
-
-                        if (filledInventorySpace < UserSettings.SearchFortBelowPercent)
+                        if (pokestop.Type == FortType.Gym)
                         {
-                            MethodResult searchResult = await SearchPokestop(pokestop);
-
-                            //OutOfRange will show up as a success
-                            if (searchResult.Success)
-                            {
-                                currentFailedStops = 0;
-                            }
-                            else
-                            {
-                                ++currentFailedStops;
-                            }
+                            if (!UserSettings.SpinGyms)
+                                continue;
+                            MethodResult<GymGetInfoResponse> _result = await GymGetInfo(pokestop);
+                            LogCaller(new LoggerEventArgs("Gym Name: "+ _result.Data.Name, LoggerTypes.Info));
                         }
                         else
                         {
-                            LogCaller(new LoggerEventArgs(String.Format("Skipping fort. Currently at {0:0.00}% filled", filledInventorySpace), LoggerTypes.Info));
+                            var fortDetails = await FortDetails(pokestop);
+                            LogCaller(new LoggerEventArgs("Fort Name: "+ fortDetails.Data.Name, LoggerTypes.Info));
                         }
 
-                        //Stop bot instantly
-                        if (!IsRunning)
-                        {
-                            continue;
-                        }
+                        await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
                         int remainingBalls = RemainingPokeballs();
 
@@ -849,7 +804,55 @@ namespace PokemonGoGUI.GoManager
                             await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
                         }
 
-                        //Clean inventory, evolve, transfer, etc on first and every 10 stops
+                        //Stop bot instantly
+                        if (!IsRunning)
+                        {
+                            continue;
+                        }
+                        
+                        //Clean inventory,
+                        if (UserSettings.RecycleItems)
+                        {
+                            await RecycleFilteredItems();
+                            await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
+                        }
+
+
+                        //Search
+                        double filledInventorySpace = FilledInventoryStorage();
+
+                        if ( (filledInventorySpace < UserSettings.SearchFortBelowPercent) && (filledInventorySpace <= 100) )
+                        {
+                                // NOTE: the contrary of this condition should  never happen, it is only to be sure that we don't repeat the search of this fort.
+                                if (pokestop.CooldownCompleteTimestampMs < DateTime.UtcNow.ToUnixTime()){
+                                    MethodResult searchResult = await SearchPokestop(pokestop);
+        
+                                    //OutOfRange will show up as a success
+                                    if (searchResult.Success)
+                                    {
+                                        currentFailedStops = 0;
+                                    }
+                                    else
+                                    {
+                                        ++currentFailedStops;
+                                    }
+                                }else{
+                                    LogCaller(new LoggerEventArgs(String.Format("Skipping fort. In cooldown"), LoggerTypes.Info));
+                                }
+                        }
+                        else
+                        {
+                            LogCaller(new LoggerEventArgs(String.Format("Skipping fort. Inventory Currently at {0:0.00}% filled", filledInventorySpace), LoggerTypes.Info));
+                        }
+
+                        //Stop bot instantly
+                        if (!IsRunning)
+                        {
+                            continue;
+                        }
+
+
+                        // evolve, transfer, etc on first and every 10 stops
                         if (IsRunning && ((pokeStopNumber > 4 && pokeStopNumber % 10 == 0) || pokeStopNumber == 1))
                         {
                             MethodResult echoResult = await CheckReauthentication();
@@ -862,11 +865,9 @@ namespace PokemonGoGUI.GoManager
 
                             await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
-                            bool secondInventoryUpdate = false;
 
                             int prevLevel = Level;
 
-                            await UpdateInventory();
 
                             if (Level > prevLevel)
                             {
@@ -877,25 +878,12 @@ namespace PokemonGoGUI.GoManager
 
                             await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
-                            if (UserSettings.RecycleItems)
-                            {
-                                secondInventoryUpdate = true;
-
-                                await RecycleFilteredItems();
-
-                                await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
-                            }
-
                             if (UserSettings.EvolvePokemon)
                             {
                                 MethodResult evolveResult = await EvolveFilteredPokemon();
 
                                 if (evolveResult.Success)
                                 {
-                                    await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
-
-                                    await UpdateInventory();
-
                                     await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
                                 }
                             }
@@ -906,8 +894,6 @@ namespace PokemonGoGUI.GoManager
 
                                 if (transferResult.Success)
                                 {
-                                    secondInventoryUpdate = true;
-
                                     await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
                                 }
                             }
@@ -918,16 +904,10 @@ namespace PokemonGoGUI.GoManager
 
                                 if (incubateResult.Success)
                                 {
-                                    secondInventoryUpdate = true;
-
                                     await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
                                 }
                             }
 
-                            if (secondInventoryUpdate)
-                            {
-                                await UpdateInventory();
-                            }
                         }
 
                         ++pokeStopNumber;
@@ -963,7 +943,7 @@ namespace PokemonGoGUI.GoManager
             }
 
             State = BotState.Stopped;
-            Logout();
+            _client.Logout();
             LogCaller(new LoggerEventArgs(String.Format("Bot fully stopped at {0}", DateTime.Now), LoggerTypes.Info));
 
             if (_autoRestart)
@@ -981,7 +961,7 @@ namespace PokemonGoGUI.GoManager
         {
             if (!IsRunning)
             {
-                Logout();
+                _client.Logout();
                 return;
             }
 
@@ -1042,7 +1022,7 @@ namespace PokemonGoGUI.GoManager
 
         private async Task<MethodResult> CheckReauthentication()
         {
-            if (!AccessToken.IsExpired)
+            if (!_client.ClientSession.AccessToken.IsExpired)
             {
                 return new MethodResult
                 {
@@ -1054,7 +1034,7 @@ namespace PokemonGoGUI.GoManager
             {
                 LogCaller(new LoggerEventArgs("Session expired. Logging back in", LoggerTypes.Debug));
 
-                await DoLogin();
+                await _client.DoLogin(_client.ClientManager);
 
                 return new MethodResult
                 {

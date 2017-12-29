@@ -19,70 +19,16 @@ namespace PokemonGoGUI.GoManager
 {
     public partial class Manager
     {
+        
         public async Task<MethodResult> UpdateDetails()
         {
+            //TODO: review what we need do here.
+            // UpdateInventory();
+            
             LogCaller(new LoggerEventArgs("Updating details", LoggerTypes.Debug));
-            
-            MethodResult echoResult = await CheckReauthentication();
-
-            if (!echoResult.Success)
-            {
-                Logout();
-            }
-            
-            if (!LoggedIn)
-            {
-                MethodResult loginResult = await Login_();
-
-                if (!loginResult.Success)
-                {
-                    return loginResult;
-                }
-            }
 
             await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
-            bool potentialAccountban = false;
-
-            MethodResult<Dictionary<PokemonId, PokemonSettings>> result = await GetItemTemplates();
-
-            if (result.Success && result.Data != null && result.Data.Count == 0)
-            {
-                potentialAccountban = true;
-            }
-
-            await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
-
-            MethodResult inventoryResult = await UpdateInventory();
-
-            if (inventoryResult.Success)
-            {
-                if (AccountState == Enums.AccountState.PermAccountBan)
-                {
-                    AccountState = Enums.AccountState.Good;
-                }
-            }
-
-            if (!inventoryResult.Success)
-            {
-                if (inventoryResult.Message == "Failed to get inventory." && potentialAccountban)
-                {
-                    AccountState = Enums.AccountState.PermAccountBan;
-
-                    LogCaller(new LoggerEventArgs("Potential account ban", LoggerTypes.Warning));
-                }
-            }
-            else
-            {
-                if (AccountState == Enums.AccountState.PermAccountBan)
-                {
-                    AccountState = Enums.AccountState.Good;
-                }
-
-                LogCaller(new LoggerEventArgs("Finished updating details", LoggerTypes.Debug));
-            }
-
-            await ClaimLevelUpRewards(Level);
 
             return new MethodResult
             {
@@ -92,7 +38,7 @@ namespace PokemonGoGUI.GoManager
 
         public async Task<MethodResult> GetPlayer()
         {
-            if (!LoggedIn)
+            if (!_client.LoggedIn)
             {
                 MethodResult result = await Login_();
 
@@ -102,7 +48,7 @@ namespace PokemonGoGUI.GoManager
                 }
             }
 
-            PlayerData = ClientSession.Player.Data;
+            PlayerData = _client.ClientSession.Player.Data;
 
             return new MethodResult
             {
@@ -123,7 +69,7 @@ namespace PokemonGoGUI.GoManager
             }
 
             //Possible some objects were empty.
-            StringBuilder builder = new StringBuilder();
+            var builder = new StringBuilder();
             builder.AppendLine("=== Trainer Stats ===");
 
             if (Stats != null && PlayerData != null)
@@ -217,7 +163,7 @@ namespace PokemonGoGUI.GoManager
 
             try
             {
-                if (!LoggedIn)
+                if (!_client.LoggedIn)
                 {
                     MethodResult result = await Login_();
 
@@ -227,7 +173,7 @@ namespace PokemonGoGUI.GoManager
                     }
                 }
 
-                var response = await ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
+                var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                 {
                     RequestType = RequestType.LevelUpRewards,
                     RequestMessage = new LevelUpRewardsMessage
@@ -260,7 +206,7 @@ namespace PokemonGoGUI.GoManager
 
             try
             {
-                var response = await ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
+                var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                 {
                     RequestType = RequestType.GetBuddyWalked,
                     RequestMessage = new GetBuddyWalkedMessage

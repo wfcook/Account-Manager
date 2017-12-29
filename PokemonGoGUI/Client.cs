@@ -14,6 +14,8 @@ using POGOProtos.Networking.Requests.Messages;
 using POGOProtos.Networking.Responses;
 using PokemonGoGUI.Enums;
 using PokemonGoGUI.Extensions;
+using PokemonGoGUI.GoManager;
+using PokemonGoGUI.GoManager.Models;
 using System;
 using System.IO;
 using System.Threading.Tasks;
@@ -21,90 +23,103 @@ using static POGOProtos.Networking.Envelopes.Signature.Types;
 
 #endregion
 
-namespace PokemonGoGUI.GoManager
+namespace PokemonGoGUI
 {
-    public partial class Manager
+    public class Client
     {
-        private Version VersionStr = new Version("0.85.1");
-        private AccessToken AccessToken = new AccessToken();
-        private Session ClientSession { get; set; }
-        private bool LoggedIn = false;
-        private GetPlayerMessage.Types.PlayerLocale PlayerLocale = new GetPlayerMessage.Types.PlayerLocale();
-        private DeviceWrapper ClientDeviceWrapper = new DeviceWrapper();
+        public ProxyEx Proxy;
+        public Version VersionStr;
+        public uint AppVersion;
+        public Session ClientSession;
+        public bool LoggedIn = false;
+        private GetPlayerMessage.Types.PlayerLocale PlayerLocale;
+        private DeviceWrapper ClientDeviceWrapper;
+        private ISettings Settings;
+        public Manager ClientManager;
 
-        private void Logout()
+        public Client()
+        {
+            VersionStr = new Version("0.87.5");
+            AppVersion = 8700;
+        }
+
+        public void Logout()
         {
             if (!LoggedIn)
                 return;
-            ClientSession.Shutdown();
             LoggedIn = false;
-            AccessToken = new AccessToken();
+            ClientSession.AccessTokenUpdated -= SessionAccessTokenUpdated;
+            ClientSession.CaptchaReceived -= SessionOnCaptchaReceived;
+            ClientSession.InventoryUpdate -= SessionInventoryUpdate;
+            ClientSession.MapUpdate -= SessionMapUpdate;
+            ClientSession.CheckAwardedBadgesReceived -= OnCheckAwardedBadgesReceived;
+            ClientSession.HatchedEggsReceived -= OnHatchedEggsReceived;
+            ClientSession.Shutdown();
         }
 
-        private async Task<MethodResult<bool>> DoLogin()
+        public async Task<MethodResult<bool>> DoLogin(Manager manager)
         {
-            SetSettings();
+            SetSettings(manager);
             // TODO: see how do this only once better.
             if (!(Configuration.Hasher is PokeHashHasher))
             {
                 // By default Configuration.Hasher is LegacyHasher type  (see Configuration.cs in the pogolib source code)
                 // -> So this comparation only will run once.
-                if (UserSettings.UseOnlyOneKey)
+                if (Settings.UseOnlyOneKey)
                 {
-                    Configuration.Hasher = new PokeHashHasher(UserSettings.AuthAPIKey);
-                    Configuration.HasherUrl = UserSettings.HashHost;
-                    Configuration.HashEndpoint = UserSettings.HashEndpoint;
+                    Configuration.Hasher = new PokeHashHasher(Settings.AuthAPIKey);
+                    Configuration.HasherUrl = Settings.HashHost;
+                    Configuration.HashEndpoint = Settings.HashEndpoint;
                 }
                 else
-                    Configuration.Hasher = new PokeHashHasher(UserSettings.HashKeys.ToArray());
+                    Configuration.Hasher = new PokeHashHasher(Settings.HashKeys.ToArray());
 
                 // TODO: make this configurable. To avoid bans (may be with a checkbox in hash keys tab).
                 //Configuration.IgnoreHashVersion = true;
                 VersionStr = Configuration.Hasher.PokemonVersion;
-                ((PokeHashHasher)Configuration.Hasher).PokehashSleeping += OnPokehashSleeping;
+                AppVersion = Configuration.Hasher.AppVersion;
+                //Revise sleeping line 118
+                //((PokeHashHasher)Configuration.Hasher).PokehashSleeping += OnPokehashSleeping;
             }
             // *****
 
             ILoginProvider loginProvider;
 
-            switch (UserSettings.AuthType)
+            switch (Settings.AuthType)
             {
                 case AuthType.Google:
-                    loginProvider = new GoogleLoginProvider(UserSettings.Username, UserSettings.Password);
+                    loginProvider = new GoogleLoginProvider(Settings.Username, Settings.Password);
                     break;
                 case AuthType.Ptc:
-                    loginProvider = new PtcLoginProvider(UserSettings.Username, UserSettings.Password);
+                    loginProvider = new PtcLoginProvider(Settings.Username, Settings.Password, Proxy.AsWebProxy());
                     break;
                 default:
                     throw new ArgumentException("Login provider must be either \"google\" or \"ptc\".");
             }
 
-            ClientSession = await GetSession(loginProvider, UserSettings.DefaultLatitude, UserSettings.DefaultLongitude, true);
+            ClientSession = await GetSession(loginProvider, Settings.DefaultLatitude, Settings.DefaultLongitude, true);
 
             // Send initial requests and start HeartbeatDispatcher.
             // This makes sure that the initial heartbeat request finishes and the "session.Map.Cells" contains stuff.
-            string msgStr = null;
-            if (!await ClientSession.StartupAsync())
-            {
-                msgStr = "Session couldn't start up.";
-                LoggedIn = false;
-            }
-            else
-            {
-                LoggedIn = true;
-                msgStr = "Successfully logged into server.";
-            }
-
-            if (LoggedIn)
-            {
-                ClientSession.AccessTokenUpdated += SessionOnAccessTokenUpdated;
-                ClientSession.CaptchaReceived += SessionOnCaptchaReceived;
-                ClientSession.InventoryUpdate += SessionInventoryUpdate;
-                ClientSession.MapUpdate += MapUpdate;
-                ClientSession.RpcClient.CheckAwardedBadgesReceived += OnCheckAwardedBadgesReceived;
-                ClientSession.RpcClient.HatchedEggsReceived += OnHatchedEggsReceived;
-
-                SaveAccessToken(ClientSession.AccessToken);
+            var msgStr = "Session couldn't start up.";
+            LoggedIn = false;
+            try {
+                if (await ClientSession.StartupAsync())
+                {
+                    LoggedIn = true;
+                    msgStr = "Successfully logged into server.";
+    
+                    ClientSession.AccessTokenUpdated += SessionAccessTokenUpdated;
+                    ClientSession.CaptchaReceived += SessionOnCaptchaReceived;
+                    ClientSession.InventoryUpdate += SessionInventoryUpdate;
+                    ClientSession.MapUpdate += SessionMapUpdate;
+                    ClientSession.CheckAwardedBadgesReceived += OnCheckAwardedBadgesReceived;
+                    ClientSession.HatchedEggsReceived += OnHatchedEggsReceived;
+    
+                    SaveAccessToken(ClientSession.AccessToken);
+                }
+            } catch (Exception ex1) {
+                ClientManager.LogCaller(new LoggerEventArgs("exception: " +ex1, LoggerTypes.Debug));
             }
 
             return new MethodResult<bool>()
@@ -121,36 +136,35 @@ namespace PokemonGoGUI.GoManager
             OnPokehashSleeping?.Invoke(sender, sleepTime);
         }
 
-        private void MapUpdate(object sender, EventArgs e)
+        private void SessionMapUpdate(object sender, EventArgs e)
         {
-            //var session = (Session)sender;
-            //GeoCoordinate loc = new GeoCoordinate(session.Player.Latitude, session.Player.Longitude);
-            //UpdateLocation(loc).Wait();
 
-            GetPokeStops().Wait();
-            GetCatchablePokemon().Wait();
 
             // Update BuddyPokemon Stats
-            if (PlayerData.BuddyPokemon.Id != 0)
+            var buddyID =  ClientManager?.PlayerData?.BuddyPokemon.Id;
+            if (buddyID != 0)
             {
-                MethodResult<GetBuddyWalkedResponse> buddyWalkedResponse = GetBuddyWalked().Result;
+                MethodResult<GetBuddyWalkedResponse> buddyWalkedResponse = ClientManager.GetBuddyWalked().Result;
                 if (buddyWalkedResponse.Success)
                 {
-                    LogCaller(new LoggerEventArgs($"BuddyWalked CandyID: {buddyWalkedResponse.Data.FamilyCandyId}, CandyCount: {buddyWalkedResponse.Data.CandyEarnedCount}", Models.LoggerTypes.Success));
+                    var msg = $"BuddyWalked CandyID: {buddyWalkedResponse.Data.FamilyCandyId}, CandyCount: {buddyWalkedResponse.Data.CandyEarnedCount}";
+                    ClientManager.LogCaller(new LoggerEventArgs(msg, LoggerTypes.Success));
                 };
             }
+            
+
         }
 
         public void SessionOnCaptchaReceived(object sender, CaptchaEventArgs e)
         {
-            AccountState = AccountState.CaptchaReceived;
+            ClientManager.AccountState = AccountState.CaptchaReceived;
             //2captcha needed to solve or chrome drive for solve url manual
             //e.CaptchaUrl;
         }
 
         private void SessionInventoryUpdate(object sender, EventArgs e)
         {
-            UpdateInventory().Wait();
+            ClientManager.UpdateInventory();
         }
 
         private void OnHatchedEggsReceived(object sender, GetHatchedEggsResponse hatchedEggResponse)
@@ -163,43 +177,55 @@ namespace PokemonGoGUI.GoManager
             //
         }
 
-        private void SessionOnAccessTokenUpdated(object sender, EventArgs e)
+        private void SessionAccessTokenUpdated(object sender, EventArgs e)
         {
             SaveAccessToken(ClientSession.AccessToken);
         }
 
-        private void SetSettings()
+        public void SetSettings(Manager manager)
         {
-            int osId = OsVersions[UserSettings.FirmwareType.Length].Length;
+            Settings = manager.UserSettings;
+            ClientManager = manager;
+
+            int osId = OsVersions[Settings.FirmwareType.Length].Length;
             var firmwareUserAgentPart = OsUserAgentParts[osId];
             var firmwareType = OsVersions[osId];
+
+            Proxy = new ProxyEx
+            {
+                Address = Settings.ProxyIP,
+                Port = Settings.ProxyPort,
+                Username = Settings.ProxyUsername,
+                Password = Settings.ProxyPassword
+            };
 
             ClientDeviceWrapper = new DeviceWrapper
             {
                 UserAgent = $"pokemongo/1 {firmwareUserAgentPart}",
                 DeviceInfo = new DeviceInfo
                 {
-                    DeviceId = UserSettings.DeviceId,
-                    DeviceBrand = UserSettings.DeviceBrand,
-                    DeviceModelBoot = UserSettings.DeviceModelBoot,
-                    HardwareModel = UserSettings.HardwareModel,
-                    HardwareManufacturer = UserSettings.HardwareManufacturer,
-                    FirmwareBrand = UserSettings.FirmwareBrand,
-                    FirmwareType = UserSettings.FirmwareType,
-                    AndroidBoardName = UserSettings.AndroidBoardName,
-                    AndroidBootloader = UserSettings.AndroidBootloader,
-                    DeviceModel = UserSettings.DeviceModel,
-                    DeviceModelIdentifier = UserSettings.DeviceModelIdentifier,
-                    FirmwareFingerprint = UserSettings.FirmwareFingerprint,
-                    FirmwareTags = UserSettings.FirmwareTags
-                }
+                    DeviceId = Settings.DeviceId,
+                    DeviceBrand = Settings.DeviceBrand,
+                    DeviceModelBoot = Settings.DeviceModelBoot,
+                    HardwareModel = Settings.HardwareModel,
+                    HardwareManufacturer = Settings.HardwareManufacturer,
+                    FirmwareBrand = Settings.FirmwareBrand,
+                    FirmwareType = Settings.FirmwareType,
+                    AndroidBoardName = Settings.AndroidBoardName,
+                    AndroidBootloader = Settings.AndroidBootloader,
+                    DeviceModel = Settings.DeviceModel,
+                    DeviceModelIdentifier = Settings.DeviceModelIdentifier,
+                    FirmwareFingerprint = Settings.FirmwareFingerprint,
+                    FirmwareTags = Settings.FirmwareTags
+                },
+                Proxy = Proxy.AsWebProxy()
             };
 
             PlayerLocale = new GetPlayerMessage.Types.PlayerLocale
             {
-                Country = UserSettings.Country,
-                Language = UserSettings.Language,
-                Timezone = UserSettings.TimeZone
+                Country = Settings.Country,
+                Language = Settings.Language,
+                Timezone = Settings.TimeZone
             };
         }
 
@@ -208,7 +234,6 @@ namespace PokemonGoGUI.GoManager
             var fileName = Path.Combine(Directory.GetCurrentDirectory(), "Cache", $"{accessToken.Uid}.json");
 
             File.WriteAllText(fileName, JsonConvert.SerializeObject(accessToken, Formatting.Indented));
-            AccessToken = accessToken;
         }
 
         /// <summary>
@@ -219,7 +244,7 @@ namespace PokemonGoGUI.GoManager
         /// <param name="initLong">The initial longitude.</param>
         /// <param name="mayCache">Can we cache the <see cref="AccessToken" /> to a local file?</param>
         private async Task<Session> GetSession(ILoginProvider loginProvider, double initLat, double initLong, bool mayCache = false)
-        {
+        {            
             var cacheDir = Path.Combine(Directory.GetCurrentDirectory(), "Cache");
             var fileName = Path.Combine(cacheDir, $"{loginProvider.UserId}-{loginProvider.ProviderId}.json");
 

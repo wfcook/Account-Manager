@@ -53,7 +53,7 @@ namespace PokemonGoGUI.GoManager
 
             try
             {
-                var response = await ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
+                var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                 {
                     RequestType = RequestType.UseItemEggIncubator,
                     RequestMessage = new UseItemEggIncubatorMessage
@@ -100,15 +100,18 @@ namespace PokemonGoGUI.GoManager
                 };
             }
 
-            IEnumerable<EggIncubator> incubators = Incubators.Where(x => x.ItemId == ItemId.ItemIncubatorBasic && x.PokemonId == 0);
-
-            foreach(EggIncubator incubator in incubators)
+            if (!UserSettings.OnlyUnlimitedIncubator)
             {
-                return new MethodResult<EggIncubator>
+                IEnumerable<EggIncubator> incubators = Incubators.Where(x => x.ItemId == ItemId.ItemIncubatorBasic && x.PokemonId == 0);
+    
+                foreach(EggIncubator incubator in incubators)
                 {
-                    Data = incubator,
-                    Success = true
-                };
+                    return new MethodResult<EggIncubator>
+                    {
+                        Data = incubator,
+                        Success = true
+                    };
+                }
             }
 
             return new MethodResult<EggIncubator>

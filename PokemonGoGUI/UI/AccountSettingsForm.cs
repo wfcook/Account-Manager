@@ -27,7 +27,7 @@ namespace PokemonGoGUI.UI
 
             olvColumnCatchId.AspectGetter = delegate(object x)
             {
-                CatchSetting setting = (CatchSetting)x;
+                var setting = (CatchSetting)x;
 
                 return (int)setting.Id;
             };
@@ -38,7 +38,7 @@ namespace PokemonGoGUI.UI
 
             olvColumnEvolveId.AspectGetter = delegate(object x)
             {
-                EvolveSetting setting = (EvolveSetting)x;
+                var setting = (EvolveSetting)x;
 
                 return (int)setting.Id;
             };
@@ -49,7 +49,7 @@ namespace PokemonGoGUI.UI
 
             olvColumnTransferId.AspectGetter = delegate(object x)
             {
-                TransferSetting setting = (TransferSetting)x;
+                var setting = (TransferSetting)x;
 
                 return (int)setting.Id;
             };
@@ -103,10 +103,6 @@ namespace PokemonGoGUI.UI
 
         private void UpdateDetails(Settings settings)
         {
-            if (settings.AuthType == AuthType.Google)
-            {
-                radioButtonGoogle.Checked = true;
-            }
 
             textBoxPtcPassword.Text = settings.Password;
             textBoxPtcUsername.Text = settings.Username;
@@ -119,12 +115,15 @@ namespace PokemonGoGUI.UI
             textBoxMaxLevel.Text = settings.MaxLevel.ToString();
             textBoxProxy.Text = settings.Proxy.ToString();
             checkBoxMimicWalking.Checked = settings.MimicWalking;
+            checkBoxShufflePokestops.Checked = settings.ShufflePokestops;
             checkBoxEncounterWhileWalking.Checked = settings.EncounterWhileWalking;
             checkBoxRecycle.Checked = settings.RecycleItems;
             checkBoxEvolve.Checked = settings.EvolvePokemon;
             checkBoxTransfers.Checked = settings.TransferPokemon;
+            checkBoxTransferSlashPokemons.Checked = settings.TransferSlashPokemons;
             checkBoxUseLuckyEgg.Checked = settings.UseLuckyEgg;
             checkBoxIncubateEggs.Checked = settings.IncubateEggs;
+            checkBoxOnlyUnlimitedIncubator.Checked = settings.OnlyUnlimitedIncubator;
             checkBoxCatchPokemon.Checked = settings.CatchPokemon;
             numericUpDownRunForHours.Value = new Decimal(settings.RunForHours);
             numericUpDownMaxLogs.Value = settings.MaxLogs;
@@ -159,13 +158,8 @@ namespace PokemonGoGUI.UI
             textBoxDeviceModel.Text = settings.DeviceModel;
             textBoxDeviceBrand.Text = settings.DeviceBrand;
             textBoxDeviceModelBoot.Text = settings.DeviceModelBoot;
-            textBoxDeviceModelIdentifier.Text = settings.DeviceModelIdentifier;
             textBoxFirmwareBrand.Text = settings.FirmwareBrand;
-            textBoxFirmwareFingerprint.Text = settings.FirmwareFingerprint;
-            textBoxFirmwareTags.Text = settings.FirmwareTags;
             textBoxFirmwareType.Text = settings.FirmwareType;
-            textBoxAnroidBoardName.Text = settings.AndroidBoardName;
-            textBoxAndroidBootLoader.Text = settings.AndroidBootloader;
             textBoxHardwareManufacturer.Text = settings.HardwareManufacturer;
             textBoxHardwareModel.Text = settings.HardwareModel;
             //End device settings
@@ -175,6 +169,12 @@ namespace PokemonGoGUI.UI
             cbHashEndpoint.Text = settings.HashEndpoint;
             tbAuthHashKey.Text = settings.AuthAPIKey;
             cbUseOnlyThisHashKey.Checked = settings.UseOnlyOneKey;
+            
+            checkBoxUseBerries.Checked = settings.UseBerries;
+            checkBoxGetARBonus.Checked = settings.GetArBonus;
+            checkBoxCompleteTutorial.Checked = settings.CompleteTutorial;
+            checkBoxTransferAtOnce.Checked = settings.TransferAtOnce;
+            
 
             for(int i = 0; i < comboBoxMinAccountState.Items.Count; i++)
             {
@@ -186,18 +186,6 @@ namespace PokemonGoGUI.UI
             }
         }
 
-        private void RadioButtonPtc_CheckedChanged_1(object sender, EventArgs e)
-        {
-            labelUsername.Text = "Username*:";
-
-            textBoxPtcPassword.Enabled = true;
-            textBoxPtcUsername.Enabled = true;
-
-            if(radioButtonGoogle.Checked)
-            {
-                labelUsername.Text = "Email*:";
-            }
-        }
 
         private void CheckBoxMimicWalking_CheckedChanged(object sender, EventArgs e)
         {
@@ -281,16 +269,22 @@ namespace PokemonGoGUI.UI
                 return false;
             }
 
-            if (radioButtonPtc.Checked)
+            if (String.IsNullOrEmpty(textBoxPtcUsername.Text))
             {
-                userSettings.AuthType = AuthType.Ptc;
+                MessageBox.Show("Invalid Username", "Warning");
+                return false;
             }
-            else
+            if (String.IsNullOrEmpty(textBoxPtcPassword.Text))
             {
-                userSettings.AuthType = AuthType.Google;
+                MessageBox.Show("Invalid Password", "Warning");
+                return false;
             }
 
+            userSettings.AuthType = textBoxPtcUsername.Text.Contains("@") ?  AuthType.Google : AuthType.Ptc;
+
             userSettings.MimicWalking = checkBoxMimicWalking.Checked;
+            userSettings.ShufflePokestops = checkBoxShufflePokestops.Checked;
+            
             userSettings.Username = textBoxPtcUsername.Text.Trim();
             userSettings.Password = textBoxPtcPassword.Text.Trim();
             userSettings.DefaultLatitude = defaultLat;
@@ -300,11 +294,13 @@ namespace PokemonGoGUI.UI
             userSettings.EncounterWhileWalking = checkBoxEncounterWhileWalking.Checked;
             userSettings.AccountName = textBoxName.Text;
             userSettings.TransferPokemon = checkBoxTransfers.Checked;
+            userSettings.TransferSlashPokemons = checkBoxTransferSlashPokemons.Checked;
             userSettings.EvolvePokemon = checkBoxEvolve.Checked;
             userSettings.RecycleItems = checkBoxRecycle.Checked;
             userSettings.MinPokemonBeforeEvolve = minPokemonBeforeEvolve;
             userSettings.UseLuckyEgg = checkBoxUseLuckyEgg.Checked;
             userSettings.IncubateEggs = checkBoxIncubateEggs.Checked;
+            userSettings.OnlyUnlimitedIncubator = checkBoxOnlyUnlimitedIncubator.Checked;
             userSettings.MaxLevel = maxLevel;
             userSettings.CatchPokemon = checkBoxCatchPokemon.Checked;
             userSettings.StopAtMinAccountState = (AccountState)comboBoxMinAccountState.SelectedItem;
@@ -314,6 +310,7 @@ namespace PokemonGoGUI.UI
             userSettings.StopOnAPIUpdate = checkBoxStopOnAPIUpdate.Checked;
             userSettings.SpinGyms = checkBoxSpinGyms.Checked;
             AutoUpdate = cbAutoUpdate.Checked;
+            userSettings.UseBerries = checkBoxUseBerries.Checked;
 
             userSettings.RunForHours = (double)numericUpDownRunForHours.Value;
             userSettings.MaxLogs = (int)numericUpDownMaxLogs.Value;
@@ -343,13 +340,8 @@ namespace PokemonGoGUI.UI
             userSettings.DeviceModel = textBoxDeviceModel.Text;
             userSettings.DeviceBrand = textBoxDeviceBrand.Text;
             userSettings.DeviceModelBoot = textBoxDeviceModelBoot.Text;
-            userSettings.DeviceModelIdentifier = textBoxDeviceModelIdentifier.Text;
             userSettings.FirmwareBrand = textBoxFirmwareBrand.Text;
-            userSettings.FirmwareFingerprint = textBoxFirmwareFingerprint.Text;
-            userSettings.FirmwareTags = textBoxFirmwareTags.Text;
             userSettings.FirmwareType = textBoxFirmwareType.Text;
-            userSettings.AndroidBoardName = textBoxAnroidBoardName.Text;
-            userSettings.AndroidBootloader = textBoxAndroidBootLoader.Text;
             userSettings.HardwareManufacturer = textBoxHardwareManufacturer.Text;
             userSettings.HardwareModel = textBoxHardwareModel.Text;
             //End device settings
@@ -368,6 +360,10 @@ namespace PokemonGoGUI.UI
             userSettings.Language = x[cbTimeZones.Text].Item2;
             userSettings.POSIX = x[cbTimeZones.Text].Item3;
             //End location time zones
+            
+            userSettings.GetArBonus = checkBoxGetARBonus.Checked;
+            userSettings.CompleteTutorial = checkBoxCompleteTutorial.Checked;
+            userSettings.TransferAtOnce = checkBoxTransferAtOnce.Checked;
 
             if (proxyEx != null)
             {
@@ -406,7 +402,7 @@ namespace PokemonGoGUI.UI
                 return;
             }
 
-            InventoryItemSetting iiSettings = fastObjectListViewRecycling.SelectedObjects[0] as InventoryItemSetting;
+            var iiSettings = fastObjectListViewRecycling.SelectedObjects[0] as InventoryItemSetting;
 
             if(iiSettings == null)
             {
@@ -439,14 +435,14 @@ namespace PokemonGoGUI.UI
 
         private void TrueToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ToolStripMenuItem tSMI = sender as ToolStripMenuItem;
+            var tSMI = sender as ToolStripMenuItem;
  
             if(tSMI == null)
             {
                 return;
             }
 
-            CheckType checkType = (CheckType)Int32.Parse(tSMI.Tag.ToString());
+            var checkType = (CheckType)Int32.Parse(tSMI.Tag.ToString());
 
             foreach(CatchSetting cSetting in fastObjectListViewCatch.SelectedObjects)
             {
@@ -534,14 +530,14 @@ namespace PokemonGoGUI.UI
 
         private void TrueToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            ToolStripMenuItem tSMI = sender as ToolStripMenuItem;
+            var tSMI = sender as ToolStripMenuItem;
 
             if (tSMI == null)
             {
                 return;
             }
 
-            CheckType checkType = (CheckType)Int32.Parse(tSMI.Tag.ToString());
+            var checkType = (CheckType)Int32.Parse(tSMI.Tag.ToString());
 
             foreach (EvolveSetting eSetting in fastObjectListViewEvolve.SelectedObjects)
             {
@@ -573,7 +569,7 @@ namespace PokemonGoGUI.UI
                 return;
             }
 
-            TransferSettingsForm transferSettingForm = new TransferSettingsForm(settings);
+            var transferSettingForm = new TransferSettingsForm(settings);
             transferSettingForm.ShowDialog();
 
             fastObjectListViewTransfer.RefreshObjects(settings);
@@ -625,7 +621,7 @@ namespace PokemonGoGUI.UI
                 return;
             }
 
-            using (SaveFileDialog sfd = new SaveFileDialog())
+            using (var sfd = new SaveFileDialog())
             {
                 sfd.Filter = "Json Files (*.json)|*.json|All Files (*.*)|*.*";
 
@@ -645,7 +641,7 @@ namespace PokemonGoGUI.UI
 
         private async void ButtonImportConfig_Click(object sender, EventArgs e)
         {
-            using (OpenFileDialog ofd = new OpenFileDialog())
+            using (var ofd = new OpenFileDialog())
             {
                 ofd.Title = "Open config file";
                 ofd.Filter = "Json Files (*.json)|*.json|All Files (*.*)|*.*";
@@ -678,7 +674,7 @@ namespace PokemonGoGUI.UI
 
         private void ButtonResetDefaults_Click(object sender, EventArgs e)
         {
-            _manager.RestoreDeviceDefaults();
+            _manager.RandomDevice();
 
             UpdateDetails(_manager.UserSettings);
         }
@@ -687,5 +683,30 @@ namespace PokemonGoGUI.UI
         {
             checkBoxRemoveOnStop.Enabled = checkBoxAutoRotateProxies.Checked;
         }
+        void checkBoxClaimLevelUp_CheckedChanged(object sender, EventArgs e)
+        {
+          
+        }
+        void textBoxDeviceModel_TextChanged(object sender, EventArgs e)
+        {
+          
+        }
+
+        private void AccountSettingsForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            DialogResult = DialogResult.OK;
+        }
+
+        void setUsePinapToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (fastObjectListViewCatch.SelectedObjects== null)
+                return;
+
+            foreach(CatchSetting cSetting in fastObjectListViewCatch.SelectedObjects)
+                cSetting.UsePinap = !cSetting.UsePinap;
+
+            fastObjectListViewCatch.RefreshSelectedObjects();
+        }
+
     }
 }

@@ -21,7 +21,9 @@ namespace PokemonGoGUI.GoManager
     {
         private async Task<MethodResult> EvolveFilteredPokemon()
         {
-            MethodResult<List<PokemonData>> response = await GetPokemonToEvolve();
+            //TODO: Revise
+            //return new MethodResult { Message = "Dev mode sorry" };
+            MethodResult<List<PokemonData>> response = GetPokemonToEvolve();
 
             if(response.Data.Count == 0)
             {
@@ -65,6 +67,9 @@ namespace PokemonGoGUI.GoManager
 
         public async Task<MethodResult> EvolvePokemon(IEnumerable<PokemonData> pokemonToEvolve)
         {
+            //TODO: revise
+            //return new MethodResult { Message = "Dev mode sorry" };
+
             //Shouldn't happen
             if (pokemonToEvolve == null)
             {
@@ -84,7 +89,7 @@ namespace PokemonGoGUI.GoManager
 
                 try
                 {
-                    var response = await ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
+                    var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                     {
                         RequestType = RequestType.EvolvePokemon,
                         RequestMessage = new EvolvePokemonMessage
@@ -128,16 +133,17 @@ namespace PokemonGoGUI.GoManager
             };
         }
 
-        private async Task<MethodResult<int>> GetEvolutionCandy(PokemonId pokemonId)
+        private MethodResult<int> GetEvolutionCandy(PokemonId pokemonId)
         {
             if(PokeSettings == null)
             {
-                MethodResult result = await GetItemTemplates();
+                //TODO: really is needed here?
+                /*MethodResult result = await GetItemTemplates();
 
                 if(!result.Success)
                 {
                     return (MethodResult<int>)result;
-                }
+                }*/
             }
 
             MethodResult<PokemonSettings> settingsResult = GetPokemonSetting(pokemonId);
@@ -158,7 +164,7 @@ namespace PokemonGoGUI.GoManager
             };
         }
 
-        private async Task<MethodResult<List<PokemonData>>> GetPokemonToEvolve()
+        private MethodResult<List<PokemonData>> GetPokemonToEvolve()
         {
             if(!UserSettings.EvolvePokemon)
             {
@@ -172,10 +178,11 @@ namespace PokemonGoGUI.GoManager
                 };
             }
 
-            await UpdatePokemon(false);
-            await UpdatePokemonCandy(false);
+            UpdatePokemon();
+            UpdatePokemonCandy();
 
-            MethodResult result = await GetItemTemplates();
+            //TODO: really is needed here?
+            /*MethodResult result = await GetItemTemplates();
 
             if(!result.Success)
             {
@@ -186,9 +193,9 @@ namespace PokemonGoGUI.GoManager
                     Data = new List<PokemonData>(),
                     Success = true
                 };
-            }
+            }*/
 
-            List<PokemonData> pokemonToEvolve = new List<PokemonData>();
+            var pokemonToEvolve = new List<PokemonData>();
 
             IEnumerable<IGrouping<PokemonId, PokemonData>> groupedPokemon = Pokemon.OrderByDescending(x => x.PokemonId).GroupBy(x => x.PokemonId);
 
@@ -276,7 +283,7 @@ namespace PokemonGoGUI.GoManager
 
             try
             {
-                var response = await ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
+                var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                 {
                     RequestType = RequestType.UseItemXpBoost,
                     RequestMessage = new UseItemXpBoostMessage

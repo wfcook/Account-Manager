@@ -57,7 +57,7 @@ namespace PokemonGoGUI.UI
 
             olvColumnPokedexFriendlyName.AspectGetter = delegate(object x)
             {
-                PokedexEntry entry = (PokedexEntry)x;
+                var entry = (PokedexEntry)x;
 
                 //ToString for sorting purposes
                 return (int)entry.PokemonId;
@@ -65,14 +65,14 @@ namespace PokemonGoGUI.UI
 
             olvColumnPokedexId.AspectGetter = delegate(object x)
             {
-                PokedexEntry entry = (PokedexEntry)x;
+                var entry = (PokedexEntry)x;
 
                 return entry.PokemonId.ToString();
             };
 
             olvColumnPokedexFriendlyName.AspectGetter = delegate(object x)
             {
-                PokedexEntry entry = (PokedexEntry)x;
+                var entry = (PokedexEntry)x;
 
                 //ToString for sorting purposes
                 return (int)entry.PokemonId;
@@ -85,52 +85,40 @@ namespace PokemonGoGUI.UI
            
             olvColumnPokemonId.AspectGetter = delegate(object x)
             {
-                PokemonData pokemon = (PokemonData)x;
+                var pokemon = (PokemonData)x;
 
                 return (int)pokemon.PokemonId;
             };
 
             olvColumnPokemonFavorite.AspectGetter = delegate(object x)
             {
-                PokemonData pokemon = (PokemonData)x;
+                var pokemon = (PokemonData)x;
 
-                if(pokemon.Favorite == 1)
-                {
-                    return true;
-                }
+                return pokemon.Favorite == 1;
 
-                return false;
             };
 
             olvColumnPokemonRarity.AspectGetter = delegate(object x)
             {
-                PokemonData pokemon = (PokemonData)x;
+                var pokemon = (PokemonData)x;
                 PokemonSettings pokemonSettings = _manager.GetPokemonSetting(pokemon.PokemonId).Data;
 
-                if (pokemonSettings == null)
-                {
-                    return PokemonRarity.Normal;
-                }
+                return pokemonSettings == null ? PokemonRarity.Normal : pokemonSettings.Rarity;
 
-                return pokemonSettings.Rarity;
             };
 
             olvColumnCandyToEvolve.AspectGetter = delegate(object x)
             {
-                PokemonData pokemon = (PokemonData)x;
+                var pokemon = (PokemonData)x;
                 PokemonSettings pokemonSettings = _manager.GetPokemonSetting(pokemon.PokemonId).Data;
 
-                if(pokemonSettings == null)
-                {
-                    return -1;
-                }
+                return pokemonSettings == null ? -1 : pokemonSettings.CandyToEvolve;
 
-                return pokemonSettings.CandyToEvolve;
             };
 
             olvColumnPokemonCandy.AspectGetter = delegate(object x)
             {
-                PokemonData pokemon = (PokemonData)x;
+                var pokemon = (PokemonData)x;
 
                 if(_manager.PokemonCandy == null || _manager.PokemonCandy.Count == 0)
                 {
@@ -146,17 +134,13 @@ namespace PokemonGoGUI.UI
 
                 Candy family = _manager.PokemonCandy.FirstOrDefault(y => y.FamilyId == settings.FamilyId);
 
-                if(family == null)
-                {
-                    return -1;
-                }
+                return family == null ? -1 : family.Candy_;
 
-                return family.Candy_;
             };
 
             olvColumnPokemonName.AspectGetter = delegate(object x)
             {
-                PokemonData pokemon = (PokemonData)x;
+                var pokemon = (PokemonData)x;
 
 
                 return pokemon.PokemonId.ToString();
@@ -164,7 +148,7 @@ namespace PokemonGoGUI.UI
 
             olvColumnPrimaryMove.AspectGetter = delegate(object x)
             {
-                PokemonData pokemon = (PokemonData)x;
+                var pokemon = (PokemonData)x;
 
 
                 return ((PokemonMove)pokemon.Move1).ToString().Replace("Fast", "");
@@ -172,54 +156,42 @@ namespace PokemonGoGUI.UI
 
             olvColumnSecondaryMove.AspectGetter = delegate(object x)
             {
-                PokemonData pokemon = (PokemonData)x;
+                var pokemon = (PokemonData)x;
 
                 return ((PokemonMove)pokemon.Move2).ToString();
             };
 
             olvColumnAttack.AspectGetter = delegate(object x)
             {
-                PokemonData pokemon = (PokemonData)x;
+                var pokemon = (PokemonData)x;
                 MethodResult<PokemonSettings> settings = _manager.GetPokemonSetting(pokemon.PokemonId);
 
-                if(!settings.Success)
-                {
-                    return -1;
-                }
+                return !settings.Success ? -1 : pokemon.IndividualAttack;
 
-                return pokemon.IndividualAttack;// +settings.Data.Stats.BaseAttack;
             };
 
             olvColumnDefense.AspectGetter = delegate(object x)
             {
-                PokemonData pokemon = (PokemonData)x;
+                var pokemon = (PokemonData)x;
                 MethodResult<PokemonSettings> settings = _manager.GetPokemonSetting(pokemon.PokemonId);
 
-                if (!settings.Success)
-                {
-                    return -1;
-                }
+                return !settings.Success ? -1 : pokemon.IndividualDefense;
 
-                return pokemon.IndividualDefense;// +settings.Data.Stats.BaseDefense;
             };
 
             olvColumnStamina.AspectGetter = delegate(object x)
             {
-                PokemonData pokemon = (PokemonData)x;
+                var pokemon = (PokemonData)x;
                 MethodResult<PokemonSettings> settings = _manager.GetPokemonSetting(pokemon.PokemonId);
 
-                if (!settings.Success)
-                {
-                    return -1;
-                }
+                return !settings.Success ? -1 : pokemon.IndividualStamina;
 
-                return pokemon.IndividualStamina;// +settings.Data.Stats.BaseStamina;
             };
 
 
             olvColumnPerfectPercent.AspectGetter = delegate(object x)
             {
-                PokemonData pokemon = (PokemonData)x;
+                var pokemon = (PokemonData)x;
                 MethodResult<double> settings = _manager.CalculateIVPerfection(pokemon);
 
                 if (!settings.Success)
@@ -238,7 +210,7 @@ namespace PokemonGoGUI.UI
 
             olvColumnCandyFamily.AspectGetter = delegate(object x)
             {
-                Candy family = (Candy)x;
+                var family = (Candy)x;
 
                 return family.FamilyId.ToString().Replace("Family", "");
             };
@@ -249,7 +221,7 @@ namespace PokemonGoGUI.UI
 
             olvColumnInventoryItem.AspectGetter = delegate(object x)
             {
-                ItemData item = (ItemData)x;
+                var item = (ItemData)x;
 
                 return item.ItemId.ToString().Replace("Item", "");
             };
@@ -268,7 +240,7 @@ namespace PokemonGoGUI.UI
                 fastObjectListViewLogs.RestoreState(_manager.LogHeaderSettings);
             }
 
-            List<LoggerTypes> values = new List<LoggerTypes>();
+            var values = new List<LoggerTypes>();
 
             foreach(LoggerTypes type in Enum.GetValues(typeof(LoggerTypes)))
             {
@@ -285,7 +257,6 @@ namespace PokemonGoGUI.UI
 
             Text = _manager.AccountName;
 
-            _manager.OnInventoryUpdate += _manager_OnInventoryUpdate;
             _manager.OnLog += _manager_OnLog;
 
             DisplayDetails();
@@ -298,6 +269,12 @@ namespace PokemonGoGUI.UI
 
             DisplayDetails();
             UpdateListViews();
+
+            // TODO: review it, but seems that now is working well the pokesetting with 3rd gen.
+            //if (_manager.PokeSettings !=null )
+            //    foreach (var element in _manager.PokeSettings) {
+            //        _manager.LogCaller(new LoggerEventArgs(String.Format("Pokemon: {0}, Family: {1}", element.Key, element.Value.FamilyId), LoggerTypes.Debug));
+            //    }
         }
 
         private void _manager_OnLog(object sender, LoggerEventArgs e)
@@ -335,7 +312,6 @@ namespace PokemonGoGUI.UI
 
         private void DetailsForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            _manager.OnInventoryUpdate -= _manager_OnInventoryUpdate;
             _manager.OnLog -= _manager_OnLog;
 
             _manager.LogHeaderSettings = fastObjectListViewLogs.SaveState();
@@ -355,7 +331,7 @@ namespace PokemonGoGUI.UI
 
             if (!result.Success)
             {
-                MessageBox.Show("Failed to login");
+                MessageBox.Show("Failed updating details");
             }
             
 
@@ -366,10 +342,7 @@ namespace PokemonGoGUI.UI
         {
             if(InvokeRequired)
             {
-                Invoke(new MethodInvoker(() =>
-                    {
-                        DisplayDetails();
-                    }));
+                Invoke(new MethodInvoker(DisplayDetails));
 
                 return;
             }
@@ -423,7 +396,7 @@ namespace PokemonGoGUI.UI
 
         private void FastObjectListViewLogs_FormatRow(object sender, FormatRowEventArgs e)
         {
-            Log log = e.Model as Log;
+            var log = e.Model as Log;
 
             if(log == null)
             {
@@ -435,7 +408,7 @@ namespace PokemonGoGUI.UI
 
         private void FastObjectListViewPokemon_FormatCell(object sender, FormatCellEventArgs e)
         {
-            PokemonData pokemonData = (PokemonData)e.Model;
+            var pokemonData = (PokemonData)e.Model;
 
             if(e.Column == olvColumnPokemonCandy)
             {
@@ -444,14 +417,7 @@ namespace PokemonGoGUI.UI
 
                 if (candyToEvolve > 0)
                 {
-                    if (candy >= candyToEvolve)
-                    {
-                        e.SubItem.ForeColor = Color.Green;
-                    }
-                    else
-                    {
-                        e.SubItem.ForeColor = Color.Red;
-                    }
+                    e.SubItem.ForeColor = candy >= candyToEvolve ? Color.Green : Color.Red;
                 }
             }
             else if (e.Column == olvColumnPerfectPercent)
@@ -630,7 +596,7 @@ namespace PokemonGoGUI.UI
 
         private async void ExportToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using(SaveFileDialog sfd = new SaveFileDialog())
+            using(var sfd = new SaveFileDialog())
             {
                 sfd.Filter = "Json Files (*.json)|*.json|All Files (*.*)|*.*";
 
@@ -700,7 +666,7 @@ namespace PokemonGoGUI.UI
                 await Task.Delay(500);
             }
 
-            await _manager.UpdateInventory();
+            _manager.UpdateInventory();
 
             fastObjectListViewInventory.SetObjects(_manager.Items);
 
@@ -709,7 +675,7 @@ namespace PokemonGoGUI.UI
 
         private void CopyStackTraceToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Log log = fastObjectListViewLogs.SelectedObject as Log;
+            var log = fastObjectListViewLogs.SelectedObject as Log;
 
             if(log == null || String.IsNullOrEmpty(log.StackTrace))
             {
@@ -721,11 +687,11 @@ namespace PokemonGoGUI.UI
             MessageBox.Show("Stack trace copied");
         }
 
-        private async void ShowFutureTransfersToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ShowFutureTransfersToolStripMenuItem_Click(object sender, EventArgs e)
         {
             showFutureTransfersToolStripMenuItem.Enabled = false;
 
-            MethodResult<List<PokemonData>> result = await _manager.GetPokemonToTransfer();
+            MethodResult<List<PokemonData>> result = _manager.GetPokemonToTransfer();
 
             if(result.Success)
             {
