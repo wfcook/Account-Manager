@@ -173,6 +173,7 @@ namespace PokemonGoGUI.UI
             checkBoxUseBerries.Checked = settings.UseBerries;
             checkBoxGetARBonus.Checked = settings.GetArBonus;
             checkBoxCompleteTutorial.Checked = settings.CompleteTutorial;
+            checkBoxTransferAtOnce.Checked = settings.TransferAtOnce;
             
 
             for(int i = 0; i < comboBoxMinAccountState.Items.Count; i++)
@@ -362,6 +363,7 @@ namespace PokemonGoGUI.UI
             
             userSettings.GetArBonus = checkBoxGetARBonus.Checked;
             userSettings.CompleteTutorial = checkBoxCompleteTutorial.Checked;
+            userSettings.TransferAtOnce = checkBoxTransferAtOnce.Checked;
 
             if (proxyEx != null)
             {

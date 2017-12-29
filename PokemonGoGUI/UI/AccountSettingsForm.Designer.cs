@@ -195,6 +195,7 @@
             this.toolTipProxy = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipMinAccountState = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipHumanizeThrows = new System.Windows.Forms.ToolTip(this.components);
+            this.checkBoxTransferAtOnce = new System.Windows.Forms.CheckBox();
             this.tabControlMain.SuspendLayout();
             this.tabPageDetails.SuspendLayout();
             this.tabControlSettings.SuspendLayout();
@@ -430,6 +431,7 @@
             // 
             // groupBoxPlayerActions
             // 
+            this.groupBoxPlayerActions.Controls.Add(this.checkBoxTransferAtOnce);
             this.groupBoxPlayerActions.Controls.Add(this.checkBoxGetARBonus);
             this.groupBoxPlayerActions.Controls.Add(this.checkBoxCatchPokemon);
             this.groupBoxPlayerActions.Controls.Add(this.checkBoxUseBerries);
@@ -2106,6 +2108,17 @@
             this.restoreDefaultsToolStripMenuItem2.Text = "Restore Defaults";
             this.restoreDefaultsToolStripMenuItem2.Click += new System.EventHandler(this.RestoreDefaultsToolStripMenuItem2_Click);
             // 
+            // checkBoxTransferAtOnce
+            // 
+            this.checkBoxTransferAtOnce.AutoSize = true;
+            this.checkBoxTransferAtOnce.Location = new System.Drawing.Point(131, 39);
+            this.checkBoxTransferAtOnce.Margin = new System.Windows.Forms.Padding(2);
+            this.checkBoxTransferAtOnce.Name = "checkBoxTransferAtOnce";
+            this.checkBoxTransferAtOnce.Size = new System.Drawing.Size(107, 17);
+            this.checkBoxTransferAtOnce.TabIndex = 74;
+            this.checkBoxTransferAtOnce.Text = "Transfer At Once";
+            this.checkBoxTransferAtOnce.UseVisualStyleBackColor = true;
+            // 
             // AccountSettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2335,5 +2348,6 @@
         private System.Windows.Forms.CheckBox checkBoxShufflePokestops;
         private System.Windows.Forms.CheckBox checkBoxGetARBonus;
         private System.Windows.Forms.ToolStripMenuItem setUsePinapToolStripMenuItem;
+        private System.Windows.Forms.CheckBox checkBoxTransferAtOnce;
     }
 }
