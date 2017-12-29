@@ -1,8 +1,8 @@
 # Change Log
 
-## [Unreleased](https://github.com/Furtif/Account-Manager/tree/HEAD)
+## [v2.21.1.8](https://github.com/Furtif/Account-Manager/tree/v2.21.1.8) (2017-12-29)
 
-[Full Changelog](https://github.com/Furtif/Account-Manager/compare/v2.21.1.7...HEAD)
+[Full Changelog](https://github.com/Furtif/Account-Manager/compare/v2.21.1.7...v2.21.1.8)
 
 **Fixed bugs:**
 
@@ -11,6 +11,7 @@
 **Closed issues:**
 
 - Transfer of multiple pokes fails [\#38](https://github.com/Furtif/Account-Manager/issues/38)
+- Encounter failed. Pokemon inventory full [\#34](https://github.com/Furtif/Account-Manager/issues/34)
 - Catch mons only once [\#32](https://github.com/Furtif/Account-Manager/issues/32)
 - Failed To Login [\#30](https://github.com/Furtif/Account-Manager/issues/30)
 - Randomize Pokestops and Pinnap Berry usage [\#29](https://github.com/Furtif/Account-Manager/issues/29)
