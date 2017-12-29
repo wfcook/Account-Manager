@@ -497,7 +497,7 @@ namespace PokemonGoGUI.GoManager
                     if (_client.ClientSession.Player.Warn)
                     {
                         AccountState = AccountState.Flagged;
-                        LogCaller(new LoggerEventArgs("Account seen flegged.", LoggerTypes.Warning));
+                        LogCaller(new LoggerEventArgs("The account is flagged.", LoggerTypes.Warning));
 
                         if(UserSettings.StopAtMinAccountState ==  AccountState.Flagged){
                             //Remove proxy
@@ -510,7 +510,7 @@ namespace PokemonGoGUI.GoManager
                     if (_client.ClientSession.Player.Banned)
                     {
                         AccountState = AccountState.PermAccountBan;
-                        LogCaller(new LoggerEventArgs("Account seen banned.", LoggerTypes.FatalError));
+                        LogCaller(new LoggerEventArgs("The account is banned.", LoggerTypes.FatalError));
 
                         //Remove proxy
                         RemoveProxy();
@@ -556,7 +556,6 @@ namespace PokemonGoGUI.GoManager
                         LogCaller(new LoggerEventArgs("Grabbing game settings ...", LoggerTypes.Debug));
                         try
                         {
-                            // TODO: Is failing here. Globalsetting should not be null in this point.
                             var remote = new Version();
                             if (_client.ClientSession.GlobalSettings!=null)
                                 remote = new Version(_client.ClientSession.GlobalSettings?.MinimumClientVersion);
@@ -774,20 +773,9 @@ namespace PokemonGoGUI.GoManager
                             break;
                         }
 
-                        if (pokestop.Type == FortType.Gym)
-                        {
-                            if (!UserSettings.SpinGyms)
-                                continue;
-                            MethodResult<GymGetInfoResponse> _result = await GymGetInfo(pokestop);
-                            LogCaller(new LoggerEventArgs("Gym Name: "+ _result.Data.Name, LoggerTypes.Info));
-                        }
-                        else
-                        {
-                            var fortDetails = await FortDetails(pokestop);
-                            LogCaller(new LoggerEventArgs("Fort Name: "+ fortDetails.Data.Name, LoggerTypes.Info));
-                        }
-
                         await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
+
+                        UpdateItemList();
 
                         int remainingBalls = RemainingPokeballs();
 
@@ -823,8 +811,20 @@ namespace PokemonGoGUI.GoManager
 
                         if ( (filledInventorySpace < UserSettings.SearchFortBelowPercent) && (filledInventorySpace <= 100) )
                         {
-                                // NOTE: the contrary of this condition should  never happen, it is only to be sure that we don't repeat the search of this fort.
                                 if (pokestop.CooldownCompleteTimestampMs < DateTime.UtcNow.ToUnixTime()){
+                                    if (pokestop.Type == FortType.Gym)
+                                    {
+                                        if (!UserSettings.SpinGyms)
+                                            continue;
+                                        MethodResult<GymGetInfoResponse> _result = await GymGetInfo(pokestop);
+                                        LogCaller(new LoggerEventArgs("Gym Name: "+ _result.Data.Name, LoggerTypes.Info));
+                                    }
+                                    else
+                                    {
+                                        var fortDetails = await FortDetails(pokestop);
+                                        LogCaller(new LoggerEventArgs("Fort Name: "+ fortDetails.Data.Name, LoggerTypes.Info));
+                                    }
+                                
                                     MethodResult searchResult = await SearchPokestop(pokestop);
         
                                     //OutOfRange will show up as a success
