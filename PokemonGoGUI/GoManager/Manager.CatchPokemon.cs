@@ -29,6 +29,15 @@ namespace PokemonGoGUI.GoManager
                     Message = "Catching pokemon disabled"
                 };
             }
+
+            if( FilledPokemonStorage() >= 100)
+            {
+                return new MethodResult
+                {
+                    Message = "Pokemon Inventory Full."
+                };
+            }
+
             
             MethodResult<List<MapPokemon>> catchableResponse = GetCatchablePokemon();
 

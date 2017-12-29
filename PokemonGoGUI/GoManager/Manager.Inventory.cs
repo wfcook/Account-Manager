@@ -138,13 +138,21 @@ namespace PokemonGoGUI.GoManager
             }
         }
 
-        public double FilledInventorySpace()
+        public double FilledInventoryStorage()
         {
             if (Items == null || PlayerData == null) {
                 return 100;
             }
 
             return (double)Items.Sum(x => x.Count) / PlayerData.MaxItemStorage * 100;
+        }
+        public double FilledPokemonStorage()
+        {
+            if (Pokemon == null || PlayerData == null) {
+                return 100;
+            }
+
+            return (double) (Pokemon.Count + Eggs?.Count) / PlayerData.MaxPokemonStorage * 100;
         }
     }
 }

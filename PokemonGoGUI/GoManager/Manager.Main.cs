@@ -820,7 +820,7 @@ namespace PokemonGoGUI.GoManager
                         UpdateInventory();
 
                         //Search
-                        double filledInventorySpace = FilledInventorySpace();
+                        double filledInventorySpace = FilledInventoryStorage();
 
                         if ( (filledInventorySpace < UserSettings.SearchFortBelowPercent) && (filledInventorySpace <= 100) )
                         {
