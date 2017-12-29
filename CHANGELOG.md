@@ -1,5 +1,24 @@
 # Change Log
 
+## [Unreleased](https://github.com/Furtif/Account-Manager/tree/HEAD)
+
+[Full Changelog](https://github.com/Furtif/Account-Manager/compare/v2.21.1.7...HEAD)
+
+**Fixed bugs:**
+
+- Encounter failed with response EncounterAlreadyHappened [\#33](https://github.com/Furtif/Account-Manager/issues/33)
+
+**Closed issues:**
+
+- Transfer of multiple pokes fails [\#38](https://github.com/Furtif/Account-Manager/issues/38)
+- Catch mons only once [\#32](https://github.com/Furtif/Account-Manager/issues/32)
+- Failed To Login [\#30](https://github.com/Furtif/Account-Manager/issues/30)
+- Randomize Pokestops and Pinnap Berry usage [\#29](https://github.com/Furtif/Account-Manager/issues/29)
+
+## [v2.21.1.7](https://github.com/Furtif/Account-Manager/tree/v2.21.1.7) (2017-12-29)
+
+[Full Changelog](https://github.com/Furtif/Account-Manager/compare/v2.21.1.6...v2.21.1.7)
+
 ## [v2.21.1.6](https://github.com/Furtif/Account-Manager/tree/v2.21.1.6) (2017-12-27)
 
 [Full Changelog](https://github.com/Furtif/Account-Manager/compare/v2.21.1.5...v2.21.1.6)
