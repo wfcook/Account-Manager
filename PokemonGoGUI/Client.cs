@@ -48,10 +48,10 @@ namespace PokemonGoGUI
             if (!LoggedIn)
                 return;
             LoggedIn = false;
-            ClientSession.AccessTokenUpdated -= SessionOnAccessTokenUpdated;
+            ClientSession.AccessTokenUpdated -= SessionAccessTokenUpdated;
             ClientSession.CaptchaReceived -= SessionOnCaptchaReceived;
             ClientSession.InventoryUpdate -= SessionInventoryUpdate;
-            ClientSession.MapUpdate -= MapUpdate;
+            ClientSession.MapUpdate -= SessionMapUpdate;
             ClientSession.CheckAwardedBadgesReceived -= OnCheckAwardedBadgesReceived;
             ClientSession.HatchedEggsReceived -= OnHatchedEggsReceived;
             ClientSession.Shutdown();
@@ -109,10 +109,10 @@ namespace PokemonGoGUI
                     LoggedIn = true;
                     msgStr = "Successfully logged into server.";
     
-                    ClientSession.AccessTokenUpdated += SessionOnAccessTokenUpdated;
+                    ClientSession.AccessTokenUpdated += SessionAccessTokenUpdated;
                     ClientSession.CaptchaReceived += SessionOnCaptchaReceived;
                     ClientSession.InventoryUpdate += SessionInventoryUpdate;
-                    ClientSession.MapUpdate += MapUpdate;
+                    ClientSession.MapUpdate += SessionMapUpdate;
                     ClientSession.CheckAwardedBadgesReceived += OnCheckAwardedBadgesReceived;
                     ClientSession.HatchedEggsReceived += OnHatchedEggsReceived;
     
@@ -136,7 +136,7 @@ namespace PokemonGoGUI
             OnPokehashSleeping?.Invoke(sender, sleepTime);
         }
 
-        private void MapUpdate(object sender, EventArgs e)
+        private void SessionMapUpdate(object sender, EventArgs e)
         {
 
 
@@ -151,6 +151,7 @@ namespace PokemonGoGUI
                     ClientManager.LogCaller(new LoggerEventArgs(msg, LoggerTypes.Success));
                 };
             }
+            
 
         }
 
@@ -176,7 +177,7 @@ namespace PokemonGoGUI
             //
         }
 
-        private void SessionOnAccessTokenUpdated(object sender, EventArgs e)
+        private void SessionAccessTokenUpdated(object sender, EventArgs e)
         {
             SaveAccessToken(ClientSession.AccessToken);
         }

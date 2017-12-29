@@ -698,7 +698,7 @@ namespace PokemonGoGUI.GoManager
                     #region PokeStopTask
 
                     //Get pokestops
-                    LogCaller(new LoggerEventArgs("Grabbing pokestops...", LoggerTypes.Debug));
+                    LogCaller(new LoggerEventArgs("getting pokestops...", LoggerTypes.Debug));
 
                     MethodResult<List<FortData>> pokestops = GetPokeStops();
 
@@ -817,7 +817,6 @@ namespace PokemonGoGUI.GoManager
                             await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
                         }
 
-                        UpdateInventory();
 
                         //Search
                         double filledInventorySpace = FilledInventoryStorage();
@@ -909,7 +908,6 @@ namespace PokemonGoGUI.GoManager
                                 }
                             }
 
-                            UpdateInventory();
                         }
 
                         ++pokeStopNumber;
