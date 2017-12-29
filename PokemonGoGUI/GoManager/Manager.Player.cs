@@ -19,35 +19,16 @@ namespace PokemonGoGUI.GoManager
 {
     public partial class Manager
     {
+        
         public async Task<MethodResult> UpdateDetails()
         {
+            //TODO: review what we need do here.
+            // UpdateInventory();
+            
             LogCaller(new LoggerEventArgs("Updating details", LoggerTypes.Debug));
 
             await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
-
-            MethodResult inventoryResult = UpdateInventory();
-
-            if (inventoryResult.Success)
-            {
-                if (AccountState == Enums.AccountState.PermAccountBan)
-                {
-                    AccountState = Enums.AccountState.Good;
-                }
-            }
-
-            if (inventoryResult.Success)
-            {
-                if (AccountState == Enums.AccountState.PermAccountBan)
-                {
-                    AccountState = Enums.AccountState.Good;
-                }
-
-                LogCaller(new LoggerEventArgs("Finished updating details", LoggerTypes.Debug));
-            }
-
-            // TODO: is really needed this?
-            //await ClaimLevelUpRewards(Level);
 
             return new MethodResult
             {

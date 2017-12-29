@@ -125,6 +125,11 @@ namespace PokemonGoGUI
             set;
         }
 
+        public bool TransferAtOnce {
+            get;
+            set;
+        }
+
         public AccountState StopAtMinAccountState { get; set; }
 
         public ProxyEx Proxy

@@ -548,14 +548,7 @@ namespace PokemonGoGUI.GoManager
         {
             if(Items == null)
             {
-                LogCaller(new LoggerEventArgs("Item list is empty ... Regrabbing", LoggerTypes.Debug));
-
-                MethodResult result = UpdateInventory();
-
-                if(!result.Success)
-                {
-                    return ItemId.ItemUnknown;
-                }
+                   return ItemId.ItemUnknown;
             }
 
             int pokemonCp = pokemonData.Cp;

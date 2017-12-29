@@ -602,25 +602,6 @@ namespace PokemonGoGUI.GoManager
 
                     await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
-                    //Update inventory
-                    LogCaller(new LoggerEventArgs("Updating inventory items ...", LoggerTypes.Debug));
-
-                    result = UpdateInventory();
-
-                    await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
-
-                    if (!result.Success)
-                    {
-                        if (result.Message == "Failed to get inventory.")
-                        {
-                            ++_failedInventoryReponses;
-                        }
-
-                        await Task.Delay(failedWaitTime);
-
-                        continue;
-                    }
-
                     //Auto complete tutorials
                     if (UserSettings.CompleteTutorial)
                     {

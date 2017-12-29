@@ -17,8 +17,9 @@ namespace PokemonGoGUI.GoManager
 {
     public partial class Manager
     {
-        public MethodResult<List<InventoryItem>> UpdateInventory()
+        public void UpdateInventory()
         {
+            LogCaller(new LoggerEventArgs("Updating inventory.", LoggerTypes.Info));
 
             try {
                 UpdatePlayerStats();
@@ -28,15 +29,8 @@ namespace PokemonGoGUI.GoManager
                 UpdateItemList();
                 UpdateIncubators();
 
-                return new MethodResult<List<InventoryItem>> {
-                    Message = "Inventory updated successfully",
-                    Success = true
-                };
-            } catch (Exception) {
-                return new MethodResult<List<InventoryItem>> {
-                    Message = "Failed to update inventory",
-                    Success = false
-                };
+            } catch (Exception ex1) {
+                LogCaller(new LoggerEventArgs(String.Format("Failed updating inventory."), LoggerTypes.Warning, ex1));
             }
         }
 
@@ -83,14 +77,6 @@ namespace PokemonGoGUI.GoManager
                 };
             }
 
-            MethodResult<List<InventoryItem>> inventoryResponse = UpdateInventory();
-
-            if (!inventoryResponse.Success) {
-                return inventoryResponse;
-            }
-
-
-            UpdateItemList();
 
             foreach (ItemData item in Items) {
                 InventoryItemSetting itemSetting = UserSettings.ItemSettings.FirstOrDefault(x => x.Id == item.ItemId);
@@ -127,8 +113,6 @@ namespace PokemonGoGUI.GoManager
 
         public async Task<MethodResult> RecycleItem(InventoryItemSetting itemSetting, int toDelete)
         {
-            //TODO: revise
-            //return new MethodResult { Message = "Dev mode sorry" };
             try {
                 var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request {
                     RequestType = RequestType.RecycleInventoryItem,
@@ -146,6 +130,7 @@ namespace PokemonGoGUI.GoManager
                 return new MethodResult {
                     Success = true
                 };
+
             } catch (Exception ex) {
                 LogCaller(new LoggerEventArgs(String.Format("Failed to recycle iventory item {0}", itemSetting.FriendlyName), LoggerTypes.Warning, ex));
 
