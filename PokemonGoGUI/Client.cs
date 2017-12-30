@@ -116,6 +116,9 @@ namespace PokemonGoGUI
                     ClientSession.CheckAwardedBadgesReceived += OnCheckAwardedBadgesReceived;
                     ClientSession.HatchedEggsReceived += OnHatchedEggsReceived;
     
+                    
+                    ClientManager.LogCaller(new LoggerEventArgs("Succefully added all events to the client.", LoggerTypes.Debug));
+                    
                     SaveAccessToken(ClientSession.AccessToken);
                 }
             } catch (Exception ex1) {

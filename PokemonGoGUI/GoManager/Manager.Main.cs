@@ -494,6 +494,7 @@ namespace PokemonGoGUI.GoManager
                         }
                     }
 
+
                     if (_client.ClientSession.Player.Warn)
                     {
                         AccountState = AccountState.Flagged;
@@ -533,7 +534,9 @@ namespace PokemonGoGUI.GoManager
                         continue;
                     }
 
-                    //LogCaller(new LoggerEventArgs("Sending echo test ...", LoggerTypes.Debug));
+                    await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
+
+                    UpdateInventory();
 
                     result = await CheckReauthentication();
 
