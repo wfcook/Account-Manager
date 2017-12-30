@@ -108,6 +108,85 @@ namespace PokemonGoGUI.GoManager
                     }
                 }
 
+                var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
+                {
+                    RequestType = RequestType.DownloadItemTemplates,
+                    RequestMessage = new DownloadItemTemplatesMessage
+                    {
+                        PageOffset = 0,
+                        Paginate = false,
+                        PageTimestamp = 0
+                    }.ToByteString()
+                });
+
+
+                var downloadItemTemplatesResponse = DownloadItemTemplatesResponse.Parser.ParseFrom(response);
+                var pokemonSettings = new Dictionary<PokemonId, PokemonSettings>();
+
+                foreach (var template in downloadItemTemplatesResponse.ItemTemplates)
+                {
+                    if (template.PlayerLevel != null)
+                    {
+                        LevelSettings = template.PlayerLevel;
+
+                        continue;
+                    }
+
+                    if (template.PokemonSettings == null)
+                    {
+                        continue;
+                    }
+
+                    pokemonSettings.Add(template.PokemonSettings.PokemonId, template.PokemonSettings);
+                }
+
+                PokeSettings = pokemonSettings;
+
+                return new MethodResult<Dictionary<PokemonId, PokemonSettings>>
+                {
+                    Data = pokemonSettings,
+                    Message = "Success",
+                    Success = true
+                };
+            }
+            catch (Exception ex)
+            {
+                LogCaller(new LoggerEventArgs("Failed to get setting templates", LoggerTypes.Exception, ex));
+
+                return new MethodResult<Dictionary<PokemonId, PokemonSettings>>
+                {
+                    Message = "Failed to get setting templates"
+                };
+            }
+        }
+
+        public async Task<MethodResult<Dictionary<PokemonId, PokemonSettings>>> GetItemTemplatesPage()
+        {
+            if (PokeSettings != null && PokeSettings.Count != 0)
+            {
+                return new MethodResult<Dictionary<PokemonId, PokemonSettings>>
+                {
+                    Data = PokeSettings,
+                    Message = "Settings already grabbed",
+                    Success = true
+                };
+            }
+
+            try
+            {
+                if (!_client.LoggedIn)
+                {
+                    MethodResult result = await Login_();
+
+                    if (!result.Success)
+                    {
+                        return new MethodResult<Dictionary<PokemonId, PokemonSettings>>
+                        {
+                            Message = result.Message
+                        };
+                    }
+                }
+
                 int PageOff = 0;
                 ulong LastTime = 0;
 
