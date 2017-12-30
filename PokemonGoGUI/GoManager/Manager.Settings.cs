@@ -103,8 +103,20 @@ namespace PokemonGoGUI.GoManager
                         };
                     }
                 }
-
+                
+                
                 var pokemonSettings = new Dictionary<PokemonId, PokemonSettings>();
+
+                if (File.Exists("pokemon_settings.dat")) {
+                    var strPokeSettings = File.ReadAllText("pokemon_settings.dat");
+                    pokemonSettings = Serializer.FromJson<Dictionary<PokemonId, PokemonSettings>>(strPokeSettings);
+                    return new MethodResult<Dictionary<PokemonId, PokemonSettings>> {
+                        Data = pokemonSettings,
+                        Message = "Success",
+                        Success = true
+                    };
+                }
+
                 var pageOffset = 0;
                 var timestamp = 0ul;
                 do{
@@ -142,7 +154,10 @@ namespace PokemonGoGUI.GoManager
                     }
                 }while (pageOffset != 0);
 
+                File.WriteAllText("pokemon_settings.dat",Serializer.ToJson(pokemonSettings));
+
                 PokeSettings = pokemonSettings;
+
 
                 return new MethodResult<Dictionary<PokemonId, PokemonSettings>>
                 {

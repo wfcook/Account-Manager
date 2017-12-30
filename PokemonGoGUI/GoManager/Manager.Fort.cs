@@ -280,9 +280,7 @@ namespace PokemonGoGUI.GoManager
                     }.ToByteString()
                 });
 
-                GymGetInfoResponse gymGetInfoResponse = null;
-
-                gymGetInfoResponse = GymGetInfoResponse.Parser.ParseFrom(response);
+                var gymGetInfoResponse = GymGetInfoResponse.Parser.ParseFrom(response);
 
                 return new MethodResult<GymGetInfoResponse>
                 {

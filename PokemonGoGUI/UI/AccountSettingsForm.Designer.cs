@@ -44,6 +44,7 @@
             this.tabPageActions = new System.Windows.Forms.TabPage();
             this.checkBoxCompleteTutorial = new System.Windows.Forms.CheckBox();
             this.groupBoxPlayerActions = new System.Windows.Forms.GroupBox();
+            this.checkBoxTransferAtOnce = new System.Windows.Forms.CheckBox();
             this.checkBoxGetARBonus = new System.Windows.Forms.CheckBox();
             this.checkBoxCatchPokemon = new System.Windows.Forms.CheckBox();
             this.checkBoxUseBerries = new System.Windows.Forms.CheckBox();
@@ -195,7 +196,6 @@
             this.toolTipProxy = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipMinAccountState = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipHumanizeThrows = new System.Windows.Forms.ToolTip(this.components);
-            this.checkBoxTransferAtOnce = new System.Windows.Forms.CheckBox();
             this.tabControlMain.SuspendLayout();
             this.tabPageDetails.SuspendLayout();
             this.tabControlSettings.SuspendLayout();
@@ -455,15 +455,26 @@
             this.groupBoxPlayerActions.TabStop = false;
             this.groupBoxPlayerActions.Text = "Player Actions";
             // 
+            // checkBoxTransferAtOnce
+            // 
+            this.checkBoxTransferAtOnce.AutoSize = true;
+            this.checkBoxTransferAtOnce.Location = new System.Drawing.Point(131, 39);
+            this.checkBoxTransferAtOnce.Margin = new System.Windows.Forms.Padding(2);
+            this.checkBoxTransferAtOnce.Name = "checkBoxTransferAtOnce";
+            this.checkBoxTransferAtOnce.Size = new System.Drawing.Size(107, 17);
+            this.checkBoxTransferAtOnce.TabIndex = 74;
+            this.checkBoxTransferAtOnce.Text = "Transfer At Once";
+            this.checkBoxTransferAtOnce.UseVisualStyleBackColor = true;
+            // 
             // checkBoxGetARBonus
             // 
             this.checkBoxGetARBonus.AutoSize = true;
             this.checkBoxGetARBonus.Location = new System.Drawing.Point(131, 18);
             this.checkBoxGetARBonus.Margin = new System.Windows.Forms.Padding(2);
             this.checkBoxGetARBonus.Name = "checkBoxGetARBonus";
-            this.checkBoxGetARBonus.Size = new System.Drawing.Size(94, 17);
+            this.checkBoxGetARBonus.Size = new System.Drawing.Size(96, 17);
             this.checkBoxGetARBonus.TabIndex = 73;
-            this.checkBoxGetARBonus.Text = "Get AR Bonus";
+            this.checkBoxGetARBonus.Text = "Use AR Bonus";
             this.checkBoxGetARBonus.UseVisualStyleBackColor = true;
             // 
             // checkBoxCatchPokemon
@@ -472,9 +483,9 @@
             this.checkBoxCatchPokemon.Location = new System.Drawing.Point(11, 18);
             this.checkBoxCatchPokemon.Margin = new System.Windows.Forms.Padding(2);
             this.checkBoxCatchPokemon.Name = "checkBoxCatchPokemon";
-            this.checkBoxCatchPokemon.Size = new System.Drawing.Size(99, 17);
+            this.checkBoxCatchPokemon.Size = new System.Drawing.Size(107, 17);
             this.checkBoxCatchPokemon.TabIndex = 41;
-            this.checkBoxCatchPokemon.Text = "CatchPokemon";
+            this.checkBoxCatchPokemon.Text = "Catch Pokemons";
             this.checkBoxCatchPokemon.UseVisualStyleBackColor = true;
             // 
             // checkBoxUseBerries
@@ -510,9 +521,9 @@
             this.checkBoxTransfers.Location = new System.Drawing.Point(11, 39);
             this.checkBoxTransfers.Margin = new System.Windows.Forms.Padding(2);
             this.checkBoxTransfers.Name = "checkBoxTransfers";
-            this.checkBoxTransfers.Size = new System.Drawing.Size(90, 17);
+            this.checkBoxTransfers.Size = new System.Drawing.Size(118, 17);
             this.checkBoxTransfers.TabIndex = 42;
-            this.checkBoxTransfers.Text = "Auto Transfer";
+            this.checkBoxTransfers.Text = "Transfer Pokemons";
             this.checkBoxTransfers.UseVisualStyleBackColor = true;
             // 
             // label49
@@ -542,9 +553,9 @@
             this.checkBoxEvolve.Location = new System.Drawing.Point(11, 60);
             this.checkBoxEvolve.Margin = new System.Windows.Forms.Padding(2);
             this.checkBoxEvolve.Name = "checkBoxEvolve";
-            this.checkBoxEvolve.Size = new System.Drawing.Size(84, 17);
+            this.checkBoxEvolve.Size = new System.Drawing.Size(112, 17);
             this.checkBoxEvolve.TabIndex = 43;
-            this.checkBoxEvolve.Text = "Auto Evolve";
+            this.checkBoxEvolve.Text = "Evolve Pokemons";
             this.checkBoxEvolve.UseVisualStyleBackColor = true;
             // 
             // label9
@@ -588,9 +599,9 @@
             this.checkBoxRecycle.Location = new System.Drawing.Point(11, 81);
             this.checkBoxRecycle.Margin = new System.Windows.Forms.Padding(2);
             this.checkBoxRecycle.Name = "checkBoxRecycle";
-            this.checkBoxRecycle.Size = new System.Drawing.Size(90, 17);
+            this.checkBoxRecycle.Size = new System.Drawing.Size(93, 17);
             this.checkBoxRecycle.TabIndex = 44;
-            this.checkBoxRecycle.Text = "Auto Recycle";
+            this.checkBoxRecycle.Text = "Recycle Items";
             this.checkBoxRecycle.UseVisualStyleBackColor = true;
             // 
             // checkBoxUseLuckyEgg
@@ -724,9 +735,9 @@
             this.checkBoxEnabeRaids.Location = new System.Drawing.Point(287, 232);
             this.checkBoxEnabeRaids.Margin = new System.Windows.Forms.Padding(2);
             this.checkBoxEnabeRaids.Name = "checkBoxEnabeRaids";
-            this.checkBoxEnabeRaids.Size = new System.Drawing.Size(53, 17);
+            this.checkBoxEnabeRaids.Size = new System.Drawing.Size(83, 17);
             this.checkBoxEnabeRaids.TabIndex = 53;
-            this.checkBoxEnabeRaids.Text = "Raids";
+            this.checkBoxEnabeRaids.Text = "Make Raids";
             this.checkBoxEnabeRaids.UseVisualStyleBackColor = true;
             // 
             // checkBoxSendBerries
@@ -748,9 +759,9 @@
             this.checkBoxDeployToGym.Location = new System.Drawing.Point(287, 188);
             this.checkBoxDeployToGym.Margin = new System.Windows.Forms.Padding(2);
             this.checkBoxDeployToGym.Name = "checkBoxDeployToGym";
-            this.checkBoxDeployToGym.Size = new System.Drawing.Size(95, 17);
+            this.checkBoxDeployToGym.Size = new System.Drawing.Size(100, 17);
             this.checkBoxDeployToGym.TabIndex = 51;
-            this.checkBoxDeployToGym.Text = "Deploy to Gym";
+            this.checkBoxDeployToGym.Text = "Deploy to Gyms";
             this.checkBoxDeployToGym.UseVisualStyleBackColor = true;
             // 
             // checkBoxEnableBattles
@@ -760,9 +771,9 @@
             this.checkBoxEnableBattles.Location = new System.Drawing.Point(287, 166);
             this.checkBoxEnableBattles.Margin = new System.Windows.Forms.Padding(2);
             this.checkBoxEnableBattles.Name = "checkBoxEnableBattles";
-            this.checkBoxEnableBattles.Size = new System.Drawing.Size(82, 17);
+            this.checkBoxEnableBattles.Size = new System.Drawing.Size(93, 17);
             this.checkBoxEnableBattles.TabIndex = 50;
-            this.checkBoxEnableBattles.Text = "Gym Battles";
+            this.checkBoxEnableBattles.Text = "Battle in Gyms";
             this.checkBoxEnableBattles.UseVisualStyleBackColor = true;
             // 
             // checkBoxSpinGyms
@@ -2105,17 +2116,6 @@
             this.restoreDefaultsToolStripMenuItem2.Size = new System.Drawing.Size(159, 22);
             this.restoreDefaultsToolStripMenuItem2.Text = "Restore Defaults";
             this.restoreDefaultsToolStripMenuItem2.Click += new System.EventHandler(this.RestoreDefaultsToolStripMenuItem2_Click);
-            // 
-            // checkBoxTransferAtOnce
-            // 
-            this.checkBoxTransferAtOnce.AutoSize = true;
-            this.checkBoxTransferAtOnce.Location = new System.Drawing.Point(131, 39);
-            this.checkBoxTransferAtOnce.Margin = new System.Windows.Forms.Padding(2);
-            this.checkBoxTransferAtOnce.Name = "checkBoxTransferAtOnce";
-            this.checkBoxTransferAtOnce.Size = new System.Drawing.Size(107, 17);
-            this.checkBoxTransferAtOnce.TabIndex = 74;
-            this.checkBoxTransferAtOnce.Text = "Transfer At Once";
-            this.checkBoxTransferAtOnce.UseVisualStyleBackColor = true;
             // 
             // AccountSettingsForm
             // 

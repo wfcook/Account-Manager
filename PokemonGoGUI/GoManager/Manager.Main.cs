@@ -774,8 +774,8 @@ namespace PokemonGoGUI.GoManager
 
                         UpdateItemList();
 
-                        int remainingBalls = RemainingPokeballs();
-
+                        var remainingBalls = RemainingPokeballs();
+                        LogCaller(new LoggerEventArgs("Remaining Balls: " + remainingBalls, LoggerTypes.Debug));
                         if (remainingBalls > 0)
                         {
                             //Catch nearby pokemon
@@ -805,6 +805,7 @@ namespace PokemonGoGUI.GoManager
 
                         //Search
                         double filledInventorySpace = FilledInventoryStorage();
+                        LogCaller(new LoggerEventArgs("% Filled Inventory Storage: "+ filledInventorySpace, LoggerTypes.Debug));
 
                         if ( (filledInventorySpace < UserSettings.SearchFortBelowPercent) && (filledInventorySpace <= 100) )
                         {

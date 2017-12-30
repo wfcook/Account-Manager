@@ -46,6 +46,8 @@ namespace PokemonGoGUI.GoManager
             {
                 return new MethodResult();
             }
+            
+            LogCaller(new LoggerEventArgs("Catchable Pokemons: " + catchableResponse.Data.Count, LoggerTypes.Debug));
 
             foreach(MapPokemon pokemon in catchableResponse.Data)
             {

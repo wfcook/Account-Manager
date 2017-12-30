@@ -17,8 +17,9 @@ namespace PokemonGoGUI.GoManager
         {
 
             var cells = _client.ClientSession.Map.Cells;
-            List<MapPokemon> newCatchablePokemons = cells.SelectMany(x => x.CatchablePokemons).
-                                        Where(PokemonWithinCatchSettings).ToList();
+            
+            //         Where(PokemonWithinCatchSettings) <-- Unneeded, will be filtered after.
+            List<MapPokemon> newCatchablePokemons = cells.SelectMany(x => x.CatchablePokemons).ToList();
 
             return new MethodResult<List<MapPokemon>>
             {
