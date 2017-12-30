@@ -595,12 +595,6 @@ namespace PokemonGoGUI.GoManager
 
                     await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
-                    //Get profile data
-                    LogCaller(new LoggerEventArgs("Grabbing player data ...", LoggerTypes.Debug));
-                    result = await GetPlayer();
-
-                    await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
-
                     //Auto complete tutorials
                     if (UserSettings.CompleteTutorial)
                     {
