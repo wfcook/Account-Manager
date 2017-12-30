@@ -26,20 +26,12 @@ namespace PokemonGoGUI.GoManager
 
             bool success = true;
 
-            if (PlayerData == null)
-            {
-                MethodResult result = await GetPlayer();
-
-                if (!result.Success)
-                {
-                    return result;
-                }
-
-                await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
+            if (PlayerData == null) {
+                return new MethodResult{ Success = false };
             }
 
 
-            List<TutorialState> startupTutorials = new List<TutorialState>
+            var startupTutorials = new List<TutorialState>
             {
                 TutorialState.AccountCreation,
                 TutorialState.AvatarSelection,
@@ -82,7 +74,7 @@ namespace PokemonGoGUI.GoManager
             }
 
             //Complete encounter
-            List<PokemonId> pokemon = new List<PokemonId>
+            var pokemon = new List<PokemonId>
             {
                 PokemonId.Charmander,
                 PokemonId.Bulbasaur,
@@ -149,7 +141,6 @@ namespace PokemonGoGUI.GoManager
                 LogCaller(new LoggerEventArgs("Tutorial completion request wasn't successful", LoggerTypes.Success));
 
                 _client.ClientSession.Player.Data = markTutorialCompleteResponse.PlayerData;
-                PlayerData = _client.ClientSession.Player.Data;
 
                 return new MethodResult
                 {
@@ -199,7 +190,7 @@ namespace PokemonGoGUI.GoManager
         {
             try
             {
-                PlayerAvatar avatar = new PlayerAvatar();
+                var avatar = new PlayerAvatar();
 
                 var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                 {

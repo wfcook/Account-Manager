@@ -36,25 +36,6 @@ namespace PokemonGoGUI.GoManager
             };
         }
 
-        public async Task<MethodResult> GetPlayer()
-        {
-            if (!_client.LoggedIn)
-            {
-                MethodResult result = await Login_();
-
-                if (!result.Success)
-                {
-                    return result;
-                }
-            }
-
-            PlayerData = _client.ClientSession.Player.Data;
-
-            return new MethodResult
-            {
-                Success = true
-            };
-        }
 
         public async Task<MethodResult> ExportStats()
         {
