@@ -50,8 +50,8 @@ namespace PokemonGoGUI.GoManager
 
         public void UpdatePokemon()
         {
-            Pokemon = _client.ClientSession.Player.Inventory.InventoryItems.Select(item => item.InventoryItemData.PokemonData).Where(item => item != null && item.PokemonId > 0).Where(item => item.IsEgg = false).ToList();
-            Eggs = _client.ClientSession.Player.Inventory.InventoryItems.Select(item => item.InventoryItemData.PokemonData).Where(item => item != null && item.PokemonId > 0).Where(item => item.IsEgg = true).ToList();
+            Pokemon = _client.ClientSession.Player.Inventory.InventoryItems.Select(item => item.InventoryItemData.PokemonData).Where(item => item != null && item.PokemonId > 0 && !item.IsEgg).ToList();
+            Eggs = _client.ClientSession.Player.Inventory.InventoryItems.Select(item => item.InventoryItemData.PokemonData).Where(item => item != null && item.PokemonId > 0 && item.IsEgg).ToList();
         }
 
         public void UpdatePokedex()
