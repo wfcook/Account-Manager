@@ -29,12 +29,8 @@ namespace PokemonGoGUI.GoManager
                 int returnDelay = baseDelay + currentOffset;
 
                 //API throttles
-                if(returnDelay <= 500)
-                {
-                    return 500;
-                }
+                return returnDelay <= 500 ? 500 : returnDelay;
 
-                return returnDelay;
             }
         }
 
@@ -210,7 +206,7 @@ namespace PokemonGoGUI.GoManager
                 });
 
                 DownloadItemTemplatesResponse downloadItemTemplatesResponse = null;
-                RepeatedField<DownloadItemTemplatesResponse.Types.ItemTemplate> item_templates = new RepeatedField<DownloadItemTemplatesResponse.Types.ItemTemplate>();
+                var item_templates = new RepeatedField<DownloadItemTemplatesResponse.Types.ItemTemplate>();
 
                 downloadItemTemplatesResponse = DownloadItemTemplatesResponse.Parser.ParseFrom(response);
 
