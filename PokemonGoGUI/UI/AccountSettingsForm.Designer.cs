@@ -196,6 +196,11 @@
             this.toolTipProxy = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipMinAccountState = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipHumanizeThrows = new System.Windows.Forms.ToolTip(this.components);
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.numericUpDownProximity = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDownAwareness = new System.Windows.Forms.NumericUpDown();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             this.tabControlMain.SuspendLayout();
             this.tabPageDetails.SuspendLayout();
             this.tabControlSettings.SuspendLayout();
@@ -232,6 +237,9 @@
             this.tabPageTransfer.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewTransfer)).BeginInit();
             this.contextMenuStripTransfer.SuspendLayout();
+            this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownProximity)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownAwareness)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControlMain
@@ -1330,6 +1338,7 @@
             // 
             // tabPageHumanization
             // 
+            this.tabPageHumanization.Controls.Add(this.groupBox1);
             this.tabPageHumanization.Controls.Add(this.numericUpDownLocationUpdateDelay);
             this.tabPageHumanization.Controls.Add(this.numericUpDownLocationUpdateRandom);
             this.tabPageHumanization.Controls.Add(this.numericUpDownGeneralDelayRandom);
@@ -2117,6 +2126,87 @@
             this.restoreDefaultsToolStripMenuItem2.Text = "Restore Defaults";
             this.restoreDefaultsToolStripMenuItem2.Click += new System.EventHandler(this.RestoreDefaultsToolStripMenuItem2_Click);
             // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.label2);
+            this.groupBox1.Controls.Add(this.label1);
+            this.groupBox1.Controls.Add(this.numericUpDownAwareness);
+            this.groupBox1.Controls.Add(this.numericUpDownProximity);
+            this.groupBox1.Location = new System.Drawing.Point(97, 76);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(204, 77);
+            this.groupBox1.TabIndex = 8;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "AR Bonus";
+            // 
+            // numericUpDownProximity
+            // 
+            this.numericUpDownProximity.DecimalPlaces = 3;
+            this.numericUpDownProximity.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.numericUpDownProximity.Location = new System.Drawing.Point(102, 18);
+            this.numericUpDownProximity.Margin = new System.Windows.Forms.Padding(2);
+            this.numericUpDownProximity.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.numericUpDownProximity.Name = "numericUpDownProximity";
+            this.numericUpDownProximity.Size = new System.Drawing.Size(83, 20);
+            this.numericUpDownProximity.TabIndex = 3;
+            this.numericUpDownProximity.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // numericUpDownAwareness
+            // 
+            this.numericUpDownAwareness.DecimalPlaces = 3;
+            this.numericUpDownAwareness.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.numericUpDownAwareness.Location = new System.Drawing.Point(102, 42);
+            this.numericUpDownAwareness.Margin = new System.Windows.Forms.Padding(2);
+            this.numericUpDownAwareness.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.numericUpDownAwareness.Name = "numericUpDownAwareness";
+            this.numericUpDownAwareness.Size = new System.Drawing.Size(83, 20);
+            this.numericUpDownAwareness.TabIndex = 4;
+            this.numericUpDownAwareness.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(9, 20);
+            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(51, 13);
+            this.label1.TabIndex = 5;
+            this.label1.Text = "Proximity:";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(9, 44);
+            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(62, 13);
+            this.label2.TabIndex = 6;
+            this.label2.Text = "Awareness:";
+            // 
             // AccountSettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2174,6 +2264,10 @@
             this.tabPageTransfer.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewTransfer)).EndInit();
             this.contextMenuStripTransfer.ResumeLayout(false);
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownProximity)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownAwareness)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -2347,5 +2441,10 @@
         private System.Windows.Forms.CheckBox checkBoxGetARBonus;
         private System.Windows.Forms.ToolStripMenuItem setUsePinapToolStripMenuItem;
         private System.Windows.Forms.CheckBox checkBoxTransferAtOnce;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.NumericUpDown numericUpDownAwareness;
+        private System.Windows.Forms.NumericUpDown numericUpDownProximity;
     }
 }

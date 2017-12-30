@@ -110,7 +110,7 @@ namespace PokemonGoGUI.GoManager
                                     evolvePokemonResponse.ExperienceAwarded,
                                     pokemon.Cp,
                                     evolvePokemonResponse.EvolvedPokemonData.Cp,
-                                    CalculateIVPerfection(evolvePokemonResponse.EvolvedPokemonData).Data),
+                                    CalculateIVPerfection(evolvePokemonResponse.EvolvedPokemonData)),
                                     LoggerTypes.Evolve));
 
                     await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
@@ -230,7 +230,7 @@ namespace PokemonGoGUI.GoManager
                 }
 
                 Candy pokemonCandy = PokemonCandy.FirstOrDefault(x => x.FamilyId == setting.FamilyId);
-                List<PokemonData> pokemonGroupToEvolve = group.Where(x => x.Cp >= evolveSetting.MinCP).OrderByDescending(x => CalculateIVPerfection(x).Data).ToList();
+                List<PokemonData> pokemonGroupToEvolve = group.Where(x => x.Cp >= evolveSetting.MinCP).OrderByDescending(x => CalculateIVPerfection(x)).ToList();
 
                 if(pokemonCandy == null)
                 {

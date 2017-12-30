@@ -192,14 +192,10 @@ namespace PokemonGoGUI.UI
             olvColumnPerfectPercent.AspectGetter = delegate(object x)
             {
                 var pokemon = (PokemonData)x;
-                MethodResult<double> settings = _manager.CalculateIVPerfection(pokemon);
+                double settings = Manager.CalculateIVPerfection(pokemon);
 
-                if (!settings.Success)
-                {
-                    return -1;
-                }
 
-                string sDouble = String.Format("{0:0.00}", settings.Data);
+                string sDouble = String.Format("{0:0.00}", settings);
 
                 return double.Parse(sDouble);// +settings.Data.Stats.BaseStamina;
             };
@@ -229,7 +225,7 @@ namespace PokemonGoGUI.UI
             #endregion
         }
 
-        private async void DetailsForm_Load(object sender, EventArgs e)
+        private void DetailsForm_Load(object sender, EventArgs e)
         {
             this.Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
 
@@ -259,16 +255,7 @@ namespace PokemonGoGUI.UI
 
             _manager.OnLog += _manager_OnLog;
 
-            _manager.UpdateInventory();
             DisplayDetails();
-            UpdateListViews();
-
-            if (_manager.State == BotState.Stopped)
-            {
-                await UpdateDetails();
-            }
-            DisplayDetails();
-            UpdateListViews();
 
         }
 
@@ -369,15 +356,6 @@ namespace PokemonGoGUI.UI
             }
         }
 
-        private void UpdateListViews()
-        {
-            fastObjectListViewPokedex.SetObjects(_manager.Pokedex);
-            fastObjectListViewPokemon.SetObjects(_manager.Pokemon);
-            fastObjectListViewCandy.SetObjects(_manager.PokemonCandy);
-            fastObjectListViewInventory.SetObjects(_manager.Items);
-            fastObjectListViewLogs.SetObjects(_manager.Logs);
-            fastObjectListViewEggs.SetObjects(_manager.Eggs);
-        }
 
         private async void ButtonUpdateStats_Click(object sender, EventArgs e)
         {
@@ -558,15 +536,21 @@ namespace PokemonGoGUI.UI
 
         private void TabControlMain_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (tabControlMain.SelectedTab == tabPageLogs)
-            {
+            if (tabControlMain.SelectedTab == tabPageLogs) {
                 _totalLogs = _manager.TotalLogs;
-
                 tabPageLogs.Text = "Logs";
-            }
-            else if(tabControlMain.SelectedTab == tabPagePokemon)
-            {
+            } else if (tabControlMain.SelectedTab == tabPagePokemon) {
                 fastObjectListViewPokemon.SetObjects(_manager.Pokemon);
+            } else if (tabControlMain.SelectedTab == tabPageCandy) {
+                fastObjectListViewCandy.SetObjects(_manager.PokemonCandy);
+            } else if (tabControlMain.SelectedTab == tabPageEggs) {
+                fastObjectListViewEggs.SetObjects(_manager.Eggs);
+            } else if (tabControlMain.SelectedTab == tabPageInventory) {
+                fastObjectListViewInventory.SetObjects(_manager.Items);
+            } else if (tabControlMain.SelectedTab == tabPagePokedex) {
+                fastObjectListViewPokedex.SetObjects(_manager.Pokedex);
+            } else if (tabControlMain.SelectedTab == tabPageStats) {
+                DisplayDetails();
             }
         }
 

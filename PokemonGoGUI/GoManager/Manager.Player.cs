@@ -91,13 +91,10 @@ namespace PokemonGoGUI.GoManager
                         }
                     }
 
-                    MethodResult<double> perfectResult = CalculateIVPerfection(pokemon);
+                    double perfectResult = CalculateIVPerfection(pokemon);
                     string iv = "Unknown";
 
-                    if (perfectResult.Success)
-                    {
-                        iv = Math.Round(perfectResult.Data, 2).ToString() + "%";
-                    }
+                    iv = Math.Round(perfectResult, 2).ToString() + "%";
 
                     builder.AppendLine(String.Format("Pokemon: {0,-10} CP: {1, -5} IV: {2,-7} Primary: {3, -14} Secondary: {4, -14} Candy: {5}", pokemon.PokemonId, pokemon.Cp, iv, pokemon.Move1.ToString().Replace("Fast", ""), pokemon.Move2, candy));
                 }

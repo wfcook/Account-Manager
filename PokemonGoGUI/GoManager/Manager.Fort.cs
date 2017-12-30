@@ -241,9 +241,7 @@ namespace PokemonGoGUI.GoManager
                     }.ToByteString()
                 });
 
-                FortDetailsResponse fortDetailsResponse = null;
-
-                fortDetailsResponse = FortDetailsResponse.Parser.ParseFrom(response);
+                var fortDetailsResponse = FortDetailsResponse.Parser.ParseFrom(response);
 
                 return new MethodResult<FortDetailsResponse>
                 {
@@ -253,12 +251,12 @@ namespace PokemonGoGUI.GoManager
             }
             catch (Exception ex)
             {
-                LogCaller(new LoggerEventArgs("Failed gym get info response", LoggerTypes.Exception, ex));
+                LogCaller(new LoggerEventArgs("Failed getting fort info", LoggerTypes.Exception, ex));
 
                 return new MethodResult<FortDetailsResponse>
                 {
                     Data = new FortDetailsResponse () ,
-                    Message = "Failed gym get info response"
+                    Message = "Failed getting fort info"
                 };
             }
         }
@@ -290,12 +288,12 @@ namespace PokemonGoGUI.GoManager
             }
             catch (Exception ex)
             {
-                LogCaller(new LoggerEventArgs("Failed gym get info response", LoggerTypes.Exception, ex));
+                LogCaller(new LoggerEventArgs("Failed getting gym info", LoggerTypes.Exception, ex));
 
                 return new MethodResult<GymGetInfoResponse>
                 {
                     Data = new GymGetInfoResponse { Result = GymGetInfoResponse.Types.Result.Unset },
-                    Message = "Failed gym get info response"
+                    Message = "Failed getting gym info"
                 };
             }
         }

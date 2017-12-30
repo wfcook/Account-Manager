@@ -65,7 +65,7 @@ namespace PokemonGoGUI.GoManager
                 Username = UserSettings.Username,
                 Password = UserSettings.Password,
                 Pokedex = Pokedex.Select(x => new PokedexEntryExportModel(x)).ToList(),
-                Pokemon = Pokemon.Select(x => new PokemonDataExportModel(x, CalculateIVPerfection(x).Data)).ToList(),
+                Pokemon = Pokemon.Select(x => new PokemonDataExportModel(x, CalculateIVPerfection(x))).ToList(),
                 Items = Items.Select(x => new ItemDataExportModel(x)).ToList(),
                 Eggs = Eggs.Select(x => new EggDataExportModel(x)).ToList()
             };

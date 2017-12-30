@@ -120,6 +120,16 @@ namespace PokemonGoGUI
             set;
         }
 
+        public decimal ARBonusProximity {
+            get;
+            set;
+        }
+
+        public decimal ARBonusAwareness {
+            get;
+            set;
+        }
+
         public bool CompleteTutorial {
             get;
             set;

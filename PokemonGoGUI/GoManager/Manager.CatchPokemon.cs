@@ -199,7 +199,7 @@ namespace PokemonGoGUI.GoManager
                     if (UserSettings.UseBerries){
                         bool isLowProbability = probability < 0.35;
                         bool isHighCp = eResponse.PokemonData.Cp > 700;
-                        bool isHighPerfection = CalculateIVPerfection(eResponse.PokemonData).Data > 90;
+                        bool isHighPerfection = CalculateIVPerfection(eResponse.PokemonData) > 90;
     
                         if (!berryUsed){
                             if ((isLowProbability && isHighCp) || isHighPerfection)
@@ -236,8 +236,9 @@ namespace PokemonGoGUI.GoManager
                     //End humanization
                     var arPlusValues = new ARPlusEncounterValues();
                     if (UserSettings.GetArBonus ){
-                        arPlusValues.Awareness = 1;
-                        arPlusValues.Proximity = 1;
+                        LogCaller(new LoggerEventArgs("Using AR Bonus Values", LoggerTypes.Debug));
+                        arPlusValues.Awareness = (float) UserSettings.ARBonusAwareness;
+                        arPlusValues.Proximity = (float) UserSettings.ARBonusProximity;
                         arPlusValues.PokemonFrightened = false;
                     }
                         
@@ -246,19 +247,19 @@ namespace PokemonGoGUI.GoManager
                         RequestType = RequestType.CatchPokemon,
                         RequestMessage = new CatchPokemonMessage
                         {
+                            ArPlusValues = arPlusValues,
                             EncounterId = fortData.LureInfo.EncounterId,
                             HitPokemon = hitInsideReticule,
                             NormalizedHitPosition = 1,
                             NormalizedReticleSize = reticuleSize,
                             Pokeball = pokeBall,
                             SpawnPointId = fortData.Id,
-                            SpinModifier = 1,
-                            ArPlusValues = arPlusValues
+                            SpinModifier = 1
                         }.ToByteString()
                     });
 
                     catchPokemonResponse = CatchPokemonResponse.Parser.ParseFrom(catchresponse);
-                    string pokemon = String.Format("Name: {0}, CP: {1}, IV: {2:0.00}%", fortData.LureInfo.ActivePokemonId, eResponse.PokemonData.Cp, CalculateIVPerfection(eResponse.PokemonData).Data);
+                    string pokemon = String.Format("Name: {0}, CP: {1}, IV: {2:0.00}%", fortData.LureInfo.ActivePokemonId, eResponse.PokemonData.Cp, CalculateIVPerfection(eResponse.PokemonData));
 
                     if (catchPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchSuccess)
                     {
@@ -385,7 +386,7 @@ namespace PokemonGoGUI.GoManager
 
                     bool isLowProbability = probability < 0.40;
                     bool isHighCp = eResponse.WildPokemon.PokemonData.Cp > 800;
-                    bool isHighPerfection = CalculateIVPerfection(eResponse.WildPokemon.PokemonData).Data > 95;
+                    bool isHighPerfection = CalculateIVPerfection(eResponse.WildPokemon.PokemonData) > 95;
 
                     if (UserSettings.UseBerries){
                         if ((isLowProbability && isHighCp) || isHighPerfection)
@@ -417,12 +418,20 @@ namespace PokemonGoGUI.GoManager
                         reticuleSize = (double)_rand.Next(10, 195) / 100;
                         hitInsideReticule = HitInsideReticle();
                     }
+                    var arPlusValues = new ARPlusEncounterValues();
+                    if (UserSettings.GetArBonus ){
+                        LogCaller(new LoggerEventArgs("Using AR Bonus Values", LoggerTypes.Debug));
+                        arPlusValues.Awareness = (float) UserSettings.ARBonusAwareness;
+                        arPlusValues.Proximity = (float) UserSettings.ARBonusProximity;
+                        arPlusValues.PokemonFrightened = false;
+                    }
 
                     var catchresponse = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                     {
                         RequestType = RequestType.CatchPokemon,
                         RequestMessage = new CatchPokemonMessage
                         {
+                            ArPlusValues = arPlusValues,
                             EncounterId = mapPokemon.EncounterId,
                             HitPokemon = hitInsideReticule,
                             NormalizedHitPosition = 1,
@@ -435,7 +444,7 @@ namespace PokemonGoGUI.GoManager
 
                     catchPokemonResponse = CatchPokemonResponse.Parser.ParseFrom(catchresponse);
 
-                    string pokemon = String.Format("Name: {0}, CP: {1}, IV: {2:0.00}%", mapPokemon.PokemonId, eResponse.WildPokemon.PokemonData.Cp, CalculateIVPerfection(eResponse.WildPokemon.PokemonData).Data);
+                    string pokemon = String.Format("Name: {0}, CP: {1}, IV: {2:0.00}%", mapPokemon.PokemonId, eResponse.WildPokemon.PokemonData.Cp, CalculateIVPerfection(eResponse.WildPokemon.PokemonData));
                     string pokeBallName = pokeBall.ToString().Replace("Item", "");
 
                     if (catchPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchSuccess)

@@ -39,7 +39,7 @@ namespace PokemonGoGUI.GoManager
                                 String.Format("Successully transferred {0}. Cp: {1}. IV: {2:0.00}%",
                                     pokemon.PokemonId,
                                     pokemon.Cp,
-                                    CalculateIVPerfection(pokemon).Data),
+                                    CalculateIVPerfection(pokemon)),
                                 LoggerTypes.Transfer));
     
                             await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
@@ -211,13 +211,9 @@ namespace PokemonGoGUI.GoManager
             var toTransfer = new List<PokemonData>();
 
             foreach (PokemonData pData in pokemon) {
-                MethodResult<double> perfectResult = CalculateIVPerfection(pData);
+                double perfectResult = CalculateIVPerfection(pData);
 
-                if (!perfectResult.Success) {
-                    continue;
-                }
-
-                if (perfectResult.Data >= 0 && perfectResult.Data < percent && pData.Cp < minCp) {
+                if (perfectResult >= 0 && perfectResult < percent && pData.Cp < minCp) {
                     toTransfer.Add(pData);
                 }
             }
@@ -235,13 +231,9 @@ namespace PokemonGoGUI.GoManager
             var toTransfer = new List<PokemonData>();
 
             foreach (PokemonData pData in pokemon) {
-                MethodResult<double> perfectResult = CalculateIVPerfection(pData);
+                double perfectResult = CalculateIVPerfection(pData);
 
-                if (!perfectResult.Success) {
-                    continue;
-                }
-
-                if (perfectResult.Data >= 0 && perfectResult.Data < percent) {
+                if (perfectResult >= 0 && perfectResult < percent) {
                     toTransfer.Add(pData);
                 }
             }
@@ -261,14 +253,9 @@ namespace PokemonGoGUI.GoManager
             }
 
             //Test out first one to make sure things are correct
-            MethodResult<double> perfectResult = CalculateIVPerfection(pokemon.First());
+            double perfectResult = CalculateIVPerfection(pokemon.First());
 
-            if (!perfectResult.Success) {
-                //Failed
-                return new List<PokemonData>();
-            }
-
-            return pokemon.OrderByDescending(x => CalculateIVPerfection(x).Data).ThenByDescending(x => x.Cp).Skip(amount).ToList();
+            return pokemon.OrderByDescending(x => CalculateIVPerfection(x)).ThenByDescending(x => x.Cp).Skip(amount).ToList();
         }
 
         private List<PokemonData> GetPokemonByPossibleEvolve(IGrouping<PokemonId, PokemonData> pokemon, int limit)
@@ -301,25 +288,11 @@ namespace PokemonGoGUI.GoManager
         }
 
         // NOTE: this is the real IV Percent, using only Individual values.
-        public MethodResult<double> CalculateIVPerfection(PokemonData pokemon)
+        public static double CalculateIVPerfection(PokemonData pokemon)
         {
-            MethodResult<PokemonSettings> settingResult = GetPokemonSetting(pokemon.PokemonId);
-
-            if (!settingResult.Success) {
-                return new MethodResult<double> {
-                    Data = -1,
-                    Message = settingResult.Message
-                };
-            }
             // NOTE: 45 points = 15 at points + 15 def points + 15 sta points
             //  100/45 simplifying is 20/9
-            var perfectPercent = ((double)pokemon.IndividualAttack + pokemon.IndividualDefense + pokemon.IndividualStamina) * 20 / 9;
-
-            return new MethodResult<double> {
-                Data = perfectPercent,
-                Message = "Success",
-                Success = true
-            };
+            return ((double)pokemon.IndividualAttack + pokemon.IndividualDefense + pokemon.IndividualStamina) * 20 / 9;
         }
 
         // This other Percent gives different IV % for the same IVs depending of the pokemon level.
@@ -391,7 +364,7 @@ namespace PokemonGoGUI.GoManager
                         String.Format("Successully {3} {0}. Cp: {1}. IV: {2:0.00}%",
                             pokemon.PokemonId,
                             pokemon.Cp,
-                            CalculateIVPerfection(pokemon).Data, message),
+                            CalculateIVPerfection(pokemon), message),
                         LoggerTypes.Info));
 
                     await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));

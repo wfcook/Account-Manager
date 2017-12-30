@@ -50,11 +50,16 @@ namespace PokemonGoGUI.GoManager
 
         public void UpdatePokemon()
         {
-            LogCaller(new LoggerEventArgs("Valid _client: " + (_client!=null), LoggerTypes.Debug));
-            LogCaller(new LoggerEventArgs("Valid ClientSession: " + (_client.ClientSession!=null), LoggerTypes.Debug));
-            LogCaller(new LoggerEventArgs("Valid Player: " + (_client.ClientSession.Player!=null), LoggerTypes.Debug));
-            LogCaller(new LoggerEventArgs("Valid Inventory: " + (_client.ClientSession.Player.Inventory!=null), LoggerTypes.Debug));
-            LogCaller(new LoggerEventArgs("Valid InventoryItems: " + (_client.ClientSession.Player.Inventory.InventoryItems!=null), LoggerTypes.Debug));
+            if (_client==null)
+                LogCaller(new LoggerEventArgs("Invalid _client Object ", LoggerTypes.Debug));
+            if (_client.ClientSession==null)
+                LogCaller(new LoggerEventArgs("Invalid ClientSession Object ", LoggerTypes.Debug));
+            if (_client.ClientSession.Player==null)
+                LogCaller(new LoggerEventArgs("Invalid Player Object ", LoggerTypes.Debug));
+            if (_client.ClientSession.Player.Inventory==null)
+                LogCaller(new LoggerEventArgs("Invalid Inventory Object", LoggerTypes.Debug));
+            if (_client.ClientSession.Player.Inventory.InventoryItems==null)
+                LogCaller(new LoggerEventArgs("Invalid InventoryItems Object", LoggerTypes.Debug));
             var pokemonDatas = _client.ClientSession.Player.Inventory.InventoryItems.Select(item => item.InventoryItemData.PokemonData);
             if (pokemonDatas!=null){
                 pokemonDatas = pokemonDatas.Where(item => item != null);

@@ -174,6 +174,9 @@ namespace PokemonGoGUI.UI
             checkBoxGetARBonus.Checked = settings.GetArBonus;
             checkBoxCompleteTutorial.Checked = settings.CompleteTutorial;
             checkBoxTransferAtOnce.Checked = settings.TransferAtOnce;
+            numericUpDownProximity.Value = settings.ARBonusProximity;
+            numericUpDownAwareness.Value = settings.ARBonusAwareness;
+            
             
 
             for(int i = 0; i < comboBoxMinAccountState.Items.Count; i++)
@@ -379,6 +382,9 @@ namespace PokemonGoGUI.UI
                 userSettings.ProxyIP = null;
                 userSettings.ProxyPort = 0;
             }
+            
+            userSettings.ARBonusProximity = numericUpDownProximity.Value;
+            userSettings.ARBonusAwareness = numericUpDownAwareness.Value;
 
             return true;
         }
