@@ -797,7 +797,6 @@
             this.checkBoxClaimLevelUp.TabIndex = 47;
             this.checkBoxClaimLevelUp.Text = "Claim Level Up";
             this.checkBoxClaimLevelUp.UseVisualStyleBackColor = true;
-            this.checkBoxClaimLevelUp.CheckedChanged += new System.EventHandler(this.checkBoxClaimLevelUp_CheckedChanged);
             // 
             // tabPageProxy
             // 
@@ -1167,7 +1166,6 @@
             this.textBoxDeviceModel.Name = "textBoxDeviceModel";
             this.textBoxDeviceModel.Size = new System.Drawing.Size(250, 20);
             this.textBoxDeviceModel.TabIndex = 4;
-            this.textBoxDeviceModel.TextChanged += new System.EventHandler(this.textBoxDeviceModel_TextChanged);
             // 
             // textBoxFirmwareType
             // 

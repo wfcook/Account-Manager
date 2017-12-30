@@ -683,14 +683,6 @@ namespace PokemonGoGUI.UI
         {
             checkBoxRemoveOnStop.Enabled = checkBoxAutoRotateProxies.Checked;
         }
-        void checkBoxClaimLevelUp_CheckedChanged(object sender, EventArgs e)
-        {
-          
-        }
-        void textBoxDeviceModel_TextChanged(object sender, EventArgs e)
-        {
-          
-        }
 
         private void AccountSettingsForm_FormClosing(object sender, FormClosingEventArgs e)
         {
