@@ -259,6 +259,7 @@ namespace PokemonGoGUI.UI
 
             _manager.OnLog += _manager_OnLog;
 
+            _manager.UpdateInventory();
             DisplayDetails();
             UpdateListViews();
 
@@ -266,15 +267,9 @@ namespace PokemonGoGUI.UI
             {
                 await UpdateDetails();
             }
-
             DisplayDetails();
             UpdateListViews();
 
-            // TODO: review it, but seems that now is working well the pokesetting with 3rd gen.
-            //if (_manager.PokeSettings !=null )
-            //    foreach (var element in _manager.PokeSettings) {
-            //        _manager.LogCaller(new LoggerEventArgs(String.Format("Pokemon: {0}, Family: {1}", element.Key, element.Value.FamilyId), LoggerTypes.Debug));
-            //    }
         }
 
         private void _manager_OnLog(object sender, LoggerEventArgs e)
@@ -317,11 +312,6 @@ namespace PokemonGoGUI.UI
             _manager.LogHeaderSettings = fastObjectListViewLogs.SaveState();
         }
 
-        private void _manager_OnInventoryUpdate(object sender, EventArgs e)
-        {
-            DisplayDetails();
-            UpdateListViews();
-        }
 
         private async Task UpdateDetails()
         {
@@ -382,7 +372,7 @@ namespace PokemonGoGUI.UI
         private void UpdateListViews()
         {
             fastObjectListViewPokedex.SetObjects(_manager.Pokedex);
-            //fastObjectListViewPokemon.SetObjects(_manager.Pokemon);
+            fastObjectListViewPokemon.SetObjects(_manager.Pokemon);
             fastObjectListViewCandy.SetObjects(_manager.PokemonCandy);
             fastObjectListViewInventory.SetObjects(_manager.Items);
             fastObjectListViewLogs.SetObjects(_manager.Logs);
