@@ -108,37 +108,43 @@ namespace PokemonGoGUI.GoManager
                     }
                 }
 
-                var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
-                {
-                    RequestType = RequestType.DownloadItemTemplates,
-                    RequestMessage = new DownloadItemTemplatesMessage
-                    {
-                        PageOffset = 0,
-                        Paginate = false,
-                        PageTimestamp = 0
-                    }.ToByteString()
-                });
-
-
-                var downloadItemTemplatesResponse = DownloadItemTemplatesResponse.Parser.ParseFrom(response);
                 var pokemonSettings = new Dictionary<PokemonId, PokemonSettings>();
-
-                foreach (var template in downloadItemTemplatesResponse.ItemTemplates)
-                {
-                    if (template.PlayerLevel != null)
+                var pageOffset = 0;
+                var timestamp = 0ul;
+                do{
+                    var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                     {
-                        LevelSettings = template.PlayerLevel;
-
-                        continue;
-                    }
-
-                    if (template.PokemonSettings == null)
+                        RequestType = RequestType.DownloadItemTemplates,
+                        RequestMessage = new DownloadItemTemplatesMessage
+                        {
+                            PageOffset = pageOffset,
+                            Paginate = true,
+                            PageTimestamp = timestamp
+                        }.ToByteString()
+                    });
+    
+    
+                    var downloadItemTemplatesResponse = DownloadItemTemplatesResponse.Parser.ParseFrom(response);
+                    
+                    pageOffset = downloadItemTemplatesResponse.PageOffset;
+                    timestamp = downloadItemTemplatesResponse.TimestampMs;
+                    
+    
+                    foreach (var template in downloadItemTemplatesResponse.ItemTemplates)
                     {
-                        continue;
+                        if (template.PlayerLevel != null)
+                        {
+                            LevelSettings = template.PlayerLevel;
+    
+                            continue;
+                        }
+    
+                        if (template.PokemonSettings != null)
+                        {
+                            pokemonSettings.Add(template.PokemonSettings.PokemonId, template.PokemonSettings);
+                        }
                     }
-
-                    pokemonSettings.Add(template.PokemonSettings.PokemonId, template.PokemonSettings);
-                }
+                }while (pageOffset != 0);
 
                 PokeSettings = pokemonSettings;
 

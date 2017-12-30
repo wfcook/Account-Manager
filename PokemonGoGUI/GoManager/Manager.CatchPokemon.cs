@@ -537,7 +537,7 @@ namespace PokemonGoGUI.GoManager
 
         private bool PokemonWithinCatchSettings(MapPokemon pokemon)
         {
-            CatchSetting catchSettings = UserSettings.CatchSettings.FirstOrDefault(x => x.Id == pokemon.PokemonId);
+            CatchSetting catchSettings = UserSettings?.CatchSettings.FirstOrDefault(x => x.Id == pokemon.PokemonId);
 
             if(catchSettings == null)
             {
