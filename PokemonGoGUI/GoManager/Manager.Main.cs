@@ -805,7 +805,7 @@ namespace PokemonGoGUI.GoManager
 
                         //Search
                         double filledInventorySpace = FilledInventoryStorage();
-                        LogCaller(new LoggerEventArgs("% Filled Inventory Storage: "+ filledInventorySpace, LoggerTypes.Debug));
+                        LogCaller(new LoggerEventArgs(String.Format("Filled Inventory Storage: {0:0.00}%", filledInventorySpace), LoggerTypes.Debug));
 
                         if ( (filledInventorySpace < UserSettings.SearchFortBelowPercent) && (filledInventorySpace <= 100) )
                         {
