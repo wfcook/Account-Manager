@@ -1,5 +1,13 @@
 # Change Log
 
+## [v2.21.1.14](https://github.com/Furtif/Account-Manager/tree/v2.21.1.14) (2017-12-31)
+
+[Full Changelog](https://github.com/Furtif/Account-Manager/compare/v2.21.1.13...v2.21.1.14)
+
+**Merged pull requests:**
+
+- Display candies. Display pokeball name catch lured pokemon [\#49](https://github.com/Furtif/Account-Manager/pull/49) ([javisabalete](https://github.com/javisabalete))
+
 ## [v2.21.1.13](https://github.com/Furtif/Account-Manager/tree/v2.21.1.13) (2017-12-31)
 
 [Full Changelog](https://github.com/Furtif/Account-Manager/compare/v2.21.1.12...v2.21.1.13)
