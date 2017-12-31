@@ -111,7 +111,6 @@ namespace PokemonGoGUI.GoManager
                 {
                     Success = true
                 };
-
             }
         }
 
@@ -124,7 +123,6 @@ namespace PokemonGoGUI.GoManager
             {
                 return new MethodResult();
             }
-
 
             LogCaller(new LoggerEventArgs(String.Format("Transferring {0} pokemon", transferResult.Data.Count), LoggerTypes.Info));
 
@@ -301,7 +299,6 @@ namespace PokemonGoGUI.GoManager
         private List<PokemonData> GetPokemonByPossibleEvolve(IGrouping<PokemonId, PokemonData> pokemon, int limit)
         {
             PokemonSettings setting = null;
-
             if (!PokeSettings.TryGetValue(pokemon.Key, out setting))
             {
                 LogCaller(new LoggerEventArgs(String.Format("Failed to find settings for pokemon {0}", pokemon.Key), LoggerTypes.Info));
