@@ -79,7 +79,7 @@ namespace PokemonGoGUI
                 VersionStr = Configuration.Hasher.PokemonVersion;
                 AppVersion = Configuration.Hasher.AppVersion;
                 //Revise sleeping line 118
-                //((PokeHashHasher)Configuration.Hasher).PokehashSleeping += OnPokehashSleeping;
+                ((PokeHashHasher)Configuration.Hasher).PokehashSleeping += OnPokehashSleeping;
             }
             // *****
 
