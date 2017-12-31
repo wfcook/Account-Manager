@@ -36,21 +36,21 @@ namespace PokemonGoGUI.GoManager
 
         public void UpdateItemList()
         {
-            Items = _client.ClientSession.Player.Inventory.InventoryItems.Where(x => x.InventoryItemData.Item != null).Select(x => x.InventoryItemData.Item).ToList();
+            Items = _client.ClientSession.Player.Inventory.InventoryItems.Where(x => x.InventoryItemData?.Item != null).Select(x => x.InventoryItemData.Item).ToList();
         }
 
         public void UpdatePlayerStats()
         {
             InventoryItem item = _client.ClientSession.Player.Inventory.InventoryItems.FirstOrDefault(
-                                     x => x.InventoryItemData.PlayerStats != null);
+                                     x => x.InventoryItemData?.PlayerStats != null);
 
-            Stats = item?.InventoryItemData?.PlayerStats;
+            Stats = item.InventoryItemData.PlayerStats;
         }
 
 
         public void UpdatePokemon()
         {
-            if (_client==null)
+            /*if (_client==null)
                 LogCaller(new LoggerEventArgs("Invalid _client Object ", LoggerTypes.Debug));
             if (_client.ClientSession==null)
                 LogCaller(new LoggerEventArgs("Invalid ClientSession Object ", LoggerTypes.Debug));
@@ -60,27 +60,25 @@ namespace PokemonGoGUI.GoManager
                 LogCaller(new LoggerEventArgs("Invalid Inventory Object", LoggerTypes.Debug));
             if (_client.ClientSession.Player.Inventory.InventoryItems==null)
                 LogCaller(new LoggerEventArgs("Invalid InventoryItems Object", LoggerTypes.Debug));
-            var pokemonDatas = _client.ClientSession.Player.Inventory.InventoryItems.Select(item => item.InventoryItemData.PokemonData);
-            if (pokemonDatas!=null){
-                pokemonDatas = pokemonDatas.Where(item => item != null);
-                Pokemon = pokemonDatas.Where(item => !item.IsEgg).ToList();
-                Eggs = pokemonDatas?.Where(item => item.IsEgg).ToList();
-            }
+                */
+            var pokemonDatas = _client.ClientSession.Player.Inventory.InventoryItems.Select(item => item.InventoryItemData?.PokemonData);
+            Pokemon = pokemonDatas.Where(item =>  item != null && !item.IsEgg).ToList();
+            Eggs = pokemonDatas?.Where(item => item != null && item.IsEgg).ToList();
         }
 
         public void UpdatePokedex()
         {
-            Pokedex = _client.ClientSession.Player.Inventory.InventoryItems.Where(x => x.InventoryItemData.PokedexEntry != null).Select(x => x.InventoryItemData.PokedexEntry)?.ToList();
+            Pokedex = _client.ClientSession.Player.Inventory.InventoryItems.Where(x => x.InventoryItemData?.PokedexEntry != null).Select(x => x.InventoryItemData.PokedexEntry).ToList();
         }
 
         public void UpdateIncubators()
         {
-            Incubators = _client.ClientSession.Player.Inventory.InventoryItems.First(x => x.InventoryItemData.EggIncubators != null).InventoryItemData.EggIncubators.EggIncubator?.ToList();
+            Incubators = _client.ClientSession.Player.Inventory.InventoryItems.First(x => x.InventoryItemData?.EggIncubators != null).InventoryItemData.EggIncubators.EggIncubator.ToList();
         }
 
         public void UpdatePokemonCandy()
         {
-            PokemonCandy = _client.ClientSession.Player.Inventory.InventoryItems.Where(x => x.InventoryItemData.Candy != null).Select(x => x.InventoryItemData.Candy)?.ToList();
+            PokemonCandy = _client.ClientSession.Player.Inventory.InventoryItems.Where(x => x.InventoryItemData?.Candy != null).Select(x => x.InventoryItemData.Candy)?.ToList();
         }
 
         public async Task<MethodResult> RecycleFilteredItems()
