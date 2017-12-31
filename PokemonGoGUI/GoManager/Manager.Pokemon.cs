@@ -86,7 +86,7 @@ namespace PokemonGoGUI.GoManager
                     if (releasePokemonResponse.Result == ReleasePokemonResponse.Types.Result.Success)
                     {
                         LogCaller(new LoggerEventArgs(
-                            String.Format("Successully transferred {0} of {1} Pokemons.",
+                            String.Format("Successully candy awarded {0} of {1} Pokemons.",
                                 releasePokemonResponse.CandyAwarded,
                                 pokemonToTransfer.Count()),
                             LoggerTypes.Transfer));
@@ -106,6 +106,7 @@ namespace PokemonGoGUI.GoManager
 
                     return new MethodResult();
                 }
+
                 return new MethodResult
                 {
                     Success = true
