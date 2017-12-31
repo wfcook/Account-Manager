@@ -260,10 +260,12 @@ namespace PokemonGoGUI.GoManager
 
                     catchPokemonResponse = CatchPokemonResponse.Parser.ParseFrom(catchresponse);
                     string pokemon = String.Format("Name: {0}, CP: {1}, IV: {2:0.00}%", fortData.LureInfo.ActivePokemonId, eResponse.PokemonData.Cp, CalculateIVPerfection(eResponse.PokemonData));
+                    string pokeBallName = pokeBall.ToString().Replace("Item", "");
 
                     if (catchPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchSuccess)
                     {
                         int expGained = catchPokemonResponse.CaptureAward.Xp.Sum();
+                        int candyGained = catchPokemonResponse.CaptureAward.Candy.Sum();
 
                         Tracker.AddValues(1, 0);
 
@@ -273,7 +275,7 @@ namespace PokemonGoGUI.GoManager
 
                         fortData.LureInfo = null;
 
-                        LogCaller(new LoggerEventArgs(String.Format("Lured Pokemon Caught. {0}. Exp {1}. Attempt #{2}", pokemon, expGained, attemptCount), LoggerTypes.Success));
+                        LogCaller(new LoggerEventArgs(String.Format("Lured Pokemon Caught. {0}. Exp {1}. Candy {2}. Attempt #{3}. Ball: {4}", pokemon, expGained, candyGained, attemptCount, pokeBallName), LoggerTypes.Success));
 
                         return new MethodResult
                         {
@@ -455,6 +457,7 @@ namespace PokemonGoGUI.GoManager
                         _potentialPokemonBan = false;
 
                         int expGained = catchPokemonResponse.CaptureAward.Xp.Sum();
+                        int candyGained = catchPokemonResponse.CaptureAward.Candy.Sum();
 
                         ExpIncrease(expGained);
 
@@ -470,7 +473,7 @@ namespace PokemonGoGUI.GoManager
                         }
 
 
-                        LogCaller(new LoggerEventArgs(String.Format("Caught. {0}. Exp {1}. Attempt #{2}. Ball: {3}", pokemon, expGained, attemptCount, pokeBallName), LoggerTypes.Success));
+                        LogCaller(new LoggerEventArgs(String.Format("Caught. {0}. Exp {1}. Candy: {2}. Attempt #{3}. Ball: {4}", pokemon, expGained, candyGained, attemptCount, pokeBallName), LoggerTypes.Success));
 
                         return new MethodResult
                         {
