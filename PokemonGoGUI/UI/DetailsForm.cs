@@ -55,77 +55,44 @@ namespace PokemonGoGUI.UI
 
             #region Pokedex
 
-            olvColumnPokedexFriendlyName.AspectGetter = delegate(object x)
-            {
-                var entry = (PokedexEntry)x;
+            //ToString for sorting purposes
+            olvColumnPokedexFriendlyName.AspectGetter = (entry) => (int)(entry as PokedexEntry).PokemonId;
 
-                //ToString for sorting purposes
-                return (int)entry.PokemonId;
-            };
+            olvColumnPokedexId.AspectGetter = (entry) => (entry as PokedexEntry).PokemonId.ToString();
 
-            olvColumnPokedexId.AspectGetter = delegate(object x)
-            {
-                var entry = (PokedexEntry)x;
-
-                return entry.PokemonId.ToString();
-            };
-
-            olvColumnPokedexFriendlyName.AspectGetter = delegate(object x)
-            {
-                var entry = (PokedexEntry)x;
-
-                //ToString for sorting purposes
-                return (int)entry.PokemonId;
-            };
+            olvColumnPokedexFriendlyName.AspectGetter = (entry) => (int)(entry as PokedexEntry).PokemonId;
 
             #endregion
 
             #region Pokemon
 
            
-            olvColumnPokemonId.AspectGetter = delegate(object x)
+            olvColumnPokemonId.AspectGetter = ( pokemon) => (int)(pokemon as PokemonData).PokemonId;
+
+            olvColumnPokemonFavorite.AspectGetter = ( pokemon) => (pokemon as PokemonData).Favorite == 1;
+
+            olvColumnPokemonRarity.AspectGetter = delegate(object pokemon)
             {
-                var pokemon = (PokemonData)x;
-
-                return (int)pokemon.PokemonId;
-            };
-
-            olvColumnPokemonFavorite.AspectGetter = delegate(object x)
-            {
-                var pokemon = (PokemonData)x;
-
-                return pokemon.Favorite == 1;
-
-            };
-
-            olvColumnPokemonRarity.AspectGetter = delegate(object x)
-            {
-                var pokemon = (PokemonData)x;
-                PokemonSettings pokemonSettings = _manager.GetPokemonSetting(pokemon.PokemonId).Data;
-
+                PokemonSettings pokemonSettings = _manager.GetPokemonSetting((pokemon as PokemonData).PokemonId).Data;
                 return pokemonSettings == null ? PokemonRarity.Normal : pokemonSettings.Rarity;
-
             };
 
-            olvColumnCandyToEvolve.AspectGetter = delegate(object x)
+            olvColumnCandyToEvolve.AspectGetter = delegate(object pokemon)
             {
-                var pokemon = (PokemonData)x;
-                PokemonSettings pokemonSettings = _manager.GetPokemonSetting(pokemon.PokemonId).Data;
-
+                PokemonSettings pokemonSettings = _manager.GetPokemonSetting((pokemon as PokemonData).PokemonId).Data;
                 return pokemonSettings == null ? -1 : pokemonSettings.CandyToEvolve;
 
             };
 
-            olvColumnPokemonCandy.AspectGetter = delegate(object x)
+            olvColumnPokemonCandy.AspectGetter = delegate(object pokemon)
             {
-                var pokemon = (PokemonData)x;
 
                 if(_manager.PokemonCandy == null || _manager.PokemonCandy.Count == 0)
                 {
                     return -1;
                 }
 
-                PokemonSettings settings = _manager.GetPokemonSetting(pokemon.PokemonId).Data;
+                PokemonSettings settings = _manager.GetPokemonSetting((pokemon as PokemonData).PokemonId).Data;
 
                 if(settings == null)
                 {
@@ -138,66 +105,22 @@ namespace PokemonGoGUI.UI
 
             };
 
-            olvColumnPokemonName.AspectGetter = delegate(object x)
+            olvColumnPokemonName.AspectGetter = ( pokemon) => (pokemon as PokemonData).PokemonId.ToString();
+
+            olvColumnPrimaryMove.AspectGetter = ( pokemon) => ((PokemonMove)(pokemon as PokemonData).Move1).ToString().Replace("Fast", "");
+
+            olvColumnSecondaryMove.AspectGetter = ( pokemon) => ((PokemonMove)(pokemon as PokemonData).Move2).ToString();
+
+            olvColumnAttack.AspectGetter = ( pokemon) => (pokemon as PokemonData) .IndividualAttack;
+            olvColumnDefense.AspectGetter = ( pokemon) => (pokemon as PokemonData) .IndividualDefense;
+            olvColumnStamina.AspectGetter = ( pokemon) => (pokemon as PokemonData) .IndividualStamina;
+
+
+            olvColumnPerfectPercent.AspectGetter = delegate(object pokemon)
             {
-                var pokemon = (PokemonData)x;
-
-
-                return pokemon.PokemonId.ToString();
-            };
-
-            olvColumnPrimaryMove.AspectGetter = delegate(object x)
-            {
-                var pokemon = (PokemonData)x;
-
-
-                return ((PokemonMove)pokemon.Move1).ToString().Replace("Fast", "");
-            };
-
-            olvColumnSecondaryMove.AspectGetter = delegate(object x)
-            {
-                var pokemon = (PokemonData)x;
-
-                return ((PokemonMove)pokemon.Move2).ToString();
-            };
-
-            olvColumnAttack.AspectGetter = delegate(object x)
-            {
-                var pokemon = (PokemonData)x;
-                MethodResult<PokemonSettings> settings = _manager.GetPokemonSetting(pokemon.PokemonId);
-
-                return !settings.Success ? -1 : pokemon.IndividualAttack;
-
-            };
-
-            olvColumnDefense.AspectGetter = delegate(object x)
-            {
-                var pokemon = (PokemonData)x;
-                MethodResult<PokemonSettings> settings = _manager.GetPokemonSetting(pokemon.PokemonId);
-
-                return !settings.Success ? -1 : pokemon.IndividualDefense;
-
-            };
-
-            olvColumnStamina.AspectGetter = delegate(object x)
-            {
-                var pokemon = (PokemonData)x;
-                MethodResult<PokemonSettings> settings = _manager.GetPokemonSetting(pokemon.PokemonId);
-
-                return !settings.Success ? -1 : pokemon.IndividualStamina;
-
-            };
-
-
-            olvColumnPerfectPercent.AspectGetter = delegate(object x)
-            {
-                var pokemon = (PokemonData)x;
-                double settings = Manager.CalculateIVPerfection(pokemon);
-
-
+                double settings = Manager.CalculateIVPerfection(pokemon as PokemonData);
                 string sDouble = String.Format("{0:0.00}", settings);
-
-                return double.Parse(sDouble);// +settings.Data.Stats.BaseStamina;
+                return double.Parse(sDouble);
             };
 
             #endregion

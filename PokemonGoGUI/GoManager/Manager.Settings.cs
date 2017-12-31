@@ -104,19 +104,19 @@ namespace PokemonGoGUI.GoManager
                     }
                 }
                 
-                
-                var pokemonSettings = new Dictionary<PokemonId, PokemonSettings>();
 
                 if (File.Exists("pokemon_settings.dat")) {
                     var strPokeSettings = File.ReadAllText("pokemon_settings.dat");
-                    pokemonSettings = Serializer.FromJson<Dictionary<PokemonId, PokemonSettings>>(strPokeSettings);
+                    PokeSettings = Serializer.FromJson<Dictionary<PokemonId, PokemonSettings>>(strPokeSettings);
+
                     return new MethodResult<Dictionary<PokemonId, PokemonSettings>> {
-                        Data = pokemonSettings,
+                        Data = PokeSettings,
                         Message = "Success",
                         Success = true
                     };
                 }
 
+                var pokemonSettings = new Dictionary<PokemonId, PokemonSettings>();
                 var pageOffset = 0;
                 var timestamp = 0ul;
                 do{
