@@ -71,7 +71,7 @@ namespace PokemonGoGUI.GoManager
             }
             else
             {
-                var message = new ReleasePokemonMessage { PokemonIds = { pokemonToTransfer.Select(x => x.Id) } };
+                var message = new ReleasePokemonMessage { PokemonIds = { pokemonToTransfer.Where(x => x != null && x.PokemonId != PokemonId.Missingno).Select(x => x.Id) } };
                 try
                 {
                     var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
