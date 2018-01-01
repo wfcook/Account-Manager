@@ -76,8 +76,72 @@ namespace PokemonGoGUI.GoManager
                 Success = true
             };
         }
-
         public async Task<MethodResult<Dictionary<PokemonId, PokemonSettings>>> GetItemTemplates()
+        {
+            if (PokeSettings != null && PokeSettings.Count != 0)
+            {
+                return new MethodResult<Dictionary<PokemonId, PokemonSettings>>
+                {
+                    Data = PokeSettings,
+                    Message = "Settings already grabbed",
+                    Success = true
+                };
+            }
+
+            try
+            {
+                if (!_client.LoggedIn)
+                {
+                    MethodResult result = await Login_();
+
+                    if (!result.Success)
+                    {
+                        return new MethodResult<Dictionary<PokemonId, PokemonSettings>>
+                        {
+                            Message = result.Message
+                        };
+                    }
+                }
+
+                var pokemonSettings = new Dictionary<PokemonId, PokemonSettings>();
+                foreach (var template in _client.ClientSession.Templates.ItemTemplates)
+                {
+                    if (template.PlayerLevel != null)
+                    {
+                        LevelSettings = template.PlayerLevel;
+
+                        continue;
+                    }
+
+                    if (template.PokemonSettings != null)
+                    {
+                        if (pokemonSettings.ContainsKey(template.PokemonSettings.PokemonId))
+                            pokemonSettings.Remove(template.PokemonSettings.PokemonId);
+                        pokemonSettings.Add(template.PokemonSettings.PokemonId, template.PokemonSettings);
+                    }
+                }
+
+                PokeSettings = pokemonSettings;
+                
+
+                return new MethodResult<Dictionary<PokemonId, PokemonSettings>>
+                {
+                    Data = pokemonSettings,
+                    Message = "Success",
+                    Success = true
+                };
+            }
+            catch (Exception ex)
+            {
+                LogCaller(new LoggerEventArgs("Failed to get setting templates", LoggerTypes.Exception, ex));
+
+                return new MethodResult<Dictionary<PokemonId, PokemonSettings>>
+                {
+                    Message = "Failed to get setting templates"
+                };
+            }
+        }
+        public async Task<MethodResult<Dictionary<PokemonId, PokemonSettings>>> GetItemTemplatesPage2()
         {
             if (PokeSettings != null && PokeSettings.Count != 0)
             {
@@ -129,14 +193,13 @@ namespace PokemonGoGUI.GoManager
                             Paginate = true,
                             PageTimestamp = timestamp
                         }.ToByteString()
-                    });
+                    }, true, true, true);
     
     
                     var downloadItemTemplatesResponse = DownloadItemTemplatesResponse.Parser.ParseFrom(response);
                     
                     pageOffset = downloadItemTemplatesResponse.PageOffset;
-                    timestamp = downloadItemTemplatesResponse.TimestampMs;
-                    
+                    timestamp = downloadItemTemplatesResponse.TimestampMs;                    
     
                     foreach (var template in downloadItemTemplatesResponse.ItemTemplates)
                     {
@@ -149,6 +212,8 @@ namespace PokemonGoGUI.GoManager
     
                         if (template.PokemonSettings != null)
                         {
+                            if (pokemonSettings.ContainsKey(template.PokemonSettings.PokemonId))
+                                pokemonSettings.Remove(template.PokemonSettings.PokemonId);
                             pokemonSettings.Add(template.PokemonSettings.PokemonId, template.PokemonSettings);
                         }
                     }
@@ -157,7 +222,7 @@ namespace PokemonGoGUI.GoManager
                 File.WriteAllText("pokemon_settings.dat",Serializer.ToJson(pokemonSettings));
 
                 PokeSettings = pokemonSettings;
-
+                
 
                 return new MethodResult<Dictionary<PokemonId, PokemonSettings>>
                 {

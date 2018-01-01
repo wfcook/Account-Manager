@@ -104,6 +104,7 @@ namespace PokemonGoGUI
             var msgStr = "Session couldn't start up.";
             LoggedIn = false;
             try {
+                ClientSession.ManageResources = true;
                 if (await ClientSession.StartupAsync())
                 {
                     LoggedIn = true;
