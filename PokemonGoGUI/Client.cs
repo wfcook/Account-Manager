@@ -106,25 +106,23 @@ namespace PokemonGoGUI
             LoggedIn = false;
             try
             {
-                if (await ClientSession.StartupAsync())
+                //My files resources here
+                /*
+                ClientSession.Templates.ItemTemplates = read_file;
+                ClientSession.Templates.DownloadUrls = read_file;
+                ClientSession.Templates.AssetDigests = read_file;
+                ClientSession.Templates.RemoteConfigVersion = read_file;
+                */
+
+                if (await ClientSession.StartupAsync(true))
                 {
                     LoggedIn = true;
                     msgStr = "Successfully logged into server.";
 
-                    //My files here
-                    /*
-                    ClientSession.Templates.ItemTemplates = read_file;
-                    ClientSession.Templates.DownloadUrls = read_file;
-                    ClientSession.Templates.AssetDigests = read_file;
-                    ClientSession.Templates.RemoteConfigVersion = read_file;
-                    */
-                    // events here
                     ClientSession.AssetDigestUpdated += OnAssetDisgestReceived;
                     ClientSession.ItemTemplatesUpdated += OnItemTemplatesReceived;
                     ClientSession.UrlsUpdated += OnDownloadUrlsReceived;
                     ClientSession.RemoteConfigUpdated += OnRemoteConfigReceived;
-                    //
-
                     ClientSession.AccessTokenUpdated += SessionAccessTokenUpdated;
                     ClientSession.CaptchaReceived += SessionOnCaptchaReceived;
                     ClientSession.InventoryUpdate += SessionInventoryUpdate;
@@ -178,21 +176,9 @@ namespace PokemonGoGUI
 
         private void SessionMapUpdate(object sender, EventArgs e)
         {
-
-
             // Update BuddyPokemon Stats
-            var buddyID =  ClientManager?.PlayerData?.BuddyPokemon.Id;
-            if (buddyID != 0)
-            {
-                MethodResult<GetBuddyWalkedResponse> buddyWalkedResponse = ClientManager.GetBuddyWalked().Result;
-                if (buddyWalkedResponse.Success)
-                {
-                    var msg = $"BuddyWalked CandyID: {buddyWalkedResponse.Data.FamilyCandyId}, CandyCount: {buddyWalkedResponse.Data.CandyEarnedCount}";
-                    ClientManager.LogCaller(new LoggerEventArgs(msg, LoggerTypes.Success));
-                };
-            }
-            
-
+            var msg = $"BuddyWalked Candy: {ClientSession.Player.BuddyCandy}";
+            ClientManager.LogCaller(new LoggerEventArgs(msg, LoggerTypes.Success));
         }
 
         public void SessionOnCaptchaReceived(object sender, CaptchaEventArgs e)
