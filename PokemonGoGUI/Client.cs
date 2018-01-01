@@ -17,6 +17,7 @@ using PokemonGoGUI.Extensions;
 using PokemonGoGUI.GoManager;
 using PokemonGoGUI.GoManager.Models;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using static POGOProtos.Networking.Envelopes.Signature.Types;
@@ -78,7 +79,7 @@ namespace PokemonGoGUI
                 //Configuration.IgnoreHashVersion = true;
                 VersionStr = Configuration.Hasher.PokemonVersion;
                 AppVersion = Configuration.Hasher.AppVersion;
-                //Revise sleeping line 118
+                // TODO: Revise sleeping
                 ((PokeHashHasher)Configuration.Hasher).PokehashSleeping += OnPokehashSleeping;
             }
             // *****
@@ -103,27 +104,42 @@ namespace PokemonGoGUI
             // This makes sure that the initial heartbeat request finishes and the "session.Map.Cells" contains stuff.
             var msgStr = "Session couldn't start up.";
             LoggedIn = false;
-            try {
-                ClientSession.ManageResources = true;
+            try
+            {
                 if (await ClientSession.StartupAsync())
                 {
                     LoggedIn = true;
                     msgStr = "Successfully logged into server.";
-    
+
+                    //My files here
+                    /*
+                    ClientSession.Templates.ItemTemplates = read_file;
+                    ClientSession.Templates.DownloadUrls = read_file;
+                    ClientSession.Templates.AssetDigests = read_file;
+                    ClientSession.Templates.RemoteConfigVersion = read_file;
+                    */
+                    // events here
+                    ClientSession.AssetDigestUpdated += OnAssetDisgestReceived;
+                    ClientSession.ItemTemplatesUpdated += OnItemTemplatesReceived;
+                    ClientSession.UrlsUpdated += OnDownloadUrlsReceived;
+                    ClientSession.RemoteConfigUpdated += OnRemoteConfigReceived;
+                    //
+
                     ClientSession.AccessTokenUpdated += SessionAccessTokenUpdated;
                     ClientSession.CaptchaReceived += SessionOnCaptchaReceived;
                     ClientSession.InventoryUpdate += SessionInventoryUpdate;
                     ClientSession.MapUpdate += SessionMapUpdate;
                     ClientSession.CheckAwardedBadgesReceived += OnCheckAwardedBadgesReceived;
                     ClientSession.HatchedEggsReceived += OnHatchedEggsReceived;
-    
-                    
+
                     ClientManager.LogCaller(new LoggerEventArgs("Succefully added all events to the client.", LoggerTypes.Debug));
-                    
+
                     SaveAccessToken(ClientSession.AccessToken);
                 }
-            } catch (Exception ex1) {
-                ClientManager.LogCaller(new LoggerEventArgs("exception: " +ex1, LoggerTypes.Debug));
+            }
+            catch (Exception ex1)
+            {
+                ClientManager.LogCaller(new LoggerEventArgs("exception: " + ex1, LoggerTypes.Debug));
             }
 
             return new MethodResult<bool>()
@@ -131,6 +147,26 @@ namespace PokemonGoGUI
                 Success = LoggedIn,
                 Message = msgStr
             };
+        }
+
+        private void OnAssetDisgestReceived(object sender, List<POGOProtos.Data.AssetDigestEntry> assetsdigest)
+        {
+            //save file here
+        }
+
+        private void OnItemTemplatesReceived(object sender, List<DownloadItemTemplatesResponse.Types.ItemTemplate> itemtemplates)
+        {
+            //save file here
+        }
+
+        private void OnDownloadUrlsReceived(object sender, List<POGOProtos.Data.DownloadUrlEntry> dowloadUrls)
+        {
+            //save file here
+        }
+
+        private void OnRemoteConfigReceived(object sender, DownloadRemoteConfigVersionResponse downloadRemoteConfigVersionResponse)
+        {
+            //Save file here
         }
 
         private event EventHandler<int> OnPokehashSleeping;
