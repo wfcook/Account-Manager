@@ -52,7 +52,6 @@ namespace PokemonGoGUI.GoManager
         [JsonConstructor]
         public Manager()
         {
-            Stats = new PlayerStats();
             Logs = new List<Log>();
             Tracker = new Tracker();
 
@@ -63,7 +62,6 @@ namespace PokemonGoGUI.GoManager
         {
             UserSettings = new Settings();
             Logs = new List<Log>();
-            Stats = new PlayerStats();
             Tracker = new PokemonGoGUI.AccountScheduler.Tracker();
 
             ProxyHandler = handler;
@@ -536,7 +534,6 @@ namespace PokemonGoGUI.GoManager
 
                     await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
-                    UpdateInventory();
 
                     result = await CheckReauthentication();
 
@@ -647,7 +644,7 @@ namespace PokemonGoGUI.GoManager
                     {
                         LogCaller(new LoggerEventArgs("Getting level up rewards ...", LoggerTypes.Debug));
 
-                        result = await ClaimLevelUpRewards(Level);
+                        result = await ClaimLevelUpRewards(GetPlayerStats()?.Level??0);
 
                         await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
                     }
@@ -772,7 +769,6 @@ namespace PokemonGoGUI.GoManager
 
                         await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
-                        UpdateItemList();
 
                         var remainingBalls = RemainingPokeballs();
                         LogCaller(new LoggerEventArgs("Remaining Balls: " + remainingBalls, LoggerTypes.Debug));
@@ -864,14 +860,14 @@ namespace PokemonGoGUI.GoManager
                             await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
 
-                            int prevLevel = Level;
+                            int prevLevel = GetPlayerStats()?.Level??0;
 
 
-                            if (Level > prevLevel)
+                            if (GetPlayerStats()?.Level > prevLevel)
                             {
                                 await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
-                                await ClaimLevelUpRewards(Level);
+                                await ClaimLevelUpRewards(GetPlayerStats()?.Level??0);
                             }
 
                             await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
@@ -912,7 +908,7 @@ namespace PokemonGoGUI.GoManager
 
                         await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
-                        if (UserSettings.MaxLevel > 0 && Level >= UserSettings.MaxLevel)
+                        if (UserSettings.MaxLevel > 0 && (GetPlayerStats()?.Level??0) >= UserSettings.MaxLevel)
                         {
                             LogCaller(new LoggerEventArgs(String.Format("Max level of {0} reached.", UserSettings.MaxLevel), LoggerTypes.Info));
 

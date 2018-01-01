@@ -181,8 +181,8 @@ namespace PokemonGoGUI
         private void SessionMapUpdate(object sender, EventArgs e)
         {
             // Update BuddyPokemon Stats
-            var msg = $"BuddyWalked Candy: {ClientSession.Player.BuddyCandy}";
-            ClientManager.LogCaller(new LoggerEventArgs(msg, LoggerTypes.Success));
+            //var msg = $"BuddyWalked Candy: {ClientSession.Player.BuddyCandy}";
+            //ClientManager.LogCaller(new LoggerEventArgs(msg, LoggerTypes.Success));
         }
 
         public void SessionOnCaptchaReceived(object sender, CaptchaEventArgs e)
@@ -194,7 +194,7 @@ namespace PokemonGoGUI
 
         private void SessionInventoryUpdate(object sender, EventArgs e)
         {
-            ClientManager.UpdateInventory();
+            //ClientManager.UpdateInventory();
         }
 
         private void OnHatchedEggsReceived(object sender, GetHatchedEggsResponse hatchedEggResponse)
