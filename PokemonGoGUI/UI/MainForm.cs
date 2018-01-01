@@ -2209,6 +2209,65 @@ namespace PokemonGoGUI
 
             return result;
         }
+        void rMFormatToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+          try
+            {
+                List<string> accounts = ImportAccounts();
+
+                var tempManagers = new HashSet<Manager>(_managers);
+
+                int totalSuccess = 0;
+                int total = accounts.Count;
+
+                foreach(string account in accounts)
+                {
+                    string[] parts = account.Split(',');
+
+                    /*
+                     * AccType,User,Pass = 3
+                     */
+                    if (parts.Length < 3 )
+                    {
+                        continue;
+                    }
+
+                    var importModel = new AccountImport();
+
+                    importModel.Username = parts[1];
+                    importModel.Password = parts[2];
+
+                    var manager = new Manager(_proxyHandler);
+
+                    manager.UserSettings.AuthType = (parts[0].Trim().ToLower()=="ptc")?AuthType.Ptc:AuthType.Google;
+                    manager.UserSettings.AccountName = importModel.Username.Trim();
+                    manager.UserSettings.Username = importModel.Username.Trim();
+                    manager.UserSettings.Password = importModel.Password.Trim();
+                    manager.UserSettings.ProxyIP = importModel.Address;
+                    manager.UserSettings.ProxyPort = importModel.Port;
+                    manager.UserSettings.ProxyUsername = importModel.ProxyUsername;
+                    manager.UserSettings.ProxyPassword = importModel.ProxyPassword;
+
+                    manager.UserSettings.MaxLevel = 30;
+                    if (parts.Length>3)
+                        manager.UserSettings.MaxLevel = int.Parse(parts[4]);
+
+                    if (tempManagers.Add(manager))
+                    {
+                        AddManager(manager);
+                        ++totalSuccess;
+                    }
+                }
+
+                fastObjectListViewMain.SetObjects(_managers);
+
+                MessageBox.Show(String.Format("Successfully imported {0} out of {1} accounts", totalSuccess, total));
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(String.Format("Failed to import usernames. Ex: {0}", ex.Message));
+            }
+        }
         #endregion
 
     }

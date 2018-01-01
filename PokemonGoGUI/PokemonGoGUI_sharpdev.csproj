@@ -213,7 +213,7 @@
     <Compile Include="Models\AccountExportModel.cs" />
     <Compile Include="Models\AccountImport.cs" />
     <Compile Include="Models\CatchSetting.cs" />
-	<Compile Include="Models\EvoleBranch.cs" />
+    <Compile Include="Models\EvoleBranch.cs" />
     <Compile Include="Models\EvolveSetting.cs" />
     <Compile Include="Models\FarmLocation.cs" />
     <Compile Include="Models\GoProxy.cs" />
@@ -259,6 +259,7 @@
     <Compile Include="POGOLib.Core\Util\Encryption\Legacy\ShufflesLegacy.cs" />
     <Compile Include="POGOLib.Core\Util\Encryption\PokeHash\PCryptPokeHash.cs" />
     <Compile Include="POGOLib.Core\Util\Encryption\PokeHash\TwoFish.cs" />
+    <Compile Include="POGOLib.Core\Util\FileUtil.cs" />
     <Compile Include="POGOLib.Core\Util\Hash\HashData.cs" />
     <Compile Include="POGOLib.Core\Util\Hash\HashVersionMismatchException.cs" />
     <Compile Include="POGOLib.Core\Util\Hash\IHasher.cs" />

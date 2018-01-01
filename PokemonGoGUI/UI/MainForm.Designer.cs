@@ -173,6 +173,7 @@
             this.olvColumnLastLogMessage = new BrightIdeasSoftware.OLVColumn();
             this.tabControlMain = new System.Windows.Forms.TabControl();
             this.Trayicon = new System.Windows.Forms.NotifyIcon(this.components);
+            this.rMFormatToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStripAccounts.SuspendLayout();
             this.statusStripStats.SuspendLayout();
             this.contextMenuStripScheduler.SuspendLayout();
@@ -227,7 +228,7 @@
             this.devToolsToolStripMenuItem,
             this.helpInfoToolStripMenuItem});
             this.contextMenuStripAccounts.Name = "contextMenuStrip1";
-            this.contextMenuStripAccounts.Size = new System.Drawing.Size(164, 496);
+            this.contextMenuStripAccounts.Size = new System.Drawing.Size(164, 518);
             this.contextMenuStripAccounts.Opening += new System.ComponentModel.CancelEventHandler(this.ContextMenuStripAccounts_Opening);
             // 
             // aboutToolStripMenuItem
@@ -516,7 +517,8 @@
             // 
             this.importToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.wConfigToolStripMenuItem,
-            this.defaultToolStripMenuItem});
+            this.defaultToolStripMenuItem,
+            this.rMFormatToolStripMenuItem});
             this.importToolStripMenuItem.Name = "importToolStripMenuItem";
             this.importToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
             this.importToolStripMenuItem.Text = "Import Accounts";
@@ -524,7 +526,7 @@
             // wConfigToolStripMenuItem
             // 
             this.wConfigToolStripMenuItem.Name = "wConfigToolStripMenuItem";
-            this.wConfigToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
+            this.wConfigToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.wConfigToolStripMenuItem.Tag = "true";
             this.wConfigToolStripMenuItem.Text = "w/ Config";
             this.wConfigToolStripMenuItem.Click += new System.EventHandler(this.WConfigToolStripMenuItem_Click);
@@ -532,7 +534,7 @@
             // defaultToolStripMenuItem
             // 
             this.defaultToolStripMenuItem.Name = "defaultToolStripMenuItem";
-            this.defaultToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
+            this.defaultToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.defaultToolStripMenuItem.Tag = "false";
             this.defaultToolStripMenuItem.Text = "Default";
             this.defaultToolStripMenuItem.Click += new System.EventHandler(this.WConfigToolStripMenuItem_Click);
@@ -1394,6 +1396,13 @@
             this.Trayicon.Visible = true;
             this.Trayicon.MouseClick += new System.Windows.Forms.MouseEventHandler(this.TrayIcon_MouseClick);
             // 
+            // rMFormatToolStripMenuItem
+            // 
+            this.rMFormatToolStripMenuItem.Name = "rMFormatToolStripMenuItem";
+            this.rMFormatToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.rMFormatToolStripMenuItem.Text = "RM format";
+            this.rMFormatToolStripMenuItem.Click += new System.EventHandler(this.rMFormatToolStripMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1573,6 +1582,7 @@
         private System.Windows.Forms.ToolStripMenuItem importToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem exportToolStripMenuItem1;
         private System.Windows.Forms.NotifyIcon Trayicon;
+        private System.Windows.Forms.ToolStripMenuItem rMFormatToolStripMenuItem;
     }
 }
 
