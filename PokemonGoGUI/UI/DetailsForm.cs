@@ -604,11 +604,23 @@ namespace PokemonGoGUI.UI
         private void FastObjectListViewEggs_FormatCell(object sender, FormatCellEventArgs e)
         {
             var egg = (PokemonData)e.Model;
+            EggIncubator eggIncubator = new EggIncubator();
+
+            foreach(var inc in _manager.Incubators)
+            {
+                if (inc.PokemonId == egg.Id)
+                    eggIncubator = inc;
+            }
 
             if (e.Column == olvColumnEggWalked)
-                e.SubItem.Text = String.Format("{0:0.00}km", _manager.Stats.KmWalked - egg.EggKmWalkedStart);
+            {
+                if (eggIncubator.PokemonId != 0)
+                    e.SubItem.Text = String.Format("{0:0.00}km", _manager.Stats.KmWalked - eggIncubator.StartKmWalked);
+                else
+                    e.SubItem.Text = "0.00km";
+            }
             else if (e.Column == olvColumnEggDistance)
-                e.SubItem.Text = String.Format("{0:0.00}km", egg.EggKmWalkedTarget - egg.EggKmWalkedStart);
+                e.SubItem.Text = String.Format("{0:0.00}km", egg.EggKmWalkedTarget);
         }
     }
 }
