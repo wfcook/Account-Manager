@@ -36,7 +36,6 @@ namespace PokemonGoGUI.GoManager
 
         public MethodResult<AccountExportModel> GetAccountExport()
         {
-            var Stats = GetPlayerStats();
             if(Stats == null)
             {
                 LogCaller(new LoggerEventArgs(String.Format("No stats found for {0}. Please update details", UserSettings.Username), LoggerTypes.Warning));
@@ -52,7 +51,8 @@ namespace PokemonGoGUI.GoManager
                 return new MethodResult<AccountExportModel>();
             }
 
-            if (!GetPokedex().Any()) {
+            if (Pokedex == null || Pokedex.Count == 0)
+            {
                 LogCaller(new LoggerEventArgs(String.Format("No pokedex found for {0}. Please update details", UserSettings.Username), LoggerTypes.Warning));
 
                 return new MethodResult<AccountExportModel>();
@@ -64,10 +64,10 @@ namespace PokemonGoGUI.GoManager
                 Type = UserSettings.AuthType,
                 Username = UserSettings.Username,
                 Password = UserSettings.Password,
-                Pokedex = GetPokedex().Select(x => new PokedexEntryExportModel(x)).ToList(),
-                Pokemon = GetPokemons().Select(x => new PokemonDataExportModel(x, CalculateIVPerfection(x))).ToList(),
-                Items = GetItems().Select(x => new ItemDataExportModel(x)).ToList(),
-                Eggs = GetEggs().Select(x => new EggDataExportModel(x)).ToList()
+                Pokedex = Pokedex.Select(x => new PokedexEntryExportModel(x)).ToList(),
+                Pokemon = Pokemon.Select(x => new PokemonDataExportModel(x, CalculateIVPerfection(x))).ToList(),
+                Items = Items.Select(x => new ItemDataExportModel(x)).ToList(),
+                Eggs = Eggs.Select(x => new EggDataExportModel(x)).ToList()
             };
 
             return new MethodResult<AccountExportModel>

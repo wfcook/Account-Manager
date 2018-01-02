@@ -149,17 +149,23 @@ namespace PokemonGoGUI.GoManager
                 };
             }
 
-            if (!GetPokemons().Any()) {
+            //TODO: unneeded
+            //UpdatePokemon();
+            //UpdatePokemonCandy();
+
+            if (Pokemon == null || Pokemon.Count == 0)
+            {
                 LogCaller(new LoggerEventArgs("You have no pokemon", LoggerTypes.Info));
 
-                return new MethodResult<List<PokemonData>> {
+                return new MethodResult<List<PokemonData>>
+                {
                     Message = "You have no pokemon"
                 };
             }
 
             var pokemonToTransfer = new List<PokemonData>();
 
-            IEnumerable<IGrouping<PokemonId, PokemonData>> groupedPokemon = GetPokemons().GroupBy(x => x.PokemonId);
+            IEnumerable<IGrouping<PokemonId, PokemonData>> groupedPokemon = Pokemon.GroupBy(x => x.PokemonId);
 
             foreach (IGrouping<PokemonId, PokemonData> group in groupedPokemon)
             {
@@ -214,7 +220,7 @@ namespace PokemonGoGUI.GoManager
 
             if (UserSettings.TransferSlashPokemons)
             {
-                var slashPokemons = GetPokemons().Where(x => x.IsBad);
+                var slashPokemons = Pokemon.Where(x => x.IsBad);
                 foreach (var slashPokemon in slashPokemons)
                 {
                     var inlist = pokemonToTransfer.FirstOrDefault(x => x.Id == slashPokemon.Id);
@@ -300,7 +306,7 @@ namespace PokemonGoGUI.GoManager
                 return new List<PokemonData>();
             }
 
-            Candy pokemonCandy = GetPokemonCandies().FirstOrDefault(x => x.FamilyId == setting.FamilyId);
+            Candy pokemonCandy = PokemonCandy.FirstOrDefault(x => x.FamilyId == setting.FamilyId);
 
             int candyToEvolve = setting.CandyToEvolve;
             int totalPokemon = pokemon.Count();

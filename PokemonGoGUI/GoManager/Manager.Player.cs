@@ -52,8 +52,6 @@ namespace PokemonGoGUI.GoManager
             //Possible some objects were empty.
             var builder = new StringBuilder();
             builder.AppendLine("=== Trainer Stats ===");
-            
-            var Stats =GetPlayerStats();
 
             if (Stats != null && PlayerData != null)
             {
@@ -75,7 +73,9 @@ namespace PokemonGoGUI.GoManager
 
             builder.AppendLine("=== Pokemon ===");
 
-            foreach (PokemonData pokemon in GetPokemons().OrderByDescending(x => x.Cp))
+            if (Pokemon != null)
+            {
+                foreach (PokemonData pokemon in Pokemon.OrderByDescending(x => x.Cp))
                 {
                     string candy = "Unknown";
 
@@ -83,7 +83,7 @@ namespace PokemonGoGUI.GoManager
 
                     if (pSettings.Success)
                     {
-                        Candy pCandy = GetPokemonCandies().FirstOrDefault(x => x.FamilyId == pSettings.Data.FamilyId);
+                        Candy pCandy = PokemonCandy.FirstOrDefault(x => x.FamilyId == pSettings.Data.FamilyId);
 
                         if (pCandy != null)
                         {
@@ -98,7 +98,7 @@ namespace PokemonGoGUI.GoManager
 
                     builder.AppendLine(String.Format("Pokemon: {0,-10} CP: {1, -5} IV: {2,-7} Primary: {3, -14} Secondary: {4, -14} Candy: {5}", pokemon.PokemonId, pokemon.Cp, iv, pokemon.Move1.ToString().Replace("Fast", ""), pokemon.Move2, candy));
                 }
-            
+            }
 
             //Remove the hardcoded directory later
             try
