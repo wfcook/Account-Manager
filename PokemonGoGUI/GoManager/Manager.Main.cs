@@ -40,7 +40,7 @@ namespace PokemonGoGUI.GoManager
 
         private ManualResetEvent _pauser = new ManualResetEvent(true);
         private bool _proxyIssue = false;
-        private static DateTime TimeAutoCatch = DateTime.Now;
+        private DateTime TimeAutoCatch = DateTime.Now;
         private bool DisableCatch = false;
 
         //Needs to be saved on close
