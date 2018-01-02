@@ -219,7 +219,7 @@ namespace PokemonGoGUI
                     if(String.IsNullOrEmpty(manager.UserSettings.DeviceId))
                     {
                         //Load some
-                        manager.UserSettings.LoadDeviceSettings();
+                        manager.UserSettings.RandomizeDevice();
                     }
 
                     if (manager.Tracker != null)

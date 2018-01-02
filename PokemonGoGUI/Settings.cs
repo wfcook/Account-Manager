@@ -176,7 +176,7 @@ namespace PokemonGoGUI
             ItemSettings = new List<InventoryItemSetting>();
             CatchSettings = new List<CatchSetting>();
 
-            LoadDeviceSettings();
+            RandomizeDevice();
             LoadInventorySettings();
             LoadCatchSettings();
             LoadEvolveSettings();
@@ -219,23 +219,6 @@ namespace PokemonGoGUI
             DisableCatchDelay = 8;
         }
 
-        public void LoadDeviceSettings()
-        {
-            var device = DeviceInfoUtil.GetRandomDevice();
-            DeviceId = device.DeviceInfo.DeviceId;
-            AndroidBoardName = device.DeviceInfo.AndroidBoardName;
-            AndroidBootloader = device.DeviceInfo.AndroidBootloader;
-            DeviceBrand = device.DeviceInfo.DeviceBrand;
-            DeviceModel = device.DeviceInfo.DeviceModel;
-            DeviceModelIdentifier = device.DeviceInfo.DeviceModelIdentifier;
-            DeviceModelBoot = device.DeviceInfo.DeviceModelBoot;
-            HardwareManufacturer = device.DeviceInfo.HardwareManufacturer;
-            HardwareModel = device.DeviceInfo.HardwareModel;
-            FirmwareBrand = device.DeviceInfo.FirmwareBrand;
-            FirmwareTags = device.DeviceInfo.FirmwareTags;
-            FirmwareType = device.DeviceInfo.FirmwareType;
-            FirmwareFingerprint = device.DeviceInfo.FirmwareFingerprint;
-        }
 
         public void LoadCatchSettings()
         {

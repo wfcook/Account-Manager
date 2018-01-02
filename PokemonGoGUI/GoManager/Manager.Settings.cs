@@ -235,13 +235,9 @@ namespace PokemonGoGUI.GoManager
 
                 UserSettings = settings;
 
-                if (!String.IsNullOrEmpty(UserSettings.DeviceBrand))
+                if (String.IsNullOrEmpty(UserSettings.DeviceBrand))
                 {
                     UserSettings.RandomizeDevice();
-                }
-                else
-                {
-                    UserSettings.LoadDeviceSettings();
                 }
 
                 LogCaller(new LoggerEventArgs("Successfully imported config file", LoggerTypes.Info));
@@ -314,10 +310,6 @@ namespace PokemonGoGUI.GoManager
             UserSettings.LoadTransferSettings();
         }
 
-        public void RestoreDeviceDefaults()
-        {
-            UserSettings.LoadDeviceSettings();
-        }
 
         public void RandomDeviceId()
         {
