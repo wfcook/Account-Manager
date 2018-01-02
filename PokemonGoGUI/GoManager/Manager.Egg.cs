@@ -40,7 +40,7 @@ namespace PokemonGoGUI.GoManager
                 };
             }
 
-            PokemonData egg = Eggs.FirstOrDefault(x => String.IsNullOrEmpty(x.EggIncubatorId));
+            PokemonData egg = GetEggs().FirstOrDefault(x => String.IsNullOrEmpty(x.EggIncubatorId));
 
             if (egg == null)
             {
@@ -84,10 +84,7 @@ namespace PokemonGoGUI.GoManager
 
         private MethodResult<EggIncubator> GetIncubator()
         {
-            if(Incubators == null)
-            {
-                return new MethodResult<EggIncubator>();
-            }
+            var Incubators = GetIncubators();
 
             EggIncubator unusedUnlimitedIncubator = Incubators.FirstOrDefault(x => x.ItemId == ItemId.ItemIncubatorBasicUnlimited && x.PokemonId == 0);
 

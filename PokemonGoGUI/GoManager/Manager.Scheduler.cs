@@ -61,7 +61,7 @@ namespace PokemonGoGUI.GoManager
             }
 
             //Don't auto start when max level is hit
-            if(UserSettings.MaxLevel != 0 && Level >= UserSettings.MaxLevel)
+            if(UserSettings.MaxLevel != 0 && GetPlayerStats().Level >= UserSettings.MaxLevel)
             {
                 return;
             }
@@ -183,8 +183,7 @@ namespace PokemonGoGUI.GoManager
                     switch (scheduler.PokeStoplimiter.Option)
                     {
                         case SchedulerOption.DisableEnable: //No extra checks
-                            if (UserSettings.SearchFortBelowPercent != 0)
-                            {
+                            if (Math.Abs(UserSettings.SearchFortBelowPercent) > 0.0001) {
                                 LogCaller(new LoggerEventArgs("Max pokestop limit reached. Disabling...", LoggerTypes.Debug));
                                 UserSettings.SearchFortBelowPercent = 0;
                             }
@@ -200,8 +199,7 @@ namespace PokemonGoGUI.GoManager
                     switch (scheduler.PokeStoplimiter.Option)
                     {
                         case SchedulerOption.DisableEnable: //No extra checks
-                            if (UserSettings.SearchFortBelowPercent != 1000)
-                            {
+                            if (Math.Abs(UserSettings.SearchFortBelowPercent - 1000) > 0.0001) {
                                 LogCaller(new LoggerEventArgs("Min pokestop limit reached. Enabling ...", LoggerTypes.Debug));
                                 UserSettings.SearchFortBelowPercent = 1000;
                             }

@@ -570,10 +570,7 @@ namespace PokemonGoGUI.GoManager
 
         private  ItemId GetBestBall(PokemonData pokemonData)
         {
-            if(Items == null)
-            {
-                   return ItemId.ItemUnknown;
-            }
+            var Items = GetItems();
 
             int pokemonCp = pokemonData.Cp;
             //double ivPercent = CalculateIVPerfection(encounter.WildPokemon.PokemonData).Data;
@@ -645,7 +642,7 @@ namespace PokemonGoGUI.GoManager
 
         private async Task UseBerry(ulong encounterId, string spawnId, ItemId berry)
         {
-            ItemData berryData = Items.FirstOrDefault(x => x.ItemId == berry);
+            ItemData berryData = GetItems().FirstOrDefault(x => x.ItemId == berry);
 
             if (berryData == null || berryData.Count <= 0)
             {
