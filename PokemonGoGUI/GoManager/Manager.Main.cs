@@ -41,7 +41,7 @@ namespace PokemonGoGUI.GoManager
         private ManualResetEvent _pauser = new ManualResetEvent(true);
         private bool _proxyIssue = false;
         private DateTime TimeAutoCatch = DateTime.Now;
-        private bool DisableCatch = false;
+        private bool CatchDisabled = false;
 
         //Needs to be saved on close
         public GoProxy CurrentProxy { get; set; }
@@ -779,18 +779,18 @@ namespace PokemonGoGUI.GoManager
 
                         UpdateItemList();
 
-                        if (DisableCatch)
+                        if (CatchDisabled)
                         {
                             //Check delay if account not have balls
                             if (DateTime.Now > TimeAutoCatch)
                             {
-                                DisableCatch = false;
+                                CatchDisabled = false;
                                 LogCaller(new LoggerEventArgs("Enable catch after wait time.", LoggerTypes.Info));
                             }
                         }
 
                         // NOTE: not an "else" we could enabled catch in this time 
-                        if (!DisableCatch)
+                        if (!CatchDisabled)
                         {
                             var remainingBalls = RemainingPokeballs();
                             LogCaller(new LoggerEventArgs("Remaining Balls: " + remainingBalls, LoggerTypes.Debug));
@@ -810,7 +810,7 @@ namespace PokemonGoGUI.GoManager
                             else
                             {
                                 LogCaller(new LoggerEventArgs(String.Format("You don't have any pokeball catching pokemon will be disabled during {0:0:00} minutes.", UserSettings.DisableCatchDelay), LoggerTypes.Info));
-                                DisableCatch = true;
+                                CatchDisabled = true;
                                 TimeAutoCatch = DateTime.Now.AddMinutes(UserSettings.DisableCatchDelay);
                             }
                         }
