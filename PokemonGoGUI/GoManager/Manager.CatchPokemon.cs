@@ -457,7 +457,15 @@ namespace PokemonGoGUI.GoManager
                         }.ToByteString()
                     });
 
-                    catchPokemonResponse = CatchPokemonResponse.Parser.ParseFrom(catchresponse);
+                    try
+                    {
+                        catchPokemonResponse = CatchPokemonResponse.Parser.ParseFrom(catchresponse);
+                    }
+                    catch (Exception)
+                    {
+                        LogCaller(new LoggerEventArgs("Encounter expired....", LoggerTypes.Warning));
+                        return new MethodResult();
+                    }
 
                     string pokemon = String.Format("Name: {0}, CP: {1}, IV: {2:0.00}%", mapPokemon.PokemonId, eResponse.WildPokemon.PokemonData.Cp, CalculateIVPerfection(eResponse.WildPokemon.PokemonData));
                     string pokeBallName = pokeBall.ToString().Replace("Item", "");
