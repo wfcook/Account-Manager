@@ -604,8 +604,7 @@ namespace PokemonGoGUI.UI
 
         private void ComboBoxLocationPresets_SelectedIndexChanged(object sender, EventArgs e)
         {
-            var fLocation = comboBoxLocationPresets.SelectedItem as FarmLocation;
-            if (fLocation!=null)
+            if (comboBoxLocationPresets.SelectedItem is FarmLocation fLocation)
             {
                 if (fLocation.Name == "Current")
                 {
@@ -695,7 +694,7 @@ namespace PokemonGoGUI.UI
             DialogResult = DialogResult.OK;
         }
 
-        void setUsePinapToolStripMenuItem_Click(object sender, EventArgs e)
+        void SetUsePinapToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (fastObjectListViewCatch.SelectedObjects== null)
                 return;
