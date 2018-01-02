@@ -1,5 +1,13 @@
 # Change Log
 
+## [v2.21.1.17](https://github.com/Furtif/Account-Manager/tree/v2.21.1.17) (2018-01-02)
+
+[Full Changelog](https://github.com/Furtif/Account-Manager/compare/v2.21.1.16...v2.21.1.17)
+
+## [v2.21.1.16](https://github.com/Furtif/Account-Manager/tree/v2.21.1.16) (2018-01-02)
+
+[Full Changelog](https://github.com/Furtif/Account-Manager/compare/v2.21.1.15...v2.21.1.16)
+
 ## [v2.21.1.15](https://github.com/Furtif/Account-Manager/tree/v2.21.1.15) (2017-12-31)
 
 [Full Changelog](https://github.com/Furtif/Account-Manager/compare/v2.21.1.14...v2.21.1.15)
