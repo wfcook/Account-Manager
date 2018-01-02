@@ -41,7 +41,7 @@ namespace PokemonGoGUI.GoManager
         private ManualResetEvent _pauser = new ManualResetEvent(true);
         private bool _proxyIssue = false;
         private DateTime TimeAutoCatch = DateTime.Now;
-        private bool DisableCatch = false;
+        private bool CatchDisabled = false;
 
         //Needs to be saved on close
         public GoProxy CurrentProxy { get; set; }
@@ -779,40 +779,38 @@ namespace PokemonGoGUI.GoManager
 
                         UpdateItemList();
 
-                        //Check delay if account not have balls
-                        if (TimeAutoCatch.AddMinutes(UserSettings.DisableCatchDelay) < DateTime.Now)
-                        {
-                            if (DisableCatch)
-                            {
-                                LogCaller(new LoggerEventArgs("Enable catch after wait time.", LoggerTypes.Info));
-                                DisableCatch = false;
-                            }
-
-                            TimeAutoCatch = DateTime.Now;
-                        }
 
                         var remainingBalls = RemainingPokeballs();
 
-                        if (remainingBalls > 0 && !DisableCatch)
+                        if (CatchDisabled)
+                        {
+                            //Check delay if account not have balls
+                            if (  DateTime.Now > TimeAutoCatch){
+                                CatchDisabled = false;
+                                LogCaller(new LoggerEventArgs("Enable catch after wait time.", LoggerTypes.Info));
+                            }
+
+                        }
+                        // NOTE: not an "else" we could enabled catch in this time 
+                        if (!CatchDisabled)
                         {
                             LogCaller(new LoggerEventArgs("Remaining Balls: " + remainingBalls, LoggerTypes.Debug));
 
-                            //Catch nearby pokemon
-                            MethodResult nearbyPokemonResponse = await CatchNeabyPokemon();
-
-                            await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
-
-                            //Get nearby lured pokemon
-                            MethodResult luredPokemonResponse = await CatchLuredPokemon(pokestop);
-
-                            await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
-                        }
-                        else
-                        {
-                            if (!DisableCatch)
-                                LogCaller(new LoggerEventArgs("You not have pokeballs catch pokemon is disabled for 8 minutes.", LoggerTypes.Info));
-
-                            DisableCatch = true;
+                            if (remainingBalls > 0 ){
+                                //Catch nearby pokemon
+                                MethodResult nearbyPokemonResponse = await CatchNeabyPokemon();
+    
+                                await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
+    
+                                //Get nearby lured pokemon
+                                MethodResult luredPokemonResponse = await CatchLuredPokemon(pokestop);
+    
+                                await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
+                            }else{
+                                LogCaller(new LoggerEventArgs("You don't have any pokeball catching pokemon will be disabled during 8 minutes.", LoggerTypes.Info));
+                                CatchDisabled = true;
+                                TimeAutoCatch = DateTime.Now.AddMinutes(UserSettings.DisableCatchDelay);
+                            }
                         }
 
                         //Stop bot instantly
