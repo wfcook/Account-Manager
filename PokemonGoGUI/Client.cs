@@ -9,6 +9,7 @@ using POGOLib.Official.Net.Authentication.Data;
 using POGOLib.Official.Net.Captcha;
 using POGOLib.Official.Util.Device;
 using POGOLib.Official.Util.Hash;
+using POGOProtos.Data;
 using POGOProtos.Networking.Requests.Messages;
 using POGOProtos.Networking.Responses;
 using PokemonGoGUI.Enums;
@@ -51,7 +52,7 @@ namespace PokemonGoGUI
             ClientSession.AssetDigestUpdated -= OnAssetDisgestReceived;
             ClientSession.ItemTemplatesUpdated -= OnItemTemplatesReceived;
             ClientSession.UrlsUpdated -= OnDownloadUrlsReceived;
-            ClientSession.RemoteConfigUpdated -= OnRemoteConfigReceived;
+            ClientSession.RemoteConfigUpdated -= OnLocalConfigVersionReceived;
             ClientSession.AccessTokenUpdated -= SessionAccessTokenUpdated;
             ClientSession.CaptchaReceived -= SessionOnCaptchaReceived;
             ClientSession.InventoryUpdate -= SessionInventoryUpdate;
@@ -110,12 +111,18 @@ namespace PokemonGoGUI
             try
             {
                 //My files resources here
-                /*
-                ClientSession.Templates.ItemTemplates = read_file;
-                ClientSession.Templates.DownloadUrls = read_file;
-                ClientSession.Templates.AssetDigests = read_file;
-                ClientSession.Templates.RemoteConfigVersion = read_file;
-                */
+                var filename = "data/"+Settings.DeviceId+"IT.json";
+                if (File.Exists(filename))
+                    ClientSession.Templates.ItemTemplates = Serializer.FromJson<List<DownloadItemTemplatesResponse.Types.ItemTemplate>>(File.ReadAllText(filename));
+                filename = "data/"+Settings.DeviceId+"UR.json";
+                if (File.Exists(filename))
+                    ClientSession.Templates.DownloadUrls = Serializer.FromJson<List<DownloadUrlEntry>>(File.ReadAllText(filename));
+                filename = "data/"+Settings.DeviceId+"AD.json";
+                if (File.Exists(filename))
+                    ClientSession.Templates.AssetDigests = Serializer.FromJson<List<AssetDigestEntry>>(File.ReadAllText(filename));
+                filename = "data/"+Settings.DeviceId+"LCV.json";
+                if (File.Exists(filename))
+                    ClientSession.Templates.LocalConfigVersion = Serializer.FromJson<DownloadRemoteConfigVersionResponse>(File.ReadAllText(filename));
 
                 if (await ClientSession.StartupAsync(true))
                 {
@@ -125,7 +132,7 @@ namespace PokemonGoGUI
                     ClientSession.AssetDigestUpdated += OnAssetDisgestReceived;
                     ClientSession.ItemTemplatesUpdated += OnItemTemplatesReceived;
                     ClientSession.UrlsUpdated += OnDownloadUrlsReceived;
-                    ClientSession.RemoteConfigUpdated += OnRemoteConfigReceived;
+                    ClientSession.RemoteConfigUpdated += OnLocalConfigVersionReceived;
                     ClientSession.AccessTokenUpdated += SessionAccessTokenUpdated;
                     ClientSession.CaptchaReceived += SessionOnCaptchaReceived;
                     ClientSession.InventoryUpdate += SessionInventoryUpdate;
@@ -150,24 +157,36 @@ namespace PokemonGoGUI
             };
         }
 
-        private void OnAssetDisgestReceived(object sender, List<POGOProtos.Data.AssetDigestEntry> assetsdigest)
+        private void OnAssetDisgestReceived(object sender, List<POGOProtos.Data.AssetDigestEntry> data)
         {
-            //save file here
+            var filename = "data/"+Settings.DeviceId+"AD.json";
+            if (!Directory.Exists("data"))
+                Directory.CreateDirectory("data");
+            File.WriteAllText(filename,Serializer.ToJson(data));
         }
 
-        private void OnItemTemplatesReceived(object sender, List<DownloadItemTemplatesResponse.Types.ItemTemplate> itemtemplates)
+        private void OnItemTemplatesReceived(object sender, List<DownloadItemTemplatesResponse.Types.ItemTemplate> data)
         {
-            //save file here
+            var filename = "data/"+Settings.DeviceId+"IT.json";
+            if (!Directory.Exists("data"))
+                Directory.CreateDirectory("data");
+            File.WriteAllText(filename,Serializer.ToJson(data));
         }
 
-        private void OnDownloadUrlsReceived(object sender, List<POGOProtos.Data.DownloadUrlEntry> dowloadUrls)
+        private void OnDownloadUrlsReceived(object sender, List<POGOProtos.Data.DownloadUrlEntry> data)
         {
-            //save file here
+            var filename = "data/"+Settings.DeviceId+"UR.json";
+            if (!Directory.Exists("data"))
+                Directory.CreateDirectory("data");
+            File.WriteAllText(filename,Serializer.ToJson(data));
         }
 
-        private void OnRemoteConfigReceived(object sender, DownloadRemoteConfigVersionResponse downloadRemoteConfigVersionResponse)
+        private void OnLocalConfigVersionReceived(object sender, DownloadRemoteConfigVersionResponse data)
         {
-            //Save file here
+            var filename = "data/"+Settings.DeviceId+"LCV.json";
+            if (!Directory.Exists("data"))
+                Directory.CreateDirectory("data");
+            File.WriteAllText(filename,Serializer.ToJson(data));
         }
 
         private event EventHandler<int> OnPokehashSleeping;
