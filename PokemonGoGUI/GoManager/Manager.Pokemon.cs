@@ -47,6 +47,8 @@ namespace PokemonGoGUI.GoManager
                                     CalculateIVPerfection(pokemon)),
                                 LoggerTypes.Transfer));
 
+                            Pokemon.Remove(pokemon);
+
                             await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
                         }
                         else
@@ -90,13 +92,15 @@ namespace PokemonGoGUI.GoManager
                                 pokemonToTransfer.Count()),
                             LoggerTypes.Transfer));
 
+                        foreach (var poktoremove in pokemonToTransfer)
+                            Pokemon.Remove(poktoremove);
+
                         await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
                     }
                     else
                     {
-                        LogCaller(new LoggerEventArgs(String.Format("Faill to transfer {0} Pokemons. Because: {1}.",
-                            pokemonToTransfer.Count(),
-                            releasePokemonResponse.Result), LoggerTypes.Warning));
+                        LogCaller(new LoggerEventArgs(String.Format("Faill to transfer {0} Pokemons.",
+                            pokemonToTransfer.Count()), LoggerTypes.Warning));
                     }
                 }
                 catch (Exception ex)

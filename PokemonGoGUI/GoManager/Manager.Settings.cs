@@ -1,4 +1,5 @@
 ﻿using POGOProtos.Enums;
+using POGOProtos.Inventory;
 using POGOProtos.Settings.Master;
 using PokemonGoGUI.Extensions;
 using PokemonGoGUI.GoManager.Models;
@@ -38,7 +39,11 @@ namespace PokemonGoGUI.GoManager
                 return new MethodResult<AccountExportModel>();
             }
 
-            var AllItems =  _client.ClientSession.Player.Inventory.InventoryItems;
+            var AllItems = new List<InventoryItem>();
+            
+            if (_client.LoggedIn)
+                AllItems = _client.ClientSession.Player.Inventory.InventoryItems.ToList();
+
             if (AllItems == null || AllItems.Count == 0)
             {
                 LogCaller(new LoggerEventArgs(String.Format("No items found for {0}. Please update details", UserSettings.Username), LoggerTypes.Warning));
@@ -225,6 +230,8 @@ namespace PokemonGoGUI.GoManager
                 settings.ProxyPort = UserSettings.ProxyPort;
                 settings.ProxyUsername = UserSettings.ProxyUsername;
                 settings.GroupName = UserSettings.GroupName;
+
+                //new values added 
 
                 UserSettings = settings;
 

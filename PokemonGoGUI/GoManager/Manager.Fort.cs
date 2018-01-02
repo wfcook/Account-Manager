@@ -77,7 +77,8 @@ namespace PokemonGoGUI.GoManager
                         }
 
                         //Let it continue down
-                    }else if (fortResponse.Result != FortSearchResponse.Types.Result.Success )
+                    }
+                    else if (fortResponse.Result != FortSearchResponse.Types.Result.Success)
                     {
                         LogCaller(new LoggerEventArgs(String.Format("Failed to search fort. Response: {0}", fortResponse.Result), LoggerTypes.Warning));
                         return new MethodResult
@@ -86,9 +87,17 @@ namespace PokemonGoGUI.GoManager
                         };
                     }
 
-                    string message = String.Format("Searched Fort. Exp: {0}. Items: {1}.",
-                        fortResponse.ExperienceAwarded,
-                        StringUtil.GetSummedFriendlyNameOfItemAwardList(fortResponse.ItemsAwarded.ToList()));
+                    string message = String.Format("Searched Fort. Exp: {0}. Items: {1}.", // Badge: {2}. BonusLoot: {3}. Gems: {4}. Loot: {5}, Eggs: {6:0.0}. RaidTickets: {7}. TeamBonusLoot: {8}",
+                            fortResponse.ExperienceAwarded,
+                            StringUtil.GetSummedFriendlyNameOfItemAwardList(fortResponse.ItemsAwarded.ToList())
+                            /*,
+                            fortResponse.AwardedGymBadge.ToString(),
+                            fortResponse.BonusLoot.LootItem.ToString(),
+                            fortResponse.GemsAwarded.ToString(),
+                            fortResponse.Loot.LootItem.ToString(),
+                            fortResponse.PokemonDataEgg.EggKmWalkedStart,
+                            fortResponse.RaidTickets.ToString(),
+                            fortResponse.TeamBonusLoot.LootItem.ToString()*/);
 
                     var itemDictionary = new Dictionary<ItemId, ItemData>();
 
@@ -206,7 +215,7 @@ namespace PokemonGoGUI.GoManager
                             Message = "Success"
                         };
                     }
-                    
+
                 }
 
                 return new MethodResult
@@ -255,7 +264,7 @@ namespace PokemonGoGUI.GoManager
 
                 return new MethodResult<FortDetailsResponse>
                 {
-                    Data = new FortDetailsResponse () ,
+                    Data = new FortDetailsResponse(),
                     Message = "Failed getting fort info"
                 };
             }
@@ -263,7 +272,7 @@ namespace PokemonGoGUI.GoManager
 
         private async Task<MethodResult<GymGetInfoResponse>> GymGetInfo(FortData pokestop)
         {
-            try
+           try
             {
                 var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                 {

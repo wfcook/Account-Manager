@@ -321,6 +321,12 @@ namespace PokemonGoGUI.GoManager
 
         private async Task<MethodResult<EncounterResponse>> EncounterPokemon(MapPokemon mapPokemon)
         {
+            if (mapPokemon.EncounterId == 0 || mapPokemon.ExpirationTimestampMs >= DateTime.UtcNow.ToUnixTime())
+            {
+                LogCaller(new LoggerEventArgs("Encounter expired....", LoggerTypes.Warning));
+                return new MethodResult<EncounterResponse>();
+            }
+
             var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request {
                 RequestType = RequestType.Encounter,
                 RequestMessage = new EncounterMessage {
@@ -333,7 +339,15 @@ namespace PokemonGoGUI.GoManager
 
             EncounterResponse eResponse = null;
 
-            eResponse = EncounterResponse.Parser.ParseFrom(response);
+            try
+            {
+                eResponse = EncounterResponse.Parser.ParseFrom(response);
+            }
+            catch(Exception)
+            {
+                LogCaller(new LoggerEventArgs("Encounter expired....", LoggerTypes.Warning));
+                return new MethodResult<EncounterResponse>();
+            }
 
             if (eResponse.Status == EncounterResponse.Types.Status.PokemonInventoryFull) {
                 LogCaller(new LoggerEventArgs("Encounter failed. Pokemon inventory full", LoggerTypes.Warning));
@@ -473,6 +487,7 @@ namespace PokemonGoGUI.GoManager
 
 
                         LogCaller(new LoggerEventArgs(String.Format("Caught. {0}. Exp {1}. Candy: {2}. Attempt #{3}. Ball: {4}", pokemon, expGained, candyGained, attemptCount, pokeBallName), LoggerTypes.Success));
+                        Pokemon.Add(eResponse.WildPokemon.PokemonData);
 
                         return new MethodResult
                         {

@@ -400,7 +400,8 @@ namespace PokemonGoGUI.GoManager
 
         private bool CheckTime()
         {
-            if (Math.Abs(UserSettings.RunForHours) < 0.001) {
+            if (Math.Abs(UserSettings.RunForHours) < 0.001)
+            {
                 return false;
             }
 
@@ -502,7 +503,8 @@ namespace PokemonGoGUI.GoManager
                         AccountState = AccountState.Flagged;
                         LogCaller(new LoggerEventArgs("The account is flagged.", LoggerTypes.Warning));
 
-                        if(UserSettings.StopAtMinAccountState ==  AccountState.Flagged){
+                        if (UserSettings.StopAtMinAccountState == AccountState.Flagged)
+                        {
                             //Remove proxy
                             RemoveProxy();
                             Stop();
@@ -562,7 +564,7 @@ namespace PokemonGoGUI.GoManager
                         try
                         {
                             var remote = new Version();
-                            if (_client.ClientSession.GlobalSettings!=null)
+                            if (_client.ClientSession.GlobalSettings != null)
                                 remote = new Version(_client.ClientSession.GlobalSettings?.MinimumClientVersion);
                             if (_client.VersionStr < remote)
                             {
@@ -574,7 +576,7 @@ namespace PokemonGoGUI.GoManager
                         catch (Exception ex1)
                         {
                             AccountState = AccountState.PokemonBanAndPokestopBanTemp;
-                            LogCaller(new LoggerEventArgs("Exception: " + ex1,LoggerTypes.Debug));
+                            LogCaller(new LoggerEventArgs("Exception: " + ex1, LoggerTypes.Debug));
                             LogCaller(new LoggerEventArgs("Game settings failed", LoggerTypes.FatalError, new Exception("Maybe this account is banned ...")));
                             Stop();
                             continue;
@@ -585,7 +587,7 @@ namespace PokemonGoGUI.GoManager
                     //Get pokemon settings
                     if (PokeSettings == null)
                     {
-                        
+
                         LogCaller(new LoggerEventArgs("Grabbing pokemon settings ...", LoggerTypes.Debug));
                         result = await GetItemTemplates();
 
@@ -719,7 +721,8 @@ namespace PokemonGoGUI.GoManager
 
                         if (UserSettings.AutoRotateProxies && currentFails >= UserSettings.MaxFailBeforeReset)
                         {
-                            if (pokestops.Message.StartsWith("No pokestop data found.", StringComparison.Ordinal)) {
+                            if (pokestops.Message.StartsWith("No pokestop data found.", StringComparison.Ordinal))
+                            {
                                 _proxyIssue = true;
                                 await ChangeProxy();
                             }
@@ -751,14 +754,14 @@ namespace PokemonGoGUI.GoManager
                         WaitPaused();
 
                         FortData pokestop = pokestopsToFarm.Dequeue();
-                        LogCaller(new LoggerEventArgs("fort Dequeued: " +pokestop.Id, LoggerTypes.Debug));
+                        LogCaller(new LoggerEventArgs("fort Dequeued: " + pokestop.Id, LoggerTypes.Debug));
 
                         var currentLocation = new GeoCoordinate(_client.ClientSession.Player.Latitude, _client.ClientSession.Player.Longitude);
                         var fortLocation = new GeoCoordinate(pokestop.Latitude, pokestop.Longitude);
 
                         double distance = CalculateDistanceInMeters(currentLocation, fortLocation);
 
-                        string fort = (pokestop.Type == FortType.Gym)?"gym":"pokestop";
+                        string fort = (pokestop.Type == FortType.Gym) ? "gym" : "pokestop";
 
                         LogCaller(new LoggerEventArgs(String.Format("Going to {0} {1} of {2}. Distance {3:0.00}m", fort, pokeStopNumber, totalStops, distance), pokestop.Type == FortType.Checkpoint ? LoggerTypes.Info : LoggerTypes.FortGym));
 
@@ -768,7 +771,7 @@ namespace PokemonGoGUI.GoManager
                         if (!walkResult.Success)
                         {
                             LogCaller(new LoggerEventArgs("Too many failed walking attempts. Restarting to fix ...", LoggerTypes.Warning));
-                            LogCaller(new LoggerEventArgs("Result: "+ walkResult.Message, LoggerTypes.Debug));
+                            LogCaller(new LoggerEventArgs("Result: " + walkResult.Message, LoggerTypes.Debug));
                             break;
                         }
 
@@ -817,7 +820,7 @@ namespace PokemonGoGUI.GoManager
                         {
                             continue;
                         }
-                        
+
                         //Clean inventory,
                         if (UserSettings.RecycleItems)
                         {
@@ -830,36 +833,47 @@ namespace PokemonGoGUI.GoManager
                         double filledInventorySpace = FilledInventoryStorage();
                         LogCaller(new LoggerEventArgs(String.Format("Filled Inventory Storage: {0:0.00}%", filledInventorySpace), LoggerTypes.Debug));
 
-                        if ( (filledInventorySpace < UserSettings.SearchFortBelowPercent) && (filledInventorySpace <= 100) )
+                        if ((filledInventorySpace < UserSettings.SearchFortBelowPercent) && (filledInventorySpace <= 100))
                         {
-                                if (pokestop.CooldownCompleteTimestampMs < DateTime.UtcNow.ToUnixTime()){
-                                    if (pokestop.Type == FortType.Gym)
+                            if (pokestop.CooldownCompleteTimestampMs < DateTime.UtcNow.ToUnixTime())
+                            {
+                                if (pokestop.Type == FortType.Gym)
+                                {
+                                    if (!UserSettings.SpinGyms)
+                                        continue;
+                                    try
                                     {
-                                        if (!UserSettings.SpinGyms)
-                                            continue;
                                         MethodResult<GymGetInfoResponse> _result = await GymGetInfo(pokestop);
-                                        LogCaller(new LoggerEventArgs("Gym Name: "+ _result.Data.Name, LoggerTypes.Info));
+                                        LogCaller(new LoggerEventArgs("Gym Name: " + _result.Data.Name, LoggerTypes.Info));
                                     }
-                                    else
+                                    catch (Exception)
                                     {
-                                        var fortDetails = await FortDetails(pokestop);
-                                        LogCaller(new LoggerEventArgs("Fort Name: "+ fortDetails.Data.Name, LoggerTypes.Info));
+                                        LogCaller(new LoggerEventArgs("Skypped Gym...", LoggerTypes.Warning));
+                                        continue;
                                     }
-                                
-                                    MethodResult searchResult = await SearchPokestop(pokestop);
-        
-                                    //OutOfRange will show up as a success
-                                    if (searchResult.Success)
-                                    {
-                                        currentFailedStops = 0;
-                                    }
-                                    else
-                                    {
-                                        ++currentFailedStops;
-                                    }
-                                }else{
-                                    LogCaller(new LoggerEventArgs(String.Format("Skipping fort. In cooldown"), LoggerTypes.Info));
                                 }
+                                else
+                                {
+                                    var fortDetails = await FortDetails(pokestop);
+                                    LogCaller(new LoggerEventArgs("Fort Name: " + fortDetails.Data.Name, LoggerTypes.Info));
+                                }
+
+                                MethodResult searchResult = await SearchPokestop(pokestop);
+
+                                //OutOfRange will show up as a success
+                                if (searchResult.Success)
+                                {
+                                    currentFailedStops = 0;
+                                }
+                                else
+                                {
+                                    ++currentFailedStops;
+                                }
+                            }
+                            else
+                            {
+                                LogCaller(new LoggerEventArgs(String.Format("Skipping fort. In cooldown"), LoggerTypes.Info));
+                            }
                         }
                         else
                         {
