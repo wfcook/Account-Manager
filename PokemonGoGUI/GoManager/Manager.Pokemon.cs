@@ -2,7 +2,6 @@
 using POGOProtos.Data;
 using POGOProtos.Enums;
 using POGOProtos.Inventory;
-using POGOProtos.Inventory.Item;
 using POGOProtos.Networking.Requests;
 using POGOProtos.Networking.Requests.Messages;
 using POGOProtos.Networking.Responses;

@@ -1,5 +1,4 @@
-﻿using System.Windows.Forms.VisualStyles;
-using Google.Protobuf;
+﻿using Google.Protobuf;
 using POGOProtos.Data;
 using POGOProtos.Enums;
 using POGOProtos.Inventory.Item;

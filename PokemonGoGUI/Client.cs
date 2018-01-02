@@ -1,6 +1,5 @@
 ﻿#region using directives
 
-using GeoCoordinatePortable;
 using Newtonsoft.Json;
 using POGOLib.Official;
 using POGOLib.Official.LoginProviders;
@@ -84,7 +83,7 @@ namespace PokemonGoGUI
                 VersionStr = Configuration.Hasher.PokemonVersion;
                 AppVersion = Configuration.Hasher.AppVersion;
                 // TODO: Revise sleeping
-                ((PokeHashHasher)Configuration.Hasher).PokehashSleeping += OnPokehashSleeping;
+                //((PokeHashHasher)Configuration.Hasher).PokehashSleeping += OnPokehashSleeping;
             }
             // *****
 
@@ -194,7 +193,7 @@ namespace PokemonGoGUI
 
         private void SessionInventoryUpdate(object sender, EventArgs e)
         {
-            ClientManager.UpdateInventory();
+            //ClientManager.UpdateInventory();
         }
 
         private void OnHatchedEggsReceived(object sender, GetHatchedEggsResponse hatchedEggResponse)

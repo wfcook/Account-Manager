@@ -1,11 +1,9 @@
 ﻿using POGOProtos.Data;
-using POGOProtos.Enums;
 using POGOProtos.Inventory;
 using POGOProtos.Networking.Responses;
 using POGOProtos.Settings.Master;
 using PokemonGoGUI.GoManager.Models;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;

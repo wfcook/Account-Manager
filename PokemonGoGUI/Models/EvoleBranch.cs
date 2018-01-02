@@ -2,18 +2,14 @@
 using POGOProtos.Enums;
 using POGOProtos.Inventory.Item;
 using POGOProtos.Settings.Master;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PokemonGoGUI.Models
 {
-        //**********************************//
-        //EvolutionBranch first code
+    //**********************************//
+    //EvolutionBranch first code
 
-        public class EvolutionToPokemon
+    public class EvolutionToPokemon
         {
             public int CandyNeed { get; set; }
             public ulong OriginPokemonId { get; set; }
