@@ -210,7 +210,7 @@ namespace PokemonGoGUI
             StopOnAPIUpdate = true;
             SpinGyms = true;
             HashHost = new Uri("https://pokehash.buddyauth.com/");
-            HashEndpoint = "api/v153_2/hash";
+            HashEndpoint = "api/v157_5/hash";
             AuthAPIKey = "XXXXXXXXXXXXXXXXXXXX";
             Country = "US";
             Language = "en";
