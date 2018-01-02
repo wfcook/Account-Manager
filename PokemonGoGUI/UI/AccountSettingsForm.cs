@@ -78,19 +78,6 @@ namespace PokemonGoGUI.UI
 
             comboBoxLocationPresets.DataSource = _manager.FarmLocations;
             comboBoxLocationPresets.DisplayMember = "Name";
-
-            cbUseOnlyThisHashKey.Checked = _manager.UserSettings.UseOnlyOneKey;
-            tbAuthHashKey.Text = _manager.UserSettings.AuthAPIKey;
-            cbAutoUpdate.Checked = AutoUpdate;
-
-            //Location time zones
-            var zones = new TimeZoneIds().GetTimeZoneIds();
-            foreach (var tz in zones)
-            {
-                cbTimeZones.Items.Add(tz.Key);
-            }
-
-            cbTimeZones.Text = _manager.UserSettings.TimeZone;
         }
 
         private void UpdateListViews()
@@ -103,7 +90,6 @@ namespace PokemonGoGUI.UI
 
         private void UpdateDetails(Settings settings)
         {
-
             textBoxPtcPassword.Text = settings.Password;
             textBoxPtcUsername.Text = settings.Username;
             textBoxLat.Text = settings.DefaultLatitude.ToString();
@@ -176,10 +162,22 @@ namespace PokemonGoGUI.UI
             checkBoxTransferAtOnce.Checked = settings.TransferAtOnce;
             numericUpDownProximity.Value = settings.ARBonusProximity;
             numericUpDownAwareness.Value = settings.ARBonusAwareness;
-            
-            
 
-            for(int i = 0; i < comboBoxMinAccountState.Items.Count; i++)
+            cbUseOnlyThisHashKey.Checked = _manager.UserSettings.UseOnlyOneKey;
+            tbAuthHashKey.Text = _manager.UserSettings.AuthAPIKey;
+            cbAutoUpdate.Checked = AutoUpdate;
+            numericUpDownDisableCatchDelay.Value = new Decimal(_manager.UserSettings.DisableCatchDelay);
+
+            //Location time zones
+            var zones = new TimeZoneIds().GetTimeZoneIds();
+            foreach (var tz in zones)
+            {
+                cbTimeZones.Items.Add(tz.Key);
+            }
+
+            cbTimeZones.Text = _manager.UserSettings.TimeZone;
+
+            for (int i = 0; i < comboBoxMinAccountState.Items.Count; i++)
             {
                 if((AccountState)comboBoxMinAccountState.Items[i] == settings.StopAtMinAccountState)
                 {
@@ -314,6 +312,7 @@ namespace PokemonGoGUI.UI
             userSettings.SpinGyms = checkBoxSpinGyms.Checked;
             AutoUpdate = cbAutoUpdate.Checked;
             userSettings.UseBerries = checkBoxUseBerries.Checked;
+            userSettings.DisableCatchDelay = (int)numericUpDownDisableCatchDelay.Value;
 
             userSettings.RunForHours = (double)numericUpDownRunForHours.Value;
             userSettings.MaxLogs = (int)numericUpDownMaxLogs.Value;

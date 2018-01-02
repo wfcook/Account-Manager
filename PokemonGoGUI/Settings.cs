@@ -24,6 +24,7 @@ namespace PokemonGoGUI
         public string TimeZone { get; set; }
         public string POSIX { get; set; }
 
+        public int DisableCatchDelay { get; set; }
         public bool SpinGyms { get; set; }
         public string GroupName { get; set; }
         public string AccountName { get; set; }
@@ -215,6 +216,7 @@ namespace PokemonGoGUI
             Language = "en";
             TimeZone = "America/New_York";
             POSIX = "en-us";
+            DisableCatchDelay = 8;
         }
 
         public void LoadDeviceSettings()

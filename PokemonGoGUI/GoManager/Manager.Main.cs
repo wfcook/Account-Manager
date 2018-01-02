@@ -40,6 +40,8 @@ namespace PokemonGoGUI.GoManager
 
         private ManualResetEvent _pauser = new ManualResetEvent(true);
         private bool _proxyIssue = false;
+        private static DateTime TimeAutoCatch = DateTime.Now;
+        private bool DisableCatch = false;
 
         //Needs to be saved on close
         public GoProxy CurrentProxy { get; set; }
@@ -774,10 +776,24 @@ namespace PokemonGoGUI.GoManager
 
                         UpdateItemList();
 
-                        var remainingBalls = RemainingPokeballs();
-                        LogCaller(new LoggerEventArgs("Remaining Balls: " + remainingBalls, LoggerTypes.Debug));
-                        if (remainingBalls > 0)
+                        //Maybe add time wait if not pokeball to settings                        
+                        if (TimeAutoCatch.AddMinutes(8) < DateTime.Now)
                         {
+                            if (DisableCatch)
+                            {
+                                LogCaller(new LoggerEventArgs("Enable catch after wait time.", LoggerTypes.Info));
+                                DisableCatch = false;
+                            }
+
+                            TimeAutoCatch = DateTime.Now;
+                        }
+
+                        var remainingBalls = RemainingPokeballs();
+
+                        if (remainingBalls > 0 && !DisableCatch)
+                        {
+                            LogCaller(new LoggerEventArgs("Remaining Balls: " + remainingBalls, LoggerTypes.Debug));
+
                             //Catch nearby pokemon
                             MethodResult nearbyPokemonResponse = await CatchNeabyPokemon();
 
@@ -787,6 +803,13 @@ namespace PokemonGoGUI.GoManager
                             MethodResult luredPokemonResponse = await CatchLuredPokemon(pokestop);
 
                             await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
+                        }
+                        else
+                        {
+                            if (!DisableCatch)
+                                LogCaller(new LoggerEventArgs("You not have pokeballs catch pokemon is disabled for 8 minutes.", LoggerTypes.Info));
+
+                            DisableCatch = true;
                         }
 
                         //Stop bot instantly
