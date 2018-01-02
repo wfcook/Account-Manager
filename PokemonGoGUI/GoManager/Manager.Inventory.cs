@@ -31,10 +31,17 @@ namespace PokemonGoGUI.GoManager
             if (!_client.LoggedIn)
                 return new POGOProtos.Data.Player.PlayerStats();
 
+            try
+            {
                 InventoryItem item = _client.ClientSession.Player.Inventory.InventoryItems.FirstOrDefault(
                                          x => x.InventoryItemData.PlayerStats != null);
 
                 return item.InventoryItemData.PlayerStats;
+            }
+            catch (Exception)
+            {
+                return new POGOProtos.Data.Player.PlayerStats();
+            }
         }
 
         public IEnumerable<PokemonData> GetPokemons()
