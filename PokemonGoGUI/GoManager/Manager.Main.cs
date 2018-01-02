@@ -1080,32 +1080,9 @@ namespace PokemonGoGUI.GoManager
                 };
             }
 
-            try
-            {
-                LogCaller(new LoggerEventArgs("Session expired. Logging back in", LoggerTypes.Debug));
-
-                await _client.DoLogin(this);
-
-                return new MethodResult
-                {
-                    Success = true
-                };
-            }
-            /*catch (BadImageFormatException)
-            {
-                LogCaller(new LoggerEventArgs("Incorrect encrypt dll used. Please delete 'encrypt.dll' and restart the program", LoggerTypes.FatalError));
-
-                return new MethodResult
-                {
-                    Message = "Incorrect DLL used"
-                };
-            }*/
-            catch (Exception ex)
-            {
-                LogCaller(new LoggerEventArgs("Failed to reauthenticate failed", LoggerTypes.Warning, ex));
-
-                return new MethodResult();
-            }
+            LogCaller(new LoggerEventArgs("Session expired. Logging back in", LoggerTypes.Debug));
+            await Login_();
+            return new MethodResult();
         }
 
         private void LoadFarmLocations()
