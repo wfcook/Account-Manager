@@ -33,15 +33,20 @@ namespace PokemonGoGUI
         public uint AppVersion;
         public Session ClientSession;
         public bool LoggedIn = false;
+
         private GetPlayerMessage.Types.PlayerLocale PlayerLocale;
         private DeviceWrapper ClientDeviceWrapper;
         private ISettings Settings;
-        public Manager ClientManager;
+        private Manager ClientManager;
+        private int CandyBuddy;
+
+        private event EventHandler<int> OnPokehashSleeping;
 
         public Client()
         {
             VersionStr = new Version("0.87.5");
             AppVersion = 8700;
+            CandyBuddy = 0;
         }
 
         public void Logout()
@@ -111,22 +116,21 @@ namespace PokemonGoGUI
             try
             {
                 //My files resources here
-                var filename = "data/"+Settings.DeviceId+"IT.json";
+                var filename = "data/" + Settings.DeviceId + "IT.json";
                 if (File.Exists(filename))
                     ClientSession.Templates.ItemTemplates = Serializer.FromJson<List<DownloadItemTemplatesResponse.Types.ItemTemplate>>(File.ReadAllText(filename));
-                filename = "data/"+Settings.DeviceId+"UR.json";
+                filename = "data/" + Settings.DeviceId + "UR.json";
                 if (File.Exists(filename))
                     ClientSession.Templates.DownloadUrls = Serializer.FromJson<List<DownloadUrlEntry>>(File.ReadAllText(filename));
-                filename = "data/"+Settings.DeviceId+"AD.json";
+                filename = "data/" + Settings.DeviceId + "AD.json";
                 if (File.Exists(filename))
                     ClientSession.Templates.AssetDigests = Serializer.FromJson<List<AssetDigestEntry>>(File.ReadAllText(filename));
-                filename = "data/"+Settings.DeviceId+"LCV.json";
+                filename = "data/" + Settings.DeviceId + "LCV.json";
                 if (File.Exists(filename))
                     ClientSession.Templates.LocalConfigVersion = Serializer.FromJson<DownloadRemoteConfigVersionResponse>(File.ReadAllText(filename));
 
                 if (await ClientSession.StartupAsync(true))
                 {
-                    LoggedIn = true;
                     msgStr = "Successfully logged into server.";
 
                     ClientSession.AssetDigestUpdated += OnAssetDisgestReceived;
@@ -140,9 +144,11 @@ namespace PokemonGoGUI
                     ClientSession.CheckAwardedBadgesReceived += OnCheckAwardedBadgesReceived;
                     ClientSession.HatchedEggsReceived += OnHatchedEggsReceived;
 
-                    ClientManager.LogCaller(new LoggerEventArgs("Succefully added all events to the client.", LoggerTypes.Debug));
+                    CandyBuddy = ClientSession.Player.BuddyCandy;
 
                     SaveAccessToken(ClientSession.AccessToken);
+
+                    ClientManager.LogCaller(new LoggerEventArgs("Succefully added all events to the client.", LoggerTypes.Debug));
                 }
             }
             catch (Exception ex1)
@@ -159,37 +165,35 @@ namespace PokemonGoGUI
 
         private void OnAssetDisgestReceived(object sender, List<POGOProtos.Data.AssetDigestEntry> data)
         {
-            var filename = "data/"+Settings.DeviceId+"AD.json";
+            var filename = "data/" + Settings.DeviceId + "AD.json";
             if (!Directory.Exists("data"))
                 Directory.CreateDirectory("data");
-            File.WriteAllText(filename,Serializer.ToJson(data));
+            File.WriteAllText(filename, Serializer.ToJson(data));
         }
 
         private void OnItemTemplatesReceived(object sender, List<DownloadItemTemplatesResponse.Types.ItemTemplate> data)
         {
-            var filename = "data/"+Settings.DeviceId+"IT.json";
+            var filename = "data/" + Settings.DeviceId + "IT.json";
             if (!Directory.Exists("data"))
                 Directory.CreateDirectory("data");
-            File.WriteAllText(filename,Serializer.ToJson(data));
+            File.WriteAllText(filename, Serializer.ToJson(data));
         }
 
         private void OnDownloadUrlsReceived(object sender, List<POGOProtos.Data.DownloadUrlEntry> data)
         {
-            var filename = "data/"+Settings.DeviceId+"UR.json";
+            var filename = "data/" + Settings.DeviceId + "UR.json";
             if (!Directory.Exists("data"))
                 Directory.CreateDirectory("data");
-            File.WriteAllText(filename,Serializer.ToJson(data));
+            File.WriteAllText(filename, Serializer.ToJson(data));
         }
 
         private void OnLocalConfigVersionReceived(object sender, DownloadRemoteConfigVersionResponse data)
         {
-            var filename = "data/"+Settings.DeviceId+"LCV.json";
+            var filename = "data/" + Settings.DeviceId + "LCV.json";
             if (!Directory.Exists("data"))
                 Directory.CreateDirectory("data");
-            File.WriteAllText(filename,Serializer.ToJson(data));
+            File.WriteAllText(filename, Serializer.ToJson(data));
         }
-
-        private event EventHandler<int> OnPokehashSleeping;
 
         private void PokehashSleeping(object sender, int sleepTime)
         {
@@ -199,8 +203,13 @@ namespace PokemonGoGUI
         private void SessionMapUpdate(object sender, EventArgs e)
         {
             // Update BuddyPokemon Stats
-            //var msg = $"BuddyWalked Candy: {ClientSession.Player.BuddyCandy}";
-            //ClientManager.LogCaller(new LoggerEventArgs(msg, LoggerTypes.Success));
+            var session = (Session)sender;
+            if (session.Player.BuddyCandy > CandyBuddy)
+            {
+                var msg = $"BuddyWalked Candy: {CandyBuddy} + {session.Player.BuddyCandy - CandyBuddy}";
+                ClientManager.LogCaller(new LoggerEventArgs(msg, LoggerTypes.Success));
+                CandyBuddy = session.Player.BuddyCandy;
+            }
         }
 
         public void SessionOnCaptchaReceived(object sender, CaptchaEventArgs e)
@@ -227,7 +236,8 @@ namespace PokemonGoGUI
 
         private void SessionAccessTokenUpdated(object sender, EventArgs e)
         {
-            SaveAccessToken(ClientSession.AccessToken);
+            var session = (Session)sender;
+            SaveAccessToken(session.AccessToken);
         }
 
         public void SetSettings(Manager manager)
@@ -292,7 +302,7 @@ namespace PokemonGoGUI
         /// <param name="initLong">The initial longitude.</param>
         /// <param name="mayCache">Can we cache the <see cref="AccessToken" /> to a local file?</param>
         private async Task<Session> GetSession(ILoginProvider loginProvider, double initLat, double initLong, bool mayCache = false)
-        {            
+        {
             var cacheDir = Path.Combine(Directory.GetCurrentDirectory(), "Cache");
             var fileName = Path.Combine(cacheDir, $"{loginProvider.UserId}-{loginProvider.ProviderId}.json");
 
