@@ -784,8 +784,8 @@ namespace PokemonGoGUI.GoManager
                         {
                             //Check delay if account not have balls
                             var now = DateTime.Now;
-                            LogCaller(new LoggerEventArgs("Now: " +now.ToLongDateString()+" "+ now.ToLongTimeString() , LoggerTypes.Debug));
-                            LogCaller(new LoggerEventArgs("TimeAutoCatch: "+TimeAutoCatch.ToLongDateString()+" "+ TimeAutoCatch.ToLongTimeString() , LoggerTypes.Debug));
+                                LogCaller(new LoggerEventArgs("Now: " +now.ToLongDateString()+" "+ now.ToLongTimeString() , LoggerTypes.Debug));
+                                LogCaller(new LoggerEventArgs("TimeAutoCatch: "+TimeAutoCatch.ToLongDateString()+" "+ TimeAutoCatch.ToLongTimeString() , LoggerTypes.Debug));
                             if ( now  > TimeAutoCatch){
                                 CatchDisabled = false;
                                 LogCaller(new LoggerEventArgs("Enable catch after wait time.", LoggerTypes.Info));
@@ -805,9 +805,16 @@ namespace PokemonGoGUI.GoManager
 
                                 await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
-                                //Get nearby lured pokemon
-                                MethodResult luredPokemonResponse = await CatchLuredPokemon(pokestop);
+                            }else{
+                                LogCaller(new LoggerEventArgs("You don't have any pokeball catching pokemon will be disabled during "+ UserSettings.DisableCatchDelay.ToString(CultureInfo.InvariantCulture) +" minutes.", LoggerTypes.Info));
+                                CatchDisabled = true;
+                                TimeAutoCatch = DateTime.Now.AddMinutes(UserSettings.DisableCatchDelay);
+                            }
 
+                            if (RemainingPokeballs() > 0)
+                            {
+                                //Catch lured pokemon
+                                MethodResult luredPokemonResponse = await CatchLuredPokemon(pokestop);
                                 await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
                             }else{
                                 LogCaller(new LoggerEventArgs("You don't have any pokeball catching pokemon will be disabled during "+ UserSettings.DisableCatchDelay.ToString(CultureInfo.InvariantCulture) +" minutes.", LoggerTypes.Info));

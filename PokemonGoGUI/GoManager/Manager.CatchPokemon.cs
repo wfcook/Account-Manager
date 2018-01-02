@@ -1,4 +1,5 @@
-﻿using Google.Protobuf;
+﻿using System.Globalization;
+using Google.Protobuf;
 using POGOProtos.Data;
 using POGOProtos.Enums;
 using POGOProtos.Inventory.Item;
@@ -55,6 +56,13 @@ namespace PokemonGoGUI.GoManager
                     continue;
                 }
 
+                if( RemainingPokeballs()<1)
+                {
+                    LogCaller(new LoggerEventArgs("You don't have any pokeball catching pokemon will be disabled during "+ UserSettings.DisableCatchDelay.ToString(CultureInfo.InvariantCulture) +" minutes.", LoggerTypes.Info));
+                    CatchDisabled = true;
+                    TimeAutoCatch = DateTime.Now.AddMinutes(UserSettings.DisableCatchDelay);
+                    break;
+                }
 
                 MethodResult<EncounterResponse> result = await EncounterPokemon(pokemon);
 
