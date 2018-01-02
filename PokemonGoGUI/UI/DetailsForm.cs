@@ -600,5 +600,15 @@ namespace PokemonGoGUI.UI
 
             showFutureTransfersToolStripMenuItem.Enabled = true;
         }
+
+        private void FastObjectListViewEggs_FormatCell(object sender, FormatCellEventArgs e)
+        {
+            var egg = (EggIncubator)e.Model;
+
+            if (e.Column == olvColumnEggWalked)
+                e.SubItem.Text = String.Format("{0:0.00}km", _manager.Stats.KmWalked - egg.StartKmWalked);
+            else if (e.Column == olvColumnEggDistance)
+                e.SubItem.Text = String.Format("{0:0.00}km", egg.TargetKmWalked - egg.StartKmWalked);
+        }
     }
 }
