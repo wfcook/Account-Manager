@@ -86,6 +86,13 @@ namespace PokemonGoGUI.GoManager
                 result = await _client.DoLogin(this);
                 LogCaller(new LoggerEventArgs(result.Message, LoggerTypes.Debug));
 
+                if (!result.Success)
+                {
+                    LogCaller(new LoggerEventArgs("Account state unknown, maybe hash issues.", LoggerTypes.FatalError));
+                    AccountState = AccountState.Unknown;
+                    Stop();
+                }
+
                 if (CurrentProxy != null)
                 {
                     ProxyHandler.ResetFailCounter(CurrentProxy);

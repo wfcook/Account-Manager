@@ -10,6 +10,7 @@
         PokemonBanTemp,
         Flagged,
         CaptchaReceived,
-        NotVerified
+        NotVerified,
+        Unknown
     }
 }
