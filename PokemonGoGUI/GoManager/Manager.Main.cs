@@ -1084,7 +1084,7 @@ namespace PokemonGoGUI.GoManager
             {
                 LogCaller(new LoggerEventArgs("Session expired. Logging back in", LoggerTypes.Debug));
 
-                await _client.DoLogin(_client.ClientManager);
+                await _client.DoLogin(this);
 
                 return new MethodResult
                 {
