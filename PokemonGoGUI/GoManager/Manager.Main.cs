@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+using System.Globalization;
 using GeoCoordinatePortable;
 using Newtonsoft.Json;
 using POGOLib.Official.Exceptions;
@@ -780,9 +780,6 @@ namespace PokemonGoGUI.GoManager
 
                         UpdateItemList();
 
-
-                        var remainingBalls = RemainingPokeballs();
-
                         if (CatchDisabled)
                         {
                             //Check delay if account not have balls
@@ -793,22 +790,24 @@ namespace PokemonGoGUI.GoManager
                                 CatchDisabled = false;
                                 LogCaller(new LoggerEventArgs("Enable catch after wait time.", LoggerTypes.Info));
                             }
-
                         }
+
                         // NOTE: not an "else" we could enabled catch in this time 
                         if (!CatchDisabled)
                         {
+                            var remainingBalls = RemainingPokeballs();
                             LogCaller(new LoggerEventArgs("Remaining Balls: " + remainingBalls, LoggerTypes.Debug));
 
-                            if (remainingBalls > 0 ){
+                            if (remainingBalls > 0)
+                            {
                                 //Catch nearby pokemon
                                 MethodResult nearbyPokemonResponse = await CatchNeabyPokemon();
-    
+
                                 await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
-    
+
                                 //Get nearby lured pokemon
                                 MethodResult luredPokemonResponse = await CatchLuredPokemon(pokestop);
-    
+
                                 await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
                             }else{
                                 LogCaller(new LoggerEventArgs("You don't have any pokeball catching pokemon will be disabled during "+ UserSettings.DisableCatchDelay.ToString(CultureInfo.InvariantCulture) +" minutes.", LoggerTypes.Info));
