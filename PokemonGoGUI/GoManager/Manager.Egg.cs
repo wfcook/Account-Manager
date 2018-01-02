@@ -67,8 +67,8 @@ namespace PokemonGoGUI.GoManager
 
                 useItemEggIncubatorResponse = UseItemEggIncubatorResponse.Parser.ParseFrom(response);
 
-                var incitem = incubatorResponse.Data.Id.ToString().Replace("ItemIncubator", "");
-                var _egg = egg.PokemonId.ToString();
+                var incitem = incubatorResponse.Data.Id;
+                var _egg = egg.PokemonId;
                 
                 LogCaller(new LoggerEventArgs(String.Format("Incubating egg in {0}. Pokemon Id: {1}", incitem, _egg), LoggerTypes.Incubate));
 
