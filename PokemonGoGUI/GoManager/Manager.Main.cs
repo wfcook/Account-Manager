@@ -777,7 +777,7 @@ namespace PokemonGoGUI.GoManager
                         UpdateItemList();
 
                         //Maybe add time wait if not pokeball to settings                        
-                        if (TimeAutoCatch.AddMinutes(8) < DateTime.Now)
+                        if (TimeAutoCatch.AddMinutes(UserSettings.DisableCatchDelay) < DateTime.Now)
                         {
                             if (DisableCatch)
                             {
