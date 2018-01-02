@@ -87,6 +87,11 @@ namespace PokemonGoGUI.UI
             olvColumnPokemonCandy.AspectGetter = delegate(object pokemon)
             {
 
+                if(_manager.PokemonCandy == null || _manager.PokemonCandy.Count == 0)
+                {
+                    return -1;
+                }
+
                 PokemonSettings settings = _manager.GetPokemonSetting((pokemon as PokemonData).PokemonId).Data;
 
                 if(settings == null)
@@ -94,7 +99,7 @@ namespace PokemonGoGUI.UI
                     return -1;
                 }
 
-                Candy family = _manager.GetPokemonCandies().FirstOrDefault(y => y.FamilyId == settings.FamilyId);
+                Candy family = _manager.PokemonCandy.FirstOrDefault(y => y.FamilyId == settings.FamilyId);
 
                 return family == null ? -1 : family.Candy_;
 
@@ -242,25 +247,30 @@ namespace PokemonGoGUI.UI
                 return;
             }
 
-            var Stats =_manager.GetPlayerStats();
-            labelPlayerLevel.Text = _manager.GetPlayerStats()?.Level.ToString();
+            labelPlayerLevel.Text = _manager.Level.ToString();
             labelExp.Text = _manager.ExpRatio.ToString();
             labelRunningTime.Text = _manager.RunningTime;
             labelStardust.Text = _manager.TotalStardust.ToString();
             labelExpPerHour.Text = String.Format("{0:0}", _manager.ExpPerHour);
             labelExpGained.Text = _manager.ExpGained.ToString();
-            labelDistanceWalked.Text = String.Format("{0:0.00}km", Stats.KmWalked);
+            labelDistanceWalked.Text = String.Format("{0:0.00}km", _manager.Stats.KmWalked);
 
-            if (Stats != null)
+            if (_manager.Stats != null)
             {
-                labelPokemonCaught.Text = Stats.PokemonsCaptured.ToString();
-                labelPokestopVisits.Text = Stats.PokeStopVisits.ToString();
-                labelUniquePokemon.Text = Stats.UniquePokedexEntries.ToString();
+                labelPokemonCaught.Text = _manager.Stats.PokemonsCaptured.ToString();
+                labelPokestopVisits.Text = _manager.Stats.PokeStopVisits.ToString();
+                labelUniquePokemon.Text = _manager.Stats.UniquePokedexEntries.ToString();
             }
 
-            labelPokemonCount.Text = String.Format("{0}/{1}", _manager.GetPokemons().Count() + _manager.GetEggs().Count(), _manager.MaxPokemonStorage);
+            if (_manager.Pokemon != null)
+            {
+                labelPokemonCount.Text = String.Format("{0}/{1}", _manager.Pokemon.Count + _manager.Eggs.Count, _manager.MaxPokemonStorage);
+            }
 
-            labelInventoryCount.Text = String.Format("{0}/{1}", _manager.GetItems().Sum(x => x.Count).ToString(), _manager.MaxItemStorage);
+            if (_manager.Items != null)
+            {
+                labelInventoryCount.Text = String.Format("{0}/{1}", _manager.Items.Sum(x => x.Count).ToString(), _manager.MaxItemStorage);
+            }
 
             if(_manager.PlayerData != null)
             {
@@ -387,7 +397,7 @@ namespace PokemonGoGUI.UI
                 return;
             }
 
-            fastObjectListViewPokemon.SetObjects(_manager.GetPokemons());
+            fastObjectListViewPokemon.SetObjects(_manager.Pokemon);
         }
 
         private async void TransferToolStripMenuItem_Click(object sender, EventArgs e)
@@ -407,7 +417,7 @@ namespace PokemonGoGUI.UI
 
             contextMenuStripPokemonDetails.Enabled = true;
 
-            fastObjectListViewPokemon.SetObjects(_manager.GetPokemons());
+            fastObjectListViewPokemon.SetObjects(_manager.Pokemon);
 
             MessageBox.Show("Finished transferring pokemon");
         }
@@ -429,7 +439,7 @@ namespace PokemonGoGUI.UI
 
             contextMenuStripPokemonDetails.Enabled = true;
 
-            fastObjectListViewPokemon.SetObjects(_manager.GetPokemons());
+            fastObjectListViewPokemon.SetObjects(_manager.Pokemon);
 
             MessageBox.Show("Finished evolving pokemon");
         }
@@ -453,15 +463,15 @@ namespace PokemonGoGUI.UI
                 _totalLogs = _manager.TotalLogs;
                 tabPageLogs.Text = "Logs";
             } else if (tabControlMain.SelectedTab == tabPagePokemon) {
-                fastObjectListViewPokemon.SetObjects(_manager.GetPokemons());
+                fastObjectListViewPokemon.SetObjects(_manager.Pokemon);
             } else if (tabControlMain.SelectedTab == tabPageCandy) {
-                fastObjectListViewCandy.SetObjects(_manager.GetPokemonCandies());
+                fastObjectListViewCandy.SetObjects(_manager.PokemonCandy);
             } else if (tabControlMain.SelectedTab == tabPageEggs) {
-                fastObjectListViewEggs.SetObjects(_manager.GetEggs());
+                fastObjectListViewEggs.SetObjects(_manager.Eggs);
             } else if (tabControlMain.SelectedTab == tabPageInventory) {
-                fastObjectListViewInventory.SetObjects(_manager.GetItems());
+                fastObjectListViewInventory.SetObjects(_manager.Items);
             } else if (tabControlMain.SelectedTab == tabPagePokedex) {
-                fastObjectListViewPokedex.SetObjects(_manager.GetPokedex());
+                fastObjectListViewPokedex.SetObjects(_manager.Pokedex);
             } else if (tabControlMain.SelectedTab == tabPageStats) {
                 DisplayDetails();
             }
@@ -508,7 +518,7 @@ namespace PokemonGoGUI.UI
 
             favoriteToolStripMenuItem.Enabled = true;
 
-            fastObjectListViewPokemon.SetObjects(_manager.GetPokemons());
+            fastObjectListViewPokemon.SetObjects(_manager.Pokemon);
 
             MessageBox.Show("Finished favoriting pokemon");
 
@@ -523,7 +533,7 @@ namespace PokemonGoGUI.UI
 
             favoriteToolStripMenuItem.Enabled = true;
 
-            fastObjectListViewPokemon.SetObjects(_manager.GetPokemons());
+            fastObjectListViewPokemon.SetObjects(_manager.Pokemon);
 
             MessageBox.Show("Finished unfavoriting pokemon");
 
@@ -553,8 +563,9 @@ namespace PokemonGoGUI.UI
                 await Task.Delay(500);
             }
 
+            _manager.UpdateInventory();
 
-            fastObjectListViewInventory.SetObjects(_manager.GetItems());
+            fastObjectListViewInventory.SetObjects(_manager.Items);
 
             MessageBox.Show("Finished recycling items");
         }

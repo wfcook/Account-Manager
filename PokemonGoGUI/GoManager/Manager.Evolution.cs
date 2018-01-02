@@ -182,9 +182,26 @@ namespace PokemonGoGUI.GoManager
                 };
             }
 
+            UpdatePokemon();
+            UpdatePokemonCandy();
+
+            //TODO: really is needed here?
+            /*MethodResult result = await GetItemTemplates();
+
+            if(!result.Success)
+            {
+                LogCaller(new LoggerEventArgs("Failed to grab pokemon settings. Skipping evolution", LoggerTypes.Warning));
+
+                return new MethodResult<List<PokemonData>>
+                {
+                    Data = new List<PokemonData>(),
+                    Success = true
+                };
+            }*/
+
             var pokemonToEvolve = new List<PokemonData>();
 
-            IEnumerable<IGrouping<PokemonId, PokemonData>> groupedPokemon = GetPokemons().OrderByDescending(x => x.PokemonId).GroupBy(x => x.PokemonId);
+            IEnumerable<IGrouping<PokemonId, PokemonData>> groupedPokemon = Pokemon.OrderByDescending(x => x.PokemonId).GroupBy(x => x.PokemonId);
 
             foreach(IGrouping<PokemonId, PokemonData> group in groupedPokemon)
             {
@@ -216,7 +233,7 @@ namespace PokemonGoGUI.GoManager
                     continue;
                 }
 
-                Candy pokemonCandy = GetPokemonCandies().FirstOrDefault(x => x.FamilyId == setting.FamilyId);
+                Candy pokemonCandy = PokemonCandy.FirstOrDefault(x => x.FamilyId == setting.FamilyId);
                 List<PokemonData> pokemonGroupToEvolve = group.Where(x => x.Cp >= evolveSetting.MinCP).OrderByDescending(x => CalculateIVPerfection(x)).ToList();
 
                 if(pokemonCandy == null)
@@ -256,7 +273,7 @@ namespace PokemonGoGUI.GoManager
                 };
             }
 
-            ItemData data = GetItems().FirstOrDefault(x => x.ItemId == POGOProtos.Inventory.Item.ItemId.ItemLuckyEgg);
+            ItemData data = Items.FirstOrDefault(x => x.ItemId == POGOProtos.Inventory.Item.ItemId.ItemLuckyEgg);
 
             if (data == null || data.Count == 0)
             {
@@ -337,8 +354,12 @@ namespace PokemonGoGUI.GoManager
 
         public double FilledPokemonInventorySpace()
         {
+            if (Pokemon == null || PlayerData == null)
+            {
+                return 0;
+            }
 
-            return (double)(GetPokemons().Count() + GetEggs().Count()) / PlayerData.MaxPokemonStorage * 100;
+            return (double)(Pokemon.Count + Eggs.Count) / PlayerData.MaxPokemonStorage * 100;
         }
     }
 }

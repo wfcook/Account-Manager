@@ -92,6 +92,27 @@ namespace PokemonGoGUI.GoManager
         [JsonIgnore]
         public List<Log> Logs { get; private set; }
 
+        [JsonIgnore]
+        public PlayerStats Stats { get; private set; }
+
+
+        [JsonIgnore]
+        public List<ItemData> Items { get; private set; }
+
+        [JsonIgnore]
+        public List<PokemonData> Pokemon { get; private set; }
+
+        [JsonIgnore]
+        public List<PokedexEntry> Pokedex { get; private set; }
+
+        [JsonIgnore]
+        public List<Candy> PokemonCandy { get; private set; }
+
+        [JsonIgnore]
+        public List<EggIncubator> Incubators { get; private set; }
+
+        [JsonIgnore]
+        public List<PokemonData> Eggs { get; private set; }
 
         [JsonIgnore]
         public Dictionary<PokemonId, PokemonSettings> PokeSettings { get; private set; }
@@ -148,6 +169,15 @@ namespace PokemonGoGUI.GoManager
             }
         }
 
+        [JsonIgnore]
+        public int Level
+        {
+            get
+            {
+                return Stats == null ? 0 : Stats.Level;
+
+            }
+        }
 
         [JsonIgnore]
         public int MaxLevel
@@ -168,7 +198,6 @@ namespace PokemonGoGUI.GoManager
                 {
                     return "Unknown";
                 }
-                var Stats = GetPlayerStats();
 
                 long currentExp = Stats.Experience - Stats.PrevLevelXp;
                 long required = Stats.NextLevelXp - Stats.PrevLevelXp;
@@ -223,7 +252,6 @@ namespace PokemonGoGUI.GoManager
         {
             get
             {
-                var Stats = GetPlayerStats();
                 if (Stats == null)
                 {
                     return "??/??";
@@ -345,13 +373,12 @@ namespace PokemonGoGUI.GoManager
         private void ExpIncrease(int amount)
         {
             _expGained += amount;
-            GetPlayerStats().Experience += amount;
+            Stats.Experience += amount;
         }
 
         private int RemainingPokeballs()
         {
             int total = 0;
-            var Items = GetItems();
 
             ItemData data = Items.FirstOrDefault(x => x.ItemId == ItemId.ItemPokeBall);
 
