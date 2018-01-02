@@ -778,6 +778,7 @@
             this.fastObjectListViewEggs.ShowGroups = false;
             this.fastObjectListViewEggs.Size = new System.Drawing.Size(1124, 440);
             this.fastObjectListViewEggs.TabIndex = 2;
+            this.fastObjectListViewEggs.UseCellFormatEvents = true;
             this.fastObjectListViewEggs.UseCompatibleStateImageBehavior = false;
             this.fastObjectListViewEggs.UseFiltering = true;
             this.fastObjectListViewEggs.View = System.Windows.Forms.View.Details;
