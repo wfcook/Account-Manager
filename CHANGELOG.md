@@ -1,5 +1,15 @@
 # Change Log
 
+## [v2.21.1.20](https://github.com/Furtif/Account-Manager/tree/v2.21.1.20) (2018-01-03)
+
+[Full Changelog](https://github.com/Furtif/Account-Manager/compare/v2.21.1.19...v2.21.1.20)
+
+**Merged pull requests:**
+
+- fix user ressources data add conecting mode [\#52](https://github.com/Furtif/Account-Manager/pull/52) ([Furtif](https://github.com/Furtif))
+- Move exceptions [\#51](https://github.com/Furtif/Account-Manager/pull/51) ([Furtif](https://github.com/Furtif))
+- update pogolib [\#50](https://github.com/Furtif/Account-Manager/pull/50) ([Furtif](https://github.com/Furtif))
+
 ## [v2.21.1.19](https://github.com/Furtif/Account-Manager/tree/v2.21.1.19) (2018-01-02)
 
 [Full Changelog](https://github.com/Furtif/Account-Manager/compare/v2.21.1.18...v2.21.1.19)
