@@ -21,6 +21,9 @@ namespace PokemonGoGUI.UI
 
             fastObjectListViewLogs.PrimarySortColumn = olvColumnDate;
             fastObjectListViewLogs.PrimarySortOrder = SortOrder.Descending;
+
+            fastObjectListViewLogs.BackColor = Color.FromArgb(0, 0, 0);
+            fastObjectListViewLogs.ForeColor = Color.LightGray;
         }
 
         private async void LogViewerForm_Load(object sender, EventArgs e)
@@ -40,7 +43,20 @@ namespace PokemonGoGUI.UI
                 MessageBox.Show(String.Format("Failed to import log. Ex: {0}", ex.Message));
             }
         }
+
         private void FastObjectListViewLogs_FormatRow(object sender, BrightIdeasSoftware.FormatRowEventArgs e)
+        {
+            Log log = e.Model as Log;
+
+            if (log == null)
+            {
+                return;
+            }
+
+            e.Item.ForeColor = log.GetLogColor();
+        }
+
+        private void FastObjectListViewLogs_FormatCell(object sender, BrightIdeasSoftware.FormatCellEventArgs e)
         {
             Log log = e.Model as Log;
 
