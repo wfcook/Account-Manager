@@ -37,7 +37,14 @@ namespace PokemonGoGUI.GoManager
                         }.ToByteString()
                     });
 
-                    fortResponse = FortSearchResponse.Parser.ParseFrom(response);
+                    try
+                    {
+                        fortResponse = FortSearchResponse.Parser.ParseFrom(response);
+                    }
+                    catch (Exception)
+                    {
+                        return new MethodResult();
+                    }
 
                     if (fortResponse.Result == FortSearchResponse.Types.Result.OutOfRange)
                     {
