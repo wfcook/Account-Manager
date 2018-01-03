@@ -45,6 +45,6 @@ for /f "delims=" %%i in ('dir /s /b /a-d "%programfiles(x86)%\MSBuild.exe"') do 
 echo.
 set PokemonGoGUI=
 echo.
-echo ............ Finished :)
+echo ............ Build Finished :)
 echo.
 pause
