@@ -227,7 +227,7 @@ namespace PokemonGoGUI
                         manager.Tracker.CalculatedTrackingHours();
                     }
 
-                    if (manager.AccountState == AccountState.Conecting)
+                    if (manager.AccountState == AccountState.Conecting || manager.AccountState == AccountState.HashIssues)
                     {
                         manager.AccountState = AccountState.Good;
                     }
