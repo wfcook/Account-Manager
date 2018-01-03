@@ -10,6 +10,7 @@ using POGOLib.Official.Net.Authentication.Data;
 using POGOLib.Official.Net.Captcha;
 using POGOLib.Official.Util.Device;
 using POGOLib.Official.Util.Hash;
+using POGOLib.Official.Util.Hash.PokeHash;
 using POGOProtos.Data;
 using POGOProtos.Networking.Requests.Messages;
 using POGOProtos.Networking.Responses;
@@ -301,6 +302,12 @@ namespace PokemonGoGUI
 
                 msgStr = "Failed to login";
             }
+            catch (PokeHashException)
+            {
+                ClientManager.AccountState = AccountState.HashIssues;
+
+                msgStr = "Hash issues";
+            }
             catch (Exception ex)
             {
                 ClientManager.Stop();
@@ -310,7 +317,7 @@ namespace PokemonGoGUI
 
                 msgStr = "Failed to login";
             }
-
+ 
             return new MethodResult<bool>()
             {
                 Success = LoggedIn,

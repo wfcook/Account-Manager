@@ -12,6 +12,7 @@
         Flagged,
         CaptchaReceived,
         NotVerified,
+        HashIssues,
         Unknown
     }
 }
