@@ -158,6 +158,8 @@ namespace PokemonGoGUI.UI
                 fastObjectListViewLogs.RestoreState(_manager.LogHeaderSettings);
             }
 
+            fastObjectListViewLogs.SetObjects(_manager.Logs);
+
             var values = new List<LoggerTypes>();
 
             foreach(LoggerTypes type in Enum.GetValues(typeof(LoggerTypes)))
@@ -178,7 +180,6 @@ namespace PokemonGoGUI.UI
             _manager.OnLog += _manager_OnLog;
 
             DisplayDetails();
-
         }
 
         private void _manager_OnLog(object sender, LoggerEventArgs e)

@@ -19,9 +19,9 @@ namespace PokemonGoGUI.GoManager
 {
     public partial class Manager
     {
-        public async Task<MethodResult> TransferPokemon(IEnumerable<PokemonData> pokemonToTransfer)
+        public async Task<MethodResult> TransferPokemon(IEnumerable<PokemonData> pokemonsToTransfer)
         {
-            pokemonToTransfer = pokemonToTransfer.Where(x => x.Favorite != 1 && !x.IsEgg && string.IsNullOrEmpty(x.DeployedFortId) && x.Id != PlayerData.BuddyPokemon?.Id);
+            var pokemonToTransfer = pokemonsToTransfer.Where(x => x.Favorite != 1 && !x.IsEgg && string.IsNullOrEmpty(x.DeployedFortId) && x.Id != PlayerData.BuddyPokemon?.Id);
             if (!UserSettings.TransferAtOnce)
             {
                 foreach (PokemonData pokemon in pokemonToTransfer)
@@ -47,7 +47,7 @@ namespace PokemonGoGUI.GoManager
                                     CalculateIVPerfection(pokemon)),
                                 LoggerTypes.Transfer));
 
-                            //Pokemon.Remove(pokemon);
+                            Pokemon.Remove(pokemon);
 
                             await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
                         }
@@ -92,8 +92,8 @@ namespace PokemonGoGUI.GoManager
                                 pokemonToTransfer.Count()),
                             LoggerTypes.Transfer));
 
-                        //foreach (var poktoremove in pokemonToTransfer)
-                        //    Pokemon.Remove(poktoremove);
+                        foreach (var poktoremove in pokemonsToTransfer)
+                            Pokemon.Remove(poktoremove);
 
                         await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
                     }
@@ -116,7 +116,6 @@ namespace PokemonGoGUI.GoManager
                 };
             }
         }
-
 
         private async Task<MethodResult> TransferFilteredPokemon()
         {
