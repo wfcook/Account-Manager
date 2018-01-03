@@ -78,17 +78,21 @@ namespace PokemonGoGUI.GoManager
         public async Task<MethodResult> AcLogin()
         {
             LogCaller(new LoggerEventArgs("Attempting to login ...", LoggerTypes.Debug));
+            AccountState = AccountState.Conecting;
 
             MethodResult result = null;
             result = await _client.DoLogin(this);
             LogCaller(new LoggerEventArgs(result.Message, LoggerTypes.Debug));
 
-            if (!result.Success && AccountState != AccountState.Good)
+            if (!result.Success)
             {
-                LogCaller(new LoggerEventArgs("Account state unknown, maybe hash issues.", LoggerTypes.FatalError));
-                AccountState = AccountState.Unknown;
+                LogCaller(new LoggerEventArgs(result.Message, LoggerTypes.FatalError));
+                if (AccountState == AccountState.Conecting)
+                    AccountState = AccountState.Unknown;
                 Stop();
             }
+
+            AccountState = AccountState.Good;
 
             if (CurrentProxy != null)
             {
