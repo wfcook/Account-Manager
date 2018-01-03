@@ -92,7 +92,7 @@ namespace PokemonGoGUI.GoManager
             {
                 if (!_client.LoggedIn)
                 {
-                    MethodResult result = await Login_();
+                    MethodResult result = await AcLogin();
 
                     if (!result.Success)
                     {

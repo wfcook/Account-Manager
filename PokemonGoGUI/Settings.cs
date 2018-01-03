@@ -12,7 +12,7 @@ using System.Security.Cryptography;
 
 namespace PokemonGoGUI
 {
-    public class Settings : ISettings
+    public class Settings
     {
         public List<string> HashKeys { get; set; }
         public bool UseOnlyOneKey { get; set; }
