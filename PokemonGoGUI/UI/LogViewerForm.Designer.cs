@@ -43,6 +43,7 @@
             this.fastObjectListViewLogs.AllColumns.Add(this.olvColumnMessage);
             this.fastObjectListViewLogs.AllColumns.Add(this.olvColumnException);
             this.fastObjectListViewLogs.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.fastObjectListViewLogs.CellEditUseWholeCell = false;
             this.fastObjectListViewLogs.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.olvColumnDate,
             this.olvColumnStatus,
@@ -61,6 +62,7 @@
             this.fastObjectListViewLogs.UseFiltering = true;
             this.fastObjectListViewLogs.View = System.Windows.Forms.View.Details;
             this.fastObjectListViewLogs.VirtualMode = true;
+            this.fastObjectListViewLogs.FormatCell += new System.EventHandler<BrightIdeasSoftware.FormatCellEventArgs>(this.FastObjectListViewLogs_FormatCell);
             this.fastObjectListViewLogs.FormatRow += new System.EventHandler<BrightIdeasSoftware.FormatRowEventArgs>(this.FastObjectListViewLogs_FormatRow);
             // 
             // olvColumnDate
