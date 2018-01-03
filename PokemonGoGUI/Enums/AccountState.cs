@@ -3,6 +3,7 @@
     public enum AccountState
     {
         Good,
+        Conecting,
         PermAccountBan,
         PokemonBanOrPokestopBanTemp,
         PokemonBanAndPokestopBanTemp,

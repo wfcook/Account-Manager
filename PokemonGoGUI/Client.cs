@@ -112,35 +112,21 @@ namespace PokemonGoGUI
             LoggedIn = false;
             try
             {
-                //My files resources here
-                var filename = "data/"+ ClientManager.UserSettings.DeviceId+"IT.json";
-                if (File.Exists(filename))
-                    ClientSession.Templates.ItemTemplates = Serializer.FromJson<List<DownloadItemTemplatesResponse.Types.ItemTemplate>>(File.ReadAllText(filename));
-                filename = "data/"+ ClientManager.UserSettings.DeviceId+"UR.json";
-                if (File.Exists(filename))
-                    ClientSession.Templates.DownloadUrls = Serializer.FromJson<List<DownloadUrlEntry>>(File.ReadAllText(filename));
-                filename = "data/"+ ClientManager.UserSettings.DeviceId+"AD.json";
-                if (File.Exists(filename))
-                    ClientSession.Templates.AssetDigests = Serializer.FromJson<List<AssetDigestEntry>>(File.ReadAllText(filename));
-                filename = "data/"+ ClientManager.UserSettings.DeviceId+"LCV.json";
-                if (File.Exists(filename))
-                    ClientSession.Templates.LocalConfigVersion = Serializer.FromJson<DownloadRemoteConfigVersionResponse>(File.ReadAllText(filename));
+                ClientSession.AssetDigestUpdated += OnAssetDisgestReceived;
+                ClientSession.ItemTemplatesUpdated += OnItemTemplatesReceived;
+                ClientSession.UrlsUpdated += OnDownloadUrlsReceived;
+                ClientSession.LocalConfigUpdated += OnLocalConfigVersionReceived;
+                ClientSession.AccessTokenUpdated += SessionAccessTokenUpdated;
+                ClientSession.CaptchaReceived += SessionOnCaptchaReceived;
+                ClientSession.InventoryUpdate += SessionInventoryUpdate;
+                ClientSession.MapUpdate += SessionMapUpdate;
+                ClientSession.CheckAwardedBadgesReceived += OnCheckAwardedBadgesReceived;
+                ClientSession.HatchedEggsReceived += OnHatchedEggsReceived;
 
                 if (await ClientSession.StartupAsync(true))
                 {
                     LoggedIn = true;
                     msgStr = "Successfully logged into server.";
-
-                    ClientSession.AssetDigestUpdated += OnAssetDisgestReceived;
-                    ClientSession.ItemTemplatesUpdated += OnItemTemplatesReceived;
-                    ClientSession.UrlsUpdated += OnDownloadUrlsReceived;
-                    ClientSession.LocalConfigUpdated += OnLocalConfigVersionReceived;
-                    ClientSession.AccessTokenUpdated += SessionAccessTokenUpdated;
-                    ClientSession.CaptchaReceived += SessionOnCaptchaReceived;
-                    ClientSession.InventoryUpdate += SessionInventoryUpdate;
-                    ClientSession.MapUpdate += SessionMapUpdate;
-                    ClientSession.CheckAwardedBadgesReceived += OnCheckAwardedBadgesReceived;
-                    ClientSession.HatchedEggsReceived += OnHatchedEggsReceived;
 
                     ClientManager.LogCaller(new LoggerEventArgs("Succefully added all events to the client.", LoggerTypes.Debug));
 
@@ -325,34 +311,42 @@ namespace PokemonGoGUI
 
         private void OnAssetDisgestReceived(object sender, List<POGOProtos.Data.AssetDigestEntry> data)
         {
-            var filename = "data/"+ ClientManager.UserSettings.DeviceId+"AD.json";
+            var filename = "data/" + ClientManager.UserSettings.DeviceId + "_AD.json";
             if (!Directory.Exists("data"))
                 Directory.CreateDirectory("data");
-            File.WriteAllText(filename,Serializer.ToJson(data));
+            if (File.Exists(filename))
+                File.Delete(filename);
+            File.WriteAllText(filename, Serializer.ToJson(data));
         }
 
         private void OnItemTemplatesReceived(object sender, List<DownloadItemTemplatesResponse.Types.ItemTemplate> data)
         {
-            var filename = "data/"+ ClientManager.UserSettings.DeviceId+"IT.json";
+            var filename = "data/" + ClientManager.UserSettings.DeviceId + "_IT.json";
             if (!Directory.Exists("data"))
                 Directory.CreateDirectory("data");
-            File.WriteAllText(filename,Serializer.ToJson(data));
+            if (File.Exists(filename))
+                File.Delete(filename);
+            File.WriteAllText(filename, Serializer.ToJson(data));
         }
 
         private void OnDownloadUrlsReceived(object sender, List<POGOProtos.Data.DownloadUrlEntry> data)
         {
-            var filename = "data/"+ ClientManager.UserSettings.DeviceId+"UR.json";
+            var filename = "data/" + ClientManager.UserSettings.DeviceId + "_UR.json";
             if (!Directory.Exists("data"))
                 Directory.CreateDirectory("data");
-            File.WriteAllText(filename,Serializer.ToJson(data));
+            if (File.Exists(filename))
+                File.Delete(filename);
+            File.WriteAllText(filename, Serializer.ToJson(data));
         }
 
         private void OnLocalConfigVersionReceived(object sender, DownloadRemoteConfigVersionResponse data)
         {
-            var filename = "data/"+ ClientManager.UserSettings.DeviceId+"LCV.json";
+            var filename = "data/" + ClientManager.UserSettings.DeviceId + "_LCV.json";
             if (!Directory.Exists("data"))
                 Directory.CreateDirectory("data");
-            File.WriteAllText(filename,Serializer.ToJson(data));
+            if (File.Exists(filename))
+                File.Delete(filename);
+            File.WriteAllText(filename, Serializer.ToJson(data));
         }
 
         private event EventHandler<int> OnPokehashSleeping;
@@ -457,7 +451,7 @@ namespace PokemonGoGUI
         /// <param name="initLong">The initial longitude.</param>
         /// <param name="mayCache">Can we cache the <see cref="AccessToken" /> to a local file?</param>
         private async Task<Session> GetSession(ILoginProvider loginProvider, double initLat, double initLong, bool mayCache = false)
-        {            
+        {
             var cacheDir = Path.Combine(Directory.GetCurrentDirectory(), "Cache");
             var fileName = Path.Combine(cacheDir, $"{loginProvider.UserId}-{loginProvider.ProviderId}.json");
 
@@ -479,6 +473,21 @@ namespace PokemonGoGUI
 
             if (mayCache)
                 SaveAccessToken(session.AccessToken);
+
+            //My files resources here
+            var filename = "data/" + ClientManager.UserSettings.DeviceId + "_IT.json";
+            if (File.Exists(filename))
+                session.Templates.ItemTemplates = Serializer.FromJson<List<DownloadItemTemplatesResponse.Types.ItemTemplate>>(File.ReadAllText(filename));
+            filename = "data/" + ClientManager.UserSettings.DeviceId + "_UR.json";
+            if (File.Exists(filename))
+                session.Templates.DownloadUrls = Serializer.FromJson<List<DownloadUrlEntry>>(File.ReadAllText(filename));
+            filename = "data/" + ClientManager.UserSettings.DeviceId + "_AD.json";
+            if (File.Exists(filename))
+                session.Templates.AssetDigests = Serializer.FromJson<List<AssetDigestEntry>>(File.ReadAllText(filename));
+            filename = "data/" + ClientManager.UserSettings.DeviceId + "_LCV.json";
+            if (File.Exists(filename))
+                session.Templates.LocalConfigVersion = Serializer.FromJson<DownloadRemoteConfigVersionResponse>(File.ReadAllText(filename));
+            //*/
 
             return session;
         }
