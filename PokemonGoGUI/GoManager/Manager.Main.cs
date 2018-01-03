@@ -40,9 +40,10 @@ namespace PokemonGoGUI.GoManager
         private bool _wasAutoRestarted = false;
 
         private ManualResetEvent _pauser = new ManualResetEvent(true);
-        private bool _proxyIssue = false;
         private DateTime TimeAutoCatch = DateTime.Now;
         private bool CatchDisabled = false;
+
+        public bool _proxyIssue = false;
 
         //Needs to be saved on close
         public GoProxy CurrentProxy { get; set; }
@@ -74,201 +75,27 @@ namespace PokemonGoGUI.GoManager
             LoadFarmLocations();
         }
 
-
-
-        public async Task<MethodResult> Login_()
+        public async Task<MethodResult> AcLogin()
         {
             LogCaller(new LoggerEventArgs("Attempting to login ...", LoggerTypes.Debug));
 
-            try
+            MethodResult result = null;
+            result = await _client.DoLogin(this);
+            LogCaller(new LoggerEventArgs(result.Message, LoggerTypes.Debug));
+
+            if (!result.Success && AccountState != AccountState.Good)
             {
-                MethodResult result = null;
-                result = await _client.DoLogin(this);
-                LogCaller(new LoggerEventArgs(result.Message, LoggerTypes.Debug));
-
-                if (!result.Success)
-                {
-                    LogCaller(new LoggerEventArgs("Account state unknown, maybe hash issues.", LoggerTypes.FatalError));
-                    AccountState = AccountState.Unknown;
-                    Stop();
-                }
-
-                if (CurrentProxy != null)
-                {
-                    ProxyHandler.ResetFailCounter(CurrentProxy);
-                }
-
-                return result;
-            }
-            catch (PtcOfflineException)
-            {
+                LogCaller(new LoggerEventArgs("Account state unknown, maybe hash issues.", LoggerTypes.FatalError));
+                AccountState = AccountState.Unknown;
                 Stop();
-
-                LogCaller(new LoggerEventArgs("Ptc server offline. Please try again later.", LoggerTypes.Warning));
-
-                return new MethodResult
-                {
-                    Message = "Ptc server offline."
-                };
             }
-            catch (AccountNotVerifiedException)
+
+            if (CurrentProxy != null)
             {
-                Stop();
-                RemoveProxy();
-
-                LogCaller(new LoggerEventArgs("Account not verified. Stopping ...", LoggerTypes.Warning));
-
-                AccountState = Enums.AccountState.NotVerified;
-
-                return new MethodResult
-                {
-                    Message = "Account not verified."
-                };
+                ProxyHandler.ResetFailCounter(CurrentProxy);
             }
-            catch (WebException ex)
-            {
-                Stop();
 
-                if (ex.Status == WebExceptionStatus.Timeout)
-                {
-                    if (String.IsNullOrEmpty(Proxy))
-                    {
-                        LogCaller(new LoggerEventArgs("Login request has timed out.", LoggerTypes.Warning));
-                    }
-                    else
-                    {
-                        _proxyIssue = true;
-                        LogCaller(new LoggerEventArgs("Login request has timed out. Possible bad proxy.", LoggerTypes.ProxyIssue));
-                    }
-
-                    return new MethodResult
-                    {
-                        Message = "Request has timed out."
-                    };
-                }
-
-                if (!String.IsNullOrEmpty(Proxy))
-                {
-                    if (ex.Status == WebExceptionStatus.ConnectionClosed)
-                    {
-                        _proxyIssue = true;
-                        LogCaller(new LoggerEventArgs("Potential http proxy detected. Only https proxies will work.", LoggerTypes.ProxyIssue));
-
-                        return new MethodResult
-                        {
-                            Message = "Http proxy detected"
-                        };
-                    }
-                    else if (ex.Status == WebExceptionStatus.ConnectFailure || ex.Status == WebExceptionStatus.ProtocolError || ex.Status == WebExceptionStatus.ReceiveFailure
-                        || ex.Status == WebExceptionStatus.ServerProtocolViolation)
-                    {
-                        _proxyIssue = true;
-                        LogCaller(new LoggerEventArgs("Proxy is offline", LoggerTypes.ProxyIssue));
-
-                        return new MethodResult
-                        {
-                            Message = "Proxy is offline"
-                        };
-                    }
-                }
-
-                _proxyIssue |= !String.IsNullOrEmpty(Proxy);
-
-                LogCaller(new LoggerEventArgs("Failed to login due to request error", LoggerTypes.Exception, ex.InnerException));
-
-                return new MethodResult
-                {
-                    Message = "Failed to login due to request error"
-                };
-            }
-            catch (TaskCanceledException)
-            {
-                Stop();
-
-                if (String.IsNullOrEmpty(Proxy))
-                {
-                    LogCaller(new LoggerEventArgs("Login request has timed out", LoggerTypes.Warning));
-                }
-                else
-                {
-                    _proxyIssue = true;
-                    LogCaller(new LoggerEventArgs("Login request has timed out. Possible bad proxy", LoggerTypes.ProxyIssue));
-                }
-
-                return new MethodResult
-                {
-                    Message = "Login request has timed out"
-                };
-            }
-            catch (InvalidCredentialsException ex)
-            {
-                //Puts stopping log before other log.
-                Stop();
-                RemoveProxy();
-
-                LogCaller(new LoggerEventArgs("Invalid credentials or account lockout. Stopping bot...", LoggerTypes.Warning, ex));
-
-                return new MethodResult
-                {
-                    Message = "Username or password incorrect"
-                };
-            }
-            catch (IPBannedException)
-            {
-                if (UserSettings.StopOnIPBan)
-                {
-                    Stop();
-                }
-
-                string message = String.Empty;
-
-                if (!String.IsNullOrEmpty(Proxy))
-                {
-                    if (CurrentProxy != null)
-                    {
-                        ProxyHandler.MarkProxy(CurrentProxy, true);
-                    }
-
-                    message = "Proxy IP is banned.";
-                }
-                else
-                {
-                    message = "IP address is banned.";
-                }
-
-                _proxyIssue = true;
-
-                LogCaller(new LoggerEventArgs(message, LoggerTypes.ProxyIssue));
-
-                return new MethodResult
-                {
-                    Message = message
-                };
-            }
-            catch (GoogleLoginException ex)
-            {
-                Stop();
-                RemoveProxy();
-
-                LogCaller(new LoggerEventArgs(ex.Message, LoggerTypes.Warning));
-
-                return new MethodResult
-                {
-                    Message = "Failed to login"
-                };
-            }
-            catch (Exception ex)
-            {
-                Stop();
-                //RemoveProxy();
-
-                LogCaller(new LoggerEventArgs("Failed to login", LoggerTypes.Exception, ex));
-
-                return new MethodResult
-                {
-                    Message = "Failed to login"
-                };
-            }
+            return result;
         }
 
         public MethodResult Start()
@@ -494,7 +321,7 @@ namespace PokemonGoGUI.GoManager
                     if (!_client.LoggedIn)
                     {
                         //Login
-                        result = await Login_();
+                        result = await AcLogin();
 
                         if (!result.Success)
                         {
