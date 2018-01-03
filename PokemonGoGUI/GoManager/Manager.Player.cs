@@ -22,7 +22,9 @@ namespace PokemonGoGUI.GoManager
         {
             //TODO: review what we need do here.
             // UpdateInventory();
-            
+
+            UpdatePokemon();
+
             LogCaller(new LoggerEventArgs("Updating details", LoggerTypes.Debug));
 
             await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));

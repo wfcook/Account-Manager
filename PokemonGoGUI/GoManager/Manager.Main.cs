@@ -87,12 +87,15 @@ namespace PokemonGoGUI.GoManager
             if (!result.Success)
             {
                 LogCaller(new LoggerEventArgs(result.Message, LoggerTypes.FatalError));
-                if (AccountState == AccountState.Conecting)
+                if (AccountState == AccountState.Conecting || AccountState == AccountState.Good)
                     AccountState = AccountState.Unknown;
                 Stop();
             }
-
-            AccountState = AccountState.Good;
+            else
+            {
+                if (AccountState == AccountState.Conecting)
+                    AccountState = AccountState.Good;
+            }
 
             if (CurrentProxy != null)
             {
@@ -334,47 +337,6 @@ namespace PokemonGoGUI.GoManager
 
                             continue;
                         }
-                    }
-
-
-                    if (_client.ClientSession.Player.Warn)
-                    {
-                        AccountState = AccountState.Flagged;
-                        LogCaller(new LoggerEventArgs("The account is flagged.", LoggerTypes.Warning));
-
-                        if (UserSettings.StopAtMinAccountState == AccountState.Flagged)
-                        {
-                            //Remove proxy
-                            RemoveProxy();
-                            Stop();
-                            continue;
-                        }
-                    }
-
-                    if (_client.ClientSession.Player.Banned)
-                    {
-                        AccountState = AccountState.PermAccountBan;
-                        LogCaller(new LoggerEventArgs("The account is banned.", LoggerTypes.FatalError));
-
-                        //Remove proxy
-                        RemoveProxy();
-
-                        Stop();
-
-                        continue;
-                    }
-
-                    //Closes bot on captcha received need utils for solve
-                    if (AccountState == AccountState.CaptchaReceived)
-                    {
-                        LogCaller(new LoggerEventArgs("Captcha ceceived", LoggerTypes.Warning));
-
-                        //Remove proxy
-                        RemoveProxy();
-
-                        Stop();
-
-                        continue;
                     }
 
                     await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
@@ -622,9 +584,10 @@ namespace PokemonGoGUI.GoManager
                         {
                             //Check delay if account not have balls
                             var now = DateTime.Now;
-                                LogCaller(new LoggerEventArgs("Now: " +now.ToLongDateString()+" "+ now.ToLongTimeString() , LoggerTypes.Debug));
-                                LogCaller(new LoggerEventArgs("TimeAutoCatch: "+TimeAutoCatch.ToLongDateString()+" "+ TimeAutoCatch.ToLongTimeString() , LoggerTypes.Debug));
-                            if ( now  > TimeAutoCatch){
+                            LogCaller(new LoggerEventArgs("Now: " + now.ToLongDateString() + " " + now.ToLongTimeString(), LoggerTypes.Debug));
+                            LogCaller(new LoggerEventArgs("TimeAutoCatch: " + TimeAutoCatch.ToLongDateString() + " " + TimeAutoCatch.ToLongTimeString(), LoggerTypes.Debug));
+                            if (now > TimeAutoCatch)
+                            {
                                 CatchDisabled = false;
                                 LogCaller(new LoggerEventArgs("Enable catch after wait time.", LoggerTypes.Info));
                             }
@@ -643,8 +606,10 @@ namespace PokemonGoGUI.GoManager
 
                                 await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
-                            }else{
-                                LogCaller(new LoggerEventArgs("You don't have any pokeball catching pokemon will be disabled during "+ UserSettings.DisableCatchDelay.ToString(CultureInfo.InvariantCulture) +" minutes.", LoggerTypes.Info));
+                            }
+                            else
+                            {
+                                LogCaller(new LoggerEventArgs("You don't have any pokeball catching pokemon will be disabled during " + UserSettings.DisableCatchDelay.ToString(CultureInfo.InvariantCulture) + " minutes.", LoggerTypes.Info));
                                 CatchDisabled = true;
                                 TimeAutoCatch = DateTime.Now.AddMinutes(UserSettings.DisableCatchDelay);
                             }
@@ -654,8 +619,10 @@ namespace PokemonGoGUI.GoManager
                                 //Catch lured pokemon
                                 MethodResult luredPokemonResponse = await CatchLuredPokemon(pokestop);
                                 await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
-                            }else{
-                                LogCaller(new LoggerEventArgs("You don't have any pokeball catching pokemon will be disabled during "+ UserSettings.DisableCatchDelay.ToString(CultureInfo.InvariantCulture) +" minutes.", LoggerTypes.Info));
+                            }
+                            else
+                            {
+                                LogCaller(new LoggerEventArgs("You don't have any pokeball catching pokemon will be disabled during " + UserSettings.DisableCatchDelay.ToString(CultureInfo.InvariantCulture) + " minutes.", LoggerTypes.Info));
                                 CatchDisabled = true;
                                 TimeAutoCatch = DateTime.Now.AddMinutes(UserSettings.DisableCatchDelay);
                             }
