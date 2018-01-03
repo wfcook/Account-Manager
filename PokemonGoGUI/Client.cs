@@ -480,10 +480,7 @@ namespace PokemonGoGUI
 
             var session = await Login.GetSession(loginProvider, initLat, initLong, ClientDeviceWrapper, PlayerLocale);
 
-            if (mayCache)
-                SaveAccessToken(session.AccessToken);
-
-            //My files resources here
+            //My files resources here       
             var filename = "data/" + ClientManager.UserSettings.DeviceId + "_IT.json";
             if (File.Exists(filename))
                 session.Templates.ItemTemplates = Serializer.FromJson<List<DownloadItemTemplatesResponse.Types.ItemTemplate>>(File.ReadAllText(filename));
@@ -498,6 +495,9 @@ namespace PokemonGoGUI
                 session.Templates.LocalConfigVersion = Serializer.FromJson<DownloadRemoteConfigVersionResponse>(File.ReadAllText(filename));
             //*/
 
+            if (mayCache)
+                SaveAccessToken(session.AccessToken);
+
             return session;
         }
 
@@ -509,10 +509,11 @@ namespace PokemonGoGUI
             "CFNetwork/758.2.8 Darwin/15.0.0",  // 9.2
             "CFNetwork/758.2.8 Darwin/15.0.0",  // 9.2.1
             "CFNetwork/758.3.15 Darwin/15.4.0", // 9.3
-            "CFNetwork/758.4.3 Darwin/15.5.0", // 9.3.2
+            "CFNetwork/758.4.3 Darwin/15.5.0",  // 9.3.2
             "CFNetwork/807.2.14 Darwin/16.3.0", // 10.3.3
-            "CFNetwork/889.3 Darwin/17.2.0", // 11.1.0
-            "CFNetwork/893.10 Darwin/17.3.0", // 11.2.0
+            "CFNetwork/889.3 Darwin/17.2.0",    // 11.1.0
+            "CFNetwork/893.10 Darwin/17.3.0",   // 11.2.0
+            "CFNetwork/893.14.2 Darwin/17.4.0"  // 11.2.5
         };
 
         private static readonly string[][] Devices =
@@ -533,7 +534,7 @@ namespace PokemonGoGUI
             new[] {"iPhone7,2", "iPhone", "N61AP"},
             new[] {"iPhone8,1", "iPhone", "N71AP"},
             new[] {"iPhone8,2", "iPhone", "MKTM2"}, //iphone 6s plus
-            new[] {"iPhone9,3", "iPhone", "MN9T2"}
+            new[] {"iPhone9,3", "iPhone", "MN9T2"}  //iphone 7
         };
 
         private static readonly string[] OsVersions = {
@@ -547,7 +548,8 @@ namespace PokemonGoGUI
             "9.3.2",
             "10.3.3",
             "11.1.0",
-            "11.2.0"
+            "11.2.0",
+            "11.2.5"
         };
     }
 }

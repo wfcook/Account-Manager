@@ -85,12 +85,14 @@ namespace PokemonGoGUI.Extensions
                 Directory.Delete(tmpDir, true);
             }
 
+            /*/Clean caches on startup
             var cacheDir = Path.Combine(Directory.GetCurrentDirectory(), "Cache");
 
             if (Directory.Exists(cacheDir))
             {
                 Directory.Delete(cacheDir, true);
             }
+            //*/
 
             var di = new DirectoryInfo(Directory.GetCurrentDirectory());
             var files = di.GetFiles("*.old", SearchOption.AllDirectories);
