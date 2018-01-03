@@ -52,7 +52,7 @@ namespace PokemonGoGUI
             ClientSession.AssetDigestUpdated -= OnAssetDisgestReceived;
             ClientSession.ItemTemplatesUpdated -= OnItemTemplatesReceived;
             ClientSession.UrlsUpdated -= OnDownloadUrlsReceived;
-            ClientSession.RemoteConfigUpdated -= OnLocalConfigVersionReceived;
+            ClientSession.LocalConfigUpdated -= OnLocalConfigVersionReceived;
             ClientSession.AccessTokenUpdated -= SessionAccessTokenUpdated;
             ClientSession.CaptchaReceived -= SessionOnCaptchaReceived;
             ClientSession.InventoryUpdate -= SessionInventoryUpdate;
@@ -132,7 +132,7 @@ namespace PokemonGoGUI
                     ClientSession.AssetDigestUpdated += OnAssetDisgestReceived;
                     ClientSession.ItemTemplatesUpdated += OnItemTemplatesReceived;
                     ClientSession.UrlsUpdated += OnDownloadUrlsReceived;
-                    ClientSession.RemoteConfigUpdated += OnLocalConfigVersionReceived;
+                    ClientSession.LocalConfigUpdated += OnLocalConfigVersionReceived;
                     ClientSession.AccessTokenUpdated += SessionAccessTokenUpdated;
                     ClientSession.CaptchaReceived += SessionOnCaptchaReceived;
                     ClientSession.InventoryUpdate += SessionInventoryUpdate;
