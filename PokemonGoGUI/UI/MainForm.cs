@@ -827,6 +827,15 @@ namespace PokemonGoGUI
                     case AccountState.CaptchaReceived:
                         e.SubItem.ForeColor = Color.Blue;
                         break;
+                    case AccountState.Conecting:
+                        e.SubItem.ForeColor = Color.Blue;
+                        break;
+                    case AccountState.HashIssues:
+                        e.SubItem.ForeColor = Color.Beige;
+                        break;
+                    case AccountState.Unknown:
+                        e.SubItem.ForeColor = Color.Cyan;
+                        break;
                 }
             }
             else if(e.Column == olvColumnBotState)
