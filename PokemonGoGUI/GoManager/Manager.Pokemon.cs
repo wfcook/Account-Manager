@@ -47,7 +47,7 @@ namespace PokemonGoGUI.GoManager
                                     CalculateIVPerfection(pokemon)),
                                 LoggerTypes.Transfer));
 
-                            Pokemon.Remove(pokemon);
+                            //Pokemon.Remove(pokemon);
 
                             await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
                         }
@@ -92,8 +92,8 @@ namespace PokemonGoGUI.GoManager
                                 pokemonToTransfer.Count()),
                             LoggerTypes.Transfer));
 
-                        foreach (var poktoremove in pokemonToTransfer)
-                            Pokemon.Remove(poktoremove);
+                        //foreach (var poktoremove in pokemonToTransfer)
+                        //    Pokemon.Remove(poktoremove);
 
                         await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
                     }

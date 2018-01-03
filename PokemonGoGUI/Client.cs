@@ -130,6 +130,47 @@ namespace PokemonGoGUI
 
                     ClientManager.LogCaller(new LoggerEventArgs("Succefully added all events to the client.", LoggerTypes.Debug));
 
+                    if (ClientSession.Player.Warn)
+                    {
+                        ClientManager.AccountState = AccountState.Flagged;
+                        ClientManager.LogCaller(new LoggerEventArgs("The account is flagged.", LoggerTypes.Warning));
+
+                        if (ClientManager.UserSettings.StopAtMinAccountState == AccountState.Flagged)
+                        {
+                            //Remove proxy
+                            ClientManager.RemoveProxy();
+                            ClientManager.Stop();
+
+                            msgStr = "The account is flagged.";
+                        }
+                    }
+
+                    if (ClientSession.Player.Banned)
+                    {
+                        ClientManager.AccountState = AccountState.PermAccountBan;
+                        ClientManager.LogCaller(new LoggerEventArgs("The account is banned.", LoggerTypes.FatalError));
+
+                        //Remove proxy
+                        ClientManager.RemoveProxy();
+
+                        ClientManager.Stop();
+
+                        msgStr = "The account is banned.";
+                    }
+
+                    //Closes bot on captcha received need utils for solve
+                    if (ClientManager.AccountState == AccountState.CaptchaReceived)
+                    {
+                        ClientManager.LogCaller(new LoggerEventArgs("Captcha ceceived.", LoggerTypes.Warning));
+
+                        //Remove proxy
+                        ClientManager.RemoveProxy();
+
+                        ClientManager.Stop();
+
+                        msgStr = "Captcha ceceived.";
+                    }
+
                     SaveAccessToken(ClientSession.AccessToken);
                 }
             }
@@ -139,10 +180,7 @@ namespace PokemonGoGUI
 
                 ClientManager.LogCaller(new LoggerEventArgs("Ptc server offline. Please try again later.", LoggerTypes.Warning));
 
-                return new MethodResult<bool>
-                {
-                    Message = "Ptc server offline."
-                };
+                msgStr = "Ptc server offline.";
             }
             catch (AccountNotVerifiedException)
             {
@@ -153,10 +191,7 @@ namespace PokemonGoGUI
 
                 ClientManager.AccountState = Enums.AccountState.NotVerified;
 
-                return new MethodResult<bool>
-                {
-                    Message = "Account not verified."
-                };
+                msgStr = "Account not verified.";
             }
             catch (WebException ex)
             {
@@ -174,10 +209,7 @@ namespace PokemonGoGUI
                         ClientManager.LogCaller(new LoggerEventArgs("Login request has timed out. Possible bad proxy.", LoggerTypes.ProxyIssue));
                     }
 
-                    return new MethodResult<bool>
-                    {
-                        Message = "Request has timed out."
-                    };
+                    msgStr = "Request has timed out.";
                 }
 
                 if (!String.IsNullOrEmpty(ClientManager.Proxy))
@@ -187,10 +219,7 @@ namespace PokemonGoGUI
                         ClientManager._proxyIssue = true;
                         ClientManager.LogCaller(new LoggerEventArgs("Potential http proxy detected. Only https proxies will work.", LoggerTypes.ProxyIssue));
 
-                        return new MethodResult<bool>
-                        {
-                            Message = "Http proxy detected"
-                        };
+                        msgStr = "Http proxy detected";
                     }
                     else if (ex.Status == WebExceptionStatus.ConnectFailure || ex.Status == WebExceptionStatus.ProtocolError || ex.Status == WebExceptionStatus.ReceiveFailure
                         || ex.Status == WebExceptionStatus.ServerProtocolViolation)
@@ -198,10 +227,7 @@ namespace PokemonGoGUI
                         ClientManager._proxyIssue = true;
                         ClientManager.LogCaller(new LoggerEventArgs("Proxy is offline", LoggerTypes.ProxyIssue));
 
-                        return new MethodResult<bool>
-                        {
-                            Message = "Proxy is offline"
-                        };
+                        msgStr = "Proxy is offline";
                     }
                 }
 
@@ -209,10 +235,7 @@ namespace PokemonGoGUI
 
                 ClientManager.LogCaller(new LoggerEventArgs("Failed to login due to request error", LoggerTypes.Exception, ex.InnerException));
 
-                return new MethodResult<bool>
-                {
-                    Message = "Failed to login due to request error"
-                };
+                msgStr = "Failed to login due to request error";
             }
             catch (TaskCanceledException)
             {
@@ -228,10 +251,7 @@ namespace PokemonGoGUI
                     ClientManager.LogCaller(new LoggerEventArgs("Login request has timed out. Possible bad proxy", LoggerTypes.ProxyIssue));
                 }
 
-                return new MethodResult<bool>
-                {
-                    Message = "Login request has timed out"
-                };
+                msgStr = "Login request has timed out";
             }
             catch (InvalidCredentialsException ex)
             {
@@ -241,10 +261,7 @@ namespace PokemonGoGUI
 
                 ClientManager.LogCaller(new LoggerEventArgs("Invalid credentials or account lockout. Stopping bot...", LoggerTypes.Warning, ex));
 
-                return new MethodResult<bool>
-                {
-                    Message = "Username or password incorrect"
-                };
+                msgStr = "Username or password incorrect";
             }
             catch (IPBannedException)
             {
@@ -273,10 +290,7 @@ namespace PokemonGoGUI
 
                 ClientManager.LogCaller(new LoggerEventArgs(message, LoggerTypes.ProxyIssue));
 
-                return new MethodResult<bool>
-                {
-                    Message = message
-                };
+                msgStr = message;
             }
             catch (GoogleLoginException ex)
             {
@@ -285,10 +299,7 @@ namespace PokemonGoGUI
 
                 ClientManager.LogCaller(new LoggerEventArgs(ex.Message, LoggerTypes.Warning));
 
-                return new MethodResult<bool>
-                {
-                    Message = "Failed to login"
-                };
+                msgStr = "Failed to login";
             }
             catch (Exception ex)
             {
@@ -297,11 +308,9 @@ namespace PokemonGoGUI
 
                 ClientManager.LogCaller(new LoggerEventArgs("Failed to login", LoggerTypes.Exception, ex));
 
-                return new MethodResult<bool>
-                {
-                    Message = "Failed to login"
-                };
+                msgStr = "Failed to login";
             }
+
             return new MethodResult<bool>()
             {
                 Success = LoggedIn,
@@ -316,7 +325,7 @@ namespace PokemonGoGUI
                 Directory.CreateDirectory("data");
             if (File.Exists(filename))
                 File.Delete(filename);
-            File.WriteAllText(filename, JsonConvert.SerializeObject(data));
+            File.WriteAllText(filename, Serializer.ToJson(data));
         }
 
         private void OnItemTemplatesReceived(object sender, List<DownloadItemTemplatesResponse.Types.ItemTemplate> data)
@@ -326,7 +335,7 @@ namespace PokemonGoGUI
                 Directory.CreateDirectory("data");
             if (File.Exists(filename))
                 File.Delete(filename);
-            File.WriteAllText(filename, JsonConvert.SerializeObject(data));
+            File.WriteAllText(filename, Serializer.ToJson(data));
         }
 
         private void OnDownloadUrlsReceived(object sender, List<POGOProtos.Data.DownloadUrlEntry> data)
@@ -336,7 +345,7 @@ namespace PokemonGoGUI
                 Directory.CreateDirectory("data");
             if (File.Exists(filename))
                 File.Delete(filename);
-            File.WriteAllText(filename, JsonConvert.SerializeObject(data));
+            File.WriteAllText(filename, Serializer.ToJson(data));
         }
 
         private void OnLocalConfigVersionReceived(object sender, DownloadRemoteConfigVersionResponse data)
@@ -346,7 +355,7 @@ namespace PokemonGoGUI
                 Directory.CreateDirectory("data");
             if (File.Exists(filename))
                 File.Delete(filename);
-            File.WriteAllText(filename, JsonConvert.SerializeObject(data));
+            File.WriteAllText(filename, Serializer.ToJson(data));
         }
 
         private event EventHandler<int> OnPokehashSleeping;
@@ -477,16 +486,16 @@ namespace PokemonGoGUI
             //My files resources here
             var filename = "data/" + ClientManager.UserSettings.DeviceId + "_IT.json";
             if (File.Exists(filename))
-                session.Templates.ItemTemplates = JsonConvert.DeserializeObject<List<DownloadItemTemplatesResponse.Types.ItemTemplate>>(File.ReadAllText(filename));
+                session.Templates.ItemTemplates = Serializer.FromJson<List<DownloadItemTemplatesResponse.Types.ItemTemplate>>(File.ReadAllText(filename));
             filename = "data/" + ClientManager.UserSettings.DeviceId + "_UR.json";
             if (File.Exists(filename))
-                session.Templates.DownloadUrls = JsonConvert.DeserializeObject<List<DownloadUrlEntry>>(File.ReadAllText(filename));
+                session.Templates.DownloadUrls = Serializer.FromJson<List<DownloadUrlEntry>>(File.ReadAllText(filename));
             filename = "data/" + ClientManager.UserSettings.DeviceId + "_AD.json";
             if (File.Exists(filename))
-                session.Templates.AssetDigests = JsonConvert.DeserializeObject<List<AssetDigestEntry>>(File.ReadAllText(filename));
+                session.Templates.AssetDigests = Serializer.FromJson<List<AssetDigestEntry>>(File.ReadAllText(filename));
             filename = "data/" + ClientManager.UserSettings.DeviceId + "_LCV.json";
             if (File.Exists(filename))
-                session.Templates.LocalConfigVersion = JsonConvert.DeserializeObject<DownloadRemoteConfigVersionResponse>(File.ReadAllText(filename));
+                session.Templates.LocalConfigVersion = Serializer.FromJson<DownloadRemoteConfigVersionResponse>(File.ReadAllText(filename));
             //*/
 
             return session;
