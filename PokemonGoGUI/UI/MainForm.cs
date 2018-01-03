@@ -831,7 +831,7 @@ namespace PokemonGoGUI
                         e.SubItem.ForeColor = Color.Blue;
                         break;
                     case AccountState.HashIssues:
-                        e.SubItem.ForeColor = Color.Beige;
+                        e.SubItem.ForeColor = Color.Coral;
                         break;
                     case AccountState.Unknown:
                         e.SubItem.ForeColor = Color.Cyan;
