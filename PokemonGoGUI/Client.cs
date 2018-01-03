@@ -316,7 +316,7 @@ namespace PokemonGoGUI
                 Directory.CreateDirectory("data");
             if (File.Exists(filename))
                 File.Delete(filename);
-            File.WriteAllText(filename, Serializer.ToJson(data));
+            File.WriteAllText(filename, JsonConvert.SerializeObject(data));
         }
 
         private void OnItemTemplatesReceived(object sender, List<DownloadItemTemplatesResponse.Types.ItemTemplate> data)
@@ -326,7 +326,7 @@ namespace PokemonGoGUI
                 Directory.CreateDirectory("data");
             if (File.Exists(filename))
                 File.Delete(filename);
-            File.WriteAllText(filename, Serializer.ToJson(data));
+            File.WriteAllText(filename, JsonConvert.SerializeObject(data));
         }
 
         private void OnDownloadUrlsReceived(object sender, List<POGOProtos.Data.DownloadUrlEntry> data)
@@ -336,7 +336,7 @@ namespace PokemonGoGUI
                 Directory.CreateDirectory("data");
             if (File.Exists(filename))
                 File.Delete(filename);
-            File.WriteAllText(filename, Serializer.ToJson(data));
+            File.WriteAllText(filename, JsonConvert.SerializeObject(data));
         }
 
         private void OnLocalConfigVersionReceived(object sender, DownloadRemoteConfigVersionResponse data)
@@ -346,7 +346,7 @@ namespace PokemonGoGUI
                 Directory.CreateDirectory("data");
             if (File.Exists(filename))
                 File.Delete(filename);
-            File.WriteAllText(filename, Serializer.ToJson(data));
+            File.WriteAllText(filename, JsonConvert.SerializeObject(data));
         }
 
         private event EventHandler<int> OnPokehashSleeping;
@@ -477,16 +477,16 @@ namespace PokemonGoGUI
             //My files resources here
             var filename = "data/" + ClientManager.UserSettings.DeviceId + "_IT.json";
             if (File.Exists(filename))
-                session.Templates.ItemTemplates = Serializer.FromJson<List<DownloadItemTemplatesResponse.Types.ItemTemplate>>(File.ReadAllText(filename));
+                session.Templates.ItemTemplates = JsonConvert.DeserializeObject<List<DownloadItemTemplatesResponse.Types.ItemTemplate>>(File.ReadAllText(filename));
             filename = "data/" + ClientManager.UserSettings.DeviceId + "_UR.json";
             if (File.Exists(filename))
-                session.Templates.DownloadUrls = Serializer.FromJson<List<DownloadUrlEntry>>(File.ReadAllText(filename));
+                session.Templates.DownloadUrls = JsonConvert.DeserializeObject<List<DownloadUrlEntry>>(File.ReadAllText(filename));
             filename = "data/" + ClientManager.UserSettings.DeviceId + "_AD.json";
             if (File.Exists(filename))
-                session.Templates.AssetDigests = Serializer.FromJson<List<AssetDigestEntry>>(File.ReadAllText(filename));
+                session.Templates.AssetDigests = JsonConvert.DeserializeObject<List<AssetDigestEntry>>(File.ReadAllText(filename));
             filename = "data/" + ClientManager.UserSettings.DeviceId + "_LCV.json";
             if (File.Exists(filename))
-                session.Templates.LocalConfigVersion = Serializer.FromJson<DownloadRemoteConfigVersionResponse>(File.ReadAllText(filename));
+                session.Templates.LocalConfigVersion = JsonConvert.DeserializeObject<DownloadRemoteConfigVersionResponse>(File.ReadAllText(filename));
             //*/
 
             return session;
