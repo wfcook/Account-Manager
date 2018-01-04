@@ -21,7 +21,7 @@ namespace PokemonGoGUI.GoManager
         public async Task<MethodResult> UpdateDetails()
         {
             //TODO: review what we need do here.
-            // UpdateInventory();
+            UpdateInventory();
 
             LogCaller(new LoggerEventArgs("Updating details", LoggerTypes.Debug));
 
@@ -132,7 +132,7 @@ namespace PokemonGoGUI.GoManager
 
         public async Task<MethodResult> ClaimLevelUpRewards(int level)
         {
-            if (!UserSettings.ClaimLevelUpRewards)
+            if (!UserSettings.ClaimLevelUpRewards || level < 2)
             {
                 return new MethodResult();
             }

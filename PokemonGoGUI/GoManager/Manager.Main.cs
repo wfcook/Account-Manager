@@ -95,7 +95,13 @@ namespace PokemonGoGUI.GoManager
             else
             {
                 if (AccountState == AccountState.Conecting)
+                {
                     AccountState = AccountState.Good;
+                }
+                // This is part of the login process
+                if (UserSettings.ClaimLevelUpRewards){
+                    ClaimLevelUpRewards(Level);
+                }
             }
 
             if (CurrentProxy != null)
@@ -449,15 +455,6 @@ namespace PokemonGoGUI.GoManager
                         }
                     }
 
-                    if (UserSettings.ClaimLevelUpRewards)
-                    {
-                        LogCaller(new LoggerEventArgs("Getting level up rewards ...", LoggerTypes.Debug));
-
-                        result = await ClaimLevelUpRewards(Level);
-
-                        await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
-                    }
-
                     _failedInventoryReponses = 0;
 
                     if (WaitPaused())
@@ -543,6 +540,9 @@ namespace PokemonGoGUI.GoManager
 
                     while (pokestopsToFarm.Any())
                     {
+                        // In each iteration of the loop we store the current level
+                        int prevLevel = Level;
+
                         if (!IsRunning || currentFailedStops >= UserSettings.MaxFailBeforeReset)
                         {
                             break;
@@ -716,18 +716,6 @@ namespace PokemonGoGUI.GoManager
                             await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
 
-                            int prevLevel = Level;
-
-
-                            if (Level > prevLevel)
-                            {
-                                await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
-
-                                await ClaimLevelUpRewards(Level);
-                            }
-
-                            await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
-
                             if (UserSettings.EvolvePokemon)
                             {
                                 MethodResult evolveResult = await EvolveFilteredPokemon();
@@ -757,6 +745,14 @@ namespace PokemonGoGUI.GoManager
                                     await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
                                 }
                             }
+
+                            if (Level > prevLevel)
+                            {
+                                await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
+
+                                await ClaimLevelUpRewards(Level);
+                            }
+
 
                         }
 
