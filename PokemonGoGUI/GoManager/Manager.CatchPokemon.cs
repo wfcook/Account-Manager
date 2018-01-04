@@ -283,6 +283,7 @@ namespace PokemonGoGUI.GoManager
                         fortData.LureInfo = null;
 
                         LogCaller(new LoggerEventArgs(String.Format("Lured Pokemon Caught. {0}. Exp {1}. Candy {2}. Attempt #{3}. Ball: {4}", pokemon, expGained, candyGained, attemptCount, pokeBallName), LoggerTypes.Success));
+                        Pokemon.Add(eResponse.PokemonData);
 
                         return new MethodResult
                         {

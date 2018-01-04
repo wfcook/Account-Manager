@@ -19,6 +19,7 @@ using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using POGOLib.Official.Util.Hash.PokeHash;
 
 namespace PokemonGoGUI.GoManager
 {
@@ -774,8 +775,14 @@ namespace PokemonGoGUI.GoManager
                             //Break out of pokestop loop to test for ip ban
                             break;
                         }
+                        AccountState = AccountState.Good;
                     }
 
+                }
+                catch (PokeHashException ex)
+                {
+                    AccountState = AccountState.HashIssues;
+                    LogCaller(new LoggerEventArgs("Hash service exception occured. Restarting ...", LoggerTypes.Exception, ex));
                 }
                 catch (Exception ex)
                 {
