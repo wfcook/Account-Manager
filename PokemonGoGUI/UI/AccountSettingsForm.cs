@@ -342,10 +342,10 @@ namespace PokemonGoGUI.UI
             userSettings.DeviceModel = textBoxDeviceModel.Text;
             userSettings.DeviceBrand = textBoxDeviceBrand.Text;
             userSettings.DeviceModelBoot = textBoxDeviceModelBoot.Text;
-            userSettings.FirmwareBrand = textBoxFirmwareBrand.Text;
-            userSettings.FirmwareType = textBoxFirmwareType.Text;
             userSettings.HardwareManufacturer = textBoxHardwareManufacturer.Text;
             userSettings.HardwareModel = textBoxHardwareModel.Text;
+            userSettings.FirmwareBrand = textBoxFirmwareBrand.Text;
+            userSettings.FirmwareType = textBoxFirmwareType.Text;
             //End device settings
 
             //Api config

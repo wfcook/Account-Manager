@@ -108,31 +108,12 @@ namespace PokemonGoGUI.GoManager
 
                     var itemDictionary = new Dictionary<ItemId, ItemData>();
 
-                    foreach (ItemData item in Items)
-                    {
-                        itemDictionary.Add(item.ItemId, item);
-                    }
-
-                    foreach (ItemAward item in fortResponse.ItemsAwarded)
-                    {
-                        if (itemDictionary.ContainsKey(item.ItemId))
-                        {
-                            itemDictionary[item.ItemId].Count += item.ItemCount;
-                        }
-                        else
-                        {
-                            Items.Add(new ItemData
-                            {
-                                ItemId = item.ItemId,
-                                Unseen = true,
-                                Count = item.ItemCount
-                            });
-                        }
-                    }
-
+                   
                     if (fortResponse.Result != FortSearchResponse.Types.Result.OutOfRange)
                     {
                         //Successfully grabbed stop
+                        
+                        UpdateItemList();
                         if (AccountState == Enums.AccountState.PokemonBanAndPokestopBanTemp || AccountState == Enums.AccountState.PokestopBanTemp)
                         {
                             AccountState = AccountState == Enums.AccountState.PokemonBanAndPokestopBanTemp ? Enums.AccountState.PokemonBanTemp : Enums.AccountState.Good;

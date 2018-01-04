@@ -359,7 +359,7 @@ namespace PokemonGoGUI.GoManager
                 return 0;
             }
 
-            return (double)(Pokemon.Count + Eggs.Count) / PlayerData.MaxPokemonStorage * 100;
+            return (double)(Pokemon.Count() + Eggs.Count()) / PlayerData.MaxPokemonStorage * 100;
         }
     }
 }

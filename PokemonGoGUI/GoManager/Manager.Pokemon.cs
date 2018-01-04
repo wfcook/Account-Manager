@@ -47,9 +47,8 @@ namespace PokemonGoGUI.GoManager
                                     CalculateIVPerfection(pokemon)),
                                 LoggerTypes.Transfer));
 
-                            Pokemon.Remove(pokemon);
-
                             await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+                            UpdatePokemon();
                         }
                         else
                         {
@@ -92,10 +91,8 @@ namespace PokemonGoGUI.GoManager
                                 pokemonToTransfer.Count()),
                             LoggerTypes.Transfer));
 
-                        foreach (var poktoremove in pokemonsToTransfer)
-                            Pokemon.Remove(poktoremove);
-
                         await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+                        UpdatePokemon();
                     }
                     else
                     {
@@ -151,16 +148,11 @@ namespace PokemonGoGUI.GoManager
                 };
             }
 
-            //TODO: unneeded
-            //UpdatePokemon();
-            //UpdatePokemonCandy();
 
-            if (Pokemon == null || Pokemon.Count == 0)
-            {
+            if (!Pokemon.Any()) {
                 LogCaller(new LoggerEventArgs("You have no pokemon", LoggerTypes.Info));
 
-                return new MethodResult<List<PokemonData>>
-                {
+                return new MethodResult<List<PokemonData>> {
                     Message = "You have no pokemon"
                 };
             }

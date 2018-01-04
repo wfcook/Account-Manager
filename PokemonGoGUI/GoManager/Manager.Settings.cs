@@ -1,4 +1,5 @@
-﻿using POGOProtos.Enums;
+﻿using System.Collections;
+using POGOProtos.Enums;
 using POGOProtos.Inventory;
 using POGOProtos.Settings.Master;
 using PokemonGoGUI.Extensions;
@@ -39,20 +40,18 @@ namespace PokemonGoGUI.GoManager
                 return new MethodResult<AccountExportModel>();
             }
 
-            var AllItems = new List<InventoryItem>();
+            IEnumerable<InventoryItem> AllItems = new List<InventoryItem>();
             
             if (_client.LoggedIn)
-                AllItems = _client.ClientSession.Player.Inventory.InventoryItems.ToList();
+                AllItems = _client.ClientSession.Player.Inventory.InventoryItems;
 
-            if (AllItems == null || AllItems.Count == 0)
-            {
+            if (!AllItems.Any()) {
                 LogCaller(new LoggerEventArgs(String.Format("No items found for {0}. Please update details", UserSettings.Username), LoggerTypes.Warning));
 
                 return new MethodResult<AccountExportModel>();
             }
 
-            if (Pokedex == null || Pokedex.Count == 0)
-            {
+            if (!Pokedex.Any()) {
                 LogCaller(new LoggerEventArgs(String.Format("No pokedex found for {0}. Please update details", UserSettings.Username), LoggerTypes.Warning));
 
                 return new MethodResult<AccountExportModel>();

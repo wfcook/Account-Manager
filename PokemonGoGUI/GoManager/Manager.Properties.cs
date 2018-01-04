@@ -97,22 +97,22 @@ namespace PokemonGoGUI.GoManager
 
 
         [JsonIgnore]
-        public List<ItemData> Items { get; private set; }
+        public IEnumerable<ItemData> Items { get; private set; }
 
         [JsonIgnore]
-        public List<PokemonData> Pokemon { get; private set; }
+        public IEnumerable<PokemonData> Pokemon { get; private set; }
 
         [JsonIgnore]
-        public List<PokedexEntry> Pokedex { get; private set; }
+        public IEnumerable<PokedexEntry> Pokedex { get; private set; }
 
         [JsonIgnore]
-        public List<Candy> PokemonCandy { get; private set; }
+        public IEnumerable<Candy> PokemonCandy { get; private set; }
 
         [JsonIgnore]
-        public List<EggIncubator> Incubators { get; private set; }
+        public IEnumerable<EggIncubator> Incubators { get; private set; }
 
         [JsonIgnore]
-        public List<PokemonData> Eggs { get; private set; }
+        public IEnumerable<PokemonData> Eggs { get; private set; }
 
         [JsonIgnore]
         public Dictionary<PokemonId, PokemonSettings> PokeSettings { get; private set; }

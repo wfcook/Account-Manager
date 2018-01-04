@@ -432,12 +432,12 @@ namespace PokemonGoGUI
                 {
                     DeviceId = ClientManager.UserSettings.DeviceId,
                     DeviceBrand = ClientManager.UserSettings.DeviceBrand,
-                    DeviceModelBoot = ClientManager.UserSettings.DeviceModelBoot,
-                    HardwareModel = ClientManager.UserSettings.HardwareModel,
-                    HardwareManufacturer = ClientManager.UserSettings.HardwareManufacturer,
-                    FirmwareBrand = ClientManager.UserSettings.FirmwareBrand,
-                    FirmwareType = ClientManager.UserSettings.FirmwareType,
                     DeviceModel = ClientManager.UserSettings.DeviceModel,
+                    DeviceModelBoot = ClientManager.UserSettings.DeviceModelBoot,
+                    HardwareManufacturer = ClientManager.UserSettings.HardwareManufacturer,
+                    HardwareModel = ClientManager.UserSettings.HardwareModel,
+                    FirmwareBrand = ClientManager.UserSettings.FirmwareBrand,
+                    FirmwareType = ClientManager.UserSettings.FirmwareType
                 },
                 Proxy = Proxy.AsWebProxy()
             };

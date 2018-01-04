@@ -627,6 +627,7 @@ namespace PokemonGoGUI.GoManager
                                 CatchDisabled = true;
                                 TimeAutoCatch = DateTime.Now.AddMinutes(UserSettings.DisableCatchDelay);
                             }
+                            UpdatePokemon();
                         }
 
                         //Stop bot instantly

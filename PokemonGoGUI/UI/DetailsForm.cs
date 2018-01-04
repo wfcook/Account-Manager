@@ -86,8 +86,7 @@ namespace PokemonGoGUI.UI
             olvColumnPokemonCandy.AspectGetter = delegate(object pokemon)
             {
 
-                if(_manager.PokemonCandy == null || _manager.PokemonCandy.Count == 0)
-                {
+                if (!_manager.PokemonCandy.Any()) {
                     return -1;
                 }
 
@@ -264,12 +263,12 @@ namespace PokemonGoGUI.UI
 
             if (_manager.Pokemon != null)
             {
-                labelPokemonCount.Text = String.Format("{0}/{1}", _manager.Pokemon.Count + _manager.Eggs.Count, _manager.MaxPokemonStorage);
+                labelPokemonCount.Text = String.Format("{0}/{1}", _manager.Pokemon.Count() + _manager.Eggs.Count(), _manager.MaxPokemonStorage);
             }
 
             if (_manager.Items != null)
             {
-                labelInventoryCount.Text = String.Format("{0}/{1}", _manager.Items.Sum(x => x.Count).ToString(), _manager.MaxItemStorage);
+                labelInventoryCount.Text = String.Format("{0}/{1}", _manager.Items.Sum(x => x.Count), _manager.MaxItemStorage);
             }
 
             if(_manager.PlayerData != null)
