@@ -775,9 +775,7 @@ namespace PokemonGoGUI.GoManager
                             //Break out of pokestop loop to test for ip ban
                             break;
                         }
-                        AccountState = AccountState.Good;
                     }
-
                 }
                 catch (PokeHashException ex)
                 {
