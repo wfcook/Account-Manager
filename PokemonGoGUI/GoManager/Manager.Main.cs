@@ -100,7 +100,7 @@ namespace PokemonGoGUI.GoManager
                 }
                 // This is part of the login process
                 if (UserSettings.ClaimLevelUpRewards){
-                    ClaimLevelUpRewards(Level);
+                    await ClaimLevelUpRewards(Level);
                 }
             }
 
@@ -480,7 +480,7 @@ namespace PokemonGoGUI.GoManager
                     {
                         LogCaller(new LoggerEventArgs("Setting default location ...", LoggerTypes.Debug));
 
-                        result = await UpdateLocation(new GeoCoordinate(UserSettings.DefaultLatitude, UserSettings.DefaultLongitude));
+                        result = await UpdateLocation(new GeoCoordinate(UserSettings.Location.Latitude, UserSettings.Location.Longitude));
 
                         if (!result.Success)
                         {

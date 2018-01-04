@@ -199,8 +199,29 @@ namespace PokemonGoGUI
 
                 if (model.ProxyHandler!=null)
                     _proxyHandler = model.ProxyHandler;
-                if (model.Managers!=null)
+                if (model.Managers != null) {
                     tempManagers = model.Managers;
+                    //Obsoleted. For retrocompatibility. Remove after of several new versions. (currently 2.21.1.25)
+                    foreach (var tmpMan in tempManagers) {
+                        if (tmpMan.UserSettings.DeviceInfo == null || string.IsNullOrEmpty(tmpMan.UserSettings.DeviceInfo.DeviceId)) {
+                            tmpMan.UserSettings.Location.Latitude = tmpMan.UserSettings.DefaultLatitude;
+                            tmpMan.UserSettings.Location.Longitude = tmpMan.UserSettings.DefaultLongitude;
+                            tmpMan.UserSettings.Location.Altitude = tmpMan.UserSettings.DefaultAltitude;
+                            tmpMan.UserSettings.PlayerLocale.Country = tmpMan.UserSettings.Country;
+                            tmpMan.UserSettings.PlayerLocale.Language = tmpMan.UserSettings.Language;
+                            tmpMan.UserSettings.PlayerLocale.Timezone = tmpMan.UserSettings.TimeZone;
+                            tmpMan.UserSettings.PlayerLocale.POSIX = tmpMan.UserSettings.POSIX;
+                            tmpMan.UserSettings.DeviceInfo.DeviceId = tmpMan.UserSettings.DeviceId;
+                            tmpMan.UserSettings.DeviceInfo.DeviceBrand = tmpMan.UserSettings.DeviceBrand;
+                            tmpMan.UserSettings.DeviceInfo.DeviceModel = tmpMan.UserSettings.DeviceModel;
+                            tmpMan.UserSettings.DeviceInfo.DeviceModelBoot = tmpMan.UserSettings.DeviceModelBoot;
+                            tmpMan.UserSettings.DeviceInfo.HardwareManufacturer = tmpMan.UserSettings.HardwareManufacturer;
+                            tmpMan.UserSettings.DeviceInfo.HardwareModel = tmpMan.UserSettings.HardwareModel;
+                            tmpMan.UserSettings.DeviceInfo.FirmwareBrand = tmpMan.UserSettings.FirmwareBrand;
+                            tmpMan.UserSettings.DeviceInfo.FirmwareType = tmpMan.UserSettings.FirmwareType;
+                        }
+                    }
+                }
                 if (model.Schedulers!=null)
                     _schedulers = model.Schedulers;
                 if (model.HashKeys!=null)
@@ -216,7 +237,7 @@ namespace PokemonGoGUI
                     manager.OnLog += Manager_OnLog;
 
                     //Patch for version upgrade
-                    if(String.IsNullOrEmpty(manager.UserSettings.DeviceId))
+                    if(String.IsNullOrEmpty(manager.UserSettings.DeviceInfo.DeviceId))
                     {
                         //Load some
                         manager.UserSettings.RandomizeDevice();

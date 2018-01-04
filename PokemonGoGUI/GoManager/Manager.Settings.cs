@@ -231,10 +231,30 @@ namespace PokemonGoGUI.GoManager
                 settings.GroupName = UserSettings.GroupName;
 
                 //new values added 
+                
+                //Obsoleted. For retrocompatibility. Remove after of several new versions. (currently 2.21.1.25)
+                if (settings.DeviceInfo == null || string.IsNullOrEmpty(settings.DeviceInfo.DeviceId) )
+                {
+                    settings.Location.Latitude = settings.DefaultLatitude;
+                    settings.Location.Longitude = settings.DefaultLongitude;
+                    settings.Location.Altitude = settings.DefaultAltitude;
+                    settings.PlayerLocale.Country = settings.Country;
+                    settings.PlayerLocale.Language = settings.Language;
+                    settings.PlayerLocale.Timezone = settings.TimeZone;
+                    settings.PlayerLocale.POSIX = settings.POSIX;
+                    settings.DeviceInfo.DeviceId = settings.DeviceId;
+                    settings.DeviceInfo.DeviceBrand = settings.DeviceBrand;
+                    settings.DeviceInfo.DeviceModel = settings.DeviceModel;
+                    settings.DeviceInfo.DeviceModelBoot = settings.DeviceModelBoot;
+                    settings.DeviceInfo.HardwareManufacturer = settings.HardwareManufacturer;
+                    settings.DeviceInfo.HardwareModel = settings.HardwareModel;
+                    settings.DeviceInfo.FirmwareBrand = settings.FirmwareBrand;
+                    settings.DeviceInfo.FirmwareType = settings.FirmwareType;
+                }
 
                 UserSettings = settings;
 
-                if (String.IsNullOrEmpty(UserSettings.DeviceBrand))
+                if (String.IsNullOrEmpty(UserSettings.DeviceInfo.DeviceBrand))
                 {
                     UserSettings.RandomizeDevice();
                 }

@@ -19,10 +19,8 @@ namespace PokemonGoGUI
         public string AuthAPIKey { get; set; }
         public Uri HashHost { get; set; }
         public string HashEndpoint { get; set; }
-        public string Country { get; set; }
-        public string Language { get; set; }
-        public string TimeZone { get; set; }
-        public string POSIX { get; set; }
+        public cLocale PlayerLocale  { get; set; } = new cLocale();
+        public cLocation Location { get; set; } = new cLocation();
 
         public double DisableCatchDelay { get; set; }
         public bool SpinGyms { get; set; }
@@ -31,9 +29,6 @@ namespace PokemonGoGUI
         public AuthType AuthType { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
-        public double DefaultLatitude { get; set; }
-        public double DefaultLongitude { get; set; }
-        public double DefaultAltitude { get; set; }
         public bool MimicWalking { get; set; }
         public int WalkingSpeed { get; set; }
         public bool EncounterWhileWalking { get; set; }
@@ -71,15 +66,8 @@ namespace PokemonGoGUI
 
         public double WalkingSpeedOffset { get; set; }
         //End Humanization
-
-        public string DeviceId { get; set; }
-        public string DeviceBrand { get; set; }
-        public string DeviceModel { get; set; }
-        public string DeviceModelBoot { get; set; }
-        public string HardwareManufacturer { get; set; }
-        public string HardwareModel { get; set; }
-        public string FirmwareBrand { get; set; }
-        public string FirmwareType { get; set; }
+        
+        public cDeviceInfo DeviceInfo { get; set; } = new cDeviceInfo();
 
         public string ProxyIP { get; set; }
         public int ProxyPort { get; set; }
@@ -138,12 +126,9 @@ namespace PokemonGoGUI
 
         public AccountState StopAtMinAccountState { get; set; }
 
-        public ProxyEx Proxy
-        {
-            get
-            {
-                return new ProxyEx
-                {
+        public ProxyEx Proxy {
+            get {
+                return new ProxyEx {
                     Address = ProxyIP,
                     Port = ProxyPort,
                     Username = ProxyUsername,
@@ -182,9 +167,7 @@ namespace PokemonGoGUI
         {
             GroupName = "Default";
             AuthType = AuthType.Ptc;
-            DefaultLatitude = 40.764665;
-            DefaultLongitude = -73.973184;
-            DefaultAltitude = 10;
+            Location = new cLocation(40.764665, -73.973184, 10);
             MimicWalking = true;
             CatchPokemon = true;
             WalkingSpeed = 7;
@@ -207,10 +190,10 @@ namespace PokemonGoGUI
             HashHost = new Uri("https://pokehash.buddyauth.com/");
             HashEndpoint = "api/v157_5/hash";
             AuthAPIKey = "XXXXXXXXXXXXXXXXXXXX";
-            Country = "US";
-            Language = "en";
-            TimeZone = "America/New_York";
-            POSIX = "en-us";
+            PlayerLocale.Country = "US";
+            PlayerLocale.Language = "en";
+            PlayerLocale.Timezone = "America/New_York";
+            PlayerLocale.POSIX = "en-us";
             DisableCatchDelay = 8;
         }
 
@@ -219,15 +202,12 @@ namespace PokemonGoGUI
         {
             CatchSettings = new List<CatchSetting>();
 
-            foreach(PokemonId pokemon in Enum.GetValues(typeof(PokemonId)))
-            {
-                if(pokemon == PokemonId.Missingno)
-                {
+            foreach (PokemonId pokemon in Enum.GetValues(typeof(PokemonId))) {
+                if (pokemon == PokemonId.Missingno) {
                     continue;
                 }
 
-                var cSettings = new CatchSetting
-                {
+                var cSettings = new CatchSetting {
                     Id = pokemon
                 };
 
@@ -239,15 +219,12 @@ namespace PokemonGoGUI
         {
             ItemSettings = new List<InventoryItemSetting>();
 
-            foreach(ItemId item in Enum.GetValues(typeof(ItemId)))
-            {
-                if(item == ItemId.ItemUnknown)
-                {
+            foreach (ItemId item in Enum.GetValues(typeof(ItemId))) {
+                if (item == ItemId.ItemUnknown) {
                     continue;
                 }
 
-                var itemSetting = new InventoryItemSetting
-                {
+                var itemSetting = new InventoryItemSetting {
                     Id = item
                 };
 
@@ -259,15 +236,12 @@ namespace PokemonGoGUI
         {
             EvolveSettings = new List<EvolveSetting>();
 
-            foreach (PokemonId pokemon in Enum.GetValues(typeof(PokemonId)))
-            {
-                if (pokemon == PokemonId.Missingno)
-                {
+            foreach (PokemonId pokemon in Enum.GetValues(typeof(PokemonId))) {
+                if (pokemon == PokemonId.Missingno) {
                     continue;
                 }
 
-                var setting = new EvolveSetting
-                {
+                var setting = new EvolveSetting {
                     Id = pokemon
                 };
 
@@ -279,15 +253,12 @@ namespace PokemonGoGUI
         {
             TransferSettings = new List<TransferSetting>();
 
-            foreach (PokemonId pokemon in Enum.GetValues(typeof(PokemonId)))
-            {
-                if (pokemon == PokemonId.Missingno)
-                {
+            foreach (PokemonId pokemon in Enum.GetValues(typeof(PokemonId))) {
+                if (pokemon == PokemonId.Missingno) {
                     continue;
                 }
 
-                var setting = new TransferSetting
-                {
+                var setting = new TransferSetting {
                     Id = pokemon,
                     Transfer = true
                 };
@@ -299,30 +270,80 @@ namespace PokemonGoGUI
         public void RandomizeDeviceId()
         {
             var device = DeviceInfoUtil.GetRandomDevice();
-            DeviceId = device.DeviceInfo.DeviceId;
+            DeviceInfo.DeviceId = device.DeviceInfo.DeviceId;
         }
         
         public void RandomizeDevice()
         {
             var device = DeviceInfoUtil.GetRandomDevice();
-            DeviceId = device.DeviceInfo.DeviceId;
-            DeviceBrand = device.DeviceInfo.DeviceBrand;
-            DeviceModel = device.DeviceInfo.DeviceModel;
-            DeviceModelBoot = device.DeviceInfo.DeviceModelBoot;
-            HardwareManufacturer = device.DeviceInfo.HardwareManufacturer;
-            HardwareModel = device.DeviceInfo.HardwareModel;
-            FirmwareBrand = device.DeviceInfo.FirmwareBrand;
-            FirmwareType = device.DeviceInfo.FirmwareType;
+            DeviceInfo.DeviceId = device.DeviceInfo.DeviceId;
+            DeviceInfo.DeviceBrand = device.DeviceInfo.DeviceBrand;
+            DeviceInfo.DeviceModel = device.DeviceInfo.DeviceModel;
+            DeviceInfo.DeviceModelBoot = device.DeviceInfo.DeviceModelBoot;
+            DeviceInfo.HardwareManufacturer = device.DeviceInfo.HardwareManufacturer;
+            DeviceInfo.HardwareModel = device.DeviceInfo.HardwareModel;
+            DeviceInfo.FirmwareBrand = device.DeviceInfo.FirmwareBrand;
+            DeviceInfo.FirmwareType = device.DeviceInfo.FirmwareType;
         }
 
         private byte RandomByte()
         {
-            using (var randomizationProvider = new RNGCryptoServiceProvider())
-            {
+            using (var randomizationProvider = new RNGCryptoServiceProvider()) {
                 var randomBytes = new byte[1];
                 randomizationProvider.GetBytes(randomBytes);
                 return randomBytes.Single();
             }
         }
+        public class cLocation
+        {
+            public cLocation()
+            {
+            
+            }
+            public cLocation(double lat, double lon, int alt)
+            {
+                Latitude = lat;
+                Longitude = lon;
+                Altitude = alt;
+            }
+
+            public double Latitude{ get; set; }
+            public double Longitude{ get; set; }
+            public double Altitude{ get; set; }
+        }
+        public class cDeviceInfo
+        {
+            public string DeviceId{ get; set; }
+            public string DeviceBrand{ get; set; }
+            public string DeviceModel{ get; set; }
+            public string DeviceModelBoot{ get; set; }
+            public string HardwareManufacturer{ get; set; }
+            public string HardwareModel{ get; set; }
+            public string FirmwareBrand{ get; set; }
+            public string FirmwareType{ get; set; }
+        }
+        public class cLocale
+        {
+            public string Country{ get; set; }
+            public string Language{ get; set; }
+            public string Timezone{ get; set; }
+            public string POSIX{ get; set; }
+        }
+        //Obsoleted. For retrocompatibility. Remove after of several new versions. (currently 2.21.1.25)
+        public double DefaultLatitude{ get; set; }
+        public double DefaultLongitude{ get; set; }
+        public double DefaultAltitude{ get; set; }
+        public string DeviceId{ get; set; }
+        public string DeviceBrand{ get; set; }
+        public string DeviceModel{ get; set; }
+        public string DeviceModelBoot{ get; set; }
+        public string HardwareManufacturer{ get; set; }
+        public string HardwareModel{ get; set; }
+        public string FirmwareBrand{ get; set; }
+        public string FirmwareType{ get; set; }
+        public string Country { get; set; }
+        public string Language { get; set; }
+        public string TimeZone { get; set; }
+        public string POSIX { get; set; }
     }
 }

@@ -92,8 +92,8 @@ namespace PokemonGoGUI.UI
         {
             textBoxPtcPassword.Text = settings.Password;
             textBoxPtcUsername.Text = settings.Username;
-            textBoxLat.Text = settings.DefaultLatitude.ToString();
-            textBoxLong.Text = settings.DefaultLongitude.ToString();
+            textBoxLat.Text = settings.Location.Latitude.ToString();
+            textBoxLong.Text = settings.Location.Longitude.ToString();
             textBoxName.Text = settings.AccountName;
             textBoxMaxTravelDistance.Text = settings.MaxTravelDistance.ToString();
             textBoxWalkSpeed.Text = settings.WalkingSpeed.ToString();
@@ -140,14 +140,14 @@ namespace PokemonGoGUI.UI
             //End humanization
 
             //Device settings
-            textBoxDeviceId.Text = settings.DeviceId;
-            textBoxDeviceModel.Text = settings.DeviceModel;
-            textBoxDeviceBrand.Text = settings.DeviceBrand;
-            textBoxDeviceModelBoot.Text = settings.DeviceModelBoot;
-            textBoxFirmwareBrand.Text = settings.FirmwareBrand;
-            textBoxFirmwareType.Text = settings.FirmwareType;
-            textBoxHardwareManufacturer.Text = settings.HardwareManufacturer;
-            textBoxHardwareModel.Text = settings.HardwareModel;
+            textBoxDeviceId.Text = settings.DeviceInfo.DeviceId;
+            textBoxDeviceModel.Text = settings.DeviceInfo.DeviceModel;
+            textBoxDeviceBrand.Text = settings.DeviceInfo.DeviceBrand;
+            textBoxDeviceModelBoot.Text = settings.DeviceInfo.DeviceModelBoot;
+            textBoxFirmwareBrand.Text = settings.DeviceInfo.FirmwareBrand;
+            textBoxFirmwareType.Text = settings.DeviceInfo.FirmwareType;
+            textBoxHardwareManufacturer.Text = settings.DeviceInfo.HardwareManufacturer;
+            textBoxHardwareModel.Text = settings.DeviceInfo.HardwareModel;
             //End device settings
 
             //Api config
@@ -175,7 +175,7 @@ namespace PokemonGoGUI.UI
                 cbTimeZones.Items.Add(tz.Key);
             }
 
-            cbTimeZones.Text = _manager.UserSettings.TimeZone;
+            cbTimeZones.Text = _manager.UserSettings.PlayerLocale.Timezone;
 
             for (int i = 0; i < comboBoxMinAccountState.Items.Count; i++)
             {
@@ -288,8 +288,8 @@ namespace PokemonGoGUI.UI
             
             userSettings.Username = textBoxPtcUsername.Text.Trim();
             userSettings.Password = textBoxPtcPassword.Text.Trim();
-            userSettings.DefaultLatitude = defaultLat;
-            userSettings.DefaultLongitude = defaultLong;
+            userSettings.Location.Latitude = defaultLat;
+            userSettings.Location.Longitude = defaultLong;
             userSettings.WalkingSpeed = walkingSpeed;
             userSettings.MaxTravelDistance = maxTravelDistance;
             userSettings.EncounterWhileWalking = checkBoxEncounterWhileWalking.Checked;
@@ -338,14 +338,14 @@ namespace PokemonGoGUI.UI
             //End humanization
 
             //Device settings
-            userSettings.DeviceId = textBoxDeviceId.Text;
-            userSettings.DeviceModel = textBoxDeviceModel.Text;
-            userSettings.DeviceBrand = textBoxDeviceBrand.Text;
-            userSettings.DeviceModelBoot = textBoxDeviceModelBoot.Text;
-            userSettings.HardwareManufacturer = textBoxHardwareManufacturer.Text;
-            userSettings.HardwareModel = textBoxHardwareModel.Text;
-            userSettings.FirmwareBrand = textBoxFirmwareBrand.Text;
-            userSettings.FirmwareType = textBoxFirmwareType.Text;
+            userSettings.DeviceInfo.DeviceId = textBoxDeviceId.Text;
+            userSettings.DeviceInfo.DeviceModel = textBoxDeviceModel.Text;
+            userSettings.DeviceInfo.DeviceBrand = textBoxDeviceBrand.Text;
+            userSettings.DeviceInfo.DeviceModelBoot = textBoxDeviceModelBoot.Text;
+            userSettings.DeviceInfo.HardwareManufacturer = textBoxHardwareManufacturer.Text;
+            userSettings.DeviceInfo.HardwareModel = textBoxHardwareModel.Text;
+            userSettings.DeviceInfo.FirmwareBrand = textBoxFirmwareBrand.Text;
+            userSettings.DeviceInfo.FirmwareType = textBoxFirmwareType.Text;
             //End device settings
 
             //Api config
@@ -357,10 +357,10 @@ namespace PokemonGoGUI.UI
 
             //Location time zones
             var x = new TimeZoneIds().GetTimeZoneIds();
-            userSettings.TimeZone = cbTimeZones.Text;
-            userSettings.Country = x[cbTimeZones.Text].Item1;
-            userSettings.Language = x[cbTimeZones.Text].Item2;
-            userSettings.POSIX = x[cbTimeZones.Text].Item3;
+            userSettings.PlayerLocale.Timezone = cbTimeZones.Text;
+            userSettings.PlayerLocale.Country = x[cbTimeZones.Text].Item1;
+            userSettings.PlayerLocale.Language = x[cbTimeZones.Text].Item2;
+            userSettings.PlayerLocale.POSIX = x[cbTimeZones.Text].Item3;
             //End location time zones
             
             userSettings.GetArBonus = checkBoxGetARBonus.Checked;
@@ -608,8 +608,8 @@ namespace PokemonGoGUI.UI
             {
                 if (fLocation.Name == "Current")
                 {
-                    textBoxLat.Text = _manager.UserSettings.DefaultLatitude.ToString();
-                    textBoxLong.Text = _manager.UserSettings.DefaultLongitude.ToString();
+                    textBoxLat.Text = _manager.UserSettings.Location.Latitude.ToString();
+                    textBoxLong.Text = _manager.UserSettings.Location.Longitude.ToString();
                 }
                 else
                 {
@@ -672,7 +672,7 @@ namespace PokemonGoGUI.UI
         {
             _manager.RandomDeviceId();
 
-            textBoxDeviceId.Text = _manager.UserSettings.DeviceId;
+            textBoxDeviceId.Text = _manager.UserSettings.DeviceInfo.DeviceId;
 
             //UpdateDetails(_manager.UserSettings);
         }
