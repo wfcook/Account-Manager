@@ -73,18 +73,13 @@ namespace PokemonGoGUI
         //End Humanization
 
         public string DeviceId { get; set; }
-        public string AndroidBoardName { get; set; }
-        public string AndroidBootloader { get; set; }
         public string DeviceBrand { get; set; }
         public string DeviceModel { get; set; }
-        public string DeviceModelIdentifier { get; set; }
         public string DeviceModelBoot { get; set; }
         public string HardwareManufacturer { get; set; }
         public string HardwareModel { get; set; }
         public string FirmwareBrand { get; set; }
-        public string FirmwareTags { get; set; }
         public string FirmwareType { get; set; }
-        public string FirmwareFingerprint { get; set; }
 
         public string ProxyIP { get; set; }
         public int ProxyPort { get; set; }

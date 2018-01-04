@@ -49,6 +49,9 @@ namespace PokemonGoGUI
 
         public void Logout()
         {
+            if (ClientManager.AccountState == AccountState.Conecting)
+                ClientManager.AccountState = AccountState.Good;
+
             if (!LoggedIn)
                 return;
             LoggedIn = false;
@@ -434,12 +437,7 @@ namespace PokemonGoGUI
                     HardwareManufacturer = ClientManager.UserSettings.HardwareManufacturer,
                     FirmwareBrand = ClientManager.UserSettings.FirmwareBrand,
                     FirmwareType = ClientManager.UserSettings.FirmwareType,
-                    AndroidBoardName = ClientManager.UserSettings.AndroidBoardName,
-                    AndroidBootloader = ClientManager.UserSettings.AndroidBootloader,
                     DeviceModel = ClientManager.UserSettings.DeviceModel,
-                    DeviceModelIdentifier = ClientManager.UserSettings.DeviceModelIdentifier,
-                    FirmwareFingerprint = ClientManager.UserSettings.FirmwareFingerprint,
-                    FirmwareTags = ClientManager.UserSettings.FirmwareTags
                 },
                 Proxy = Proxy.AsWebProxy()
             };
