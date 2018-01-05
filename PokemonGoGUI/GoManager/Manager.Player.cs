@@ -209,5 +209,82 @@ namespace PokemonGoGUI.GoManager
                 Success = true
             };
         }
+        public async Task<MethodResult> GetPlayer(bool nobuddy =true, bool noinbox =true)
+        {
+
+            try
+            {
+                if (!_client.LoggedIn)
+                {
+                    MethodResult result = await AcLogin();
+
+                    if (!result.Success)
+                    {
+                        return result;
+                    }
+                }
+
+                var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request {
+                    RequestType = RequestType.GetPlayer,
+                    RequestMessage = new GetPlayerMessage {
+                        PlayerLocale = new GetPlayerMessage.Types.PlayerLocale {
+                            Country = UserSettings.PlayerLocale.Country,
+                            Language = UserSettings.PlayerLocale.Language,
+                            Timezone = UserSettings.PlayerLocale.Timezone
+                        }
+                    }.ToByteString()
+                }, true, nobuddy, noinbox);
+
+
+                var parsedResponse = GetPlayerResponse.Parser.ParseFrom(response);
+
+
+                return new MethodResult
+                {
+                    Success = true
+                };
+            }
+            catch (Exception ex)
+            {
+                LogCaller(new LoggerEventArgs("Failed to get level up rewards", LoggerTypes.Exception, ex));
+                return new MethodResult();
+            }
+        }
+        public async Task<MethodResult> GetPlayerProfile()
+        {
+
+            try
+            {
+                if (!_client.LoggedIn)
+                {
+                    MethodResult result = await AcLogin();
+
+                    if (!result.Success)
+                    {
+                        return result;
+                    }
+                }
+
+                var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request {
+                    RequestType = RequestType.GetPlayerProfile,
+                    RequestMessage = new GetPlayerProfileMessage {
+                    }.ToByteString()
+                }, true, false, true);
+
+
+                var parsedResponse = GetPlayerProfileResponse.Parser.ParseFrom(response);
+
+
+                return new MethodResult
+                {
+                    Success = true
+                };
+            }
+            catch (Exception ex)
+            {
+                LogCaller(new LoggerEventArgs("Failed to get level up rewards", LoggerTypes.Exception, ex));
+                return new MethodResult();
+            }
+        }         
     }
 }

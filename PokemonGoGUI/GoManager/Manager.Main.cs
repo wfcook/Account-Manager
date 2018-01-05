@@ -436,7 +436,7 @@ namespace PokemonGoGUI.GoManager
 
                         if (!PlayerData.TutorialState.Contains(TutorialState.PokestopTutorial))
                         {
-                            result = await MarkTutorialsComplete(new List<TutorialState> { TutorialState.PokestopTutorial, TutorialState.PokemonBerry, TutorialState.UseItem });
+                            result = await MarkTutorialsComplete(new [] {TutorialState.PokestopTutorial, TutorialState.PokemonBerry, TutorialState.UseItem });
 
                             if (!result.Success)
                             {
