@@ -3,6 +3,7 @@
 using Newtonsoft.Json;
 using POGOLib.Official;
 using POGOLib.Official.Exceptions;
+using POGOLib.Official.Logging;
 using POGOLib.Official.LoginProviders;
 using POGOLib.Official.Net;
 using POGOLib.Official.Net.Authentication;
@@ -68,6 +69,26 @@ namespace PokemonGoGUI
             ClientSession.Shutdown();
         }
 
+        void loggerFucntion(LogLevel logLevel, string message)
+        {
+            var logtype = LoggerTypes.Debug;
+            switch (logLevel) {
+                case LogLevel.Warn:
+                    logtype = LoggerTypes.Warning;
+                    break;
+                case LogLevel.Error:
+                    logtype = LoggerTypes.FatalError;
+                    break;
+                case LogLevel.Info:
+                    logtype = LoggerTypes.Info;
+                    break;
+                case LogLevel.Notice:
+                    logtype = LoggerTypes.Success;
+                    break;
+            }
+
+            ClientManager.LogCaller(new LoggerEventArgs(message, logtype));
+        }
         public async Task<MethodResult<bool>> DoLogin(Manager manager)
         {
             SetSettings(manager);
@@ -126,6 +147,7 @@ namespace PokemonGoGUI
                 ClientSession.MapUpdate += SessionMapUpdate;
                 ClientSession.CheckAwardedBadgesReceived += OnCheckAwardedBadgesReceived;
                 ClientSession.HatchedEggsReceived += OnHatchedEggsReceived;
+                Logger.RegisterLogOutput(loggerFucntion);
 
                 if (await ClientSession.StartupAsync(true))
                 {
@@ -305,11 +327,12 @@ namespace PokemonGoGUI
 
                 msgStr = "Failed to login";
             }
-            catch (PokeHashException)
+            catch (PokeHashException phe)
             {
                 ClientManager.AccountState = AccountState.HashIssues;
 
                 msgStr = "Hash issues";
+                ClientManager.LogCaller(new LoggerEventArgs(phe.Message, LoggerTypes.FatalError,phe));
             }
             catch (Exception ex)
             {
@@ -486,13 +509,25 @@ namespace PokemonGoGUI
                 {
                     var accessToken = JsonConvert.DeserializeObject<AccessToken>(File.ReadAllText(fileName));
 
-                    if (!accessToken.IsExpired)
-                        return Login.GetSession(loginProvider, accessToken, initLat, initLong, ClientDeviceWrapper, PlayerLocale);
+                    if (!accessToken.IsExpired){
+                        var sess = Login.GetSession(loginProvider, accessToken, initLat, initLong, ClientDeviceWrapper, PlayerLocale);
+                        LoadResources(sess);
+                        return sess;
+                    }
                 }
             }
 
             var session = await Login.GetSession(loginProvider, initLat, initLong, ClientDeviceWrapper, PlayerLocale);
+            LoadResources(session);
 
+
+            if (mayCache)
+                SaveAccessToken(session.AccessToken);
+
+            return session;
+        }
+        private void LoadResources(Session session)
+        {
             //My files resources here       
             var filename = "data/" + ClientManager.UserSettings.DeviceInfo.DeviceId + "_IT.json";
             if (File.Exists(filename))
@@ -506,12 +541,6 @@ namespace PokemonGoGUI
             filename = "data/" + ClientManager.UserSettings.DeviceInfo.DeviceId + "_LCV.json";
             if (File.Exists(filename))
                 session.Templates.LocalConfigVersion = Serializer.FromJson<DownloadRemoteConfigVersionResponse>(File.ReadAllText(filename));
-            //*/
-
-            if (mayCache)
-                SaveAccessToken(session.AccessToken);
-
-            return session;
         }
 
         private static readonly string[] OsUserAgentParts = {

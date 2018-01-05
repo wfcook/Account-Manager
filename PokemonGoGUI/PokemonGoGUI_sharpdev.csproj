@@ -137,8 +137,8 @@
     <Reference Include="ObjectListView, Version=2.9.1.1072, Culture=neutral, PublicKeyToken=b1c5bf581481bcd4, processorArchitecture=MSIL">
       <HintPath>..\packages\ObjectListView.Official.2.9.1\lib\net20\ObjectListView.dll</HintPath>
     </Reference>
-    <Reference Include="POGOLib.Core, Version=1.8.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\POGOLib.Core.1.8.2\lib\netstandard1.1\POGOLib.Core.dll</HintPath>
+    <Reference Include="POGOLib.Core">
+      <HintPath>..\..\packages\POGOLib.Core.1.8.2\lib\netstandard1.1\POGOLib.Core.dll</HintPath>
     </Reference>
     <Reference Include="POGOProtos.Core, Version=2.21.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\POGOProtos.Core.2.21.1\lib\net45\POGOProtos.Core.dll</HintPath>
