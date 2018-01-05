@@ -215,7 +215,7 @@ namespace PokemonGoGUI.GoManager
                                 berryUsed = true;
                             }else{
                                 bool isHighProbability = probability > 0.65;
-                                var catchSettings = UserSettings.CatchSettings.FirstOrDefault( x=> x.Id == eResponse.PokemonData.PokemonId);
+                                var catchSettings = UserSettings.PokemonSettings.FirstOrDefault( x=> x.Id == eResponse.PokemonData.PokemonId);
                                 var usePinap = catchSettings != null && catchSettings.UsePinap;
                                 if (isHighProbability && usePinap){
                                     await UseBerry(fortData.LureInfo.EncounterId, fortData.Id, ItemId.ItemPinapBerry);
@@ -561,7 +561,7 @@ namespace PokemonGoGUI.GoManager
 
         private bool PokemonWithinCatchSettings(PokemonId pokemondId)
         {
-            CatchSetting catchSettings = UserSettings.CatchSettings.FirstOrDefault(x => x.Id == pokemondId);
+            CatchSetting catchSettings = UserSettings.PokemonSettings.FirstOrDefault(x => x.Id == pokemondId);
 
             if(catchSettings == null)
             {
@@ -580,7 +580,7 @@ namespace PokemonGoGUI.GoManager
 
         private bool PokemonWithinCatchSettings(MapPokemon pokemon)
         {
-            CatchSetting catchSettings = UserSettings?.CatchSettings.FirstOrDefault(x => x.Id == pokemon.PokemonId);
+            CatchSetting catchSettings = UserSettings?.PokemonSettings.FirstOrDefault(x => x.Id == pokemon.PokemonId);
 
             if(catchSettings == null)
             {

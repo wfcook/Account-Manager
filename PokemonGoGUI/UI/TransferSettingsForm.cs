@@ -10,9 +10,9 @@ namespace PokemonGoGUI.UI
 {
     public partial class TransferSettingsForm : Form
     {
-        private List<TransferSetting> _settings;
+        private List<CatchSetting> _settings;
 
-        public TransferSettingsForm(List<TransferSetting> settings)
+        public TransferSettingsForm(List<CatchSetting> settings)
         {
             InitializeComponent();
 
@@ -21,12 +21,12 @@ namespace PokemonGoGUI.UI
 
         private void SetSettings()
         {
-            foreach (TransferSetting setting in _settings)
+            foreach (CatchSetting setting in _settings)
             {
                 setting.Transfer = checkBoxTransfer.Checked;
-                setting.MinCP = (int)numericUpDownMinCP.Value;
+                setting.MinTransferCP = (int)numericUpDownMinCP.Value;
                 setting.KeepMax = (int)numericUpDownKeepMax.Value;
-                setting.Type = (TransferType)comboBoxTransferType.SelectedItem;
+                setting.TransferType = (TransferType)comboBoxTransferType.SelectedItem;
                 setting.IVPercent = (int)numericUpDownIVPercent.Value;
             }
         }
@@ -45,11 +45,11 @@ namespace PokemonGoGUI.UI
 
         private void UpdateDisplay()
         {
-            TransferSetting setting = _settings.First();
+            CatchSetting setting = _settings.First();
 
             for(int i = 0; i < comboBoxTransferType.Items.Count; i++)
             {
-                if (((TransferType)comboBoxTransferType.Items[i]) == setting.Type)
+                if (((TransferType)comboBoxTransferType.Items[i]) == setting.TransferType)
                 {
                     comboBoxTransferType.SelectedIndex = i;
 
@@ -58,7 +58,7 @@ namespace PokemonGoGUI.UI
             }
 
             numericUpDownKeepMax.Value = setting.KeepMax;
-            numericUpDownMinCP.Value = setting.MinCP;
+            numericUpDownMinCP.Value = setting.MinTransferCP;
             numericUpDownIVPercent.Value = setting.IVPercent;
             checkBoxTransfer.Checked = setting.Transfer;
         }

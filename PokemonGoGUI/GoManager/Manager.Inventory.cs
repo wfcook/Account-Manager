@@ -1,4 +1,5 @@
-﻿using Google.Protobuf;
+﻿using System.Collections.Generic;
+using Google.Protobuf;
 using POGOProtos.Data;
 using POGOProtos.Inventory;
 using POGOProtos.Inventory.Item;
@@ -22,12 +23,43 @@ namespace PokemonGoGUI.GoManager
 
             try
             {
-                UpdatePlayerStats();
-                UpdatePokemon();
-                UpdatePokedex();
-                UpdatePokemonCandy();
-                UpdateItemList();
-                UpdateIncubators();
+                var inventoryItems = _client?.ClientSession?.Player?.Inventory?.InventoryItems;
+                if( inventoryItems == null )
+                    return;
+                Items.Clear();
+                Pokemon.Clear();
+                Pokedex.Clear();
+                PokemonCandy.Clear();
+                Incubators.Clear();
+                Eggs.Clear();
+                foreach (var inventoryItem in inventoryItems) {
+                    if (inventoryItem.InventoryItemData?.PlayerStats!=null){
+                        Stats = inventoryItem.InventoryItemData.PlayerStats;
+                    }
+                    if (inventoryItem.InventoryItemData?.Item!=null){
+                        Items.Add(inventoryItem.InventoryItemData.Item);
+                    }
+                    if (inventoryItem.InventoryItemData?.PokedexEntry!=null){
+                        Pokedex.Add(inventoryItem.InventoryItemData.PokedexEntry);
+                    }
+                    if (inventoryItem.InventoryItemData?.Candy!=null){
+                        PokemonCandy.Add(inventoryItem.InventoryItemData.Candy);
+                    }
+                    if (inventoryItem.InventoryItemData?.EggIncubators!=null){
+                        foreach (var eggIncubator in inventoryItem.InventoryItemData.EggIncubators.EggIncubator)
+                            if (eggIncubator!=null)
+                                Incubators.Add(eggIncubator);
+                        
+                    }
+                    if (inventoryItem.InventoryItemData?.PokemonData!=null){
+                        if (inventoryItem.InventoryItemData.PokemonData.IsEgg)
+                            Eggs.Add(inventoryItem.InventoryItemData.PokemonData);
+                        else
+                            Pokemon.Add(inventoryItem.InventoryItemData.PokemonData);
+                    }
+                    
+                }
+
 
             }
             catch (Exception ex1)
@@ -36,53 +68,6 @@ namespace PokemonGoGUI.GoManager
                 LogCaller(new LoggerEventArgs(String.Format("Failed updating inventory."), LoggerTypes.Debug, ex1));
                 Stop();
             }
-        }
-
-        public void UpdateItemList()
-        {
-            Items = _client.ClientSession.Player.Inventory.InventoryItems.Where(x => x.InventoryItemData?.Item != null).Select(x => x.InventoryItemData.Item);
-        }
-
-        public void UpdatePlayerStats()
-        {
-            InventoryItem item = _client.ClientSession.Player.Inventory.InventoryItems.FirstOrDefault(
-                                     x => x.InventoryItemData?.PlayerStats != null);
-
-            Stats = item.InventoryItemData.PlayerStats;
-        }
-
-
-        public void UpdatePokemon()
-        {
-            /*if (_client==null)
-                LogCaller(new LoggerEventArgs("Invalid _client Object ", LoggerTypes.Debug));
-            if (_client.ClientSession==null)
-                LogCaller(new LoggerEventArgs("Invalid ClientSession Object ", LoggerTypes.Debug));
-            if (_client.ClientSession.Player==null)
-                LogCaller(new LoggerEventArgs("Invalid Player Object ", LoggerTypes.Debug));
-            if (_client.ClientSession.Player.Inventory==null)
-                LogCaller(new LoggerEventArgs("Invalid Inventory Object", LoggerTypes.Debug));
-            if (_client.ClientSession.Player.Inventory.InventoryItems==null)
-                LogCaller(new LoggerEventArgs("Invalid InventoryItems Object", LoggerTypes.Debug));
-                */
-            var pokemonDatas = _client.ClientSession.Player.Inventory.InventoryItems.Select(item => item.InventoryItemData?.PokemonData);
-            Pokemon = pokemonDatas.Where(item => item != null && !item.IsEgg);
-            Eggs = pokemonDatas.Where(item => item != null && item.IsEgg);
-        }
-
-        public void UpdatePokedex()
-        {
-            Pokedex = _client.ClientSession.Player.Inventory.InventoryItems.Where(x => x.InventoryItemData?.PokedexEntry != null).Select(x => x.InventoryItemData.PokedexEntry);
-        }
-
-        public void UpdateIncubators()
-        {
-            Incubators = _client.ClientSession.Player.Inventory.InventoryItems.First(x => x.InventoryItemData?.EggIncubators != null).InventoryItemData.EggIncubators.EggIncubator;
-        }
-
-        public void UpdatePokemonCandy()
-        {
-            PokemonCandy = _client.ClientSession.Player.Inventory.InventoryItems.Where(x => x.InventoryItemData?.Candy != null).Select(x => x.InventoryItemData.Candy);
         }
 
         public async Task<MethodResult> RecycleFilteredItems()
@@ -182,7 +167,7 @@ namespace PokemonGoGUI.GoManager
                 return 100;
             }
 
-            return (double)(Pokemon.Count() + Eggs.Count()) / PlayerData.MaxPokemonStorage * 100;
+            return (double)(Pokemon.Count + Eggs.Count) / PlayerData.MaxPokemonStorage * 100;
         }
     }
 }

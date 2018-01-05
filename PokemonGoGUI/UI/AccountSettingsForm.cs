@@ -38,7 +38,7 @@ namespace PokemonGoGUI.UI
 
             olvColumnEvolveId.AspectGetter = delegate(object x)
             {
-                var setting = (EvolveSetting)x;
+                var setting = (CatchSetting)x;
 
                 return (int)setting.Id;
             };
@@ -49,7 +49,7 @@ namespace PokemonGoGUI.UI
 
             olvColumnTransferId.AspectGetter = delegate(object x)
             {
-                var setting = (TransferSetting)x;
+                var setting = (CatchSetting)x;
 
                 return (int)setting.Id;
             };
@@ -83,9 +83,9 @@ namespace PokemonGoGUI.UI
         private void UpdateListViews()
         {
             fastObjectListViewRecycling.SetObjects(_manager.UserSettings.ItemSettings);
-            fastObjectListViewCatch.SetObjects(_manager.UserSettings.CatchSettings);
-            fastObjectListViewEvolve.SetObjects(_manager.UserSettings.EvolveSettings);
-            fastObjectListViewTransfer.SetObjects(_manager.UserSettings.TransferSettings);
+            fastObjectListViewCatch.SetObjects(_manager.UserSettings.PokemonSettings);
+            fastObjectListViewEvolve.SetObjects(_manager.UserSettings.PokemonSettings);
+            fastObjectListViewTransfer.SetObjects(_manager.UserSettings.PokemonSettings);
         }
 
         private void UpdateDetails(Settings settings)
@@ -479,7 +479,7 @@ namespace PokemonGoGUI.UI
 
             _manager.RestoreCatchDefaults();
 
-            fastObjectListViewCatch.SetObjects(_manager.UserSettings.CatchSettings);
+            fastObjectListViewCatch.SetObjects(_manager.UserSettings.PokemonSettings);
         }
 
         #endregion
@@ -497,7 +497,7 @@ namespace PokemonGoGUI.UI
 
             _manager.RestoreEvolveDefaults();
 
-            fastObjectListViewEvolve.SetObjects(_manager.UserSettings.EvolveSettings);
+            fastObjectListViewEvolve.SetObjects(_manager.UserSettings.PokemonSettings);
         }
 
         private void EditCPToolStripMenuItem_Click(object sender, EventArgs e)
@@ -509,7 +509,7 @@ namespace PokemonGoGUI.UI
                 return;
             }
 
-            int defaultCP = ((EvolveSetting)fastObjectListViewEvolve.SelectedObjects[0]).MinCP;
+            int defaultCP = ((CatchSetting)fastObjectListViewEvolve.SelectedObjects[0]).MinEvolveCP;
 
             string cp = Prompt.ShowDialog("Enter minimum CP:", "Edit CP", defaultCP.ToString());
 
@@ -525,12 +525,12 @@ namespace PokemonGoGUI.UI
                 return;
             }
 
-            foreach (EvolveSetting setting in fastObjectListViewEvolve.SelectedObjects)
+            foreach (CatchSetting setting in fastObjectListViewEvolve.SelectedObjects)
             {
-                setting.MinCP = changeCp;
+                setting.MinEvolveCP = changeCp;
             }
 
-            fastObjectListViewEvolve.SetObjects(_manager.UserSettings.EvolveSettings);
+            fastObjectListViewEvolve.SetObjects(_manager.UserSettings.PokemonSettings);
         }
 
         private void TrueToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -544,7 +544,7 @@ namespace PokemonGoGUI.UI
 
             var checkType = (CheckType)Int32.Parse(tSMI.Tag.ToString());
 
-            foreach (EvolveSetting eSetting in fastObjectListViewEvolve.SelectedObjects)
+            foreach (CatchSetting eSetting in fastObjectListViewEvolve.SelectedObjects)
             {
                 if (checkType == CheckType.Toggle)
                 {
@@ -560,14 +560,14 @@ namespace PokemonGoGUI.UI
                 }
             }
 
-            fastObjectListViewEvolve.SetObjects(_manager.UserSettings.EvolveSettings);
+            fastObjectListViewEvolve.SetObjects(_manager.UserSettings.PokemonSettings);
         }
 
         #endregion
 
         #region Transfer
 
-        private void EditTransferSettings(List<TransferSetting> settings)
+        private void EditTransferSettings(List<CatchSetting> settings)
         {
             if(settings.Count == 0)
             {
@@ -582,7 +582,7 @@ namespace PokemonGoGUI.UI
 
         private void EditToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            EditTransferSettings(fastObjectListViewTransfer.SelectedObjects.Cast<TransferSetting>().ToList());
+            EditTransferSettings(fastObjectListViewTransfer.SelectedObjects.Cast<CatchSetting>().ToList());
         }
 
         private void RestoreDefaultsToolStripMenuItem2_Click(object sender, EventArgs e)
@@ -596,7 +596,7 @@ namespace PokemonGoGUI.UI
 
             _manager.RestoreTransferDefaults();
 
-            fastObjectListViewTransfer.SetObjects(_manager.UserSettings.TransferSettings);
+            fastObjectListViewTransfer.SetObjects(_manager.UserSettings.PokemonSettings);
         }
 
         #endregion

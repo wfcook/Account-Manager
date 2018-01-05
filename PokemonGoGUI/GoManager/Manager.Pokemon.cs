@@ -48,7 +48,7 @@ namespace PokemonGoGUI.GoManager
                                 LoggerTypes.Transfer));
 
                             await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
-                            UpdatePokemon();
+                            UpdateInventory();
                         }
                         else
                         {
@@ -92,7 +92,7 @@ namespace PokemonGoGUI.GoManager
                             LoggerTypes.Transfer));
 
                         await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
-                        UpdatePokemon();
+                        UpdateInventory();
                     }
                     else
                     {
@@ -163,7 +163,7 @@ namespace PokemonGoGUI.GoManager
 
             foreach (IGrouping<PokemonId, PokemonData> group in groupedPokemon)
             {
-                TransferSetting settings = UserSettings.TransferSettings.FirstOrDefault(x => x.Id == group.Key);
+                CatchSetting settings = UserSettings.PokemonSettings.FirstOrDefault(x => x.Id == group.Key);
 
                 if (settings == null)
                 {
@@ -177,13 +177,13 @@ namespace PokemonGoGUI.GoManager
                     continue;
                 }
 
-                switch (settings.Type)
+                switch (settings.TransferType)
                 {
                     case TransferType.All:
                         pokemonToTransfer.AddRange(group.ToList());
                         break;
                     case TransferType.BelowCP:
-                        pokemonToTransfer.AddRange(GetPokemonBelowCP(group, settings.MinCP));
+                        pokemonToTransfer.AddRange(GetPokemonBelowCP(group, settings.MinTransferCP));
                         break;
                     case TransferType.BelowIVPercentage:
                         pokemonToTransfer.AddRange(GetPokemonBelowIVPercent(group, settings.IVPercent));
@@ -198,11 +198,11 @@ namespace PokemonGoGUI.GoManager
                         pokemonToTransfer.AddRange(GetPokemonByIV(group, settings.KeepMax));
                         break;
                     case TransferType.BelowCPAndIVAmount:
-                        pokemonToTransfer.AddRange(GetPokemonBelowCPIVAmount(group, settings.MinCP, settings.IVPercent));
+                        pokemonToTransfer.AddRange(GetPokemonBelowCPIVAmount(group, settings.MinTransferCP, settings.IVPercent));
                         break;
                     case TransferType.BelowCPOrIVAmount:
                         pokemonToTransfer.AddRange(GetPokemonBelowIVPercent(group, settings.IVPercent));
-                        pokemonToTransfer.AddRange(GetPokemonBelowCP(group, settings.MinCP));
+                        pokemonToTransfer.AddRange(GetPokemonBelowCP(group, settings.MinTransferCP));
                         pokemonToTransfer = pokemonToTransfer.DistinctBy(x => x.Id).ToList();
                         break;
                     case TransferType.Slashed:

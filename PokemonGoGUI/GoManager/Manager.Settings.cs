@@ -250,6 +250,26 @@ namespace PokemonGoGUI.GoManager
                     settings.DeviceInfo.HardwareModel = settings.HardwareModel;
                     settings.DeviceInfo.FirmwareBrand = settings.FirmwareBrand;
                     settings.DeviceInfo.FirmwareType = settings.FirmwareType;
+                    settings.PokemonSettings = settings.CatchSettings;
+                }
+                if (settings.PokemonSettings==null){
+                    foreach (var element in settings.EvolveSettings) {
+                        var pokemonSetting = settings.PokemonSettings.FirstOrDefault(x=>x.Id == element.Id);
+                        if (pokemonSetting!=null){
+                            pokemonSetting.Evolve = element.Evolve;
+                            pokemonSetting.MinEvolveCP = element.MinCP;
+                        }
+                    }
+                    foreach (var element in settings.TransferSettings) {
+                        var pokemonSetting = settings.PokemonSettings.FirstOrDefault(x=>x.Id == element.Id);
+                        if (pokemonSetting!=null){
+                            pokemonSetting.Transfer = element.Transfer;
+                            pokemonSetting.MinTransferCP = element.MinCP;
+                            pokemonSetting.IVPercent = element.IVPercent;
+                            pokemonSetting.KeepMax = element.KeepMax;
+                            pokemonSetting.TransferType = element.Type;
+                        }
+                    }
                 }
 
                 UserSettings = settings;

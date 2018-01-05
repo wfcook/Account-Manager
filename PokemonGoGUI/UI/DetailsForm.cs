@@ -222,20 +222,6 @@ namespace PokemonGoGUI.UI
         }
 
 
-        private async Task UpdateDetails()
-        {
-            buttonUpdateStats.Enabled = false;
-
-            MethodResult result = await _manager.UpdateDetails();
-
-            if (!result.Success)
-            {
-                MessageBox.Show("Failed updating details");
-            }
-            
-
-            buttonUpdateStats.Enabled = true;
-        }
 
         private void DisplayDetails()
         {
@@ -263,7 +249,7 @@ namespace PokemonGoGUI.UI
 
             if (_manager.Pokemon != null)
             {
-                labelPokemonCount.Text = String.Format("{0}/{1}", _manager.Pokemon.Count() + _manager.Eggs.Count(), _manager.MaxPokemonStorage);
+                labelPokemonCount.Text = String.Format("{0}/{1}", _manager.Pokemon.Count + _manager.Eggs.Count, _manager.MaxPokemonStorage);
             }
 
             if (_manager.Items != null)
@@ -279,9 +265,9 @@ namespace PokemonGoGUI.UI
         }
 
 
-        private async void ButtonUpdateStats_Click(object sender, EventArgs e)
+        private void ButtonUpdateStats_Click(object sender, EventArgs e)
         {
-            await UpdateDetails();
+            DisplayDetails();
         }
 
         private void FastObjectListViewLogs_FormatRow(object sender, FormatRowEventArgs e)
@@ -412,7 +398,7 @@ namespace PokemonGoGUI.UI
 
             MethodResult managerResult = await _manager.TransferPokemon(fastObjectListViewPokemon.SelectedObjects.Cast<PokemonData>());
 
-            await UpdateDetails();
+            DisplayDetails();
 
             contextMenuStripPokemonDetails.Enabled = true;
 
@@ -434,7 +420,7 @@ namespace PokemonGoGUI.UI
 
             await _manager.EvolvePokemon(fastObjectListViewPokemon.SelectedObjects.Cast<PokemonData>());
             
-            await UpdateDetails();
+            DisplayDetails();
 
             contextMenuStripPokemonDetails.Enabled = true;
 
@@ -513,7 +499,7 @@ namespace PokemonGoGUI.UI
             favoriteToolStripMenuItem.Enabled = false;
 
             await _manager.FavoritePokemon(fastObjectListViewPokemon.SelectedObjects.Cast<PokemonData>(), true);
-            await UpdateDetails();
+            DisplayDetails();
 
             favoriteToolStripMenuItem.Enabled = true;
 
@@ -528,7 +514,7 @@ namespace PokemonGoGUI.UI
             favoriteToolStripMenuItem.Enabled = false;
 
             await _manager.FavoritePokemon(fastObjectListViewPokemon.SelectedObjects.Cast<PokemonData>(), false);
-            await UpdateDetails();
+            DisplayDetails();
 
             favoriteToolStripMenuItem.Enabled = true;
 
@@ -604,7 +590,7 @@ namespace PokemonGoGUI.UI
         private void FastObjectListViewEggs_FormatCell(object sender, FormatCellEventArgs e)
         {
             var egg = (PokemonData)e.Model;
-            EggIncubator eggIncubator = new EggIncubator();
+            var eggIncubator = new EggIncubator();
 
             foreach(var inc in _manager.Incubators)
             {
@@ -615,9 +601,9 @@ namespace PokemonGoGUI.UI
             if (e.Column == olvColumnEggWalked)
             {
                 if (eggIncubator.PokemonId != 0)
-                    e.SubItem.Text = String.Format("{0:0.00}km", _manager.Stats.KmWalked - eggIncubator.StartKmWalked);
+                    e.SubItem.Text = String.Format("{0:0.00} km", _manager.Stats.KmWalked - eggIncubator.StartKmWalked);
                 else
-                    e.SubItem.Text = "0.00km";
+                    e.SubItem.Text = "0.00 km";
             }
             else if (e.Column == olvColumnEggDistance)
                 e.SubItem.Text = String.Format("{0:0.00}km", egg.EggKmWalkedTarget);

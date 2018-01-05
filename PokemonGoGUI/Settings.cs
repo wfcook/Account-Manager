@@ -138,8 +138,7 @@ namespace PokemonGoGUI
         }
 
         public List<InventoryItemSetting> ItemSettings { get; set; }
-        public List<CatchSetting> CatchSettings { get; set; }
-        public List<EvolveSetting> EvolveSettings { get; set; }
+        public List<CatchSetting> PokemonSettings { get; set; }
         public List<TransferSetting> TransferSettings { get; set; }
 
         [JsonConstructor]
@@ -345,5 +344,9 @@ namespace PokemonGoGUI
         public string Language { get; set; }
         public string TimeZone { get; set; }
         public string POSIX { get; set; }
+        public List<CatchSetting> CatchSettings { get; set; }
+        public List<EvolveSetting> EvolveSettings { get; set; }
+        
+        
     }
 }

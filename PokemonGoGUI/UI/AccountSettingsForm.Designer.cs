@@ -1899,7 +1899,7 @@
             // 
             // olvColumnEvolveMinCP
             // 
-            this.olvColumnEvolveMinCP.AspectName = "MinCP";
+            this.olvColumnEvolveMinCP.AspectName = "MinEvolveCP";
             this.olvColumnEvolveMinCP.Text = "Min CP";
             // 
             // contextMenuStripEvolve
@@ -2138,7 +2138,7 @@
             // 
             // olvColumnTransferType
             // 
-            this.olvColumnTransferType.AspectName = "Type";
+            this.olvColumnTransferType.AspectName = "TransferType";
             this.olvColumnTransferType.Text = "Type";
             // 
             // olvColumnTransferKeepMax
@@ -2148,7 +2148,7 @@
             // 
             // olvColumnTransferMinCP
             // 
-            this.olvColumnTransferMinCP.AspectName = "MinCP";
+            this.olvColumnTransferMinCP.AspectName = "MinTransferCP";
             this.olvColumnTransferMinCP.Text = "Min CP";
             // 
             // olvColumnCPPercent

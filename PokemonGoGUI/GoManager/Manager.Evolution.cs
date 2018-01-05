@@ -182,9 +182,7 @@ namespace PokemonGoGUI.GoManager
                 };
             }
 
-            UpdatePokemon();
-            UpdatePokemonCandy();
-
+            UpdateInventory();
             //TODO: really is needed here?
             /*MethodResult result = await GetItemTemplates();
 
@@ -205,7 +203,7 @@ namespace PokemonGoGUI.GoManager
 
             foreach(IGrouping<PokemonId, PokemonData> group in groupedPokemon)
             {
-                EvolveSetting evolveSetting = UserSettings.EvolveSettings.FirstOrDefault(x => x.Id == group.Key);
+                CatchSetting evolveSetting = UserSettings.PokemonSettings.FirstOrDefault(x => x.Id == group.Key);
 
                 if(evolveSetting == null)
                 {
@@ -234,7 +232,7 @@ namespace PokemonGoGUI.GoManager
                 }
 
                 Candy pokemonCandy = PokemonCandy.FirstOrDefault(x => x.FamilyId == setting.FamilyId);
-                List<PokemonData> pokemonGroupToEvolve = group.Where(x => x.Cp >= evolveSetting.MinCP).OrderByDescending(x => CalculateIVPerfection(x)).ToList();
+                List<PokemonData> pokemonGroupToEvolve = group.Where(x => x.Cp >= evolveSetting.MinEvolveCP).OrderByDescending(x => CalculateIVPerfection(x)).ToList();
 
                 if(pokemonCandy == null)
                 {
@@ -359,7 +357,7 @@ namespace PokemonGoGUI.GoManager
                 return 0;
             }
 
-            return (double)(Pokemon.Count() + Eggs.Count()) / PlayerData.MaxPokemonStorage * 100;
+            return (double)(Pokemon.Count + Eggs.Count) / PlayerData.MaxPokemonStorage * 100;
         }
     }
 }
