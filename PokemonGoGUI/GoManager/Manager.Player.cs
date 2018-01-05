@@ -21,7 +21,7 @@ namespace PokemonGoGUI.GoManager
         public async Task<MethodResult> UpdateDetails()
         {
             //TODO: review what we need do here.
-            UpdateInventory();
+            UpdateInventory();// <- should not be needed
 
             LogCaller(new LoggerEventArgs("Updating details", LoggerTypes.Debug));
 

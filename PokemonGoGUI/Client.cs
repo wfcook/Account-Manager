@@ -333,39 +333,47 @@ namespace PokemonGoGUI
             var filename = "data/" + ClientManager.UserSettings.DeviceInfo.DeviceId + "_AD.json";
             if (!Directory.Exists("data"))
                 Directory.CreateDirectory("data");
-            if (File.Exists(filename))
-                File.Delete(filename);
-            File.WriteAllText(filename, Serializer.ToJson(data));
+            try {
+                File.WriteAllText(filename, Serializer.ToJson(data));
+            } catch (Exception ex1) {
+                ClientManager.LogCaller(new LoggerEventArgs("AssetDigests could not be saved sucessfully", LoggerTypes.Warning,ex1));
+            }
         }
 
         private void OnItemTemplatesReceived(object sender, List<DownloadItemTemplatesResponse.Types.ItemTemplate> data)
         {
-            var filename = "data/" + ClientManager.UserSettings.DeviceInfo.DeviceId + "_IT.json";
             if (!Directory.Exists("data"))
                 Directory.CreateDirectory("data");
-            if (File.Exists(filename))
-                File.Delete(filename);
-            File.WriteAllText(filename, Serializer.ToJson(data));
+            var filename = "data/" + ClientManager.UserSettings.DeviceInfo.DeviceId + "_IT.json";
+            try {
+                File.WriteAllText(filename, Serializer.ToJson(data));
+            } catch (Exception ex1) {
+                ClientManager.LogCaller(new LoggerEventArgs("ItemTemplates could not be saved sucessfully", LoggerTypes.Warning,ex1));
+            }
         }
 
         private void OnDownloadUrlsReceived(object sender, List<POGOProtos.Data.DownloadUrlEntry> data)
         {
-            var filename = "data/" + ClientManager.UserSettings.DeviceInfo.DeviceId + "_UR.json";
             if (!Directory.Exists("data"))
                 Directory.CreateDirectory("data");
-            if (File.Exists(filename))
-                File.Delete(filename);
-            File.WriteAllText(filename, Serializer.ToJson(data));
+            var filename = "data/" + ClientManager.UserSettings.DeviceInfo.DeviceId + "_UR.json";
+            try {
+                File.WriteAllText(filename, Serializer.ToJson(data));
+            } catch (Exception ex1) {
+                ClientManager.LogCaller(new LoggerEventArgs("Urls could not be saved sucessfully", LoggerTypes.Warning,ex1));
+            }
         }
 
         private void OnLocalConfigVersionReceived(object sender, DownloadRemoteConfigVersionResponse data)
         {
-            var filename = "data/" + ClientManager.UserSettings.DeviceInfo.DeviceId + "_LCV.json";
             if (!Directory.Exists("data"))
                 Directory.CreateDirectory("data");
-            if (File.Exists(filename))
-                File.Delete(filename);
-            File.WriteAllText(filename, Serializer.ToJson(data));
+            var filename = "data/" + ClientManager.UserSettings.DeviceInfo.DeviceId + "_LCV.json";
+            try {
+                File.WriteAllText(filename, Serializer.ToJson(data));
+            } catch (Exception ex1) {
+                ClientManager.LogCaller(new LoggerEventArgs("LocalConfigVersion could not be saved sucessfully", LoggerTypes.Warning,ex1));
+            }
         }
 
         private event EventHandler<int> OnPokehashSleeping;
@@ -391,7 +399,7 @@ namespace PokemonGoGUI
 
         private void SessionInventoryUpdate(object sender, EventArgs e)
         {
-            //ClientManager.UpdateInventory();
+            ClientManager.UpdateInventory(); // <- this line should be the unique line updating the inventory
         }
 
         private void OnHatchedEggsReceived(object sender, GetHatchedEggsResponse hatchedEggResponse)

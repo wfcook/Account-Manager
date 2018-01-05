@@ -182,20 +182,7 @@ namespace PokemonGoGUI.GoManager
                 };
             }
 
-            UpdateInventory();
-            //TODO: really is needed here?
-            /*MethodResult result = await GetItemTemplates();
-
-            if(!result.Success)
-            {
-                LogCaller(new LoggerEventArgs("Failed to grab pokemon settings. Skipping evolution", LoggerTypes.Warning));
-
-                return new MethodResult<List<PokemonData>>
-                {
-                    Data = new List<PokemonData>(),
-                    Success = true
-                };
-            }*/
+            UpdateInventory(); // <- should not be needed
 
             var pokemonToEvolve = new List<PokemonData>();
 

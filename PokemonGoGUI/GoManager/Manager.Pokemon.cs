@@ -48,7 +48,7 @@ namespace PokemonGoGUI.GoManager
                                 LoggerTypes.Transfer));
 
                             await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
-                            UpdateInventory();
+                            UpdateInventory(); // <- should not be needed
                         }
                         else
                         {
@@ -92,7 +92,7 @@ namespace PokemonGoGUI.GoManager
                             LoggerTypes.Transfer));
 
                         await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
-                        UpdateInventory();
+                        UpdateInventory(); // <- should not be needed
                     }
                     else
                     {

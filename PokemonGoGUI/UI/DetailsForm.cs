@@ -548,7 +548,7 @@ namespace PokemonGoGUI.UI
                 await Task.Delay(500);
             }
 
-            _manager.UpdateInventory();
+            _manager.UpdateInventory(); // <- should not be needed
 
             fastObjectListViewInventory.SetObjects(_manager.Items);
 

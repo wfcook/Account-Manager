@@ -113,7 +113,7 @@ namespace PokemonGoGUI.GoManager
                     {
                         //Successfully grabbed stop
                         
-                        UpdateInventory(); 
+                        UpdateInventory(); // <- should not be needed
                         if (AccountState == Enums.AccountState.PokemonBanAndPokestopBanTemp || AccountState == Enums.AccountState.PokestopBanTemp)
                         {
                             AccountState = AccountState == Enums.AccountState.PokemonBanAndPokestopBanTemp ? Enums.AccountState.PokemonBanTemp : Enums.AccountState.Good;

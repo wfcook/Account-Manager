@@ -348,8 +348,8 @@ namespace PokemonGoGUI.GoManager
 
                     await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
-                    UpdateInventory();
-
+                    UpdateInventory(); // <- should not be needed
+ 
                     result = await CheckReauthentication();
 
                     if (!result.Success)
@@ -627,7 +627,7 @@ namespace PokemonGoGUI.GoManager
                                 CatchDisabled = true;
                                 TimeAutoCatch = DateTime.Now.AddMinutes(UserSettings.DisableCatchDelay);
                             }
-                            UpdateInventory();
+                            UpdateInventory(); // <- should not be needed
                         }
 
                         //Stop bot instantly
