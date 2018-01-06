@@ -206,6 +206,7 @@
             this.toolTipProxy = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipMinAccountState = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipHumanizeThrows = new System.Windows.Forms.ToolTip(this.components);
+            this.checkBoxDownloadResources = new System.Windows.Forms.CheckBox();
             this.tabControlMain.SuspendLayout();
             this.tabPageDetails.SuspendLayout();
             this.tabControlSettings.SuspendLayout();
@@ -1703,6 +1704,7 @@
             // 
             // tabPageHash
             // 
+            this.tabPageHash.Controls.Add(this.checkBoxDownloadResources);
             this.tabPageHash.Controls.Add(this.checkBoxShowDebugLogs);
             this.tabPageHash.Controls.Add(this.groupBox2);
             this.tabPageHash.Location = new System.Drawing.Point(4, 22);
@@ -2273,6 +2275,19 @@
             this.restoreDefaultsToolStripMenuItem2.Text = "Restore Defaults";
             this.restoreDefaultsToolStripMenuItem2.Click += new System.EventHandler(this.RestoreDefaultsToolStripMenuItem2_Click);
             // 
+            // checkBoxDownloadResources
+            // 
+            this.checkBoxDownloadResources.AutoSize = true;
+            this.checkBoxDownloadResources.Checked = true;
+            this.checkBoxDownloadResources.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxDownloadResources.Location = new System.Drawing.Point(166, 133);
+            this.checkBoxDownloadResources.Margin = new System.Windows.Forms.Padding(2);
+            this.checkBoxDownloadResources.Name = "checkBoxDownloadResources";
+            this.checkBoxDownloadResources.Size = new System.Drawing.Size(128, 17);
+            this.checkBoxDownloadResources.TabIndex = 71;
+            this.checkBoxDownloadResources.Text = "Download Resources";
+            this.checkBoxDownloadResources.UseVisualStyleBackColor = true;
+            // 
             // AccountSettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2520,5 +2535,6 @@
         private System.Windows.Forms.NumericUpDown numericUpDownDisableCatchDelay;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.CheckBox checkBoxShowDebugLogs;
+        private System.Windows.Forms.CheckBox checkBoxDownloadResources;
     }
 }

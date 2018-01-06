@@ -149,7 +149,7 @@ namespace PokemonGoGUI
                 ClientSession.HatchedEggsReceived += OnHatchedEggsReceived;
                 Logger.RegisterLogOutput(loggerFucntion);
 
-                if (await ClientSession.StartupAsync(true))
+                if (await ClientSession.StartupAsync(ClientManager.UserSettings.DownloadResources))
                 {
                     LoggedIn = true;
                     msgStr = "Successfully logged into server.";

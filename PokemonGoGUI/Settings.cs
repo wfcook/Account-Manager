@@ -128,6 +128,10 @@ namespace PokemonGoGUI
             get;
             set;
         }
+        public bool DownloadResources {
+            get;
+            set;
+        }
         public AccountState StopAtMinAccountState { get; set; }
 
         public ProxyEx Proxy {
@@ -198,6 +202,7 @@ namespace PokemonGoGUI
             PlayerLocale.Timezone = "America/New_York";
             PlayerLocale.POSIX = "en-us";
             DisableCatchDelay = 8;
+            DownloadResources = true;
         }
 
 
