@@ -330,8 +330,8 @@ namespace PokemonGoGUI.GoManager
 
                 #region Startup
 
-                try
-                {
+                //try
+               // {
                     if (!_client.LoggedIn)
                     {
                         //Login
@@ -773,7 +773,7 @@ namespace PokemonGoGUI.GoManager
                             break;
                         }
                     }
-                }
+               /* }
                 catch (PokeHashException ex)
                 {
                     AccountState = AccountState.HashIssues;
@@ -784,7 +784,7 @@ namespace PokemonGoGUI.GoManager
                     LogCaller(new LoggerEventArgs("Unknown exception occured. Restarting ...", LoggerTypes.Exception, ex));
                     //LogCaller(new LoggerEventArgs("Unknown exception occured. Stopping ...", LoggerTypes.Exception, ex));
                     //Stop();
-                }
+                }*/
 
                 #endregion
 
