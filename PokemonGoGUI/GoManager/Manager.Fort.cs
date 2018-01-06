@@ -50,25 +50,15 @@ namespace PokemonGoGUI.GoManager
                     {
                         if (_potentialPokeStopBan)
                         {
-                            if (AccountState != Enums.AccountState.PokestopBanTemp && AccountState != Enums.AccountState.PokemonBanAndPokestopBanTemp)
+                            if (AccountState != Enums.AccountState.SoftBan)
                             {
                                 LogCaller(new LoggerEventArgs("Pokestop ban detected. Marking state", LoggerTypes.Warning));
                             }
-
-                            //Already pokemon banned
-                            if (AccountState == Enums.AccountState.PokemonBanTemp || AccountState == Enums.AccountState.PokemonBanAndPokestopBanTemp)
-                            {
-                                AccountState = Enums.AccountState.PokemonBanAndPokestopBanTemp;
-                            }
-                            else
-                            {
-                                AccountState = Enums.AccountState.PokestopBanTemp;
-                            }
+                            
+                            AccountState = Enums.AccountState.SoftBan;
 
                             //Check for auto stop bot
-                            if ((UserSettings.StopAtMinAccountState == Enums.AccountState.PokestopBanTemp ||
-                                UserSettings.StopAtMinAccountState == Enums.AccountState.PokemonBanOrPokestopBanTemp) ||
-                                (UserSettings.StopAtMinAccountState == Enums.AccountState.PokemonBanAndPokestopBanTemp && AccountState == Enums.AccountState.PokemonBanAndPokestopBanTemp))
+                            if (UserSettings.StopAtMinAccountState == Enums.AccountState.SoftBan)
                             {
                                 LogCaller(new LoggerEventArgs("Auto stopping bot ...", LoggerTypes.Info));
 
@@ -114,11 +104,11 @@ namespace PokemonGoGUI.GoManager
                         //Successfully grabbed stop
                         
                         UpdateInventory(); // <- should not be needed
-                        if (AccountState == Enums.AccountState.PokemonBanAndPokestopBanTemp || AccountState == Enums.AccountState.PokestopBanTemp)
+                        if (AccountState == Enums.AccountState.SoftBan)
                         {
-                            AccountState = AccountState == Enums.AccountState.PokemonBanAndPokestopBanTemp ? Enums.AccountState.PokemonBanTemp : Enums.AccountState.Good;
+                            AccountState =  Enums.AccountState.Good;
 
-                            LogCaller(new LoggerEventArgs("Pokestop ban was removed", LoggerTypes.Info));
+                            LogCaller(new LoggerEventArgs("Soft ban was removed", LoggerTypes.Info));
                         }
 
                         ExpIncrease(fortResponse.ExperienceAwarded);
@@ -151,18 +141,13 @@ namespace PokemonGoGUI.GoManager
                         else if (_fleeingPokemonResponses >= _fleeingPokemonUntilBan)
                         {
                             //Already pokestop banned
-                            if (AccountState == Enums.AccountState.PokestopBanTemp || AccountState == Enums.AccountState.PokemonBanAndPokestopBanTemp)
+                            if (AccountState == Enums.AccountState.SoftBan)
                             {
                                 _potentialPokemonBan = false;
-                                AccountState = Enums.AccountState.PokemonBanAndPokestopBanTemp;
-                            }
-                            else
-                            {
                                 _potentialPokemonBan = false;
-                                AccountState = Enums.AccountState.PokemonBanTemp;
                             }
 
-                            if (AccountState != Enums.AccountState.PokemonBanTemp)
+                            if (AccountState != Enums.AccountState.SoftBan)
                             {
                                 //Only occurs when out of range is found
                                 if (fortResponse.ExperienceAwarded == 0)
@@ -175,9 +160,7 @@ namespace PokemonGoGUI.GoManager
                                 }
                             }
 
-                            if (UserSettings.StopAtMinAccountState == Enums.AccountState.PokemonBanTemp ||
-                                UserSettings.StopAtMinAccountState == Enums.AccountState.PokemonBanOrPokestopBanTemp ||
-                                (UserSettings.StopAtMinAccountState == Enums.AccountState.PokemonBanAndPokestopBanTemp && AccountState == Enums.AccountState.PokemonBanAndPokestopBanTemp))
+                            if (UserSettings.StopAtMinAccountState == Enums.AccountState.SoftBan )
                             {
                                 LogCaller(new LoggerEventArgs("Auto stopping bot ...", LoggerTypes.Info));
 

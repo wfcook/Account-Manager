@@ -565,7 +565,7 @@ namespace PokemonGoGUI
                     ++running;
                 }
 
-                if (manager.AccountState == AccountState.PermAccountBan)
+                if (manager.AccountState == AccountState.PermanentBan)
                 {
                     ++permBan;
                 }
@@ -580,9 +580,12 @@ namespace PokemonGoGUI
                     ++captcha;
                 }
 
-                if (manager.AccountState == AccountState.PokemonBanAndPokestopBanTemp ||
-                    manager.AccountState == AccountState.PokemonBanTemp ||
-                    manager.AccountState == AccountState.PokestopBanTemp)
+                if (manager.AccountState == AccountState.SoftBan)
+                {
+                    ++tempBanned;
+                }
+
+                if (manager.AccountState == AccountState.TemporalBan)
                 {
                     ++tempBanned;
                 }
@@ -844,19 +847,13 @@ namespace PokemonGoGUI
             {
                 switch(manager.AccountState)
                 {
-                    case AccountState.PermAccountBan:
+                    case AccountState.PermanentBan:
                         e.SubItem.ForeColor = Color.Red;
                         break;
                     case AccountState.NotVerified:
                         e.SubItem.ForeColor = Color.Red;
                         break;
-                    case AccountState.PokemonBanTemp:
-                        e.SubItem.ForeColor = Color.Yellow;
-                        break;
-                    case AccountState.PokestopBanTemp:
-                        e.SubItem.ForeColor = Color.Yellow;
-                        break;
-                    case AccountState.PokemonBanAndPokestopBanTemp:
+                    case AccountState.SoftBan:
                         e.SubItem.ForeColor = Color.Yellow;
                         break;
                     case AccountState.Good:

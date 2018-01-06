@@ -67,7 +67,7 @@ namespace PokemonGoGUI.GoManager
             }
 
             //Should not start with these states
-            if(AccountState == AccountState.PermAccountBan || AccountState == AccountState.NotVerified)
+            if(AccountState == AccountState.PermanentBan || AccountState == AccountState.NotVerified)
             {
                 return;
             }

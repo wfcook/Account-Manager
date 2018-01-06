@@ -523,9 +523,9 @@ namespace PokemonGoGUI.GoManager
                         _fleeingPokemonResponses = 0;
                         _potentialPokemonBan = false;
 
-                        if (AccountState == Enums.AccountState.PokemonBanAndPokestopBanTemp || AccountState == Enums.AccountState.PokemonBanTemp)
+                        if (AccountState == Enums.AccountState.SoftBan)
                         {
-                            AccountState = AccountState == Enums.AccountState.PokemonBanAndPokestopBanTemp ? Enums.AccountState.PokestopBanTemp : Enums.AccountState.Good;
+                            AccountState =  Enums.AccountState.Good;
 
                             LogCaller(new LoggerEventArgs("Pokemon ban was lifted", LoggerTypes.Info));
                         }

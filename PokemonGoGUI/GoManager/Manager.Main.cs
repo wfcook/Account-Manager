@@ -312,7 +312,7 @@ namespace PokemonGoGUI.GoManager
 
                 if (_failedInventoryReponses >= _failedInventoryUntilBan)
                 {
-                    AccountState = AccountState.PermAccountBan;
+                    AccountState = AccountState.PermanentBan;
 
                     LogCaller(new LoggerEventArgs("Potential account ban", LoggerTypes.Warning));
 
@@ -383,7 +383,7 @@ namespace PokemonGoGUI.GoManager
                         }
                         catch (Exception ex1)
                         {
-                            AccountState = AccountState.PokemonBanAndPokestopBanTemp;
+                            AccountState = AccountState.SoftBan;
                             LogCaller(new LoggerEventArgs("Exception: " + ex1, LoggerTypes.Debug));
                             LogCaller(new LoggerEventArgs("Game settings failed", LoggerTypes.FatalError, new Exception("Maybe this account is banned ...")));
                             Stop();
@@ -401,7 +401,7 @@ namespace PokemonGoGUI.GoManager
 
                         if (!result.Success)
                         {
-                            AccountState = AccountState.PokemonBanAndPokestopBanTemp;
+                            AccountState = AccountState.SoftBan;
                             LogCaller(new LoggerEventArgs("Load pokemon settings failed", LoggerTypes.FatalError, new Exception("Maybe this account is banned ...")));
                             Stop();
                             continue;

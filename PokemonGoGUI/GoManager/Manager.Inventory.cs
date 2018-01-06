@@ -64,7 +64,7 @@ namespace PokemonGoGUI.GoManager
             }
             catch (Exception ex1)
             {
-                AccountState = Enums.AccountState.PokemonBanAndPokestopBanTemp;
+                AccountState = Enums.AccountState.TemporalBan;
                 LogCaller(new LoggerEventArgs(String.Format("Failed updating inventory."), LoggerTypes.Debug, ex1));
                 Stop();
             }

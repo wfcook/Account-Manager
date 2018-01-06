@@ -183,7 +183,7 @@ namespace PokemonGoGUI
             EnableHumanization = false;
             InsideReticuleChance = 100;
             MinPokemonBeforeEvolve = 0;
-            StopAtMinAccountState = AccountState.PokemonBanOrPokestopBanTemp;
+            StopAtMinAccountState = AccountState.SoftBan;
             DelayBetweenPlayerActions = 500;
             DelayBetweenLocationUpdates = 1000;
             GeneralDelay = 800;

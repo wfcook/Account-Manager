@@ -147,7 +147,7 @@ namespace PokemonGoGUI
                 ClientSession.MapUpdate += SessionMapUpdate;
                 ClientSession.CheckAwardedBadgesReceived += OnCheckAwardedBadgesReceived;
                 ClientSession.HatchedEggsReceived += OnHatchedEggsReceived;
-                Logger.RegisterLogOutput(loggerFucntion);
+                ClientSession.logger.RegisterLogOutput(loggerFucntion);
 
                 if (await ClientSession.StartupAsync(ClientManager.UserSettings.DownloadResources))
                 {
@@ -171,18 +171,6 @@ namespace PokemonGoGUI
                         }
                     }
 
-                    if (ClientSession.Player.Banned)
-                    {
-                        ClientManager.AccountState = AccountState.PermAccountBan;
-                        ClientManager.LogCaller(new LoggerEventArgs("The account is banned.", LoggerTypes.FatalError));
-
-                        //Remove proxy
-                        ClientManager.RemoveProxy();
-
-                        ClientManager.Stop();
-
-                        msgStr = "The account is banned.";
-                    }
 
                     //Closes bot on captcha received need utils for solve
                     if (ClientManager.AccountState == AccountState.CaptchaReceived)
@@ -198,6 +186,31 @@ namespace PokemonGoGUI
                     }
 
                     SaveAccessToken(ClientSession.AccessToken);
+                }else{
+                    if (ClientSession.Player.Banned)
+                    {
+                        ClientManager.AccountState = AccountState.PermanentBan;
+                        ClientManager.LogCaller(new LoggerEventArgs("The account is banned.", LoggerTypes.FatalError));
+
+                        //Remove proxy
+                        ClientManager.RemoveProxy();
+
+                        ClientManager.Stop();
+
+                        msgStr = "The account is banned.";
+                    }
+                    if (ClientSession.State ==SessionState.TemporalBanned)
+                    {
+                        ClientManager.AccountState = AccountState.TemporalBan;
+                        ClientManager.LogCaller(new LoggerEventArgs("The account is temporal banned.", LoggerTypes.FatalError));
+
+                        //Remove proxy
+                        ClientManager.RemoveProxy();
+
+                        ClientManager.Stop();
+
+                        msgStr = "The account is temporal banned.";
+                    }
                 }
             }
             catch (PtcOfflineException)
