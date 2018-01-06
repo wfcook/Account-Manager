@@ -167,6 +167,8 @@ namespace PokemonGoGUI.UI
             tbAuthHashKey.Text = _manager.UserSettings.AuthAPIKey;
             cbAutoUpdate.Checked = AutoUpdate;
             numericUpDownDisableCatchDelay.Value = new Decimal(_manager.UserSettings.DisableCatchDelay);
+            
+            checkBoxShowDebugLogs.Checked = settings.ShowDebugLogs;
 
             //Location time zones
             var zones = new TimeZoneIds().GetTimeZoneIds();
@@ -384,6 +386,9 @@ namespace PokemonGoGUI.UI
             
             userSettings.ARBonusProximity = numericUpDownProximity.Value;
             userSettings.ARBonusAwareness = numericUpDownAwareness.Value;
+            
+            // 
+            userSettings.ShowDebugLogs = checkBoxShowDebugLogs.Checked;
 
             return true;
         }
