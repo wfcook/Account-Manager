@@ -124,6 +124,10 @@ namespace PokemonGoGUI
             set;
         }
 
+        public bool ShowDebugLogs {
+            get;
+            set;
+        }
         public AccountState StopAtMinAccountState { get; set; }
 
         public ProxyEx Proxy {

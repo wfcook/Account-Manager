@@ -16,7 +16,9 @@ namespace PokemonGoGUI.GoManager
             {
                 if (log.LoggerType != LoggerTypes.LocationUpdate)
                 {
-                    Logs.Add(log);
+                    if (log.LoggerType != LoggerTypes.Debug || UserSettings.ShowDebugLogs){
+                        Logs.Add(log);
+                    }
                 }
 
                 if(Logs.Count >= UserSettings.MaxLogs)
