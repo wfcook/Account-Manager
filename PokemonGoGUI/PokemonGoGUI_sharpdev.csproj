@@ -125,9 +125,6 @@
     <Reference Include="Google.Protobuf, Version=3.5.1.0, Culture=neutral, PublicKeyToken=a7d26565bac4d604, processorArchitecture=MSIL">
       <HintPath>..\packages\Google.Protobuf.3.5.1\lib\net45\Google.Protobuf.dll</HintPath>
     </Reference>
-    <Reference Include="GPSOAuthSharp.Core, Version=1.0.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\GPSOAuthSharp.Core.1.0.2\lib\netstandard1.1\GPSOAuthSharp.Core.dll</HintPath>
-    </Reference>
     <Reference Include="Markdig, Version=0.14.8.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Markdig.0.14.8\lib\net40\Markdig.dll</HintPath>
     </Reference>
@@ -138,7 +135,7 @@
       <HintPath>..\packages\ObjectListView.Official.2.9.1\lib\net20\ObjectListView.dll</HintPath>
     </Reference>
     <Reference Include="POGOLib.Core">
-      <HintPath>..\..\packages\POGOLib.Core.1.8.2\lib\netstandard1.1\POGOLib.Core.dll</HintPath>
+      <HintPath>..\..\packages\POGOLib.Core.1.8.3\lib\netstandard1.1\POGOLib.Core.dll</HintPath>
     </Reference>
     <Reference Include="POGOProtos.Core, Version=2.21.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\POGOProtos.Core.2.21.1\lib\net45\POGOProtos.Core.dll</HintPath>
