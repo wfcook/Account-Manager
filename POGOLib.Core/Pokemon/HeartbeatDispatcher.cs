@@ -43,7 +43,7 @@ namespace POGOLib.Official.Pokemon
 
                     if (lastGeoCoordinate.IsUnknown)
                     {
-                        _session.logger.Debug("Refreshing MapObjects, reason: 'lastGeoCoordinate.IsUnknown'.");
+                        _session.Logger.Debug("Refreshing MapObjects, reason: 'lastGeoCoordinate.IsUnknown'.");
                         canRefresh = true;
                     }
                     else if (secondsSinceLast >= minSeconds)
@@ -51,12 +51,12 @@ namespace POGOLib.Official.Pokemon
                         var metersMoved = _session.Player.Coordinate.GetDistanceTo(lastGeoCoordinate);
                         if (secondsSinceLast >= maxSeconds)
                         {
-                            _session.logger.Debug($"Refreshing MapObjects, reason: 'secondsSinceLast({secondsSinceLast}) >= maxSeconds({maxSeconds})'.");
+                            _session.Logger.Debug($"Refreshing MapObjects, reason: 'secondsSinceLast({secondsSinceLast}) >= maxSeconds({maxSeconds})'.");
                             canRefresh = true;
                         }
                         else if (metersMoved >= minDistance)
                         {
-                            _session.logger.Debug($"Refreshing MapObjects, reason: 'metersMoved({metersMoved}) >= minDistance({minDistance})'.");
+                            _session.Logger.Debug($"Refreshing MapObjects, reason: 'metersMoved({metersMoved}) >= minDistance({minDistance})'.");
                             canRefresh = true;
                         }
                     }
@@ -73,7 +73,7 @@ namespace POGOLib.Official.Pokemon
                     }
                     catch (Exception e)
                     {
-                        _session.logger.Error($"Map refresh failed: {e}");
+                        _session.Logger.Error($"Map refresh failed: {e}");
                     }
                 }
 
@@ -94,7 +94,7 @@ namespace POGOLib.Official.Pokemon
 
             firstRefreshCompleted?.TrySetResult(false);
 
-            _session.logger.Debug("Heartbeat got cancelled");
+            _session.Logger.Debug("Heartbeat got cancelled");
         }
 
         internal async Task StartDispatcherAsync()

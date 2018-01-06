@@ -59,7 +59,7 @@ namespace PokemonGoGUI
             ClientSession.AssetDigestUpdated -= OnAssetDisgestReceived;
             ClientSession.ItemTemplatesUpdated -= OnItemTemplatesReceived;
             ClientSession.UrlsUpdated -= OnDownloadUrlsReceived;
-            ClientSession.LocalConfigUpdated -= OnLocalConfigVersionReceived;
+            ClientSession.RemoteConfigVersionUpdated -= OnLocalConfigVersionReceived;
             ClientSession.AccessTokenUpdated -= SessionAccessTokenUpdated;
             ClientSession.CaptchaReceived -= SessionOnCaptchaReceived;
             ClientSession.InventoryUpdate -= SessionInventoryUpdate;
@@ -140,14 +140,14 @@ namespace PokemonGoGUI
                 ClientSession.AssetDigestUpdated += OnAssetDisgestReceived;
                 ClientSession.ItemTemplatesUpdated += OnItemTemplatesReceived;
                 ClientSession.UrlsUpdated += OnDownloadUrlsReceived;
-                ClientSession.LocalConfigUpdated += OnLocalConfigVersionReceived;
+                ClientSession.RemoteConfigVersionUpdated += OnLocalConfigVersionReceived;
                 ClientSession.AccessTokenUpdated += SessionAccessTokenUpdated;
                 ClientSession.CaptchaReceived += SessionOnCaptchaReceived;
                 ClientSession.InventoryUpdate += SessionInventoryUpdate;
                 ClientSession.MapUpdate += SessionMapUpdate;
                 ClientSession.CheckAwardedBadgesReceived += OnCheckAwardedBadgesReceived;
                 ClientSession.HatchedEggsReceived += OnHatchedEggsReceived;
-                ClientSession.logger.RegisterLogOutput(loggerFucntion);
+                ClientSession.Logger.RegisterLogOutput(loggerFucntion);
 
                 if (await ClientSession.StartupAsync(ClientManager.UserSettings.DownloadResources))
                 {

@@ -29,7 +29,7 @@ namespace POGOLib.Official.Net.Authentication
 
 
             var session = new Session(loginProvider, accessToken, new GeoCoordinate(initialLatitude, initialLongitude), deviceWrapper, playerLocale);
-            session.logger.Debug("Authenticated from cache.");
+            session.Logger.Debug("Authenticated from cache.");
             return session;
 
         }
@@ -46,9 +46,9 @@ namespace POGOLib.Official.Net.Authentication
         {
             var session = new Session(loginProvider, await loginProvider.GetAccessToken(), new GeoCoordinate(initialLatitude, initialLongitude), deviceWrapper, playerLocale);
             if (loginProvider is PtcLoginProvider)
-                session.logger.Debug("Authenticated through PTC.");
+                session.Logger.Debug("Authenticated through PTC.");
             else
-                session.logger.Debug("Authenticated through Google.");
+                session.Logger.Debug("Authenticated through Google.");
             return session;
         }
 
@@ -68,7 +68,7 @@ namespace POGOLib.Official.Net.Authentication
             }
 
             var session = new Session(loginProvider, accessToken, coordinate, deviceWrapper, playerLocale);
-            session.logger.Debug("Authenticated from cache.");
+            session.Logger.Debug("Authenticated from cache.");
             return session;
         }
 
@@ -84,9 +84,9 @@ namespace POGOLib.Official.Net.Authentication
         {
             var session = new Session(loginProvider, await loginProvider.GetAccessToken() , coordinate, deviceWrapper, playerLocale);
             if (loginProvider is PtcLoginProvider)
-                session.logger.Debug("Authenticated through PTC.");
+                session.Logger.Debug("Authenticated through PTC.");
             else
-                session.logger.Debug("Authenticated through Google.");
+                session.Logger.Debug("Authenticated through Google.");
             return session;
         }
     }

@@ -8,102 +8,55 @@ namespace POGOLib.Official.Util.Device
     {
         private static readonly Random Random = new Random();
 
+
+        private static readonly string[][] OsVars = { 
+            new [] {"9.0", "CFNetwork/758.0.2 Darwin/15.0.0"},        // Index 0
+            new [] {"9.0.1","CFNetwork/758.0.2 Darwin/15.0.0"},       // Index 1
+                new [] {"9.0.2","CFNetwork/758.0.2 Darwin/15.0.0"},   // Index 2
+                new [] {"9.1","CFNetwork/758.1.6 Darwin/15.0.0"},     // Index 3
+                new [] {"9.2","CFNetwork/758.2.8 Darwin/15.0.0"},     // Index 4
+                new [] {"9.2.1","CFNetwork/758.2.8 Darwin/15.0.0"},   // Index 5
+                new [] {"9.3","CFNetwork/758.3.15 Darwin/15.4.0"},    // Index 6
+                new [] {"9.3.2","CFNetwork/758.4.3 Darwin/15.5.0"},   // Index 7
+                new [] {"10.3.3","CFNetwork/807.2.14 Darwin/16.3.0"}, // Index 8
+                new [] {"11.1.0","CFNetwork/889.3 Darwin/17.2.0"},    // Index 9
+                new [] {"11.2.0","CFNetwork/893.10 Darwin/17.3.0"}    // Index 10
+        };
+        // NOTEs:
+        //        pos 3 = index of first valid OS
+        //        pos 4 = index of last valid OS
         private static readonly string[][] Devices =
         {
-            // maybe not support 
-            /*new[] {"iPad3,1", "iPad", "J1AP"},
-            new[] {"iPad3,2", "iPad", "J2AP"},
-            new[] {"iPad3,3", "iPad", "J2AAP"},
-            new[] {"iPad3,4", "iPad", "P101AP"},
-            new[] {"iPad3,5", "iPad", "P102AP"},
-            new[] {"iPad3,6", "iPad", "P103AP"},
-            new[] {"iPad4,1", "iPad", "J71AP"},
-            new[] {"iPad4,2", "iPad", "J72AP"},
-            new[] {"iPad4,3", "iPad", "J73AP"},
-            new[] {"iPad4,4", "iPad", "J85AP"},
-            new[] {"iPad4,5", "iPad", "J86AP"},
-            new[] {"iPad4,6", "iPad", "J87AP"},
-            new[] {"iPad4,7", "iPad", "J85mAP"},
-            new[] {"iPad4,8", "iPad", "J86mAP"},
-            new[] {"iPad4,9", "iPad", "J87mAP"},*/
-            new[] {"iPad5,1", "iPad", "J96AP"},
-            new[] {"iPad5,2", "iPad", "J97AP"},
-            new[] {"iPad5,3", "iPad", "J81AP"},
-            new[] {"iPad5,4", "iPad", "J82AP"},
-            new[] {"iPad6,7", "iPad", "J98aAP"},
-            new[] {"iPad6,8", "iPad", "J99aAP"},
-            new[] {"iPhone5,1", "iPhone", "N41AP"},
-            new[] {"iPhone5,2", "iPhone", "N42AP"},
-            new[] {"iPhone5,3", "iPhone", "N48AP"},
-            new[] {"iPhone5,4", "iPhone", "N49AP"},
-            new[] {"iPhone6,1", "iPhone", "N51AP"},
-            new[] {"iPhone6,2", "iPhone", "N53AP"},
-            new[] {"iPhone7,1", "iPhone", "N56AP"},
-            new[] {"iPhone7,2", "iPhone", "N61AP"},
-            new[] {"iPhone8,1", "iPhone", "N71AP"},
-            new[] {"iPhone8,2", "iPhone", "MKTM2"}, //iphone 6s plus
-            new[] {"iPhone9,3", "iPhone", "MN9T2"}
+            new[] {"iPad5,1", "iPad", "J96AP","0","10"},     // iPad 4 mini
+            new[] {"iPad5,2", "iPad", "J97AP","0","10"},     // iPad 4 mini
+            new[] {"iPad5,3", "iPad", "J81AP","0","10"},     // iPad Air 2
+            new[] {"iPad5,4", "iPad", "J82AP","0","10"},     // iPad Air 2
+            new[] {"iPad6,7", "iPad", "J98aAP","3","10"},    // iPad Pro (12.9-inch)
+            new[] {"iPad6,8", "iPad", "J99aAP","3","10"},    // iPad Pro (12.9-inch)
+            new[] {"iPhone5,1", "iPhone", "N41AP","0","8"},  // iPhone 5
+            new[] {"iPhone5,2", "iPhone", "N42AP","0","8"},  // iPhone 5
+            new[] {"iPhone5,3", "iPhone", "N48AP","0","8"},  // iPhone 5c
+            new[] {"iPhone5,4", "iPhone", "N49AP","0","8"},  // iPhone 5c
+            new[] {"iPhone6,1", "iPhone", "N51AP","0","10"}, // iPhone 5s
+            new[] {"iPhone6,2", "iPhone", "N53AP","0","10"}, // iPhone 5s
+            new[] {"iPhone7,1", "iPhone", "N56AP","8","10"}, // iPhone 6 Plus
+            new[] {"iPhone7,2", "iPhone", "N61AP","8","10"}, // iPhone 6
+            new[] {"iPhone8,1", "iPhone", "N71AP","8","10"}, // iPhone 6s
+            new[] {"iPhone8,2", "iPhone", "MKTM2","8","10"}, // iPhone 6s plus
+            new[] {"iPhone9,3", "iPhone", "MN9T2","8","10"}  // iPhone 7
         };
 
-        private static readonly string[] OsVersions = {
-            /*
-             * not more supported
-            "8.1.1",
-            "8.1.2",
-            "8.1.3",
-            "8.2",
-            "8.3",
-            "8.4",
-            "8.4.1",*/
-            "9.0",
-            "9.0.1",
-            "9.0.2",
-            "9.1",
-            "9.2",
-            "9.2.1",
-            "9.3",
-//            "9.3.1",
-            "9.3.2",
-//            "9.3.3",
-//            "9.3.4"
-            "10.3.3",
-            "11.1.0",
-            "11.2.0"
-        };
 
-        private static readonly string[] OsUserAgentParts = {
-            /*
-             * not more supportd
-            "CFNetwork/711.1.16 Darwin/14.0.0", // 8.1.1
-            "CFNetwork/711.1.16 Darwin/14.0.0", // 8.1.2
-            "CFNetwork/711.1.16	Darwin/14.0.0", // 8.1.3
-            "CFNetwork/711.2.23 Darwin/14.0.0", // 8.2
-            "CFNetwork/711.3.18 Darwin/14.0.0", // 8.3
-            "CFNetwork/711.4.6 Darwin/14.4.0",  // 8.4
-            "CFNetwork/711.4.6 Darwin/14.4.0",  // 8.4.1*/
-            "CFNetwork/758.0.2 Darwin/15.0.0",  // 9.0
-            "CFNetwork/758.0.2 Darwin/15.0.0",  // 9.0.1
-            "CFNetwork/758.0.2 Darwin/15.0.0",  // 9.0.2
-            "CFNetwork/758.1.6 Darwin/15.0.0",  // 9.1
-            "CFNetwork/758.2.8 Darwin/15.0.0",  // 9.2
-            "CFNetwork/758.2.8 Darwin/15.0.0",  // 9.2.1
-            "CFNetwork/758.3.15 Darwin/15.4.0", // 9.3
-//            "9.3.1", // 9.3.1
-            "CFNetwork/758.4.3 Darwin/15.5.0", // 9.3.2
-//            "9.3.3", // 9.3.3
-//            "9.3.4"  // 9.3.4
-            "CFNetwork/807.2.14 Darwin/16.3.0", // 10.3.3
-            "CFNetwork/889.3 Darwin/17.2.0", // 11.1.0
-            "CFNetwork/893.10 Darwin/17.3.0", // 11.2.0
-        };
 
         public static DeviceWrapper GetRandomDevice()
         {
             var device = Devices[Random.Next(Devices.Length)];
+            var startIndex = int.Parse(device[3]);
+            var LastIndex = int.Parse(device[4]);
 
-            var osId = Random.Next(OsVersions.Length);
-            var firmwareType = OsVersions[osId];
-            var firmwareUserAgentPart = OsUserAgentParts[osId];
+            var osIndex = Random.Next(startIndex, LastIndex +1);
+            var firmwareType = OsVars[osIndex][0];
+            var firmwareUserAgentPart = OsVars[osIndex][1];
 
             return new DeviceWrapper
             {

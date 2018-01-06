@@ -86,6 +86,8 @@
     <Compile Include="Exceptions\GoogleLoginException.cs" />
     <Compile Include="Exceptions\PtcLoginException.cs" />
     <Compile Include="Exceptions\SessionStateException.cs" />
+    <Compile Include="Extensions\GoogleKeyUtils.cs" />
+    <Compile Include="Extensions\GPSOAuthClient.cs" />
     <Compile Include="Extensions\RandomExtension.cs" />
     <Compile Include="Logging\Logger.cs" />
     <Compile Include="Logging\LogLevel.cs" />

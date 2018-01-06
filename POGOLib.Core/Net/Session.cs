@@ -39,7 +39,7 @@ namespace POGOLib.Official.Net
         /// </summary>
         public readonly RpcClient RpcClient;
         
-        public readonly Logger logger;
+        public readonly Logger Logger;
 
         private static readonly string[] ValidLoginProviders = { "ptc", "google" };
 
@@ -55,8 +55,9 @@ namespace POGOLib.Official.Net
             {
                 throw new ArgumentException("LoginProvider ID must be one of the following: " + string.Join(", ", ValidLoginProviders));
             }
+            Logger = new Logger();
 
-            //State = SessionState.Stopped;
+            State = SessionState.Stopped;
             Device = deviceWrapper ?? DeviceInfoUtil.GetRandomDevice();
 
             var handler = new HttpClientHandler
@@ -80,7 +81,6 @@ namespace POGOLib.Official.Net
             Templates = new Templates(this);
             RpcClient = new RpcClient(this);
             _heartbeat = new HeartbeatDispatcher(this);
-            logger = new Logger();
         }
 
         /// <summary>
@@ -93,7 +93,7 @@ namespace POGOLib.Official.Net
             {
                 _state = value;
 
-                logger.Debug($"Session state was set to {_state}.");
+                Logger.Debug($"Session state was set to {_state}.");
             }
         }
         public void SetTemporalBan()
@@ -250,20 +250,20 @@ namespace POGOLib.Official.Net
                     {
                         accessToken = await LoginProvider.GetAccessToken();
                         if (LoginProvider is PtcLoginProvider)
-                            logger.Debug("Authenticated through PTC.");
+                            Logger.Debug("Authenticated through PTC.");
                         else
-                            logger.Debug("Authenticated through Google.");
+                            Logger.Debug("Authenticated through Google.");
                     }
                     catch (Exception exception)
                     {
-                        logger.Error($"Reauthenticate exception was catched: {exception}");
+                        Logger.Error($"Reauthenticate exception was catched: {exception}");
                     }
                     finally
                     {
                         if (accessToken == null)
                         {
                             var sleepSeconds = Math.Min(60, ++tries * 5);
-                            logger.Error($"Reauthentication failed, trying again in {sleepSeconds} seconds.");
+                            Logger.Error($"Reauthentication failed, trying again in {sleepSeconds} seconds.");
                             await Task.Delay(TimeSpan.FromMilliseconds(sleepSeconds * 1000));
                         }
                     }
@@ -320,12 +320,12 @@ namespace POGOLib.Official.Net
             UrlsUpdated?.Invoke(this, new List<POGOProtos.Data.DownloadUrlEntry>(urls));
         }
 
-        internal void OnLocalConfigReceived(DownloadRemoteConfigVersionResponse downloadRemoteConfigVersionResponse)
+        internal void OnRemoteConfigVersionReceived(DownloadRemoteConfigVersionResponse downloadRemoteConfigVersionResponse)
         {
-            LocalConfigUpdated?.Invoke(this, new DownloadRemoteConfigVersionResponse(downloadRemoteConfigVersionResponse));
+            RemoteConfigVersionUpdated?.Invoke(this, new DownloadRemoteConfigVersionResponse(downloadRemoteConfigVersionResponse));
         }
 
-        public event EventHandler<DownloadRemoteConfigVersionResponse> LocalConfigUpdated;
+        public event EventHandler<DownloadRemoteConfigVersionResponse> RemoteConfigVersionUpdated;
 
         public event EventHandler<List<POGOProtos.Data.DownloadUrlEntry>> UrlsUpdated;
 

@@ -198,7 +198,7 @@ namespace POGOLib.Official.Net
             try {
                 hashData = await Configuration.Hasher.GetHashDataAsync(requestEnvelope, signature, locationBytes, requestsBytes, serializedTicket);
             } catch (Exception ex1) {
-                _session.logger.Error(ex1.Message);
+                _session.Logger.Error(ex1.Message);
                 throw ex1;
             }
 
