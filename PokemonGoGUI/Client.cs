@@ -69,10 +69,11 @@ namespace PokemonGoGUI
             ClientSession.Shutdown();
         }
 
-        void loggerFucntion(LogLevel logLevel, string message)
+        private void LoggerFucntion(LogLevel logLevel, string message)
         {
             var logtype = LoggerTypes.Debug;
-            switch (logLevel) {
+            switch (logLevel)
+            {
                 case LogLevel.Warn:
                     logtype = LoggerTypes.Warning;
                     break;
@@ -111,6 +112,7 @@ namespace PokemonGoGUI
                 VersionStr = Configuration.Hasher.PokemonVersion;
                 AppVersion = Configuration.Hasher.AppVersion;
                 // TODO: Revise sleeping
+                // Used on Windows phone background app
                 //((PokeHashHasher)Configuration.Hasher).PokehashSleeping += OnPokehashSleeping;
             }
             // *****
@@ -147,7 +149,7 @@ namespace PokemonGoGUI
                 ClientSession.MapUpdate += SessionMapUpdate;
                 ClientSession.CheckAwardedBadgesReceived += OnCheckAwardedBadgesReceived;
                 ClientSession.HatchedEggsReceived += OnHatchedEggsReceived;
-                ClientSession.Logger.RegisterLogOutput(loggerFucntion);
+                ClientSession.Logger.RegisterLogOutput(LoggerFucntion);
 
                 if (await ClientSession.StartupAsync(ClientManager.UserSettings.DownloadResources))
                 {
@@ -186,7 +188,9 @@ namespace PokemonGoGUI
                     }
 
                     SaveAccessToken(ClientSession.AccessToken);
-                }else{
+                }
+                else
+                {
                     if (ClientSession.Player.Banned)
                     {
                         ClientManager.AccountState = AccountState.PermanentBan;
@@ -199,7 +203,7 @@ namespace PokemonGoGUI
 
                         msgStr = "The account is banned.";
                     }
-                    if (ClientSession.State ==SessionState.TemporalBanned)
+                    if (ClientSession.State == SessionState.TemporalBanned)
                     {
                         ClientManager.AccountState = AccountState.TemporalBan;
                         ClientManager.LogCaller(new LoggerEventArgs("The account is temporal banned.", LoggerTypes.FatalError));
@@ -345,7 +349,7 @@ namespace PokemonGoGUI
                 ClientManager.AccountState = AccountState.HashIssues;
 
                 msgStr = "Hash issues";
-                ClientManager.LogCaller(new LoggerEventArgs(phe.Message, LoggerTypes.FatalError,phe));
+                ClientManager.LogCaller(new LoggerEventArgs(phe.Message, LoggerTypes.FatalError, phe));
             }
             catch (Exception ex)
             {
@@ -356,7 +360,7 @@ namespace PokemonGoGUI
 
                 msgStr = "Failed to login";
             }
- 
+
             return new MethodResult<bool>()
             {
                 Success = LoggedIn,
@@ -369,10 +373,13 @@ namespace PokemonGoGUI
             var filename = "data/" + ClientManager.UserSettings.DeviceInfo.DeviceId + "_AD.json";
             if (!Directory.Exists("data"))
                 Directory.CreateDirectory("data");
-            try {
+            try
+            {
                 File.WriteAllText(filename, Serializer.ToJson(data));
-            } catch (Exception ex1) {
-                ClientManager.LogCaller(new LoggerEventArgs("AssetDigests could not be saved sucessfully", LoggerTypes.Warning,ex1));
+            }
+            catch (Exception ex1)
+            {
+                ClientManager.LogCaller(new LoggerEventArgs("AssetDigests could not be saved sucessfully", LoggerTypes.Warning, ex1));
             }
         }
 
@@ -381,10 +388,13 @@ namespace PokemonGoGUI
             if (!Directory.Exists("data"))
                 Directory.CreateDirectory("data");
             var filename = "data/" + ClientManager.UserSettings.DeviceInfo.DeviceId + "_IT.json";
-            try {
+            try
+            {
                 File.WriteAllText(filename, Serializer.ToJson(data));
-            } catch (Exception ex1) {
-                ClientManager.LogCaller(new LoggerEventArgs("ItemTemplates could not be saved sucessfully", LoggerTypes.Warning,ex1));
+            }
+            catch (Exception ex1)
+            {
+                ClientManager.LogCaller(new LoggerEventArgs("ItemTemplates could not be saved sucessfully", LoggerTypes.Warning, ex1));
             }
         }
 
@@ -393,10 +403,13 @@ namespace PokemonGoGUI
             if (!Directory.Exists("data"))
                 Directory.CreateDirectory("data");
             var filename = "data/" + ClientManager.UserSettings.DeviceInfo.DeviceId + "_UR.json";
-            try {
+            try
+            {
                 File.WriteAllText(filename, Serializer.ToJson(data));
-            } catch (Exception ex1) {
-                ClientManager.LogCaller(new LoggerEventArgs("Urls could not be saved sucessfully", LoggerTypes.Warning,ex1));
+            }
+            catch (Exception ex1)
+            {
+                ClientManager.LogCaller(new LoggerEventArgs("Urls could not be saved sucessfully", LoggerTypes.Warning, ex1));
             }
         }
 
@@ -405,10 +418,13 @@ namespace PokemonGoGUI
             if (!Directory.Exists("data"))
                 Directory.CreateDirectory("data");
             var filename = "data/" + ClientManager.UserSettings.DeviceInfo.DeviceId + "_LCV.json";
-            try {
+            try
+            {
                 File.WriteAllText(filename, Serializer.ToJson(data));
-            } catch (Exception ex1) {
-                ClientManager.LogCaller(new LoggerEventArgs("LocalConfigVersion could not be saved sucessfully", LoggerTypes.Warning,ex1));
+            }
+            catch (Exception ex1)
+            {
+                ClientManager.LogCaller(new LoggerEventArgs("LocalConfigVersion could not be saved sucessfully", LoggerTypes.Warning, ex1));
             }
         }
 
@@ -522,7 +538,8 @@ namespace PokemonGoGUI
                 {
                     var accessToken = JsonConvert.DeserializeObject<AccessToken>(File.ReadAllText(fileName));
 
-                    if (!accessToken.IsExpired){
+                    if (!accessToken.IsExpired)
+                    {
                         var sess = Login.GetSession(loginProvider, accessToken, initLat, initLong, ClientDeviceWrapper, PlayerLocale);
                         LoadResources(sess);
                         return sess;
