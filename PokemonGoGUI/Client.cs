@@ -451,7 +451,7 @@ namespace PokemonGoGUI
 
         private void SessionInventoryUpdate(object sender, EventArgs e)
         {
-            ClientManager.UpdateInventory(); // <- this line should be the unique line updating the inventory
+           // ClientManager.UpdateInventory(); // <- this line should be the unique line updating the inventory
         }
 
         private void OnHatchedEggsReceived(object sender, GetHatchedEggsResponse hatchedEggResponse)
