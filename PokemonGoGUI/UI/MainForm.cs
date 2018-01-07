@@ -23,7 +23,7 @@ namespace PokemonGoGUI
 {
     public partial class MainForm : System.Windows.Forms.Form
     {
-        
+
         private List<Manager> _managers = new List<Manager>();
         private ProxyHandler _proxyHandler = new ProxyHandler();
         private List<Scheduler> _schedulers = new List<Scheduler>();
@@ -58,11 +58,11 @@ namespace PokemonGoGUI
 
             Text = "Account Manager - " + _versionNumber;
 
-            olvColumnProxyAuth.AspectGetter = delegate(object x)
+            olvColumnProxyAuth.AspectGetter = delegate (object x)
             {
                 var proxy = (GoProxy)x;
 
-                if(String.IsNullOrEmpty(proxy.Username) || String.IsNullOrEmpty(proxy.Password))
+                if (String.IsNullOrEmpty(proxy.Username) || String.IsNullOrEmpty(proxy.Password))
                 {
                     return String.Empty;
                 }
@@ -70,7 +70,7 @@ namespace PokemonGoGUI
                 return String.Format("{0}:{1}", proxy.Username, proxy.Password);
             };
 
-            olvColumnCurrentFails.AspectGetter = delegate(object x)
+            olvColumnCurrentFails.AspectGetter = delegate (object x)
             {
                 var proxy = (GoProxy)x;
 
@@ -78,7 +78,7 @@ namespace PokemonGoGUI
             };
 
 
-            olvColumnUsageCount.AspectGetter = delegate(object x)
+            olvColumnUsageCount.AspectGetter = delegate (object x)
             {
                 var proxy = (GoProxy)x;
 
@@ -145,18 +145,18 @@ namespace PokemonGoGUI
             if (_showStartup)
             {
                 var startForm = new StartupForm();
-                
-                if(startForm.ShowDialog() == DialogResult.OK)
+
+                if (startForm.ShowDialog() == DialogResult.OK)
                 {
                     _showStartup = startForm.ShowOnStartUp;
                 }
             }
-             UpdateStatusBar();
+            UpdateStatusBar();
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if(_managers.Any(x => x.IsRunning))
+            if (_managers.Any(x => x.IsRunning))
             {
                 MessageBox.Show("Please stop bots before closing", "Information");
 
@@ -196,7 +196,7 @@ namespace PokemonGoGUI
             try
             {
 
-                if( !File.Exists(gzipFile))
+                if (!File.Exists(gzipFile))
                     return false;
 
                 var tempManagers = new List<Manager>();
@@ -205,15 +205,18 @@ namespace PokemonGoGUI
                 byte[] byteData = await Task.Run(() => File.ReadAllBytes(gzipFile));
                 string data = Compression.Unzip(byteData);
 
-                ProgramExportModel  model = Serializer.FromJson<ProgramExportModel>(data);
+                ProgramExportModel model = Serializer.FromJson<ProgramExportModel>(data);
 
-                if (model.ProxyHandler!=null)
+                if (model.ProxyHandler != null)
                     _proxyHandler = model.ProxyHandler;
-                if (model.Managers != null) {
+                if (model.Managers != null)
+                {
                     tempManagers = model.Managers;
                     //Obsoleted. For retrocompatibility. Remove after of several new versions. (currently 2.21.1.25)
-                    foreach (var tmpMan in tempManagers) {
-                        if (tmpMan.UserSettings.DeviceInfo == null || string.IsNullOrEmpty(tmpMan.UserSettings.DeviceInfo.DeviceId)) {
+                    foreach (var tmpMan in tempManagers)
+                    {
+                        if (tmpMan.UserSettings.DeviceInfo == null || string.IsNullOrEmpty(tmpMan.UserSettings.DeviceInfo.DeviceId))
+                        {
                             tmpMan.UserSettings.Location.Latitude = tmpMan.UserSettings.DefaultLatitude;
                             tmpMan.UserSettings.Location.Longitude = tmpMan.UserSettings.DefaultLongitude;
                             tmpMan.UserSettings.Location.Altitude = tmpMan.UserSettings.DefaultAltitude;
@@ -230,18 +233,23 @@ namespace PokemonGoGUI
                             tmpMan.UserSettings.DeviceInfo.FirmwareBrand = tmpMan.UserSettings.FirmwareBrand;
                             tmpMan.UserSettings.DeviceInfo.FirmwareType = tmpMan.UserSettings.FirmwareType;
                         }
-                        if (tmpMan.UserSettings.PokemonSettings==null){
+                        if (tmpMan.UserSettings.PokemonSettings == null)
+                        {
                             tmpMan.UserSettings.PokemonSettings = tmpMan.UserSettings.CatchSettings;
-                            foreach (var element in tmpMan.UserSettings.EvolveSettings) {
-                                var pokemonSetting = tmpMan.UserSettings.PokemonSettings.FirstOrDefault(x=>x.Id == element.Id);
-                                if (pokemonSetting!=null){
+                            foreach (var element in tmpMan.UserSettings.EvolveSettings)
+                            {
+                                var pokemonSetting = tmpMan.UserSettings.PokemonSettings.FirstOrDefault(x => x.Id == element.Id);
+                                if (pokemonSetting != null)
+                                {
                                     pokemonSetting.Evolve = element.Evolve;
                                     pokemonSetting.MinEvolveCP = element.MinCP;
                                 }
                             }
-                            foreach (var element in tmpMan.UserSettings.TransferSettings) {
-                                var pokemonSetting = tmpMan.UserSettings.PokemonSettings.FirstOrDefault(x=>x.Id == element.Id);
-                                if (pokemonSetting!=null){
+                            foreach (var element in tmpMan.UserSettings.TransferSettings)
+                            {
+                                var pokemonSetting = tmpMan.UserSettings.PokemonSettings.FirstOrDefault(x => x.Id == element.Id);
+                                if (pokemonSetting != null)
+                                {
                                     pokemonSetting.Transfer = element.Transfer;
                                     pokemonSetting.MinTransferCP = element.MinCP;
                                     pokemonSetting.IVPercent = element.IVPercent;
@@ -252,22 +260,22 @@ namespace PokemonGoGUI
                         }
                     }
                 }
-                if (model.Schedulers!=null)
+                if (model.Schedulers != null)
                     _schedulers = model.Schedulers;
-                if (model.HashKeys!=null)
+                if (model.HashKeys != null)
                     tempHashKeys = model.HashKeys;
                 _spf = model.SPF;
                 _showStartup = model.ShowWelcomeMessage;
                 _autoupdate = model.AutoUpdate;
 
-                foreach(Manager manager in tempManagers)
+                foreach (Manager manager in tempManagers)
                 {
                     manager.AddSchedulerEvent();
                     manager.ProxyHandler = _proxyHandler;
                     manager.OnLog += Manager_OnLog;
 
                     //Patch for version upgrade
-                    if(String.IsNullOrEmpty(manager.UserSettings.DeviceInfo.DeviceId))
+                    if (String.IsNullOrEmpty(manager.UserSettings.DeviceInfo.DeviceId))
                     {
                         //Load some
                         manager.UserSettings.RandomizeDevice();
@@ -337,7 +345,7 @@ namespace PokemonGoGUI
 
             var manager = sender as Manager;
 
-            if(manager == null)
+            if (manager == null)
             {
                 return;
             }
@@ -381,23 +389,23 @@ namespace PokemonGoGUI
         {
             int totalAccounts = fastObjectListViewMain.SelectedObjects.Count;
 
-            if(totalAccounts == 0)
+            if (totalAccounts == 0)
             {
                 return;
             }
 
             DialogResult dResult = MessageBox.Show(String.Format("Delete {0} accounts?", totalAccounts), "Are you sure?", MessageBoxButtons.YesNoCancel);
 
-            if(dResult != System.Windows.Forms.DialogResult.Yes)
+            if (dResult != System.Windows.Forms.DialogResult.Yes)
             {
                 return;
             }
 
             bool messageShown = false;
 
-            foreach(Manager manager in fastObjectListViewMain.SelectedObjects)
+            foreach (Manager manager in fastObjectListViewMain.SelectedObjects)
             {
-                if(manager.IsRunning && !messageShown)
+                if (manager.IsRunning && !messageShown)
                 {
                     messageShown = true;
 
@@ -450,7 +458,7 @@ namespace PokemonGoGUI
 
         private void FastObjectListViewMain_KeyDown(object sender, KeyEventArgs e)
         {
-            if(e.Control && e.Alt && e.KeyCode == Keys.U)
+            if (e.Control && e.Alt && e.KeyCode == Keys.U)
             {
                 DialogResult result = MessageBox.Show("Show developer tools?", "Confirmation", MessageBoxButtons.YesNo);
 
@@ -460,7 +468,7 @@ namespace PokemonGoGUI
                 }
             }
 
-            if(e.KeyCode != Keys.Enter)
+            if (e.KeyCode != Keys.Enter)
             {
                 return;
             }
@@ -480,9 +488,9 @@ namespace PokemonGoGUI
         {
             startToolStripMenuItem.Enabled = false;
 
-            foreach(Manager manager in fastObjectListViewMain.SelectedObjects)
+            foreach (Manager manager in fastObjectListViewMain.SelectedObjects)
             {
-                manager.UserSettings.HashKeys = _hashKeys.Select(x=>x.Key).ToList();
+                manager.UserSettings.HashKeys = _hashKeys.Select(x => x.Key).ToList();
                 manager.UserSettings.SPF = _spf;
                 manager.Start();
 
@@ -522,12 +530,12 @@ namespace PokemonGoGUI
 
         private string ImportConfig()
         {
-            using(var ofd = new OpenFileDialog())
+            using (var ofd = new OpenFileDialog())
             {
                 ofd.Title = "Open config file";
                 ofd.Filter = "Json Files (*.json)|*.json|All Files (*.*)|*.*";
 
-                if(ofd.ShowDialog() == DialogResult.OK)
+                if (ofd.ShowDialog() == DialogResult.OK)
                 {
                     return ofd.FileName;
                 }
@@ -545,7 +553,7 @@ namespace PokemonGoGUI
 
         private string GetSaveFileName()
         {
-            using(var sfd = new SaveFileDialog())
+            using (var sfd = new SaveFileDialog())
             {
                 sfd.Title = "Save File";
                 sfd.Filter = "Text Files (*.txt)|*.txt|All Files (*.*)|*.*";
@@ -568,9 +576,9 @@ namespace PokemonGoGUI
 
             var tempManagers = new List<Manager>(_managers);
 
-            foreach(Manager manager in tempManagers)
+            foreach (Manager manager in tempManagers)
             {
-                if(manager.IsRunning)
+                if (manager.IsRunning)
                 {
                     ++running;
                 }
@@ -607,7 +615,7 @@ namespace PokemonGoGUI
             toolStripStatusLabelFlagged.Text = flags.ToString();
             toolStripStatusLabelCaptcha.Text = captcha.ToString();
 
-            if(_proxyHandler?.Proxies != null)
+            if (_proxyHandler?.Proxies != null)
             {
                 toolStripStatusLabelTotalProxies.Text = _proxyHandler.Proxies.Count.ToString();
                 toolStripStatusLabelBannedProxies.Text = _proxyHandler.Proxies.Count(x => x.IsBanned).ToString();
@@ -636,7 +644,7 @@ namespace PokemonGoGUI
 
                 var tempManagers = new HashSet<Manager>(_managers);
 
-                if(useConfig && String.IsNullOrEmpty(configFile))
+                if (useConfig && String.IsNullOrEmpty(configFile))
                 {
                     return;
                 }
@@ -644,7 +652,7 @@ namespace PokemonGoGUI
                 int totalSuccess = 0;
                 int total = accounts.Count;
 
-                foreach(string account in accounts)
+                foreach (string account in accounts)
                 {
                     string[] parts = account.Split(':');
 
@@ -663,7 +671,7 @@ namespace PokemonGoGUI
 
                     var importModel = new AccountImport();
 
-                    if(!importModel.ParseAccount(account))
+                    if (!importModel.ParseAccount(account))
                     {
                         continue;
                     }
@@ -708,7 +716,7 @@ namespace PokemonGoGUI
 
                 MessageBox.Show(String.Format("Successfully imported {0} out of {1} accounts", totalSuccess, total));
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(String.Format("Failed to import usernames. Ex: {0}", ex.Message));
             }
@@ -716,7 +724,7 @@ namespace PokemonGoGUI
 
         private void TimerUpdate_Tick(object sender, EventArgs e)
         {
-            if(WindowState == FormWindowState.Minimized)
+            if (WindowState == FormWindowState.Minimized)
             {
                 return;
             }
@@ -733,9 +741,9 @@ namespace PokemonGoGUI
 
                 fastObjectListViewMain.RefreshObject(_managers[0]);
             }
-            else if(tabControlMain.SelectedTab == tabPageProxies)
+            else if (tabControlMain.SelectedTab == tabPageProxies)
             {
-                if(_proxyHandler.Proxies.Count == 0)
+                if (_proxyHandler.Proxies.Count == 0)
                 {
                     return;
                 }
@@ -744,7 +752,7 @@ namespace PokemonGoGUI
             }
             else if (tabControlMain.SelectedTab == tabPageScheduler)
             {
-                if(_schedulers.Count == 0)
+                if (_schedulers.Count == 0)
                 {
                     return;
                 }
@@ -753,7 +761,7 @@ namespace PokemonGoGUI
             }
             else if (tabControlMain.SelectedTab == tabPageHashKeys)
             {
-                if(_hashKeys.Count == 0)
+                if (_hashKeys.Count == 0)
                 {
                     return;
                 }
@@ -773,7 +781,7 @@ namespace PokemonGoGUI
                 return;
             }
 
-            foreach(Manager manager in fastObjectListViewMain.SelectedObjects)
+            foreach (Manager manager in fastObjectListViewMain.SelectedObjects)
             {
                 manager.RemoveProxy();
 
@@ -796,7 +804,7 @@ namespace PokemonGoGUI
             fastObjectListViewProxies.UseCellFormatEvents = isChecked;
             fastObjectListViewHashKeys.UseCellFormatEvents = isChecked;
 
-            if(isChecked)
+            if (isChecked)
             {
 
                 fastObjectListViewMain.BackColor = Color.FromArgb(43, 43, 43);
@@ -810,7 +818,7 @@ namespace PokemonGoGUI
 
                 fastObjectListViewHashKeys.BackColor = Color.FromArgb(43, 43, 43);
                 fastObjectListViewHashKeys.ForeColor = Color.LightGray;
-                
+
             }
             else
             {
@@ -839,23 +847,23 @@ namespace PokemonGoGUI
         {
             var manager = (Manager)e.Model;
 
-            if(e.Column == olvColumnScheduler)
+            if (e.Column == olvColumnScheduler)
             {
-                if(manager.AccountScheduler != null)
+                if (manager.AccountScheduler != null)
                 {
                     e.SubItem.ForeColor = manager.AccountScheduler.NameColor;
                 }
             }
             else if (e.Column == olvColumnExpPerHour)
             {
-                if(manager.LuckyEggActive)
+                if (manager.LuckyEggActive)
                 {
                     e.SubItem.ForeColor = Color.Green;
                 }
             }
-            else if(e.Column == olvColumnAccountState)
+            else if (e.Column == olvColumnAccountState)
             {
-                switch(manager.AccountState)
+                switch (manager.AccountState)
                 {
                     case AccountState.PermanentBan:
                         e.SubItem.ForeColor = Color.Red;
@@ -886,9 +894,9 @@ namespace PokemonGoGUI
                         break;
                 }
             }
-            else if(e.Column == olvColumnBotState)
+            else if (e.Column == olvColumnBotState)
             {
-                switch(manager.State)
+                switch (manager.State)
                 {
                     case BotState.Running:
                         e.SubItem.ForeColor = Color.Green;
@@ -914,7 +922,7 @@ namespace PokemonGoGUI
             {
                 Log log = manager.Logs.LastOrDefault();
 
-                if(log == null)
+                if (log == null)
                 {
                     return;
                 }
@@ -928,7 +936,7 @@ namespace PokemonGoGUI
                     return;
                 }
 
-                if(manager.PokemonCaught >= manager.AccountScheduler.PokemonLimiter.Max)
+                if (manager.PokemonCaught >= manager.AccountScheduler.PokemonLimiter.Max)
                 {
                     e.SubItem.ForeColor = Color.Red;
                 }
@@ -988,7 +996,7 @@ namespace PokemonGoGUI
                  {
                      Parallel.ForEach(managers, options, (manager) =>
                      {
-                             manager.ExportStats().Wait();
+                         manager.ExportStats().Wait();
                      });
                  });
         }
@@ -1008,7 +1016,7 @@ namespace PokemonGoGUI
                 {
                     Parallel.ForEach(selectedManager, options, (manager) =>
                     {
-                            manager.UpdateDetails().Wait();
+                        manager.UpdateDetails().Wait();
                     });
                 });
 
@@ -1028,7 +1036,7 @@ namespace PokemonGoGUI
 
             string pPerAccount = Prompt.ShowDialog("Accounts per proxy", "Accounts per proxy", "1");
 
-            if(String.IsNullOrEmpty(pPerAccount))
+            if (String.IsNullOrEmpty(pPerAccount))
             {
                 return;
             }
@@ -1148,7 +1156,7 @@ namespace PokemonGoGUI
 
         private void ExportProxiesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if(fastObjectListViewMain.SelectedObjects.Count == 0)
+            if (fastObjectListViewMain.SelectedObjects.Count == 0)
             {
                 return;
             }
@@ -1178,12 +1186,12 @@ namespace PokemonGoGUI
         {
             DialogResult result = MessageBox.Show("This will reset your last 23 hour count and is updated to accurately reflect your pokestops + pokemon counts.\n\nAre you sure you want to clear this?", "Confirmation", MessageBoxButtons.YesNo);
 
-            if(result != DialogResult.Yes)
+            if (result != DialogResult.Yes)
             {
                 return;
             }
 
-            foreach(Manager manager in fastObjectListViewMain.SelectedObjects)
+            foreach (Manager manager in fastObjectListViewMain.SelectedObjects)
             {
                 manager.ClearStats();
             }
@@ -1203,7 +1211,7 @@ namespace PokemonGoGUI
 
         private void PauseUnPauseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            foreach(Manager manager in fastObjectListViewMain.SelectedObjects)
+            foreach (Manager manager in fastObjectListViewMain.SelectedObjects)
             {
                 manager.TogglePause();
             }
@@ -1211,7 +1219,7 @@ namespace PokemonGoGUI
 
         private async void RestartToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            foreach(Manager manager in fastObjectListViewMain.SelectedObjects)
+            foreach (Manager manager in fastObjectListViewMain.SelectedObjects)
             {
                 manager.Restart();
 
@@ -1277,12 +1285,12 @@ namespace PokemonGoGUI
         {
             string data = Prompt.ShowDialog("Group name", "Set group name", "Default");
 
-            if(String.IsNullOrEmpty(data))
+            if (String.IsNullOrEmpty(data))
             {
                 return;
             }
 
-            foreach(Manager manager in fastObjectListViewMain.SelectedObjects)
+            foreach (Manager manager in fastObjectListViewMain.SelectedObjects)
             {
                 manager.UserSettings.GroupName = data;
             }
@@ -1294,7 +1302,7 @@ namespace PokemonGoGUI
         {
             string data = Prompt.ShowDialog("Max Level:", "Set Max Level");
 
-            if(String.IsNullOrEmpty(data))
+            if (String.IsNullOrEmpty(data))
             {
                 return;
             }
@@ -1319,7 +1327,7 @@ namespace PokemonGoGUI
 
             Manager manager = fastObjectListViewMain.SelectedObjects.Cast<Manager>().FirstOrDefault();
 
-            if(manager == null)
+            if (manager == null)
             {
                 return;
             }
@@ -1368,13 +1376,13 @@ namespace PokemonGoGUI
         private void Schedule_Click(object sender, EventArgs e)
         {
             var tSMI = sender as ToolStripMenuItem;
-            
-            if(tSMI == null)
+
+            if (tSMI == null)
             {
                 return;
             }
 
-            foreach(Manager manager in fastObjectListViewMain.SelectedObjects)
+            foreach (Manager manager in fastObjectListViewMain.SelectedObjects)
             {
                 manager.AddScheduler((Scheduler)tSMI.Tag);
             }
@@ -1384,7 +1392,7 @@ namespace PokemonGoGUI
 
         private void EnableTransferToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            foreach(Manager manager in fastObjectListViewMain.SelectedObjects)
+            foreach (Manager manager in fastObjectListViewMain.SelectedObjects)
             {
                 manager.UserSettings.TransferPokemon = !enableTransferToolStripMenuItem.Checked;
             }
@@ -1547,16 +1555,16 @@ namespace PokemonGoGUI
 
             DialogResult dialogResult = MessageBox.Show("Update details before exporting?", "Update details", MessageBoxButtons.YesNoCancel);
 
-            if(dialogResult == DialogResult.Cancel)
+            if (dialogResult == DialogResult.Cancel)
             {
                 return;
             }
 
-            using(var sfd = new SaveFileDialog())
+            using (var sfd = new SaveFileDialog())
             {
                 sfd.Filter = "Json Files (*.json)|*.json|All Files (*.*)|*.*";
 
-                if(sfd.ShowDialog() == DialogResult.OK)
+                if (sfd.ShowDialog() == DialogResult.OK)
                 {
                     fileName = sfd.FileName;
                 }
@@ -1575,22 +1583,22 @@ namespace PokemonGoGUI
 
             Task.Run(() =>
                   {
-                     Parallel.ForEach(selectedManagers, options, (manager) =>
-                       {
-                           if (dialogResult == DialogResult.Yes)
-                           {
-                                   manager.UpdateDetails().Wait();
-                           }
+                      Parallel.ForEach(selectedManagers, options, (manager) =>
+                        {
+                            if (dialogResult == DialogResult.Yes)
+                            {
+                                manager.UpdateDetails().Wait();
+                            }
 
-                           MethodResult<AccountExportModel> result = manager.GetAccountExport();
+                            MethodResult<AccountExportModel> result = manager.GetAccountExport();
 
-                           if (!result.Success)
-                           {
-                               return;
-                           }
+                            if (!result.Success)
+                            {
+                                return;
+                            }
 
-                           exportModels.Add(result.Data);
-                       });
+                            exportModels.Add(result.Data);
+                        });
                   });
 
             try
@@ -1601,7 +1609,7 @@ namespace PokemonGoGUI
 
                 MessageBox.Show(String.Format("Successfully exported {0} of {1} accounts", exportModels.Count, fastObjectListViewMain.SelectedObjects.Count));
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(String.Format("Failed to save to file. Ex: {0}", ex.Message));
             }
@@ -1609,7 +1617,7 @@ namespace PokemonGoGUI
 
         private void ShowStatusBarToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if(WindowState == FormWindowState.Minimized)
+            if (WindowState == FormWindowState.Minimized)
             {
                 return;
             }
@@ -1620,7 +1628,7 @@ namespace PokemonGoGUI
 
             const int scrollBarHeight = 38;
 
-            if(showGroups)
+            if (showGroups)
             {
                 UpdateStatusBar();
                 fastObjectListViewMain.Height = this.Height - statusStripStats.Height - scrollBarHeight;
@@ -1637,7 +1645,7 @@ namespace PokemonGoGUI
         {
             string configFile = ImportConfig();
 
-            if(String.IsNullOrEmpty(configFile))
+            if (String.IsNullOrEmpty(configFile))
             {
                 return;
             }
@@ -1651,7 +1659,7 @@ namespace PokemonGoGUI
                     manager.ImportConfig(data);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(String.Format("Failed to import config file. Ex: {0}", ex.Message));
             }
@@ -1659,7 +1667,8 @@ namespace PokemonGoGUI
 
         private void AboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (Control.ModifierKeys == Keys.Shift){
+            if (Control.ModifierKeys == Keys.Shift)
+            {
                 LogViewerToolStripMenuItem_Click(sender, e);
                 return;
             }
@@ -1695,7 +1704,7 @@ namespace PokemonGoGUI
 
         private void ResetBanStateToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            foreach(GoProxy proxy in fastObjectListViewProxies.SelectedObjects)
+            foreach (GoProxy proxy in fastObjectListViewProxies.SelectedObjects)
             {
                 _proxyHandler.MarkProxy(proxy, false);
             }
@@ -1707,14 +1716,14 @@ namespace PokemonGoGUI
         {
             string data = Prompt.ShowDialog("Add proxy", "Proxy");
 
-            if(String.IsNullOrEmpty(data))
+            if (String.IsNullOrEmpty(data))
             {
                 return;
             }
 
             bool success = _proxyHandler.AddProxy(data);
 
-            if(!success)
+            if (!success)
             {
                 MessageBox.Show("Invalid proxy format");
                 return;
@@ -1750,7 +1759,7 @@ namespace PokemonGoGUI
 
                 foreach (string pData in proxyData)
                 {
-                    if(_proxyHandler.AddProxy(pData))
+                    if (_proxyHandler.AddProxy(pData))
                     {
                         ++count;
                     }
@@ -1760,7 +1769,7 @@ namespace PokemonGoGUI
 
                 MessageBox.Show(String.Format("Imported {0} proxies", count), "Info");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(String.Format("Failed to import proxy file. Ex: {0}", ex.Message), "Exception occured");
             }
@@ -1770,14 +1779,14 @@ namespace PokemonGoGUI
         {
             int count = fastObjectListViewProxies.SelectedObjects.Count;
 
-            if(count == 0)
+            if (count == 0)
             {
                 return;
             }
 
             DialogResult result = MessageBox.Show(String.Format("Are you sure you want to delete {0} proxies?", count), "Confirmation", MessageBoxButtons.YesNo);
 
-            if(result != DialogResult.Yes)
+            if (result != DialogResult.Yes)
             {
                 return;
             }
@@ -1807,9 +1816,9 @@ namespace PokemonGoGUI
 
             bool messageShown = false;
 
-            foreach(GoProxy proxy in fastObjectListViewProxies.SelectedObjects)
+            foreach (GoProxy proxy in fastObjectListViewProxies.SelectedObjects)
             {
-                if(proxy.CurrentAccounts > 0 && !messageShown)
+                if (proxy.CurrentAccounts > 0 && !messageShown)
                 {
                     messageShown = true;
 
@@ -1835,7 +1844,7 @@ namespace PokemonGoGUI
         {
             string data = Prompt.ShowDialog("Max concurrent fails", "Set fails", "3");
 
-            if(String.IsNullOrEmpty(data))
+            if (String.IsNullOrEmpty(data))
             {
                 return;
             }
@@ -1925,7 +1934,7 @@ namespace PokemonGoGUI
         {
             _spf = !_spf;
 
-            foreach(Manager manager in _managers)
+            foreach (Manager manager in _managers)
             {
                 manager.UserSettings.SPF = _spf;
             }
@@ -1963,7 +1972,7 @@ namespace PokemonGoGUI
 
             DialogResult result = MessageBox.Show(String.Format("Are you sure you want to remove {0} schedules?", count), "Confirmation", MessageBoxButtons.YesNo);
 
-            if(result != DialogResult.Yes)
+            if (result != DialogResult.Yes)
             {
                 return;
             }
@@ -1971,14 +1980,14 @@ namespace PokemonGoGUI
             //Deleting many at once will take awhile without this
             var managerSchedulers = new Dictionary<Scheduler, List<Manager>>();
 
-            foreach(Manager manager in _managers)
+            foreach (Manager manager in _managers)
             {
-                if(manager.AccountScheduler == null)
+                if (manager.AccountScheduler == null)
                 {
                     continue;
                 }
 
-                if(managerSchedulers.ContainsKey(manager.AccountScheduler))
+                if (managerSchedulers.ContainsKey(manager.AccountScheduler))
                 {
                     managerSchedulers[manager.AccountScheduler].Add(manager);
                 }
@@ -1996,11 +2005,11 @@ namespace PokemonGoGUI
             foreach (Scheduler scheduler in fastObjectListViewScheduler.SelectedObjects)
             {
                 _schedulers.Remove(scheduler);
-                
+
                 //Should always be true. If not, bug.
-                if(managerSchedulers.ContainsKey(scheduler))
+                if (managerSchedulers.ContainsKey(scheduler))
                 {
-                    foreach(Manager manager in managerSchedulers[scheduler])
+                    foreach (Manager manager in managerSchedulers[scheduler])
                     {
                         manager.RemoveScheduler();
                     }
@@ -2012,7 +2021,7 @@ namespace PokemonGoGUI
 
         private void EnablelDisableToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            foreach(Scheduler scheduler in fastObjectListViewScheduler.SelectedObjects)
+            foreach (Scheduler scheduler in fastObjectListViewScheduler.SelectedObjects)
             {
                 scheduler.Enabled = !scheduler.Enabled;
             }
@@ -2024,17 +2033,17 @@ namespace PokemonGoGUI
         {
             int count = fastObjectListViewScheduler.SelectedObjects.Count;
 
-            if(count > 1)
+            if (count > 1)
             {
                 DialogResult result = MessageBox.Show(String.Format("Are you sure you want to open up {0} edit forms?", count), "Confirmation", MessageBoxButtons.YesNo);
 
-                if(result != DialogResult.Yes)
+                if (result != DialogResult.Yes)
                 {
                     return;
                 }
             }
 
-            foreach(Scheduler scheduler in fastObjectListViewScheduler.SelectedObjects)
+            foreach (Scheduler scheduler in fastObjectListViewScheduler.SelectedObjects)
             {
                 var schedulerForm = new SchedulerSettingForm(scheduler);
 
@@ -2049,8 +2058,8 @@ namespace PokemonGoGUI
             var scheduler = new Scheduler();
 
             var schedulerForm = new SchedulerSettingForm(scheduler);
-            
-            if(schedulerForm.ShowDialog() == DialogResult.OK)
+
+            if (schedulerForm.ShowDialog() == DialogResult.OK)
             {
                 _schedulers.Add(scheduler);
             }
@@ -2060,7 +2069,7 @@ namespace PokemonGoGUI
 
         private void ManualCheckToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            foreach(Scheduler scheduler in fastObjectListViewScheduler.SelectedObjects)
+            foreach (Scheduler scheduler in fastObjectListViewScheduler.SelectedObjects)
             {
                 scheduler.ForceCall();
             }
@@ -2071,7 +2080,7 @@ namespace PokemonGoGUI
             var scheduler = (Scheduler)e.Model;
             bool withinTime = scheduler.WithinTime();
 
-            if(e.Column == olvColumnSchedulerName)
+            if (e.Column == olvColumnSchedulerName)
             {
                 e.SubItem.ForeColor = scheduler.NameColor;
             }
@@ -2130,7 +2139,7 @@ namespace PokemonGoGUI
         {
             foreach (HashKey key in fastObjectListViewHashKeys.SelectedObjects)
             {
-                key.KeyInfo =  TestHashKey(key.Key);
+                key.KeyInfo = TestHashKey(key.Key);
             }
         }
 
@@ -2271,14 +2280,15 @@ namespace PokemonGoGUI
             }
             catch
             {
-               result = "The HashKey is invalid or has expired";
+                result = "The HashKey is invalid or has expired";
             }
 
             return result;
         }
-        void rMFormatToolStripMenuItem_Click(object sender, EventArgs e)
+
+        private void RMFormatToolStripMenuItem_Click(object sender, EventArgs e)
         {
-          try
+            try
             {
                 List<string> accounts = ImportAccounts();
 
@@ -2287,26 +2297,27 @@ namespace PokemonGoGUI
                 int totalSuccess = 0;
                 int total = accounts.Count;
 
-                foreach(string account in accounts)
+                foreach (string account in accounts)
                 {
                     string[] parts = account.Split(',');
 
                     /*
                      * AccType,User,Pass = 3
                      */
-                    if (parts.Length < 3 )
+                    if (parts.Length < 3)
                     {
                         continue;
                     }
 
-                    var importModel = new AccountImport();
-
-                    importModel.Username = parts[1];
-                    importModel.Password = parts[2];
+                    var importModel = new AccountImport
+                    {
+                        Username = parts[1],
+                        Password = parts[2]
+                    };
 
                     var manager = new Manager(_proxyHandler);
 
-                    manager.UserSettings.AuthType = (parts[0].Trim().ToLower()=="ptc")?AuthType.Ptc:AuthType.Google;
+                    manager.UserSettings.AuthType = (parts[0].Trim().ToLower() == "ptc") ? AuthType.Ptc : AuthType.Google;
                     manager.UserSettings.AccountName = importModel.Username.Trim();
                     manager.UserSettings.Username = importModel.Username.Trim();
                     manager.UserSettings.Password = importModel.Password.Trim();
@@ -2316,7 +2327,7 @@ namespace PokemonGoGUI
                     manager.UserSettings.ProxyPassword = importModel.ProxyPassword;
 
                     manager.UserSettings.MaxLevel = 30;
-                    if (parts.Length>3)
+                    if (parts.Length > 3)
                         manager.UserSettings.MaxLevel = int.Parse(parts[4]);
 
                     if (tempManagers.Add(manager))
@@ -2330,7 +2341,7 @@ namespace PokemonGoGUI
 
                 MessageBox.Show(String.Format("Successfully imported {0} out of {1} accounts", totalSuccess, total));
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(String.Format("Failed to import usernames. Ex: {0}", ex.Message));
             }
