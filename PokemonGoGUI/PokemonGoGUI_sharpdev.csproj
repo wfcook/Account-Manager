@@ -190,6 +190,7 @@
     <Compile Include="Extensions\DateTimeExtensions.cs" />
     <Compile Include="Extensions\LargeAddressAware.cs" />
     <Compile Include="Extensions\LinqEx.cs" />
+    <Compile Include="Extensions\NativeMethods.cs" />
     <Compile Include="Extensions\ObjectEx.cs" />
     <Compile Include="Extensions\Prompt.cs" />
     <Compile Include="Extensions\Serializer.cs" />

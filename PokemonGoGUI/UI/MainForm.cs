@@ -102,8 +102,18 @@ namespace PokemonGoGUI
 
             foreach (Manager manager in managers)
             {
-                var dForm = new DetailsForm(manager);
-                dForm.Show();
+                var checkWindow = new ConsoleHelper();
+                var window = checkWindow.FindWindowByCaption(manager.AccountName);
+
+                if (window == IntPtr.Zero)
+                {
+                    var dForm = new DetailsForm(manager);
+                    dForm.Show();
+                }
+                else
+                {
+                    checkWindow.ShowWindow(window);
+                }
             }
         }
 
