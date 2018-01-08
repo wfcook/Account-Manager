@@ -142,13 +142,17 @@ namespace PokemonGoGUI
 
             await VersionCheckState.CleanupOldFiles();
 
-            var plugins = new PluginsEx();
+            //TODO: need review
+            //var plugins = new PluginsEx();
 
-            await plugins.LoadPlugins();
+            //await plugins.LoadPlugins();
 
             if (_showStartup)
             {
-                var startForm = new StartupForm();
+                var startForm = new StartupForm
+                {
+                    ShowOnStartUp = _showStartup
+                };
 
                 if (startForm.ShowDialog() == DialogResult.OK)
                 {
@@ -1677,11 +1681,14 @@ namespace PokemonGoGUI
                 return;
             }
 
-            var startForm = new StartupForm();
+            var startForm = new StartupForm
+            {
+                ShowOnStartUp = _showStartup
+            };
 
             if (startForm.ShowDialog() == DialogResult.OK)
             {
-                startForm.ShowOnStartUp = _showStartup;
+                _showStartup = startForm.ShowOnStartUp;
             }
         }
         private void TabControlMain_SelectedIndexChanged(object sender, EventArgs e)
