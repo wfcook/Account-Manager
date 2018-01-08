@@ -142,6 +142,10 @@ namespace PokemonGoGUI
 
             await VersionCheckState.CleanupOldFiles();
 
+            var plugins = new PluginsEx();
+
+            await plugins.LoadPlugins();
+
             if (_showStartup)
             {
                 var startForm = new StartupForm();

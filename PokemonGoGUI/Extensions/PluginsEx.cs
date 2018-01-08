@@ -10,21 +10,29 @@ using System.Windows.Forms;
 
 namespace PokemonGoGUI.Extensions
 {
+    internal interface IPlugin
+    {
+        string PluginName { get; }
+        List<IPlugin> Plugins { get; set; }
+        List<Manager> Managers { get; set; }
+        Task Load(Manager managers);
+        Task Load(List<Manager> managers);
+    }
+
+    internal class ExportModel
+    {
+        public List<IPlugin> Plugins { get; set; }
+        public List<Manager> Managers { get; set; }
+    }
+
     public class PluginsEx
     {
-        internal IPlugin ExportModel;
+        private ExportModel ExportModel { get; set; }
 
-        internal interface IPlugin
+        public async Task LoadPlugins()
         {
-            string PluginName { get; }
-            List<IPlugin> Plugins { get; set; }
-            List<Manager> Managers { get; set; }
-            Task Load(Manager managers);
-            Task Load(List<Manager> managers);
-        }
+            this.ExportModel = new ExportModel();
 
-        private async Task LoadPlugins()
-        {
             await Task.Run(delegate
             {
                 this.ExportModel.Plugins = new List<IPlugin>();
