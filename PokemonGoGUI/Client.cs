@@ -217,7 +217,7 @@ namespace PokemonGoGUI
                     }
                 }
             }
-            catch (PtcOfflineException)
+            catch (PtcOfflineException ) // poex
             {
                 ClientManager.Stop();
 
@@ -225,7 +225,7 @@ namespace PokemonGoGUI
 
                 msgStr = "Ptc server offline.";
             }
-            catch (AccountNotVerifiedException)
+            catch (AccountNotVerifiedException ) // anvex
             {
                 ClientManager.Stop();
                 ClientManager.RemoveProxy();
@@ -236,11 +236,11 @@ namespace PokemonGoGUI
 
                 msgStr = "Account not verified.";
             }
-            catch (WebException ex)
+            catch (WebException wex)
             {
                 ClientManager.Stop();
 
-                if (ex.Status == WebExceptionStatus.Timeout)
+                if (wex.Status == WebExceptionStatus.Timeout)
                 {
                     if (String.IsNullOrEmpty(ClientManager.Proxy))
                     {
@@ -257,15 +257,15 @@ namespace PokemonGoGUI
 
                 if (!String.IsNullOrEmpty(ClientManager.Proxy))
                 {
-                    if (ex.Status == WebExceptionStatus.ConnectionClosed)
+                    if (wex.Status == WebExceptionStatus.ConnectionClosed)
                     {
                         ClientManager._proxyIssue = true;
                         ClientManager.LogCaller(new LoggerEventArgs("Potential http proxy detected. Only https proxies will work.", LoggerTypes.ProxyIssue));
 
                         msgStr = "Http proxy detected";
                     }
-                    else if (ex.Status == WebExceptionStatus.ConnectFailure || ex.Status == WebExceptionStatus.ProtocolError || ex.Status == WebExceptionStatus.ReceiveFailure
-                        || ex.Status == WebExceptionStatus.ServerProtocolViolation)
+                    else if (wex.Status == WebExceptionStatus.ConnectFailure || wex.Status == WebExceptionStatus.ProtocolError || wex.Status == WebExceptionStatus.ReceiveFailure
+                        || wex.Status == WebExceptionStatus.ServerProtocolViolation)
                     {
                         ClientManager._proxyIssue = true;
                         ClientManager.LogCaller(new LoggerEventArgs("Proxy is offline", LoggerTypes.ProxyIssue));
@@ -276,11 +276,11 @@ namespace PokemonGoGUI
 
                 ClientManager._proxyIssue |= !String.IsNullOrEmpty(ClientManager.Proxy);
 
-                ClientManager.LogCaller(new LoggerEventArgs("Failed to login due to request error", LoggerTypes.Exception, ex.InnerException));
+                ClientManager.LogCaller(new LoggerEventArgs("Failed to login due to request error", LoggerTypes.Exception, wex.InnerException));
 
                 msgStr = "Failed to login due to request error";
             }
-            catch (TaskCanceledException)
+            catch (TaskCanceledException ) // tce
             {
                 ClientManager.Stop();
 
@@ -296,17 +296,17 @@ namespace PokemonGoGUI
 
                 msgStr = "Login request has timed out";
             }
-            catch (InvalidCredentialsException ex)
+            catch (InvalidCredentialsException icex)
             {
                 //Puts stopping log before other log.
                 ClientManager.Stop();
                 ClientManager.RemoveProxy();
 
-                ClientManager.LogCaller(new LoggerEventArgs("Invalid credentials or account lockout. Stopping bot...", LoggerTypes.Warning, ex));
+                ClientManager.LogCaller(new LoggerEventArgs("Invalid credentials or account lockout. Stopping bot...", LoggerTypes.Warning, icex));
 
                 msgStr = "Username or password incorrect";
             }
-            catch (IPBannedException)
+            catch (IPBannedException ) // ipex
             {
                 if (ClientManager.UserSettings.StopOnIPBan)
                 {
@@ -335,21 +335,21 @@ namespace PokemonGoGUI
 
                 msgStr = message;
             }
-            catch (GoogleLoginException ex)
+            catch (GoogleLoginException glex)
             {
                 ClientManager.Stop();
                 ClientManager.RemoveProxy();
 
-                ClientManager.LogCaller(new LoggerEventArgs(ex.Message, LoggerTypes.Warning));
+                ClientManager.LogCaller(new LoggerEventArgs(glex.Message, LoggerTypes.Warning));
 
                 msgStr = "Failed to login";
             }
-            catch (PokeHashException phe)
+            catch (PokeHashException phex)
             {
                 ClientManager.AccountState = AccountState.HashIssues;
 
                 msgStr = "Hash issues";
-                ClientManager.LogCaller(new LoggerEventArgs(phe.Message, LoggerTypes.FatalError, phe));
+                ClientManager.LogCaller(new LoggerEventArgs(phex.Message, LoggerTypes.FatalError, phex));
             }
             catch (Exception ex)
             {
