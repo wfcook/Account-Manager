@@ -206,14 +206,14 @@ namespace PokemonGoGUI
                     if (ClientSession.State == SessionState.TemporalBanned)
                     {
                         ClientManager.AccountState = AccountState.TemporalBan;
-                        ClientManager.LogCaller(new LoggerEventArgs("The account is temporal banned.", LoggerTypes.FatalError));
+                        ClientManager.LogCaller(new LoggerEventArgs("The account is banned temporally.", LoggerTypes.FatalError));
 
                         //Remove proxy
                         ClientManager.RemoveProxy();
 
                         ClientManager.Stop();
 
-                        msgStr = "The account is temporal banned.";
+                        msgStr = "The account is banned temporally.";
                     }
                 }
             }
@@ -344,6 +344,14 @@ namespace PokemonGoGUI
 
                 msgStr = "Failed to login";
             }
+            catch (ArgumentNullException anex)
+            {
+                ClientManager.AccountState = AccountState.TemporalBan;
+                ClientManager.Stop();
+                ClientManager.RemoveProxy();
+                msgStr = "This account is banned temporally.";
+            }
+            
             catch (PokeHashException phex)
             {
                 ClientManager.AccountState = AccountState.HashIssues;
