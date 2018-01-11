@@ -1,5 +1,13 @@
 # Change Log
 
+## [v2.21.1.28](https://github.com/Furtif/Account-Manager/tree/v2.21.1.28) (2018-01-11)
+
+[Full Changelog](https://github.com/Furtif/Account-Manager/compare/v2.21.1.27...v2.21.1.28)
+
+**Closed issues:**
+
+- No settings on config inside [\#54](https://github.com/Furtif/Account-Manager/issues/54)
+
 ## [v2.21.1.27](https://github.com/Furtif/Account-Manager/tree/v2.21.1.27) (2018-01-06)
 
 [Full Changelog](https://github.com/Furtif/Account-Manager/compare/v2.21.1.26...v2.21.1.27)
