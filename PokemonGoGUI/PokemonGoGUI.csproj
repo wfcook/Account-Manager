@@ -146,12 +146,26 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="WebDriver, Version=3.8.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Selenium.WebDriver.3.8.0\lib\net45\WebDriver.dll</HintPath>
+    </Reference>
+    <Reference Include="WebDriver.Support, Version=3.8.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Selenium.Support.3.8.0\lib\net45\WebDriver.Support.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountScheduler\Scheduler.cs" />
     <Compile Include="AccountScheduler\SchedulerLimiter.cs" />
     <Compile Include="AccountScheduler\Tracker.cs" />
     <Compile Include="AccountScheduler\TrackerValues.cs" />
+    <Compile Include="Captcha\Anti-Captcha\AnticaptchaApiWrapper.cs" />
+    <Compile Include="Captcha\Anti-Captcha\AntiCaptchaClient.cs" />
+    <Compile Include="Captcha\Anti-Captcha\AnticaptchaResult.cs" />
+    <Compile Include="Captcha\Anti-Captcha\AnticaptchaTask.cs" />
+    <Compile Include="Captcha\Anti-Captcha\HttpHelper.cs" />
+    <Compile Include="Captcha\CaptchaManager.cs" />
+    <Compile Include="Captcha\CaptchaSolutionClient.cs" />
+    <Compile Include="Captcha\TwoCaptchaClient.cs" />
     <Compile Include="Client.cs" />
     <Compile Include="Enums\AuthType.cs" />
     <Compile Include="Enums\AccountState.cs" />
@@ -221,6 +235,12 @@
     <Compile Include="UI\AutoUpdateForm.designer.cs">
       <DependentUpon>AutoUpdateForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\CaptchaSolveForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\CaptchaSolveForm.designer.cs">
+      <DependentUpon>CaptchaSolveForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\DetailsForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -267,6 +287,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\AutoUpdateForm.resx">
       <DependentUpon>AutoUpdateForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\CaptchaSolveForm.resx">
+      <DependentUpon>CaptchaSolveForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\DetailsForm.resx">
       <DependentUpon>DetailsForm.cs</DependentUpon>
@@ -339,10 +362,12 @@
       <ErrorText>Ce projet fait référence à des packages NuGet qui sont manquants sur cet ordinateur. Utilisez l'option de restauration des packages NuGet pour les télécharger. Pour plus d'informations, consultez http://go.microsoft.com/fwlink/?LinkID=322105. Le fichier manquant est : {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\Costura.Fody.1.6.2\build\dotnet\Costura.Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Costura.Fody.1.6.2\build\dotnet\Costura.Fody.targets'))" />
-    <Error Condition="!Exists('..\packages\Fody.2.3.17\build\netstandard1.0\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Fody.2.3.17\build\netstandard1.0\Fody.targets'))" />
+    <Error Condition="!Exists('..\packages\Fody.2.3.18\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Fody.2.3.18\build\Fody.targets'))" />
+    <Error Condition="!Exists('..\packages\Selenium.WebDriver.ChromeDriver.2.35.0\build\Selenium.WebDriver.ChromeDriver.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Selenium.WebDriver.ChromeDriver.2.35.0\build\Selenium.WebDriver.ChromeDriver.targets'))" />
   </Target>
   <Import Project="..\packages\Costura.Fody.1.6.2\build\dotnet\Costura.Fody.targets" Condition="Exists('..\packages\Costura.Fody.1.6.2\build\dotnet\Costura.Fody.targets')" />
-  <Import Project="..\packages\Fody.2.3.17\build\netstandard1.0\Fody.targets" Condition="Exists('..\packages\Fody.2.3.17\build\netstandard1.0\Fody.targets')" />
+  <Import Project="..\packages\Fody.2.3.18\build\Fody.targets" Condition="Exists('..\packages\Fody.2.3.18\build\Fody.targets')" />
+  <Import Project="..\packages\Selenium.WebDriver.ChromeDriver.2.35.0\build\Selenium.WebDriver.ChromeDriver.targets" Condition="Exists('..\packages\Selenium.WebDriver.ChromeDriver.2.35.0\build\Selenium.WebDriver.ChromeDriver.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

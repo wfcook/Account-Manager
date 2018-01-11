@@ -285,6 +285,72 @@ namespace PokemonGoGUI.GoManager
                 LogCaller(new LoggerEventArgs("Failed to get level up rewards", LoggerTypes.Exception, ex));
                 return new MethodResult();
             }
-        }         
+        }
+
+        public async Task<CheckChallengeResponse> CheckChallenge()
+        {
+            try
+            {
+                if (!_client.LoggedIn)
+                {
+                    MethodResult result = await AcLogin();
+
+                    if (!result.Success)
+                    {
+                        return new CheckChallengeResponse();
+                    }
+                }
+
+                var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
+                {
+                    RequestType = RequestType.CheckChallenge,
+                    RequestMessage = new CheckChallengeMessage
+                    {
+                        //DebugRequest = 
+                    }.ToByteString()
+                }, true, false, true);
+
+
+                return CheckChallengeResponse.Parser.ParseFrom(response);
+            }
+            catch (Exception ex)
+            {
+                LogCaller(new LoggerEventArgs("Failed to get challenge", LoggerTypes.Exception, ex));
+                return new CheckChallengeResponse();
+            }
+        }
+
+        public async Task<VerifyChallengeResponse> VerifyChallenge(string captchaResponse)
+        {
+            try
+            {
+                if (!_client.LoggedIn)
+                {
+                    MethodResult result = await AcLogin();
+
+                    if (!result.Success)
+                    {
+                        return new VerifyChallengeResponse();
+                    }
+                }
+
+                var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
+                {
+                    RequestType = RequestType.VerifyChallenge,
+                    RequestMessage = new VerifyChallengeMessage
+                    {
+                        Token = captchaResponse
+                    }.ToByteString()
+                }, true, false, true);
+
+
+                return VerifyChallengeResponse.Parser.ParseFrom(response);
+            }
+            catch (Exception ex)
+            {
+                LogCaller(new LoggerEventArgs("Failed to get challenge", LoggerTypes.Exception, ex));
+                return new VerifyChallengeResponse();
+            }
+        }
     }
 }

@@ -25,6 +25,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
+using PokemonGoGUI.Captcha;
 using static POGOProtos.Networking.Envelopes.Signature.Types;
 
 #endregion
@@ -171,20 +172,6 @@ namespace PokemonGoGUI
 
                             msgStr = "The account is flagged.";
                         }
-                    }
-
-
-                    //Closes bot on captcha received need utils for solve
-                    if (ClientManager.AccountState == AccountState.CaptchaReceived)
-                    {
-                        ClientManager.LogCaller(new LoggerEventArgs("Captcha ceceived.", LoggerTypes.Warning));
-
-                        //Remove proxy
-                        ClientManager.RemoveProxy();
-
-                        ClientManager.Stop();
-
-                        msgStr = "Captcha ceceived.";
                     }
 
                     SaveAccessToken(ClientSession.AccessToken);
@@ -344,7 +331,7 @@ namespace PokemonGoGUI
 
                 msgStr = "Failed to login";
             }
-            catch (ArgumentNullException anex)
+            catch (ArgumentNullException) // anex
             {
                 ClientManager.AccountState = AccountState.TemporalBan;
                 ClientManager.Stop();
@@ -450,12 +437,15 @@ namespace PokemonGoGUI
             //ClientManager.LogCaller(new LoggerEventArgs(msg, LoggerTypes.Success));
         }
 
-        public void SessionOnCaptchaReceived(object sender, CaptchaEventArgs e)
+        public async void SessionOnCaptchaReceived(object sender, CaptchaEventArgs e)
         {
-            ClientManager.AccountState = AccountState.CaptchaReceived;
-            ClientManager.Stop();
-            //2captcha needed to solve or chrome drive for solve url manual
-            //e.CaptchaUrl;
+            ClientManager.LogCaller(new LoggerEventArgs("Captcha ceceived.", LoggerTypes.Warning));
+            var resolved = await CaptchaManager.SolveCaptcha(ClientManager, e.CaptchaUrl.ToString());
+            if (!resolved)
+            {
+                ClientManager.AccountState = AccountState.CaptchaReceived;
+                ClientManager.Stop();
+            }
         }
 
         private void SessionInventoryUpdate(object sender, EventArgs e)

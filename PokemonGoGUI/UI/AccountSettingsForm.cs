@@ -170,7 +170,23 @@ namespace PokemonGoGUI.UI
             
             checkBoxShowDebugLogs.Checked = settings.ShowDebugLogs;
             checkBoxDownloadResources.Checked = settings.DownloadResources;
-            
+
+            //Captcha Config
+            AllowManualCaptchaResolve.Checked = settings.AllowManualCaptchaResolve;
+            ManualCaptchaTimeout.Text = settings.ManualCaptchaTimeout.ToString();
+            PlaySoundOnCaptcha.Checked = settings.PlaySoundOnCaptcha;
+            DisplayOnTop.Checked = settings.DisplayOnTop;
+            Enable2Captcha.Checked = settings.Enable2Captcha;
+            EnableAntiCaptcha.Checked = settings.EnableAntiCaptcha;
+            AntiCaptchaAPIKey.Text = settings.AntiCaptchaAPIKey;
+            ProxyHostCaptcha.Text = settings.ProxyHostCaptcha.ToString();
+            ProxyPortCaptcha.Text = settings.ProxyPortCaptcha.ToString();
+            EnableCaptchaSolutions.Checked = settings.EnableCaptchaSolutions;
+            CaptchaSolutionAPIKey.Text = settings.CaptchaSolutionAPIKey;
+            CaptchaSolutionsSecretKey.Text = settings.CaptchaSolutionsSecretKey;
+            AutoCaptchaTimeout.Text = settings.AutoCaptchaTimeout.ToString();
+            AutoCaptchaRetries.Text = settings.AutoCaptchaRetries.ToString();
+            TwoCaptchaAPIKey.Text = settings.TwoCaptchaAPIKey;
 
             //Location time zones
             var zones = new TimeZoneIds().GetTimeZoneIds();
@@ -392,6 +408,47 @@ namespace PokemonGoGUI.UI
             // Developer options
             userSettings.ShowDebugLogs = checkBoxShowDebugLogs.Checked;
             userSettings.DownloadResources = checkBoxDownloadResources.Checked;
+
+            //Captcha Config
+            userSettings.AllowManualCaptchaResolve = AllowManualCaptchaResolve.Checked;
+            int manualCaptchaTimeout;
+            if (!Int32.TryParse(ManualCaptchaTimeout.Text, out manualCaptchaTimeout) || maxLevel < 0)
+            {
+                MessageBox.Show("InvalidTimeOut", "Warning");
+                return false;
+            }
+            userSettings.ManualCaptchaTimeout = manualCaptchaTimeout;
+            userSettings.PlaySoundOnCaptcha = PlaySoundOnCaptcha.Checked;
+            userSettings.DisplayOnTop = DisplayOnTop.Checked;
+            userSettings.Enable2Captcha = Enable2Captcha.Checked;
+            userSettings.EnableAntiCaptcha = EnableAntiCaptcha.Checked;
+            userSettings.AntiCaptchaAPIKey = AntiCaptchaAPIKey.Text;
+            userSettings.ProxyHostCaptcha = new Uri(ProxyHostCaptcha.Text);
+            int proxyPortCaptcha;
+            if (!Int32.TryParse(ProxyPortCaptcha.Text, out proxyPortCaptcha) || maxLevel < 0)
+            {
+                MessageBox.Show("InvalidProxyCaptchaPort", "Warning");
+                return false;
+            }
+            userSettings.ProxyPortCaptcha = proxyPortCaptcha;
+            userSettings.EnableCaptchaSolutions = EnableCaptchaSolutions.Checked;
+            userSettings.CaptchaSolutionAPIKey = CaptchaSolutionAPIKey.Text;
+            userSettings.CaptchaSolutionsSecretKey = CaptchaSolutionsSecretKey.Text;
+            int autoCaptchaTimeout;
+            if (!Int32.TryParse(AutoCaptchaTimeout.Text, out autoCaptchaTimeout) || maxLevel < 0)
+            {
+                MessageBox.Show("InvalidAutoCaptchaTimeout", "Warning");
+                return false;
+            }
+            userSettings.AutoCaptchaTimeout = autoCaptchaTimeout;
+            int autoCaptchaRetries;
+            if (!Int32.TryParse(AutoCaptchaRetries.Text, out autoCaptchaRetries) || maxLevel < 0)
+            {
+                MessageBox.Show("InvalidAutoCaptchaRetries", "Warning");
+                return false;
+            }
+            userSettings.AutoCaptchaRetries = autoCaptchaRetries;
+            userSettings.TwoCaptchaAPIKey = TwoCaptchaAPIKey.Text;
 
             return true;
         }

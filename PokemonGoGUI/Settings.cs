@@ -22,6 +22,22 @@ namespace PokemonGoGUI
         public cLocale PlayerLocale  { get; set; } = new cLocale();
         public cLocation Location { get; set; } = new cLocation();
 
+        public bool AllowManualCaptchaResolve { get; set; }
+        public int ManualCaptchaTimeout { get; set; }
+        public bool PlaySoundOnCaptcha { get; set; }
+        public bool DisplayOnTop { get; set; }
+        public bool Enable2Captcha { get; set; }
+        public bool EnableAntiCaptcha { get; set; }
+        public string AntiCaptchaAPIKey { get; set; }
+        public Uri ProxyHostCaptcha { get; set; }
+        public int ProxyPortCaptcha { get; set; }
+        public bool EnableCaptchaSolutions { get; set; }
+        public string CaptchaSolutionAPIKey { get; set; }
+        public string CaptchaSolutionsSecretKey { get; set; }
+        public int AutoCaptchaTimeout { get; set; }
+        public int AutoCaptchaRetries { get; set; }
+        public string TwoCaptchaAPIKey { get; set; }
+
         public double DisableCatchDelay { get; set; }
         public bool SpinGyms { get; set; }
         public string GroupName { get; set; }
@@ -203,6 +219,21 @@ namespace PokemonGoGUI
             PlayerLocale.POSIX = "en-us";
             DisableCatchDelay = 8;
             DownloadResources = true;
+            AllowManualCaptchaResolve = true;
+            ManualCaptchaTimeout = 120;
+            PlaySoundOnCaptcha = true;
+            DisplayOnTop = true;
+            Enable2Captcha = false;
+            EnableAntiCaptcha = false;
+            AntiCaptchaAPIKey = "";
+            ProxyHostCaptcha = new Uri("");
+            ProxyPortCaptcha = 3128;
+            EnableCaptchaSolutions = false;
+            CaptchaSolutionAPIKey = "";
+            CaptchaSolutionsSecretKey = "";
+            AutoCaptchaTimeout = 120;
+            AutoCaptchaRetries = 3;
+            TwoCaptchaAPIKey = "";
         }
 
 
