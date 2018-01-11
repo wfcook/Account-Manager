@@ -179,7 +179,7 @@ namespace PokemonGoGUI.UI
             Enable2Captcha.Checked = settings.Enable2Captcha;
             EnableAntiCaptcha.Checked = settings.EnableAntiCaptcha;
             AntiCaptchaAPIKey.Text = settings.AntiCaptchaAPIKey;
-            ProxyHostCaptcha.Text = settings.ProxyHostCaptcha.ToString();
+            ProxyHostCaptcha.Text = settings.ProxyHostCaptcha;
             ProxyPortCaptcha.Text = settings.ProxyPortCaptcha.ToString();
             EnableCaptchaSolutions.Checked = settings.EnableCaptchaSolutions;
             CaptchaSolutionAPIKey.Text = settings.CaptchaSolutionAPIKey;
@@ -423,7 +423,7 @@ namespace PokemonGoGUI.UI
             userSettings.Enable2Captcha = Enable2Captcha.Checked;
             userSettings.EnableAntiCaptcha = EnableAntiCaptcha.Checked;
             userSettings.AntiCaptchaAPIKey = AntiCaptchaAPIKey.Text;
-            userSettings.ProxyHostCaptcha = new Uri(ProxyHostCaptcha.Text);
+            userSettings.ProxyHostCaptcha = ProxyHostCaptcha.Text;
             int proxyPortCaptcha;
             if (!Int32.TryParse(ProxyPortCaptcha.Text, out proxyPortCaptcha) || maxLevel < 0)
             {

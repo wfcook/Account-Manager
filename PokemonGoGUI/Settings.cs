@@ -29,7 +29,7 @@ namespace PokemonGoGUI
         public bool Enable2Captcha { get; set; }
         public bool EnableAntiCaptcha { get; set; }
         public string AntiCaptchaAPIKey { get; set; }
-        public Uri ProxyHostCaptcha { get; set; }
+        public string ProxyHostCaptcha { get; set; }
         public int ProxyPortCaptcha { get; set; }
         public bool EnableCaptchaSolutions { get; set; }
         public string CaptchaSolutionAPIKey { get; set; }
@@ -226,7 +226,7 @@ namespace PokemonGoGUI
             Enable2Captcha = false;
             EnableAntiCaptcha = false;
             AntiCaptchaAPIKey = "";
-            ProxyHostCaptcha = new Uri("");
+            ProxyHostCaptcha = "";
             ProxyPortCaptcha = 3128;
             EnableCaptchaSolutions = false;
             CaptchaSolutionAPIKey = "";

@@ -155,6 +155,31 @@
             this.cbUseOnlyThisHashKey = new System.Windows.Forms.CheckBox();
             this.cbHashEndpoint = new System.Windows.Forms.ComboBox();
             this.label51 = new System.Windows.Forms.Label();
+            this.tabPageCaptchaConfig = new System.Windows.Forms.TabPage();
+            this.TwoCaptchaAPIKey = new System.Windows.Forms.TextBox();
+            this.label38 = new System.Windows.Forms.Label();
+            this.AutoCaptchaRetries = new System.Windows.Forms.TextBox();
+            this.label37 = new System.Windows.Forms.Label();
+            this.AutoCaptchaTimeout = new System.Windows.Forms.TextBox();
+            this.label31 = new System.Windows.Forms.Label();
+            this.CaptchaSolutionsSecretKey = new System.Windows.Forms.TextBox();
+            this.label29 = new System.Windows.Forms.Label();
+            this.CaptchaSolutionAPIKey = new System.Windows.Forms.TextBox();
+            this.label28 = new System.Windows.Forms.Label();
+            this.EnableCaptchaSolutions = new System.Windows.Forms.CheckBox();
+            this.ProxyPortCaptcha = new System.Windows.Forms.TextBox();
+            this.label22 = new System.Windows.Forms.Label();
+            this.ProxyHostCaptcha = new System.Windows.Forms.TextBox();
+            this.label20 = new System.Windows.Forms.Label();
+            this.AntiCaptchaAPIKey = new System.Windows.Forms.TextBox();
+            this.label19 = new System.Windows.Forms.Label();
+            this.EnableAntiCaptcha = new System.Windows.Forms.CheckBox();
+            this.Enable2Captcha = new System.Windows.Forms.CheckBox();
+            this.DisplayOnTop = new System.Windows.Forms.CheckBox();
+            this.PlaySoundOnCaptcha = new System.Windows.Forms.CheckBox();
+            this.ManualCaptchaTimeout = new System.Windows.Forms.TextBox();
+            this.label17 = new System.Windows.Forms.Label();
+            this.AllowManualCaptchaResolve = new System.Windows.Forms.CheckBox();
             this.buttonImportConfig = new System.Windows.Forms.Button();
             this.buttonExportConfig = new System.Windows.Forms.Button();
             this.buttonDone = new System.Windows.Forms.Button();
@@ -207,31 +232,6 @@
             this.toolTipProxy = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipMinAccountState = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipHumanizeThrows = new System.Windows.Forms.ToolTip(this.components);
-            this.tabPageCaptchaConfig = new System.Windows.Forms.TabPage();
-            this.AllowManualCaptchaResolve = new System.Windows.Forms.CheckBox();
-            this.label17 = new System.Windows.Forms.Label();
-            this.ManualCaptchaTimeout = new System.Windows.Forms.TextBox();
-            this.PlaySoundOnCaptcha = new System.Windows.Forms.CheckBox();
-            this.DisplayOnTop = new System.Windows.Forms.CheckBox();
-            this.Enable2Captcha = new System.Windows.Forms.CheckBox();
-            this.EnableAntiCaptcha = new System.Windows.Forms.CheckBox();
-            this.label19 = new System.Windows.Forms.Label();
-            this.AntiCaptchaAPIKey = new System.Windows.Forms.TextBox();
-            this.label20 = new System.Windows.Forms.Label();
-            this.ProxyHostCaptcha = new System.Windows.Forms.TextBox();
-            this.label22 = new System.Windows.Forms.Label();
-            this.ProxyPortCaptcha = new System.Windows.Forms.TextBox();
-            this.EnableCaptchaSolutions = new System.Windows.Forms.CheckBox();
-            this.label28 = new System.Windows.Forms.Label();
-            this.CaptchaSolutionAPIKey = new System.Windows.Forms.TextBox();
-            this.label29 = new System.Windows.Forms.Label();
-            this.CaptchaSolutionsSecretKey = new System.Windows.Forms.TextBox();
-            this.label31 = new System.Windows.Forms.Label();
-            this.AutoCaptchaTimeout = new System.Windows.Forms.TextBox();
-            this.label37 = new System.Windows.Forms.Label();
-            this.AutoCaptchaRetries = new System.Windows.Forms.TextBox();
-            this.label38 = new System.Windows.Forms.Label();
-            this.TwoCaptchaAPIKey = new System.Windows.Forms.TextBox();
             this.tabControlMain.SuspendLayout();
             this.tabPageDetails.SuspendLayout();
             this.tabControlSettings.SuspendLayout();
@@ -261,6 +261,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownInsideReticuleChance)).BeginInit();
             this.tabPageHash.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            this.tabPageCaptchaConfig.SuspendLayout();
             this.tabPageRecycling.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewRecycling)).BeginInit();
             this.contextMenuStripRecycling.SuspendLayout();
@@ -273,7 +274,6 @@
             this.tabPageTransfer.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewTransfer)).BeginInit();
             this.contextMenuStripTransfer.SuspendLayout();
-            this.tabPageCaptchaConfig.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControlMain
@@ -288,7 +288,7 @@
             this.tabControlMain.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabControlMain.Name = "tabControlMain";
             this.tabControlMain.SelectedIndex = 0;
-            this.tabControlMain.Size = new System.Drawing.Size(597, 553);
+            this.tabControlMain.Size = new System.Drawing.Size(685, 553);
             this.tabControlMain.TabIndex = 0;
             // 
             // tabPageDetails
@@ -303,7 +303,7 @@
             this.tabPageDetails.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabPageDetails.Name = "tabPageDetails";
             this.tabPageDetails.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.tabPageDetails.Size = new System.Drawing.Size(589, 524);
+            this.tabPageDetails.Size = new System.Drawing.Size(677, 524);
             this.tabPageDetails.TabIndex = 1;
             this.tabPageDetails.Text = "Details";
             this.tabPageDetails.UseVisualStyleBackColor = true;
@@ -325,7 +325,7 @@
             this.tabControlSettings.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabControlSettings.Name = "tabControlSettings";
             this.tabControlSettings.SelectedIndex = 0;
-            this.tabControlSettings.Size = new System.Drawing.Size(584, 474);
+            this.tabControlSettings.Size = new System.Drawing.Size(672, 474);
             this.tabControlSettings.TabIndex = 0;
             // 
             // tabPageSettingsGeneral
@@ -342,7 +342,7 @@
             this.tabPageSettingsGeneral.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabPageSettingsGeneral.Name = "tabPageSettingsGeneral";
             this.tabPageSettingsGeneral.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.tabPageSettingsGeneral.Size = new System.Drawing.Size(576, 445);
+            this.tabPageSettingsGeneral.Size = new System.Drawing.Size(664, 445);
             this.tabPageSettingsGeneral.TabIndex = 0;
             this.tabPageSettingsGeneral.Text = "General";
             this.tabPageSettingsGeneral.UseVisualStyleBackColor = true;
@@ -450,9 +450,9 @@
             this.tabPageActions.Controls.Add(this.checkBoxStopOnAPIUpdate);
             this.tabPageActions.Controls.Add(this.checkBoxClaimLevelUp);
             this.tabPageActions.Location = new System.Drawing.Point(4, 25);
-            this.tabPageActions.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPageActions.Margin = new System.Windows.Forms.Padding(4);
             this.tabPageActions.Name = "tabPageActions";
-            this.tabPageActions.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPageActions.Padding = new System.Windows.Forms.Padding(4);
             this.tabPageActions.Size = new System.Drawing.Size(576, 445);
             this.tabPageActions.TabIndex = 6;
             this.tabPageActions.Text = "Actions";
@@ -492,9 +492,9 @@
             this.groupBoxPlayerActions.Controls.Add(this.textBoxPokemonBeforeEvolve);
             this.groupBoxPlayerActions.Controls.Add(this.label46);
             this.groupBoxPlayerActions.Location = new System.Drawing.Point(8, 11);
-            this.groupBoxPlayerActions.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBoxPlayerActions.Margin = new System.Windows.Forms.Padding(4);
             this.groupBoxPlayerActions.Name = "groupBoxPlayerActions";
-            this.groupBoxPlayerActions.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBoxPlayerActions.Padding = new System.Windows.Forms.Padding(4);
             this.groupBoxPlayerActions.Size = new System.Drawing.Size(319, 414);
             this.groupBoxPlayerActions.TabIndex = 73;
             this.groupBoxPlayerActions.TabStop = false;
@@ -891,7 +891,7 @@
             this.tabPageProxy.Location = new System.Drawing.Point(4, 25);
             this.tabPageProxy.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabPageProxy.Name = "tabPageProxy";
-            this.tabPageProxy.Size = new System.Drawing.Size(568, 445);
+            this.tabPageProxy.Size = new System.Drawing.Size(576, 445);
             this.tabPageProxy.TabIndex = 4;
             this.tabPageProxy.Text = "Proxy";
             this.tabPageProxy.UseVisualStyleBackColor = true;
@@ -1004,7 +1004,7 @@
             this.tabPageSettingsNavigation.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabPageSettingsNavigation.Name = "tabPageSettingsNavigation";
             this.tabPageSettingsNavigation.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.tabPageSettingsNavigation.Size = new System.Drawing.Size(568, 445);
+            this.tabPageSettingsNavigation.Size = new System.Drawing.Size(576, 445);
             this.tabPageSettingsNavigation.TabIndex = 1;
             this.tabPageSettingsNavigation.Text = "Navigation";
             this.tabPageSettingsNavigation.UseVisualStyleBackColor = true;
@@ -1200,7 +1200,7 @@
             this.tabPageDevice.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabPageDevice.Name = "tabPageDevice";
             this.tabPageDevice.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.tabPageDevice.Size = new System.Drawing.Size(568, 445);
+            this.tabPageDevice.Size = new System.Drawing.Size(576, 445);
             this.tabPageDevice.TabIndex = 2;
             this.tabPageDevice.Text = "Device*";
             this.tabPageDevice.UseVisualStyleBackColor = true;
@@ -1208,7 +1208,7 @@
             // buttonResetDefaults
             // 
             this.buttonResetDefaults.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonResetDefaults.Location = new System.Drawing.Point(368, 263);
+            this.buttonResetDefaults.Location = new System.Drawing.Point(376, 263);
             this.buttonResetDefaults.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.buttonResetDefaults.Name = "buttonResetDefaults";
             this.buttonResetDefaults.Size = new System.Drawing.Size(133, 23);
@@ -1220,7 +1220,7 @@
             // buttonDeviceRandom
             // 
             this.buttonDeviceRandom.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonDeviceRandom.Location = new System.Drawing.Point(427, 15);
+            this.buttonDeviceRandom.Location = new System.Drawing.Point(435, 15);
             this.buttonDeviceRandom.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.buttonDeviceRandom.Name = "buttonDeviceRandom";
             this.buttonDeviceRandom.Size = new System.Drawing.Size(75, 23);
@@ -1236,7 +1236,7 @@
             this.textBoxDeviceModel.Location = new System.Drawing.Point(168, 73);
             this.textBoxDeviceModel.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBoxDeviceModel.Name = "textBoxDeviceModel";
-            this.textBoxDeviceModel.Size = new System.Drawing.Size(332, 22);
+            this.textBoxDeviceModel.Size = new System.Drawing.Size(340, 22);
             this.textBoxDeviceModel.TabIndex = 4;
             // 
             // textBoxFirmwareType
@@ -1246,7 +1246,7 @@
             this.textBoxFirmwareType.Location = new System.Drawing.Point(168, 220);
             this.textBoxFirmwareType.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBoxFirmwareType.Name = "textBoxFirmwareType";
-            this.textBoxFirmwareType.Size = new System.Drawing.Size(332, 22);
+            this.textBoxFirmwareType.Size = new System.Drawing.Size(340, 22);
             this.textBoxFirmwareType.TabIndex = 12;
             // 
             // textBoxFirmwareBrand
@@ -1256,7 +1256,7 @@
             this.textBoxFirmwareBrand.Location = new System.Drawing.Point(168, 191);
             this.textBoxFirmwareBrand.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBoxFirmwareBrand.Name = "textBoxFirmwareBrand";
-            this.textBoxFirmwareBrand.Size = new System.Drawing.Size(332, 22);
+            this.textBoxFirmwareBrand.Size = new System.Drawing.Size(340, 22);
             this.textBoxFirmwareBrand.TabIndex = 10;
             // 
             // textBoxHardwareModel
@@ -1266,7 +1266,7 @@
             this.textBoxHardwareModel.Location = new System.Drawing.Point(168, 161);
             this.textBoxHardwareModel.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBoxHardwareModel.Name = "textBoxHardwareModel";
-            this.textBoxHardwareModel.Size = new System.Drawing.Size(332, 22);
+            this.textBoxHardwareModel.Size = new System.Drawing.Size(340, 22);
             this.textBoxHardwareModel.TabIndex = 8;
             // 
             // textBoxHardwareManufacturer
@@ -1276,7 +1276,7 @@
             this.textBoxHardwareManufacturer.Location = new System.Drawing.Point(168, 132);
             this.textBoxHardwareManufacturer.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBoxHardwareManufacturer.Name = "textBoxHardwareManufacturer";
-            this.textBoxHardwareManufacturer.Size = new System.Drawing.Size(332, 22);
+            this.textBoxHardwareManufacturer.Size = new System.Drawing.Size(340, 22);
             this.textBoxHardwareManufacturer.TabIndex = 7;
             // 
             // textBoxDeviceModelBoot
@@ -1286,7 +1286,7 @@
             this.textBoxDeviceModelBoot.Location = new System.Drawing.Point(168, 102);
             this.textBoxDeviceModelBoot.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBoxDeviceModelBoot.Name = "textBoxDeviceModelBoot";
-            this.textBoxDeviceModelBoot.Size = new System.Drawing.Size(332, 22);
+            this.textBoxDeviceModelBoot.Size = new System.Drawing.Size(340, 22);
             this.textBoxDeviceModelBoot.TabIndex = 5;
             // 
             // textBoxDeviceBrand
@@ -1296,7 +1296,7 @@
             this.textBoxDeviceBrand.Location = new System.Drawing.Point(168, 46);
             this.textBoxDeviceBrand.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBoxDeviceBrand.Name = "textBoxDeviceBrand";
-            this.textBoxDeviceBrand.Size = new System.Drawing.Size(332, 22);
+            this.textBoxDeviceBrand.Size = new System.Drawing.Size(340, 22);
             this.textBoxDeviceBrand.TabIndex = 3;
             // 
             // textBoxDeviceId
@@ -1306,7 +1306,7 @@
             this.textBoxDeviceId.Location = new System.Drawing.Point(168, 16);
             this.textBoxDeviceId.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBoxDeviceId.Name = "textBoxDeviceId";
-            this.textBoxDeviceId.Size = new System.Drawing.Size(255, 22);
+            this.textBoxDeviceId.Size = new System.Drawing.Size(263, 22);
             this.textBoxDeviceId.TabIndex = 0;
             // 
             // label27
@@ -1402,7 +1402,7 @@
             this.tabPageHumanization.Location = new System.Drawing.Point(4, 25);
             this.tabPageHumanization.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabPageHumanization.Name = "tabPageHumanization";
-            this.tabPageHumanization.Size = new System.Drawing.Size(568, 445);
+            this.tabPageHumanization.Size = new System.Drawing.Size(576, 445);
             this.tabPageHumanization.TabIndex = 3;
             this.tabPageHumanization.Text = "Humanization";
             this.tabPageHumanization.UseVisualStyleBackColor = true;
@@ -1414,9 +1414,9 @@
             this.groupBox1.Controls.Add(this.numericUpDownAwareness);
             this.groupBox1.Controls.Add(this.numericUpDownProximity);
             this.groupBox1.Location = new System.Drawing.Point(129, 94);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(4);
             this.groupBox1.Size = new System.Drawing.Size(272, 95);
             this.groupBox1.TabIndex = 8;
             this.groupBox1.TabStop = false;
@@ -1742,9 +1742,9 @@
             this.groupBox2.Controls.Add(this.cbHashEndpoint);
             this.groupBox2.Controls.Add(this.label51);
             this.groupBox2.Location = new System.Drawing.Point(7, 6);
-            this.groupBox2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox2.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox2.Padding = new System.Windows.Forms.Padding(4);
             this.groupBox2.Size = new System.Drawing.Size(552, 135);
             this.groupBox2.TabIndex = 69;
             this.groupBox2.TabStop = false;
@@ -1827,6 +1827,244 @@
             this.label51.TabIndex = 3;
             this.label51.Text = "Hash endpoint:";
             // 
+            // tabPageCaptchaConfig
+            // 
+            this.tabPageCaptchaConfig.Controls.Add(this.TwoCaptchaAPIKey);
+            this.tabPageCaptchaConfig.Controls.Add(this.label38);
+            this.tabPageCaptchaConfig.Controls.Add(this.AutoCaptchaRetries);
+            this.tabPageCaptchaConfig.Controls.Add(this.label37);
+            this.tabPageCaptchaConfig.Controls.Add(this.AutoCaptchaTimeout);
+            this.tabPageCaptchaConfig.Controls.Add(this.label31);
+            this.tabPageCaptchaConfig.Controls.Add(this.CaptchaSolutionsSecretKey);
+            this.tabPageCaptchaConfig.Controls.Add(this.label29);
+            this.tabPageCaptchaConfig.Controls.Add(this.CaptchaSolutionAPIKey);
+            this.tabPageCaptchaConfig.Controls.Add(this.label28);
+            this.tabPageCaptchaConfig.Controls.Add(this.EnableCaptchaSolutions);
+            this.tabPageCaptchaConfig.Controls.Add(this.ProxyPortCaptcha);
+            this.tabPageCaptchaConfig.Controls.Add(this.label22);
+            this.tabPageCaptchaConfig.Controls.Add(this.ProxyHostCaptcha);
+            this.tabPageCaptchaConfig.Controls.Add(this.label20);
+            this.tabPageCaptchaConfig.Controls.Add(this.AntiCaptchaAPIKey);
+            this.tabPageCaptchaConfig.Controls.Add(this.label19);
+            this.tabPageCaptchaConfig.Controls.Add(this.EnableAntiCaptcha);
+            this.tabPageCaptchaConfig.Controls.Add(this.Enable2Captcha);
+            this.tabPageCaptchaConfig.Controls.Add(this.DisplayOnTop);
+            this.tabPageCaptchaConfig.Controls.Add(this.PlaySoundOnCaptcha);
+            this.tabPageCaptchaConfig.Controls.Add(this.ManualCaptchaTimeout);
+            this.tabPageCaptchaConfig.Controls.Add(this.label17);
+            this.tabPageCaptchaConfig.Controls.Add(this.AllowManualCaptchaResolve);
+            this.tabPageCaptchaConfig.Location = new System.Drawing.Point(4, 25);
+            this.tabPageCaptchaConfig.Name = "tabPageCaptchaConfig";
+            this.tabPageCaptchaConfig.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageCaptchaConfig.Size = new System.Drawing.Size(576, 445);
+            this.tabPageCaptchaConfig.TabIndex = 7;
+            this.tabPageCaptchaConfig.Text = "CaptchaConfig";
+            this.tabPageCaptchaConfig.UseVisualStyleBackColor = true;
+            // 
+            // TwoCaptchaAPIKey
+            // 
+            this.TwoCaptchaAPIKey.Location = new System.Drawing.Point(174, 410);
+            this.TwoCaptchaAPIKey.Name = "TwoCaptchaAPIKey";
+            this.TwoCaptchaAPIKey.Size = new System.Drawing.Size(354, 22);
+            this.TwoCaptchaAPIKey.TabIndex = 23;
+            // 
+            // label38
+            // 
+            this.label38.AutoSize = true;
+            this.label38.Location = new System.Drawing.Point(6, 413);
+            this.label38.Name = "label38";
+            this.label38.Size = new System.Drawing.Size(139, 17);
+            this.label38.TabIndex = 22;
+            this.label38.Text = "TwoCaptcha APIKey:";
+            // 
+            // AutoCaptchaRetries
+            // 
+            this.AutoCaptchaRetries.Location = new System.Drawing.Point(174, 382);
+            this.AutoCaptchaRetries.Name = "AutoCaptchaRetries";
+            this.AutoCaptchaRetries.Size = new System.Drawing.Size(100, 22);
+            this.AutoCaptchaRetries.TabIndex = 21;
+            // 
+            // label37
+            // 
+            this.label37.AutoSize = true;
+            this.label37.Location = new System.Drawing.Point(6, 385);
+            this.label37.Name = "label37";
+            this.label37.Size = new System.Drawing.Size(139, 17);
+            this.label37.TabIndex = 20;
+            this.label37.Text = "Auto captcha retries:";
+            // 
+            // AutoCaptchaTimeout
+            // 
+            this.AutoCaptchaTimeout.Location = new System.Drawing.Point(174, 354);
+            this.AutoCaptchaTimeout.Name = "AutoCaptchaTimeout";
+            this.AutoCaptchaTimeout.Size = new System.Drawing.Size(100, 22);
+            this.AutoCaptchaTimeout.TabIndex = 19;
+            // 
+            // label31
+            // 
+            this.label31.AutoSize = true;
+            this.label31.Location = new System.Drawing.Point(6, 357);
+            this.label31.Name = "label31";
+            this.label31.Size = new System.Drawing.Size(145, 17);
+            this.label31.TabIndex = 18;
+            this.label31.Text = "Auto captcha timeout:";
+            // 
+            // CaptchaSolutionsSecretKey
+            // 
+            this.CaptchaSolutionsSecretKey.Location = new System.Drawing.Point(203, 326);
+            this.CaptchaSolutionsSecretKey.Name = "CaptchaSolutionsSecretKey";
+            this.CaptchaSolutionsSecretKey.Size = new System.Drawing.Size(325, 22);
+            this.CaptchaSolutionsSecretKey.TabIndex = 17;
+            // 
+            // label29
+            // 
+            this.label29.AutoSize = true;
+            this.label29.Location = new System.Drawing.Point(6, 329);
+            this.label29.Name = "label29";
+            this.label29.Size = new System.Drawing.Size(191, 17);
+            this.label29.TabIndex = 16;
+            this.label29.Text = "CaptchaSolutions SecretKey:";
+            // 
+            // CaptchaSolutionAPIKey
+            // 
+            this.CaptchaSolutionAPIKey.Location = new System.Drawing.Point(174, 298);
+            this.CaptchaSolutionAPIKey.Name = "CaptchaSolutionAPIKey";
+            this.CaptchaSolutionAPIKey.Size = new System.Drawing.Size(354, 22);
+            this.CaptchaSolutionAPIKey.TabIndex = 15;
+            // 
+            // label28
+            // 
+            this.label28.AutoSize = true;
+            this.label28.Location = new System.Drawing.Point(6, 301);
+            this.label28.Name = "label28";
+            this.label28.Size = new System.Drawing.Size(164, 17);
+            this.label28.TabIndex = 14;
+            this.label28.Text = "CaptchaSolution APIKey:";
+            // 
+            // EnableCaptchaSolutions
+            // 
+            this.EnableCaptchaSolutions.AutoSize = true;
+            this.EnableCaptchaSolutions.Location = new System.Drawing.Point(9, 268);
+            this.EnableCaptchaSolutions.Name = "EnableCaptchaSolutions";
+            this.EnableCaptchaSolutions.Size = new System.Drawing.Size(188, 21);
+            this.EnableCaptchaSolutions.TabIndex = 13;
+            this.EnableCaptchaSolutions.Text = "Enable CaptchaSolutions";
+            this.EnableCaptchaSolutions.UseVisualStyleBackColor = true;
+            // 
+            // ProxyPortCaptcha
+            // 
+            this.ProxyPortCaptcha.Location = new System.Drawing.Point(174, 236);
+            this.ProxyPortCaptcha.Name = "ProxyPortCaptcha";
+            this.ProxyPortCaptcha.Size = new System.Drawing.Size(101, 22);
+            this.ProxyPortCaptcha.TabIndex = 12;
+            // 
+            // label22
+            // 
+            this.label22.AutoSize = true;
+            this.label22.Location = new System.Drawing.Point(6, 239);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(130, 17);
+            this.label22.TabIndex = 11;
+            this.label22.Text = "Proxy port captcha:";
+            // 
+            // ProxyHostCaptcha
+            // 
+            this.ProxyHostCaptcha.Location = new System.Drawing.Point(174, 208);
+            this.ProxyHostCaptcha.Name = "ProxyHostCaptcha";
+            this.ProxyHostCaptcha.Size = new System.Drawing.Size(354, 22);
+            this.ProxyHostCaptcha.TabIndex = 10;
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Location = new System.Drawing.Point(6, 211);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(132, 17);
+            this.label20.TabIndex = 9;
+            this.label20.Text = "Proxy host captcha:";
+            // 
+            // AntiCaptchaAPIKey
+            // 
+            this.AntiCaptchaAPIKey.Location = new System.Drawing.Point(174, 178);
+            this.AntiCaptchaAPIKey.Name = "AntiCaptchaAPIKey";
+            this.AntiCaptchaAPIKey.Size = new System.Drawing.Size(354, 22);
+            this.AntiCaptchaAPIKey.TabIndex = 8;
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(6, 181);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(137, 17);
+            this.label19.TabIndex = 7;
+            this.label19.Text = "AntiCaptcha APIKey:";
+            // 
+            // EnableAntiCaptcha
+            // 
+            this.EnableAntiCaptcha.AutoSize = true;
+            this.EnableAntiCaptcha.Location = new System.Drawing.Point(9, 155);
+            this.EnableAntiCaptcha.Name = "EnableAntiCaptcha";
+            this.EnableAntiCaptcha.Size = new System.Drawing.Size(154, 21);
+            this.EnableAntiCaptcha.TabIndex = 6;
+            this.EnableAntiCaptcha.Text = "Enable AntiCaptcha";
+            this.EnableAntiCaptcha.UseVisualStyleBackColor = true;
+            // 
+            // Enable2Captcha
+            // 
+            this.Enable2Captcha.AutoSize = true;
+            this.Enable2Captcha.Location = new System.Drawing.Point(9, 128);
+            this.Enable2Captcha.Name = "Enable2Captcha";
+            this.Enable2Captcha.Size = new System.Drawing.Size(138, 21);
+            this.Enable2Captcha.TabIndex = 5;
+            this.Enable2Captcha.Text = "Enable 2Captcha";
+            this.Enable2Captcha.UseVisualStyleBackColor = true;
+            // 
+            // DisplayOnTop
+            // 
+            this.DisplayOnTop.AutoSize = true;
+            this.DisplayOnTop.Location = new System.Drawing.Point(9, 101);
+            this.DisplayOnTop.Name = "DisplayOnTop";
+            this.DisplayOnTop.Size = new System.Drawing.Size(120, 21);
+            this.DisplayOnTop.TabIndex = 4;
+            this.DisplayOnTop.Text = "Display on top";
+            this.DisplayOnTop.UseVisualStyleBackColor = true;
+            // 
+            // PlaySoundOnCaptcha
+            // 
+            this.PlaySoundOnCaptcha.AutoSize = true;
+            this.PlaySoundOnCaptcha.Location = new System.Drawing.Point(9, 74);
+            this.PlaySoundOnCaptcha.Name = "PlaySoundOnCaptcha";
+            this.PlaySoundOnCaptcha.Size = new System.Drawing.Size(174, 21);
+            this.PlaySoundOnCaptcha.TabIndex = 3;
+            this.PlaySoundOnCaptcha.Text = "Play sound on captcha";
+            this.PlaySoundOnCaptcha.UseVisualStyleBackColor = true;
+            // 
+            // ManualCaptchaTimeout
+            // 
+            this.ManualCaptchaTimeout.Location = new System.Drawing.Point(174, 46);
+            this.ManualCaptchaTimeout.Name = "ManualCaptchaTimeout";
+            this.ManualCaptchaTimeout.Size = new System.Drawing.Size(100, 22);
+            this.ManualCaptchaTimeout.TabIndex = 2;
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(6, 49);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(162, 17);
+            this.label17.TabIndex = 1;
+            this.label17.Text = "Manual captcha timeout:";
+            // 
+            // AllowManualCaptchaResolve
+            // 
+            this.AllowManualCaptchaResolve.AutoSize = true;
+            this.AllowManualCaptchaResolve.Location = new System.Drawing.Point(9, 25);
+            this.AllowManualCaptchaResolve.Name = "AllowManualCaptchaResolve";
+            this.AllowManualCaptchaResolve.Size = new System.Drawing.Size(216, 21);
+            this.AllowManualCaptchaResolve.TabIndex = 0;
+            this.AllowManualCaptchaResolve.Text = "Allow manual captcha resolve";
+            this.AllowManualCaptchaResolve.UseVisualStyleBackColor = true;
+            // 
             // buttonImportConfig
             // 
             this.buttonImportConfig.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -1854,7 +2092,7 @@
             // buttonDone
             // 
             this.buttonDone.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonDone.Location = new System.Drawing.Point(481, 494);
+            this.buttonDone.Location = new System.Drawing.Point(569, 494);
             this.buttonDone.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.buttonDone.Name = "buttonDone";
             this.buttonDone.Size = new System.Drawing.Size(96, 23);
@@ -1867,7 +2105,7 @@
             // 
             this.label13.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(404, 476);
+            this.label13.Location = new System.Drawing.Point(492, 476);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(171, 17);
             this.label13.TabIndex = 2;
@@ -1892,7 +2130,7 @@
             this.tabPageRecycling.Location = new System.Drawing.Point(4, 25);
             this.tabPageRecycling.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabPageRecycling.Name = "tabPageRecycling";
-            this.tabPageRecycling.Size = new System.Drawing.Size(581, 524);
+            this.tabPageRecycling.Size = new System.Drawing.Size(589, 524);
             this.tabPageRecycling.TabIndex = 2;
             this.tabPageRecycling.Text = "Recycling";
             this.tabPageRecycling.UseVisualStyleBackColor = true;
@@ -1913,7 +2151,7 @@
             this.fastObjectListViewRecycling.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.fastObjectListViewRecycling.Name = "fastObjectListViewRecycling";
             this.fastObjectListViewRecycling.ShowGroups = false;
-            this.fastObjectListViewRecycling.Size = new System.Drawing.Size(581, 524);
+            this.fastObjectListViewRecycling.Size = new System.Drawing.Size(589, 524);
             this.fastObjectListViewRecycling.TabIndex = 0;
             this.fastObjectListViewRecycling.UseCompatibleStateImageBehavior = false;
             this.fastObjectListViewRecycling.View = System.Windows.Forms.View.Details;
@@ -1952,7 +2190,7 @@
             this.tabPageEvolving.Location = new System.Drawing.Point(4, 25);
             this.tabPageEvolving.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabPageEvolving.Name = "tabPageEvolving";
-            this.tabPageEvolving.Size = new System.Drawing.Size(581, 524);
+            this.tabPageEvolving.Size = new System.Drawing.Size(589, 524);
             this.tabPageEvolving.TabIndex = 3;
             this.tabPageEvolving.Text = "Evolving";
             this.tabPageEvolving.UseVisualStyleBackColor = true;
@@ -1976,7 +2214,7 @@
             this.fastObjectListViewEvolve.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.fastObjectListViewEvolve.Name = "fastObjectListViewEvolve";
             this.fastObjectListViewEvolve.ShowGroups = false;
-            this.fastObjectListViewEvolve.Size = new System.Drawing.Size(581, 524);
+            this.fastObjectListViewEvolve.Size = new System.Drawing.Size(589, 524);
             this.fastObjectListViewEvolve.TabIndex = 2;
             this.fastObjectListViewEvolve.UseCompatibleStateImageBehavior = false;
             this.fastObjectListViewEvolve.View = System.Windows.Forms.View.Details;
@@ -2067,7 +2305,7 @@
             this.tabPageCatching.Location = new System.Drawing.Point(4, 25);
             this.tabPageCatching.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabPageCatching.Name = "tabPageCatching";
-            this.tabPageCatching.Size = new System.Drawing.Size(581, 524);
+            this.tabPageCatching.Size = new System.Drawing.Size(589, 524);
             this.tabPageCatching.TabIndex = 4;
             this.tabPageCatching.Text = "Catching";
             this.tabPageCatching.UseVisualStyleBackColor = true;
@@ -2091,7 +2329,7 @@
             this.fastObjectListViewCatch.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.fastObjectListViewCatch.Name = "fastObjectListViewCatch";
             this.fastObjectListViewCatch.ShowGroups = false;
-            this.fastObjectListViewCatch.Size = new System.Drawing.Size(581, 524);
+            this.fastObjectListViewCatch.Size = new System.Drawing.Size(589, 524);
             this.fastObjectListViewCatch.TabIndex = 1;
             this.fastObjectListViewCatch.UseCompatibleStateImageBehavior = false;
             this.fastObjectListViewCatch.View = System.Windows.Forms.View.Details;
@@ -2183,7 +2421,7 @@
             this.tabPageTransfer.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabPageTransfer.Name = "tabPageTransfer";
             this.tabPageTransfer.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.tabPageTransfer.Size = new System.Drawing.Size(581, 524);
+            this.tabPageTransfer.Size = new System.Drawing.Size(589, 524);
             this.tabPageTransfer.TabIndex = 5;
             this.tabPageTransfer.Text = "Transfer";
             this.tabPageTransfer.UseVisualStyleBackColor = true;
@@ -2214,7 +2452,7 @@
             this.fastObjectListViewTransfer.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.fastObjectListViewTransfer.Name = "fastObjectListViewTransfer";
             this.fastObjectListViewTransfer.ShowGroups = false;
-            this.fastObjectListViewTransfer.Size = new System.Drawing.Size(575, 520);
+            this.fastObjectListViewTransfer.Size = new System.Drawing.Size(583, 520);
             this.fastObjectListViewTransfer.TabIndex = 2;
             this.fastObjectListViewTransfer.UseCompatibleStateImageBehavior = false;
             this.fastObjectListViewTransfer.UseFiltering = true;
@@ -2280,249 +2518,11 @@
             this.restoreDefaultsToolStripMenuItem2.Text = "Restore Defaults";
             this.restoreDefaultsToolStripMenuItem2.Click += new System.EventHandler(this.RestoreDefaultsToolStripMenuItem2_Click);
             // 
-            // tabPageCaptchaConfig
-            // 
-            this.tabPageCaptchaConfig.Controls.Add(this.TwoCaptchaAPIKey);
-            this.tabPageCaptchaConfig.Controls.Add(this.label38);
-            this.tabPageCaptchaConfig.Controls.Add(this.AutoCaptchaRetries);
-            this.tabPageCaptchaConfig.Controls.Add(this.label37);
-            this.tabPageCaptchaConfig.Controls.Add(this.AutoCaptchaTimeout);
-            this.tabPageCaptchaConfig.Controls.Add(this.label31);
-            this.tabPageCaptchaConfig.Controls.Add(this.CaptchaSolutionsSecretKey);
-            this.tabPageCaptchaConfig.Controls.Add(this.label29);
-            this.tabPageCaptchaConfig.Controls.Add(this.CaptchaSolutionAPIKey);
-            this.tabPageCaptchaConfig.Controls.Add(this.label28);
-            this.tabPageCaptchaConfig.Controls.Add(this.EnableCaptchaSolutions);
-            this.tabPageCaptchaConfig.Controls.Add(this.ProxyPortCaptcha);
-            this.tabPageCaptchaConfig.Controls.Add(this.label22);
-            this.tabPageCaptchaConfig.Controls.Add(this.ProxyHostCaptcha);
-            this.tabPageCaptchaConfig.Controls.Add(this.label20);
-            this.tabPageCaptchaConfig.Controls.Add(this.AntiCaptchaAPIKey);
-            this.tabPageCaptchaConfig.Controls.Add(this.label19);
-            this.tabPageCaptchaConfig.Controls.Add(this.EnableAntiCaptcha);
-            this.tabPageCaptchaConfig.Controls.Add(this.Enable2Captcha);
-            this.tabPageCaptchaConfig.Controls.Add(this.DisplayOnTop);
-            this.tabPageCaptchaConfig.Controls.Add(this.PlaySoundOnCaptcha);
-            this.tabPageCaptchaConfig.Controls.Add(this.ManualCaptchaTimeout);
-            this.tabPageCaptchaConfig.Controls.Add(this.label17);
-            this.tabPageCaptchaConfig.Controls.Add(this.AllowManualCaptchaResolve);
-            this.tabPageCaptchaConfig.Location = new System.Drawing.Point(4, 25);
-            this.tabPageCaptchaConfig.Name = "tabPageCaptchaConfig";
-            this.tabPageCaptchaConfig.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageCaptchaConfig.Size = new System.Drawing.Size(576, 445);
-            this.tabPageCaptchaConfig.TabIndex = 7;
-            this.tabPageCaptchaConfig.Text = "CaptchaConfig";
-            this.tabPageCaptchaConfig.UseVisualStyleBackColor = true;
-            // 
-            // AllowManualCaptchaResolve
-            // 
-            this.AllowManualCaptchaResolve.AutoSize = true;
-            this.AllowManualCaptchaResolve.Location = new System.Drawing.Point(9, 25);
-            this.AllowManualCaptchaResolve.Name = "AllowManualCaptchaResolve";
-            this.AllowManualCaptchaResolve.Size = new System.Drawing.Size(216, 21);
-            this.AllowManualCaptchaResolve.TabIndex = 0;
-            this.AllowManualCaptchaResolve.Text = "Allow manual captcha resolve";
-            this.AllowManualCaptchaResolve.UseVisualStyleBackColor = true;
-            // 
-            // label17
-            // 
-            this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(6, 49);
-            this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(162, 17);
-            this.label17.TabIndex = 1;
-            this.label17.Text = "Manual captcha timeout:";
-            // 
-            // ManualCaptchaTimeout
-            // 
-            this.ManualCaptchaTimeout.Location = new System.Drawing.Point(174, 46);
-            this.ManualCaptchaTimeout.Name = "ManualCaptchaTimeout";
-            this.ManualCaptchaTimeout.Size = new System.Drawing.Size(100, 22);
-            this.ManualCaptchaTimeout.TabIndex = 2;
-            // 
-            // PlaySoundOnCaptcha
-            // 
-            this.PlaySoundOnCaptcha.AutoSize = true;
-            this.PlaySoundOnCaptcha.Location = new System.Drawing.Point(9, 74);
-            this.PlaySoundOnCaptcha.Name = "PlaySoundOnCaptcha";
-            this.PlaySoundOnCaptcha.Size = new System.Drawing.Size(174, 21);
-            this.PlaySoundOnCaptcha.TabIndex = 3;
-            this.PlaySoundOnCaptcha.Text = "Play sound on captcha";
-            this.PlaySoundOnCaptcha.UseVisualStyleBackColor = true;
-            // 
-            // DisplayOnTop
-            // 
-            this.DisplayOnTop.AutoSize = true;
-            this.DisplayOnTop.Location = new System.Drawing.Point(9, 101);
-            this.DisplayOnTop.Name = "DisplayOnTop";
-            this.DisplayOnTop.Size = new System.Drawing.Size(120, 21);
-            this.DisplayOnTop.TabIndex = 4;
-            this.DisplayOnTop.Text = "Display on top";
-            this.DisplayOnTop.UseVisualStyleBackColor = true;
-            // 
-            // Enable2Captcha
-            // 
-            this.Enable2Captcha.AutoSize = true;
-            this.Enable2Captcha.Location = new System.Drawing.Point(9, 128);
-            this.Enable2Captcha.Name = "Enable2Captcha";
-            this.Enable2Captcha.Size = new System.Drawing.Size(138, 21);
-            this.Enable2Captcha.TabIndex = 5;
-            this.Enable2Captcha.Text = "Enable 2Captcha";
-            this.Enable2Captcha.UseVisualStyleBackColor = true;
-            // 
-            // EnableAntiCaptcha
-            // 
-            this.EnableAntiCaptcha.AutoSize = true;
-            this.EnableAntiCaptcha.Location = new System.Drawing.Point(9, 155);
-            this.EnableAntiCaptcha.Name = "EnableAntiCaptcha";
-            this.EnableAntiCaptcha.Size = new System.Drawing.Size(154, 21);
-            this.EnableAntiCaptcha.TabIndex = 6;
-            this.EnableAntiCaptcha.Text = "Enable AntiCaptcha";
-            this.EnableAntiCaptcha.UseVisualStyleBackColor = true;
-            // 
-            // label19
-            // 
-            this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(6, 181);
-            this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(137, 17);
-            this.label19.TabIndex = 7;
-            this.label19.Text = "AntiCaptcha APIKey:";
-            // 
-            // AntiCaptchaAPIKey
-            // 
-            this.AntiCaptchaAPIKey.Location = new System.Drawing.Point(174, 178);
-            this.AntiCaptchaAPIKey.Name = "AntiCaptchaAPIKey";
-            this.AntiCaptchaAPIKey.Size = new System.Drawing.Size(354, 22);
-            this.AntiCaptchaAPIKey.TabIndex = 8;
-            // 
-            // label20
-            // 
-            this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(6, 211);
-            this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(132, 17);
-            this.label20.TabIndex = 9;
-            this.label20.Text = "Proxy host captcha:";
-            // 
-            // ProxyHostCaptcha
-            // 
-            this.ProxyHostCaptcha.Location = new System.Drawing.Point(174, 208);
-            this.ProxyHostCaptcha.Name = "ProxyHostCaptcha";
-            this.ProxyHostCaptcha.Size = new System.Drawing.Size(354, 22);
-            this.ProxyHostCaptcha.TabIndex = 10;
-            // 
-            // label22
-            // 
-            this.label22.AutoSize = true;
-            this.label22.Location = new System.Drawing.Point(6, 239);
-            this.label22.Name = "label22";
-            this.label22.Size = new System.Drawing.Size(130, 17);
-            this.label22.TabIndex = 11;
-            this.label22.Text = "Proxy port captcha:";
-            // 
-            // ProxyPortCaptcha
-            // 
-            this.ProxyPortCaptcha.Location = new System.Drawing.Point(174, 236);
-            this.ProxyPortCaptcha.Name = "ProxyPortCaptcha";
-            this.ProxyPortCaptcha.Size = new System.Drawing.Size(101, 22);
-            this.ProxyPortCaptcha.TabIndex = 12;
-            // 
-            // EnableCaptchaSolutions
-            // 
-            this.EnableCaptchaSolutions.AutoSize = true;
-            this.EnableCaptchaSolutions.Location = new System.Drawing.Point(9, 268);
-            this.EnableCaptchaSolutions.Name = "EnableCaptchaSolutions";
-            this.EnableCaptchaSolutions.Size = new System.Drawing.Size(188, 21);
-            this.EnableCaptchaSolutions.TabIndex = 13;
-            this.EnableCaptchaSolutions.Text = "Enable CaptchaSolutions";
-            this.EnableCaptchaSolutions.UseVisualStyleBackColor = true;
-            // 
-            // label28
-            // 
-            this.label28.AutoSize = true;
-            this.label28.Location = new System.Drawing.Point(6, 301);
-            this.label28.Name = "label28";
-            this.label28.Size = new System.Drawing.Size(164, 17);
-            this.label28.TabIndex = 14;
-            this.label28.Text = "CaptchaSolution APIKey:";
-            // 
-            // CaptchaSolutionAPIKey
-            // 
-            this.CaptchaSolutionAPIKey.Location = new System.Drawing.Point(174, 298);
-            this.CaptchaSolutionAPIKey.Name = "CaptchaSolutionAPIKey";
-            this.CaptchaSolutionAPIKey.Size = new System.Drawing.Size(354, 22);
-            this.CaptchaSolutionAPIKey.TabIndex = 15;
-            // 
-            // label29
-            // 
-            this.label29.AutoSize = true;
-            this.label29.Location = new System.Drawing.Point(6, 329);
-            this.label29.Name = "label29";
-            this.label29.Size = new System.Drawing.Size(191, 17);
-            this.label29.TabIndex = 16;
-            this.label29.Text = "CaptchaSolutions SecretKey:";
-            // 
-            // CaptchaSolutionsSecretKey
-            // 
-            this.CaptchaSolutionsSecretKey.Location = new System.Drawing.Point(203, 326);
-            this.CaptchaSolutionsSecretKey.Name = "CaptchaSolutionsSecretKey";
-            this.CaptchaSolutionsSecretKey.Size = new System.Drawing.Size(325, 22);
-            this.CaptchaSolutionsSecretKey.TabIndex = 17;
-            // 
-            // label31
-            // 
-            this.label31.AutoSize = true;
-            this.label31.Location = new System.Drawing.Point(6, 357);
-            this.label31.Name = "label31";
-            this.label31.Size = new System.Drawing.Size(145, 17);
-            this.label31.TabIndex = 18;
-            this.label31.Text = "Auto captcha timeout:";
-            // 
-            // AutoCaptchaTimeout
-            // 
-            this.AutoCaptchaTimeout.Location = new System.Drawing.Point(174, 354);
-            this.AutoCaptchaTimeout.Name = "AutoCaptchaTimeout";
-            this.AutoCaptchaTimeout.Size = new System.Drawing.Size(100, 22);
-            this.AutoCaptchaTimeout.TabIndex = 19;
-            // 
-            // label37
-            // 
-            this.label37.AutoSize = true;
-            this.label37.Location = new System.Drawing.Point(6, 385);
-            this.label37.Name = "label37";
-            this.label37.Size = new System.Drawing.Size(139, 17);
-            this.label37.TabIndex = 20;
-            this.label37.Text = "Auto captcha retries:";
-            // 
-            // AutoCaptchaRetries
-            // 
-            this.AutoCaptchaRetries.Location = new System.Drawing.Point(174, 382);
-            this.AutoCaptchaRetries.Name = "AutoCaptchaRetries";
-            this.AutoCaptchaRetries.Size = new System.Drawing.Size(100, 22);
-            this.AutoCaptchaRetries.TabIndex = 21;
-            // 
-            // label38
-            // 
-            this.label38.AutoSize = true;
-            this.label38.Location = new System.Drawing.Point(6, 413);
-            this.label38.Name = "label38";
-            this.label38.Size = new System.Drawing.Size(139, 17);
-            this.label38.TabIndex = 22;
-            this.label38.Text = "TwoCaptcha APIKey:";
-            // 
-            // TwoCaptchaAPIKey
-            // 
-            this.TwoCaptchaAPIKey.Location = new System.Drawing.Point(174, 410);
-            this.TwoCaptchaAPIKey.Name = "TwoCaptchaAPIKey";
-            this.TwoCaptchaAPIKey.Size = new System.Drawing.Size(354, 22);
-            this.TwoCaptchaAPIKey.TabIndex = 23;
-            // 
             // AccountSettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(597, 553);
+            this.ClientSize = new System.Drawing.Size(685, 553);
             this.Controls.Add(this.tabControlMain);
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.MinimumSize = new System.Drawing.Size(522, 427);
@@ -2570,6 +2570,8 @@
             this.tabPageHash.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            this.tabPageCaptchaConfig.ResumeLayout(false);
+            this.tabPageCaptchaConfig.PerformLayout();
             this.tabPageRecycling.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewRecycling)).EndInit();
             this.contextMenuStripRecycling.ResumeLayout(false);
@@ -2582,8 +2584,6 @@
             this.tabPageTransfer.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewTransfer)).EndInit();
             this.contextMenuStripTransfer.ResumeLayout(false);
-            this.tabPageCaptchaConfig.ResumeLayout(false);
-            this.tabPageCaptchaConfig.PerformLayout();
             this.ResumeLayout(false);
 
         }
