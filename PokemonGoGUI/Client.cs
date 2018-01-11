@@ -573,17 +573,26 @@ namespace PokemonGoGUI
                 session.Templates.LocalConfigVersion = Serializer.FromJson<DownloadRemoteConfigVersionResponse>(File.ReadAllText(filename));
         }
 
-        private static readonly string[] OsUserAgentParts = {
-            "CFNetwork/889.3 Darwin/17.2.0",    // 11.1.0
-            "CFNetwork/893.10 Darwin/17.3.0",   // 11.2.0
-            "CFNetwork/893.14.2 Darwin/17.4.0"  // 11.2.5
-        };
-
         private static readonly string[][] Devices =
         {
-            new[] {"iPhone8,1", "iPhone", "N71AP"}, //iphone 6
-            new[] {"iPhone8,2", "iPhone", "MKTM2"}, //iphone 6s plus
-            new[] {"iPhone9,3", "iPhone", "MN9T2"}  //iphone 7
+            new[] {"iPhone7,1", "iPhone", "N56AP"},    // iPhone 6 Plus
+            new[] {"iPhone7,2", "iPhone", "N61AP"},    // iPhone 6
+            new[] {"iPhone8,1", "iPhone", "N71AP"},    // iPhone 6s
+            new[] {"iPhone8,1", "iPhone", "N71mAP"},   // iPhone 6s
+            new[] {"iPhone8,2", "iPhone", "N66AP"},    // iPhone 6s plus
+            new[] {"iPhone8,2", "iPhone", "N66mAP"},   // iPhone 6s plus
+            new[] {"iPhone8,4", "iPhone", "N69AP"},    // iPhone SE
+            new[] {"iPhone8,4", "iPhone", "N69uAP"},   // iPhone SE
+            new[] {"iPhone9,1", "iPhone", "D10AP"},    // iPhone 7
+            new[] {"iPhone9,2", "iPhone", "D11AP"},    // iPhone 7 plus
+            new[] {"iPhone9,3", "iPhone", "D101AP"},   // iPhone 7
+            new[] {"iPhone9,4", "iPhone", "D111AP"},   // iPhone 7 plus
+            new[] {"iPhone10,1", "iPhone", "D20AP"},   // iPhone 8
+            new[] {"iPhone10,2", "iPhone", "D21AP"},   // iPhone 8 plus
+            new[] {"iPhone10,3", "iPhone", "D22AP"},   // iPhone X
+            new[] {"iPhone10,4", "iPhone", "D201AP"},  // iPhone 8
+            new[] {"iPhone10,5", "iPhone", "D211AP"},  // iPhone 8 plus
+            new[] {"iphone10,6", "iPhone", "D221AP"}   // iPhone X
         };
 
         private static readonly string[] OsVersions = {
@@ -591,5 +600,11 @@ namespace PokemonGoGUI
             "11.2.0",
             "11.2.5"
         };
-    }
+
+        private static readonly string[] OsUserAgentParts = {
+            "CFNetwork/889.3 Darwin/17.2.0",      // Index 0   // iOS 11.1.0
+            "CFNetwork/893.10 Darwin/17.3.0",     // Index 1   // iOS 11.2.0
+            "CFNetwork/893.14.2 Darwin/17.4.0"    // Index 2   // iOS 11.2.5
+        };
+	}
 }
