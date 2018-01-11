@@ -453,6 +453,7 @@ namespace PokemonGoGUI
         public void SessionOnCaptchaReceived(object sender, CaptchaEventArgs e)
         {
             ClientManager.AccountState = AccountState.CaptchaReceived;
+            ClientManager.Stop();
             //2captcha needed to solve or chrome drive for solve url manual
             //e.CaptchaUrl;
         }
