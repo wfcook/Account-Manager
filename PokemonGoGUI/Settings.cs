@@ -225,15 +225,10 @@ namespace PokemonGoGUI
             DisplayOnTop = true;
             Enable2Captcha = false;
             EnableAntiCaptcha = false;
-            AntiCaptchaAPIKey = "";
-            ProxyHostCaptcha = "";
             ProxyPortCaptcha = 3128;
             EnableCaptchaSolutions = false;
-            CaptchaSolutionAPIKey = "";
-            CaptchaSolutionsSecretKey = "";
             AutoCaptchaTimeout = 120;
             AutoCaptchaRetries = 3;
-            TwoCaptchaAPIKey = "";
         }
 
 
