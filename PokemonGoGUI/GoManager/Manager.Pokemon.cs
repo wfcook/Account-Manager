@@ -147,7 +147,7 @@ namespace PokemonGoGUI.GoManager
                 return new MethodResult();
             }
 
-            LogCaller(new LoggerEventArgs(String.Format("Transferring {0} pokemon", transferResult.Data.Count), LoggerTypes.Info));
+            LogCaller(new LoggerEventArgs(String.Format("Transferring {0} pokemon", transferResult.Data.Count -1), LoggerTypes.Info));
 
             await TransferPokemon(transferResult.Data);
 
