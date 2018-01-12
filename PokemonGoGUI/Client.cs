@@ -27,6 +27,7 @@ using System.Net;
 using System.Threading.Tasks;
 using PokemonGoGUI.Captcha;
 using static POGOProtos.Networking.Envelopes.Signature.Types;
+using System.Windows.Forms;
 
 #endregion
 
@@ -204,7 +205,7 @@ namespace PokemonGoGUI
                     }
                 }
             }
-            catch (PtcOfflineException ) // poex
+            catch (PtcOfflineException) // poex
             {
                 ClientManager.Stop();
 
@@ -212,7 +213,7 @@ namespace PokemonGoGUI
 
                 msgStr = "Ptc server offline.";
             }
-            catch (AccountNotVerifiedException ) // anvex
+            catch (AccountNotVerifiedException) // anvex
             {
                 ClientManager.Stop();
                 ClientManager.RemoveProxy();
@@ -267,7 +268,7 @@ namespace PokemonGoGUI
 
                 msgStr = "Failed to login due to request error";
             }
-            catch (TaskCanceledException ) // tce
+            catch (TaskCanceledException) // tce
             {
                 ClientManager.Stop();
 
@@ -293,7 +294,7 @@ namespace PokemonGoGUI
 
                 msgStr = "Username or password incorrect";
             }
-            catch (IPBannedException ) // ipex
+            catch (IPBannedException) // ipex
             {
                 if (ClientManager.UserSettings.StopOnIPBan)
                 {
@@ -338,7 +339,7 @@ namespace PokemonGoGUI
                 ClientManager.RemoveProxy();
                 msgStr = "This account is banned temporally.";
             }
-            
+
             catch (PokeHashException phex)
             {
                 ClientManager.AccountState = AccountState.HashIssues;
@@ -473,10 +474,6 @@ namespace PokemonGoGUI
         {
             ClientManager = manager;
 
-            int osId = OsVersions[ClientManager.UserSettings.DeviceInfo.FirmwareType.Length].Length;
-            var firmwareUserAgentPart = OsUserAgentParts[osId];
-            var firmwareType = OsVersions[osId];
-
             Proxy = new ProxyEx
             {
                 Address = ClientManager.UserSettings.ProxyIP,
@@ -485,9 +482,19 @@ namespace PokemonGoGUI
                 Password = ClientManager.UserSettings.ProxyPassword
             };
 
+            Dictionary<string, string> Header = new Dictionary<string, string>()
+            {
+                {"11.1.0", "CFNetwork/889.3 Darwin/17.2.0"},
+                {"11.2.0", "CFNetwork/893.10 Darwin/17.3.0"},
+                {"11.2.5", "CFNetwork/893.14.2 Darwin/17.4.0"}
+            };
+
+            //TODO: ODD all this message box is null!!!!!!!!!!!!!!! can not set head
+            MessageBox.Show(ClientManager.UserSettings.FirmwareType);
+
             ClientDeviceWrapper = new DeviceWrapper
             {
-                UserAgent = $"pokemongo/1 {firmwareUserAgentPart}",
+                UserAgent = $"pokemongo/1 {Header[ClientManager.UserSettings.FirmwareType]}",
                 DeviceInfo = new DeviceInfo
                 {
                     DeviceId = ClientManager.UserSettings.DeviceInfo.DeviceId,
@@ -572,39 +579,5 @@ namespace PokemonGoGUI
             if (File.Exists(filename))
                 session.Templates.LocalConfigVersion = Serializer.FromJson<DownloadRemoteConfigVersionResponse>(File.ReadAllText(filename));
         }
-
-        private static readonly string[][] Devices =
-        {
-            new[] {"iPhone7,1", "iPhone", "N56AP"},    // iPhone 6 Plus
-            new[] {"iPhone7,2", "iPhone", "N61AP"},    // iPhone 6
-            new[] {"iPhone8,1", "iPhone", "N71AP"},    // iPhone 6s
-            new[] {"iPhone8,1", "iPhone", "N71mAP"},   // iPhone 6s
-            new[] {"iPhone8,2", "iPhone", "N66AP"},    // iPhone 6s plus
-            new[] {"iPhone8,2", "iPhone", "N66mAP"},   // iPhone 6s plus
-            new[] {"iPhone8,4", "iPhone", "N69AP"},    // iPhone SE
-            new[] {"iPhone8,4", "iPhone", "N69uAP"},   // iPhone SE
-            new[] {"iPhone9,1", "iPhone", "D10AP"},    // iPhone 7
-            new[] {"iPhone9,2", "iPhone", "D11AP"},    // iPhone 7 plus
-            new[] {"iPhone9,3", "iPhone", "D101AP"},   // iPhone 7
-            new[] {"iPhone9,4", "iPhone", "D111AP"},   // iPhone 7 plus
-            new[] {"iPhone10,1", "iPhone", "D20AP"},   // iPhone 8
-            new[] {"iPhone10,2", "iPhone", "D21AP"},   // iPhone 8 plus
-            new[] {"iPhone10,3", "iPhone", "D22AP"},   // iPhone X
-            new[] {"iPhone10,4", "iPhone", "D201AP"},  // iPhone 8
-            new[] {"iPhone10,5", "iPhone", "D211AP"},  // iPhone 8 plus
-            new[] {"iphone10,6", "iPhone", "D221AP"}   // iPhone X
-        };
-
-        private static readonly string[] OsVersions = {
-            "11.1.0",
-            "11.2.0",
-            "11.2.5"
-        };
-
-        private static readonly string[] OsUserAgentParts = {
-            "CFNetwork/889.3 Darwin/17.2.0",      // Index 0   // iOS 11.1.0
-            "CFNetwork/893.10 Darwin/17.3.0",     // Index 1   // iOS 11.2.0
-            "CFNetwork/893.14.2 Darwin/17.4.0"    // Index 2   // iOS 11.2.5
-        };
-	}
+    }
 }
