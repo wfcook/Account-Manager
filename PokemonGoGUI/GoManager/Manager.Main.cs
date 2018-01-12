@@ -822,7 +822,7 @@ namespace PokemonGoGUI.GoManager
             }
 
             IsRunning = false;
-            _firstRun = false;
+            _firstRun = true;
         }
 
         /*
