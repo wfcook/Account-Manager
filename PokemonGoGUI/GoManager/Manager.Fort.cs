@@ -102,8 +102,6 @@ namespace PokemonGoGUI.GoManager
                     if (fortResponse.Result != FortSearchResponse.Types.Result.OutOfRange)
                     {
                         //Successfully grabbed stop
-                        
-                        UpdateInventory(); // <- should not be needed
                         if (AccountState == Enums.AccountState.SoftBan)
                         {
                             AccountState =  Enums.AccountState.Good;

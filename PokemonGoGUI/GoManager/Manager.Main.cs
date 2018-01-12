@@ -347,8 +347,6 @@ namespace PokemonGoGUI.GoManager
                     }
 
                     await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
-
-                    UpdateInventory(); // <- should not be needed
  
                     result = await CheckReauthentication();
 
@@ -395,7 +393,6 @@ namespace PokemonGoGUI.GoManager
                     //Get pokemon settings
                     if (PokeSettings == null)
                     {
-
                         LogCaller(new LoggerEventArgs("Grabbing pokemon settings ...", LoggerTypes.Debug));
                         result = await GetItemTemplates();
 
@@ -454,6 +451,8 @@ namespace PokemonGoGUI.GoManager
                             await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
                         }
                     }
+
+                    UpdateInventory();
 
                     _failedInventoryReponses = 0;
 
@@ -579,8 +578,6 @@ namespace PokemonGoGUI.GoManager
 
                         await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
-                        UpdateInventory();
-
                         if (CatchDisabled)
                         {
                             //Check delay if account not have balls
@@ -627,7 +624,6 @@ namespace PokemonGoGUI.GoManager
                                 CatchDisabled = true;
                                 TimeAutoCatch = DateTime.Now.AddMinutes(UserSettings.DisableCatchDelay);
                             }
-                            UpdateInventory(); // <- should not be needed
                         }
 
                         //Stop bot instantly
@@ -642,7 +638,6 @@ namespace PokemonGoGUI.GoManager
                             await RecycleFilteredItems();
                             await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
                         }
-
 
                         //Search
                         double filledInventorySpace = FilledInventoryStorage();
@@ -701,7 +696,6 @@ namespace PokemonGoGUI.GoManager
                             continue;
                         }
 
-
                         // evolve, transfer, etc on first and every 10 stops
                         if (IsRunning && ((pokeStopNumber > 4 && pokeStopNumber % 10 == 0) || pokeStopNumber == 1))
                         {
@@ -749,11 +743,8 @@ namespace PokemonGoGUI.GoManager
                             if (Level > prevLevel)
                             {
                                 await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
-
                                 await ClaimLevelUpRewards(Level);
                             }
-
-
                         }
 
                         ++pokeStopNumber;

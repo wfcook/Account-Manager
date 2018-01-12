@@ -19,12 +19,12 @@ namespace PokemonGoGUI.GoManager
     {
         public void UpdateInventory()
         {
-            LogCaller(new LoggerEventArgs("Updating inventory.", LoggerTypes.Debug));
+            LogCaller(new LoggerEventArgs("Updating inventory.", LoggerTypes.Info));
 
             try
             {
                 var inventoryItems = _client?.ClientSession?.Player?.Inventory?.InventoryItems;
-                if( inventoryItems == null )
+                if (inventoryItems == null)
                     return;
                 Items.Clear();
                 Pokemon.Clear();
@@ -32,35 +32,39 @@ namespace PokemonGoGUI.GoManager
                 PokemonCandy.Clear();
                 Incubators.Clear();
                 Eggs.Clear();
-                foreach (var inventoryItem in inventoryItems) {
-                    if (inventoryItem.InventoryItemData?.PlayerStats!=null){
+                foreach (var inventoryItem in inventoryItems)
+                {
+                    if (inventoryItem.InventoryItemData?.PlayerStats != null)
+                    {
                         Stats = inventoryItem.InventoryItemData.PlayerStats;
                     }
-                    if (inventoryItem.InventoryItemData?.Item!=null){
+                    if (inventoryItem.InventoryItemData?.Item != null)
+                    {
                         Items.Add(inventoryItem.InventoryItemData.Item);
                     }
-                    if (inventoryItem.InventoryItemData?.PokedexEntry!=null){
+                    if (inventoryItem.InventoryItemData?.PokedexEntry != null)
+                    {
                         Pokedex.Add(inventoryItem.InventoryItemData.PokedexEntry);
                     }
-                    if (inventoryItem.InventoryItemData?.Candy!=null){
+                    if (inventoryItem.InventoryItemData?.Candy != null)
+                    {
                         PokemonCandy.Add(inventoryItem.InventoryItemData.Candy);
                     }
-                    if (inventoryItem.InventoryItemData?.EggIncubators!=null){
+                    if (inventoryItem.InventoryItemData?.EggIncubators != null)
+                    {
                         foreach (var eggIncubator in inventoryItem.InventoryItemData.EggIncubators.EggIncubator)
-                            if (eggIncubator!=null)
+                            if (eggIncubator != null)
                                 Incubators.Add(eggIncubator);
-                        
+
                     }
-                    if (inventoryItem.InventoryItemData?.PokemonData!=null){
+                    if (inventoryItem.InventoryItemData?.PokemonData != null)
+                    {
                         if (inventoryItem.InventoryItemData.PokemonData.IsEgg)
                             Eggs.Add(inventoryItem.InventoryItemData.PokemonData);
                         else
                             Pokemon.Add(inventoryItem.InventoryItemData.PokemonData);
                     }
-                    
                 }
-
-
             }
             catch (Exception ex1)
             {
@@ -102,7 +106,6 @@ namespace PokemonGoGUI.GoManager
                 await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
             }
 
-
             return new MethodResult
             {
                 Message = "Success",
@@ -115,7 +118,6 @@ namespace PokemonGoGUI.GoManager
             InventoryItemSetting itemSetting = UserSettings.ItemSettings.FirstOrDefault(x => x.Id == item.ItemId);
 
             return itemSetting == null ? new MethodResult() : await RecycleItem(itemSetting, toDelete);
-
         }
 
         public async Task<MethodResult> RecycleItem(InventoryItemSetting itemSetting, int toDelete)

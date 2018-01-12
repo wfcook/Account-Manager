@@ -182,8 +182,6 @@ namespace PokemonGoGUI.GoManager
                 };
             }
 
-            UpdateInventory(); // <- should not be needed
-
             var pokemonToEvolve = new List<PokemonData>();
 
             IEnumerable<IGrouping<PokemonId, PokemonData>> groupedPokemon = Pokemon.OrderByDescending(x => x.PokemonId).GroupBy(x => x.PokemonId);
