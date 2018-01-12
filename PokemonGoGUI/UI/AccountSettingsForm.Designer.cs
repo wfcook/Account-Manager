@@ -288,7 +288,7 @@
             this.tabControlMain.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabControlMain.Name = "tabControlMain";
             this.tabControlMain.SelectedIndex = 0;
-            this.tabControlMain.Size = new System.Drawing.Size(685, 553);
+            this.tabControlMain.Size = new System.Drawing.Size(654, 553);
             this.tabControlMain.TabIndex = 0;
             // 
             // tabPageDetails
@@ -303,7 +303,7 @@
             this.tabPageDetails.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabPageDetails.Name = "tabPageDetails";
             this.tabPageDetails.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.tabPageDetails.Size = new System.Drawing.Size(677, 524);
+            this.tabPageDetails.Size = new System.Drawing.Size(646, 524);
             this.tabPageDetails.TabIndex = 1;
             this.tabPageDetails.Text = "Details";
             this.tabPageDetails.UseVisualStyleBackColor = true;
@@ -325,7 +325,7 @@
             this.tabControlSettings.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabControlSettings.Name = "tabControlSettings";
             this.tabControlSettings.SelectedIndex = 0;
-            this.tabControlSettings.Size = new System.Drawing.Size(672, 474);
+            this.tabControlSettings.Size = new System.Drawing.Size(641, 474);
             this.tabControlSettings.TabIndex = 0;
             // 
             // tabPageSettingsGeneral
@@ -342,7 +342,7 @@
             this.tabPageSettingsGeneral.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabPageSettingsGeneral.Name = "tabPageSettingsGeneral";
             this.tabPageSettingsGeneral.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.tabPageSettingsGeneral.Size = new System.Drawing.Size(664, 445);
+            this.tabPageSettingsGeneral.Size = new System.Drawing.Size(633, 445);
             this.tabPageSettingsGeneral.TabIndex = 0;
             this.tabPageSettingsGeneral.Text = "General";
             this.tabPageSettingsGeneral.UseVisualStyleBackColor = true;
@@ -453,7 +453,7 @@
             this.tabPageActions.Margin = new System.Windows.Forms.Padding(4);
             this.tabPageActions.Name = "tabPageActions";
             this.tabPageActions.Padding = new System.Windows.Forms.Padding(4);
-            this.tabPageActions.Size = new System.Drawing.Size(576, 445);
+            this.tabPageActions.Size = new System.Drawing.Size(664, 445);
             this.tabPageActions.TabIndex = 6;
             this.tabPageActions.Text = "Actions";
             this.tabPageActions.UseVisualStyleBackColor = true;
@@ -891,7 +891,7 @@
             this.tabPageProxy.Location = new System.Drawing.Point(4, 25);
             this.tabPageProxy.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabPageProxy.Name = "tabPageProxy";
-            this.tabPageProxy.Size = new System.Drawing.Size(576, 445);
+            this.tabPageProxy.Size = new System.Drawing.Size(664, 445);
             this.tabPageProxy.TabIndex = 4;
             this.tabPageProxy.Text = "Proxy";
             this.tabPageProxy.UseVisualStyleBackColor = true;
@@ -1004,7 +1004,7 @@
             this.tabPageSettingsNavigation.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabPageSettingsNavigation.Name = "tabPageSettingsNavigation";
             this.tabPageSettingsNavigation.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.tabPageSettingsNavigation.Size = new System.Drawing.Size(576, 445);
+            this.tabPageSettingsNavigation.Size = new System.Drawing.Size(664, 445);
             this.tabPageSettingsNavigation.TabIndex = 1;
             this.tabPageSettingsNavigation.Text = "Navigation";
             this.tabPageSettingsNavigation.UseVisualStyleBackColor = true;
@@ -1200,7 +1200,7 @@
             this.tabPageDevice.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabPageDevice.Name = "tabPageDevice";
             this.tabPageDevice.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.tabPageDevice.Size = new System.Drawing.Size(576, 445);
+            this.tabPageDevice.Size = new System.Drawing.Size(664, 445);
             this.tabPageDevice.TabIndex = 2;
             this.tabPageDevice.Text = "Device*";
             this.tabPageDevice.UseVisualStyleBackColor = true;
@@ -1208,7 +1208,7 @@
             // buttonResetDefaults
             // 
             this.buttonResetDefaults.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonResetDefaults.Location = new System.Drawing.Point(376, 263);
+            this.buttonResetDefaults.Location = new System.Drawing.Point(464, 263);
             this.buttonResetDefaults.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.buttonResetDefaults.Name = "buttonResetDefaults";
             this.buttonResetDefaults.Size = new System.Drawing.Size(133, 23);
@@ -1220,7 +1220,7 @@
             // buttonDeviceRandom
             // 
             this.buttonDeviceRandom.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonDeviceRandom.Location = new System.Drawing.Point(435, 15);
+            this.buttonDeviceRandom.Location = new System.Drawing.Point(523, 15);
             this.buttonDeviceRandom.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.buttonDeviceRandom.Name = "buttonDeviceRandom";
             this.buttonDeviceRandom.Size = new System.Drawing.Size(75, 23);
@@ -1236,7 +1236,7 @@
             this.textBoxDeviceModel.Location = new System.Drawing.Point(168, 73);
             this.textBoxDeviceModel.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBoxDeviceModel.Name = "textBoxDeviceModel";
-            this.textBoxDeviceModel.Size = new System.Drawing.Size(340, 22);
+            this.textBoxDeviceModel.Size = new System.Drawing.Size(428, 22);
             this.textBoxDeviceModel.TabIndex = 4;
             // 
             // textBoxFirmwareType
@@ -1246,7 +1246,7 @@
             this.textBoxFirmwareType.Location = new System.Drawing.Point(168, 220);
             this.textBoxFirmwareType.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBoxFirmwareType.Name = "textBoxFirmwareType";
-            this.textBoxFirmwareType.Size = new System.Drawing.Size(340, 22);
+            this.textBoxFirmwareType.Size = new System.Drawing.Size(428, 22);
             this.textBoxFirmwareType.TabIndex = 12;
             // 
             // textBoxFirmwareBrand
@@ -1256,7 +1256,7 @@
             this.textBoxFirmwareBrand.Location = new System.Drawing.Point(168, 191);
             this.textBoxFirmwareBrand.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBoxFirmwareBrand.Name = "textBoxFirmwareBrand";
-            this.textBoxFirmwareBrand.Size = new System.Drawing.Size(340, 22);
+            this.textBoxFirmwareBrand.Size = new System.Drawing.Size(428, 22);
             this.textBoxFirmwareBrand.TabIndex = 10;
             // 
             // textBoxHardwareModel
@@ -1266,7 +1266,7 @@
             this.textBoxHardwareModel.Location = new System.Drawing.Point(168, 161);
             this.textBoxHardwareModel.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBoxHardwareModel.Name = "textBoxHardwareModel";
-            this.textBoxHardwareModel.Size = new System.Drawing.Size(340, 22);
+            this.textBoxHardwareModel.Size = new System.Drawing.Size(428, 22);
             this.textBoxHardwareModel.TabIndex = 8;
             // 
             // textBoxHardwareManufacturer
@@ -1276,7 +1276,7 @@
             this.textBoxHardwareManufacturer.Location = new System.Drawing.Point(168, 132);
             this.textBoxHardwareManufacturer.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBoxHardwareManufacturer.Name = "textBoxHardwareManufacturer";
-            this.textBoxHardwareManufacturer.Size = new System.Drawing.Size(340, 22);
+            this.textBoxHardwareManufacturer.Size = new System.Drawing.Size(428, 22);
             this.textBoxHardwareManufacturer.TabIndex = 7;
             // 
             // textBoxDeviceModelBoot
@@ -1286,7 +1286,7 @@
             this.textBoxDeviceModelBoot.Location = new System.Drawing.Point(168, 102);
             this.textBoxDeviceModelBoot.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBoxDeviceModelBoot.Name = "textBoxDeviceModelBoot";
-            this.textBoxDeviceModelBoot.Size = new System.Drawing.Size(340, 22);
+            this.textBoxDeviceModelBoot.Size = new System.Drawing.Size(428, 22);
             this.textBoxDeviceModelBoot.TabIndex = 5;
             // 
             // textBoxDeviceBrand
@@ -1296,7 +1296,7 @@
             this.textBoxDeviceBrand.Location = new System.Drawing.Point(168, 46);
             this.textBoxDeviceBrand.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBoxDeviceBrand.Name = "textBoxDeviceBrand";
-            this.textBoxDeviceBrand.Size = new System.Drawing.Size(340, 22);
+            this.textBoxDeviceBrand.Size = new System.Drawing.Size(428, 22);
             this.textBoxDeviceBrand.TabIndex = 3;
             // 
             // textBoxDeviceId
@@ -1306,7 +1306,7 @@
             this.textBoxDeviceId.Location = new System.Drawing.Point(168, 16);
             this.textBoxDeviceId.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBoxDeviceId.Name = "textBoxDeviceId";
-            this.textBoxDeviceId.Size = new System.Drawing.Size(263, 22);
+            this.textBoxDeviceId.Size = new System.Drawing.Size(351, 22);
             this.textBoxDeviceId.TabIndex = 0;
             // 
             // label27
@@ -1402,7 +1402,7 @@
             this.tabPageHumanization.Location = new System.Drawing.Point(4, 25);
             this.tabPageHumanization.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabPageHumanization.Name = "tabPageHumanization";
-            this.tabPageHumanization.Size = new System.Drawing.Size(576, 445);
+            this.tabPageHumanization.Size = new System.Drawing.Size(664, 445);
             this.tabPageHumanization.TabIndex = 3;
             this.tabPageHumanization.Text = "Humanization";
             this.tabPageHumanization.UseVisualStyleBackColor = true;
@@ -1704,7 +1704,7 @@
             this.tabPageHash.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabPageHash.Name = "tabPageHash";
             this.tabPageHash.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.tabPageHash.Size = new System.Drawing.Size(576, 445);
+            this.tabPageHash.Size = new System.Drawing.Size(664, 445);
             this.tabPageHash.TabIndex = 5;
             this.tabPageHash.Text = "Developers";
             this.tabPageHash.UseVisualStyleBackColor = true;
@@ -1856,7 +1856,7 @@
             this.tabPageCaptchaConfig.Location = new System.Drawing.Point(4, 25);
             this.tabPageCaptchaConfig.Name = "tabPageCaptchaConfig";
             this.tabPageCaptchaConfig.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageCaptchaConfig.Size = new System.Drawing.Size(576, 445);
+            this.tabPageCaptchaConfig.Size = new System.Drawing.Size(664, 445);
             this.tabPageCaptchaConfig.TabIndex = 7;
             this.tabPageCaptchaConfig.Text = "CaptchaConfig";
             this.tabPageCaptchaConfig.UseVisualStyleBackColor = true;
@@ -2092,7 +2092,7 @@
             // buttonDone
             // 
             this.buttonDone.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonDone.Location = new System.Drawing.Point(569, 494);
+            this.buttonDone.Location = new System.Drawing.Point(538, 494);
             this.buttonDone.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.buttonDone.Name = "buttonDone";
             this.buttonDone.Size = new System.Drawing.Size(96, 23);
@@ -2105,7 +2105,7 @@
             // 
             this.label13.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(492, 476);
+            this.label13.Location = new System.Drawing.Point(461, 476);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(171, 17);
             this.label13.TabIndex = 2;
@@ -2130,7 +2130,7 @@
             this.tabPageRecycling.Location = new System.Drawing.Point(4, 25);
             this.tabPageRecycling.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabPageRecycling.Name = "tabPageRecycling";
-            this.tabPageRecycling.Size = new System.Drawing.Size(589, 524);
+            this.tabPageRecycling.Size = new System.Drawing.Size(677, 524);
             this.tabPageRecycling.TabIndex = 2;
             this.tabPageRecycling.Text = "Recycling";
             this.tabPageRecycling.UseVisualStyleBackColor = true;
@@ -2151,7 +2151,7 @@
             this.fastObjectListViewRecycling.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.fastObjectListViewRecycling.Name = "fastObjectListViewRecycling";
             this.fastObjectListViewRecycling.ShowGroups = false;
-            this.fastObjectListViewRecycling.Size = new System.Drawing.Size(589, 524);
+            this.fastObjectListViewRecycling.Size = new System.Drawing.Size(677, 524);
             this.fastObjectListViewRecycling.TabIndex = 0;
             this.fastObjectListViewRecycling.UseCompatibleStateImageBehavior = false;
             this.fastObjectListViewRecycling.View = System.Windows.Forms.View.Details;
@@ -2190,7 +2190,7 @@
             this.tabPageEvolving.Location = new System.Drawing.Point(4, 25);
             this.tabPageEvolving.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabPageEvolving.Name = "tabPageEvolving";
-            this.tabPageEvolving.Size = new System.Drawing.Size(589, 524);
+            this.tabPageEvolving.Size = new System.Drawing.Size(677, 524);
             this.tabPageEvolving.TabIndex = 3;
             this.tabPageEvolving.Text = "Evolving";
             this.tabPageEvolving.UseVisualStyleBackColor = true;
@@ -2214,7 +2214,7 @@
             this.fastObjectListViewEvolve.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.fastObjectListViewEvolve.Name = "fastObjectListViewEvolve";
             this.fastObjectListViewEvolve.ShowGroups = false;
-            this.fastObjectListViewEvolve.Size = new System.Drawing.Size(589, 524);
+            this.fastObjectListViewEvolve.Size = new System.Drawing.Size(677, 524);
             this.fastObjectListViewEvolve.TabIndex = 2;
             this.fastObjectListViewEvolve.UseCompatibleStateImageBehavior = false;
             this.fastObjectListViewEvolve.View = System.Windows.Forms.View.Details;
@@ -2305,7 +2305,7 @@
             this.tabPageCatching.Location = new System.Drawing.Point(4, 25);
             this.tabPageCatching.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabPageCatching.Name = "tabPageCatching";
-            this.tabPageCatching.Size = new System.Drawing.Size(589, 524);
+            this.tabPageCatching.Size = new System.Drawing.Size(677, 524);
             this.tabPageCatching.TabIndex = 4;
             this.tabPageCatching.Text = "Catching";
             this.tabPageCatching.UseVisualStyleBackColor = true;
@@ -2329,7 +2329,7 @@
             this.fastObjectListViewCatch.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.fastObjectListViewCatch.Name = "fastObjectListViewCatch";
             this.fastObjectListViewCatch.ShowGroups = false;
-            this.fastObjectListViewCatch.Size = new System.Drawing.Size(589, 524);
+            this.fastObjectListViewCatch.Size = new System.Drawing.Size(677, 524);
             this.fastObjectListViewCatch.TabIndex = 1;
             this.fastObjectListViewCatch.UseCompatibleStateImageBehavior = false;
             this.fastObjectListViewCatch.View = System.Windows.Forms.View.Details;
@@ -2421,7 +2421,7 @@
             this.tabPageTransfer.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabPageTransfer.Name = "tabPageTransfer";
             this.tabPageTransfer.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.tabPageTransfer.Size = new System.Drawing.Size(589, 524);
+            this.tabPageTransfer.Size = new System.Drawing.Size(677, 524);
             this.tabPageTransfer.TabIndex = 5;
             this.tabPageTransfer.Text = "Transfer";
             this.tabPageTransfer.UseVisualStyleBackColor = true;
@@ -2452,7 +2452,7 @@
             this.fastObjectListViewTransfer.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.fastObjectListViewTransfer.Name = "fastObjectListViewTransfer";
             this.fastObjectListViewTransfer.ShowGroups = false;
-            this.fastObjectListViewTransfer.Size = new System.Drawing.Size(583, 520);
+            this.fastObjectListViewTransfer.Size = new System.Drawing.Size(671, 520);
             this.fastObjectListViewTransfer.TabIndex = 2;
             this.fastObjectListViewTransfer.UseCompatibleStateImageBehavior = false;
             this.fastObjectListViewTransfer.UseFiltering = true;
@@ -2522,7 +2522,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(685, 553);
+            this.ClientSize = new System.Drawing.Size(654, 553);
             this.Controls.Add(this.tabControlMain);
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.MinimumSize = new System.Drawing.Size(522, 427);

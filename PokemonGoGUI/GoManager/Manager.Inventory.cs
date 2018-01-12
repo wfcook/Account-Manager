@@ -203,6 +203,8 @@ namespace PokemonGoGUI.GoManager
                 await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
             }
 
+            UpdateInventory(1);
+
             return new MethodResult
             {
                 Message = "Success",
@@ -235,8 +237,6 @@ namespace PokemonGoGUI.GoManager
 
                 recycleInventoryItemResponse = RecycleInventoryItemResponse.Parser.ParseFrom(response);
                 LogCaller(new LoggerEventArgs(String.Format("Deleted {0} {1}. Remaining {2}", toDelete, itemSetting.FriendlyName, recycleInventoryItemResponse.NewCount), LoggerTypes.Recycle));
-
-                UpdateInventory(1);
 
                 return new MethodResult
                 {
