@@ -550,6 +550,8 @@ namespace PokemonGoGUI.UI
                 await Task.Delay(500);
             }
 
+            _manager.UpdateInventory(1);
+
             fastObjectListViewInventory.SetObjects(_manager.Items);
 
             MessageBox.Show("Finished recycling items");
