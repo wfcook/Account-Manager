@@ -64,7 +64,7 @@ namespace PokemonGoGUI.UI
 
             foreach (AccountState state in Enum.GetValues(typeof(AccountState)))
             {
-                if(state == AccountState.Good)
+                if(state == AccountState.Good || state == AccountState.Conecting || state == AccountState.HashIssues || state == AccountState.Unknown)
                 {
                     continue;
                 }
