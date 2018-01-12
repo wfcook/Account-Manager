@@ -419,7 +419,7 @@ namespace PokemonGoGUI.UI
             contextMenuStripPokemonDetails.Enabled = false;
 
             await _manager.EvolvePokemon(fastObjectListViewPokemon.SelectedObjects.Cast<PokemonData>());
-            
+
             DisplayDetails();
 
             contextMenuStripPokemonDetails.Enabled = true;
@@ -499,6 +499,7 @@ namespace PokemonGoGUI.UI
             favoriteToolStripMenuItem.Enabled = false;
 
             await _manager.FavoritePokemon(fastObjectListViewPokemon.SelectedObjects.Cast<PokemonData>(), true);
+
             DisplayDetails();
 
             favoriteToolStripMenuItem.Enabled = true;
@@ -514,6 +515,7 @@ namespace PokemonGoGUI.UI
             favoriteToolStripMenuItem.Enabled = false;
 
             await _manager.FavoritePokemon(fastObjectListViewPokemon.SelectedObjects.Cast<PokemonData>(), false);
+
             DisplayDetails();
 
             favoriteToolStripMenuItem.Enabled = true;
@@ -547,8 +549,6 @@ namespace PokemonGoGUI.UI
 
                 await Task.Delay(500);
             }
-
-            //_manager.UpdateInventory(); // <- should not be needed
 
             fastObjectListViewInventory.SetObjects(_manager.Items);
 

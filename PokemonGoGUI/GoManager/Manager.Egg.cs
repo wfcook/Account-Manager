@@ -72,6 +72,10 @@ namespace PokemonGoGUI.GoManager
                 
                 LogCaller(new LoggerEventArgs(String.Format("Incubating egg in {0}. Pokemon Id: {1}", incitem, _egg), LoggerTypes.Incubate));
 
+                //TODO: Need tests
+                UpdateInventory(5);
+                UpdateInventory(6);
+
                 return new MethodResult
                 {
                     Message = "Success",

@@ -67,9 +67,6 @@ namespace PokemonGoGUI.GoManager
 
         public async Task<MethodResult> EvolvePokemon(IEnumerable<PokemonData> pokemonToEvolve)
         {
-            //TODO: revise
-            //return new MethodResult { Message = "Dev mode sorry" };
-
             //Shouldn't happen
             if (pokemonToEvolve == null)
             {
@@ -119,10 +116,12 @@ namespace PokemonGoGUI.GoManager
 
                     await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
 
-                    return new MethodResult
+                    Pokemon.Remove(pokemon);
+                    foreach (var npok in _client.ClientSession.Player.Inventory.InventoryItems)
                     {
-                        Success = true
-                    };
+                        if (npok.InventoryItemData.PokemonData.Id.Equals(EvoleBranch.Pokemon))
+                            Pokemon.Add(npok.InventoryItemData.PokemonData);
+                    }
                 }
                 catch (Exception ex)
                 {

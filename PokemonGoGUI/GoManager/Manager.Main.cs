@@ -452,8 +452,6 @@ namespace PokemonGoGUI.GoManager
                         }
                     }
 
-                    UpdateInventory();
-
                     _failedInventoryReponses = 0;
 
                     if (WaitPaused())
@@ -480,6 +478,8 @@ namespace PokemonGoGUI.GoManager
                         LogCaller(new LoggerEventArgs("Setting default location ...", LoggerTypes.Debug));
 
                         result = await UpdateLocation(new GeoCoordinate(UserSettings.Latitude, UserSettings.Longitude));
+
+                        UpdateInventory(0);
 
                         if (!result.Success)
                         {
@@ -709,7 +709,6 @@ namespace PokemonGoGUI.GoManager
 
                             await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
-
                             if (UserSettings.EvolvePokemon)
                             {
                                 MethodResult evolveResult = await EvolveFilteredPokemon();
@@ -739,12 +738,12 @@ namespace PokemonGoGUI.GoManager
                                     await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
                                 }
                             }
+                        }
 
-                            if (Level > prevLevel)
-                            {
-                                await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
-                                await ClaimLevelUpRewards(Level);
-                            }
+                        if (Level > prevLevel)
+                        {
+                            await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
+                            await ClaimLevelUpRewards(Level);
                         }
 
                         ++pokeStopNumber;

@@ -454,7 +454,7 @@ namespace PokemonGoGUI
 
         private void SessionInventoryUpdate(object sender, EventArgs e)
         {
-            //TODO: review needed here
+            //TODO: review needed here            
             //ClientManager.UpdateInventory(); // <- this line should be the unique line updating the inventory
         }
 

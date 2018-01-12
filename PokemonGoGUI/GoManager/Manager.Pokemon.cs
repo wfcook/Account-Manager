@@ -151,7 +151,6 @@ namespace PokemonGoGUI.GoManager
                 };
             }
 
-
             if (!Pokemon.Any()) {
                 LogCaller(new LoggerEventArgs("You have no pokemon", LoggerTypes.Info));
 
