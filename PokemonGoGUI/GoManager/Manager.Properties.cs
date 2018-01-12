@@ -87,7 +87,7 @@ namespace PokemonGoGUI.GoManager
         public BotState State { get; set; }
 
         [JsonIgnore]
-        public PlayerData PlayerData { get { return  _client?.ClientSession?.Player?.Data; } }
+        public PlayerData PlayerData { get { return _client?.ClientSession?.Player?.Data; } }
 
         [JsonIgnore]
         public List<Log> Logs { get; private set; }

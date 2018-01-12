@@ -739,15 +739,17 @@ namespace PokemonGoGUI.GoManager
                                 }
                             }
 
-                            if (Level > prevLevel)
-                            {
-                                await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
-                                await ClaimLevelUpRewards(Level);
-                            }
-
                             //testes.....
                             if (!_firstRun)
                                 UpdateInventory(0); //all inventory
+                        }
+
+                        UpdateInventory(7);
+
+                        if (Level > prevLevel)
+                        {
+                            await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
+                            await ClaimLevelUpRewards(Level);
                         }
 
                         ++pokeStopNumber;

@@ -27,6 +27,7 @@ namespace PokemonGoGUI.GoManager
         /// <param name="index 4">Load PokemonCandy.</param>
         /// <param name="index 5">Load Incubators.</param>
         /// <param name="index 6">Load Eggs.</param>
+        /// <param name="index 7">Load Stats.</param>
         public void UpdateInventory(int index = 0)
         {
             Dictionary<int, string> ItemsLoaded = new Dictionary<int, string>
@@ -37,7 +38,8 @@ namespace PokemonGoGUI.GoManager
                 {3,  "Load Pokedex."},
                 {4,  "Load PokemonCandy."},
                 {5,  "Load Incubators."},
-                {6,  "Load Eggs."}
+                {6,  "Load Eggs."},
+                {7,  "Load Stats."}
             };
 
             LogCaller(new LoggerEventArgs($"Updating inventory. Items to load: {ItemsLoaded[index]}", LoggerTypes.Info));
@@ -153,6 +155,15 @@ namespace PokemonGoGUI.GoManager
                             {
                                 if (inventoryItem.InventoryItemData.PokemonData.IsEgg)
                                     Eggs.Add(inventoryItem.InventoryItemData.PokemonData);
+                            }
+                        }
+                        break;
+                    case 7:
+                        foreach (var inventoryItem in inventoryItems)
+                        {
+                            if (inventoryItem.InventoryItemData?.PlayerStats != null)
+                            {
+                                Stats = inventoryItem.InventoryItemData.PlayerStats;
                             }
                         }
                         break;

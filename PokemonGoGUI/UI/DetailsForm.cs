@@ -456,10 +456,13 @@ namespace PokemonGoGUI.UI
             }
             else if (tabControlMain.SelectedTab == tabPageCandy)
             {
+                _manager.UpdateInventory(4);
                 fastObjectListViewCandy.SetObjects(_manager.PokemonCandy);
             }
             else if (tabControlMain.SelectedTab == tabPageEggs)
             {
+                _manager.UpdateInventory(5);
+                _manager.UpdateInventory(6);
                 fastObjectListViewEggs.SetObjects(_manager.Eggs);
             }
             else if (tabControlMain.SelectedTab == tabPageInventory)
@@ -468,6 +471,7 @@ namespace PokemonGoGUI.UI
             }
             else if (tabControlMain.SelectedTab == tabPagePokedex)
             {
+                _manager.UpdateInventory(3);
                 fastObjectListViewPokedex.SetObjects(_manager.Pokedex);
             }
             else if (tabControlMain.SelectedTab == tabPageStats)
