@@ -133,7 +133,7 @@ namespace PokemonGoGUI
                     throw new ArgumentException("Login provider must be either \"google\" or \"ptc\".");
             }
 
-            ClientSession = await GetSession(loginProvider, ClientManager.UserSettings.Location.Latitude, ClientManager.UserSettings.Location.Longitude, true);
+            ClientSession = await GetSession(loginProvider, ClientManager.UserSettings.Latitude, ClientManager.UserSettings.Longitude, true);
 
             // Send initial requests and start HeartbeatDispatcher.
             // This makes sure that the initial heartbeat request finishes and the "session.Map.Cells" contains stuff.
@@ -366,7 +366,7 @@ namespace PokemonGoGUI
 
         private void OnAssetDisgestReceived(object sender, List<POGOProtos.Data.AssetDigestEntry> data)
         {
-            var filename = "data/" + ClientManager.UserSettings.DeviceInfo.DeviceId + "_AD.json";
+            var filename = "data/" + ClientManager.UserSettings.DeviceId + "_AD.json";
             if (!Directory.Exists("data"))
                 Directory.CreateDirectory("data");
             try
@@ -383,7 +383,7 @@ namespace PokemonGoGUI
         {
             if (!Directory.Exists("data"))
                 Directory.CreateDirectory("data");
-            var filename = "data/" + ClientManager.UserSettings.DeviceInfo.DeviceId + "_IT.json";
+            var filename = "data/" + ClientManager.UserSettings.DeviceId + "_IT.json";
             try
             {
                 File.WriteAllText(filename, Serializer.ToJson(data));
@@ -398,7 +398,7 @@ namespace PokemonGoGUI
         {
             if (!Directory.Exists("data"))
                 Directory.CreateDirectory("data");
-            var filename = "data/" + ClientManager.UserSettings.DeviceInfo.DeviceId + "_UR.json";
+            var filename = "data/" + ClientManager.UserSettings.DeviceId + "_UR.json";
             try
             {
                 File.WriteAllText(filename, Serializer.ToJson(data));
@@ -413,7 +413,7 @@ namespace PokemonGoGUI
         {
             if (!Directory.Exists("data"))
                 Directory.CreateDirectory("data");
-            var filename = "data/" + ClientManager.UserSettings.DeviceInfo.DeviceId + "_LCV.json";
+            var filename = "data/" + ClientManager.UserSettings.DeviceId + "_LCV.json";
             try
             {
                 File.WriteAllText(filename, Serializer.ToJson(data));
@@ -492,31 +492,28 @@ namespace PokemonGoGUI
                 {"11.2.5", "CFNetwork/893.14.2 Darwin/17.4.0"}
             };
 
-            //TODO: ODD all this message box is null!!!!!!!!!!!!!!! can not set head
-            MessageBox.Show(ClientManager.UserSettings.FirmwareType);
-
             ClientDeviceWrapper = new DeviceWrapper
             {
                 UserAgent = $"pokemongo/1 {Header[ClientManager.UserSettings.FirmwareType]}",
                 DeviceInfo = new DeviceInfo
                 {
-                    DeviceId = ClientManager.UserSettings.DeviceInfo.DeviceId,
-                    DeviceBrand = ClientManager.UserSettings.DeviceInfo.DeviceBrand,
-                    DeviceModel = ClientManager.UserSettings.DeviceInfo.DeviceModel,
-                    DeviceModelBoot = ClientManager.UserSettings.DeviceInfo.DeviceModelBoot,
-                    HardwareManufacturer = ClientManager.UserSettings.DeviceInfo.HardwareManufacturer,
-                    HardwareModel = ClientManager.UserSettings.DeviceInfo.HardwareModel,
-                    FirmwareBrand = ClientManager.UserSettings.DeviceInfo.FirmwareBrand,
-                    FirmwareType = ClientManager.UserSettings.DeviceInfo.FirmwareType
+                    DeviceId = ClientManager.UserSettings.DeviceId,
+                    DeviceBrand = ClientManager.UserSettings.DeviceBrand,
+                    DeviceModel = ClientManager.UserSettings.DeviceModel,
+                    DeviceModelBoot = ClientManager.UserSettings.DeviceModelBoot,
+                    HardwareManufacturer = ClientManager.UserSettings.HardwareManufacturer,
+                    HardwareModel = ClientManager.UserSettings.HardwareModel,
+                    FirmwareBrand = ClientManager.UserSettings.FirmwareBrand,
+                    FirmwareType = ClientManager.UserSettings.FirmwareType
                 },
                 Proxy = Proxy.AsWebProxy()
             };
 
             PlayerLocale = new GetPlayerMessage.Types.PlayerLocale
             {
-                Country = ClientManager.UserSettings.PlayerLocale.Country,
-                Language = ClientManager.UserSettings.PlayerLocale.Language,
-                Timezone = ClientManager.UserSettings.PlayerLocale.Timezone
+                Country = ClientManager.UserSettings.Country,
+                Language = ClientManager.UserSettings.Language,
+                Timezone = ClientManager.UserSettings.TimeZone
             };
         }
 
@@ -569,16 +566,16 @@ namespace PokemonGoGUI
         private void LoadResources(Session session)
         {
             //My files resources here       
-            var filename = "data/" + ClientManager.UserSettings.DeviceInfo.DeviceId + "_IT.json";
+            var filename = "data/" + ClientManager.UserSettings.DeviceId + "_IT.json";
             if (File.Exists(filename))
                 session.Templates.ItemTemplates = Serializer.FromJson<List<DownloadItemTemplatesResponse.Types.ItemTemplate>>(File.ReadAllText(filename));
-            filename = "data/" + ClientManager.UserSettings.DeviceInfo.DeviceId + "_UR.json";
+            filename = "data/" + ClientManager.UserSettings.DeviceId + "_UR.json";
             if (File.Exists(filename))
                 session.Templates.DownloadUrls = Serializer.FromJson<List<DownloadUrlEntry>>(File.ReadAllText(filename));
-            filename = "data/" + ClientManager.UserSettings.DeviceInfo.DeviceId + "_AD.json";
+            filename = "data/" + ClientManager.UserSettings.DeviceId + "_AD.json";
             if (File.Exists(filename))
                 session.Templates.AssetDigests = Serializer.FromJson<List<AssetDigestEntry>>(File.ReadAllText(filename));
-            filename = "data/" + ClientManager.UserSettings.DeviceInfo.DeviceId + "_LCV.json";
+            filename = "data/" + ClientManager.UserSettings.DeviceId + "_LCV.json";
             if (File.Exists(filename))
                 session.Templates.LocalConfigVersion = Serializer.FromJson<DownloadRemoteConfigVersionResponse>(File.ReadAllText(filename));
         }

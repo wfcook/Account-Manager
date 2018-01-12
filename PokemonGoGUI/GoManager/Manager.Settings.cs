@@ -232,25 +232,22 @@ namespace PokemonGoGUI.GoManager
 
                 //new values added 
 
-                //Obsoleted. For retrocompatibility. Remove after of several new versions. (currently 2.21.1.25)
-                if (settings.DeviceInfo == null || string.IsNullOrEmpty(settings.DeviceInfo.DeviceId))
-                {
-                    settings.Location.Latitude = settings.DefaultLatitude;
-                    settings.Location.Longitude = settings.DefaultLongitude;
-                    settings.Location.Altitude = settings.DefaultAltitude;
-                    settings.PlayerLocale.Country = settings.Country;
-                    settings.PlayerLocale.Language = settings.Language;
-                    settings.PlayerLocale.Timezone = settings.TimeZone;
-                    settings.PlayerLocale.POSIX = settings.POSIX;
-                    settings.DeviceInfo.DeviceId = settings.DeviceId;
-                    settings.DeviceInfo.DeviceBrand = settings.DeviceBrand;
-                    settings.DeviceInfo.DeviceModel = settings.DeviceModel;
-                    settings.DeviceInfo.DeviceModelBoot = settings.DeviceModelBoot;
-                    settings.DeviceInfo.HardwareManufacturer = settings.HardwareManufacturer;
-                    settings.DeviceInfo.HardwareModel = settings.HardwareModel;
-                    settings.DeviceInfo.FirmwareBrand = settings.FirmwareBrand;
-                    settings.DeviceInfo.FirmwareType = settings.FirmwareType;
-                }
+                settings.Latitude = settings.Latitude;
+                settings.Longitude = settings.Longitude;
+                settings.Altitude = settings.Altitude;
+                settings.Country = settings.Country;
+                settings.Language = settings.Language;
+                settings.TimeZone = settings.TimeZone;
+                settings.POSIX = settings.POSIX;
+                settings.DeviceId = settings.DeviceId;
+                settings.DeviceBrand = settings.DeviceBrand;
+                settings.DeviceModel = settings.DeviceModel;
+                settings.DeviceModelBoot = settings.DeviceModelBoot;
+                settings.HardwareManufacturer = settings.HardwareManufacturer;
+                settings.HardwareModel = settings.HardwareModel;
+                settings.FirmwareBrand = settings.FirmwareBrand;
+                settings.FirmwareType = settings.FirmwareType;
+
                 foreach (var element in settings.EvolveSettings)
                 {
                     var pokemonSetting = settings.EvolveSettings.FirstOrDefault(x => x.Id == element.Id);
@@ -275,7 +272,7 @@ namespace PokemonGoGUI.GoManager
 
                 UserSettings = settings;
 
-                if (String.IsNullOrEmpty(UserSettings.DeviceInfo.DeviceBrand))
+                if (String.IsNullOrEmpty(UserSettings.DeviceBrand))
                 {
                     UserSettings.RandomizeDevice();
                 }

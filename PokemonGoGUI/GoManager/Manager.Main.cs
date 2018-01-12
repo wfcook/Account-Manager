@@ -480,7 +480,7 @@ namespace PokemonGoGUI.GoManager
                     {
                         LogCaller(new LoggerEventArgs("Setting default location ...", LoggerTypes.Debug));
 
-                        result = await UpdateLocation(new GeoCoordinate(UserSettings.Location.Latitude, UserSettings.Location.Longitude));
+                        result = await UpdateLocation(new GeoCoordinate(UserSettings.Latitude, UserSettings.Longitude));
 
                         if (!result.Success)
                         {

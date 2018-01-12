@@ -19,8 +19,22 @@ namespace PokemonGoGUI
         public string AuthAPIKey { get; set; }
         public Uri HashHost { get; set; }
         public string HashEndpoint { get; set; }
-        public CLocale PlayerLocale  { get; set; } = new CLocale();
-        public CLocation Location { get; set; } = new CLocation();
+
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
+        public double Altitude { get; set; }
+        public string DeviceId { get; set; }
+        public string DeviceBrand { get; set; }
+        public string DeviceModel { get; set; }
+        public string DeviceModelBoot { get; set; }
+        public string HardwareManufacturer { get; set; }
+        public string HardwareModel { get; set; }
+        public string FirmwareBrand { get; set; }
+        public string FirmwareType { get; set; }
+        public string Country { get; set; }
+        public string Language { get; set; }
+        public string TimeZone { get; set; }
+        public string POSIX { get; set; }
 
         public bool AllowManualCaptchaResolve { get; set; }
         public int ManualCaptchaTimeout { get; set; }
@@ -83,8 +97,6 @@ namespace PokemonGoGUI
         public double WalkingSpeedOffset { get; set; }
         //End Humanization
         
-        public CDeviceInfo DeviceInfo { get; set; } = new CDeviceInfo();
-
         public string ProxyIP { get; set; }
         public int ProxyPort { get; set; }
         public string ProxyUsername { get; set; }
@@ -149,7 +161,6 @@ namespace PokemonGoGUI
         {
             GroupName = "Default";
             AuthType = AuthType.Ptc;
-            Location = new CLocation(40.764665, -73.973184, 10);
             MimicWalking = true;
             CatchPokemon = true;
             WalkingSpeed = 7;
@@ -172,10 +183,12 @@ namespace PokemonGoGUI
             HashHost = new Uri("https://pokehash.buddyauth.com/");
             HashEndpoint = "api/v157_5/hash";
             AuthAPIKey = "XXXXXXXXXXXXXXXXXXXX";
-            PlayerLocale.Country = "US";
-            PlayerLocale.Language = "en";
-            PlayerLocale.Timezone = "America/New_York";
-            PlayerLocale.POSIX = "en-us";
+            Latitude = 40.764665;
+            Longitude = -73.973184;
+            Country = "US";
+            Language = "en";
+            TimeZone = "America/New_York";
+            POSIX = "en-us";
             DisableCatchDelay = 8;
             DownloadResources = true;
             AllowManualCaptchaResolve = true;
@@ -263,20 +276,20 @@ namespace PokemonGoGUI
         public void RandomizeDeviceId()
         {
             var device = DeviceInfoUtil.GetRandomDevice();
-            DeviceInfo.DeviceId = device.DeviceInfo.DeviceId;
+            DeviceId = device.DeviceInfo.DeviceId;
         }
         
         public void RandomizeDevice()
         {
             var device = DeviceInfoUtil.GetRandomDevice();
-            DeviceInfo.DeviceId = device.DeviceInfo.DeviceId;
-            DeviceInfo.DeviceBrand = device.DeviceInfo.DeviceBrand;
-            DeviceInfo.DeviceModel = device.DeviceInfo.DeviceModel;
-            DeviceInfo.DeviceModelBoot = device.DeviceInfo.DeviceModelBoot;
-            DeviceInfo.HardwareManufacturer = device.DeviceInfo.HardwareManufacturer;
-            DeviceInfo.HardwareModel = device.DeviceInfo.HardwareModel;
-            DeviceInfo.FirmwareBrand = device.DeviceInfo.FirmwareBrand;
-            DeviceInfo.FirmwareType = device.DeviceInfo.FirmwareType;
+            DeviceId = device.DeviceInfo.DeviceId;
+            DeviceBrand = device.DeviceInfo.DeviceBrand;
+            DeviceModel = device.DeviceInfo.DeviceModel;
+            DeviceModelBoot = device.DeviceInfo.DeviceModelBoot;
+            HardwareManufacturer = device.DeviceInfo.HardwareManufacturer;
+            HardwareModel = device.DeviceInfo.HardwareModel;
+            FirmwareBrand = device.DeviceInfo.FirmwareBrand;
+            FirmwareType = device.DeviceInfo.FirmwareType;
         }
 
         private byte RandomByte()
@@ -287,56 +300,5 @@ namespace PokemonGoGUI
                 return randomBytes.Single();
             }
         }
-        public class CLocation
-        {
-            public CLocation()
-            {
-            
-            }
-            public CLocation(double lat, double lon, int alt)
-            {
-                Latitude = lat;
-                Longitude = lon;
-                Altitude = alt;
-            }
-
-            public double Latitude{ get; set; }
-            public double Longitude{ get; set; }
-            public double Altitude{ get; set; }
-        }
-        public class CDeviceInfo
-        {
-            public string DeviceId{ get; set; }
-            public string DeviceBrand{ get; set; }
-            public string DeviceModel{ get; set; }
-            public string DeviceModelBoot{ get; set; }
-            public string HardwareManufacturer{ get; set; }
-            public string HardwareModel{ get; set; }
-            public string FirmwareBrand{ get; set; }
-            public string FirmwareType{ get; set; }
-        }
-        public class CLocale
-        {
-            public string Country{ get; set; }
-            public string Language{ get; set; }
-            public string Timezone{ get; set; }
-            public string POSIX{ get; set; }
-        }
-        //Obsoleted. For retrocompatibility. Remove after of several new versions. (currently 2.21.1.25)
-        public double DefaultLatitude{ get; set; }
-        public double DefaultLongitude{ get; set; }
-        public double DefaultAltitude{ get; set; }
-        public string DeviceId{ get; set; }
-        public string DeviceBrand{ get; set; }
-        public string DeviceModel{ get; set; }
-        public string DeviceModelBoot{ get; set; }
-        public string HardwareManufacturer{ get; set; }
-        public string HardwareModel{ get; set; }
-        public string FirmwareBrand{ get; set; }
-        public string FirmwareType{ get; set; }
-        public string Country { get; set; }
-        public string Language { get; set; }
-        public string TimeZone { get; set; }
-        public string POSIX { get; set; }             
     }
 }
