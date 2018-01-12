@@ -40,7 +40,7 @@ namespace PokemonGoGUI
         public uint AppVersion;
         public Session ClientSession;
         public bool LoggedIn = false;
-        private GetPlayerMessage.Types.PlayerLocale PlayerLocale;
+        public GetPlayerMessage.Types.PlayerLocale PlayerLocale;
         private DeviceWrapper ClientDeviceWrapper;
         public Manager ClientManager;
 

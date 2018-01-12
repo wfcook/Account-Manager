@@ -23,15 +23,12 @@ namespace PokemonGoGUI.Captcha.Anti_Captcha
                 using (var stream = request.GetRequestStream())
                 {
                     stream.Write(postBody, 0, postBody.Length);
-                    stream.Close();
                 }
 
                 using (var response = (HttpWebResponse) request.GetResponse())
                 {
                     var strreader = new StreamReader(response.GetResponseStream(), Encoding.UTF8);
                     result = JsonConvert.DeserializeObject(strreader.ReadToEnd());
-
-                    response.Close();
                 }
             }
             catch

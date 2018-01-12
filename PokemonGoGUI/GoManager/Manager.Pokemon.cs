@@ -48,7 +48,8 @@ namespace PokemonGoGUI.GoManager
                                 LoggerTypes.Transfer));
 
                             await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
-                            UpdateInventory(); // <- should not be needed
+
+                            Pokemon.Remove(pokemon);
                         }
                         else
                         {
@@ -92,7 +93,9 @@ namespace PokemonGoGUI.GoManager
                             LoggerTypes.Transfer));
 
                         await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
-                        UpdateInventory(); // <- should not be needed
+
+                        foreach (var poktoremove in pokemonsToTransfer)
+                            Pokemon.Remove(poktoremove);
                     }
                     else
                     {

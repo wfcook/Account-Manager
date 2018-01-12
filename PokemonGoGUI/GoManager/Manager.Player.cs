@@ -130,7 +130,7 @@ namespace PokemonGoGUI.GoManager
             }
         }
 
-        public async Task<MethodResult> ClaimLevelUpRewards(int level)
+        private async Task<MethodResult> ClaimLevelUpRewards(int level)
         {
             if (!UserSettings.ClaimLevelUpRewards || level < 2)
             {
@@ -176,7 +176,7 @@ namespace PokemonGoGUI.GoManager
             }
         }
 
-        public async Task<MethodResult<GetBuddyWalkedResponse>> GetBuddyWalked()
+        private async Task<MethodResult<GetBuddyWalkedResponse>> GetBuddyWalked()
         {
             GetBuddyWalkedResponse getBuddyWalkedResponse = null;
 
@@ -209,7 +209,7 @@ namespace PokemonGoGUI.GoManager
                 Success = true
             };
         }
-        public async Task<MethodResult> GetPlayer(bool nobuddy =true, bool noinbox =true)
+        private async Task<MethodResult> GetPlayer(bool nobuddy =true, bool noinbox =true)
         {
 
             try
@@ -227,11 +227,7 @@ namespace PokemonGoGUI.GoManager
                 var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request {
                     RequestType = RequestType.GetPlayer,
                     RequestMessage = new GetPlayerMessage {
-                        PlayerLocale = new GetPlayerMessage.Types.PlayerLocale {
-                            Country = UserSettings.PlayerLocale.Country,
-                            Language = UserSettings.PlayerLocale.Language,
-                            Timezone = UserSettings.PlayerLocale.Timezone
-                        }
+                        PlayerLocale = _client.PlayerLocale
                     }.ToByteString()
                 }, true, nobuddy, noinbox);
 
@@ -250,7 +246,7 @@ namespace PokemonGoGUI.GoManager
                 return new MethodResult();
             }
         }
-        public async Task<MethodResult> GetPlayerProfile()
+        private async Task<MethodResult> GetPlayerProfile()
         {
 
             try

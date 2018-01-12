@@ -2412,7 +2412,7 @@
             this.setUsePinapToolStripMenuItem.Name = "setUsePinapToolStripMenuItem";
             this.setUsePinapToolStripMenuItem.Size = new System.Drawing.Size(193, 24);
             this.setUsePinapToolStripMenuItem.Text = "Toggle Use Pinap";
-            this.setUsePinapToolStripMenuItem.Click += new System.EventHandler(this.setUsePinapToolStripMenuItem_Click);
+            this.setUsePinapToolStripMenuItem.Click += new System.EventHandler(this.SetUsePinapToolStripMenuItem_Click);
             // 
             // tabPageTransfer
             // 

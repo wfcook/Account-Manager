@@ -885,7 +885,7 @@ namespace PokemonGoGUI
                         e.SubItem.ForeColor = Color.Magenta;
                         break;
                     case AccountState.CaptchaReceived:
-                        e.SubItem.ForeColor = Color.Blue;
+                        e.SubItem.ForeColor = Color.Tomato;
                         break;
                     case AccountState.Conecting:
                         e.SubItem.ForeColor = Color.Blue;
@@ -895,6 +895,9 @@ namespace PokemonGoGUI
                         break;
                     case AccountState.Unknown:
                         e.SubItem.ForeColor = Color.Cyan;
+                        break;
+                    case AccountState.TemporalBan:
+                        e.SubItem.ForeColor = Color.Yellow;
                         break;
                 }
             }

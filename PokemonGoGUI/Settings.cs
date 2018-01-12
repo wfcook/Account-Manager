@@ -19,8 +19,8 @@ namespace PokemonGoGUI
         public string AuthAPIKey { get; set; }
         public Uri HashHost { get; set; }
         public string HashEndpoint { get; set; }
-        public cLocale PlayerLocale  { get; set; } = new cLocale();
-        public cLocation Location { get; set; } = new cLocation();
+        public CLocale PlayerLocale  { get; set; } = new CLocale();
+        public CLocation Location { get; set; } = new CLocation();
 
         public bool AllowManualCaptchaResolve { get; set; }
         public int ManualCaptchaTimeout { get; set; }
@@ -83,7 +83,7 @@ namespace PokemonGoGUI
         public double WalkingSpeedOffset { get; set; }
         //End Humanization
         
-        public cDeviceInfo DeviceInfo { get; set; } = new cDeviceInfo();
+        public CDeviceInfo DeviceInfo { get; set; } = new CDeviceInfo();
 
         public string ProxyIP { get; set; }
         public int ProxyPort { get; set; }
@@ -94,60 +94,18 @@ namespace PokemonGoGUI
 
         public bool StopOnIPBan { get; set; }
         public int MaxFailBeforeReset { get; set; }
+        public bool UseBerries { get; set; }
+        public bool OnlyUnlimitedIncubator { get; set; }
+        public bool TransferSlashPokemons { get; set; }
+        public bool ShufflePokestops { get; set; }
+        public bool GetArBonus { get; set; }
+        public decimal ARBonusProximity { get; set; }
+        public decimal ARBonusAwareness { get; set; }
+        public bool CompleteTutorial { get; set; }
+        public bool TransferAtOnce { get; set; }
+        public bool ShowDebugLogs { get; set; }        
+        public bool DownloadResources { get; set; }
 
-        public bool UseBerries {
-            get;
-            set;
-        }
-
-        public bool OnlyUnlimitedIncubator {
-            get;
-            set;
-        }
-
-        public bool TransferSlashPokemons {
-            get;
-            set;
-        }
-
-        public bool ShufflePokestops {
-            get;
-            set;
-        }
-
-        public bool GetArBonus {
-            get;
-            set;
-        }
-
-        public decimal ARBonusProximity {
-            get;
-            set;
-        }
-
-        public decimal ARBonusAwareness {
-            get;
-            set;
-        }
-
-        public bool CompleteTutorial {
-            get;
-            set;
-        }
-
-        public bool TransferAtOnce {
-            get;
-            set;
-        }
-
-        public bool ShowDebugLogs {
-            get;
-            set;
-        }
-        public bool DownloadResources {
-            get;
-            set;
-        }
         public AccountState StopAtMinAccountState { get; set; }
 
         public ProxyEx Proxy {
@@ -191,7 +149,7 @@ namespace PokemonGoGUI
         {
             GroupName = "Default";
             AuthType = AuthType.Ptc;
-            Location = new cLocation(40.764665, -73.973184, 10);
+            Location = new CLocation(40.764665, -73.973184, 10);
             MimicWalking = true;
             CatchPokemon = true;
             WalkingSpeed = 7;
@@ -329,13 +287,13 @@ namespace PokemonGoGUI
                 return randomBytes.Single();
             }
         }
-        public class cLocation
+        public class CLocation
         {
-            public cLocation()
+            public CLocation()
             {
             
             }
-            public cLocation(double lat, double lon, int alt)
+            public CLocation(double lat, double lon, int alt)
             {
                 Latitude = lat;
                 Longitude = lon;
@@ -346,7 +304,7 @@ namespace PokemonGoGUI
             public double Longitude{ get; set; }
             public double Altitude{ get; set; }
         }
-        public class cDeviceInfo
+        public class CDeviceInfo
         {
             public string DeviceId{ get; set; }
             public string DeviceBrand{ get; set; }
@@ -357,7 +315,7 @@ namespace PokemonGoGUI
             public string FirmwareBrand{ get; set; }
             public string FirmwareType{ get; set; }
         }
-        public class cLocale
+        public class CLocale
         {
             public string Country{ get; set; }
             public string Language{ get; set; }
