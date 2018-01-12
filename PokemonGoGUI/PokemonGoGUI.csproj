@@ -98,7 +98,7 @@
     <StartupObject>PokemonGoGUI.Program</StartupObject>
   </PropertyGroup>
   <PropertyGroup>
-    <SignManifests>true</SignManifests>
+    <SignManifests>false</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestCertificateThumbprint>4519BD50F3C36151D1DA1BD3F5F2B17C051A2B26</ManifestCertificateThumbprint>
