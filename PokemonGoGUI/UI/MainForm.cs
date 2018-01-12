@@ -241,29 +241,25 @@ namespace PokemonGoGUI
                             tmpMan.UserSettings.DeviceInfo.FirmwareBrand = tmpMan.UserSettings.FirmwareBrand;
                             tmpMan.UserSettings.DeviceInfo.FirmwareType = tmpMan.UserSettings.FirmwareType;
                         }
-                        if (tmpMan.UserSettings.PokemonSettings == null)
+                        foreach (var element in tmpMan.UserSettings.EvolveSettings)
                         {
-                            tmpMan.UserSettings.PokemonSettings = tmpMan.UserSettings.CatchSettings;
-                            foreach (var element in tmpMan.UserSettings.EvolveSettings)
+                            var pokemonSetting = tmpMan.UserSettings.EvolveSettings.FirstOrDefault(x => x.Id == element.Id);
+                            if (pokemonSetting != null)
                             {
-                                var pokemonSetting = tmpMan.UserSettings.PokemonSettings.FirstOrDefault(x => x.Id == element.Id);
-                                if (pokemonSetting != null)
-                                {
-                                    pokemonSetting.Evolve = element.Evolve;
-                                    pokemonSetting.MinEvolveCP = element.MinCP;
-                                }
+                                pokemonSetting.Evolve = element.Evolve;
+                                pokemonSetting.MinCP = element.MinCP;
                             }
-                            foreach (var element in tmpMan.UserSettings.TransferSettings)
+                        }
+                        foreach (var element in tmpMan.UserSettings.TransferSettings)
+                        {
+                            var pokemonSetting = tmpMan.UserSettings.TransferSettings.FirstOrDefault(x => x.Id == element.Id);
+                            if (pokemonSetting != null)
                             {
-                                var pokemonSetting = tmpMan.UserSettings.PokemonSettings.FirstOrDefault(x => x.Id == element.Id);
-                                if (pokemonSetting != null)
-                                {
-                                    pokemonSetting.Transfer = element.Transfer;
-                                    pokemonSetting.MinTransferCP = element.MinCP;
-                                    pokemonSetting.IVPercent = element.IVPercent;
-                                    pokemonSetting.KeepMax = element.KeepMax;
-                                    pokemonSetting.TransferType = element.Type;
-                                }
+                                pokemonSetting.Transfer = element.Transfer;
+                                pokemonSetting.MinCP = element.MinCP;
+                                pokemonSetting.IVPercent = element.IVPercent;
+                                pokemonSetting.KeepMax = element.KeepMax;
+                                pokemonSetting.Type = element.Type;
                             }
                         }
                     }

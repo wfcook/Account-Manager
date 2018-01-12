@@ -231,9 +231,9 @@ namespace PokemonGoGUI.GoManager
                 settings.GroupName = UserSettings.GroupName;
 
                 //new values added 
-                
+
                 //Obsoleted. For retrocompatibility. Remove after of several new versions. (currently 2.21.1.25)
-                if (settings.DeviceInfo == null || string.IsNullOrEmpty(settings.DeviceInfo.DeviceId) )
+                if (settings.DeviceInfo == null || string.IsNullOrEmpty(settings.DeviceInfo.DeviceId))
                 {
                     settings.Location.Latitude = settings.DefaultLatitude;
                     settings.Location.Longitude = settings.DefaultLongitude;
@@ -250,25 +250,26 @@ namespace PokemonGoGUI.GoManager
                     settings.DeviceInfo.HardwareModel = settings.HardwareModel;
                     settings.DeviceInfo.FirmwareBrand = settings.FirmwareBrand;
                     settings.DeviceInfo.FirmwareType = settings.FirmwareType;
-                    settings.PokemonSettings = settings.CatchSettings;
                 }
-                if (settings.PokemonSettings==null){
-                    foreach (var element in settings.EvolveSettings) {
-                        var pokemonSetting = settings.PokemonSettings.FirstOrDefault(x=>x.Id == element.Id);
-                        if (pokemonSetting!=null){
-                            pokemonSetting.Evolve = element.Evolve;
-                            pokemonSetting.MinEvolveCP = element.MinCP;
-                        }
+                foreach (var element in settings.EvolveSettings)
+                {
+                    var pokemonSetting = settings.EvolveSettings.FirstOrDefault(x => x.Id == element.Id);
+                    if (pokemonSetting != null)
+                    {
+                        pokemonSetting.Evolve = element.Evolve;
+                        pokemonSetting.MinCP = element.MinCP;
                     }
-                    foreach (var element in settings.TransferSettings) {
-                        var pokemonSetting = settings.PokemonSettings.FirstOrDefault(x=>x.Id == element.Id);
-                        if (pokemonSetting!=null){
-                            pokemonSetting.Transfer = element.Transfer;
-                            pokemonSetting.MinTransferCP = element.MinCP;
-                            pokemonSetting.IVPercent = element.IVPercent;
-                            pokemonSetting.KeepMax = element.KeepMax;
-                            pokemonSetting.TransferType = element.Type;
-                        }
+                }
+                foreach (var element in settings.TransferSettings)
+                {
+                    var pokemonSetting = settings.TransferSettings.FirstOrDefault(x => x.Id == element.Id);
+                    if (pokemonSetting != null)
+                    {
+                        pokemonSetting.Transfer = element.Transfer;
+                        pokemonSetting.MinCP = element.MinCP;
+                        pokemonSetting.IVPercent = element.IVPercent;
+                        pokemonSetting.KeepMax = element.KeepMax;
+                        pokemonSetting.Type = element.Type;
                     }
                 }
 
@@ -287,7 +288,7 @@ namespace PokemonGoGUI.GoManager
                     Success = true
                 };
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 string message = String.Format("Failed to import config. Ex: {0}", ex.Message);
 

@@ -163,7 +163,7 @@ namespace PokemonGoGUI.GoManager
 
             foreach (IGrouping<PokemonId, PokemonData> group in groupedPokemon)
             {
-                CatchSetting settings = UserSettings.PokemonSettings.FirstOrDefault(x => x.Id == group.Key);
+                TransferSetting settings = UserSettings.TransferSettings.FirstOrDefault(x => x.Id == group.Key);
 
                 if (settings == null)
                 {
@@ -177,13 +177,13 @@ namespace PokemonGoGUI.GoManager
                     continue;
                 }
 
-                switch (settings.TransferType)
+                switch (settings.Type)
                 {
                     case TransferType.All:
                         pokemonToTransfer.AddRange(group.ToList());
                         break;
                     case TransferType.BelowCP:
-                        pokemonToTransfer.AddRange(GetPokemonBelowCP(group, settings.MinTransferCP));
+                        pokemonToTransfer.AddRange(GetPokemonBelowCP(group, settings.MinCP));
                         break;
                     case TransferType.BelowIVPercentage:
                         pokemonToTransfer.AddRange(GetPokemonBelowIVPercent(group, settings.IVPercent));
@@ -198,11 +198,11 @@ namespace PokemonGoGUI.GoManager
                         pokemonToTransfer.AddRange(GetPokemonByIV(group, settings.KeepMax));
                         break;
                     case TransferType.BelowCPAndIVAmount:
-                        pokemonToTransfer.AddRange(GetPokemonBelowCPIVAmount(group, settings.MinTransferCP, settings.IVPercent));
+                        pokemonToTransfer.AddRange(GetPokemonBelowCPIVAmount(group, settings.MinCP, settings.IVPercent));
                         break;
                     case TransferType.BelowCPOrIVAmount:
                         pokemonToTransfer.AddRange(GetPokemonBelowIVPercent(group, settings.IVPercent));
-                        pokemonToTransfer.AddRange(GetPokemonBelowCP(group, settings.MinTransferCP));
+                        pokemonToTransfer.AddRange(GetPokemonBelowCP(group, settings.MinCP));
                         pokemonToTransfer = pokemonToTransfer.DistinctBy(x => x.Id).ToList();
                         break;
                     case TransferType.Slashed:
