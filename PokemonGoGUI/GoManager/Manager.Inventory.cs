@@ -168,6 +168,12 @@ namespace PokemonGoGUI.GoManager
 
         public async Task<MethodResult> RecycleFilteredItems()
         {
+            if (Items.Count == 0)
+                return new MethodResult
+                {
+                    Message = "Not items here...."
+                };
+
             if (!UserSettings.RecycleItems)
             {
                 return new MethodResult
@@ -175,7 +181,6 @@ namespace PokemonGoGUI.GoManager
                     Message = "Item deletion not enabled"
                 };
             }
-
 
             foreach (ItemData item in Items)
             {

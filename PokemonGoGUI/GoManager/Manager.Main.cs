@@ -738,12 +738,16 @@ namespace PokemonGoGUI.GoManager
                                     await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
                                 }
                             }
-                        }
 
-                        if (Level > prevLevel)
-                        {
-                            await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
-                            await ClaimLevelUpRewards(Level);
+                            if (Level > prevLevel)
+                            {
+                                await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
+                                await ClaimLevelUpRewards(Level);
+                            }
+
+                            //testes.....
+                            if (!_firstRun)
+                                UpdateInventory(0); //all inventory
                         }
 
                         ++pokeStopNumber;
@@ -818,6 +822,7 @@ namespace PokemonGoGUI.GoManager
             }
 
             IsRunning = false;
+            _firstRun = false;
         }
 
         /*

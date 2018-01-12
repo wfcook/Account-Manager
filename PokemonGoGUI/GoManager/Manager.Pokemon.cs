@@ -82,8 +82,19 @@ namespace PokemonGoGUI.GoManager
                     });
 
                     ReleasePokemonResponse releasePokemonResponse = null;
-
-                    releasePokemonResponse = ReleasePokemonResponse.Parser.ParseFrom(response);
+                    //evites crash
+                    try
+                    {
+                        releasePokemonResponse = ReleasePokemonResponse.Parser.ParseFrom(response);
+                    }
+                    catch (Exception ex)
+                    {
+                        LogCaller(new LoggerEventArgs("Faill release pokemon", LoggerTypes.Exception, ex));
+                        return new MethodResult
+                        {
+                            Message = "Faill transfert."
+                        };
+                    }
                     if (releasePokemonResponse.Result == ReleasePokemonResponse.Types.Result.Success)
                     {
                         LogCaller(new LoggerEventArgs(
