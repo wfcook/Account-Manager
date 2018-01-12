@@ -126,6 +126,10 @@ namespace PokemonGoGUI.GoManager
                 catch (Exception ex)
                 {
                     LogCaller(new LoggerEventArgs("Evolve request failed", LoggerTypes.Exception, ex));
+
+                    //if bug reload all test...
+                    UpdateInventory(0);
+
                     return new MethodResult();
                 }
             }

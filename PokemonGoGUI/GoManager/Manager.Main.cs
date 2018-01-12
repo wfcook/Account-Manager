@@ -774,12 +774,12 @@ namespace PokemonGoGUI.GoManager
                 {
                     AccountState = AccountState.HashIssues;
                     LogCaller(new LoggerEventArgs("Hash service exception occured. Restarting ...", LoggerTypes.Exception, ex));
+                    _firstRun = true;
                 }
                 catch (Exception ex)
                 {
                     LogCaller(new LoggerEventArgs("Unknown exception occured. Restarting ...", LoggerTypes.Exception, ex));
-                    //LogCaller(new LoggerEventArgs("Unknown exception occured. Stopping ...", LoggerTypes.Exception, ex));
-                    //Stop();
+                    _firstRun = true;
                 }
 
                 #endregion

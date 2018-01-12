@@ -171,9 +171,8 @@ namespace PokemonGoGUI.GoManager
             }
             catch (Exception ex1)
             {
-                AccountState = Enums.AccountState.TemporalBan;
                 LogCaller(new LoggerEventArgs(String.Format("Failed updating inventory."), LoggerTypes.Debug, ex1));
-                Stop();
+                ++_failedInventoryReponses;
             }
         }
 
@@ -258,6 +257,9 @@ namespace PokemonGoGUI.GoManager
             catch (Exception ex)
             {
                 LogCaller(new LoggerEventArgs(String.Format("Failed to recycle iventory item {0}", itemSetting.FriendlyName), LoggerTypes.Warning, ex));
+
+                //if bug reload all test...
+                UpdateInventory(0);
 
                 return new MethodResult();
             }

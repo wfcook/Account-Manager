@@ -62,6 +62,9 @@ namespace PokemonGoGUI.GoManager
                     {
                         LogCaller(new LoggerEventArgs("ReleasePokemonResponse parsing failed because response was empty", LoggerTypes.Exception, ex));
 
+                        //if bug reload all test...
+                        UpdateInventory(0);
+
                         return new MethodResult();
                     }
                 }
@@ -90,6 +93,10 @@ namespace PokemonGoGUI.GoManager
                     catch (Exception ex)
                     {
                         LogCaller(new LoggerEventArgs("Faill release pokemon", LoggerTypes.Exception, ex));
+
+                        //if bug reload all test...
+                        UpdateInventory(0);
+
                         return new MethodResult
                         {
                             Message = "Faill transfert."
@@ -117,6 +124,9 @@ namespace PokemonGoGUI.GoManager
                 catch (Exception ex)
                 {
                     LogCaller(new LoggerEventArgs("ReleasePokemonResponse parsing failed because response was empty", LoggerTypes.Exception, ex));
+                    
+                    //if bug reload all test...
+                    UpdateInventory(0);
 
                     return new MethodResult();
                 }
