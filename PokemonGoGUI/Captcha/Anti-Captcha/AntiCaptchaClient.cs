@@ -20,7 +20,7 @@ namespace PokemonGoGUI.Captcha.Anti_Captcha
 
 
         public static async Task<string> SolveCaptcha(string captchaURL, string apiKey, string googleSiteKey,
-            string proxyHost, int proxyPort, string proxyAccount = "", string proxyPassword = "", Manager manager = null)
+            string proxyHost, int proxyPort, string proxyAccount = "", string proxyPassword = "", Client client = null)
         {
             var task1 = AnticaptchaApiWrapper.CreateNoCaptchaTaskProxyless(
                 Host,
@@ -30,10 +30,10 @@ namespace PokemonGoGUI.Captcha.Anti_Captcha
                 "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.106 Safari/537.36"
             );
 
-            return await ProcessTask(task1, apiKey, manager).ConfigureAwait(false);
+            return await ProcessTask(task1, apiKey, client);
         }
 
-        private static async Task<string> ProcessTask(AnticaptchaTask task, string apikey, Manager manager)
+        private static async Task<string> ProcessTask(AnticaptchaTask task, string apikey, Client client)
         {
             AnticaptchaResult response;
 
@@ -46,12 +46,12 @@ namespace PokemonGoGUI.Captcha.Anti_Captcha
                     break;
                 }
 
-                await Task.Delay(3000).ConfigureAwait(false);
+                await Task.Delay(3000);
             } while (response != null && response.GetStatus().Equals(AnticaptchaResult.Status.processing));
 
             if (response == null || response.GetSolution() == null)
             {
-                manager.LogCaller(new LoggerEventArgs("Unknown error occurred...", LoggerTypes.FatalError));
+                client.ClientManager.LogCaller(new LoggerEventArgs("Unknown error occurred...", LoggerTypes.FatalError));
                 //Console.WriteLine("Response dump:");
                 //Console.WriteLine(response);
             }

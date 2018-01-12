@@ -25,7 +25,7 @@ namespace PokemonGoGUI.Captcha
         /// <param name="proxyType">The type of proxy used</param>
         /// <param name="result">If solving was successful this contains the answer</param>
         /// <returns>Returns true if solving was successful, otherwise false</returns>
-        public async Task<string> SolveRecaptchaV2(string googleKey, string pageUrl, string proxy, ProxyType proxyType, Manager manager)
+        public async Task<string> SolveRecaptchaV2(string googleKey, string pageUrl, string proxy, ProxyType proxyType, Client client)
         {
             string requestUrl = "http://2captcha.com/in.php?key=" + APIKey + "&method=userrecaptcha&googlekey=" + googleKey + "&pageurl=" + pageUrl + "&proxy=" + proxy + "&proxytype=";
 
@@ -63,7 +63,7 @@ namespace PokemonGoGUI.Captcha
                         if (response.Substring(0, 3) == "OK|")
                         {
                             string captchaID = response.Remove(0, 3);
-                            manager.LogCaller(new LoggerEventArgs($"Captcha has been sent to 2Captcha, Your captcha ID :  {captchaID}", LoggerTypes.Info));
+                            client.ClientManager.LogCaller(new LoggerEventArgs($"Captcha has been sent to 2Captcha, Your captcha ID :  {captchaID}", LoggerTypes.Info));
 
                             for (int i = 0; i < 29; i++)
                             {
@@ -89,7 +89,7 @@ namespace PokemonGoGUI.Captcha
                                             return string.Empty;
                                         }
                                     }
-                                    manager.LogCaller(new LoggerEventArgs($"Waiting response captcha from 2Captcha workers...", LoggerTypes.Info));
+                                    client.ClientManager.LogCaller(new LoggerEventArgs($"Waiting response captcha from 2Captcha workers...", LoggerTypes.Info));
                                 }
 
                                 await Task.Delay(3000);
@@ -101,7 +101,7 @@ namespace PokemonGoGUI.Captcha
             }
             catch (Exception ex)
             {
-                manager.LogCaller(new LoggerEventArgs($"2Captcha Error :  {ex.Message}", LoggerTypes.Exception));
+                client.ClientManager.LogCaller(new LoggerEventArgs($"2Captcha Error", LoggerTypes.Exception, ex));
             }
             return string.Empty;
         }

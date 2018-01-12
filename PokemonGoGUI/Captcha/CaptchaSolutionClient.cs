@@ -29,11 +29,11 @@ namespace PokemonGoGUI.Captcha
             Timeout = timeout;
         }
 
-        public async Task<string> ResolveCaptcha(string googleSiteKey, string captchaUrl, Manager manager)
+        public async Task<string> ResolveCaptcha(string googleSiteKey, string captchaUrl, Client client)
         {
             if (string.IsNullOrEmpty(APIKey) || string.IsNullOrEmpty(APISecret))
             {
-                manager.LogCaller(new LoggerEventArgs(
+                client.ClientManager.LogCaller(new LoggerEventArgs(
                     $"(CAPTCHA) - CaptchaSolutions API key or API Secret  not setup properly.",
                     LoggerTypes.FatalError));
 
@@ -46,28 +46,28 @@ namespace PokemonGoGUI.Captcha
             //content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/x-www-form-urlencoded");
             //string url = "http://api.captchasolutions.com/solve?p=nocaptcha&googlekey=6Le-wvkSAAAAAPBMRTvw0Q4Muexq9bi0DJwx_mJ-&pageurl=https://www.google.com/recaptcha/api2/demo&key=dcbeece13cb658697f7e39264603fc70&secret=fb14ac29&out=json";
             var url = $"{API_ENDPOINT}{contentstring}";
-            using (HttpClient client = new HttpClient())
+            using (HttpClient _client = new HttpClient())
             {
-                client.Timeout = TimeSpan.FromSeconds(Timeout);
+                _client.Timeout = TimeSpan.FromSeconds(Timeout);
 
                 try
                 {
-                    var responseContent = await client.GetAsync(url).ConfigureAwait(false);
+                    var responseContent = await _client.GetAsync(url);
                     if (responseContent.StatusCode != HttpStatusCode.OK)
                     {
-                        manager.LogCaller(new LoggerEventArgs(
+                        client.ClientManager.LogCaller(new LoggerEventArgs(
                              $"(CAPTCHA) - Could not connect to solution captcha, please check your API config",
                            LoggerTypes.FatalError)
                         );
                         return string.Empty;
                     }
-                    var responseJSON = await responseContent.Content.ReadAsStringAsync().ConfigureAwait(false);
+                    var responseJSON = await responseContent.Content.ReadAsStringAsync();
                     var response = JsonConvert.DeserializeObject<APIObjectResponse>(responseJSON);
                     return response.Captchasolutions;
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    manager.LogCaller(new LoggerEventArgs($"(CAPTCHA) - An Error has occurred when solving captcha with Captcha Solutions", LoggerTypes.Exception));
+                    client.ClientManager.LogCaller(new LoggerEventArgs($"(CAPTCHA) - An Error has occurred when solving captcha with Captcha Solutions", LoggerTypes.Exception, ex));
                 }
             }
             return string.Empty;

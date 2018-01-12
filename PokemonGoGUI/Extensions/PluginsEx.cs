@@ -94,7 +94,7 @@ namespace PokemonGoGUI.Extensions
                         }
                     }
                 }
-            }).ConfigureAwait(false);
+            });
             this.UpdateStatus("Loading plugin data ...", 95);
             if (this.ExportModel.Managers == null)
             {
@@ -102,7 +102,7 @@ namespace PokemonGoGUI.Extensions
             }
             foreach (IPlugin plugin3 in this.ExportModel.Plugins)
             {
-                await plugin3.Load(this.ExportModel.Managers).ConfigureAwait(false);
+                await plugin3.Load(this.ExportModel.Managers);
             }
         }
 

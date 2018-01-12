@@ -440,13 +440,16 @@ namespace PokemonGoGUI
 
         public async void SessionOnCaptchaReceived(object sender, CaptchaEventArgs e)
         {
+            AccountState accountState = ClientManager.AccountState;
+            ClientManager.AccountState = AccountState.CaptchaReceived;
             ClientManager.LogCaller(new LoggerEventArgs("Captcha ceceived.", LoggerTypes.Warning));
-            var resolved = await CaptchaManager.SolveCaptcha(ClientManager, e.CaptchaUrl.ToString());
+            var resolved = await CaptchaManager.SolveCaptcha(this, e.CaptchaUrl.ToString());
             if (!resolved)
             {
-                ClientManager.AccountState = AccountState.CaptchaReceived;
                 ClientManager.Stop();
+                return;
             }
+            ClientManager.AccountState = accountState;
         }
 
         private void SessionInventoryUpdate(object sender, EventArgs e)
