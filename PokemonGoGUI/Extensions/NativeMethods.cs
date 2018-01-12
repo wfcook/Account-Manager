@@ -124,7 +124,8 @@ namespace PokemonGoGUI.Extensions
         {
             if (hWnd != IntPtr.Zero)
             {
-                NativeMethods.ShowWindow(hWnd, (int)SW_SHOWNA); // 8 = SW_SHOWNA
+                NativeMethods.ShowWindow(hWnd, (int)SW_SHOWNA);      // 8 = SW_SHOWNA
+                NativeMethods.ShowWindow(hWnd, (int)SW_SHOWNORMAL);  // 1 = SW_SHOWNORMAL
             }
         }
     }

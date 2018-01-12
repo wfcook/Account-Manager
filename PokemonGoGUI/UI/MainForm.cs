@@ -2354,6 +2354,5 @@ namespace PokemonGoGUI
             }
         }
         #endregion
-
     }
 }
