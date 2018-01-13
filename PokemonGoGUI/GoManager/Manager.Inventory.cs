@@ -178,7 +178,7 @@ namespace PokemonGoGUI.GoManager
 
         public async Task<MethodResult> RecycleFilteredItems()
         {
-            if (Items.Count == 0)
+            if (Items.Count == 0 || Items == null)
                 return new MethodResult
                 {
                     Message = "Not items here...."

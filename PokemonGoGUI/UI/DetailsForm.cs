@@ -430,19 +430,6 @@ namespace PokemonGoGUI.UI
             MessageBox.Show("Finished evolving pokemon");
         }
 
-        private void ContextMenuStripPokemonDetails_Opening(object sender, CancelEventArgs e)
-        {
-            /*
-            if(_manager.IsRunning)
-            {
-                contextMenuStripPokemonDetails.Enabled = false;
-            }
-            else
-            {
-                contextMenuStripPokemonDetails.Enabled = true;
-            }*/
-        }
-
         private void TabControlMain_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (tabControlMain.SelectedTab == tabPageLogs)
@@ -452,6 +439,9 @@ namespace PokemonGoGUI.UI
             }
             else if (tabControlMain.SelectedTab == tabPagePokemon)
             {
+                //list not ok if refresh..
+                //if tranfer pok and select tab pok is in... delay pogolib maybe...
+                //_manager.UpdateInventory(2);
                 fastObjectListViewPokemon.SetObjects(_manager.Pokemon);
             }
             else if (tabControlMain.SelectedTab == tabPageCandy)
@@ -467,6 +457,7 @@ namespace PokemonGoGUI.UI
             }
             else if (tabControlMain.SelectedTab == tabPageInventory)
             {
+                _manager.UpdateInventory(1);
                 fastObjectListViewInventory.SetObjects(_manager.Items);
             }
             else if (tabControlMain.SelectedTab == tabPagePokedex)
@@ -476,6 +467,7 @@ namespace PokemonGoGUI.UI
             }
             else if (tabControlMain.SelectedTab == tabPageStats)
             {
+                _manager.UpdateInventory(7);
                 DisplayDetails();
             }
         }
@@ -525,7 +517,6 @@ namespace PokemonGoGUI.UI
             fastObjectListViewPokemon.SetObjects(_manager.Pokemon);
 
             MessageBox.Show("Finished favoriting pokemon");
-
         }
 
         private async void SetUnfavoriteToolStripMenuItem_Click(object sender, EventArgs e)
@@ -541,7 +532,6 @@ namespace PokemonGoGUI.UI
             fastObjectListViewPokemon.SetObjects(_manager.Pokemon);
 
             MessageBox.Show("Finished unfavoriting pokemon");
-
         }
 
         private async void RecycleToolStripMenuItem_Click(object sender, EventArgs e)
