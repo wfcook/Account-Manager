@@ -19,8 +19,6 @@ namespace PokemonGoGUI.GoManager
 {
     public partial class Manager
     {
-        //private  IEnumerable<InventoryItem> InventoryItems => _client?.ClientSession?.Player?.Inventory?.InventoryItems;
-        //public event OnInventoryUpdateHandler OnInventoryUpdated;
         private ConcurrentDictionary<string, InventoryItem> InventoryItems = new ConcurrentDictionary<string, InventoryItem>();
 
         private string GetInventoryItemHashKey(InventoryItem item)
@@ -248,7 +246,7 @@ namespace PokemonGoGUI.GoManager
             foreach (var x in _client.ClientSession.Player.Inventory.InventoryItems)
                 AddRemoveOrUpdateItem(x);
 
-            LogCaller(new LoggerEventArgs($"Updating inventory. Items to load: {ItemsLoaded[index]}", LoggerTypes.Info));
+            LogCaller(new LoggerEventArgs($"Updating inventory. Items to load: {ItemsLoaded[index]}", LoggerTypes.Debug));
 
             try
             {
