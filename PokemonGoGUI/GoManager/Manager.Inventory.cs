@@ -124,7 +124,7 @@ namespace PokemonGoGUI.GoManager
                 .Where(p => p != null && p.PokemonId > 0);
         }
 
-        private IEnumerable<Candy> GetCandys()
+        private IEnumerable<Candy> GetCandies()
         {
             return InventoryItems
                 .Select(kvp => kvp.Value.InventoryItemData?.Candy)
@@ -262,7 +262,7 @@ namespace PokemonGoGUI.GoManager
                         Stats = GetPlayerStats().FirstOrDefault();
                         Items = GetItemsData().ToList();
                         Pokedex = GetPokedex().ToList();
-                        PokemonCandy = GetCandys().ToList();
+                        PokemonCandy = GetCandies().ToList();
                         Incubators = GetIncubators().ToList();
                         Eggs = GetEggs().ToList();
                         Pokemon = GetPokemons().ToList();
@@ -281,7 +281,7 @@ namespace PokemonGoGUI.GoManager
                         break;
                     case 4:
                         PokemonCandy.Clear();
-                        PokemonCandy = GetCandys().ToList();
+                        PokemonCandy = GetCandies().ToList();
                         break;
                     case 5:
                         Incubators.Clear();
