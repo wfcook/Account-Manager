@@ -231,6 +231,9 @@ namespace PokemonGoGUI.GoManager
         /// <param name="index 7">Load Stats.</param>
         public void UpdateInventory(int index = 0)
         {
+            if (!_client.LoggedIn)
+                return;
+
             Dictionary<int, string> ItemsLoaded = new Dictionary<int, string>
             {
                 {0,  "Load All."},
