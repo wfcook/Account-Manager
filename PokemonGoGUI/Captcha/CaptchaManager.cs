@@ -162,7 +162,7 @@ namespace PokemonGoGUI.Captcha
                     {
                         //DebugRequest = 
                     }.ToByteString()
-                }, true, false, true);
+                }, false);
 
 
                 return CheckChallengeResponse.Parser.ParseFrom(response).ChallengeUrl;
@@ -196,7 +196,7 @@ namespace PokemonGoGUI.Captcha
                     {
                         Token = captchaResponse
                     }.ToByteString()
-                }, true, false, true);
+                }, false);
 
                 var verifyChallengeResponse = VerifyChallengeResponse.Parser.ParseFrom(response);
 
