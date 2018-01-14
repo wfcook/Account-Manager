@@ -21,7 +21,7 @@ namespace PokemonGoGUI.GoManager
     {
         public async Task<MethodResult> TransferPokemon(IEnumerable<PokemonData> pokemonsToTransfer)
         {
-            var pokemonToTransfer = pokemonsToTransfer.Where(x => x.Favorite != 1 && !x.IsEgg && string.IsNullOrEmpty(x.DeployedFortId) && x.Id != PlayerData.BuddyPokemon?.Id);
+            var pokemonToTransfer = pokemonsToTransfer.Where(x => x.Favorite != 1 && !x.IsEgg && string.IsNullOrEmpty(x.DeployedFortId) && x.Id != PlayerData.BuddyPokemon?.Id && x != null);
 
             if (pokemonsToTransfer.Count() < 1)
                 return new MethodResult();
@@ -53,7 +53,8 @@ namespace PokemonGoGUI.GoManager
 
                                 await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
 
-                                Pokemon.Remove(pokemon);
+                                RemoveInventoryItem(GetPokemonHashKey(pokemon.Id));
+
                                 continue;
                             case ReleasePokemonResponse.Types.Result.ErrorPokemonIsBuddy:
                                 LogCaller(new LoggerEventArgs(String.Format("Faill to transfer {0}. Because: {1}.",
@@ -99,13 +100,17 @@ namespace PokemonGoGUI.GoManager
             }
             else
             {
-                var message = new ReleasePokemonMessage { PokemonIds = { pokemonToTransfer.Where(x => x != null && x.PokemonId != PokemonId.Missingno).Select(x => x.Id) } };
+                var PokemonIds = pokemonToTransfer.Where(x => x != null && x.PokemonId != PokemonId.Missingno).Select(x => x.Id);
+
                 try
                 {
                     var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                     {
                         RequestType = RequestType.ReleasePokemon,
-                        RequestMessage = message.ToByteString()
+                        RequestMessage = new ReleasePokemonMessage
+                        {
+                            PokemonIds = { PokemonIds }
+                        }.ToByteString()
                     });
 
                     ReleasePokemonResponse releasePokemonResponse = ReleasePokemonResponse.Parser.ParseFrom(response);
@@ -121,8 +126,11 @@ namespace PokemonGoGUI.GoManager
 
                             await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
 
-                            foreach (var poktoremove in pokemonsToTransfer)
-                                Pokemon.Remove(poktoremove);
+                            foreach (var pokemonId in PokemonIds)
+                            {
+                                RemoveInventoryItem(GetPokemonHashKey(pokemonId));
+                            } 
+
                             break;
                         case ReleasePokemonResponse.Types.Result.ErrorPokemonIsBuddy:
                             LogCaller(new LoggerEventArgs(String.Format("Faill to transfer {0}. Because: {1}.",
@@ -459,6 +467,8 @@ namespace PokemonGoGUI.GoManager
                             pokemon.Cp,
                             CalculateIVPerfection(pokemon), message),
                         LoggerTypes.Info));
+
+                    UpdateInventory(2);
 
                     await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
 

@@ -739,10 +739,7 @@ namespace PokemonGoGUI.GoManager
                                 }
                             }
 
-                            /*/testes.....
-                            if (!_firstRun)
-                                UpdateInventory(0); //all inventory
-                            //*/
+                            UpdateInventory(0); //all inventory
                         }
 
                         UpdateInventory(7);

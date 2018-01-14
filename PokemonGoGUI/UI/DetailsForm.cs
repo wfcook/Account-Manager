@@ -439,9 +439,7 @@ namespace PokemonGoGUI.UI
             }
             else if (tabControlMain.SelectedTab == tabPagePokemon)
             {
-                //list not ok if refresh..
-                //if tranfer pok and select tab pok is in... delay pogolib maybe...
-                //_manager.UpdateInventory(2);
+                _manager.UpdateInventory(2);
                 fastObjectListViewPokemon.SetObjects(_manager.Pokemon);
             }
             else if (tabControlMain.SelectedTab == tabPageCandy)

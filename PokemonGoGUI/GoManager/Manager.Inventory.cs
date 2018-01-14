@@ -12,11 +12,214 @@ using PokemonGoGUI.Models;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using POGOProtos.Data.Player;
+using System.Collections.Concurrent;
 
 namespace PokemonGoGUI.GoManager
 {
     public partial class Manager
     {
+        //private  IEnumerable<InventoryItem> InventoryItems => _client?.ClientSession?.Player?.Inventory?.InventoryItems;
+        //public event OnInventoryUpdateHandler OnInventoryUpdated;
+        private ConcurrentDictionary<string, InventoryItem> InventoryItems = new ConcurrentDictionary<string, InventoryItem>();
+
+        private string GetInventoryItemHashKey(InventoryItem item)
+        {
+            if (item == null || item.InventoryItemData == null)
+                return null;
+
+            var delta = item.InventoryItemData;
+
+            if (delta.AppliedItems != null)
+                return "AppliedItems";
+
+            if (delta.AvatarItem != null)
+                return "AvatarItem." + delta.AvatarItem.AvatarTemplateId;
+
+            if (delta.Candy != null)
+                return "Candy." + delta.Candy.FamilyId;
+
+            if (delta.EggIncubators != null)
+                return "EggIncubators";
+
+            if (delta.InventoryUpgrades != null)
+                return "InventoryUpgrades";
+
+            if (delta.Item != null)
+                return "Item." + delta.Item.ItemId;
+
+            if (delta.PlayerCamera != null)
+                return "PlayerCamera";
+
+            if (delta.PlayerCurrency != null)
+                return "PlayerCurrency";
+
+            if (delta.PlayerStats != null)
+                return "PlayerStats";
+
+            if (delta.PokedexEntry != null)
+                return "PokedexEntry." + delta.PokedexEntry.PokemonId;
+
+            if (delta.PokemonData != null)
+                return GetPokemonHashKey(delta.PokemonData.Id);
+
+            if (delta.Quest != null)
+                return "Quest." + delta.Quest.QuestType;
+
+            if (delta.RaidTickets != null)
+                return delta.RaidTickets.RaidTicket.ToString();
+
+            throw new Exception("Unexpected inventory error. Could not generate hash code.");
+        }
+
+        private string GetPokemonHashKey(ulong id)
+        {
+            return "PokemonData." + id;
+        }
+
+        private IEnumerable<ItemData> GetItemsData()
+        {
+            return InventoryItems.Select(x => x.Value.InventoryItemData.Item)
+                .Where(x => x != null);
+        }
+
+        private ItemData GetItemData(ItemId itemId)
+        {
+            return GetItemsData()?.FirstOrDefault(p => p.ItemId == itemId);
+        }
+
+        private int GetItemCount(ItemId itemId)
+        {
+            var itemData = GetItemData(itemId);
+            return (itemData != null) ? itemData.Count : 0;
+        }
+
+        private int GetItemsCount()
+        {
+            return InventoryItems.Where(p => p.Value.InventoryItemData.Item != null)
+                .Sum(p => p.Value.InventoryItemData.Item.Count);
+        }
+
+        private IEnumerable<PlayerStats> GetPlayerStats()
+        {
+            return InventoryItems.Select(i => i.Value.InventoryItemData?.PlayerStats)
+                .Where(i => i != null);
+        }
+
+        private IEnumerable<EggIncubator> GetIncubators()
+        {
+            return InventoryItems.Where(x => x.Value.InventoryItemData.EggIncubators != null)
+                    .SelectMany(i => i.Value.InventoryItemData.EggIncubators.EggIncubator)
+                    .Where(i => i != null);
+        }
+
+        private IEnumerable<PokemonData> GetEggs()
+        {
+            return InventoryItems.Select(i => i.Value.InventoryItemData?.PokemonData)
+               .Where(p => p != null && p.IsEgg);
+        }
+
+        private IEnumerable<PokemonData> GetPokemons()
+        {
+            return InventoryItems
+                .Select(kvp => kvp.Value.InventoryItemData?.PokemonData)
+                .Where(p => p != null && p.PokemonId > 0);
+        }
+
+        private IEnumerable<Candy> GetCandys()
+        {
+            return InventoryItems
+                .Select(kvp => kvp.Value.InventoryItemData?.Candy)
+                .Where(p => p != null && p.FamilyId > 0);
+        }
+
+        private IEnumerable<PokedexEntry> GetPokedex()
+        {
+            return InventoryItems
+                .Select(kvp => kvp.Value.InventoryItemData?.PokedexEntry)
+                .Where(p => p != null && p.PokemonId > 0);
+        }
+
+        private PokemonData GetPokemon(ulong pokemonId)
+        {
+            return GetPokemons().FirstOrDefault(p => p.Id == pokemonId);
+        }
+
+        private bool RemoveInventoryItem(string key)
+        {
+            InventoryItem toRemove;
+            try
+            {
+                return InventoryItems.TryRemove(key, out toRemove);
+            }
+            catch (ArgumentNullException)
+            {
+                return false;
+            }
+        }
+
+        internal void RemoveInventoryItems(IEnumerable<InventoryItem> items)
+        {
+            foreach (var item in items)
+            {
+                RemoveInventoryItem(item);
+            }
+        }
+
+        public void MergeWith(GetHoloInventoryResponse update)
+        {
+            var delta = update.InventoryDelta;
+
+            if (delta?.InventoryItems == null)
+            {
+                return;
+            }
+
+            foreach (var item in delta.InventoryItems)
+            {
+                AddRemoveOrUpdateItem(item);
+            }
+
+            //OnInventoryUpdated?.Invoke();
+        }
+
+        private bool RemoveInventoryItem(InventoryItem item)
+        {
+            if (item == null)
+                return false;
+
+            return RemoveInventoryItem(GetInventoryItemHashKey(item));
+        }
+
+        private void AddRemoveOrUpdateItem(InventoryItem item)
+        {
+            if (item == null)
+                return;
+
+            if (item.DeletedItem != null)
+            {
+                // Items with DeletedItem have a null InventoryItemData and are not added to inventory.
+                // But we still need to remove the pokemon with Id == item.DeletedItem.PokemonId from the inventory.
+                var pokemonToRemoveKey = $"PokemonData.{item.DeletedItem.PokemonId}"; // Manually construct key.
+                RemoveInventoryItem(pokemonToRemoveKey);
+            }
+            else
+            {
+                InventoryItems.AddOrUpdate(GetInventoryItemHashKey(item), item, (key, oldItem) =>
+                {
+                    // Check timestamps to make sure we update with a newer item.
+                    if (oldItem.ModifiedTimestampMs < item.ModifiedTimestampMs)
+                    {
+                        // Copy fields over to the old item.
+                        oldItem.InventoryItemData = item.InventoryItemData;
+                        oldItem.ModifiedTimestampMs = item.ModifiedTimestampMs;
+                    }
+
+                    return oldItem;
+                });
+            }
+        }
+
         /// <summary>
         /// Load Inventory methodes.
         /// </summary>
@@ -42,14 +245,13 @@ namespace PokemonGoGUI.GoManager
                 {7,  "Load Stats."}
             };
 
+            foreach (var x in _client.ClientSession.Player.Inventory.InventoryItems)
+                AddRemoveOrUpdateItem(x);
+
             LogCaller(new LoggerEventArgs($"Updating inventory. Items to load: {ItemsLoaded[index]}", LoggerTypes.Info));
 
             try
             {
-                var inventoryItems = _client?.ClientSession?.Player?.Inventory?.InventoryItems;
-                if (inventoryItems == null)
-                    return;
-
                 switch (index)
                 {
                     case 0:
@@ -59,113 +261,40 @@ namespace PokemonGoGUI.GoManager
                         PokemonCandy.Clear();
                         Incubators.Clear();
                         Eggs.Clear();
-                        foreach (var inventoryItem in inventoryItems)
-                        {
-                            if (inventoryItem.InventoryItemData?.PlayerStats != null)
-                            {
-                                Stats = inventoryItem.InventoryItemData.PlayerStats;
-                            }
-                            if (inventoryItem.InventoryItemData?.Item != null)
-                            {
-                                Items.Add(inventoryItem.InventoryItemData.Item);
-                            }
-                            if (inventoryItem.InventoryItemData?.PokedexEntry != null)
-                            {
-                                Pokedex.Add(inventoryItem.InventoryItemData.PokedexEntry);
-                            }
-                            if (inventoryItem.InventoryItemData?.Candy != null)
-                            {
-                                PokemonCandy.Add(inventoryItem.InventoryItemData.Candy);
-                            }
-                            if (inventoryItem.InventoryItemData?.EggIncubators != null)
-                            {
-                                foreach (var eggIncubator in inventoryItem.InventoryItemData.EggIncubators.EggIncubator)
-                                    if (eggIncubator != null)
-                                        Incubators.Add(eggIncubator);
-
-                            }
-                            if (inventoryItem.InventoryItemData?.PokemonData != null)
-                            {
-                                if (inventoryItem.InventoryItemData.PokemonData.IsEgg)
-                                    Eggs.Add(inventoryItem.InventoryItemData.PokemonData);
-                                else
-                                    Pokemon.Add(inventoryItem.InventoryItemData.PokemonData);
-                            }
-                        }
+                        Stats = GetPlayerStats().FirstOrDefault();
+                        Items = GetItemsData().ToList();
+                        Pokedex = GetPokedex().ToList();
+                        PokemonCandy = GetCandys().ToList();
+                        Incubators = GetIncubators().ToList();
+                        Eggs = GetEggs().ToList();
+                        Pokemon = GetPokemons().ToList();
                         break;
                     case 1:
                         Items.Clear();
-                        foreach (var inventoryItem in inventoryItems)
-                        {
-                            if (inventoryItem.InventoryItemData?.Item != null)
-                            {
-                                Items.Add(inventoryItem.InventoryItemData.Item);
-                            }
-                        }
+                        Items = GetItemsData().ToList();
                         break;
                     case 2:
                         Pokemon.Clear();
-                        foreach (var inventoryItem in inventoryItems)
-                        {
-                            if (inventoryItem.InventoryItemData?.PokemonData != null)
-                            {
-                                if (!inventoryItem.InventoryItemData.PokemonData.IsEgg)
-                                    Pokemon.Add(inventoryItem.InventoryItemData.PokemonData);
-                            }
-                        }
+                        Pokemon = GetPokemons().ToList();
                         break;
                     case 3:
                         Pokedex.Clear();
-                        foreach (var inventoryItem in inventoryItems)
-                        {
-                            if (inventoryItem.InventoryItemData?.PokedexEntry != null)
-                            {
-                                Pokedex.Add(inventoryItem.InventoryItemData.PokedexEntry);
-                            }
-                        }
+                        Pokedex = GetPokedex().ToList();
                         break;
                     case 4:
                         PokemonCandy.Clear();
-                        foreach (var inventoryItem in inventoryItems)
-                        {
-                            if (inventoryItem.InventoryItemData?.Candy != null)
-                            {
-                                PokemonCandy.Add(inventoryItem.InventoryItemData.Candy);
-                            }
-                        }
+                        PokemonCandy = GetCandys().ToList();
                         break;
                     case 5:
                         Incubators.Clear();
-                        foreach (var inventoryItem in inventoryItems)
-                        {
-                            if (inventoryItem.InventoryItemData?.EggIncubators != null)
-                            {
-                                foreach (var eggIncubator in inventoryItem.InventoryItemData.EggIncubators.EggIncubator)
-                                    if (eggIncubator != null)
-                                        Incubators.Add(eggIncubator);
-
-                            }
-                        }
+                        Incubators = GetIncubators().ToList();
                         break;
                     case 6:
                         Eggs.Clear();
-                        foreach (var inventoryItem in inventoryItems)
-                        {
-                            if (inventoryItem.InventoryItemData?.PokemonData != null)
-                            {
-                                if (inventoryItem.InventoryItemData.PokemonData.IsEgg)
-                                    Eggs.Add(inventoryItem.InventoryItemData.PokemonData);
-                            }
-                        }
+                        Eggs = GetEggs().ToList();
                         break;
                     case 7:
-                        foreach (var inventoryItem in inventoryItems)
-                        {
-                            if (inventoryItem.InventoryItemData?.PlayerStats != null)
-                            {
-                                Stats = inventoryItem.InventoryItemData.PlayerStats;
-                            }
-                        }
+                        Stats = GetPlayerStats().FirstOrDefault();
                         break;
                 }
             }
@@ -243,24 +372,29 @@ namespace PokemonGoGUI.GoManager
                     }.ToByteString()
                 });
 
-                RecycleInventoryItemResponse recycleInventoryItemResponse = null;
+                RecycleInventoryItemResponse recycleInventoryItemResponse = RecycleInventoryItemResponse.Parser.ParseFrom(response);
 
-                recycleInventoryItemResponse = RecycleInventoryItemResponse.Parser.ParseFrom(response);
-                LogCaller(new LoggerEventArgs(String.Format("Deleted {0} {1}. Remaining {2}", toDelete, itemSetting.FriendlyName, recycleInventoryItemResponse.NewCount), LoggerTypes.Recycle));
-
-                return new MethodResult
+                switch (recycleInventoryItemResponse.Result)
                 {
-                    Success = true
-                };
+                    case RecycleInventoryItemResponse.Types.Result.ErrorCannotRecycleIncubators:
+                        return new MethodResult();
+                    case RecycleInventoryItemResponse.Types.Result.ErrorNotEnoughCopies:
+                        return new MethodResult();
+                    case RecycleInventoryItemResponse.Types.Result.Success:
+                        LogCaller(new LoggerEventArgs(String.Format("Deleted {0} {1}. Remaining {2}", toDelete, itemSetting.FriendlyName, recycleInventoryItemResponse.NewCount), LoggerTypes.Recycle));
 
+                        return new MethodResult
+                        {
+                            Success = true
+                        };
+                    case RecycleInventoryItemResponse.Types.Result.Unset:
+                        return new MethodResult();
+                }
+                return new MethodResult();
             }
             catch (Exception ex)
             {
                 LogCaller(new LoggerEventArgs(String.Format("Failed to recycle iventory item {0}", itemSetting.FriendlyName), LoggerTypes.Warning, ex));
-
-                //if bug reload all test...
-                UpdateInventory(0);
-
                 return new MethodResult();
             }
         }

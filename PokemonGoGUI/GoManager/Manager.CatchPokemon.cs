@@ -340,7 +340,7 @@ namespace PokemonGoGUI.GoManager
 
         private async Task<MethodResult<EncounterResponse>> EncounterPokemon(MapPokemon mapPokemon)
         {
-            if (mapPokemon.EncounterId == 0 || mapPokemon.ExpirationTimestampMs >= DateTime.UtcNow.ToUnixTime())
+            if (mapPokemon == null || mapPokemon.ExpirationTimestampMs >= DateTime.UtcNow.ToUnixTime())
             {
                 LogCaller(new LoggerEventArgs("Encounter expired....", LoggerTypes.Warning));
                 return new MethodResult<EncounterResponse>();
@@ -430,6 +430,9 @@ namespace PokemonGoGUI.GoManager
 
                 do
                 {
+                    if (mapPokemon == null)
+                        return new MethodResult();
+
                     //Uses lowest capture probability
                     float probability = eResponse.CaptureProbability.CaptureProbability_[0];
                     ItemId pokeBall = GetBestBall(eResponse.WildPokemon.PokemonData);
