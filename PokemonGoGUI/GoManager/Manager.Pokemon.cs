@@ -65,7 +65,7 @@ namespace PokemonGoGUI.GoManager
                                     releasePokemonResponse.Result), LoggerTypes.Warning));
                                 break;
                             case ReleasePokemonResponse.Types.Result.Failed:
-                                LogCaller(new LoggerEventArgs(String.Format("Faill to transfer {0",
+                                LogCaller(new LoggerEventArgs(String.Format("Faill to transfer {0}",
                                     pokemon.PokemonId,
                                     releasePokemonResponse.Result), LoggerTypes.Warning));
                                 break;
