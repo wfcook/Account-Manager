@@ -22,6 +22,12 @@ namespace PokemonGoGUI.GoManager
         public async Task<MethodResult> TransferPokemon(IEnumerable<PokemonData> pokemonsToTransfer)
         {
             var pokemonToTransfer = pokemonsToTransfer.Where(x => x.Favorite != 1 && !x.IsEgg && string.IsNullOrEmpty(x.DeployedFortId) && x.Id != PlayerData.BuddyPokemon?.Id);
+
+            if (pokemonsToTransfer.Count() < 1)
+                return new MethodResult();
+
+            LogCaller(new LoggerEventArgs(String.Format("Transferring {0} pokemon", pokemonToTransfer.Count()), LoggerTypes.Info));
+
             if (!UserSettings.TransferAtOnce)
             {
                 foreach (PokemonData pokemon in pokemonToTransfer)
@@ -169,8 +175,6 @@ namespace PokemonGoGUI.GoManager
             {
                 return new MethodResult();
             }
-
-            LogCaller(new LoggerEventArgs(String.Format("Transferring {0} pokemon", transferResult.Data.Count), LoggerTypes.Info));
 
             await TransferPokemon(transferResult.Data);
 
