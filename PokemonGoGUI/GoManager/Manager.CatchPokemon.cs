@@ -321,6 +321,15 @@ namespace PokemonGoGUI.GoManager
                         };
                 }
             }
+            catch (ArgumentOutOfRangeException ex)
+            {
+                LogCaller(new LoggerEventArgs("Failed to catch lured pokemon due to error", LoggerTypes.Exception, ex));
+
+                return new MethodResult
+                {
+                    Message = "Failed to catch lured pokemon"
+                };
+            }
             catch (Exception ex)
             {
                 LogCaller(new LoggerEventArgs("Failed to catch lured pokemon due to error", LoggerTypes.Exception, ex));
@@ -331,11 +340,7 @@ namespace PokemonGoGUI.GoManager
                 };
             }
 
-            return new MethodResult
-            {
-                Message = "Failed to catch lured pokemon",
-                Success = true
-            };
+            return new MethodResult();
         }
 
         private async Task<MethodResult<EncounterResponse>> EncounterPokemon(MapPokemon mapPokemon)
@@ -579,6 +584,15 @@ namespace PokemonGoGUI.GoManager
                     await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
                 } while (catchPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchMissed || catchPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchEscape);
             }
+            catch (ArgumentOutOfRangeException ex)
+            {
+                LogCaller(new LoggerEventArgs("Failed to catch lured pokemon due to error", LoggerTypes.Exception, ex));
+
+                return new MethodResult
+                {
+                    Message = "Failed to catch pokemon"
+                };
+            }
             catch (Exception ex)
             {
                 LogCaller(new LoggerEventArgs("Failed to catch pokemon due to error", LoggerTypes.Exception, ex));
@@ -586,14 +600,10 @@ namespace PokemonGoGUI.GoManager
                 return new MethodResult
                 {
                     Message = "Failed to catch pokemon",
-                    Success = true
                 };
             }
 
-            return new MethodResult
-            {
-                Message = "Failed to catch pokemon",
-            };
+            return new MethodResult();
         }
 
         private bool PokemonWithinCatchSettings(PokemonId pokemondId)
@@ -736,19 +746,18 @@ namespace PokemonGoGUI.GoManager
                 switch (useItemEncounterResponse.Status)
                 {
                     case UseItemEncounterResponse.Types.Status.ActiveItemExists:
-                        LogCaller(new LoggerEventArgs("Success: " + useItemEncounterResponse.Status, LoggerTypes.Debug));
+                        LogCaller(new LoggerEventArgs("Faill: " + useItemEncounterResponse.Status, LoggerTypes.Debug));
                         break;
                     case UseItemEncounterResponse.Types.Status.AlreadyCompleted:
-                        LogCaller(new LoggerEventArgs("Success: " + useItemEncounterResponse.Status, LoggerTypes.Debug));
+                        LogCaller(new LoggerEventArgs("Faill: " + useItemEncounterResponse.Status, LoggerTypes.Debug));
                         break;
                     case UseItemEncounterResponse.Types.Status.InvalidItemCategory:
-                        LogCaller(new LoggerEventArgs("Success: " + useItemEncounterResponse.Status, LoggerTypes.Debug));
+                        LogCaller(new LoggerEventArgs("Faill: " + useItemEncounterResponse.Status, LoggerTypes.Debug));
                         break;
                     case UseItemEncounterResponse.Types.Status.NoItemInInventory:
-                        LogCaller(new LoggerEventArgs("Success: " + useItemEncounterResponse.Status, LoggerTypes.Debug));
+                        LogCaller(new LoggerEventArgs("Faill: " + useItemEncounterResponse.Status, LoggerTypes.Debug));
                         break;
                     case UseItemEncounterResponse.Types.Status.Success:
-                        LogCaller(new LoggerEventArgs("Success: " + useItemEncounterResponse.Status, LoggerTypes.Debug));
                         int remaining = berryData.Count - 1;
                         berryData.Count = remaining;
                         LogCaller(new LoggerEventArgs(String.Format("Successfully used berry. Remaining: {0}", remaining), LoggerTypes.Info));

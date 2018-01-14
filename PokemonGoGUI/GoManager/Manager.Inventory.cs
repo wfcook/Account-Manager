@@ -164,6 +164,8 @@ namespace PokemonGoGUI.GoManager
             }
         }
 
+        /*
+         * used if call request
         public void MergeWith(GetHoloInventoryResponse update)
         {
             var delta = update.InventoryDelta;
@@ -180,6 +182,7 @@ namespace PokemonGoGUI.GoManager
 
             //OnInventoryUpdated?.Invoke();
         }
+        */
 
         private bool RemoveInventoryItem(InventoryItem item)
         {
@@ -246,8 +249,8 @@ namespace PokemonGoGUI.GoManager
                 {7,  "Load Stats."}
             };
 
-            foreach (var x in _client.ClientSession.Player.Inventory.InventoryItems)
-                AddRemoveOrUpdateItem(x);
+            foreach (var item in _client.ClientSession.Player.Inventory.InventoryItems)
+                AddRemoveOrUpdateItem(item);
 
             LogCaller(new LoggerEventArgs($"Updating inventory. Items to load: {ItemsLoaded[index]}", LoggerTypes.Debug));
 
