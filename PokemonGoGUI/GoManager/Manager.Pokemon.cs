@@ -81,7 +81,7 @@ namespace PokemonGoGUI.GoManager
                         LogCaller(new LoggerEventArgs("ReleasePokemonResponse parsing failed because response was empty", LoggerTypes.Exception, ex));
 
                         //if bug reload all test...
-                        UpdateInventory(0);
+                        //UpdateInventory(0);
 
                         return new MethodResult();
                     }

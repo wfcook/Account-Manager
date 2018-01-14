@@ -77,10 +77,7 @@ namespace PokemonGoGUI.GoManager
 
             foreach (PokemonData pokemon in pokemonToEvolve)
             {
-
-                var EvoleBranch = new EvoleBranch(pokemon, GetPokemonSetting(pokemon.PokemonId).Data).EvolutionBranchs.FirstOrDefault();
-
-                if (pokemon == null || EvoleBranch.Pokemon == PokemonId.Missingno)
+                if (pokemon == null)
                 {
                     LogCaller(new LoggerEventArgs("Null pokemon data in IEnumerable", LoggerTypes.Debug));
 
@@ -96,6 +93,8 @@ namespace PokemonGoGUI.GoManager
 
                 try
                 {
+                    var EvoleBranch = new EvoleBranch(pokemon, GetPokemonSetting(pokemon.PokemonId).Data).EvolutionBranchs.FirstOrDefault();
+
                     var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                     {
                         RequestType = RequestType.EvolvePokemon,
@@ -160,7 +159,7 @@ namespace PokemonGoGUI.GoManager
                     LogCaller(new LoggerEventArgs("Evolve request failed", LoggerTypes.Exception, ex));
 
                     //if bug reload all test...
-                    UpdateInventory(0);
+                    //UpdateInventory(0);
 
                     return new MethodResult();
                 }
