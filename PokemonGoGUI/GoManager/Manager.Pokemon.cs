@@ -35,27 +35,45 @@ namespace PokemonGoGUI.GoManager
                             RequestMessage = message.ToByteString()
                         });
 
-                        ReleasePokemonResponse releasePokemonResponse = null;
-
-                        releasePokemonResponse = ReleasePokemonResponse.Parser.ParseFrom(response);
-                        if (releasePokemonResponse.Result == ReleasePokemonResponse.Types.Result.Success)
+                        ReleasePokemonResponse releasePokemonResponse = ReleasePokemonResponse.Parser.ParseFrom(response);
+                        switch (releasePokemonResponse.Result)
                         {
-                            LogCaller(new LoggerEventArgs(
-                                String.Format("Successully transferred {0}. Cp: {1}. IV: {2:0.00}%",
+                            case ReleasePokemonResponse.Types.Result.Success:
+                                LogCaller(new LoggerEventArgs(String.Format("Successully transferred {0}. Cp: {1}. IV: {2:0.00}%",
                                     pokemon.PokemonId,
                                     pokemon.Cp,
                                     CalculateIVPerfection(pokemon)),
-                                LoggerTypes.Transfer));
+                                    LoggerTypes.Transfer));
 
-                            await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+                                await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
 
-                            Pokemon.Remove(pokemon);
-                        }
-                        else
-                        {
-                            LogCaller(new LoggerEventArgs(String.Format("Faill to transfer {0}. Because: {1}.",
-                                pokemon.PokemonId,
-                                releasePokemonResponse.Result), LoggerTypes.Warning));
+                                Pokemon.Remove(pokemon);
+                                break;
+                            case ReleasePokemonResponse.Types.Result.ErrorPokemonIsBuddy:
+                                LogCaller(new LoggerEventArgs(String.Format("Faill to transfer {0}. Because: {1}.",
+                                    pokemon.PokemonId,
+                                    releasePokemonResponse.Result), LoggerTypes.Warning));
+                                break;
+                            case ReleasePokemonResponse.Types.Result.ErrorPokemonIsEgg:
+                                LogCaller(new LoggerEventArgs(String.Format("Faill to transfer {0}. Because: {1}.",
+                                    pokemon.PokemonId,
+                                    releasePokemonResponse.Result), LoggerTypes.Warning));
+                                break;
+                            case ReleasePokemonResponse.Types.Result.PokemonDeployed:
+                                LogCaller(new LoggerEventArgs(String.Format("Faill to transfer {0}. Because: {1}.",
+                                    pokemon.PokemonId,
+                                    releasePokemonResponse.Result), LoggerTypes.Warning));
+                                break;
+                            case ReleasePokemonResponse.Types.Result.Failed:
+                                LogCaller(new LoggerEventArgs(String.Format("Faill to transfer {0",
+                                    pokemon.PokemonId,
+                                    releasePokemonResponse.Result), LoggerTypes.Warning));
+                                break;
+                            case ReleasePokemonResponse.Types.Result.Unset:
+                                LogCaller(new LoggerEventArgs(String.Format("Faill to transfer {0}. Because: {1}.",
+                                    pokemon.PokemonId,
+                                    releasePokemonResponse.Result), LoggerTypes.Warning));
+                                break;
                         }
                     }
                     catch (Exception ex)
