@@ -88,7 +88,7 @@ namespace PokemonGoGUI.GoManager
                 {
                     LogCaller(new LoggerEventArgs(String.Format("Pokemon {0} is slashed.", pokemon.PokemonId), LoggerTypes.Warning));
                     //await TransferPokemon(new List<PokemonData> { pokemon });
-                    return new MethodResult();
+                    continue;
                 }
 
                 try
@@ -133,25 +133,25 @@ namespace PokemonGoGUI.GoManager
                                     Pokemon.Add(npok.InventoryItemData.PokemonData);
                                 }
                             }
-                            break;
+                            continue;
                         case EvolvePokemonResponse.Types.Result.FailedInsufficientResources:
                             LogCaller(new LoggerEventArgs("Evolve request failed: Failed Insufficient Resources", LoggerTypes.Debug));
-                            break;
+                            continue;
                         case EvolvePokemonResponse.Types.Result.FailedInvalidItemRequirement:
                             LogCaller(new LoggerEventArgs("Evolve request failed: Failed Invalid Item Requirement", LoggerTypes.Debug));
-                            break;
+                            continue;
                         case EvolvePokemonResponse.Types.Result.FailedPokemonCannotEvolve:
                             LogCaller(new LoggerEventArgs("Evolve request failed: Failed Pokemon Cannot Evolve", LoggerTypes.Debug));
-                            break;
+                            continue;
                         case EvolvePokemonResponse.Types.Result.FailedPokemonIsDeployed:
                             LogCaller(new LoggerEventArgs("Evolve request failed: Failed Pokemon IsDeployed", LoggerTypes.Debug));
-                            break;
+                            continue;
                         case EvolvePokemonResponse.Types.Result.FailedPokemonMissing:
                             LogCaller(new LoggerEventArgs("Evolve request failed: Failed Pokemon Missing", LoggerTypes.Debug));
-                            break;
+                            continue;
                         case EvolvePokemonResponse.Types.Result.Unset:
                             LogCaller(new LoggerEventArgs("Evolve request failed", LoggerTypes.Debug));
-                            break;
+                            continue;
                     }
                 }
                 catch (Exception ex)
