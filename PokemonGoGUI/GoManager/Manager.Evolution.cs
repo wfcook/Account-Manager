@@ -124,15 +124,13 @@ namespace PokemonGoGUI.GoManager
 
                             await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
 
-                            Pokemon.Remove(pokemon);
+                            if (Pokemon.Contains(pokemon))
+                                Pokemon.Remove(pokemon);
 
-                            foreach (var npok in _client.ClientSession.Player.Inventory.InventoryItems)
-                            {
-                                if (npok.InventoryItemData.PokemonData.PokemonId == EvoleBranch.Pokemon)
-                                {
-                                    Pokemon.Add(npok.InventoryItemData.PokemonData);
-                                }
-                            }
+                            var newPok = _client.ClientSession.Player.Inventory?.InventoryItems.Where(x => x?.InventoryItemData?.PokemonData?.PokemonId == EvoleBranch.Pokemon).Select(x => x.InventoryItemData.PokemonData).FirstOrDefault();
+
+                            if (newPok != null)
+                                Pokemon.Add(newPok);
                             continue;
                         case EvolvePokemonResponse.Types.Result.FailedInsufficientResources:
                             LogCaller(new LoggerEventArgs("Evolve request failed: Failed Insufficient Resources", LoggerTypes.Debug));
