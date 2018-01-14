@@ -230,7 +230,7 @@ namespace PokemonGoGUI.Captcha
             }
             if (solved)
             {
-                client.ClientManager.LogCaller(new LoggerEventArgs("Captcha has been resolved automatically by Anti-Captcha ", LoggerTypes.Info));
+                client.ClientManager.LogCaller(new LoggerEventArgs("Captcha has been resolved automatically by Anti-Captcha ", LoggerTypes.Success));
             }
             return result;
         }
@@ -251,7 +251,7 @@ namespace PokemonGoGUI.Captcha
             }
             if (solved)
             {
-                client.ClientManager.LogCaller(new LoggerEventArgs("Captcha has been resolved automatically by 2Captcha ", LoggerTypes.Info));
+                client.ClientManager.LogCaller(new LoggerEventArgs("Captcha has been resolved automatically by 2Captcha ", LoggerTypes.Success));
             }
             return result;
         }

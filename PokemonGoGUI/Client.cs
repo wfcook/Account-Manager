@@ -442,7 +442,7 @@ namespace PokemonGoGUI
         {
             AccountState accountState = ClientManager.AccountState;
             ClientManager.AccountState = AccountState.CaptchaReceived;
-            ClientManager.LogCaller(new LoggerEventArgs("Captcha ceceived.", LoggerTypes.Warning));
+            ClientManager.LogCaller(new LoggerEventArgs("Captcha received.", LoggerTypes.Warning));
             var resolved = await CaptchaManager.SolveCaptcha(this, e.CaptchaUrl.ToString());
             if (!resolved)
             {
