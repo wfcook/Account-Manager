@@ -164,8 +164,8 @@ namespace PokemonGoGUI.Captcha
                     }.ToByteString()
                 }, false);
 
-
-                return CheckChallengeResponse.Parser.ParseFrom(response).ChallengeUrl;
+                string message = CheckChallengeResponse.Parser.ParseFrom(response).ChallengeUrl;
+                return String.IsNullOrEmpty(message) ? String.Empty : message;
             }
             catch (Exception ex)
             {
