@@ -67,6 +67,18 @@ namespace PokemonGoGUI.GoManager
 
                 bool _continue = false;
 
+                MethodResult<EncounterResponse> result = await EncounterPokemon(pokemon);
+
+                if (!result.Success)
+                    _continue = true;
+                else
+                {
+                    _pokemonType = "Normal";
+                    MethodResult catchResult = await CatchPokemon(result.Data, pokemon);
+
+                    await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+                }
+
                 var incensePokemon = await GetIncensePokemons();
 
                 if (incensePokemon.Success)
@@ -78,15 +90,14 @@ namespace PokemonGoGUI.GoManager
                     if (!result2.Success)
                         _continue = true;
                     else
+                    {
                         _pokemonType = "Incense";
+
+                        MethodResult catchResult = await CatchPokemon(result2.Data, pokemon);
+
+                        await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+                    }
                 }
-
-                MethodResult<EncounterResponse> result = await EncounterPokemon(pokemon);
-
-                if (!result.Success)
-                    _continue = true;
-                else
-                    _pokemonType = "Normal";
 
                 if (_continue)
                 {
@@ -94,10 +105,6 @@ namespace PokemonGoGUI.GoManager
 
                     continue;
                 }
-
-                MethodResult catchResult = await CatchPokemon(result.Data, pokemon);
-
-                await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
             }
 
             return new MethodResult
@@ -448,8 +455,31 @@ namespace PokemonGoGUI.GoManager
         }
 
         //Catch encountered pokemon
-        private async Task<MethodResult> CatchPokemon(EncounterResponse eResponse, MapPokemon mapPokemon)
+        private async Task<MethodResult> CatchPokemon(dynamic eResponse, MapPokemon mapPokemon)
         {
+            PokemonData encounteredPokemon = null;
+            long unixTimeStamp;
+            ulong _encounterId;
+            string _spawnPointId;
+
+            // Calling from CatchNormalPokemon
+            if (eResponse is EncounterResponse)
+            {
+                encounteredPokemon = eResponse.WildPokemon?.PokemonData;
+                unixTimeStamp = eResponse.WildPokemon?.LastModifiedTimestampMs
+                                + eResponse.WildPokemon?.TimeTillHiddenMs;
+                _spawnPointId = eResponse.WildPokemon?.SpawnPointId;
+                _encounterId = eResponse.WildPokemon?.EncounterId;
+            }
+            // Calling from CatchIncensePokemon
+            else if (eResponse is IncenseEncounterResponse)
+            {
+                encounteredPokemon = eResponse?.PokemonData;
+                unixTimeStamp = mapPokemon.ExpirationTimestampMs;
+                _spawnPointId = mapPokemon.SpawnPointId;
+                _encounterId = mapPokemon.EncounterId;
+            }
+
             try
             {
                 CatchPokemonResponse catchPokemonResponse = null;
@@ -462,7 +492,7 @@ namespace PokemonGoGUI.GoManager
 
                     //Uses lowest capture probability
                     float probability = eResponse.CaptureProbability.CaptureProbability_[0];
-                    ItemId pokeBall = GetBestBall(eResponse.WildPokemon.PokemonData);
+                    ItemId pokeBall = GetBestBall(encounteredPokemon);
 
                     if (pokeBall == ItemId.ItemUnknown)
                     {
@@ -475,8 +505,8 @@ namespace PokemonGoGUI.GoManager
                     }
 
                     bool isLowProbability = probability < 0.40;
-                    bool isHighCp = eResponse.WildPokemon.PokemonData.Cp > 800;
-                    bool isHighPerfection = CalculateIVPerfection(eResponse.WildPokemon.PokemonData) > 95;
+                    bool isHighCp = encounteredPokemon.Cp > 800;
+                    bool isHighPerfection = CalculateIVPerfection(encounteredPokemon) > 95;
 
                     if (UserSettings.UseBerries)
                     {
@@ -537,7 +567,7 @@ namespace PokemonGoGUI.GoManager
 
                     catchPokemonResponse = CatchPokemonResponse.Parser.ParseFrom(catchresponse);
  
-                    string pokemon = String.Format("Name: {0}, CP: {1}, IV: {2:0.00}%", mapPokemon.PokemonId, eResponse.WildPokemon.PokemonData.Cp, CalculateIVPerfection(eResponse.WildPokemon.PokemonData));
+                    string pokemon = String.Format("Name: {0}, CP: {1}, IV: {2:0.00}%", mapPokemon.PokemonId, encounteredPokemon.Cp, CalculateIVPerfection(encounteredPokemon));
                     string pokeBallName = pokeBall.ToString().Replace("Item", "");
 
                     switch(catchPokemonResponse.Status)
@@ -592,7 +622,7 @@ namespace PokemonGoGUI.GoManager
 
                             LogCaller(new LoggerEventArgs(String.Format("[{0}] Caught. {1}. Exp {2}. Candy: {3}. Attempt #{4}. Ball: {5}", _pokemonType, pokemon, expGained, candyGained, attemptCount, pokeBallName), LoggerTypes.Success));
 
-                            Pokemon.Add(eResponse.WildPokemon.PokemonData);
+                            Pokemon.Add(encounteredPokemon);
 
                             return new MethodResult
                             {
