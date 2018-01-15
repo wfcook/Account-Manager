@@ -115,7 +115,6 @@ namespace PokemonGoGUI.GoManager
                                         return new MethodResult
                                         {
                                             Message = "Bans detected",
-                                            Success = true
                                         };
                                     }
                                 }
@@ -172,13 +171,18 @@ namespace PokemonGoGUI.GoManager
 
                                 ++_totalZeroExpStops;
                                 message += String.Format(" No exp gained. Attempt {0} of {1}", i + 1, maxFortAttempts);
+                                continue;
                             }
 
                             LogCaller(new LoggerEventArgs(message, LoggerTypes.Success));
 
                             await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
 
-                            continue;
+                            return new MethodResult
+                            {
+                                Success = true,
+                                Message = "Success"
+                            };
                     }
                 }
 
