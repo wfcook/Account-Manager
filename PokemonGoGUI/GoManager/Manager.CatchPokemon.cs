@@ -638,7 +638,7 @@ namespace PokemonGoGUI.GoManager
             }
             catch (ArgumentOutOfRangeException ex)
             {
-                LogCaller(new LoggerEventArgs("Failed to catch lured pokemon due to error", LoggerTypes.Exception, ex));
+                LogCaller(new LoggerEventArgs("Failed to catch pokemon due to error", LoggerTypes.Exception, ex));
 
                 return new MethodResult
                 {
