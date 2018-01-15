@@ -46,6 +46,7 @@ namespace PokemonGoGUI.GoManager
                                 Message = "Failed to search fort"
                             };
                         case FortSearchResponse.Types.Result.InCooldownPeriod:
+                            //review for this 
                             LogCaller(new LoggerEventArgs(String.Format("Failed to search fort. Response: {0}", fortResponse.Result), LoggerTypes.Warning));
                             return new MethodResult
                             {
