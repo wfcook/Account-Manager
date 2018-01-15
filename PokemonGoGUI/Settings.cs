@@ -52,6 +52,7 @@ namespace PokemonGoGUI
         public int AutoCaptchaRetries { get; set; }
         public string TwoCaptchaAPIKey { get; set; }
 
+        public bool UseIncense { get; set; }
         public double DisableCatchDelay { get; set; }
         public bool SpinGyms { get; set; }
         public string GroupName { get; set; }

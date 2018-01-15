@@ -20,6 +20,7 @@ namespace PokemonGoGUI.GoManager
 {
     public partial class Manager
     {
+        private string _pokemonType = null;
 
         private async Task<MethodResult> CatchNeabyPokemon()
         {
@@ -64,9 +65,30 @@ namespace PokemonGoGUI.GoManager
                     break;
                 }
 
+                bool _continue = false;
+
+                var incensePokemon = await GetIncensePokemons();
+
+                if (incensePokemon.Success)
+                {
+                    _continue = false;
+
+                    MethodResult<IncenseEncounterResponse> result2 = await EncounterIncensePokemon(incensePokemon.Data.FirstOrDefault());
+
+                    if (!result2.Success)
+                        _continue = true;
+                    else
+                        _pokemonType = "Incense";
+                }
+
                 MethodResult<EncounterResponse> result = await EncounterPokemon(pokemon);
 
                 if (!result.Success)
+                    _continue = true;
+                else
+                    _pokemonType = "Normal";
+
+                if (_continue)
                 {
                     await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
 
@@ -568,7 +590,7 @@ namespace PokemonGoGUI.GoManager
                                 }
                             }
 
-                            LogCaller(new LoggerEventArgs(String.Format("Caught. {0}. Exp {1}. Candy: {2}. Attempt #{3}. Ball: {4}", pokemon, expGained, candyGained, attemptCount, pokeBallName), LoggerTypes.Success));
+                            LogCaller(new LoggerEventArgs(String.Format("[{0}] Caught. {1}. Exp {2}. Candy: {3}. Attempt #{4}. Ball: {5}", _pokemonType, pokemon, expGained, candyGained, attemptCount, pokeBallName), LoggerTypes.Success));
 
                             Pokemon.Add(eResponse.WildPokemon.PokemonData);
 
@@ -785,6 +807,60 @@ namespace PokemonGoGUI.GoManager
                 return _rand.Next(1, 101) <= UserSettings.InsideReticuleChance;
 
             }
+        }
+
+        //Encounter Incense
+        private async Task<MethodResult<IncenseEncounterResponse>> EncounterIncensePokemon(MapPokemon mapPokemon)
+        {
+            /*/if (mapPokemon == null || mapPokemon.ExpirationTimestampMs >= DateTime.UtcNow.ToUnixTime())
+            {
+                LogCaller(new LoggerEventArgs("Encounter expired....", LoggerTypes.Warning));
+                return new MethodResult<IncenseEncounterResponse>();
+            }
+            //*/
+
+            var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
+            {
+                RequestType = RequestType.IncenseEncounter,
+                RequestMessage = new IncenseEncounterMessage
+                {
+                    EncounterId = mapPokemon.EncounterId,
+                    EncounterLocation = mapPokemon.SpawnPointId
+                }.ToByteString()
+            });
+
+            IncenseEncounterResponse eResponse = IncenseEncounterResponse.Parser.ParseFrom(response);
+
+            switch (eResponse.Result)
+            {
+                case IncenseEncounterResponse.Types.Result.IncenseEncounterNotAvailable:
+                    return new MethodResult<IncenseEncounterResponse>
+                    {
+                        Message = "Encounter failed. Pokemon Already Happened"
+                    };
+                case IncenseEncounterResponse.Types.Result.IncenseEncounterUnknown:
+                    LogCaller(new LoggerEventArgs(String.Format("Encounter failed with response {0}", eResponse.Result), LoggerTypes.Warning));
+
+                    return new MethodResult<IncenseEncounterResponse>
+                    {
+                        Message = "Encounter failed"
+                    };
+                case IncenseEncounterResponse.Types.Result.IncenseEncounterSuccess:
+                    return new MethodResult<IncenseEncounterResponse>
+                    {
+                        Data = eResponse,
+                        Success = true,
+                        Message = "Success"
+                    };
+                case IncenseEncounterResponse.Types.Result.PokemonInventoryFull:
+                    LogCaller(new LoggerEventArgs("Encounter failed. Pokemon inventory full", LoggerTypes.Warning));
+
+                    return new MethodResult<IncenseEncounterResponse>
+                    {
+                        Message = "Encounter failed. Pokemon inventory full"
+                    };
+            }
+            return new MethodResult<IncenseEncounterResponse>();
         }
     }
 }

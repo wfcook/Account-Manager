@@ -75,6 +75,13 @@ namespace PokemonGoGUI.GoManager
             return "PokemonData." + id;
         }
 
+        private IEnumerable<AppliedItem> GetAppliedItems()
+        {
+            return InventoryItems.Select(i => i.Value.InventoryItemData?.AppliedItems)
+                .Where(aItems => aItems?.Item != null)
+                .SelectMany(aItems => aItems.Item);
+        }
+
         private IEnumerable<ItemData> GetItemsData()
         {
             return InventoryItems.Select(x => x.Value.InventoryItemData.Item)
@@ -403,6 +410,47 @@ namespace PokemonGoGUI.GoManager
             }
         }
 
+        private async Task<MethodResult> UseIncense(ItemId item = ItemId.ItemIncenseOrdinary)
+        {
+            try
+            {
+                var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
+                {
+                    RequestType = RequestType.UseIncense,
+                    RequestMessage = new UseIncenseMessage
+                    {
+                        IncenseType = item
+                    }.ToByteString()
+                });
+
+                UseIncenseResponse useIncenseResponse = UseIncenseResponse.Parser.ParseFrom(response);
+
+                switch (useIncenseResponse.Result)
+                {
+                    case UseIncenseResponse.Types.Result.IncenseAlreadyActive:
+                        return new MethodResult();
+                    case UseIncenseResponse.Types.Result.LocationUnset:
+                        return new MethodResult();
+                    case UseIncenseResponse.Types.Result.Success:
+                        LogCaller(new LoggerEventArgs(String.Format("Used incense {0}.", item), LoggerTypes.Success));
+                        return new MethodResult
+                        {
+                            Success = true
+                        };
+                    case UseIncenseResponse.Types.Result.NoneInInventory:
+                        return new MethodResult();
+                    case UseIncenseResponse.Types.Result.Unknown:
+                        return new MethodResult();
+                }
+                return new MethodResult();
+            }
+            catch (Exception ex)
+            {
+                LogCaller(new LoggerEventArgs(String.Format("Failed to use incense item {0}", item), LoggerTypes.Warning, ex));
+                return new MethodResult();
+            }
+        }
+
         public double FilledInventoryStorage()
         {
             if (Items == null || PlayerData == null)
@@ -412,6 +460,7 @@ namespace PokemonGoGUI.GoManager
 
             return (double)Items.Sum(x => x.Count) / PlayerData.MaxItemStorage * 100;
         }
+
         public double FilledPokemonStorage()
         {
             if (Pokemon == null || PlayerData == null)

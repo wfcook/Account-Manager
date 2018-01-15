@@ -122,6 +122,7 @@ namespace PokemonGoGUI.UI
             numericUpDownForceEvolveAbove.Value = new Decimal(settings.ForceEvolveAbovePercent);
             checkBoxStopOnAPIUpdate.Checked = settings.StopOnAPIUpdate;
             checkBoxSpinGyms.Checked = settings.SpinGyms;
+            cbUseIncense.Checked = settings.UseIncense;
 
             //Humanization
             checkBoxHumanizeThrows.Checked = settings.EnableHumanization;
@@ -332,7 +333,7 @@ namespace PokemonGoGUI.UI
             AutoUpdate = cbAutoUpdate.Checked;
             userSettings.UseBerries = checkBoxUseBerries.Checked;
             userSettings.DisableCatchDelay = (int)numericUpDownDisableCatchDelay.Value;
-
+            userSettings.UseIncense = cbUseIncense.Checked;
             userSettings.RunForHours = (double)numericUpDownRunForHours.Value;
             userSettings.MaxLogs = (int)numericUpDownMaxLogs.Value;
             userSettings.StopOnIPBan = checkBoxStopOnIPBan.Checked;
