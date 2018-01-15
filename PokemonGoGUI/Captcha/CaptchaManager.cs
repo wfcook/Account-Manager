@@ -28,7 +28,6 @@ namespace PokemonGoGUI.Captcha
         {
             string captchaResponse = "";
             bool resolved = false;
-            bool needGetNewCaptcha = false;
             int retry = client.ClientManager.UserSettings.AutoCaptchaRetries;
 
             while (retry-- > 0 && !resolved)
@@ -36,15 +35,10 @@ namespace PokemonGoGUI.Captcha
                 //Use captcha solution to resolve captcha
                 if (client.ClientManager.UserSettings.EnableCaptchaSolutions)
                 {
-                    if (needGetNewCaptcha)
-                    {
-                        captchaUrl = await GetNewCaptchaURL(client);
-                    }
-                    client.ClientManager.LogCaller(new LoggerEventArgs("Auto resolving captcha by using captcha solution service, please wait..........", LoggerTypes.Info));
+                   client.ClientManager.LogCaller(new LoggerEventArgs("Auto resolving captcha by using captcha solution service, please wait..........", LoggerTypes.Captcha));
                     CaptchaSolutionClient _client = new CaptchaSolutionClient(client.ClientManager.UserSettings.CaptchaSolutionAPIKey,
                         client.ClientManager.UserSettings.CaptchaSolutionsSecretKey, client.ClientManager.UserSettings.AutoCaptchaTimeout);
                     captchaResponse = await _client.ResolveCaptcha(client, POKEMON_GO_GOOGLE_KEY, captchaUrl);
-                    needGetNewCaptcha = true;
                     if (!string.IsNullOrEmpty(captchaResponse))
                     {
                         resolved = await Resolve(client, captchaResponse);
@@ -55,15 +49,14 @@ namespace PokemonGoGUI.Captcha
                 if (!resolved && client.ClientManager.UserSettings.Enable2Captcha &&
                     !string.IsNullOrEmpty(client.ClientManager.UserSettings.TwoCaptchaAPIKey))
                 {
-                    if (needGetNewCaptcha)
+                    /*if (needGetNewCaptcha)
                     {
                         captchaUrl = await GetNewCaptchaURL(client);
-                    }
+                    }*/
                     if (string.IsNullOrEmpty(captchaUrl)) return true;
 
-                    client.ClientManager.LogCaller(new LoggerEventArgs("Auto resolving captcha by using 2Captcha service", LoggerTypes.Info));
+                    client.ClientManager.LogCaller(new LoggerEventArgs("Auto resolving captcha by using 2Captcha service", LoggerTypes.Captcha));
                     captchaResponse = await GetCaptchaResposeBy2Captcha(client, captchaUrl);
-                    needGetNewCaptcha = true;
                     if (!string.IsNullOrEmpty(captchaResponse))
                     {
                         resolved = await Resolve(client, captchaResponse);
@@ -72,15 +65,10 @@ namespace PokemonGoGUI.Captcha
 
                 if (!resolved && client.ClientManager.UserSettings.EnableAntiCaptcha && !string.IsNullOrEmpty(client.ClientManager.UserSettings.AntiCaptchaAPIKey))
                 {
-                    if (needGetNewCaptcha)
-                    {
-                        captchaUrl = await GetNewCaptchaURL(client);
-                    }
-                    if (string.IsNullOrEmpty(captchaUrl)) return true;
+                   if (string.IsNullOrEmpty(captchaUrl)) return true;
 
-                    client.ClientManager.LogCaller(new LoggerEventArgs("Auto resolving captcha by using anti captcha service", LoggerTypes.Info));
+                    client.ClientManager.LogCaller(new LoggerEventArgs("Auto resolving captcha by using anti captcha service", LoggerTypes.Captcha));
                     captchaResponse = await GetCaptchaResposeByAntiCaptcha(client, captchaUrl);
-                    needGetNewCaptcha = true;
                     if (!string.IsNullOrEmpty(captchaResponse))
                     {
                         resolved = await Resolve(client, captchaResponse);
@@ -91,11 +79,6 @@ namespace PokemonGoGUI.Captcha
             //captchaRespose = "";
             if (!resolved)
             {
-                if (needGetNewCaptcha)
-                {
-                    captchaUrl = await GetNewCaptchaURL(client);
-                }
-
                 if (client.ClientManager.UserSettings.PlaySoundOnCaptcha)
                 {
                     SystemSounds.Asterisk.Play();
@@ -142,39 +125,6 @@ namespace PokemonGoGUI.Captcha
             return response;
         }
 
-        private static async Task<string> GetNewCaptchaURL(Client client)
-        {
-            try
-            {
-                if (!client.LoggedIn)
-                {
-                    MethodResult result = await client.ClientManager.AcLogin();
-
-                    if (!result.Success)
-                    {
-                        return string.Empty;
-                    }
-                }
-
-                var response = await client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
-                {
-                    RequestType = RequestType.CheckChallenge,
-                    RequestMessage = new CheckChallengeMessage
-                    {
-                        //DebugRequest = 
-                    }.ToByteString()
-                }, false);
-
-                string message = CheckChallengeResponse.Parser.ParseFrom(response).ChallengeUrl;
-                return String.IsNullOrEmpty(message) ? String.Empty : message;
-            }
-            catch (Exception ex)
-            {
-                client.ClientManager.LogCaller(new LoggerEventArgs("Failed to get challenge", LoggerTypes.Exception, ex));
-                return string.Empty;
-            }
-        }
-
         private static async Task<bool> Resolve(Client client, string captchaResponse)
         {
             if (string.IsNullOrEmpty(captchaResponse)) return false;
@@ -197,7 +147,7 @@ namespace PokemonGoGUI.Captcha
                     {
                         Token = captchaResponse
                     }.ToByteString()
-                }, false);
+                }, false, false, false);
 
                 var verifyChallengeResponse = VerifyChallengeResponse.Parser.ParseFrom(response);
 
@@ -281,7 +231,7 @@ namespace PokemonGoGUI.Captcha
                 });
 
                 webDriver.Navigate().GoToUrl(url);
-                client.ClientManager.LogCaller(new LoggerEventArgs($"Captcha is being show in separate thread window, please check your chrome browser and resolve it before {client.ClientManager.UserSettings.ManualCaptchaTimeout} seconds", LoggerTypes.Info));
+                client.ClientManager.LogCaller(new LoggerEventArgs($"Captcha is being show in separate thread window, please check your chrome browser and resolve it before {client.ClientManager.UserSettings.ManualCaptchaTimeout} seconds", LoggerTypes.Captcha));
 
                 var wait = new WebDriverWait(
                     webDriver,

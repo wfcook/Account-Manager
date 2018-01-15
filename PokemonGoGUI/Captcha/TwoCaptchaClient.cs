@@ -89,7 +89,7 @@ namespace PokemonGoGUI.Captcha
                                             return string.Empty;
                                         }
                                     }
-                                    client.ClientManager.LogCaller(new LoggerEventArgs($"Waiting response captcha from 2Captcha workers...", LoggerTypes.Info));
+                                    client.ClientManager.LogCaller(new LoggerEventArgs($"Waiting response captcha from 2Captcha workers...", LoggerTypes.Captcha));
                                 }
 
                                 await Task.Delay(3000);

@@ -3,7 +3,7 @@ using System.Drawing;
 
 namespace PokemonGoGUI.GoManager.Models
 {
-    public enum LoggerTypes { Debug, Info, Warning, Exception, FatalError, PokemonEscape, PokemonFlee, LocationUpdate, FortGym, Transfer, Evolve, Incubate, Recycle, ProxyIssue, Success };
+    public enum LoggerTypes { Debug, Info, Warning, Exception, FatalError, PokemonEscape, PokemonFlee, LocationUpdate, FortGym, Transfer, Evolve, Incubate, Recycle, ProxyIssue, Success, Captcha };
 
     public class Log
     {
@@ -75,6 +75,8 @@ namespace PokemonGoGUI.GoManager.Models
                     return Color.LightGreen;
                 case LoggerTypes.FortGym:
                     return Color.Magenta;
+                case LoggerTypes.Captcha:
+                    return Color.Tomato;
             }
 
             return SystemColors.WindowText;

@@ -445,24 +445,19 @@ namespace PokemonGoGUI
 
             ClientManager.LogCaller(new LoggerEventArgs("Captcha received.", LoggerTypes.Warning));
 
-            if (ClientManager.WaitForChallenge(true))
+            ClientManager.LogCaller(new LoggerEventArgs("Bot paused VerifyChallenge...", LoggerTypes.Captcha));
+            ClientManager.State = BotState.Paused;
+
+            bool solved = await CaptchaManager.SolveCaptcha(this, e.CaptchaUrl);
+
+            if (solved)
             {
-                var resolved = await CaptchaManager.SolveCaptcha(this, e.CaptchaUrl);
-                if (!resolved)
-                {
-                    ClientManager.Stop();
-                    return;
-                }
-            }
-            else
-            {
-                ClientManager.Stop();
+                ClientManager.LogCaller(new LoggerEventArgs("Unpausing bot Challenge finished...", LoggerTypes.Captcha));
+                ClientManager.State = BotState.Running;
+                ClientManager.AccountState = accountState;
                 return;
             }
-
-            //Captcha solved resume...
-            ClientManager.WaitForChallenge(false);
-            ClientManager.AccountState = accountState;
+            ClientManager.Stop();
         }
 
         private void SessionInventoryUpdate(object sender, EventArgs e)

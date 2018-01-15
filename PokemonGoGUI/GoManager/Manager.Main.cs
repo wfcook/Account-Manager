@@ -96,10 +96,6 @@ namespace PokemonGoGUI.GoManager
                 {
                     AccountState = AccountState.Good;
                 }
-                // This is part of the login process
-                if (UserSettings.ClaimLevelUpRewards){
-                    await ClaimLevelUpRewards(Level);
-                }
             }
 
             if (CurrentProxy != null)
@@ -108,27 +104,6 @@ namespace PokemonGoGUI.GoManager
             }
 
             return result;
-        }
-
-        public bool WaitForChallenge(bool wait)
-        {
-            if (wait)
-            {
-                _pauser.Reset();
-                _runningStopwatch.Stop();
-                LogCaller(new LoggerEventArgs("Bot paused VerifyChallenge...", LoggerTypes.Info));
-                State = BotState.Paused;
-                _pauser.WaitOne();
-                return true;
-            }
-            else
-            {
-                _pauser.Set();
-                _runningStopwatch.Start();
-                LogCaller(new LoggerEventArgs("Unpausing bot Challenge finished...", LoggerTypes.Info));
-                State = BotState.Running;
-                return false;
-            }
         }
 
         public MethodResult Start()
@@ -498,7 +473,7 @@ namespace PokemonGoGUI.GoManager
 
                         result = await UpdateLocation(new GeoCoordinate(UserSettings.Latitude, UserSettings.Longitude));
 
-                        UpdateInventory(0);
+                        UpdateInventory(InventoryRefresh.All);
 
                         if (!result.Success)
                         {
@@ -758,7 +733,7 @@ namespace PokemonGoGUI.GoManager
                                 }
                             }
 
-                            UpdateInventory(0); //all inventory
+                            UpdateInventory(InventoryRefresh.All); //all inventory
                         }
 
                         UpdateInventory(InventoryRefresh.Stats);

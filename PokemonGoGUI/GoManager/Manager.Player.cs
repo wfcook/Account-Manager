@@ -12,6 +12,7 @@ using PokemonGoGUI.Extensions;
 using POGOProtos.Networking.Requests;
 using POGOProtos.Networking.Requests.Messages;
 using Google.Protobuf;
+using PokemonGoGUI.Enums;
 
 namespace PokemonGoGUI.GoManager
 {
@@ -21,7 +22,7 @@ namespace PokemonGoGUI.GoManager
         public async Task<MethodResult> UpdateDetails()
         {
             //TODO: review what we need do here.
-            UpdateInventory(0);// <- should not be needed
+            UpdateInventory(InventoryRefresh.All);// <- should not be needed
 
             LogCaller(new LoggerEventArgs("Updating details", LoggerTypes.Debug));
 
