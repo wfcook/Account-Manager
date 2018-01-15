@@ -218,49 +218,7 @@ namespace PokemonGoGUI
                 if (model.ProxyHandler != null)
                     _proxyHandler = model.ProxyHandler;
                 if (model.Managers != null)
-                {
                     tempManagers = model.Managers;
-                    //Obsoleted. For retrocompatibility. Remove after of several new versions. (currently 2.21.1.25)
-                    foreach (var tmpMan in tempManagers)
-                    {
-                        tmpMan.UserSettings.Latitude = tmpMan.UserSettings.Latitude;
-                        tmpMan.UserSettings.Longitude = tmpMan.UserSettings.Longitude;
-                        tmpMan.UserSettings.Altitude = tmpMan.UserSettings.Altitude;
-                        tmpMan.UserSettings.Country = tmpMan.UserSettings.Country;
-                        tmpMan.UserSettings.Language = tmpMan.UserSettings.Language;
-                        tmpMan.UserSettings.TimeZone = tmpMan.UserSettings.TimeZone;
-                        tmpMan.UserSettings.POSIX = tmpMan.UserSettings.POSIX;
-                        tmpMan.UserSettings.DeviceId = tmpMan.UserSettings.DeviceId;
-                        tmpMan.UserSettings.DeviceBrand = tmpMan.UserSettings.DeviceBrand;
-                        tmpMan.UserSettings.DeviceModel = tmpMan.UserSettings.DeviceModel;
-                        tmpMan.UserSettings.DeviceModelBoot = tmpMan.UserSettings.DeviceModelBoot;
-                        tmpMan.UserSettings.HardwareManufacturer = tmpMan.UserSettings.HardwareManufacturer;
-                        tmpMan.UserSettings.HardwareModel = tmpMan.UserSettings.HardwareModel;
-                        tmpMan.UserSettings.FirmwareBrand = tmpMan.UserSettings.FirmwareBrand;
-                        tmpMan.UserSettings.FirmwareType = tmpMan.UserSettings.FirmwareType;
-                        foreach (var element in tmpMan.UserSettings.EvolveSettings)
-                        {
-                            var pokemonSetting = tmpMan.UserSettings.EvolveSettings.FirstOrDefault(x => x.Id == element.Id);
-                            if (pokemonSetting != null)
-                            {
-                                pokemonSetting.Evolve = element.Evolve;
-                                pokemonSetting.MinCP = element.MinCP;
-                            }
-                        }
-                        foreach (var element in tmpMan.UserSettings.TransferSettings)
-                        {
-                            var pokemonSetting = tmpMan.UserSettings.TransferSettings.FirstOrDefault(x => x.Id == element.Id);
-                            if (pokemonSetting != null)
-                            {
-                                pokemonSetting.Transfer = element.Transfer;
-                                pokemonSetting.MinCP = element.MinCP;
-                                pokemonSetting.IVPercent = element.IVPercent;
-                                pokemonSetting.KeepMax = element.KeepMax;
-                                pokemonSetting.Type = element.Type;
-                            }
-                        }
-                    }
-                }
                 if (model.Schedulers != null)
                     _schedulers = model.Schedulers;
                 if (model.HashKeys != null)
@@ -291,7 +249,6 @@ namespace PokemonGoGUI
                     {
                         manager.AccountState = AccountState.Good;
                     }
-
                     _managers.Add(manager);
                 }
 

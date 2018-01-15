@@ -20,8 +20,6 @@ namespace PokemonGoGUI.GoManager
 {
     public partial class Manager
     {
-        private string _pokemonType = null;
-
         private async Task<MethodResult> CatchNeabyPokemon()
         {
             if (!UserSettings.CatchPokemon)
@@ -72,12 +70,8 @@ namespace PokemonGoGUI.GoManager
                 if (!result.Success)
                     _continue = true;
                 else
-                {
-                    _pokemonType = "Normal";
-                    MethodResult catchResult = await CatchPokemon(result.Data, pokemon);
+                   await CatchPokemon(result.Data, pokemon);
 
-                    await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
-                }
 
                 var incensePokemon = await GetIncensePokemons();
 
@@ -90,13 +84,7 @@ namespace PokemonGoGUI.GoManager
                     if (!result2.Success)
                         _continue = true;
                     else
-                    {
-                        _pokemonType = "Incense";
-
-                        MethodResult catchResult = await CatchPokemon(result2.Data, pokemon);
-
-                        await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
-                    }
+                       await CatchPokemon(result2.Data, pokemon);
                 }
 
                 if (_continue)
@@ -462,23 +450,28 @@ namespace PokemonGoGUI.GoManager
             long unixTimeStamp;
             ulong _encounterId;
             string _spawnPointId;
+            string _pokemonType = null;
 
             // Calling from CatchNormalPokemon
-            if (eResponse is EncounterResponse)
+            if (eResponse is EncounterResponse &&
+                    (eResponse?.Status == EncounterResponse.Types.Status.EncounterSuccess))
             {
                 encounteredPokemon = eResponse.WildPokemon?.PokemonData;
                 unixTimeStamp = eResponse.WildPokemon?.LastModifiedTimestampMs
                                 + eResponse.WildPokemon?.TimeTillHiddenMs;
                 _spawnPointId = eResponse.WildPokemon?.SpawnPointId;
                 _encounterId = eResponse.WildPokemon?.EncounterId;
+                _pokemonType = "Normal";                   
             }
             // Calling from CatchIncensePokemon
-            else if (eResponse is IncenseEncounterResponse)
+            else if (eResponse is IncenseEncounterResponse &&
+                         (eResponse?.Result == IncenseEncounterResponse.Types.Result.IncenseEncounterSuccess))
             {
                 encounteredPokemon = eResponse?.PokemonData;
                 unixTimeStamp = mapPokemon.ExpirationTimestampMs;
                 _spawnPointId = mapPokemon.SpawnPointId;
                 _encounterId = mapPokemon.EncounterId;
+                _pokemonType = "Incense";
             }
 
             try
@@ -696,7 +689,7 @@ namespace PokemonGoGUI.GoManager
 
             return catchSettings.Catch;
         }
-
+        
         private ItemId GetBestBall(PokemonData pokemonData)
         {
             if (Items == null)

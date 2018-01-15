@@ -1,5 +1,4 @@
 ﻿using POGOProtos.Enums;
-using PokemonGoGUI.Enums;
 
 namespace PokemonGoGUI.Models
 {

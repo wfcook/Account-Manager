@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using POGOProtos.Enums;
-using POGOProtos.Inventory;
+﻿using POGOProtos.Enums;
 using POGOProtos.Settings.Master;
 using PokemonGoGUI.Extensions;
 using PokemonGoGUI.GoManager.Models;
@@ -40,12 +38,7 @@ namespace PokemonGoGUI.GoManager
                 return new MethodResult<AccountExportModel>();
             }
 
-            IEnumerable<InventoryItem> AllItems = new List<InventoryItem>();
-            
-            if (_client.LoggedIn)
-                AllItems = _client.ClientSession.Player.Inventory.InventoryItems;
-
-            if (!AllItems.Any()) {
+            if (!Items.Any()) {
                 LogCaller(new LoggerEventArgs(String.Format("No items found for {0}. Please update details", UserSettings.Username), LoggerTypes.Warning));
 
                 return new MethodResult<AccountExportModel>();
@@ -75,6 +68,7 @@ namespace PokemonGoGUI.GoManager
                 Success = true
             };
         }
+
         public async Task<MethodResult<Dictionary<PokemonId, PokemonSettings>>> GetItemTemplates()
         {
             if (PokeSettings != null && PokeSettings.Count != 0)

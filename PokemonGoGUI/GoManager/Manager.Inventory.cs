@@ -105,10 +105,10 @@ namespace PokemonGoGUI.GoManager
                 .Sum(p => p.Value.InventoryItemData.Item.Count);
         }
 
-        private IEnumerable<PlayerStats> GetPlayerStats()
+        private PlayerStats GetPlayerStats()
         {
             return InventoryItems.Select(i => i.Value.InventoryItemData?.PlayerStats)
-                .Where(i => i != null);
+                .Where(i => i != null).FirstOrDefault();
         }
 
         private IEnumerable<EggIncubator> GetIncubators()
@@ -242,7 +242,9 @@ namespace PokemonGoGUI.GoManager
         public void UpdateInventory(int index = 0)
         {
             if (!_client.LoggedIn)
-                return;
+            {
+              return;
+            }
 
             Dictionary<int, string> ItemsLoaded = new Dictionary<int, string>
             {
@@ -272,7 +274,7 @@ namespace PokemonGoGUI.GoManager
                         PokemonCandy.Clear();
                         Incubators.Clear();
                         Eggs.Clear();
-                        Stats = GetPlayerStats().FirstOrDefault();
+                        Stats = GetPlayerStats();
                         Items = GetItemsData().ToList();
                         Pokedex = GetPokedex().ToList();
                         PokemonCandy = GetCandies().ToList();
@@ -305,7 +307,7 @@ namespace PokemonGoGUI.GoManager
                         Eggs = GetEggs().ToList();
                         break;
                     case 7:
-                        Stats = GetPlayerStats().FirstOrDefault();
+                        Stats = GetPlayerStats();
                         break;
                 }
             }

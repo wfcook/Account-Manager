@@ -1,14 +1,12 @@
 using System.Globalization;
 using GeoCoordinatePortable;
 using Newtonsoft.Json;
-using POGOLib.Official.Exceptions;
 using POGOProtos.Data.Player;
 using POGOProtos.Enums;
 using POGOProtos.Map.Fort;
 using POGOProtos.Networking.Responses;
 using PokemonGoGUI.AccountScheduler;
 using PokemonGoGUI.Enums;
-using PokemonGoGUI.Exceptions;
 using PokemonGoGUI.Extensions;
 using PokemonGoGUI.GoManager.Models;
 using PokemonGoGUI.Models;

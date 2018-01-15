@@ -1,5 +1,4 @@
 ﻿using Google.Protobuf;
-using POGOProtos.Inventory.Item;
 using POGOProtos.Map.Fort;
 using POGOProtos.Networking.Requests;
 using POGOProtos.Networking.Requests.Messages;
@@ -7,7 +6,6 @@ using POGOProtos.Networking.Responses;
 using PokemonGoGUI.Extensions;
 using PokemonGoGUI.GoManager.Models;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
