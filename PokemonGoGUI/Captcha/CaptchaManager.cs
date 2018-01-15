@@ -16,6 +16,7 @@ using POGOProtos.Networking.Requests;
 using POGOProtos.Networking.Requests.Messages;
 using Google.Protobuf;
 using POGOProtos.Networking.Responses;
+using POGOLib.Official.Net;
 
 namespace PokemonGoGUI.Captcha
 {
@@ -42,7 +43,7 @@ namespace PokemonGoGUI.Captcha
                     client.ClientManager.LogCaller(new LoggerEventArgs("Auto resolving captcha by using captcha solution service, please wait..........", LoggerTypes.Info));
                     CaptchaSolutionClient _client = new CaptchaSolutionClient(client.ClientManager.UserSettings.CaptchaSolutionAPIKey,
                         client.ClientManager.UserSettings.CaptchaSolutionsSecretKey, client.ClientManager.UserSettings.AutoCaptchaTimeout);
-                    captchaResponse = await _client.ResolveCaptcha(POKEMON_GO_GOOGLE_KEY, captchaUrl, client);
+                    captchaResponse = await _client.ResolveCaptcha(client, POKEMON_GO_GOOGLE_KEY, captchaUrl);
                     needGetNewCaptcha = true;
                     if (!string.IsNullOrEmpty(captchaResponse))
                     {
@@ -211,17 +212,19 @@ namespace PokemonGoGUI.Captcha
             catch (Exception ex)
             {
                 client.ClientManager.LogCaller(new LoggerEventArgs("(CAPTCHA) error.", LoggerTypes.Exception, ex));
+                return false;
             }
-            return false;
         }
 
         private static async Task<string> GetCaptchaResposeByAntiCaptcha(Client client, string captchaUrl)
         {
             bool solved = false;
+            int retries = client.ClientManager.UserSettings.AutoCaptchaRetries;
             string result = null;
 
+            while (retries-- > 0 && !solved)
             {
-                result = await AntiCaptchaClient.SolveCaptcha(captchaUrl,
+                result = await AntiCaptchaClient.SolveCaptcha(client, captchaUrl,
                     client.ClientManager.UserSettings.AntiCaptchaAPIKey,
                     POKEMON_GO_GOOGLE_KEY,
                     client.ClientManager.UserSettings.ProxyHostCaptcha.ToString(),
@@ -231,8 +234,9 @@ namespace PokemonGoGUI.Captcha
             if (solved)
             {
                 client.ClientManager.LogCaller(new LoggerEventArgs("Captcha has been resolved automatically by Anti-Captcha ", LoggerTypes.Success));
+                return result;
             }
-            return result;
+            return String.Empty;
         }
 
 
@@ -246,14 +250,15 @@ namespace PokemonGoGUI.Captcha
             {
                 TwoCaptchaClient _client = new TwoCaptchaClient(client.ClientManager.UserSettings.TwoCaptchaAPIKey);
 
-                result = await _client.SolveRecaptchaV2(POKEMON_GO_GOOGLE_KEY, captchaUrl, string.Empty, ProxyType.HTTP, client);
+                result = await _client.SolveRecaptchaV2(client, POKEMON_GO_GOOGLE_KEY, captchaUrl, string.Empty, ProxyType.HTTP);
                 solved = !string.IsNullOrEmpty(result);
             }
             if (solved)
             {
                 client.ClientManager.LogCaller(new LoggerEventArgs("Captcha has been resolved automatically by 2Captcha ", LoggerTypes.Success));
+                return result;
             }
-            return result;
+            return String.Empty;
         }
 
         public static string GetCaptchaResposeManually(Client client, string url)
@@ -272,6 +277,7 @@ namespace PokemonGoGUI.Captcha
             {
                 webDriver = new ChromeDriver(Environment.CurrentDirectory, new ChromeOptions()
                 {
+                    //
                 });
 
                 webDriver.Navigate().GoToUrl(url);
@@ -302,13 +308,12 @@ namespace PokemonGoGUI.Captcha
             catch (Exception ex)
             {
                 client.ClientManager.LogCaller(new LoggerEventArgs($"You didn't resolve captcha in the given time", LoggerTypes.Exception, ex));
+                return String.Empty;
             }
             finally
             {
                 if (webDriver != null) webDriver.Close();
             }
-
-            return null;
         }
     }
 }

@@ -177,15 +177,15 @@ namespace PokemonGoGUI.GoManager
 
                             await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
 
-                            return new MethodResult
-                            {
-                                Success = true,
-                                Message = "Success"
-                            };
+                            continue;
                     }
                 }
 
-                return new MethodResult();
+                return new MethodResult
+                {
+                    Success = true,
+                    Message = "Success"
+                };
             }
             catch (Exception ex)
             {

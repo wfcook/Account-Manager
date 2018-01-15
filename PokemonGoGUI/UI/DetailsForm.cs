@@ -4,6 +4,7 @@ using POGOProtos.Enums;
 using POGOProtos.Inventory;
 using POGOProtos.Inventory.Item;
 using POGOProtos.Settings.Master;
+using PokemonGoGUI.Enums;
 using PokemonGoGUI.Extensions;
 using PokemonGoGUI.GoManager;
 using PokemonGoGUI.GoManager.Models;
@@ -438,33 +439,33 @@ namespace PokemonGoGUI.UI
             }
             else if (tabControlMain.SelectedTab == tabPagePokemon)
             {
-                _manager.UpdateInventory(2);
+                _manager.UpdateInventory(InventoryRefresh.Pokemon);
                 fastObjectListViewPokemon.SetObjects(_manager.Pokemon);
             }
             else if (tabControlMain.SelectedTab == tabPageCandy)
             {
-                _manager.UpdateInventory(4);
+                _manager.UpdateInventory(InventoryRefresh.PokemonCandy);
                 fastObjectListViewCandy.SetObjects(_manager.PokemonCandy);
             }
             else if (tabControlMain.SelectedTab == tabPageEggs)
             {
-                _manager.UpdateInventory(5);
-                _manager.UpdateInventory(6);
+                _manager.UpdateInventory(InventoryRefresh.Eggs);
+                _manager.UpdateInventory(InventoryRefresh.Incubators);
                 fastObjectListViewEggs.SetObjects(_manager.Eggs);
             }
             else if (tabControlMain.SelectedTab == tabPageInventory)
             {
-                _manager.UpdateInventory(1);
+                _manager.UpdateInventory(InventoryRefresh.Items);
                 fastObjectListViewInventory.SetObjects(_manager.Items);
             }
             else if (tabControlMain.SelectedTab == tabPagePokedex)
             {
-                _manager.UpdateInventory(3);
+                _manager.UpdateInventory(InventoryRefresh.Pokedex);
                 fastObjectListViewPokedex.SetObjects(_manager.Pokedex);
             }
             else if (tabControlMain.SelectedTab == tabPageStats)
             {
-                _manager.UpdateInventory(7);
+                _manager.UpdateInventory(InventoryRefresh.Stats);
                 DisplayDetails();
             }
         }
@@ -555,7 +556,7 @@ namespace PokemonGoGUI.UI
                 await Task.Delay(500);
             }
 
-            _manager.UpdateInventory(1);
+            _manager.UpdateInventory(InventoryRefresh.Items);
 
             fastObjectListViewInventory.SetObjects(_manager.Items);
 

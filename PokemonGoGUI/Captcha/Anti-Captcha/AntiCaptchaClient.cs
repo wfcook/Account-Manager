@@ -19,8 +19,8 @@ namespace PokemonGoGUI.Captcha.Anti_Captcha
             ;
 
 
-        public static async Task<string> SolveCaptcha(string captchaURL, string apiKey, string googleSiteKey,
-            string proxyHost, int proxyPort, string proxyAccount = "", string proxyPassword = "", Client client = null)
+        public static async Task<string> SolveCaptcha(Client client, string captchaURL, string apiKey, string googleSiteKey,
+            string proxyHost, int proxyPort, string proxyAccount = "", string proxyPassword = "")
         {
             var task1 = AnticaptchaApiWrapper.CreateNoCaptchaTaskProxyless(
                 Host,
@@ -30,10 +30,10 @@ namespace PokemonGoGUI.Captcha.Anti_Captcha
                 "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.106 Safari/537.36"
             );
 
-            return await ProcessTask(task1, apiKey, client);
+            return await ProcessTask(client, task1, apiKey);
         }
 
-        private static async Task<string> ProcessTask(AnticaptchaTask task, string apikey, Client client)
+        private static async Task<string> ProcessTask(Client client, AnticaptchaTask task, string apikey)
         {
             AnticaptchaResult response;
 

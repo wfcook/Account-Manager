@@ -147,10 +147,6 @@ namespace PokemonGoGUI
         {
             //Defaults
             LoadDefaults();
-
-            ItemSettings = new List<InventoryItemSetting>();
-            CatchSettings = new List<CatchSetting>();
-
             RandomizeDevice();
             LoadInventorySettings();
             LoadCatchSettings();

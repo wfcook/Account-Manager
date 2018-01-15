@@ -14,6 +14,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using POGOProtos.Data.Player;
 using System.Collections.Concurrent;
+using PokemonGoGUI.Enums;
 
 namespace PokemonGoGUI.GoManager
 {
@@ -239,35 +240,23 @@ namespace PokemonGoGUI.GoManager
         /// <param name="index 5">Load Incubators.</param>
         /// <param name="index 6">Load Eggs.</param>
         /// <param name="index 7">Load Stats.</param>
-        public void UpdateInventory(int index = 0)
+        public void UpdateInventory(InventoryRefresh type)
         {
             if (!_client.LoggedIn)
             {
               return;
             }
 
-            Dictionary<int, string> ItemsLoaded = new Dictionary<int, string>
-            {
-                {0,  "Load All."},
-                {1,  "Load Items."},
-                {2,  "Load Pokemon."},
-                {3,  "Load Pokedex."},
-                {4,  "Load PokemonCandy."},
-                {5,  "Load Incubators."},
-                {6,  "Load Eggs."},
-                {7,  "Load Stats."}
-            };
-
             foreach (var item in _client.ClientSession.Player.Inventory.InventoryItems)
                 AddRemoveOrUpdateItem(item);
 
-            LogCaller(new LoggerEventArgs($"Updating inventory. Items to load: {ItemsLoaded[index]}", LoggerTypes.Debug));
+            LogCaller(new LoggerEventArgs($"Updating inventory. Items to load: {type}", LoggerTypes.Debug));
 
             try
             {
-                switch (index)
+                switch (type)
                 {
-                    case 0:
+                    case InventoryRefresh.All:
                         Items.Clear();
                         Pokemon.Clear();
                         Pokedex.Clear();
@@ -282,31 +271,31 @@ namespace PokemonGoGUI.GoManager
                         Eggs = GetEggs().ToList();
                         Pokemon = GetPokemons().ToList();
                         break;
-                    case 1:
+                    case InventoryRefresh.Items:
                         Items.Clear();
                         Items = GetItemsData().ToList();
                         break;
-                    case 2:
+                    case InventoryRefresh.Pokemon:
                         Pokemon.Clear();
                         Pokemon = GetPokemons().ToList();
                         break;
-                    case 3:
+                    case InventoryRefresh.Pokedex:
                         Pokedex.Clear();
                         Pokedex = GetPokedex().ToList();
                         break;
-                    case 4:
+                    case InventoryRefresh.PokemonCandy:
                         PokemonCandy.Clear();
                         PokemonCandy = GetCandies().ToList();
                         break;
-                    case 5:
+                    case InventoryRefresh.Incubators:
                         Incubators.Clear();
                         Incubators = GetIncubators().ToList();
                         break;
-                    case 6:
+                    case InventoryRefresh.Eggs:
                         Eggs.Clear();
                         Eggs = GetEggs().ToList();
                         break;
-                    case 7:
+                    case InventoryRefresh.Stats:
                         Stats = GetPlayerStats();
                         break;
                 }
@@ -355,7 +344,7 @@ namespace PokemonGoGUI.GoManager
                 await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
             }
 
-            UpdateInventory(1);
+            UpdateInventory(InventoryRefresh.Items);
 
             return new MethodResult
             {

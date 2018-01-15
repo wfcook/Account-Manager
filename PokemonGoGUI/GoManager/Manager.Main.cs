@@ -67,7 +67,7 @@ namespace PokemonGoGUI.GoManager
             UserSettings = new Settings();
             Logs = new List<Log>();
             Stats = new PlayerStats();
-            Tracker = new PokemonGoGUI.AccountScheduler.Tracker();
+            Tracker = new Tracker();
 
             ProxyHandler = handler;
 
@@ -108,6 +108,27 @@ namespace PokemonGoGUI.GoManager
             }
 
             return result;
+        }
+
+        public bool WaitForChallenge(bool wait)
+        {
+            if (wait)
+            {
+                _pauser.Reset();
+                _runningStopwatch.Stop();
+                LogCaller(new LoggerEventArgs("Bot paused VerifyChallenge...", LoggerTypes.Info));
+                State = BotState.Paused;
+                _pauser.WaitOne();
+                return true;
+            }
+            else
+            {
+                _pauser.Set();
+                _runningStopwatch.Start();
+                LogCaller(new LoggerEventArgs("Unpausing bot Challenge finished...", LoggerTypes.Info));
+                State = BotState.Running;
+                return false;
+            }
         }
 
         public MethodResult Start()
@@ -379,7 +400,7 @@ namespace PokemonGoGUI.GoManager
                         }
                         catch (Exception ex1)
                         {
-                            AccountState = AccountState.SoftBan;
+                            AccountState = AccountState.TemporalBan;
                             LogCaller(new LoggerEventArgs("Exception: " + ex1, LoggerTypes.Debug));
                             LogCaller(new LoggerEventArgs("Game settings failed", LoggerTypes.FatalError, new Exception("Maybe this account is banned ...")));
                             Stop();
@@ -740,7 +761,7 @@ namespace PokemonGoGUI.GoManager
                             UpdateInventory(0); //all inventory
                         }
 
-                        UpdateInventory(7);
+                        UpdateInventory(InventoryRefresh.Stats);
 
                         if (Level > prevLevel)
                         {
@@ -756,6 +777,15 @@ namespace PokemonGoGUI.GoManager
                         {
                             LogCaller(new LoggerEventArgs(String.Format("Max level of {0} reached.", UserSettings.MaxLevel), LoggerTypes.Info));
 
+                            Stop();
+                        }
+
+                        if (_totalZeroExpStops > 25)
+                        {
+                            LogCaller(new LoggerEventArgs("Potential PokeStop SoftBan.", LoggerTypes.Warning));
+                            AccountState = AccountState.SoftBan;
+                            // reset values
+                            _totalZeroExpStops = 0;
                             Stop();
                         }
 

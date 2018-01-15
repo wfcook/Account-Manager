@@ -5,6 +5,7 @@ using POGOProtos.Inventory.Item;
 using POGOProtos.Networking.Requests;
 using POGOProtos.Networking.Requests.Messages;
 using POGOProtos.Networking.Responses;
+using PokemonGoGUI.Enums;
 using PokemonGoGUI.Extensions;
 using PokemonGoGUI.GoManager.Models;
 using System;
@@ -73,8 +74,8 @@ namespace PokemonGoGUI.GoManager
                 LogCaller(new LoggerEventArgs(String.Format("Incubating egg in {0}. Pokemon Id: {1}", incitem, _egg), LoggerTypes.Incubate));
 
                 //TODO: Need tests
-                UpdateInventory(5);
-                UpdateInventory(6);
+                UpdateInventory(InventoryRefresh.Eggs);
+                UpdateInventory(InventoryRefresh.Incubators);
 
                 return new MethodResult
                 {

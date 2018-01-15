@@ -29,7 +29,7 @@ namespace PokemonGoGUI.Captcha
             Timeout = timeout;
         }
 
-        public async Task<string> ResolveCaptcha(string googleSiteKey, string captchaUrl, Client client)
+        public async Task<string> ResolveCaptcha(Client client, string googleSiteKey, string captchaUrl)
         {
             if (string.IsNullOrEmpty(APIKey) || string.IsNullOrEmpty(APISecret))
             {

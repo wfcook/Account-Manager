@@ -44,6 +44,7 @@
             this.tabPageActions = new System.Windows.Forms.TabPage();
             this.checkBoxCompleteTutorial = new System.Windows.Forms.CheckBox();
             this.groupBoxPlayerActions = new System.Windows.Forms.GroupBox();
+            this.cbUseIncense = new System.Windows.Forms.CheckBox();
             this.numericUpDownDisableCatchDelay = new System.Windows.Forms.NumericUpDown();
             this.label16 = new System.Windows.Forms.Label();
             this.label14 = new System.Windows.Forms.Label();
@@ -232,7 +233,6 @@
             this.toolTipProxy = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipMinAccountState = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipHumanizeThrows = new System.Windows.Forms.ToolTip(this.components);
-            this.cbUseIncense = new System.Windows.Forms.CheckBox();
             this.tabControlMain.SuspendLayout();
             this.tabPageDetails.SuspendLayout();
             this.tabControlSettings.SuspendLayout();
@@ -501,6 +501,16 @@
             this.groupBoxPlayerActions.TabIndex = 73;
             this.groupBoxPlayerActions.TabStop = false;
             this.groupBoxPlayerActions.Text = "Player Actions";
+            // 
+            // cbUseIncense
+            // 
+            this.cbUseIncense.AutoSize = true;
+            this.cbUseIncense.Location = new System.Drawing.Point(15, 383);
+            this.cbUseIncense.Name = "cbUseIncense";
+            this.cbUseIncense.Size = new System.Drawing.Size(176, 21);
+            this.cbUseIncense.TabIndex = 75;
+            this.cbUseIncense.Text = "Use incense constantly";
+            this.cbUseIncense.UseVisualStyleBackColor = true;
             // 
             // numericUpDownDisableCatchDelay
             // 
@@ -1875,9 +1885,9 @@
             this.label38.AutoSize = true;
             this.label38.Location = new System.Drawing.Point(6, 413);
             this.label38.Name = "label38";
-            this.label38.Size = new System.Drawing.Size(139, 17);
+            this.label38.Size = new System.Drawing.Size(121, 17);
             this.label38.TabIndex = 22;
-            this.label38.Text = "TwoCaptcha APIKey:";
+            this.label38.Text = "2Captcha APIKey:";
             // 
             // AutoCaptchaRetries
             // 
@@ -2519,16 +2529,6 @@
             this.restoreDefaultsToolStripMenuItem2.Size = new System.Drawing.Size(187, 24);
             this.restoreDefaultsToolStripMenuItem2.Text = "Restore Defaults";
             this.restoreDefaultsToolStripMenuItem2.Click += new System.EventHandler(this.RestoreDefaultsToolStripMenuItem2_Click);
-            // 
-            // cbUseIncense
-            // 
-            this.cbUseIncense.AutoSize = true;
-            this.cbUseIncense.Location = new System.Drawing.Point(15, 383);
-            this.cbUseIncense.Name = "cbUseIncense";
-            this.cbUseIncense.Size = new System.Drawing.Size(176, 21);
-            this.cbUseIncense.TabIndex = 75;
-            this.cbUseIncense.Text = "Use incense constantly";
-            this.cbUseIncense.UseVisualStyleBackColor = true;
             // 
             // AccountSettingsForm
             // 

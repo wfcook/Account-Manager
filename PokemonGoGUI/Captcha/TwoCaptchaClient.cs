@@ -25,7 +25,7 @@ namespace PokemonGoGUI.Captcha
         /// <param name="proxyType">The type of proxy used</param>
         /// <param name="result">If solving was successful this contains the answer</param>
         /// <returns>Returns true if solving was successful, otherwise false</returns>
-        public async Task<string> SolveRecaptchaV2(string googleKey, string pageUrl, string proxy, ProxyType proxyType, Client client)
+        public async Task<string> SolveRecaptchaV2(Client client, string googleKey, string pageUrl, string proxy, ProxyType proxyType)
         {
             string requestUrl = "http://2captcha.com/in.php?key=" + APIKey + "&method=userrecaptcha&googlekey=" + googleKey + "&pageurl=" + pageUrl + "&proxy=" + proxy + "&proxytype=";
 

@@ -468,7 +468,7 @@ namespace PokemonGoGUI.GoManager
                             CalculateIVPerfection(pokemon), message),
                         LoggerTypes.Info));
 
-                    UpdateInventory(2);
+                    UpdateInventory(InventoryRefresh.Pokemon);
 
                     await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
 
