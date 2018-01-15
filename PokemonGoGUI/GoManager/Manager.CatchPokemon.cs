@@ -362,12 +362,11 @@ namespace PokemonGoGUI.GoManager
 
         private async Task<MethodResult<EncounterResponse>> EncounterPokemon(MapPokemon mapPokemon)
         {
-            /*if (mapPokemon == null || mapPokemon.ExpirationTimestampMs >= DateTime.UtcNow.ToUnixTime())
+            if (mapPokemon == null || mapPokemon.ExpirationTimestampMs >= DateTime.UtcNow.ToUnixTime())
             {
                 LogCaller(new LoggerEventArgs("Encounter expired....", LoggerTypes.Warning));
                 return new MethodResult<EncounterResponse>();
             }
-            //*/
 
             var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
@@ -836,12 +835,11 @@ namespace PokemonGoGUI.GoManager
         //Encounter Incense
         private async Task<MethodResult<IncenseEncounterResponse>> EncounterIncensePokemon(MapPokemon mapPokemon)
         {
-            /*/if (mapPokemon == null || mapPokemon.ExpirationTimestampMs >= DateTime.UtcNow.ToUnixTime())
+            if (mapPokemon == null || mapPokemon.ExpirationTimestampMs >= DateTime.UtcNow.ToUnixTime())
             {
                 LogCaller(new LoggerEventArgs("Encounter expired....", LoggerTypes.Warning));
                 return new MethodResult<IncenseEncounterResponse>();
             }
-            //*/
 
             var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {

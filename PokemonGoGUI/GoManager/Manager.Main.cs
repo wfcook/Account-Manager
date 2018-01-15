@@ -18,6 +18,7 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using POGOLib.Official.Util.Hash.PokeHash;
+using POGOLib.Official.Net;
 
 namespace PokemonGoGUI.GoManager
 {
@@ -72,6 +73,14 @@ namespace PokemonGoGUI.GoManager
             ProxyHandler = handler;
 
             LoadFarmLocations();
+        }
+
+        public void WaitVerifyChalange(bool wait)
+        {
+            if (wait)
+                _pauser.WaitOne();
+            else
+                _pauser.Set();
         }
 
         public async Task<MethodResult> AcLogin()
@@ -340,8 +349,10 @@ namespace PokemonGoGUI.GoManager
                         }
                     }
 
+                    //Break out of captcha loop to verifychallenge
+
                     await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
- 
+
                     result = await CheckReauthentication();
 
                     if (!result.Success)
@@ -427,7 +438,7 @@ namespace PokemonGoGUI.GoManager
 
                         if (!PlayerData.TutorialState.Contains(TutorialState.PokestopTutorial))
                         {
-                            result = await MarkTutorialsComplete(new [] {TutorialState.PokestopTutorial, TutorialState.PokemonBerry, TutorialState.UseItem });
+                            result = await MarkTutorialsComplete(new[] { TutorialState.PokestopTutorial, TutorialState.PokemonBerry, TutorialState.UseItem });
 
                             if (!result.Success)
                             {
