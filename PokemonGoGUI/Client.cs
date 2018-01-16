@@ -106,7 +106,10 @@ namespace PokemonGoGUI
                     Configuration.HashEndpoint = ClientManager.UserSettings.HashEndpoint;
                 }
                 else
+                {
+                    //Need valid keys but this send all
                     Configuration.Hasher = new PokeHashHasher(ClientManager.UserSettings.HashKeys.ToArray());
+                }
 
                 // TODO: make this configurable. To avoid bans (may be with a checkbox in hash keys tab).
                 //Configuration.IgnoreHashVersion = true;

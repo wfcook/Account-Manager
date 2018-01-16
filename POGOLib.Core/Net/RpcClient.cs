@@ -19,6 +19,7 @@ using POGOProtos.Networking.Platform;
 using POGOProtos.Networking.Platform.Requests;
 using POGOProtos.Networking.Platform.Responses;
 using POGOLib.Official.Extensions;
+using POGOProtos.Map.Pokemon;
 
 namespace POGOLib.Official.Net
 {
@@ -56,7 +57,10 @@ namespace POGOLib.Official.Net
             RequestType.GetHoloInventory,
             RequestType.CheckAwardedBadges,
             RequestType.DownloadSettings,
-            RequestType.GetInbox
+            RequestType.GetBuddyWalked,
+            RequestType.GetInbox,
+            //if incense
+            //RequestType.GetIncensePokemon
         };
 
         private readonly ConcurrentQueue<RequestEnvelope> _rpcQueue = new ConcurrentQueue<RequestEnvelope>();
@@ -147,7 +151,6 @@ namespace POGOLib.Official.Net
                 }
             } while (!playerResponse.Success);
 
-
             _session.Player.Data = playerResponse.PlayerData;
             _session.Player.Banned = playerResponse.Banned;
             _session.Player.Warn = playerResponse.Warn;
@@ -162,10 +165,14 @@ namespace POGOLib.Official.Net
                 return false;
             }
 
-            try {
+            try
+            {
                 await DownloadRemoteConfig();
-            } catch (Exception ex1) {
-                if (ex1.Message.Contains("Bad Request")){
+            }
+            catch (Exception ex1)
+            {
+                if (ex1.Message.Contains("Bad Request"))
+                {
                     return false;
                 }
                 throw ex1;
@@ -180,6 +187,7 @@ namespace POGOLib.Official.Net
 
             return true;
         }
+
         // NOTE: This was the login before of 0.45 API, continue working but it is not that the real app does now.
         internal async Task<bool> StartupAsync_0_45_API()
         {
@@ -225,93 +233,14 @@ namespace POGOLib.Official.Net
             return true;
         }
 
-        // TODO: Reimplement
-        #region Unused assets code
-        //        public async Task<GetAssetDigestResponse> GetAssetsAsync()
-        //        {
-        //            // check if template cache has been set
-        //
-        //            // Get DownloadRemoteConfig
-        //            var remoteConfigResponse = await SendRemoteProcedureCallAsync(new Request
-        //            {
-        //                RequestType = RequestType.DownloadRemoteConfigVersion,
-        //                RequestMessage = new DownloadRemoteConfigVersionMessage
-        //                {
-        //                    Platform = Platform.Android,
-        //                    AppVersion = 2903
-        //                }.ToByteString()
-        //            });
-        //
-        //            var remoteConfigParsed = DownloadRemoteConfigVersionResponse.Parser.ParseFrom(remoteConfigResponse);
-        //            var timestamp = (ulong) TimeUtil.GetCurrentTimestampInMilliseconds();
-        //
-        //            // TODO: the timestamp comparisons seem to be used for determining if the stored data is invalid and needs refreshed,
-        //            //       however, looking at this code I'm not sure it's implemented correctly - or if these refactors still match the behavior of
-        //            //       the previous code... same concern with the next method GetItemTemplates()..
-        //
-        //            var cachedMsg = _session.DataCache.GetCachedAssetDigest();
-        //            if (cachedMsg != null && remoteConfigParsed.AssetDigestTimestampMs <= timestamp)
-        //            {
-        //                return cachedMsg;
-        //            }
-        //            else
-        //            {
-        //                // GetAssetDigest
-        //                var assetDigestResponse = await SendRemoteProcedureCallAsync(new Request
-        //                {
-        //                    RequestType = RequestType.GetAssetDigest,
-        //                    RequestMessage = new GetAssetDigestMessage
-        //                    {
-        //                        Platform = Platform.Android,
-        //                        AppVersion = 2903
-        //                    }.ToByteString()
-        //                });
-        //                var msg = GetAssetDigestResponse.Parser.ParseFrom(assetDigestResponse);
-        //                _session.DataCache.SaveData(DataCacheExtensions.AssetDigestFile, msg);
-        //                return msg;
-        //            }
-        //        }
-        //
-        //        public async Task<DownloadItemTemplatesResponse> GetItemTemplatesAsync()
-        //        {
-        //            // Get DownloadRemoteConfig
-        //            var remoteConfigResponse = await SendRemoteProcedureCallAsync(new Request
-        //            {
-        //                RequestType = RequestType.DownloadRemoteConfigVersion,
-        //                RequestMessage = new DownloadRemoteConfigVersionMessage
-        //                {
-        //                    Platform = Platform.Android,
-        //                    AppVersion = 2903
-        //                }.ToByteString()
-        //            });
-        //
-        //            var remoteConfigParsed = DownloadRemoteConfigVersionResponse.Parser.ParseFrom(remoteConfigResponse);
-        //            var timestamp = (ulong) TimeUtil.GetCurrentTimestampInMilliseconds();
-        //
-        //            var cachedMsg = _session.DataCache.GetCachedItemTemplates();
-        //            if (cachedMsg != null && remoteConfigParsed.AssetDigestTimestampMs <= timestamp)
-        //            {
-        //                return cachedMsg;
-        //            }
-        //            else
-        //            {
-        //                // GetAssetDigest
-        //                var itemTemplateResponse = await SendRemoteProcedureCallAsync(new Request
-        //                {
-        //                    RequestType = RequestType.DownloadItemTemplates
-        //                });
-        //                var msg = DownloadItemTemplatesResponse.Parser.ParseFrom(itemTemplateResponse);
-        //                _session.DataCache.SaveData(DataCacheExtensions.ItemTemplatesFile, msg);
-        //                return msg;
-        //            }
-        //        }
-        #endregion
-
         /// <summary>
         ///     It is not recommended to call this. Map objects will update automatically and fire the map update event.
         /// </summary>
         public async Task RefreshMapObjectsAsync()
         {
+            if (_session.State == SessionState.Paused)
+                return;
+
             var cellIds = MapUtil.GetCellIdsForLatLong(_session.Player.Coordinate.Latitude, _session.Player.Coordinate.Longitude);
             var sinceTimeMs = cellIds.Select(x => (long)0).ToArray();
 
@@ -375,29 +304,6 @@ namespace POGOLib.Official.Net
         private ulong GetNextRequestId()
         {
             //Change to random requestId https://github.com/pogodevorg/pgoapi/pull/217
-            /*
-            if (_requestCount == 1)
-            {
-                IncrementRequestCount();
-
-                switch (GetPlatform())
-                {
-                    case Platform.Android:
-                        // lrand48 is "broken" in that the first run of it will return a static value.
-                        // So the first time we send a request, we need to match that initial value. 
-                        // Note: On android srand(4) is called in .init_array which seeds the initial value.
-                        return 0x53B77E48000000B0;
-                    case Platform.Ios:
-                        // Same as lrand48, iOS uses "rand()" without a pre-seed which always gives the same first value.
-                        return 0x41A700000002;
-                }
-            }
-
-            // Note that the API expects a "positive" random value here. (At least on Android it does due to lrand48 implementation details)
-            // So we'll just use the same for iOS since it doesn't hurt, and means less code required.
-            ulong r = (((ulong)PositiveRandom() | ((_requestCount + 1) >> 31)) << 32) | (_requestCount + 1);
-            IncrementRequestCount();
-            return r;*/
 
             return idGenerator.Next();
         }
@@ -465,6 +371,19 @@ namespace POGOLib.Official.Net
                     RequestMessage = new GetBuddyWalkedMessage().ToByteString()
                 });
             }
+            // Need maybe other ordre....
+            if (_session.IncenseUsed)
+            {
+                request.Add(new Request
+                {
+                    RequestType = RequestType.GetIncensePokemon,
+                    RequestMessage = new GetIncensePokemonMessage
+                    {
+                        PlayerLatitude = _session.Player.Coordinate.Latitude,
+                        PlayerLongitude = _session.Player.Coordinate.Longitude
+                    }.ToByteString()
+                });
+            }
             if (!noinbox)
             {
                 request.Add(new Request
@@ -476,18 +395,6 @@ namespace POGOLib.Official.Net
                     }.ToByteString()
                 });
             }
-
-            //If Incense is active we add this:
-            //request.Add(new Request
-            //{
-            //    RequestType = RequestType.GetIncensePokemon,
-            //    RequestMessage = new GetIncensePokemonMessage
-            //    {
-            //        PlayerLatitude = _session.Player.Coordinate.Latitude,
-            //        PlayerLongitude = _session.Player.Coordinate.Longitude
-            //    }.ToByteString()
-            //});
-
             return request;
         }
 
@@ -717,7 +624,6 @@ namespace POGOLib.Official.Net
                             case ResponseEnvelope.Types.StatusCode.BadRequest:
                                 _session.SetTemporalBan();
                                 throw new Exception("Bad Request Received. The account is Temporal Banned");
-
                             default:
                                 _session.Logger.Info($"Unknown status code: {responseEnvelope.StatusCode}");
                                 break;
@@ -880,6 +786,7 @@ namespace POGOLib.Official.Net
                         catch (Exception)
                         {
                             downloadSettings = new DownloadSettingsResponse() { Error = "Could not parse downloadSettings" };
+                            continue;
                         }
                         if (string.IsNullOrEmpty(downloadSettings.Error))
                         {
@@ -900,6 +807,7 @@ namespace POGOLib.Official.Net
                         else
                         {
                             _session.Logger.Debug($"DownloadSettingsResponse.Error: '{downloadSettings.Error}'");
+                            continue;
                         }
                         break;
 
@@ -907,13 +815,31 @@ namespace POGOLib.Official.Net
                         var checkChallenge = CheckChallengeResponse.Parser.ParseFrom(bytes);
                         if (checkChallenge.ShowChallenge)
                         {
-                            _session.Pause();
                             _session.OnCaptchaReceived(checkChallenge.ChallengeUrl);
+                            _session.Pause();
+                            continue;
                         }
                         break;
                     case RequestType.GetBuddyWalked:
                         var getBuddyWalked = GetBuddyWalkedResponse.Parser.ParseFrom(bytes);
                         _session.Player.BuddyCandy = getBuddyWalked.CandyEarnedCount;
+                        break;
+                    case RequestType.GetIncensePokemon:
+                        var getIncensePokemonResponse = GetIncensePokemonResponse.Parser.ParseFrom(bytes);
+                        if (getIncensePokemonResponse.PokemonId > 0)
+                        {
+                            var pokemon = new MapPokemon
+                            {
+                                EncounterId = getIncensePokemonResponse.EncounterId,
+                                ExpirationTimestampMs = getIncensePokemonResponse.DisappearTimestampMs,
+                                Latitude = getIncensePokemonResponse.Latitude,
+                                Longitude = getIncensePokemonResponse.Longitude,
+                                PokemonId = getIncensePokemonResponse.PokemonId,
+                                SpawnPointId = getIncensePokemonResponse.EncounterLocation,
+                                PokemonDisplay = getIncensePokemonResponse.PokemonDisplay
+                            };
+                            _session.Map.IncensePokemons = pokemon;
+                        }
                         break;
                 }
             }
@@ -989,12 +915,10 @@ namespace POGOLib.Official.Net
                     }.ToByteString()
                 }, true, true, true);
 
-
                 var downloadItemTemplatesResponse = DownloadItemTemplatesResponse.Parser.ParseFrom(response);
 
                 pageOffset = downloadItemTemplatesResponse.PageOffset;
                 timestamp = downloadItemTemplatesResponse.TimestampMs;
-
 
                 templates.AddRange(downloadItemTemplatesResponse.ItemTemplates);
 
@@ -1069,7 +993,6 @@ namespace POGOLib.Official.Net
         public async Task GetDownloadURLs(string[] toCheck)
         {
             var dowloadUrls = new List<POGOProtos.Data.DownloadUrlEntry>();
-            var duFilename = "data/"+_session.Device.DeviceInfo.DeviceId + "_du.json";
             if (_session.Templates.DownloadUrls != null) {
                     return;
             }

@@ -27,6 +27,7 @@ namespace POGOLib.Official.Net
     public class Session : IDisposable
     {
         private SessionState _state;
+        private bool _incenseUsed;
 
         /// <summary>
         /// This is the <see cref="HeartbeatDispatcher" /> which is responsible for retrieving events and updating gps location.
@@ -84,6 +85,19 @@ namespace POGOLib.Official.Net
         }
 
         /// <summary>
+        /// Gets Incense active of the <see cref="Session" />.
+        /// </summary>
+        public bool IncenseUsed
+        {
+            get { return _incenseUsed; }
+            set
+            {
+                _incenseUsed = value;
+                Logger.Debug($"Session incense was set to {_incenseUsed}.");
+            }
+        }
+
+        /// <summary>
         /// Gets the <see cref="SessionState"/> of the <see cref="Session"/>.
         /// </summary>
         public SessionState State
@@ -96,9 +110,11 @@ namespace POGOLib.Official.Net
                 Logger.Debug($"Session state was set to {_state}.");
             }
         }
-        public void SetTemporalBan()
+
+        internal void SetTemporalBan()
         {
             State = SessionState.TemporalBanned;
+            Shutdown();
         }
 
         /// <summary>
@@ -177,7 +193,7 @@ namespace POGOLib.Official.Net
         public void Pause()
         {
             if (State != SessionState.Started &&
-                State != SessionState.Resumed)
+                State != SessionState.Resumed && State != SessionState.TemporalBanned)
             {
                 throw new SessionStateException("The session is not running.");
             }
@@ -206,7 +222,8 @@ namespace POGOLib.Official.Net
                 throw new SessionStateException("The session has already been stopped.");
             }
 
-            State = SessionState.Stopped;
+            if (State != SessionState.TemporalBanned)
+                State = SessionState.Stopped;
 
             _heartbeat.StopDispatcher();
         }

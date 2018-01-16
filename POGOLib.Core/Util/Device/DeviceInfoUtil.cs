@@ -8,55 +8,47 @@ namespace POGOLib.Official.Util.Device
     {
         private static readonly Random Random = new Random();
 
-
-        private static readonly string[][] OsVars = { 
-            new [] {"9.0", "CFNetwork/758.0.2 Darwin/15.0.0"},        // Index 0
-            new [] {"9.0.1","CFNetwork/758.0.2 Darwin/15.0.0"},       // Index 1
-                new [] {"9.0.2","CFNetwork/758.0.2 Darwin/15.0.0"},   // Index 2
-                new [] {"9.1","CFNetwork/758.1.6 Darwin/15.0.0"},     // Index 3
-                new [] {"9.2","CFNetwork/758.2.8 Darwin/15.0.0"},     // Index 4
-                new [] {"9.2.1","CFNetwork/758.2.8 Darwin/15.0.0"},   // Index 5
-                new [] {"9.3","CFNetwork/758.3.15 Darwin/15.4.0"},    // Index 6
-                new [] {"9.3.2","CFNetwork/758.4.3 Darwin/15.5.0"},   // Index 7
-                new [] {"10.3.3","CFNetwork/807.2.14 Darwin/16.3.0"}, // Index 8
-                new [] {"11.1.0","CFNetwork/889.3 Darwin/17.2.0"},    // Index 9
-                new [] {"11.2.0","CFNetwork/893.10 Darwin/17.3.0"}    // Index 10
-        };
-        // NOTEs:
-        //        pos 3 = index of first valid OS
-        //        pos 4 = index of last valid OS
         private static readonly string[][] Devices =
         {
-            new[] {"iPad5,1", "iPad", "J96AP","0","10"},     // iPad 4 mini
-            new[] {"iPad5,2", "iPad", "J97AP","0","10"},     // iPad 4 mini
-            new[] {"iPad5,3", "iPad", "J81AP","0","10"},     // iPad Air 2
-            new[] {"iPad5,4", "iPad", "J82AP","0","10"},     // iPad Air 2
-            new[] {"iPad6,7", "iPad", "J98aAP","3","10"},    // iPad Pro (12.9-inch)
-            new[] {"iPad6,8", "iPad", "J99aAP","3","10"},    // iPad Pro (12.9-inch)
-            new[] {"iPhone5,1", "iPhone", "N41AP","0","8"},  // iPhone 5
-            new[] {"iPhone5,2", "iPhone", "N42AP","0","8"},  // iPhone 5
-            new[] {"iPhone5,3", "iPhone", "N48AP","0","8"},  // iPhone 5c
-            new[] {"iPhone5,4", "iPhone", "N49AP","0","8"},  // iPhone 5c
-            new[] {"iPhone6,1", "iPhone", "N51AP","0","10"}, // iPhone 5s
-            new[] {"iPhone6,2", "iPhone", "N53AP","0","10"}, // iPhone 5s
-            new[] {"iPhone7,1", "iPhone", "N56AP","8","10"}, // iPhone 6 Plus
-            new[] {"iPhone7,2", "iPhone", "N61AP","8","10"}, // iPhone 6
-            new[] {"iPhone8,1", "iPhone", "N71AP","8","10"}, // iPhone 6s
-            new[] {"iPhone8,2", "iPhone", "MKTM2","8","10"}, // iPhone 6s plus
-            new[] {"iPhone9,3", "iPhone", "MN9T2","8","10"}  // iPhone 7
+            new[] {"iPhone7,1", "iPhone", "N56AP"},    // iPhone 6 Plus
+            new[] {"iPhone7,2", "iPhone", "N61AP"},    // iPhone 6
+            new[] {"iPhone8,1", "iPhone", "N71AP"},    // iPhone 6s
+            new[] {"iPhone8,1", "iPhone", "N71mAP"},   // iPhone 6s
+            new[] {"iPhone8,2", "iPhone", "N66AP"},    // iPhone 6s plus
+            new[] {"iPhone8,2", "iPhone", "N66mAP"},   // iPhone 6s plus
+            new[] {"iPhone8,4", "iPhone", "N69AP"},    // iPhone SE
+            new[] {"iPhone8,4", "iPhone", "N69uAP"},   // iPhone SE
+            new[] {"iPhone9,1", "iPhone", "D10AP"},    // iPhone 7
+            new[] {"iPhone9,2", "iPhone", "D11AP"},    // iPhone 7 plus
+            new[] {"iPhone9,3", "iPhone", "D101AP"},   // iPhone 7
+            new[] {"iPhone9,4", "iPhone", "D111AP"},   // iPhone 7 plus
+            new[] {"iPhone10,1", "iPhone", "D20AP"},   // iPhone 8
+            new[] {"iPhone10,2", "iPhone", "D21AP"},   // iPhone 8 plus
+            new[] {"iPhone10,3", "iPhone", "D22AP"},   // iPhone X
+            new[] {"iPhone10,4", "iPhone", "D201AP"},  // iPhone 8
+            new[] {"iPhone10,5", "iPhone", "D211AP"},  // iPhone 8 plus
+            new[] {"iphone10,6", "iPhone", "D221AP"}   // iPhone X
         };
 
+        private static readonly string[] OsVersions = {
+            "11.1.0",
+            "11.2.0",
+            "11.2.5"
+        };
 
+        private static readonly string[] OsUserAgentParts = {
+            "CFNetwork/889.3 Darwin/17.2.0",      // Index 0   // iOS 11.1.0
+            "CFNetwork/893.10 Darwin/17.3.0",     // Index 1   // iOS 11.2.0
+            "CFNetwork/893.14.2 Darwin/17.4.0"    // Index 2   // iOS 11.2.5
+        };
 
         public static DeviceWrapper GetRandomDevice()
         {
             var device = Devices[Random.Next(Devices.Length)];
-            var startIndex = int.Parse(device[3]);
-            var LastIndex = int.Parse(device[4]);
 
-            var osIndex = Random.Next(startIndex, LastIndex +1);
-            var firmwareType = OsVars[osIndex][0];
-            var firmwareUserAgentPart = OsVars[osIndex][1];
+            var osId = Random.Next(OsVersions.Length);
+            var firmwareType = OsVersions[osId];
+            var firmwareUserAgentPart = OsUserAgentParts[osId];
 
             return new DeviceWrapper
             {

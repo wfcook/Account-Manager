@@ -6,6 +6,7 @@ using Google.Protobuf.Collections;
 using POGOLib.Official.Net;
 using POGOProtos.Map;
 using POGOProtos.Map.Fort;
+using POGOProtos.Map.Pokemon;
 
 namespace POGOLib.Official.Pokemon
 {
@@ -23,10 +24,26 @@ namespace POGOLib.Official.Pokemon
         // The last received map cells.
         private RepeatedField<MapCell> _cells;
 
+        // The last received incense pokémon.
+        private MapPokemon _incensePokemons;
+
         internal Map(Session session)
         {
             _session = session;
             _cells = new RepeatedField<MapCell>();
+        }
+
+        /// <summary>
+        ///     Gets the last received Incense Pokémon from PokémonGo.<br />
+        ///     Only use this if you Incense is active.
+        /// </summary>
+        public MapPokemon IncensePokemons
+        {
+            get { return _incensePokemons; }
+            internal set
+            {
+                _incensePokemons = value;
+            }
         }
 
         /// <summary>
