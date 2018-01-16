@@ -349,9 +349,13 @@ namespace PokemonGoGUI.GoManager
                         }
                     }
 
-                    //Break out of captcha loop to verifychallenge
-
                     await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
+
+                    //Pause out of captcha loop to verifychallenge
+                    if (WaitPaused())
+                    {
+                        continue;
+                    }
 
                     result = await CheckReauthentication();
 
@@ -399,6 +403,13 @@ namespace PokemonGoGUI.GoManager
                     if (PokeSettings == null)
                     {
                         LogCaller(new LoggerEventArgs("Grabbing pokemon settings ...", LoggerTypes.Debug));
+
+                        //Pause out of captcha loop to verifychallenge
+                        if (WaitPaused())
+                        {
+                            continue;
+                        }
+
                         result = await GetItemTemplates();
 
                         if (!result.Success)
@@ -417,6 +428,13 @@ namespace PokemonGoGUI.GoManager
                     {
                         if (!PlayerData.TutorialState.Contains(TutorialState.AvatarSelection))
                         {
+
+                            //Pause out of captcha loop to verifychallenge
+                            if (WaitPaused())
+                            {
+                                continue;
+                            }
+
                             result = await MarkStartUpTutorialsComplete(true);
 
                             if (!result.Success)
@@ -438,6 +456,13 @@ namespace PokemonGoGUI.GoManager
 
                         if (!PlayerData.TutorialState.Contains(TutorialState.PokestopTutorial))
                         {
+
+                            //Pause out of captcha loop to verifychallenge
+                            if (WaitPaused())
+                            {
+                                continue;
+                            }
+
                             result = await MarkTutorialsComplete(new[] { TutorialState.PokestopTutorial, TutorialState.PokemonBerry, TutorialState.UseItem });
 
                             if (!result.Success)
@@ -503,6 +528,12 @@ namespace PokemonGoGUI.GoManager
                     //Get pokestops
                     LogCaller(new LoggerEventArgs("getting pokestops...", LoggerTypes.Debug));
 
+                    //Pause out of captcha loop to verifychallenge
+                    if (WaitPaused())
+                    {
+                        continue;
+                    }
+
                     MethodResult<List<FortData>> pokestops = GetPokeStops();
 
                     if (!pokestops.Success)
@@ -557,7 +588,11 @@ namespace PokemonGoGUI.GoManager
                             continue;
                         }
 
-                        WaitPaused();
+                        //Pause out of captcha loop to verifychallenge
+                        if (WaitPaused())
+                        {
+                            continue;
+                        }
 
                         FortData pokestop = pokestopsToFarm.Dequeue();
                         LogCaller(new LoggerEventArgs("fort Dequeued: " + pokestop.Id, LoggerTypes.Debug));
@@ -604,6 +639,13 @@ namespace PokemonGoGUI.GoManager
 
                             if (remainingBalls > 0)
                             {
+
+                                //Pause out of captcha loop to verifychallenge
+                                if (WaitPaused())
+                                {
+                                    continue;
+                                }
+
                                 //Catch nearby pokemon
                                 MethodResult nearbyPokemonResponse = await CatchNeabyPokemon();
 
@@ -619,6 +661,13 @@ namespace PokemonGoGUI.GoManager
 
                             if (RemainingPokeballs() > 0)
                             {
+
+                                //Pause out of captcha loop to verifychallenge
+                                if (WaitPaused())
+                                {
+                                    continue;
+                                }
+
                                 //Catch lured pokemon
                                 MethodResult luredPokemonResponse = await CatchLuredPokemon(pokestop);
                                 await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
@@ -640,6 +689,13 @@ namespace PokemonGoGUI.GoManager
                         //Clean inventory,
                         if (UserSettings.RecycleItems)
                         {
+
+                            //Pause out of captcha loop to verifychallenge
+                            if (WaitPaused())
+                            {
+                                continue;
+                            }
+
                             await RecycleFilteredItems();
                             await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
                         }
@@ -658,6 +714,13 @@ namespace PokemonGoGUI.GoManager
                                         continue;
                                     try
                                     {
+
+                                        //Pause out of captcha loop to verifychallenge
+                                        if (WaitPaused())
+                                        {
+                                            continue;
+                                        }
+
                                         MethodResult<GymGetInfoResponse> _result = await GymGetInfo(pokestop);
                                         LogCaller(new LoggerEventArgs("Gym Name: " + _result.Data.Name, LoggerTypes.Info));
                                     }
@@ -669,8 +732,21 @@ namespace PokemonGoGUI.GoManager
                                 }
                                 else
                                 {
+
+                                    //Pause out of captcha loop to verifychallenge
+                                    if (WaitPaused())
+                                    {
+                                        continue;
+                                    }
+
                                     var fortDetails = await FortDetails(pokestop);
                                     LogCaller(new LoggerEventArgs("Fort Name: " + fortDetails.Data.Name, LoggerTypes.Info));
+                                }
+
+                                //Pause out of captcha loop to verifychallenge
+                                if (WaitPaused())
+                                {
+                                    continue;
                                 }
 
                                 MethodResult searchResult = await SearchPokestop(pokestop);
@@ -704,6 +780,13 @@ namespace PokemonGoGUI.GoManager
                         // evolve, transfer, etc on first and every 10 stops
                         if (IsRunning && ((pokeStopNumber > 4 && pokeStopNumber % 10 == 0) || pokeStopNumber == 1))
                         {
+
+                            //Pause out of captcha loop to verifychallenge
+                            if (WaitPaused())
+                            {
+                                continue;
+                            }
+
                             MethodResult echoResult = await CheckReauthentication();
 
                             //Echo failed, restart
@@ -716,6 +799,13 @@ namespace PokemonGoGUI.GoManager
 
                             if (UserSettings.EvolvePokemon)
                             {
+
+                                //Pause out of captcha loop to verifychallenge
+                                if (WaitPaused())
+                                {
+                                    continue;
+                                }
+
                                 MethodResult evolveResult = await EvolveFilteredPokemon();
 
                                 if (evolveResult.Success)
@@ -726,6 +816,13 @@ namespace PokemonGoGUI.GoManager
 
                             if (UserSettings.TransferPokemon)
                             {
+
+                                //Pause out of captcha loop to verifychallenge
+                                if (WaitPaused())
+                                {
+                                    continue;
+                                }
+
                                 MethodResult transferResult = await TransferFilteredPokemon();
 
                                 if (transferResult.Success)
@@ -736,6 +833,13 @@ namespace PokemonGoGUI.GoManager
 
                             if (UserSettings.IncubateEggs)
                             {
+
+                                //Pause out of captcha loop to verifychallenge
+                                if (WaitPaused())
+                                {
+                                    continue;
+                                }
+
                                 MethodResult incubateResult = await IncubateEggs();
 
                                 if (incubateResult.Success)
@@ -752,6 +856,13 @@ namespace PokemonGoGUI.GoManager
                         if (Level > prevLevel)
                         {
                             await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
+
+                            //Pause out of captcha loop to verifychallenge
+                            if (WaitPaused())
+                            {
+                                continue;
+                            }
+
                             await ClaimLevelUpRewards(Level);
                         }
 
