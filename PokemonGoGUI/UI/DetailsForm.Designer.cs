@@ -691,7 +691,6 @@
             this.showFutureTransfersToolStripMenuItem});
             this.contextMenuStripPokemonDetails.Name = "contextMenuStripPokemonDetails";
             this.contextMenuStripPokemonDetails.Size = new System.Drawing.Size(218, 124);
-            this.contextMenuStripPokemonDetails.Opening += new System.ComponentModel.CancelEventHandler(this.ContextMenuStripPokemonDetails_Opening);
             // 
             // favoriteToolStripMenuItem
             // 

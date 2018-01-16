@@ -25,6 +25,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
+using PokemonGoGUI.Captcha;
 using static POGOProtos.Networking.Envelopes.Signature.Types;
 
 #endregion
@@ -38,7 +39,7 @@ namespace PokemonGoGUI
         public uint AppVersion;
         public Session ClientSession;
         public bool LoggedIn = false;
-        private GetPlayerMessage.Types.PlayerLocale PlayerLocale;
+        public GetPlayerMessage.Types.PlayerLocale PlayerLocale;
         private DeviceWrapper ClientDeviceWrapper;
         public Manager ClientManager;
 
@@ -131,7 +132,7 @@ namespace PokemonGoGUI
                     throw new ArgumentException("Login provider must be either \"google\" or \"ptc\".");
             }
 
-            ClientSession = await GetSession(loginProvider, ClientManager.UserSettings.Location.Latitude, ClientManager.UserSettings.Location.Longitude, true);
+            ClientSession = await GetSession(loginProvider, ClientManager.UserSettings.Latitude, ClientManager.UserSettings.Longitude, true);
 
             // Send initial requests and start HeartbeatDispatcher.
             // This makes sure that the initial heartbeat request finishes and the "session.Map.Cells" contains stuff.
@@ -173,20 +174,6 @@ namespace PokemonGoGUI
                         }
                     }
 
-
-                    //Closes bot on captcha received need utils for solve
-                    if (ClientManager.AccountState == AccountState.CaptchaReceived)
-                    {
-                        ClientManager.LogCaller(new LoggerEventArgs("Captcha ceceived.", LoggerTypes.Warning));
-
-                        //Remove proxy
-                        ClientManager.RemoveProxy();
-
-                        ClientManager.Stop();
-
-                        msgStr = "Captcha ceceived.";
-                    }
-
                     SaveAccessToken(ClientSession.AccessToken);
                 }
                 else
@@ -206,18 +193,18 @@ namespace PokemonGoGUI
                     if (ClientSession.State == SessionState.TemporalBanned)
                     {
                         ClientManager.AccountState = AccountState.TemporalBan;
-                        ClientManager.LogCaller(new LoggerEventArgs("The account is temporal banned.", LoggerTypes.FatalError));
+                        ClientManager.LogCaller(new LoggerEventArgs("The account is banned temporally.", LoggerTypes.FatalError));
 
                         //Remove proxy
                         ClientManager.RemoveProxy();
 
                         ClientManager.Stop();
 
-                        msgStr = "The account is temporal banned.";
+                        msgStr = "The account is banned temporally.";
                     }
                 }
             }
-            catch (PtcOfflineException)
+            catch (PtcOfflineException) // poex
             {
                 ClientManager.Stop();
 
@@ -225,7 +212,7 @@ namespace PokemonGoGUI
 
                 msgStr = "Ptc server offline.";
             }
-            catch (AccountNotVerifiedException)
+            catch (AccountNotVerifiedException) // anvex
             {
                 ClientManager.Stop();
                 ClientManager.RemoveProxy();
@@ -236,11 +223,11 @@ namespace PokemonGoGUI
 
                 msgStr = "Account not verified.";
             }
-            catch (WebException ex)
+            catch (WebException wex)
             {
                 ClientManager.Stop();
 
-                if (ex.Status == WebExceptionStatus.Timeout)
+                if (wex.Status == WebExceptionStatus.Timeout)
                 {
                     if (String.IsNullOrEmpty(ClientManager.Proxy))
                     {
@@ -257,15 +244,15 @@ namespace PokemonGoGUI
 
                 if (!String.IsNullOrEmpty(ClientManager.Proxy))
                 {
-                    if (ex.Status == WebExceptionStatus.ConnectionClosed)
+                    if (wex.Status == WebExceptionStatus.ConnectionClosed)
                     {
                         ClientManager._proxyIssue = true;
                         ClientManager.LogCaller(new LoggerEventArgs("Potential http proxy detected. Only https proxies will work.", LoggerTypes.ProxyIssue));
 
                         msgStr = "Http proxy detected";
                     }
-                    else if (ex.Status == WebExceptionStatus.ConnectFailure || ex.Status == WebExceptionStatus.ProtocolError || ex.Status == WebExceptionStatus.ReceiveFailure
-                        || ex.Status == WebExceptionStatus.ServerProtocolViolation)
+                    else if (wex.Status == WebExceptionStatus.ConnectFailure || wex.Status == WebExceptionStatus.ProtocolError || wex.Status == WebExceptionStatus.ReceiveFailure
+                        || wex.Status == WebExceptionStatus.ServerProtocolViolation)
                     {
                         ClientManager._proxyIssue = true;
                         ClientManager.LogCaller(new LoggerEventArgs("Proxy is offline", LoggerTypes.ProxyIssue));
@@ -276,11 +263,11 @@ namespace PokemonGoGUI
 
                 ClientManager._proxyIssue |= !String.IsNullOrEmpty(ClientManager.Proxy);
 
-                ClientManager.LogCaller(new LoggerEventArgs("Failed to login due to request error", LoggerTypes.Exception, ex.InnerException));
+                ClientManager.LogCaller(new LoggerEventArgs("Failed to login due to request error", LoggerTypes.Exception, wex.InnerException));
 
                 msgStr = "Failed to login due to request error";
             }
-            catch (TaskCanceledException)
+            catch (TaskCanceledException) // tce
             {
                 ClientManager.Stop();
 
@@ -296,17 +283,17 @@ namespace PokemonGoGUI
 
                 msgStr = "Login request has timed out";
             }
-            catch (InvalidCredentialsException ex)
+            catch (InvalidCredentialsException icex)
             {
                 //Puts stopping log before other log.
                 ClientManager.Stop();
                 ClientManager.RemoveProxy();
 
-                ClientManager.LogCaller(new LoggerEventArgs("Invalid credentials or account lockout. Stopping bot...", LoggerTypes.Warning, ex));
+                ClientManager.LogCaller(new LoggerEventArgs("Invalid credentials or account lockout. Stopping bot...", LoggerTypes.Warning, icex));
 
                 msgStr = "Username or password incorrect";
             }
-            catch (IPBannedException)
+            catch (IPBannedException) // ipex
             {
                 if (ClientManager.UserSettings.StopOnIPBan)
                 {
@@ -335,21 +322,29 @@ namespace PokemonGoGUI
 
                 msgStr = message;
             }
-            catch (GoogleLoginException ex)
+            catch (GoogleLoginException glex)
             {
                 ClientManager.Stop();
                 ClientManager.RemoveProxy();
 
-                ClientManager.LogCaller(new LoggerEventArgs(ex.Message, LoggerTypes.Warning));
+                ClientManager.LogCaller(new LoggerEventArgs(glex.Message, LoggerTypes.Warning));
 
                 msgStr = "Failed to login";
             }
-            catch (PokeHashException phe)
+            catch (ArgumentNullException) // anex
+            {
+                ClientManager.AccountState = AccountState.TemporalBan;
+                ClientManager.Stop();
+                ClientManager.RemoveProxy();
+                msgStr = "This account is banned temporally.";
+            }
+
+            catch (PokeHashException phex)
             {
                 ClientManager.AccountState = AccountState.HashIssues;
 
                 msgStr = "Hash issues";
-                ClientManager.LogCaller(new LoggerEventArgs(phe.Message, LoggerTypes.FatalError, phe));
+                ClientManager.LogCaller(new LoggerEventArgs(phex.Message, LoggerTypes.FatalError, phex));
             }
             catch (Exception ex)
             {
@@ -370,7 +365,7 @@ namespace PokemonGoGUI
 
         private void OnAssetDisgestReceived(object sender, List<POGOProtos.Data.AssetDigestEntry> data)
         {
-            var filename = "data/" + ClientManager.UserSettings.DeviceInfo.DeviceId + "_AD.json";
+            var filename = "data/" + ClientManager.UserSettings.DeviceId + "_AD.json";
             if (!Directory.Exists("data"))
                 Directory.CreateDirectory("data");
             try
@@ -387,7 +382,7 @@ namespace PokemonGoGUI
         {
             if (!Directory.Exists("data"))
                 Directory.CreateDirectory("data");
-            var filename = "data/" + ClientManager.UserSettings.DeviceInfo.DeviceId + "_IT.json";
+            var filename = "data/" + ClientManager.UserSettings.DeviceId + "_IT.json";
             try
             {
                 File.WriteAllText(filename, Serializer.ToJson(data));
@@ -402,7 +397,7 @@ namespace PokemonGoGUI
         {
             if (!Directory.Exists("data"))
                 Directory.CreateDirectory("data");
-            var filename = "data/" + ClientManager.UserSettings.DeviceInfo.DeviceId + "_UR.json";
+            var filename = "data/" + ClientManager.UserSettings.DeviceId + "_UR.json";
             try
             {
                 File.WriteAllText(filename, Serializer.ToJson(data));
@@ -417,7 +412,7 @@ namespace PokemonGoGUI
         {
             if (!Directory.Exists("data"))
                 Directory.CreateDirectory("data");
-            var filename = "data/" + ClientManager.UserSettings.DeviceInfo.DeviceId + "_LCV.json";
+            var filename = "data/" + ClientManager.UserSettings.DeviceId + "_LCV.json";
             try
             {
                 File.WriteAllText(filename, Serializer.ToJson(data));
@@ -442,16 +437,40 @@ namespace PokemonGoGUI
             //ClientManager.LogCaller(new LoggerEventArgs(msg, LoggerTypes.Success));
         }
 
-        public void SessionOnCaptchaReceived(object sender, CaptchaEventArgs e)
+        public async void SessionOnCaptchaReceived(object sender, CaptchaEventArgs e)
         {
+            AccountState accountState = ClientManager.AccountState;
+
             ClientManager.AccountState = AccountState.CaptchaReceived;
-            //2captcha needed to solve or chrome drive for solve url manual
-            //e.CaptchaUrl;
+
+            ClientManager.LogCaller(new LoggerEventArgs("Captcha received.", LoggerTypes.Warning));
+
+            ClientManager.LogCaller(new LoggerEventArgs("Bot paused VerifyChallenge...", LoggerTypes.Captcha));
+            ClientManager.WaitVerifyChalange(true);
+
+            bool solved = false;
+            int retries = 1;
+
+            while (retries-- > 0 && !solved)
+            {
+                solved = await CaptchaManager.SolveCaptcha(this, e.CaptchaUrl);
+            }
+            if (solved)
+            {
+                ClientManager.WaitVerifyChalange(false);
+                ClientManager.LogCaller(new LoggerEventArgs("Unpausing bot Challenge finished...", LoggerTypes.Captcha));
+                ClientManager.AccountState = accountState;
+                return;
+            }
+
+            ClientManager.WaitVerifyChalange(false);
+            ClientManager.Stop();
         }
 
         private void SessionInventoryUpdate(object sender, EventArgs e)
         {
-           // ClientManager.UpdateInventory(); // <- this line should be the unique line updating the inventory
+            //TODO: review needed here            
+            //ClientManager.UpdateInventory(0); // <- this line should be the unique line updating the inventory
         }
 
         private void OnHatchedEggsReceived(object sender, GetHatchedEggsResponse hatchedEggResponse)
@@ -473,10 +492,6 @@ namespace PokemonGoGUI
         {
             ClientManager = manager;
 
-            int osId = OsVersions[ClientManager.UserSettings.DeviceInfo.FirmwareType.Length].Length;
-            var firmwareUserAgentPart = OsUserAgentParts[osId];
-            var firmwareType = OsVersions[osId];
-
             Proxy = new ProxyEx
             {
                 Address = ClientManager.UserSettings.ProxyIP,
@@ -485,28 +500,35 @@ namespace PokemonGoGUI
                 Password = ClientManager.UserSettings.ProxyPassword
             };
 
+            Dictionary<string, string> Header = new Dictionary<string, string>()
+            {
+                {"11.1.0", "CFNetwork/889.3 Darwin/17.2.0"},
+                {"11.2.0", "CFNetwork/893.10 Darwin/17.3.0"},
+                {"11.2.5", "CFNetwork/893.14.2 Darwin/17.4.0"}
+            };
+
             ClientDeviceWrapper = new DeviceWrapper
             {
-                UserAgent = $"pokemongo/1 {firmwareUserAgentPart}",
+                UserAgent = $"pokemongo/1 {Header[ClientManager.UserSettings.FirmwareType]}",
                 DeviceInfo = new DeviceInfo
                 {
-                    DeviceId = ClientManager.UserSettings.DeviceInfo.DeviceId,
-                    DeviceBrand = ClientManager.UserSettings.DeviceInfo.DeviceBrand,
-                    DeviceModel = ClientManager.UserSettings.DeviceInfo.DeviceModel,
-                    DeviceModelBoot = ClientManager.UserSettings.DeviceInfo.DeviceModelBoot,
-                    HardwareManufacturer = ClientManager.UserSettings.DeviceInfo.HardwareManufacturer,
-                    HardwareModel = ClientManager.UserSettings.DeviceInfo.HardwareModel,
-                    FirmwareBrand = ClientManager.UserSettings.DeviceInfo.FirmwareBrand,
-                    FirmwareType = ClientManager.UserSettings.DeviceInfo.FirmwareType
+                    DeviceId = ClientManager.UserSettings.DeviceId,
+                    DeviceBrand = ClientManager.UserSettings.DeviceBrand,
+                    DeviceModel = ClientManager.UserSettings.DeviceModel,
+                    DeviceModelBoot = ClientManager.UserSettings.DeviceModelBoot,
+                    HardwareManufacturer = ClientManager.UserSettings.HardwareManufacturer,
+                    HardwareModel = ClientManager.UserSettings.HardwareModel,
+                    FirmwareBrand = ClientManager.UserSettings.FirmwareBrand,
+                    FirmwareType = ClientManager.UserSettings.FirmwareType
                 },
                 Proxy = Proxy.AsWebProxy()
             };
 
             PlayerLocale = new GetPlayerMessage.Types.PlayerLocale
             {
-                Country = ClientManager.UserSettings.PlayerLocale.Country,
-                Language = ClientManager.UserSettings.PlayerLocale.Language,
-                Timezone = ClientManager.UserSettings.PlayerLocale.Timezone
+                Country = ClientManager.UserSettings.Country,
+                Language = ClientManager.UserSettings.Language,
+                Timezone = ClientManager.UserSettings.TimeZone
             };
         }
 
@@ -559,69 +581,18 @@ namespace PokemonGoGUI
         private void LoadResources(Session session)
         {
             //My files resources here       
-            var filename = "data/" + ClientManager.UserSettings.DeviceInfo.DeviceId + "_IT.json";
+            var filename = "data/" + ClientManager.UserSettings.DeviceId + "_IT.json";
             if (File.Exists(filename))
                 session.Templates.ItemTemplates = Serializer.FromJson<List<DownloadItemTemplatesResponse.Types.ItemTemplate>>(File.ReadAllText(filename));
-            filename = "data/" + ClientManager.UserSettings.DeviceInfo.DeviceId + "_UR.json";
+            filename = "data/" + ClientManager.UserSettings.DeviceId + "_UR.json";
             if (File.Exists(filename))
                 session.Templates.DownloadUrls = Serializer.FromJson<List<DownloadUrlEntry>>(File.ReadAllText(filename));
-            filename = "data/" + ClientManager.UserSettings.DeviceInfo.DeviceId + "_AD.json";
+            filename = "data/" + ClientManager.UserSettings.DeviceId + "_AD.json";
             if (File.Exists(filename))
                 session.Templates.AssetDigests = Serializer.FromJson<List<AssetDigestEntry>>(File.ReadAllText(filename));
-            filename = "data/" + ClientManager.UserSettings.DeviceInfo.DeviceId + "_LCV.json";
+            filename = "data/" + ClientManager.UserSettings.DeviceId + "_LCV.json";
             if (File.Exists(filename))
                 session.Templates.LocalConfigVersion = Serializer.FromJson<DownloadRemoteConfigVersionResponse>(File.ReadAllText(filename));
         }
-
-        private static readonly string[] OsUserAgentParts = {
-            "CFNetwork/758.0.2 Darwin/15.0.0",  // 9.0
-            "CFNetwork/758.0.2 Darwin/15.0.0",  // 9.0.1
-            "CFNetwork/758.0.2 Darwin/15.0.0",  // 9.0.2
-            "CFNetwork/758.1.6 Darwin/15.0.0",  // 9.1
-            "CFNetwork/758.2.8 Darwin/15.0.0",  // 9.2
-            "CFNetwork/758.2.8 Darwin/15.0.0",  // 9.2.1
-            "CFNetwork/758.3.15 Darwin/15.4.0", // 9.3
-            "CFNetwork/758.4.3 Darwin/15.5.0",  // 9.3.2
-            "CFNetwork/807.2.14 Darwin/16.3.0", // 10.3.3
-            "CFNetwork/889.3 Darwin/17.2.0",    // 11.1.0
-            "CFNetwork/893.10 Darwin/17.3.0",   // 11.2.0
-            "CFNetwork/893.14.2 Darwin/17.4.0"  // 11.2.5
-        };
-
-        private static readonly string[][] Devices =
-        {
-            new[] {"iPad5,1", "iPad", "J96AP"},
-            new[] {"iPad5,2", "iPad", "J97AP"},
-            new[] {"iPad5,3", "iPad", "J81AP"},
-            new[] {"iPad5,4", "iPad", "J82AP"},
-            new[] {"iPad6,7", "iPad", "J98aAP"},
-            new[] {"iPad6,8", "iPad", "J99aAP"},
-            new[] {"iPhone5,1", "iPhone", "N41AP"},
-            new[] {"iPhone5,2", "iPhone", "N42AP"},
-            new[] {"iPhone5,3", "iPhone", "N48AP"},
-            new[] {"iPhone5,4", "iPhone", "N49AP"},
-            new[] {"iPhone6,1", "iPhone", "N51AP"},
-            new[] {"iPhone6,2", "iPhone", "N53AP"},
-            new[] {"iPhone7,1", "iPhone", "N56AP"},
-            new[] {"iPhone7,2", "iPhone", "N61AP"},
-            new[] {"iPhone8,1", "iPhone", "N71AP"},
-            new[] {"iPhone8,2", "iPhone", "MKTM2"}, //iphone 6s plus
-            new[] {"iPhone9,3", "iPhone", "MN9T2"}  //iphone 7
-        };
-
-        private static readonly string[] OsVersions = {
-            "9.0",
-            "9.0.1",
-            "9.0.2",
-            "9.1",
-            "9.2",
-            "9.2.1",
-            "9.3",
-            "9.3.2",
-            "10.3.3",
-            "11.1.0",
-            "11.2.0",
-            "11.2.5"
-        };
     }
 }

@@ -1,14 +1,12 @@
 using System.Globalization;
 using GeoCoordinatePortable;
 using Newtonsoft.Json;
-using POGOLib.Official.Exceptions;
 using POGOProtos.Data.Player;
 using POGOProtos.Enums;
 using POGOProtos.Map.Fort;
 using POGOProtos.Networking.Responses;
 using PokemonGoGUI.AccountScheduler;
 using PokemonGoGUI.Enums;
-using PokemonGoGUI.Exceptions;
 using PokemonGoGUI.Extensions;
 using PokemonGoGUI.GoManager.Models;
 using PokemonGoGUI.Models;
@@ -69,20 +67,33 @@ namespace PokemonGoGUI.GoManager
             UserSettings = new Settings();
             Logs = new List<Log>();
             Stats = new PlayerStats();
-            Tracker = new PokemonGoGUI.AccountScheduler.Tracker();
+            Tracker = new Tracker();
 
             ProxyHandler = handler;
 
             LoadFarmLocations();
         }
 
+        public void WaitVerifyChalange(bool wait)
+        {
+            if (wait)
+                _pauser.WaitOne();
+            else
+                _pauser.Set();
+        }
+
         public async Task<MethodResult> AcLogin()
         {
             LogCaller(new LoggerEventArgs("Attempting to login ...", LoggerTypes.Debug));
             AccountState = AccountState.Conecting;
+ 
+            //Pause out of captcha loop to verifychallenge
+            if (WaitPaused())
+            {
+                return new MethodResult();
+            }
 
-            MethodResult result = null;
-            result = await _client.DoLogin(this);
+            MethodResult result = await _client.DoLogin(this);
             LogCaller(new LoggerEventArgs(result.Message, LoggerTypes.Debug));
 
             if (!result.Success)
@@ -97,10 +108,6 @@ namespace PokemonGoGUI.GoManager
                 if (AccountState == AccountState.Conecting)
                 {
                     AccountState = AccountState.Good;
-                }
-                // This is part of the login process
-                if (UserSettings.ClaimLevelUpRewards){
-                    await ClaimLevelUpRewards(Level);
                 }
             }
 
@@ -281,7 +288,10 @@ namespace PokemonGoGUI.GoManager
                     continue;
                 }
 
-                WaitPaused();
+                if (WaitPaused())
+                {
+                    continue;
+                }
 
                 if ((_proxyIssue || CurrentProxy == null) && UserSettings.AutoRotateProxies)
                 {
@@ -300,7 +310,6 @@ namespace PokemonGoGUI.GoManager
 
                     continue;
                 }
-
 
                 StartingUp = true;
 
@@ -330,8 +339,8 @@ namespace PokemonGoGUI.GoManager
 
                 #region Startup
 
-                //try
-               // {
+                try
+                {
                     if (!_client.LoggedIn)
                     {
                         //Login
@@ -348,8 +357,12 @@ namespace PokemonGoGUI.GoManager
 
                     await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
-                    UpdateInventory(); // <- should not be needed
- 
+                    //Pause out of captcha loop to verifychallenge
+                    if (WaitPaused())
+                    {
+                        continue;
+                    }
+
                     result = await CheckReauthentication();
 
                     if (!result.Success)
@@ -383,7 +396,7 @@ namespace PokemonGoGUI.GoManager
                         }
                         catch (Exception ex1)
                         {
-                            AccountState = AccountState.SoftBan;
+                            AccountState = AccountState.TemporalBan;
                             LogCaller(new LoggerEventArgs("Exception: " + ex1, LoggerTypes.Debug));
                             LogCaller(new LoggerEventArgs("Game settings failed", LoggerTypes.FatalError, new Exception("Maybe this account is banned ...")));
                             Stop();
@@ -395,8 +408,14 @@ namespace PokemonGoGUI.GoManager
                     //Get pokemon settings
                     if (PokeSettings == null)
                     {
-
                         LogCaller(new LoggerEventArgs("Grabbing pokemon settings ...", LoggerTypes.Debug));
+
+                        //Pause out of captcha loop to verifychallenge
+                        if (WaitPaused())
+                        {
+                            continue;
+                        }
+
                         result = await GetItemTemplates();
 
                         if (!result.Success)
@@ -415,6 +434,13 @@ namespace PokemonGoGUI.GoManager
                     {
                         if (!PlayerData.TutorialState.Contains(TutorialState.AvatarSelection))
                         {
+
+                            //Pause out of captcha loop to verifychallenge
+                            if (WaitPaused())
+                            {
+                                continue;
+                            }
+
                             result = await MarkStartUpTutorialsComplete(true);
 
                             if (!result.Success)
@@ -436,7 +462,14 @@ namespace PokemonGoGUI.GoManager
 
                         if (!PlayerData.TutorialState.Contains(TutorialState.PokestopTutorial))
                         {
-                            result = await MarkTutorialsComplete(new [] {TutorialState.PokestopTutorial, TutorialState.PokemonBerry, TutorialState.UseItem });
+
+                            //Pause out of captcha loop to verifychallenge
+                            if (WaitPaused())
+                            {
+                                continue;
+                            }
+
+                            result = await MarkTutorialsComplete(new[] { TutorialState.PokestopTutorial, TutorialState.PokemonBerry, TutorialState.UseItem });
 
                             if (!result.Success)
                             {
@@ -480,7 +513,9 @@ namespace PokemonGoGUI.GoManager
                     {
                         LogCaller(new LoggerEventArgs("Setting default location ...", LoggerTypes.Debug));
 
-                        result = await UpdateLocation(new GeoCoordinate(UserSettings.Location.Latitude, UserSettings.Location.Longitude));
+                        result = await UpdateLocation(new GeoCoordinate(UserSettings.Latitude, UserSettings.Longitude));
+
+                        UpdateInventory(InventoryRefresh.All);
 
                         if (!result.Success)
                         {
@@ -498,6 +533,12 @@ namespace PokemonGoGUI.GoManager
 
                     //Get pokestops
                     LogCaller(new LoggerEventArgs("getting pokestops...", LoggerTypes.Debug));
+
+                    //Pause out of captcha loop to verifychallenge
+                    if (WaitPaused())
+                    {
+                        continue;
+                    }
 
                     MethodResult<List<FortData>> pokestops = GetPokeStops();
 
@@ -553,7 +594,11 @@ namespace PokemonGoGUI.GoManager
                             continue;
                         }
 
-                        WaitPaused();
+                        //Pause out of captcha loop to verifychallenge
+                        if (WaitPaused())
+                        {
+                            continue;
+                        }
 
                         FortData pokestop = pokestopsToFarm.Dequeue();
                         LogCaller(new LoggerEventArgs("fort Dequeued: " + pokestop.Id, LoggerTypes.Debug));
@@ -579,8 +624,6 @@ namespace PokemonGoGUI.GoManager
 
                         await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
-                        UpdateInventory();
-
                         if (CatchDisabled)
                         {
                             //Check delay if account not have balls
@@ -602,6 +645,13 @@ namespace PokemonGoGUI.GoManager
 
                             if (remainingBalls > 0)
                             {
+
+                                //Pause out of captcha loop to verifychallenge
+                                if (WaitPaused())
+                                {
+                                    continue;
+                                }
+
                                 //Catch nearby pokemon
                                 MethodResult nearbyPokemonResponse = await CatchNeabyPokemon();
 
@@ -617,6 +667,13 @@ namespace PokemonGoGUI.GoManager
 
                             if (RemainingPokeballs() > 0)
                             {
+
+                                //Pause out of captcha loop to verifychallenge
+                                if (WaitPaused())
+                                {
+                                    continue;
+                                }
+
                                 //Catch lured pokemon
                                 MethodResult luredPokemonResponse = await CatchLuredPokemon(pokestop);
                                 await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
@@ -627,7 +684,6 @@ namespace PokemonGoGUI.GoManager
                                 CatchDisabled = true;
                                 TimeAutoCatch = DateTime.Now.AddMinutes(UserSettings.DisableCatchDelay);
                             }
-                            UpdateInventory(); // <- should not be needed
                         }
 
                         //Stop bot instantly
@@ -639,10 +695,16 @@ namespace PokemonGoGUI.GoManager
                         //Clean inventory,
                         if (UserSettings.RecycleItems)
                         {
+
+                            //Pause out of captcha loop to verifychallenge
+                            if (WaitPaused())
+                            {
+                                continue;
+                            }
+
                             await RecycleFilteredItems();
                             await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
                         }
-
 
                         //Search
                         double filledInventorySpace = FilledInventoryStorage();
@@ -658,6 +720,13 @@ namespace PokemonGoGUI.GoManager
                                         continue;
                                     try
                                     {
+
+                                        //Pause out of captcha loop to verifychallenge
+                                        if (WaitPaused())
+                                        {
+                                            continue;
+                                        }
+
                                         MethodResult<GymGetInfoResponse> _result = await GymGetInfo(pokestop);
                                         LogCaller(new LoggerEventArgs("Gym Name: " + _result.Data.Name, LoggerTypes.Info));
                                     }
@@ -669,8 +738,21 @@ namespace PokemonGoGUI.GoManager
                                 }
                                 else
                                 {
+
+                                    //Pause out of captcha loop to verifychallenge
+                                    if (WaitPaused())
+                                    {
+                                        continue;
+                                    }
+
                                     var fortDetails = await FortDetails(pokestop);
                                     LogCaller(new LoggerEventArgs("Fort Name: " + fortDetails.Data.Name, LoggerTypes.Info));
+                                }
+
+                                //Pause out of captcha loop to verifychallenge
+                                if (WaitPaused())
+                                {
+                                    continue;
                                 }
 
                                 MethodResult searchResult = await SearchPokestop(pokestop);
@@ -701,10 +783,16 @@ namespace PokemonGoGUI.GoManager
                             continue;
                         }
 
-
                         // evolve, transfer, etc on first and every 10 stops
                         if (IsRunning && ((pokeStopNumber > 4 && pokeStopNumber % 10 == 0) || pokeStopNumber == 1))
                         {
+
+                            //Pause out of captcha loop to verifychallenge
+                            if (WaitPaused())
+                            {
+                                continue;
+                            }
+
                             MethodResult echoResult = await CheckReauthentication();
 
                             //Echo failed, restart
@@ -715,9 +803,15 @@ namespace PokemonGoGUI.GoManager
 
                             await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
-
                             if (UserSettings.EvolvePokemon)
                             {
+
+                                //Pause out of captcha loop to verifychallenge
+                                if (WaitPaused())
+                                {
+                                    continue;
+                                }
+
                                 MethodResult evolveResult = await EvolveFilteredPokemon();
 
                                 if (evolveResult.Success)
@@ -728,6 +822,13 @@ namespace PokemonGoGUI.GoManager
 
                             if (UserSettings.TransferPokemon)
                             {
+
+                                //Pause out of captcha loop to verifychallenge
+                                if (WaitPaused())
+                                {
+                                    continue;
+                                }
+
                                 MethodResult transferResult = await TransferFilteredPokemon();
 
                                 if (transferResult.Success)
@@ -738,6 +839,13 @@ namespace PokemonGoGUI.GoManager
 
                             if (UserSettings.IncubateEggs)
                             {
+
+                                //Pause out of captcha loop to verifychallenge
+                                if (WaitPaused())
+                                {
+                                    continue;
+                                }
+
                                 MethodResult incubateResult = await IncubateEggs();
 
                                 if (incubateResult.Success)
@@ -746,14 +854,22 @@ namespace PokemonGoGUI.GoManager
                                 }
                             }
 
-                            if (Level > prevLevel)
-                            {
-                                await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
+                            UpdateInventory(InventoryRefresh.All); //all inventory
+                        }
 
-                                await ClaimLevelUpRewards(Level);
+                        UpdateInventory(InventoryRefresh.Stats);
+
+                        if (Level > prevLevel)
+                        {
+                            await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
+
+                            //Pause out of captcha loop to verifychallenge
+                            if (WaitPaused())
+                            {
+                                continue;
                             }
 
-
+                            await ClaimLevelUpRewards(Level);
                         }
 
                         ++pokeStopNumber;
@@ -767,24 +883,38 @@ namespace PokemonGoGUI.GoManager
                             Stop();
                         }
 
+                        if (_totalZeroExpStops > 25)
+                        {
+                            LogCaller(new LoggerEventArgs("Potential PokeStop SoftBan.", LoggerTypes.Warning));
+                            AccountState = AccountState.SoftBan;
+                            // reset values
+                            _totalZeroExpStops = 0;
+                            Stop();
+                        }
+
                         if (_potentialPokeStopBan)
                         {
                             //Break out of pokestop loop to test for ip ban
                             break;
                         }
                     }
-               /* }
+                }
+                catch (ArgumentOutOfRangeException)// ex
+                {
+                    LogCaller(new LoggerEventArgs("Skipping request ...", LoggerTypes.Warning));
+                    continue;
+                }
                 catch (PokeHashException ex)
                 {
                     AccountState = AccountState.HashIssues;
                     LogCaller(new LoggerEventArgs("Hash service exception occured. Restarting ...", LoggerTypes.Exception, ex));
+                    _firstRun = true;
                 }
                 catch (Exception ex)
                 {
                     LogCaller(new LoggerEventArgs("Unknown exception occured. Restarting ...", LoggerTypes.Exception, ex));
-                    //LogCaller(new LoggerEventArgs("Unknown exception occured. Stopping ...", LoggerTypes.Exception, ex));
-                    //Stop();
-                }*/
+                    _firstRun = true;
+                }
 
                 #endregion
 
@@ -828,6 +958,7 @@ namespace PokemonGoGUI.GoManager
             }
 
             IsRunning = false;
+            _firstRun = true;
         }
 
         /*

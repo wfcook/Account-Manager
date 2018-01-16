@@ -1,5 +1,61 @@
 # Change Log
 
+## [v2.21.1.40](https://github.com/Furtif/Account-Manager/tree/v2.21.1.40) (2018-01-16)
+
+[Full Changelog](https://github.com/Furtif/Account-Manager/compare/v2.21.1.39...v2.21.1.40)
+
+## [v2.21.1.39](https://github.com/Furtif/Account-Manager/tree/v2.21.1.39) (2018-01-15)
+
+[Full Changelog](https://github.com/Furtif/Account-Manager/compare/v2.21.1.38...v2.21.1.39)
+
+## [v2.21.1.38](https://github.com/Furtif/Account-Manager/tree/v2.21.1.38) (2018-01-15)
+
+[Full Changelog](https://github.com/Furtif/Account-Manager/compare/v2.21.1.37...v2.21.1.38)
+
+## [v2.21.1.37](https://github.com/Furtif/Account-Manager/tree/v2.21.1.37) (2018-01-14)
+
+[Full Changelog](https://github.com/Furtif/Account-Manager/compare/v2.21.1.36...v2.21.1.37)
+
+## [v2.21.1.36](https://github.com/Furtif/Account-Manager/tree/v2.21.1.36) (2018-01-14)
+
+[Full Changelog](https://github.com/Furtif/Account-Manager/compare/v2.21.1.35...v2.21.1.36)
+
+## [v2.21.1.35](https://github.com/Furtif/Account-Manager/tree/v2.21.1.35) (2018-01-14)
+
+[Full Changelog](https://github.com/Furtif/Account-Manager/compare/v2.21.1.34...v2.21.1.35)
+
+## [v2.21.1.34](https://github.com/Furtif/Account-Manager/tree/v2.21.1.34) (2018-01-14)
+
+[Full Changelog](https://github.com/Furtif/Account-Manager/compare/v2.21.1.33...v2.21.1.34)
+
+## [v2.21.1.33](https://github.com/Furtif/Account-Manager/tree/v2.21.1.33) (2018-01-12)
+
+[Full Changelog](https://github.com/Furtif/Account-Manager/compare/v2.21.1.32...v2.21.1.33)
+
+## [v2.21.1.32](https://github.com/Furtif/Account-Manager/tree/v2.21.1.32) (2018-01-12)
+
+[Full Changelog](https://github.com/Furtif/Account-Manager/compare/v2.21.1.31...v2.21.1.32)
+
+## [v2.21.1.31](https://github.com/Furtif/Account-Manager/tree/v2.21.1.31) (2018-01-12)
+
+[Full Changelog](https://github.com/Furtif/Account-Manager/compare/v2.21.1.30...v2.21.1.31)
+
+## [v2.21.1.30](https://github.com/Furtif/Account-Manager/tree/v2.21.1.30) (2018-01-12)
+
+[Full Changelog](https://github.com/Furtif/Account-Manager/compare/v2.21.1.29...v2.21.1.30)
+
+## [v2.21.1.29](https://github.com/Furtif/Account-Manager/tree/v2.21.1.29) (2018-01-11)
+
+[Full Changelog](https://github.com/Furtif/Account-Manager/compare/v2.21.1.28...v2.21.1.29)
+
+## [v2.21.1.28](https://github.com/Furtif/Account-Manager/tree/v2.21.1.28) (2018-01-11)
+
+[Full Changelog](https://github.com/Furtif/Account-Manager/compare/v2.21.1.27...v2.21.1.28)
+
+**Closed issues:**
+
+- No settings on config inside [\#54](https://github.com/Furtif/Account-Manager/issues/54)
+
 ## [v2.21.1.27](https://github.com/Furtif/Account-Manager/tree/v2.21.1.27) (2018-01-06)
 
 [Full Changelog](https://github.com/Furtif/Account-Manager/compare/v2.21.1.26...v2.21.1.27)

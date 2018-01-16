@@ -12,6 +12,7 @@ using PokemonGoGUI.Extensions;
 using POGOProtos.Networking.Requests;
 using POGOProtos.Networking.Requests.Messages;
 using Google.Protobuf;
+using PokemonGoGUI.Enums;
 
 namespace PokemonGoGUI.GoManager
 {
@@ -21,19 +22,17 @@ namespace PokemonGoGUI.GoManager
         public async Task<MethodResult> UpdateDetails()
         {
             //TODO: review what we need do here.
-            UpdateInventory();// <- should not be needed
+            UpdateInventory(InventoryRefresh.All);// <- should not be needed
 
             LogCaller(new LoggerEventArgs("Updating details", LoggerTypes.Debug));
 
             await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
-
 
             return new MethodResult
             {
                 Success = true
             };
         }
-
 
         public async Task<MethodResult> ExportStats()
         {
@@ -130,7 +129,7 @@ namespace PokemonGoGUI.GoManager
             }
         }
 
-        public async Task<MethodResult> ClaimLevelUpRewards(int level)
+        private async Task<MethodResult> ClaimLevelUpRewards(int level)
         {
             if (!UserSettings.ClaimLevelUpRewards || level < 2)
             {
@@ -147,6 +146,12 @@ namespace PokemonGoGUI.GoManager
                     {
                         return result;
                     }
+                }
+
+                //Pause out of captcha loop to verifychallenge
+                if (WaitPaused())
+                {
+                    return new MethodResult();
                 }
 
                 var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
@@ -176,12 +181,18 @@ namespace PokemonGoGUI.GoManager
             }
         }
 
-        public async Task<MethodResult<GetBuddyWalkedResponse>> GetBuddyWalked()
+        private async Task<MethodResult<GetBuddyWalkedResponse>> GetBuddyWalked()
         {
             GetBuddyWalkedResponse getBuddyWalkedResponse = null;
 
             try
             {
+                //Pause out of captcha loop to verifychallenge
+                if (WaitPaused())
+                {
+                    return new MethodResult<GetBuddyWalkedResponse>();
+                }
+
                 var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                 {
                     RequestType = RequestType.GetBuddyWalked,
@@ -209,7 +220,48 @@ namespace PokemonGoGUI.GoManager
                 Success = true
             };
         }
-        public async Task<MethodResult> GetPlayer(bool nobuddy =true, bool noinbox =true)
+        private async Task<MethodResult> GetPlayer(bool nobuddy =true, bool noinbox =true)
+        {
+            try
+            {
+                if (!_client.LoggedIn)
+                {
+                    MethodResult result = await AcLogin();
+
+                    if (!result.Success)
+                    {
+                        return result;
+                    }
+                }
+
+                //Pause out of captcha loop to verifychallenge
+                if (WaitPaused())
+                {
+                    return new MethodResult();
+                }
+
+                var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request {
+                    RequestType = RequestType.GetPlayer,
+                    RequestMessage = new GetPlayerMessage {
+                        PlayerLocale = _client.PlayerLocale
+                    }.ToByteString()
+                }, true, nobuddy, noinbox);
+
+
+                var parsedResponse = GetPlayerResponse.Parser.ParseFrom(response);
+
+                return new MethodResult
+                {
+                    Success = true
+                };
+            }
+            catch (Exception ex)
+            {
+                LogCaller(new LoggerEventArgs("Failed to get level up rewards", LoggerTypes.Exception, ex));
+                return new MethodResult();
+            }
+        }
+        private async Task<MethodResult> GetPlayerProfile()
         {
 
             try
@@ -223,46 +275,11 @@ namespace PokemonGoGUI.GoManager
                         return result;
                     }
                 }
-
-                var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request {
-                    RequestType = RequestType.GetPlayer,
-                    RequestMessage = new GetPlayerMessage {
-                        PlayerLocale = new GetPlayerMessage.Types.PlayerLocale {
-                            Country = UserSettings.PlayerLocale.Country,
-                            Language = UserSettings.PlayerLocale.Language,
-                            Timezone = UserSettings.PlayerLocale.Timezone
-                        }
-                    }.ToByteString()
-                }, true, nobuddy, noinbox);
-
-
-                var parsedResponse = GetPlayerResponse.Parser.ParseFrom(response);
-
-
-                return new MethodResult
+                
+                //Pause out of captcha loop to verifychallenge
+                if (WaitPaused())
                 {
-                    Success = true
-                };
-            }
-            catch (Exception ex)
-            {
-                LogCaller(new LoggerEventArgs("Failed to get level up rewards", LoggerTypes.Exception, ex));
-                return new MethodResult();
-            }
-        }
-        public async Task<MethodResult> GetPlayerProfile()
-        {
-
-            try
-            {
-                if (!_client.LoggedIn)
-                {
-                    MethodResult result = await AcLogin();
-
-                    if (!result.Success)
-                    {
-                        return result;
-                    }
+                    return new MethodResult();
                 }
 
                 var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request {
@@ -285,6 +302,6 @@ namespace PokemonGoGUI.GoManager
                 LogCaller(new LoggerEventArgs("Failed to get level up rewards", LoggerTypes.Exception, ex));
                 return new MethodResult();
             }
-        }         
+        }
     }
 }

@@ -13,8 +13,6 @@ namespace PokemonGoGUI.UI
         {
             InitializeComponent();
 
-            ShowOnStartUp = true;
-
             linkLabelDiscordChat.Links.Add(new LinkLabel.Link
             {
                 LinkData = "https://discord.gg/rkm4xhX"
@@ -22,13 +20,14 @@ namespace PokemonGoGUI.UI
 
             linkLabel1.Links.Add(new LinkLabel.Link
             {
-                LinkData = "https://github.com/Furtif/GoManager"
-            });
+                LinkData = "https://github.com/Furtif/Account-Manager"
+            });           
         }
 
         private void StartupForm_Load(object sender, EventArgs e)
         {
             this.Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
+            checkBoxShowOnStartup.Checked = ShowOnStartUp;
         }
 
         private void ButtonOk_Click(object sender, EventArgs e)

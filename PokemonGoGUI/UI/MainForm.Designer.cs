@@ -1401,7 +1401,7 @@
             this.rMFormatToolStripMenuItem.Name = "rMFormatToolStripMenuItem";
             this.rMFormatToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.rMFormatToolStripMenuItem.Text = "RM format";
-            this.rMFormatToolStripMenuItem.Click += new System.EventHandler(this.rMFormatToolStripMenuItem_Click);
+            this.rMFormatToolStripMenuItem.Click += new System.EventHandler(this.RMFormatToolStripMenuItem_Click);
             // 
             // MainForm
             // 

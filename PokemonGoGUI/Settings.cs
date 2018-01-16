@@ -19,9 +19,40 @@ namespace PokemonGoGUI
         public string AuthAPIKey { get; set; }
         public Uri HashHost { get; set; }
         public string HashEndpoint { get; set; }
-        public cLocale PlayerLocale  { get; set; } = new cLocale();
-        public cLocation Location { get; set; } = new cLocation();
 
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
+        public double Altitude { get; set; }
+        public string DeviceId { get; set; }
+        public string DeviceBrand { get; set; }
+        public string DeviceModel { get; set; }
+        public string DeviceModelBoot { get; set; }
+        public string HardwareManufacturer { get; set; }
+        public string HardwareModel { get; set; }
+        public string FirmwareBrand { get; set; }
+        public string FirmwareType { get; set; }
+        public string Country { get; set; }
+        public string Language { get; set; }
+        public string TimeZone { get; set; }
+        public string POSIX { get; set; }
+
+        public bool AllowManualCaptchaResolve { get; set; }
+        public int ManualCaptchaTimeout { get; set; }
+        public bool PlaySoundOnCaptcha { get; set; }
+        public bool DisplayOnTop { get; set; }
+        public bool Enable2Captcha { get; set; }
+        public bool EnableAntiCaptcha { get; set; }
+        public string AntiCaptchaAPIKey { get; set; }
+        public string ProxyHostCaptcha { get; set; }
+        public int ProxyPortCaptcha { get; set; }
+        public bool EnableCaptchaSolutions { get; set; }
+        public string CaptchaSolutionAPIKey { get; set; }
+        public string CaptchaSolutionsSecretKey { get; set; }
+        public int AutoCaptchaTimeout { get; set; }
+        public int AutoCaptchaRetries { get; set; }
+        public string TwoCaptchaAPIKey { get; set; }
+
+        public bool UseIncense { get; set; }
         public double DisableCatchDelay { get; set; }
         public bool SpinGyms { get; set; }
         public string GroupName { get; set; }
@@ -67,8 +98,6 @@ namespace PokemonGoGUI
         public double WalkingSpeedOffset { get; set; }
         //End Humanization
         
-        public cDeviceInfo DeviceInfo { get; set; } = new cDeviceInfo();
-
         public string ProxyIP { get; set; }
         public int ProxyPort { get; set; }
         public string ProxyUsername { get; set; }
@@ -78,60 +107,18 @@ namespace PokemonGoGUI
 
         public bool StopOnIPBan { get; set; }
         public int MaxFailBeforeReset { get; set; }
+        public bool UseBerries { get; set; }
+        public bool OnlyUnlimitedIncubator { get; set; }
+        public bool TransferSlashPokemons { get; set; }
+        public bool ShufflePokestops { get; set; }
+        public bool GetArBonus { get; set; }
+        public decimal ARBonusProximity { get; set; }
+        public decimal ARBonusAwareness { get; set; }
+        public bool CompleteTutorial { get; set; }
+        public bool TransferAtOnce { get; set; }
+        public bool ShowDebugLogs { get; set; }        
+        public bool DownloadResources { get; set; }
 
-        public bool UseBerries {
-            get;
-            set;
-        }
-
-        public bool OnlyUnlimitedIncubator {
-            get;
-            set;
-        }
-
-        public bool TransferSlashPokemons {
-            get;
-            set;
-        }
-
-        public bool ShufflePokestops {
-            get;
-            set;
-        }
-
-        public bool GetArBonus {
-            get;
-            set;
-        }
-
-        public decimal ARBonusProximity {
-            get;
-            set;
-        }
-
-        public decimal ARBonusAwareness {
-            get;
-            set;
-        }
-
-        public bool CompleteTutorial {
-            get;
-            set;
-        }
-
-        public bool TransferAtOnce {
-            get;
-            set;
-        }
-
-        public bool ShowDebugLogs {
-            get;
-            set;
-        }
-        public bool DownloadResources {
-            get;
-            set;
-        }
         public AccountState StopAtMinAccountState { get; set; }
 
         public ProxyEx Proxy {
@@ -146,8 +133,9 @@ namespace PokemonGoGUI
         }
 
         public List<InventoryItemSetting> ItemSettings { get; set; }
-        public List<CatchSetting> PokemonSettings { get; set; }
         public List<TransferSetting> TransferSettings { get; set; }
+        public List<CatchSetting> CatchSettings { get; set; }
+        public List<EvolveSetting> EvolveSettings { get; set; }
 
         [JsonConstructor]
         public Settings(bool jsonConstructor = true)
@@ -159,10 +147,6 @@ namespace PokemonGoGUI
         {
             //Defaults
             LoadDefaults();
-
-            ItemSettings = new List<InventoryItemSetting>();
-            CatchSettings = new List<CatchSetting>();
-
             RandomizeDevice();
             LoadInventorySettings();
             LoadCatchSettings();
@@ -174,7 +158,6 @@ namespace PokemonGoGUI
         {
             GroupName = "Default";
             AuthType = AuthType.Ptc;
-            Location = new cLocation(40.764665, -73.973184, 10);
             MimicWalking = true;
             CatchPokemon = true;
             WalkingSpeed = 7;
@@ -197,12 +180,24 @@ namespace PokemonGoGUI
             HashHost = new Uri("https://pokehash.buddyauth.com/");
             HashEndpoint = "api/v157_5/hash";
             AuthAPIKey = "XXXXXXXXXXXXXXXXXXXX";
-            PlayerLocale.Country = "US";
-            PlayerLocale.Language = "en";
-            PlayerLocale.Timezone = "America/New_York";
-            PlayerLocale.POSIX = "en-us";
+            Latitude = 40.764665;
+            Longitude = -73.973184;
+            Country = "US";
+            Language = "en";
+            TimeZone = "America/New_York";
+            POSIX = "en-us";
             DisableCatchDelay = 8;
             DownloadResources = true;
+            AllowManualCaptchaResolve = true;
+            ManualCaptchaTimeout = 120;
+            PlaySoundOnCaptcha = true;
+            DisplayOnTop = true;
+            Enable2Captcha = false;
+            EnableAntiCaptcha = false;
+            ProxyPortCaptcha = 3128;
+            EnableCaptchaSolutions = false;
+            AutoCaptchaTimeout = 120;
+            AutoCaptchaRetries = 3;
         }
 
 
@@ -278,20 +273,20 @@ namespace PokemonGoGUI
         public void RandomizeDeviceId()
         {
             var device = DeviceInfoUtil.GetRandomDevice();
-            DeviceInfo.DeviceId = device.DeviceInfo.DeviceId;
+            DeviceId = device.DeviceInfo.DeviceId;
         }
         
         public void RandomizeDevice()
         {
             var device = DeviceInfoUtil.GetRandomDevice();
-            DeviceInfo.DeviceId = device.DeviceInfo.DeviceId;
-            DeviceInfo.DeviceBrand = device.DeviceInfo.DeviceBrand;
-            DeviceInfo.DeviceModel = device.DeviceInfo.DeviceModel;
-            DeviceInfo.DeviceModelBoot = device.DeviceInfo.DeviceModelBoot;
-            DeviceInfo.HardwareManufacturer = device.DeviceInfo.HardwareManufacturer;
-            DeviceInfo.HardwareModel = device.DeviceInfo.HardwareModel;
-            DeviceInfo.FirmwareBrand = device.DeviceInfo.FirmwareBrand;
-            DeviceInfo.FirmwareType = device.DeviceInfo.FirmwareType;
+            DeviceId = device.DeviceInfo.DeviceId;
+            DeviceBrand = device.DeviceInfo.DeviceBrand;
+            DeviceModel = device.DeviceInfo.DeviceModel;
+            DeviceModelBoot = device.DeviceInfo.DeviceModelBoot;
+            HardwareManufacturer = device.DeviceInfo.HardwareManufacturer;
+            HardwareModel = device.DeviceInfo.HardwareModel;
+            FirmwareBrand = device.DeviceInfo.FirmwareBrand;
+            FirmwareType = device.DeviceInfo.FirmwareType;
         }
 
         private byte RandomByte()
@@ -302,60 +297,5 @@ namespace PokemonGoGUI
                 return randomBytes.Single();
             }
         }
-        public class cLocation
-        {
-            public cLocation()
-            {
-            
-            }
-            public cLocation(double lat, double lon, int alt)
-            {
-                Latitude = lat;
-                Longitude = lon;
-                Altitude = alt;
-            }
-
-            public double Latitude{ get; set; }
-            public double Longitude{ get; set; }
-            public double Altitude{ get; set; }
-        }
-        public class cDeviceInfo
-        {
-            public string DeviceId{ get; set; }
-            public string DeviceBrand{ get; set; }
-            public string DeviceModel{ get; set; }
-            public string DeviceModelBoot{ get; set; }
-            public string HardwareManufacturer{ get; set; }
-            public string HardwareModel{ get; set; }
-            public string FirmwareBrand{ get; set; }
-            public string FirmwareType{ get; set; }
-        }
-        public class cLocale
-        {
-            public string Country{ get; set; }
-            public string Language{ get; set; }
-            public string Timezone{ get; set; }
-            public string POSIX{ get; set; }
-        }
-        //Obsoleted. For retrocompatibility. Remove after of several new versions. (currently 2.21.1.25)
-        public double DefaultLatitude{ get; set; }
-        public double DefaultLongitude{ get; set; }
-        public double DefaultAltitude{ get; set; }
-        public string DeviceId{ get; set; }
-        public string DeviceBrand{ get; set; }
-        public string DeviceModel{ get; set; }
-        public string DeviceModelBoot{ get; set; }
-        public string HardwareManufacturer{ get; set; }
-        public string HardwareModel{ get; set; }
-        public string FirmwareBrand{ get; set; }
-        public string FirmwareType{ get; set; }
-        public string Country { get; set; }
-        public string Language { get; set; }
-        public string TimeZone { get; set; }
-        public string POSIX { get; set; }
-        public List<CatchSetting> CatchSettings { get; set; }
-        public List<EvolveSetting> EvolveSettings { get; set; }
-        
-        
     }
 }

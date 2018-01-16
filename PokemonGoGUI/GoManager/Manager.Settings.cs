@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using POGOProtos.Enums;
-using POGOProtos.Inventory;
+﻿using POGOProtos.Enums;
 using POGOProtos.Settings.Master;
 using PokemonGoGUI.Extensions;
 using PokemonGoGUI.GoManager.Models;
@@ -40,12 +38,7 @@ namespace PokemonGoGUI.GoManager
                 return new MethodResult<AccountExportModel>();
             }
 
-            IEnumerable<InventoryItem> AllItems = new List<InventoryItem>();
-            
-            if (_client.LoggedIn)
-                AllItems = _client.ClientSession.Player.Inventory.InventoryItems;
-
-            if (!AllItems.Any()) {
+            if (!Items.Any()) {
                 LogCaller(new LoggerEventArgs(String.Format("No items found for {0}. Please update details", UserSettings.Username), LoggerTypes.Warning));
 
                 return new MethodResult<AccountExportModel>();
@@ -75,6 +68,7 @@ namespace PokemonGoGUI.GoManager
                 Success = true
             };
         }
+
         public async Task<MethodResult<Dictionary<PokemonId, PokemonSettings>>> GetItemTemplates()
         {
             if (PokeSettings != null && PokeSettings.Count != 0)
@@ -231,50 +225,48 @@ namespace PokemonGoGUI.GoManager
                 settings.GroupName = UserSettings.GroupName;
 
                 //new values added 
-                
-                //Obsoleted. For retrocompatibility. Remove after of several new versions. (currently 2.21.1.25)
-                if (settings.DeviceInfo == null || string.IsNullOrEmpty(settings.DeviceInfo.DeviceId) )
+
+                settings.Latitude = settings.Latitude;
+                settings.Longitude = settings.Longitude;
+                settings.Altitude = settings.Altitude;
+                settings.Country = settings.Country;
+                settings.Language = settings.Language;
+                settings.TimeZone = settings.TimeZone;
+                settings.POSIX = settings.POSIX;
+                settings.DeviceId = settings.DeviceId;
+                settings.DeviceBrand = settings.DeviceBrand;
+                settings.DeviceModel = settings.DeviceModel;
+                settings.DeviceModelBoot = settings.DeviceModelBoot;
+                settings.HardwareManufacturer = settings.HardwareManufacturer;
+                settings.HardwareModel = settings.HardwareModel;
+                settings.FirmwareBrand = settings.FirmwareBrand;
+                settings.FirmwareType = settings.FirmwareType;
+
+                foreach (var element in settings.EvolveSettings)
                 {
-                    settings.Location.Latitude = settings.DefaultLatitude;
-                    settings.Location.Longitude = settings.DefaultLongitude;
-                    settings.Location.Altitude = settings.DefaultAltitude;
-                    settings.PlayerLocale.Country = settings.Country;
-                    settings.PlayerLocale.Language = settings.Language;
-                    settings.PlayerLocale.Timezone = settings.TimeZone;
-                    settings.PlayerLocale.POSIX = settings.POSIX;
-                    settings.DeviceInfo.DeviceId = settings.DeviceId;
-                    settings.DeviceInfo.DeviceBrand = settings.DeviceBrand;
-                    settings.DeviceInfo.DeviceModel = settings.DeviceModel;
-                    settings.DeviceInfo.DeviceModelBoot = settings.DeviceModelBoot;
-                    settings.DeviceInfo.HardwareManufacturer = settings.HardwareManufacturer;
-                    settings.DeviceInfo.HardwareModel = settings.HardwareModel;
-                    settings.DeviceInfo.FirmwareBrand = settings.FirmwareBrand;
-                    settings.DeviceInfo.FirmwareType = settings.FirmwareType;
-                    settings.PokemonSettings = settings.CatchSettings;
-                }
-                if (settings.PokemonSettings==null){
-                    foreach (var element in settings.EvolveSettings) {
-                        var pokemonSetting = settings.PokemonSettings.FirstOrDefault(x=>x.Id == element.Id);
-                        if (pokemonSetting!=null){
-                            pokemonSetting.Evolve = element.Evolve;
-                            pokemonSetting.MinEvolveCP = element.MinCP;
-                        }
+                    var pokemonSetting = settings.EvolveSettings.FirstOrDefault(x => x.Id == element.Id);
+                    if (pokemonSetting != null)
+                    {
+                        pokemonSetting.Evolve = element.Evolve;
+                        pokemonSetting.MinCP = element.MinCP;
                     }
-                    foreach (var element in settings.TransferSettings) {
-                        var pokemonSetting = settings.PokemonSettings.FirstOrDefault(x=>x.Id == element.Id);
-                        if (pokemonSetting!=null){
-                            pokemonSetting.Transfer = element.Transfer;
-                            pokemonSetting.MinTransferCP = element.MinCP;
-                            pokemonSetting.IVPercent = element.IVPercent;
-                            pokemonSetting.KeepMax = element.KeepMax;
-                            pokemonSetting.TransferType = element.Type;
-                        }
+                }
+                foreach (var element in settings.TransferSettings)
+                {
+                    var pokemonSetting = settings.TransferSettings.FirstOrDefault(x => x.Id == element.Id);
+                    if (pokemonSetting != null)
+                    {
+                        pokemonSetting.Transfer = element.Transfer;
+                        pokemonSetting.MinCP = element.MinCP;
+                        pokemonSetting.IVPercent = element.IVPercent;
+                        pokemonSetting.KeepMax = element.KeepMax;
+                        pokemonSetting.Type = element.Type;
                     }
                 }
 
                 UserSettings = settings;
 
-                if (String.IsNullOrEmpty(UserSettings.DeviceInfo.DeviceBrand))
+                if (String.IsNullOrEmpty(UserSettings.DeviceBrand))
                 {
                     UserSettings.RandomizeDevice();
                 }
@@ -287,7 +279,7 @@ namespace PokemonGoGUI.GoManager
                     Success = true
                 };
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 string message = String.Format("Failed to import config. Ex: {0}", ex.Message);
 

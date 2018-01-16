@@ -97,6 +97,15 @@
   <PropertyGroup>
     <StartupObject>PokemonGoGUI.Program</StartupObject>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>false</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>4519BD50F3C36151D1DA1BD3F5F2B17C051A2B26</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>cert.pfx</ManifestKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="BouncyCastle.Crypto, Version=1.8.1.0, Culture=neutral, PublicKeyToken=0e99375e54769942, processorArchitecture=MSIL">
       <HintPath>..\packages\Portable.BouncyCastle.1.8.1.3\lib\net40\BouncyCastle.Crypto.dll</HintPath>
@@ -119,6 +128,9 @@
     </Reference>
     <Reference Include="ObjectListView, Version=2.9.1.1072, Culture=neutral, PublicKeyToken=b1c5bf581481bcd4, processorArchitecture=MSIL">
       <HintPath>..\packages\ObjectListView.Official.2.9.1\lib\net20\ObjectListView.dll</HintPath>
+    </Reference>
+    <Reference Include="POGOLib.Core, Version=1.8.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\POGOLib.Core.1.8.5\lib\netstandard1.1\POGOLib.Core.dll</HintPath>
     </Reference>
     <Reference Include="POGOProtos.Core, Version=2.21.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\POGOProtos.Core.2.21.1\lib\net45\POGOProtos.Core.dll</HintPath>
@@ -143,17 +155,32 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="WebDriver, Version=3.8.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Selenium.WebDriver.3.8.0\lib\net45\WebDriver.dll</HintPath>
+    </Reference>
+    <Reference Include="WebDriver.Support, Version=3.8.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Selenium.Support.3.8.0\lib\net45\WebDriver.Support.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountScheduler\Scheduler.cs" />
     <Compile Include="AccountScheduler\SchedulerLimiter.cs" />
     <Compile Include="AccountScheduler\Tracker.cs" />
     <Compile Include="AccountScheduler\TrackerValues.cs" />
+    <Compile Include="Captcha\Anti-Captcha\AnticaptchaApiWrapper.cs" />
+    <Compile Include="Captcha\Anti-Captcha\AntiCaptchaClient.cs" />
+    <Compile Include="Captcha\Anti-Captcha\AnticaptchaResult.cs" />
+    <Compile Include="Captcha\Anti-Captcha\AnticaptchaTask.cs" />
+    <Compile Include="Captcha\Anti-Captcha\HttpHelper.cs" />
+    <Compile Include="Captcha\CaptchaManager.cs" />
+    <Compile Include="Captcha\CaptchaSolutionClient.cs" />
+    <Compile Include="Captcha\TwoCaptchaClient.cs" />
     <Compile Include="Client.cs" />
     <Compile Include="Enums\AuthType.cs" />
     <Compile Include="Enums\AccountState.cs" />
     <Compile Include="Enums\BotState.cs" />
     <Compile Include="Enums\CheckType.cs" />
+    <Compile Include="Enums\InventoryLoad.cs" />
     <Compile Include="Enums\SchedulerOption.cs" />
     <Compile Include="Enums\TransferType.cs" />
     <Compile Include="Exceptions\AccountNotVerifiedException.cs" />
@@ -169,7 +196,9 @@
     <Compile Include="Extensions\DateTimeExtensions.cs" />
     <Compile Include="Extensions\LargeAddressAware.cs" />
     <Compile Include="Extensions\LinqEx.cs" />
+    <Compile Include="Extensions\NativeMethods.cs" />
     <Compile Include="Extensions\ObjectEx.cs" />
+    <Compile Include="Extensions\PluginsEx.cs" />
     <Compile Include="Extensions\Prompt.cs" />
     <Compile Include="Extensions\Serializer.cs" />
     <Compile Include="Extensions\StringUtil.cs" />
@@ -215,6 +244,12 @@
     </Compile>
     <Compile Include="UI\AutoUpdateForm.designer.cs">
       <DependentUpon>AutoUpdateForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\CaptchaSolveForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\CaptchaSolveForm.designer.cs">
+      <DependentUpon>CaptchaSolveForm.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\DetailsForm.cs">
       <SubType>Form</SubType>
@@ -263,6 +298,9 @@
     <EmbeddedResource Include="UI\AutoUpdateForm.resx">
       <DependentUpon>AutoUpdateForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UI\CaptchaSolveForm.resx">
+      <DependentUpon>CaptchaSolveForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\DetailsForm.resx">
       <DependentUpon>DetailsForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -292,6 +330,9 @@
       <DependentUpon>TransferSettingsForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
+    <None Include="cert.pfx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -324,12 +365,6 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\POGOLib.Core\POGOLib.Core.csproj">
-      <Project>{a4b8d0fa-d922-441d-82f6-4dc879805489}</Project>
-      <Name>POGOLib.Core</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>
@@ -340,10 +375,12 @@
       <ErrorText>Ce projet fait référence à des packages NuGet qui sont manquants sur cet ordinateur. Utilisez l'option de restauration des packages NuGet pour les télécharger. Pour plus d'informations, consultez http://go.microsoft.com/fwlink/?LinkID=322105. Le fichier manquant est : {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\Costura.Fody.1.6.2\build\dotnet\Costura.Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Costura.Fody.1.6.2\build\dotnet\Costura.Fody.targets'))" />
-    <Error Condition="!Exists('..\packages\Fody.2.3.17\build\netstandard1.0\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Fody.2.3.17\build\netstandard1.0\Fody.targets'))" />
+    <Error Condition="!Exists('..\packages\Selenium.WebDriver.ChromeDriver.2.35.0\build\Selenium.WebDriver.ChromeDriver.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Selenium.WebDriver.ChromeDriver.2.35.0\build\Selenium.WebDriver.ChromeDriver.targets'))" />
+    <Error Condition="!Exists('..\packages\Fody.2.3.19\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Fody.2.3.19\build\Fody.targets'))" />
   </Target>
   <Import Project="..\packages\Costura.Fody.1.6.2\build\dotnet\Costura.Fody.targets" Condition="Exists('..\packages\Costura.Fody.1.6.2\build\dotnet\Costura.Fody.targets')" />
-  <Import Project="..\packages\Fody.2.3.17\build\netstandard1.0\Fody.targets" Condition="Exists('..\packages\Fody.2.3.17\build\netstandard1.0\Fody.targets')" />
+  <Import Project="..\packages\Selenium.WebDriver.ChromeDriver.2.35.0\build\Selenium.WebDriver.ChromeDriver.targets" Condition="Exists('..\packages\Selenium.WebDriver.ChromeDriver.2.35.0\build\Selenium.WebDriver.ChromeDriver.targets')" />
+  <Import Project="..\packages\Fody.2.3.19\build\Fody.targets" Condition="Exists('..\packages\Fody.2.3.19\build\Fody.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

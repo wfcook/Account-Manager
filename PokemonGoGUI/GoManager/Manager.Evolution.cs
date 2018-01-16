@@ -67,11 +67,8 @@ namespace PokemonGoGUI.GoManager
 
         public async Task<MethodResult> EvolvePokemon(IEnumerable<PokemonData> pokemonToEvolve)
         {
-            //TODO: revise
-            //return new MethodResult { Message = "Dev mode sorry" };
-
             //Shouldn't happen
-            if (pokemonToEvolve == null)
+            if (pokemonToEvolve.Count() < 1)
             {
                 LogCaller(new LoggerEventArgs("Null value sent to evolve pokemon", LoggerTypes.Debug));
 
@@ -87,10 +84,23 @@ namespace PokemonGoGUI.GoManager
                     continue;
                 }
 
+                if (pokemon.IsBad)
+                {
+                    LogCaller(new LoggerEventArgs(String.Format("Pokemon {0} is slashed.", pokemon.PokemonId), LoggerTypes.Warning));
+                    //await TransferPokemon(new List<PokemonData> { pokemon });
+                    continue;
+                }
+
                 try
                 {
+                    //Pause out of captcha loop to verifychallenge
+                    if (WaitPaused())
+                    {
+                        return new MethodResult();
+                    }
+
                     var EvoleBranch = new EvoleBranch(pokemon, GetPokemonSetting(pokemon.PokemonId).Data).EvolutionBranchs.FirstOrDefault();
-                    
+
                     var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                     {
                         RequestType = RequestType.EvolvePokemon,
@@ -101,32 +111,60 @@ namespace PokemonGoGUI.GoManager
                         }.ToByteString()
                     });
 
-                    EvolvePokemonResponse evolvePokemonResponse = null;
-
-                    evolvePokemonResponse = EvolvePokemonResponse.Parser.ParseFrom(response);
-                    ExpIncrease(evolvePokemonResponse.ExperienceAwarded);
-                    //_expGained += evolveResponse.ExperienceAwarded;
-
-                    LogCaller(new LoggerEventArgs(
-                        String.Format("Successully evolved {0} to {1}. Experience: {2}. Cp: {3} -> {4}. IV: {5:0.00}%",
-                                    pokemon.PokemonId,
-                                    EvoleBranch.Pokemon,
-                                    evolvePokemonResponse.ExperienceAwarded,
-                                    pokemon.Cp,
-                                    evolvePokemonResponse.EvolvedPokemonData.Cp,
-                                    CalculateIVPerfection(evolvePokemonResponse.EvolvedPokemonData)),
-                                    LoggerTypes.Evolve));
-
-                    await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
-
-                    return new MethodResult
+                    EvolvePokemonResponse evolvePokemonResponse = EvolvePokemonResponse.Parser.ParseFrom(response);
+                    switch (evolvePokemonResponse.Result)
                     {
-                        Success = true
-                    };
+                        case EvolvePokemonResponse.Types.Result.Success:
+                            ExpIncrease(evolvePokemonResponse.ExperienceAwarded);
+                            //_expGained += evolvePokemonResponse.ExperienceAwarded;
+
+                            LogCaller(new LoggerEventArgs(
+                                    String.Format("Successully evolved {0} to {1}. Experience: {2}. Cp: {3} -> {4}. IV: {5:0.00}%",
+                                                pokemon.PokemonId,
+                                                EvoleBranch.Pokemon,
+                                                evolvePokemonResponse.ExperienceAwarded,
+                                                pokemon.Cp,
+                                                evolvePokemonResponse.EvolvedPokemonData.Cp,
+                                                CalculateIVPerfection(evolvePokemonResponse.EvolvedPokemonData)),
+                                                LoggerTypes.Evolve));
+
+                            await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+
+                            if (Pokemon.Contains(pokemon))
+                                Pokemon.Remove(pokemon);
+
+                            var newPok = _client.ClientSession.Player.Inventory?.InventoryItems.Where(x => x?.InventoryItemData?.PokemonData?.PokemonId == EvoleBranch.Pokemon).Select(x => x.InventoryItemData.PokemonData).FirstOrDefault();
+
+                            if (newPok != null)
+                                Pokemon.Add(newPok);
+                            continue;
+                        case EvolvePokemonResponse.Types.Result.FailedInsufficientResources:
+                            LogCaller(new LoggerEventArgs("Evolve request failed: Failed Insufficient Resources", LoggerTypes.Debug));
+                            continue;
+                        case EvolvePokemonResponse.Types.Result.FailedInvalidItemRequirement:
+                            LogCaller(new LoggerEventArgs("Evolve request failed: Failed Invalid Item Requirement", LoggerTypes.Debug));
+                            continue;
+                        case EvolvePokemonResponse.Types.Result.FailedPokemonCannotEvolve:
+                            LogCaller(new LoggerEventArgs("Evolve request failed: Failed Pokemon Cannot Evolve", LoggerTypes.Debug));
+                            continue;
+                        case EvolvePokemonResponse.Types.Result.FailedPokemonIsDeployed:
+                            LogCaller(new LoggerEventArgs("Evolve request failed: Failed Pokemon IsDeployed", LoggerTypes.Debug));
+                            continue;
+                        case EvolvePokemonResponse.Types.Result.FailedPokemonMissing:
+                            LogCaller(new LoggerEventArgs("Evolve request failed: Failed Pokemon Missing", LoggerTypes.Debug));
+                            continue;
+                        case EvolvePokemonResponse.Types.Result.Unset:
+                            LogCaller(new LoggerEventArgs("Evolve request failed", LoggerTypes.Debug));
+                            continue;
+                    }
                 }
                 catch (Exception ex)
                 {
                     LogCaller(new LoggerEventArgs("Evolve request failed", LoggerTypes.Exception, ex));
+
+                    //if bug reload all test...
+                    //UpdateInventory(0);
+
                     return new MethodResult();
                 }
             }
@@ -182,15 +220,13 @@ namespace PokemonGoGUI.GoManager
                 };
             }
 
-            UpdateInventory(); // <- should not be needed
-
             var pokemonToEvolve = new List<PokemonData>();
 
             IEnumerable<IGrouping<PokemonId, PokemonData>> groupedPokemon = Pokemon.OrderByDescending(x => x.PokemonId).GroupBy(x => x.PokemonId);
 
             foreach(IGrouping<PokemonId, PokemonData> group in groupedPokemon)
             {
-                CatchSetting evolveSetting = UserSettings.PokemonSettings.FirstOrDefault(x => x.Id == group.Key);
+                EvolveSetting evolveSetting = UserSettings.EvolveSettings.FirstOrDefault(x => x.Id == group.Key);
 
                 if(evolveSetting == null)
                 {
@@ -219,7 +255,7 @@ namespace PokemonGoGUI.GoManager
                 }
 
                 Candy pokemonCandy = PokemonCandy.FirstOrDefault(x => x.FamilyId == setting.FamilyId);
-                List<PokemonData> pokemonGroupToEvolve = group.Where(x => x.Cp >= evolveSetting.MinEvolveCP).OrderByDescending(x => CalculateIVPerfection(x)).ToList();
+                List<PokemonData> pokemonGroupToEvolve = group.Where(x => x.Cp >= evolveSetting.MinCP).OrderByDescending(x => CalculateIVPerfection(x)).ToList();
 
                 if(pokemonCandy == null)
                 {

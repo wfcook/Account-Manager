@@ -5,6 +5,7 @@ using POGOProtos.Inventory.Item;
 using POGOProtos.Networking.Requests;
 using POGOProtos.Networking.Requests.Messages;
 using POGOProtos.Networking.Responses;
+using PokemonGoGUI.Enums;
 using PokemonGoGUI.Extensions;
 using PokemonGoGUI.GoManager.Models;
 using System;
@@ -53,6 +54,12 @@ namespace PokemonGoGUI.GoManager
 
             try
             {
+                //Pause out of captcha loop to verifychallenge
+                if (WaitPaused())
+                {
+                    return new MethodResult();
+                }
+
                 var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                 {
                     RequestType = RequestType.UseItemEggIncubator,
@@ -71,6 +78,10 @@ namespace PokemonGoGUI.GoManager
                 var _egg = egg.PokemonId;
                 
                 LogCaller(new LoggerEventArgs(String.Format("Incubating egg in {0}. Pokemon Id: {1}", incitem, _egg), LoggerTypes.Incubate));
+
+                //TODO: Need tests
+                UpdateInventory(InventoryRefresh.Eggs);
+                UpdateInventory(InventoryRefresh.Incubators);
 
                 return new MethodResult
                 {

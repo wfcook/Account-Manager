@@ -38,7 +38,7 @@ namespace PokemonGoGUI.UI
 
             olvColumnEvolveId.AspectGetter = delegate(object x)
             {
-                var setting = (CatchSetting)x;
+                var setting = (EvolveSetting)x;
 
                 return (int)setting.Id;
             };
@@ -49,7 +49,7 @@ namespace PokemonGoGUI.UI
 
             olvColumnTransferId.AspectGetter = delegate(object x)
             {
-                var setting = (CatchSetting)x;
+                var setting = (TransferSetting)x;
 
                 return (int)setting.Id;
             };
@@ -64,7 +64,7 @@ namespace PokemonGoGUI.UI
 
             foreach (AccountState state in Enum.GetValues(typeof(AccountState)))
             {
-                if(state == AccountState.Good)
+                if(state == AccountState.Good || state == AccountState.Conecting || state == AccountState.HashIssues || state == AccountState.Unknown)
                 {
                     continue;
                 }
@@ -83,17 +83,17 @@ namespace PokemonGoGUI.UI
         private void UpdateListViews()
         {
             fastObjectListViewRecycling.SetObjects(_manager.UserSettings.ItemSettings);
-            fastObjectListViewCatch.SetObjects(_manager.UserSettings.PokemonSettings);
-            fastObjectListViewEvolve.SetObjects(_manager.UserSettings.PokemonSettings);
-            fastObjectListViewTransfer.SetObjects(_manager.UserSettings.PokemonSettings);
+            fastObjectListViewCatch.SetObjects(_manager.UserSettings.CatchSettings);
+            fastObjectListViewEvolve.SetObjects(_manager.UserSettings.EvolveSettings);
+            fastObjectListViewTransfer.SetObjects(_manager.UserSettings.TransferSettings);
         }
 
         private void UpdateDetails(Settings settings)
         {
             textBoxPtcPassword.Text = settings.Password;
             textBoxPtcUsername.Text = settings.Username;
-            textBoxLat.Text = settings.Location.Latitude.ToString();
-            textBoxLong.Text = settings.Location.Longitude.ToString();
+            textBoxLat.Text = settings.Latitude.ToString();
+            textBoxLong.Text = settings.Longitude.ToString();
             textBoxName.Text = settings.AccountName;
             textBoxMaxTravelDistance.Text = settings.MaxTravelDistance.ToString();
             textBoxWalkSpeed.Text = settings.WalkingSpeed.ToString();
@@ -122,6 +122,7 @@ namespace PokemonGoGUI.UI
             numericUpDownForceEvolveAbove.Value = new Decimal(settings.ForceEvolveAbovePercent);
             checkBoxStopOnAPIUpdate.Checked = settings.StopOnAPIUpdate;
             checkBoxSpinGyms.Checked = settings.SpinGyms;
+            cbUseIncense.Checked = settings.UseIncense;
 
             //Humanization
             checkBoxHumanizeThrows.Checked = settings.EnableHumanization;
@@ -140,14 +141,14 @@ namespace PokemonGoGUI.UI
             //End humanization
 
             //Device settings
-            textBoxDeviceId.Text = settings.DeviceInfo.DeviceId;
-            textBoxDeviceModel.Text = settings.DeviceInfo.DeviceModel;
-            textBoxDeviceBrand.Text = settings.DeviceInfo.DeviceBrand;
-            textBoxDeviceModelBoot.Text = settings.DeviceInfo.DeviceModelBoot;
-            textBoxFirmwareBrand.Text = settings.DeviceInfo.FirmwareBrand;
-            textBoxFirmwareType.Text = settings.DeviceInfo.FirmwareType;
-            textBoxHardwareManufacturer.Text = settings.DeviceInfo.HardwareManufacturer;
-            textBoxHardwareModel.Text = settings.DeviceInfo.HardwareModel;
+            textBoxDeviceId.Text = settings.DeviceId;
+            textBoxDeviceModel.Text = settings.DeviceModel;
+            textBoxDeviceBrand.Text = settings.DeviceBrand;
+            textBoxDeviceModelBoot.Text = settings.DeviceModelBoot;
+            textBoxFirmwareBrand.Text = settings.FirmwareBrand;
+            textBoxFirmwareType.Text = settings.FirmwareType;
+            textBoxHardwareManufacturer.Text = settings.HardwareManufacturer;
+            textBoxHardwareModel.Text = settings.HardwareModel;
             //End device settings
 
             //Api config
@@ -170,7 +171,23 @@ namespace PokemonGoGUI.UI
             
             checkBoxShowDebugLogs.Checked = settings.ShowDebugLogs;
             checkBoxDownloadResources.Checked = settings.DownloadResources;
-            
+
+            //Captcha Config
+            AllowManualCaptchaResolve.Checked = settings.AllowManualCaptchaResolve;
+            ManualCaptchaTimeout.Text = settings.ManualCaptchaTimeout.ToString();
+            PlaySoundOnCaptcha.Checked = settings.PlaySoundOnCaptcha;
+            DisplayOnTop.Checked = settings.DisplayOnTop;
+            Enable2Captcha.Checked = settings.Enable2Captcha;
+            EnableAntiCaptcha.Checked = settings.EnableAntiCaptcha;
+            AntiCaptchaAPIKey.Text = settings.AntiCaptchaAPIKey;
+            ProxyHostCaptcha.Text = settings.ProxyHostCaptcha;
+            ProxyPortCaptcha.Text = settings.ProxyPortCaptcha.ToString();
+            EnableCaptchaSolutions.Checked = settings.EnableCaptchaSolutions;
+            CaptchaSolutionAPIKey.Text = settings.CaptchaSolutionAPIKey;
+            CaptchaSolutionsSecretKey.Text = settings.CaptchaSolutionsSecretKey;
+            AutoCaptchaTimeout.Text = settings.AutoCaptchaTimeout.ToString();
+            AutoCaptchaRetries.Text = settings.AutoCaptchaRetries.ToString();
+            TwoCaptchaAPIKey.Text = settings.TwoCaptchaAPIKey;
 
             //Location time zones
             var zones = new TimeZoneIds().GetTimeZoneIds();
@@ -179,7 +196,7 @@ namespace PokemonGoGUI.UI
                 cbTimeZones.Items.Add(tz.Key);
             }
 
-            cbTimeZones.Text = _manager.UserSettings.PlayerLocale.Timezone;
+            cbTimeZones.Text = _manager.UserSettings.TimeZone;
 
             for (int i = 0; i < comboBoxMinAccountState.Items.Count; i++)
             {
@@ -190,7 +207,6 @@ namespace PokemonGoGUI.UI
                 }
             }
         }
-
 
         private void CheckBoxMimicWalking_CheckedChanged(object sender, EventArgs e)
         {
@@ -292,8 +308,8 @@ namespace PokemonGoGUI.UI
             
             userSettings.Username = textBoxPtcUsername.Text.Trim();
             userSettings.Password = textBoxPtcPassword.Text.Trim();
-            userSettings.Location.Latitude = defaultLat;
-            userSettings.Location.Longitude = defaultLong;
+            userSettings.Latitude = defaultLat;
+            userSettings.Longitude = defaultLong;
             userSettings.WalkingSpeed = walkingSpeed;
             userSettings.MaxTravelDistance = maxTravelDistance;
             userSettings.EncounterWhileWalking = checkBoxEncounterWhileWalking.Checked;
@@ -317,7 +333,7 @@ namespace PokemonGoGUI.UI
             AutoUpdate = cbAutoUpdate.Checked;
             userSettings.UseBerries = checkBoxUseBerries.Checked;
             userSettings.DisableCatchDelay = (int)numericUpDownDisableCatchDelay.Value;
-
+            userSettings.UseIncense = cbUseIncense.Checked;
             userSettings.RunForHours = (double)numericUpDownRunForHours.Value;
             userSettings.MaxLogs = (int)numericUpDownMaxLogs.Value;
             userSettings.StopOnIPBan = checkBoxStopOnIPBan.Checked;
@@ -342,14 +358,14 @@ namespace PokemonGoGUI.UI
             //End humanization
 
             //Device settings
-            userSettings.DeviceInfo.DeviceId = textBoxDeviceId.Text;
-            userSettings.DeviceInfo.DeviceModel = textBoxDeviceModel.Text;
-            userSettings.DeviceInfo.DeviceBrand = textBoxDeviceBrand.Text;
-            userSettings.DeviceInfo.DeviceModelBoot = textBoxDeviceModelBoot.Text;
-            userSettings.DeviceInfo.HardwareManufacturer = textBoxHardwareManufacturer.Text;
-            userSettings.DeviceInfo.HardwareModel = textBoxHardwareModel.Text;
-            userSettings.DeviceInfo.FirmwareBrand = textBoxFirmwareBrand.Text;
-            userSettings.DeviceInfo.FirmwareType = textBoxFirmwareType.Text;
+            userSettings.DeviceId = textBoxDeviceId.Text;
+            userSettings.DeviceModel = textBoxDeviceModel.Text;
+            userSettings.DeviceBrand = textBoxDeviceBrand.Text;
+            userSettings.DeviceModelBoot = textBoxDeviceModelBoot.Text;
+            userSettings.HardwareManufacturer = textBoxHardwareManufacturer.Text;
+            userSettings.HardwareModel = textBoxHardwareModel.Text;
+            userSettings.FirmwareBrand = textBoxFirmwareBrand.Text;
+            userSettings.FirmwareType = textBoxFirmwareType.Text;
             //End device settings
 
             //Api config
@@ -361,10 +377,10 @@ namespace PokemonGoGUI.UI
 
             //Location time zones
             var x = new TimeZoneIds().GetTimeZoneIds();
-            userSettings.PlayerLocale.Timezone = cbTimeZones.Text;
-            userSettings.PlayerLocale.Country = x[cbTimeZones.Text].Item1;
-            userSettings.PlayerLocale.Language = x[cbTimeZones.Text].Item2;
-            userSettings.PlayerLocale.POSIX = x[cbTimeZones.Text].Item3;
+            userSettings.TimeZone = cbTimeZones.Text;
+            userSettings.Country = x[cbTimeZones.Text].Item1;
+            userSettings.Language = x[cbTimeZones.Text].Item2;
+            userSettings.POSIX = x[cbTimeZones.Text].Item3;
             //End location time zones
             
             userSettings.GetArBonus = checkBoxGetARBonus.Checked;
@@ -392,6 +408,47 @@ namespace PokemonGoGUI.UI
             // Developer options
             userSettings.ShowDebugLogs = checkBoxShowDebugLogs.Checked;
             userSettings.DownloadResources = checkBoxDownloadResources.Checked;
+
+            //Captcha Config
+            userSettings.AllowManualCaptchaResolve = AllowManualCaptchaResolve.Checked;
+            int manualCaptchaTimeout;
+            if (!Int32.TryParse(ManualCaptchaTimeout.Text, out manualCaptchaTimeout) || maxLevel < 0)
+            {
+                MessageBox.Show("InvalidTimeOut", "Warning");
+                return false;
+            }
+            userSettings.ManualCaptchaTimeout = manualCaptchaTimeout;
+            userSettings.PlaySoundOnCaptcha = PlaySoundOnCaptcha.Checked;
+            userSettings.DisplayOnTop = DisplayOnTop.Checked;
+            userSettings.Enable2Captcha = Enable2Captcha.Checked;
+            userSettings.EnableAntiCaptcha = EnableAntiCaptcha.Checked;
+            userSettings.AntiCaptchaAPIKey = AntiCaptchaAPIKey.Text;
+            userSettings.ProxyHostCaptcha = ProxyHostCaptcha.Text;
+            int proxyPortCaptcha;
+            if (!Int32.TryParse(ProxyPortCaptcha.Text, out proxyPortCaptcha) || maxLevel < 0)
+            {
+                MessageBox.Show("InvalidProxyCaptchaPort", "Warning");
+                return false;
+            }
+            userSettings.ProxyPortCaptcha = proxyPortCaptcha;
+            userSettings.EnableCaptchaSolutions = EnableCaptchaSolutions.Checked;
+            userSettings.CaptchaSolutionAPIKey = CaptchaSolutionAPIKey.Text;
+            userSettings.CaptchaSolutionsSecretKey = CaptchaSolutionsSecretKey.Text;
+            int autoCaptchaTimeout;
+            if (!Int32.TryParse(AutoCaptchaTimeout.Text, out autoCaptchaTimeout) || maxLevel < 0)
+            {
+                MessageBox.Show("InvalidAutoCaptchaTimeout", "Warning");
+                return false;
+            }
+            userSettings.AutoCaptchaTimeout = autoCaptchaTimeout;
+            int autoCaptchaRetries;
+            if (!Int32.TryParse(AutoCaptchaRetries.Text, out autoCaptchaRetries) || maxLevel < 0)
+            {
+                MessageBox.Show("InvalidAutoCaptchaRetries", "Warning");
+                return false;
+            }
+            userSettings.AutoCaptchaRetries = autoCaptchaRetries;
+            userSettings.TwoCaptchaAPIKey = TwoCaptchaAPIKey.Text;
 
             return true;
         }
@@ -487,7 +544,7 @@ namespace PokemonGoGUI.UI
 
             _manager.RestoreCatchDefaults();
 
-            fastObjectListViewCatch.SetObjects(_manager.UserSettings.PokemonSettings);
+            fastObjectListViewCatch.SetObjects(_manager.UserSettings.CatchSettings);
         }
 
         #endregion
@@ -505,7 +562,7 @@ namespace PokemonGoGUI.UI
 
             _manager.RestoreEvolveDefaults();
 
-            fastObjectListViewEvolve.SetObjects(_manager.UserSettings.PokemonSettings);
+            fastObjectListViewEvolve.SetObjects(_manager.UserSettings.EvolveSettings);
         }
 
         private void EditCPToolStripMenuItem_Click(object sender, EventArgs e)
@@ -517,7 +574,7 @@ namespace PokemonGoGUI.UI
                 return;
             }
 
-            int defaultCP = ((CatchSetting)fastObjectListViewEvolve.SelectedObjects[0]).MinEvolveCP;
+            int defaultCP = ((EvolveSetting)fastObjectListViewEvolve.SelectedObjects[0]).MinCP;
 
             string cp = Prompt.ShowDialog("Enter minimum CP:", "Edit CP", defaultCP.ToString());
 
@@ -533,12 +590,12 @@ namespace PokemonGoGUI.UI
                 return;
             }
 
-            foreach (CatchSetting setting in fastObjectListViewEvolve.SelectedObjects)
+            foreach (EvolveSetting setting in fastObjectListViewEvolve.SelectedObjects)
             {
-                setting.MinEvolveCP = changeCp;
+                setting.MinCP = changeCp;
             }
 
-            fastObjectListViewEvolve.SetObjects(_manager.UserSettings.PokemonSettings);
+            fastObjectListViewEvolve.SetObjects(_manager.UserSettings.EvolveSettings);
         }
 
         private void TrueToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -552,7 +609,7 @@ namespace PokemonGoGUI.UI
 
             var checkType = (CheckType)Int32.Parse(tSMI.Tag.ToString());
 
-            foreach (CatchSetting eSetting in fastObjectListViewEvolve.SelectedObjects)
+            foreach (EvolveSetting eSetting in fastObjectListViewEvolve.SelectedObjects)
             {
                 if (checkType == CheckType.Toggle)
                 {
@@ -568,14 +625,14 @@ namespace PokemonGoGUI.UI
                 }
             }
 
-            fastObjectListViewEvolve.SetObjects(_manager.UserSettings.PokemonSettings);
+            fastObjectListViewEvolve.SetObjects(_manager.UserSettings.EvolveSettings);
         }
 
         #endregion
 
         #region Transfer
 
-        private void EditTransferSettings(List<CatchSetting> settings)
+        private void EditTransferSettings(List<TransferSetting> settings)
         {
             if(settings.Count == 0)
             {
@@ -590,7 +647,7 @@ namespace PokemonGoGUI.UI
 
         private void EditToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            EditTransferSettings(fastObjectListViewTransfer.SelectedObjects.Cast<CatchSetting>().ToList());
+            EditTransferSettings(fastObjectListViewTransfer.SelectedObjects.Cast<TransferSetting>().ToList());
         }
 
         private void RestoreDefaultsToolStripMenuItem2_Click(object sender, EventArgs e)
@@ -604,20 +661,19 @@ namespace PokemonGoGUI.UI
 
             _manager.RestoreTransferDefaults();
 
-            fastObjectListViewTransfer.SetObjects(_manager.UserSettings.PokemonSettings);
+            fastObjectListViewTransfer.SetObjects(_manager.UserSettings.TransferSettings);
         }
 
         #endregion
 
         private void ComboBoxLocationPresets_SelectedIndexChanged(object sender, EventArgs e)
         {
-            var fLocation = comboBoxLocationPresets.SelectedItem as FarmLocation;
-            if (fLocation!=null)
+            if (comboBoxLocationPresets.SelectedItem is FarmLocation fLocation)
             {
                 if (fLocation.Name == "Current")
                 {
-                    textBoxLat.Text = _manager.UserSettings.Location.Latitude.ToString();
-                    textBoxLong.Text = _manager.UserSettings.Location.Longitude.ToString();
+                    textBoxLat.Text = _manager.UserSettings.Latitude.ToString();
+                    textBoxLong.Text = _manager.UserSettings.Longitude.ToString();
                 }
                 else
                 {
@@ -680,7 +736,7 @@ namespace PokemonGoGUI.UI
         {
             _manager.RandomDeviceId();
 
-            textBoxDeviceId.Text = _manager.UserSettings.DeviceInfo.DeviceId;
+            textBoxDeviceId.Text = _manager.UserSettings.DeviceId;
 
             //UpdateDetails(_manager.UserSettings);
         }
@@ -702,7 +758,7 @@ namespace PokemonGoGUI.UI
             DialogResult = DialogResult.OK;
         }
 
-        void setUsePinapToolStripMenuItem_Click(object sender, EventArgs e)
+        void SetUsePinapToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (fastObjectListViewCatch.SelectedObjects== null)
                 return;
@@ -712,6 +768,5 @@ namespace PokemonGoGUI.UI
 
             fastObjectListViewCatch.RefreshSelectedObjects();
         }
-
     }
 }

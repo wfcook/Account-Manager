@@ -25,6 +25,7 @@ namespace PokemonGoGUI.GoManager
         public Tracker Tracker { get; set; }
         public Scheduler AccountScheduler { get; set; }
         public DateTime LastLuckyEgg { get; set; }
+        public PlayerStats Stats { get; set; }
 
         [JsonIgnore]
         public string SchedulerName
@@ -87,14 +88,13 @@ namespace PokemonGoGUI.GoManager
         public BotState State { get; set; }
 
         [JsonIgnore]
-        public PlayerData PlayerData { get { return  _client?.ClientSession?.Player?.Data; } }
+        public PlayerData PlayerData { get { return _client?.ClientSession?.Player?.Data; } }
 
         [JsonIgnore]
         public List<Log> Logs { get; private set; }
 
-        [JsonIgnore]
-        public PlayerStats Stats { get; private set; }
-
+        //[JsonIgnore]
+        //public PlayerStats Stats { get;  private set; }
 
         [JsonIgnore]
         public List<ItemData> Items { get; private set; } = new List<ItemData>();
@@ -304,7 +304,6 @@ namespace PokemonGoGUI.GoManager
                 Currency stardust = PlayerData.Currencies.FirstOrDefault(x => x.Name == "STARDUST");
 
                 return stardust == null ? 0 : stardust.Amount;
-
             }
         }
 
@@ -401,6 +400,13 @@ namespace PokemonGoGUI.GoManager
             }
 
             data = Items.FirstOrDefault(x => x.ItemId == ItemId.ItemMasterBall);
+
+            if (data != null)
+            {
+                total += data.Count;
+            }
+
+            data = Items.FirstOrDefault(x => x.ItemId == ItemId.ItemPremierBall);
 
             if (data != null)
             {
