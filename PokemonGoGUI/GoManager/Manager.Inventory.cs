@@ -325,6 +325,12 @@ namespace PokemonGoGUI.GoManager
 
             foreach (ItemData item in Items)
             {
+                //Break out of captcha loop to verifychallenge
+                if (WaitPaused())
+                {
+                    break;
+                }
+
                 InventoryItemSetting itemSetting = UserSettings.ItemSettings.FirstOrDefault(x => x.Id == item.ItemId);
 
                 if (itemSetting == null)
