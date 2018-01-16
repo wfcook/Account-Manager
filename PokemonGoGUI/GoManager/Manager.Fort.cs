@@ -213,6 +213,12 @@ namespace PokemonGoGUI.GoManager
         {
             try
             {
+                //Pause out of captcha loop to verifychallenge
+                if (WaitPaused())
+                {
+                    return new MethodResult<FortDetailsResponse>();
+                }
+
                 var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                 {
                     RequestType = RequestType.FortDetails,
@@ -251,6 +257,12 @@ namespace PokemonGoGUI.GoManager
         {
            try
             {
+                //Pause out of captcha loop to verifychallenge
+                if (WaitPaused())
+                {
+                    return new MethodResult<GymGetInfoResponse>();
+                }
+
                 var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                 {
                     RequestType = RequestType.GymGetInfo,

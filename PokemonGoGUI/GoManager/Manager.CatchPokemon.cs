@@ -152,6 +152,12 @@ namespace PokemonGoGUI.GoManager
         {
             try
             {
+                //Pause out of captcha loop to verifychallenge
+                if (WaitPaused())
+                {
+                    return new MethodResult();
+                }
+
                 var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                 {
                     RequestType = RequestType.DiskEncounter,
@@ -242,6 +248,12 @@ namespace PokemonGoGUI.GoManager
                                 arPlusValues.Awareness = (float)UserSettings.ARBonusAwareness;
                                 arPlusValues.Proximity = (float)UserSettings.ARBonusProximity;
                                 arPlusValues.PokemonFrightened = false;
+                            }
+
+                            //Pause out of captcha loop to verifychallenge
+                            if (WaitPaused())
+                            {
+                                return new MethodResult();
                             }
 
                             var catchresponse = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
@@ -365,6 +377,12 @@ namespace PokemonGoGUI.GoManager
             if (mapPokemon == null || mapPokemon.ExpirationTimestampMs >= DateTime.UtcNow.ToUnixTime())
             {
                 LogCaller(new LoggerEventArgs("Encounter expired....", LoggerTypes.Warning));
+                return new MethodResult<EncounterResponse>();
+            }
+
+            //Pause out of captcha loop to verifychallenge
+            if (WaitPaused())
+            {
                 return new MethodResult<EncounterResponse>();
             }
 
@@ -540,6 +558,12 @@ namespace PokemonGoGUI.GoManager
                         arPlusValues.Awareness = (float)UserSettings.ARBonusAwareness;
                         arPlusValues.Proximity = (float)UserSettings.ARBonusProximity;
                         arPlusValues.PokemonFrightened = false;
+                    }
+
+                    //Pause out of captcha loop to verifychallenge
+                    if (WaitPaused())
+                    {
+                        return new MethodResult();
                     }
 
                     var catchresponse = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
@@ -775,6 +799,12 @@ namespace PokemonGoGUI.GoManager
 
             try
             {
+                //Pause out of captcha loop to verifychallenge
+                if (WaitPaused())
+                {
+                    return;
+                }
+
                 var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                 {
                     RequestType = RequestType.UseItemEncounter,
@@ -838,6 +868,12 @@ namespace PokemonGoGUI.GoManager
             if (mapPokemon == null || mapPokemon.ExpirationTimestampMs >= DateTime.UtcNow.ToUnixTime())
             {
                 LogCaller(new LoggerEventArgs("Encounter expired....", LoggerTypes.Warning));
+                return new MethodResult<IncenseEncounterResponse>();
+            }
+
+            //Pause out of captcha loop to verifychallenge
+            if (WaitPaused())
+            {
                 return new MethodResult<IncenseEncounterResponse>();
             }
 

@@ -148,6 +148,12 @@ namespace PokemonGoGUI.GoManager
                     }
                 }
 
+                //Pause out of captcha loop to verifychallenge
+                if (WaitPaused())
+                {
+                    return new MethodResult();
+                }
+
                 var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                 {
                     RequestType = RequestType.LevelUpRewards,
@@ -181,6 +187,12 @@ namespace PokemonGoGUI.GoManager
 
             try
             {
+                //Pause out of captcha loop to verifychallenge
+                if (WaitPaused())
+                {
+                    return new MethodResult<GetBuddyWalkedResponse>();
+                }
+
                 var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                 {
                     RequestType = RequestType.GetBuddyWalked,
@@ -210,7 +222,6 @@ namespace PokemonGoGUI.GoManager
         }
         private async Task<MethodResult> GetPlayer(bool nobuddy =true, bool noinbox =true)
         {
-
             try
             {
                 if (!_client.LoggedIn)
@@ -221,6 +232,12 @@ namespace PokemonGoGUI.GoManager
                     {
                         return result;
                     }
+                }
+
+                //Pause out of captcha loop to verifychallenge
+                if (WaitPaused())
+                {
+                    return new MethodResult();
                 }
 
                 var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request {
@@ -257,6 +274,12 @@ namespace PokemonGoGUI.GoManager
                     {
                         return result;
                     }
+                }
+                
+                //Pause out of captcha loop to verifychallenge
+                if (WaitPaused())
+                {
+                    return new MethodResult();
                 }
 
                 var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request {
