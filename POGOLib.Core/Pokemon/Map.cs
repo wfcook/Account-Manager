@@ -25,7 +25,7 @@ namespace POGOLib.Official.Pokemon
         private RepeatedField<MapCell> _cells;
 
         // The last received incense pokémon.
-        private MapPokemon _incensePokemons;
+        private MapPokemon _incensePokemon;
 
         internal Map(Session session)
         {
@@ -37,12 +37,12 @@ namespace POGOLib.Official.Pokemon
         ///     Gets the last received Incense Pokémon from PokémonGo.<br />
         ///     Only use this if you Incense is active.
         /// </summary>
-        public MapPokemon IncensePokemons
+        public MapPokemon IncensePokemon
         {
-            get { return _incensePokemons; }
+            get { return _incensePokemon; }
             internal set
             {
-                _incensePokemons = value;
+                _incensePokemon = value;
             }
         }
 

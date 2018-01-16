@@ -79,7 +79,7 @@ namespace PokemonGoGUI.GoManager
                 {
                     _continue = false;
 
-                    MethodResult<IncenseEncounterResponse> result2 = await EncounterIncensePokemon(incensePokemon.Data.FirstOrDefault());
+                    MethodResult<IncenseEncounterResponse> result2 = await EncounterIncensePokemon(incensePokemon.Data);
 
                     if (!result2.Success)
                         _continue = true;
@@ -303,7 +303,7 @@ namespace PokemonGoGUI.GoManager
 
                                     fortData.LureInfo = null;
 
-                                    LogCaller(new LoggerEventArgs(String.Format("Lured Pokemon Caught. {0}. Exp {1}. Candy {2}. Attempt #{3}. Ball: {4}", pokemon, expGained, candyGained, attemptCount, pokeBallName), LoggerTypes.Success));
+                                    LogCaller(new LoggerEventArgs(String.Format("[Lured] Pokemon Caught. {0}. Exp {1}. Candy {2}. Attempt #{3}. Ball: {4}", pokemon, expGained, candyGained, attemptCount, pokeBallName), LoggerTypes.Success));
 
                                     Pokemon.Add(eResponse.PokemonData);
 
@@ -637,7 +637,7 @@ namespace PokemonGoGUI.GoManager
                                 }
                             }
 
-                            LogCaller(new LoggerEventArgs(String.Format("[{0}] Caught. {1}. Exp {2}. Candy: {3}. Attempt #{4}. Ball: {5}", _pokemonType, pokemon, expGained, candyGained, attemptCount, pokeBallName), LoggerTypes.Success));
+                            LogCaller(new LoggerEventArgs(String.Format("[{0}] Pokemon Caught. {1}. Exp {2}. Candy: {3}. Attempt #{4}. Ball: {5}", _pokemonType, pokemon, expGained, candyGained, attemptCount, pokeBallName), LoggerTypes.Success));
 
                             Pokemon.Add(encounteredPokemon);
 

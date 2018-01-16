@@ -90,10 +90,9 @@ namespace POGOLib.Official.Net
         public bool IncenseUsed
         {
             get { return _incenseUsed; }
-            set
+            internal set
             {
                 _incenseUsed = value;
-                Logger.Debug($"Session incense was set to {_incenseUsed}.");
             }
         }
 
