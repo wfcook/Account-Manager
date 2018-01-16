@@ -16,7 +16,7 @@ using POGOProtos.Networking.Requests;
 using POGOProtos.Networking.Requests.Messages;
 using Google.Protobuf;
 using POGOProtos.Networking.Responses;
-using POGOLib.Official.Net;
+using System.Diagnostics;
 
 namespace PokemonGoGUI.Captcha
 {
@@ -265,6 +265,10 @@ namespace PokemonGoGUI.Captcha
             finally
             {
                 if (webDriver != null) webDriver.Close();
+                foreach (var process in Process.GetProcessesByName("chromedriver"))
+                {
+                    process.Kill();
+                }
             }
         }
     }

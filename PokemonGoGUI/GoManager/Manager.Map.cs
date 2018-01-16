@@ -164,6 +164,12 @@ namespace PokemonGoGUI.GoManager
                 if (itemUsed == ItemId.ItemUnknown)
                     return new MethodResult<List<MapPokemon>>();
 
+                //Pause out of captcha loop to verifychallenge
+                if (WaitPaused())
+                {
+                    return new MethodResult<List<MapPokemon>>();
+                }
+
                 LogCaller(new LoggerEventArgs(String.Format("Incense {0} actived {1}m {2}s.", itemUsed, time.Minutes, Math.Abs(time.Seconds)), LoggerTypes.Info));
 
                 var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request

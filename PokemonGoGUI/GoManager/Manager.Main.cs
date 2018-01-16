@@ -18,7 +18,6 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using POGOLib.Official.Util.Hash.PokeHash;
-using POGOLib.Official.Net;
 
 namespace PokemonGoGUI.GoManager
 {
@@ -899,6 +898,11 @@ namespace PokemonGoGUI.GoManager
                             break;
                         }
                     }
+                }
+                catch (ArgumentOutOfRangeException)// ex
+                {
+                    LogCaller(new LoggerEventArgs("Skipping request ...", LoggerTypes.Warning));
+                    continue;
                 }
                 catch (PokeHashException ex)
                 {
