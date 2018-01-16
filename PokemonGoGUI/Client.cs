@@ -446,7 +446,6 @@ namespace PokemonGoGUI
             ClientManager.LogCaller(new LoggerEventArgs("Captcha received.", LoggerTypes.Warning));
 
             ClientManager.LogCaller(new LoggerEventArgs("Bot paused VerifyChallenge...", LoggerTypes.Captcha));
-            ClientManager.State = BotState.Paused;
             ClientManager.WaitVerifyChalange(true);
 
             bool solved = false;
@@ -460,7 +459,6 @@ namespace PokemonGoGUI
             {
                 ClientManager.WaitVerifyChalange(false);
                 ClientManager.LogCaller(new LoggerEventArgs("Unpausing bot Challenge finished...", LoggerTypes.Captcha));
-                ClientManager.State = BotState.Running;
                 ClientManager.AccountState = accountState;
                 return;
             }

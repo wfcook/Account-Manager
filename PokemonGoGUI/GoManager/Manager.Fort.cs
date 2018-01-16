@@ -22,6 +22,12 @@ namespace PokemonGoGUI.GoManager
 
                 for (int i = 0; i < maxFortAttempts; i++)
                 {
+                    //Pause out of captcha loop to verifychallenge
+                    if (WaitPaused())
+                    {
+                        return new MethodResult();
+                    }
+
                     var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                     {
                         RequestType = RequestType.FortSearch,

@@ -87,9 +87,14 @@ namespace PokemonGoGUI.GoManager
         {
             LogCaller(new LoggerEventArgs("Attempting to login ...", LoggerTypes.Debug));
             AccountState = AccountState.Conecting;
+ 
+            //Pause out of captcha loop to verifychallenge
+            if (WaitPaused())
+            {
+                return new MethodResult();
+            }
 
-            MethodResult result = null;
-            result = await _client.DoLogin(this);
+            MethodResult result = await _client.DoLogin(this);
             LogCaller(new LoggerEventArgs(result.Message, LoggerTypes.Debug));
 
             if (!result.Success)
@@ -284,7 +289,10 @@ namespace PokemonGoGUI.GoManager
                     continue;
                 }
 
-                WaitPaused();
+                if (WaitPaused())
+                {
+                    continue;
+                }
 
                 if ((_proxyIssue || CurrentProxy == null) && UserSettings.AutoRotateProxies)
                 {
@@ -303,7 +311,6 @@ namespace PokemonGoGUI.GoManager
 
                     continue;
                 }
-
 
                 StartingUp = true;
 
