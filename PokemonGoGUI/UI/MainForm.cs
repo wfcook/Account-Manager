@@ -1628,12 +1628,6 @@ namespace PokemonGoGUI
 
         private void AboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (Control.ModifierKeys == Keys.Shift)
-            {
-                LogViewerToolStripMenuItem_Click(sender, e);
-                return;
-            }
-
             var startForm = new StartupForm
             {
                 ShowOnStartUp = _showStartup

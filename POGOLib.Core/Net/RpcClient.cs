@@ -626,13 +626,20 @@ namespace POGOLib.Official.Net
                                 throw new Exception("Bad Request Received. The account is Temporal Banned");
                             case ResponseEnvelope.Types.StatusCode.SessionInvalidated:
                                 //Need observation here
-                                break;
+                                _session.Logger.Info($"Session Invalidated status code, re-send...");
+                                await _session.Reauthenticate();
+                                // Re-send envelope.
+                                return await PerformRemoteProcedureCallAsync(requestEnvelope);
                             case ResponseEnvelope.Types.StatusCode.Unknown:
                                 //Need observation here
+                                _session.Logger.Info($"Unknown status code.");
                                 break;
                             case ResponseEnvelope.Types.StatusCode.InvalidPlatformRequest:
                                 //Need observation here
-                                break;
+                                _session.Logger.Info($"Invalid Platform Request status code, re-send...");
+                                await _session.Reauthenticate();
+                                // Re-send envelope.
+                                return await PerformRemoteProcedureCallAsync(requestEnvelope);
                             default:
                                 _session.Logger.Info($"Unknown status code: {responseEnvelope.StatusCode}");
                                 break;

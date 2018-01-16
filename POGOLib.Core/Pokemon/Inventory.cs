@@ -143,26 +143,27 @@ namespace POGOLib.Official.Pokemon
                 .Where(aItems => aItems?.Item != null)
                 .SelectMany(aItems => aItems.Item).ToDictionary(item => item.ItemId, item => new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(item.ExpireMs));
             DateTime expires = new DateTime(0);
-            ItemId _item = ItemId.ItemUnknown;
 
             foreach (var item in InventoryItems.Select(i => i.InventoryItemData?.Item).Where(item => item != null))
             {
                 if (appliedItems.ContainsKey(item.ItemId))
                 {
                     expires = appliedItems[item.ItemId];
-                    _item = item.ItemId;
+                    var time = expires - DateTime.UtcNow;
+                    if (expires.Ticks == 0 || time.TotalSeconds < 0)
+                    {
+                        // check item
+                        if (item.ItemId == ItemId.ItemIncenseCool || item.ItemId == ItemId.ItemIncenseFloral || item.ItemId == ItemId.ItemIncenseOrdinary || item.ItemId == ItemId.ItemIncenseSpicy)
+                            _session.IncenseUsed = false;
+                    }
+                    else
+                    {
+                        // check item
+                        if (item.ItemId == ItemId.ItemIncenseCool || item.ItemId == ItemId.ItemIncenseFloral || item.ItemId == ItemId.ItemIncenseOrdinary || item.ItemId == ItemId.ItemIncenseSpicy)
+                            _session.IncenseUsed = true;
+                        _session.Logger.Info($"Session applied item: {item.ItemId.ToString().Replace("Item", "")} active for: {time.Minutes}m {Math.Abs(time.Seconds)}s.");
+                    }
                 }
-            }
-
-            var time = expires - DateTime.UtcNow;
-            if (expires.Ticks == 0 || time.TotalSeconds < 0)
-            {
-                _session.IncenseUsed = false;
-            }
-            else
-            {
-                _session.IncenseUsed = true;
-                _session.Logger.Debug($"Session {_item} active {time.Minutes}m {Math.Abs(time.Seconds)}s.");
             }
 
             _session.OnInventoryUpdate();

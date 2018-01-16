@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Description>A community-driven PokemonGo API Library written in C#. You can read the changelog here https://github.com/Furtif/POGOLib/blob/core/README.md.</Description>
     <AssemblyTitle>POGOLib.Core</AssemblyTitle>
-    <Authors>AeonLucid  - --=FurtiF™=-- - Xelwon</Authors>
+    <Authors>AeonLucid  | --=FurtiF™=-- | Xelwon</Authors>
     <TargetFramework>netstandard1.1</TargetFramework>
     <AssemblyName>POGOLib.Core</AssemblyName>
     <PackageId>POGOLib.Core</PackageId>
@@ -12,9 +12,9 @@
     <PackageProjectUrl>https://github.com/Furtif/POGOLib/tree/core</PackageProjectUrl>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/Furtif/POGOLib/tree/core</RepositoryUrl>
-    <Version>1.8.5</Version>
-    <AssemblyVersion>1.8.5.0</AssemblyVersion>
-    <FileVersion>1.8.5.0</FileVersion>
+    <Version>1.8.6</Version>
+    <AssemblyVersion>1.8.6.0</AssemblyVersion>
+    <FileVersion>1.8.6.0</FileVersion>
     <Platforms>AnyCPU;x64;x86</Platforms>
     <Company>AeonLucid</Company>
   </PropertyGroup>
