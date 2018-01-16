@@ -156,6 +156,8 @@ namespace PokemonGoGUI.Captcha
                     client.ClientManager.LogCaller(new LoggerEventArgs($"(CAPTCHA) Failed to resolve captcha, try resolved captcha by official app. ", LoggerTypes.Warning));
                     return false;
                 }
+                //resume session after solve
+                await client.ClientSession.ResumeAsync();
                 client.ClientManager.LogCaller(new LoggerEventArgs($"(CAPTCHA) Great!!! Captcha has been by passed",LoggerTypes.Success));
                 return verifyChallengeResponse.Success;
             }
