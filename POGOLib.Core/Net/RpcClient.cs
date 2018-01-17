@@ -238,9 +238,6 @@ namespace POGOLib.Official.Net
         /// </summary>
         public async Task RefreshMapObjectsAsync()
         {
-            if (_session.State == SessionState.Paused)
-                return;
-
             var cellIds = MapUtil.GetCellIdsForLatLong(_session.Player.Coordinate.Latitude, _session.Player.Coordinate.Longitude);
             var sinceTimeMs = cellIds.Select(x => (long)0).ToArray();
 
@@ -537,9 +534,21 @@ namespace POGOLib.Official.Net
 
                     case SessionState.Paused:
                         var requests = requestEnvelope.Requests.Select(x => x.RequestType).ToList();
-                        if (requests.Count != 1 || requests[0] != RequestType.VerifyChallenge)
+                        if (requests.Count != 1 || requests[0] == RequestType.VerifyChallenge)
                         {
-                            _session.Logger.Error("We tried to send a request while the session was paused. The only request allowed is VerifyChallenge.");
+                            foreach (var req in requestEnvelope.Requests)
+                            {
+                                if (req.RequestType != RequestType.VerifyChallenge)
+                                {
+                                    requestEnvelope.Requests.Remove(req);
+                                    _session.Logger.Debug($"Removed bad request: [{req.RequestType.ToString()}]. The only request allowed is VerifyChallenge.");
+                                }
+                            }
+                            break;
+                        }
+                        else if (requests.Count != 1 || requests[0] != RequestType.VerifyChallenge)
+                        {
+                            _session.Logger.Debug("We tried to send a request while the session was paused. The only request allowed is VerifyChallenge.");
                             return null;
                         }
                         break;
@@ -600,6 +609,8 @@ namespace POGOLib.Official.Net
                                 await _session.Reauthenticate();
 
                                 // Apply new token.
+                                _session.Logger.Error("ID: " + _session.AccessToken.ProviderID + " token: " + _session.AccessToken.Token);
+
                                 requestEnvelope.AuthInfo = new RequestEnvelope.Types.AuthInfo
                                 {
                                     Provider = _session.AccessToken.ProviderID,
@@ -627,7 +638,31 @@ namespace POGOLib.Official.Net
                             case ResponseEnvelope.Types.StatusCode.SessionInvalidated:
                                 //Need observation here
                                 _session.Logger.Info($"Session Invalidated status code, re-send...");
+                                _session.AccessToken.Expire();
                                 await _session.Reauthenticate();
+
+                                // Apply new token.
+                                _session.Logger.Error("ID: " + _session.AccessToken.ProviderID + " token: " + _session.AccessToken.Token);
+
+                                requestEnvelope.AuthInfo = new RequestEnvelope.Types.AuthInfo
+                                {
+                                    Provider = _session.AccessToken.ProviderID,
+                                    Token = new RequestEnvelope.Types.AuthInfo.Types.JWT
+                                    {
+                                        Contents = _session.AccessToken.Token,
+                                        Unknown2 = 59
+                                    }
+                                };
+
+                                // Re-sign envelope.
+                                var signature1 = requestEnvelope.PlatformRequests.FirstOrDefault(x => x.Type == PlatformRequestType.SendEncryptedSignature);
+                                if (signature1 != null)
+                                {
+                                    requestEnvelope.PlatformRequests.Remove(signature1);
+                                }
+
+                                requestEnvelope.PlatformRequests.Insert(0, await _rpcEncryption.GenerateSignatureAsync(requestEnvelope));
+
                                 // Re-send envelope.
                                 return await PerformRemoteProcedureCallAsync(requestEnvelope);
                             case ResponseEnvelope.Types.StatusCode.Unknown:
@@ -637,7 +672,31 @@ namespace POGOLib.Official.Net
                             case ResponseEnvelope.Types.StatusCode.InvalidPlatformRequest:
                                 //Need observation here
                                 _session.Logger.Info($"Invalid Platform Request status code, re-send...");
+                                _session.AccessToken.Expire();
                                 await _session.Reauthenticate();
+
+                                // Apply new token.
+                                _session.Logger.Error("ID: " + _session.AccessToken.ProviderID + " token: " + _session.AccessToken.Token);
+
+                                requestEnvelope.AuthInfo = new RequestEnvelope.Types.AuthInfo
+                                {
+                                    Provider = _session.AccessToken.ProviderID,
+                                    Token = new RequestEnvelope.Types.AuthInfo.Types.JWT
+                                    {
+                                        Contents = _session.AccessToken.Token,
+                                        Unknown2 = 59
+                                    }
+                                };
+
+                                // Re-sign envelope.
+                                var signature2 = requestEnvelope.PlatformRequests.FirstOrDefault(x => x.Type == PlatformRequestType.SendEncryptedSignature);
+                                if (signature2 != null)
+                                {
+                                    requestEnvelope.PlatformRequests.Remove(signature2);
+                                }
+
+                                requestEnvelope.PlatformRequests.Insert(0, await _rpcEncryption.GenerateSignatureAsync(requestEnvelope));
+
                                 // Re-send envelope.
                                 return await PerformRemoteProcedureCallAsync(requestEnvelope);
                             default:
@@ -751,6 +810,10 @@ namespace POGOLib.Official.Net
                 var request = requestEnvelope.Requests[i];
                 if (_defaultRequests.Contains(request.RequestType))
                     responseIndexes.Add(i, request.RequestType);
+                if (request.RequestType == RequestType.VerifyChallenge)
+                    responseIndexes.Add(i, request.RequestType);
+                if (request.RequestType == RequestType.GetIncensePokemon)
+                    responseIndexes.Add(i, request.RequestType);
             }
 
             foreach (var responseIndex in responseIndexes)
@@ -836,10 +899,21 @@ namespace POGOLib.Official.Net
                             continue;
                         }
                         break;
+
+                    case RequestType.VerifyChallenge:
+                        var verifyChallenge = VerifyChallengeResponse.Parser.ParseFrom(bytes);
+                        if (verifyChallenge.Success)
+                        {
+                            _session.Logger.Debug($"Verify Challenge succes'");
+                            _session.ResumeAsync().Wait();
+                        }
+                        break;
+
                     case RequestType.GetBuddyWalked:
                         var getBuddyWalked = GetBuddyWalkedResponse.Parser.ParseFrom(bytes);
                         _session.Player.BuddyCandy = getBuddyWalked.CandyEarnedCount;
                         break;
+
                     case RequestType.GetIncensePokemon:
                         var getIncensePokemonResponse = GetIncensePokemonResponse.Parser.ParseFrom(bytes);
                         _session.Map.IncensePokemon = null;

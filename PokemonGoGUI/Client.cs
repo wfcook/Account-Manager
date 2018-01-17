@@ -67,6 +67,7 @@ namespace PokemonGoGUI
             ClientSession.MapUpdate -= SessionMapUpdate;
             ClientSession.CheckAwardedBadgesReceived -= OnCheckAwardedBadgesReceived;
             ClientSession.HatchedEggsReceived -= OnHatchedEggsReceived;
+            ClientSession.TemporalBanReceived -= TempBanReceived;
             ClientSession.Shutdown();
         }
 
@@ -153,6 +154,8 @@ namespace PokemonGoGUI
                 ClientSession.MapUpdate += SessionMapUpdate;
                 ClientSession.CheckAwardedBadgesReceived += OnCheckAwardedBadgesReceived;
                 ClientSession.HatchedEggsReceived += OnHatchedEggsReceived;
+                ClientSession.TemporalBanReceived += TempBanReceived;
+
                 ClientSession.Logger.RegisterLogOutput(LoggerFucntion);
 
                 if (await ClientSession.StartupAsync(ClientManager.UserSettings.DownloadResources))
@@ -489,6 +492,12 @@ namespace PokemonGoGUI
         private void SessionAccessTokenUpdated(object sender, EventArgs e)
         {
             SaveAccessToken(ClientSession.AccessToken);
+        }
+
+        private void TempBanReceived(object sender, EventArgs e)
+        {
+            ClientManager.AccountState = AccountState.TemporalBan;
+            ClientManager.Stop();
         }
 
         public void SetSettings(Manager manager)

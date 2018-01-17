@@ -45,6 +45,9 @@ namespace PokemonGoGUI.GoManager
                 return new MethodResult();
             }
 
+            if (iResponse.Data.PokemonId == PokemonId.Missingno)
+                return new MethodResult();
+
             LogCaller(new LoggerEventArgs("Catchable Insence Pokemons: " + iResponse.Data.PokemonId.ToString(), LoggerTypes.Debug));
 
             if (!PokemonWithinCatchSettings(iResponse.Data.PokemonId))
@@ -875,7 +878,7 @@ namespace PokemonGoGUI.GoManager
                     case UseItemEncounterResponse.Types.Status.Success:
                         int remaining = berryData.Count - 1;
                         berryData.Count = remaining;
-                        LogCaller(new LoggerEventArgs(String.Format("Successfully used berry. Remaining: {0}", remaining), LoggerTypes.Success));
+                        LogCaller(new LoggerEventArgs(String.Format("Successfully used {0}. Remaining: {1}", berryData.ItemId.ToString().Replace("Item",""), remaining), LoggerTypes.Success));
 
                         await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
                         break;
@@ -905,11 +908,11 @@ namespace PokemonGoGUI.GoManager
         //Encounter Incense
         private async Task<MethodResult<IncenseEncounterResponse>> EncounterIncensePokemon(MapPokemon mapPokemon)
         {
-            if (mapPokemon == null || mapPokemon.ExpirationTimestampMs >= DateTime.UtcNow.ToUnixTime())
+            /*if (mapPokemon == null || mapPokemon.ExpirationTimestampMs >= DateTime.UtcNow.ToUnixTime())
             {
                 LogCaller(new LoggerEventArgs("Encounter expired....", LoggerTypes.Warning));
                 return new MethodResult<IncenseEncounterResponse>();
-            }
+            }*/
 
             //Pause out of captcha loop to verifychallenge
             if (WaitPaused())

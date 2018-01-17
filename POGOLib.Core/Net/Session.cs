@@ -113,7 +113,7 @@ namespace POGOLib.Official.Net
         internal void SetTemporalBan()
         {
             State = SessionState.TemporalBanned;
-            Shutdown();
+            OnTemporalBanReceived();
         }
 
         /// <summary>
@@ -291,7 +291,12 @@ namespace POGOLib.Official.Net
         }
 
         #region Events
-        private void OnAccessTokenUpdated()
+        internal void OnTemporalBanReceived()
+        {
+            TemporalBanReceived?.Invoke(this, EventArgs.Empty);
+        }
+
+        internal void OnAccessTokenUpdated()
         {
             AccessTokenUpdated?.Invoke(this, EventArgs.Empty);
         }
@@ -340,6 +345,8 @@ namespace POGOLib.Official.Net
         {
             RemoteConfigVersionUpdated?.Invoke(this, new DownloadRemoteConfigVersionResponse(downloadRemoteConfigVersionResponse));
         }
+
+        public event EventHandler<EventArgs> TemporalBanReceived;
 
         public event EventHandler<DownloadRemoteConfigVersionResponse> RemoteConfigVersionUpdated;
 
