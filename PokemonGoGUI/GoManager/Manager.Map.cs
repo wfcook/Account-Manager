@@ -127,39 +127,37 @@ namespace PokemonGoGUI.GoManager
             {
                 if (UserSettings.UseIncense)
                 {
-                    // use basic incense only ...
                     var incenses = Items.Where(x => x.ItemId == ItemId.ItemIncenseOrdinary
-                    //|| x.ItemId == ItemId.ItemIncenseCool
-                    //|| x.ItemId == ItemId.ItemIncenseFloral
-                    //|| x.ItemId == ItemId.ItemIncenseSpicy
+                    || x.ItemId == ItemId.ItemIncenseCool
+                    || x.ItemId == ItemId.ItemIncenseFloral
+                    || x.ItemId == ItemId.ItemIncenseSpicy
                     );
 
                     if (incenses.Count() > 0)
                     {
                         await UseIncense(incenses.FirstOrDefault().ItemId);
+
+                        if (_client.ClientSession.Map.IncensePokemon != null)
+                        {
+                            return new MethodResult<MapPokemon>
+                            {
+                                Data = _client.ClientSession.Map.IncensePokemon,
+                                Success = true,
+                                Message = "Succes"
+                            };
+                        }
                     }
-                    else
-                    {
-                        return new MethodResult<MapPokemon>();
-                    }
-                }
-                else
-                {
-                    return new MethodResult<MapPokemon>();
                 }
             }
-            else
+
+            if (_client.ClientSession.Map.IncensePokemon != null)
             {
-                if (_client.ClientSession.Map.IncensePokemon != null)
+                return new MethodResult<MapPokemon>
                 {
-                    return new MethodResult<MapPokemon>
-                    {
-                        Data =  _client.ClientSession.Map.IncensePokemon,
-                        Success = true,
-                        Message = "Succes"
-                    };
-                }
-                return new MethodResult<MapPokemon>();
+                    Data = _client.ClientSession.Map.IncensePokemon,
+                    Success = true,
+                    Message = "Succes"
+                };
             }
             return new MethodResult<MapPokemon>();
         }

@@ -20,7 +20,7 @@ namespace PokemonGoGUI.GoManager
 {
     public partial class Manager
     {
-        private async Task<MethodResult> CatchNeabyPokemon()
+        private async Task<MethodResult> CatchInsencePokemon()
         {
             if (!UserSettings.CatchPokemon)
             {
@@ -38,6 +38,64 @@ namespace PokemonGoGUI.GoManager
                 };
             }
 
+            MethodResult<MapPokemon> iResponse = await GetIncensePokemons();
+
+            if (!iResponse.Success)
+            {
+                return new MethodResult();
+            }
+
+            LogCaller(new LoggerEventArgs("Catchable Insence Pokemons: " + iResponse.Data.PokemonId.ToString(), LoggerTypes.Debug));
+
+            if (!PokemonWithinCatchSettings(iResponse.Data.PokemonId))
+            {
+                return new MethodResult();
+            }
+
+            if (RemainingPokeballs() < 1)
+            {
+                LogCaller(new LoggerEventArgs("You don't have any pokeball catching pokemon will be disabled during " + UserSettings.DisableCatchDelay.ToString(CultureInfo.InvariantCulture) + " minutes.", LoggerTypes.Info));
+                CatchDisabled = true;
+                TimeAutoCatch = DateTime.Now.AddMinutes(UserSettings.DisableCatchDelay);
+                return new MethodResult();
+            }
+
+            MethodResult<IncenseEncounterResponse> result = await EncounterIncensePokemon(iResponse.Data);
+
+            if (!result.Success)
+            {
+                await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+
+                return new MethodResult(); 
+            }
+
+            MethodResult catchResult = await CatchPokemon(result.Data, iResponse.Data);
+
+            await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+
+            return new MethodResult
+            {
+                Success = true
+            };
+        }
+
+        private async Task<MethodResult> CatchNeabyPokemon()
+        {
+            if (!UserSettings.CatchPokemon)
+            {
+                return new MethodResult
+                {
+                    Message = "Catching pokemon disabled"
+                };
+            }
+
+            if (FilledPokemonStorage() >= 100)
+            {
+                return new MethodResult
+                {
+                    Message = "Pokemon Inventory Full."
+                };
+            }
 
             MethodResult<List<MapPokemon>> catchableResponse = GetCatchablePokemon();
 
@@ -63,36 +121,18 @@ namespace PokemonGoGUI.GoManager
                     break;
                 }
 
-                bool _continue = false;
-
                 MethodResult<EncounterResponse> result = await EncounterPokemon(pokemon);
 
                 if (!result.Success)
-                    _continue = true;
-                else
-                   await CatchPokemon(result.Data, pokemon);
-
-
-                var incensePokemon = await GetIncensePokemons();
-
-                if (incensePokemon.Success)
-                {
-                    _continue = false;
-
-                    MethodResult<IncenseEncounterResponse> result2 = await EncounterIncensePokemon(incensePokemon.Data);
-
-                    if (!result2.Success)
-                        _continue = true;
-                    else
-                       await CatchPokemon(result2.Data, pokemon);
-                }
-
-                if (_continue)
                 {
                     await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
 
                     continue;
                 }
+
+                MethodResult catchResult = await CatchPokemon(result.Data, pokemon);
+
+                await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));            
             }
 
             return new MethodResult
@@ -463,18 +503,18 @@ namespace PokemonGoGUI.GoManager
         //Catch encountered pokemon
         private async Task<MethodResult> CatchPokemon(dynamic eResponse, MapPokemon mapPokemon)
         {
-            PokemonData encounteredPokemon = null;
-            long unixTimeStamp;
-            ulong _encounterId;
-            string _spawnPointId;
+            PokemonData _encounteredPokemon = null;
+            long _unixTimeStamp = 0;
+            ulong _encounterId = 0;
+            string _spawnPointId = null;
             string _pokemonType = null;
 
             // Calling from CatchNormalPokemon
             if (eResponse is EncounterResponse &&
                     (eResponse?.Status == EncounterResponse.Types.Status.EncounterSuccess))
             {
-                encounteredPokemon = eResponse.WildPokemon?.PokemonData;
-                unixTimeStamp = eResponse.WildPokemon?.LastModifiedTimestampMs
+                _encounteredPokemon = eResponse.WildPokemon?.PokemonData;
+                _unixTimeStamp = eResponse.WildPokemon?.LastModifiedTimestampMs
                                 + eResponse.WildPokemon?.TimeTillHiddenMs;
                 _spawnPointId = eResponse.WildPokemon?.SpawnPointId;
                 _encounterId = eResponse.WildPokemon?.EncounterId;
@@ -484,8 +524,8 @@ namespace PokemonGoGUI.GoManager
             else if (eResponse is IncenseEncounterResponse &&
                          (eResponse?.Result == IncenseEncounterResponse.Types.Result.IncenseEncounterSuccess))
             {
-                encounteredPokemon = eResponse?.PokemonData;
-                unixTimeStamp = mapPokemon.ExpirationTimestampMs;
+                _encounteredPokemon = eResponse?.PokemonData;
+                _unixTimeStamp = mapPokemon.ExpirationTimestampMs;
                 _spawnPointId = mapPokemon.SpawnPointId;
                 _encounterId = mapPokemon.EncounterId;
                 _pokemonType = "Incense";
@@ -503,7 +543,7 @@ namespace PokemonGoGUI.GoManager
 
                     //Uses lowest capture probability
                     float probability = eResponse.CaptureProbability.CaptureProbability_[0];
-                    ItemId pokeBall = GetBestBall(encounteredPokemon);
+                    ItemId pokeBall = GetBestBall(_encounteredPokemon);
 
                     if (pokeBall == ItemId.ItemUnknown)
                     {
@@ -516,8 +556,8 @@ namespace PokemonGoGUI.GoManager
                     }
 
                     bool isLowProbability = probability < 0.40;
-                    bool isHighCp = encounteredPokemon.Cp > 800;
-                    bool isHighPerfection = CalculateIVPerfection(encounteredPokemon) > 95;
+                    bool isHighCp = _encounteredPokemon.Cp > 800;
+                    bool isHighPerfection = CalculateIVPerfection(_encounteredPokemon) > 95;
 
                     if (UserSettings.UseBerries)
                     {
@@ -572,19 +612,19 @@ namespace PokemonGoGUI.GoManager
                         RequestMessage = new CatchPokemonMessage
                         {
                             ArPlusValues = arPlusValues,
-                            EncounterId = mapPokemon.EncounterId,
+                            EncounterId = _encounterId,
                             HitPokemon = hitInsideReticule,
                             NormalizedHitPosition = 1,
                             NormalizedReticleSize = reticuleSize,
                             Pokeball = pokeBall,
-                            SpawnPointId = mapPokemon.SpawnPointId,
+                            SpawnPointId = _spawnPointId,
                             SpinModifier = 1
                         }.ToByteString()
                     });
 
                     catchPokemonResponse = CatchPokemonResponse.Parser.ParseFrom(catchresponse);
  
-                    string pokemon = String.Format("Name: {0}, CP: {1}, IV: {2:0.00}%", mapPokemon.PokemonId, encounteredPokemon.Cp, CalculateIVPerfection(encounteredPokemon));
+                    string pokemon = String.Format("Name: {0}, CP: {1}, IV: {2:0.00}%", mapPokemon.PokemonId, _encounteredPokemon.Cp, CalculateIVPerfection(_encounteredPokemon));
                     string pokeBallName = pokeBall.ToString().Replace("Item", "");
 
                     switch(catchPokemonResponse.Status)
@@ -639,7 +679,7 @@ namespace PokemonGoGUI.GoManager
 
                             LogCaller(new LoggerEventArgs(String.Format("[{0}] Pokemon Caught. {1}. Exp {2}. Candy: {3}. Attempt #{4}. Ball: {5}", _pokemonType, pokemon, expGained, candyGained, attemptCount, pokeBallName), LoggerTypes.Success));
 
-                            Pokemon.Add(encounteredPokemon);
+                            Pokemon.Add(_encounteredPokemon);
 
                             return new MethodResult
                             {
@@ -835,7 +875,7 @@ namespace PokemonGoGUI.GoManager
                     case UseItemEncounterResponse.Types.Status.Success:
                         int remaining = berryData.Count - 1;
                         berryData.Count = remaining;
-                        LogCaller(new LoggerEventArgs(String.Format("Successfully used berry. Remaining: {0}", remaining), LoggerTypes.Info));
+                        LogCaller(new LoggerEventArgs(String.Format("Successfully used berry. Remaining: {0}", remaining), LoggerTypes.Success));
 
                         await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
                         break;

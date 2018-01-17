@@ -486,6 +486,32 @@ namespace PokemonGoGUI.GoManager
 
                             await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
                         }
+
+                        if (!PlayerData.TutorialState.Contains(TutorialState.GymTutorial) && Level >= 5)
+                        {
+                            //Pause out of captcha loop to verifychallenge
+                            if (WaitPaused())
+                            {
+                                continue;
+                            }
+
+                            result = await MarkTutorialsComplete(new[] { TutorialState.GymTutorial });
+
+                            if (!result.Success)
+                            {
+                                LogCaller(new LoggerEventArgs("Failed. Marking Gym tutorials completed..", LoggerTypes.Warning));
+
+                                Stop();
+
+                                await Task.Delay(failedWaitTime);
+
+                                continue;
+                            }
+
+                            LogCaller(new LoggerEventArgs("Marking Gym tutorials completed.", LoggerTypes.Success));
+
+                            await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
+                        }
                     }
 
                     _failedInventoryReponses = 0;
@@ -657,6 +683,26 @@ namespace PokemonGoGUI.GoManager
 
                                 await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
+                            }
+                            else
+                            {
+                                LogCaller(new LoggerEventArgs("You don't have any pokeball catching pokemon will be disabled during " + UserSettings.DisableCatchDelay.ToString(CultureInfo.InvariantCulture) + " minutes.", LoggerTypes.Info));
+                                CatchDisabled = true;
+                                TimeAutoCatch = DateTime.Now.AddMinutes(UserSettings.DisableCatchDelay);
+                            }
+
+                            if (RemainingPokeballs() > 0)
+                            {
+
+                                //Pause out of captcha loop to verifychallenge
+                                if (WaitPaused())
+                                {
+                                    continue;
+                                }
+
+                                //Catch incense pokemon
+                                MethodResult incensePokemonResponse = await CatchInsencePokemon();
+                                await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
                             }
                             else
                             {

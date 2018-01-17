@@ -194,7 +194,7 @@ namespace PokemonGoGUI.UI
 
             DisplayDetails();
 
-            if (e.LogType != LoggerTypes.Debug && e.LogType != LoggerTypes.LocationUpdate)
+            if (e.LogType != LoggerTypes.Debug || e.LogType != LoggerTypes.LocationUpdate)
             {
                 Invoke(new MethodInvoker(() =>
                 {
@@ -221,8 +221,6 @@ namespace PokemonGoGUI.UI
 
             _manager.LogHeaderSettings = fastObjectListViewLogs.SaveState();
         }
-
-
 
         private void DisplayDetails()
         {
@@ -262,6 +260,22 @@ namespace PokemonGoGUI.UI
             {
                 labelPlayerUsername.Text = _manager.PlayerData.Username;
                 labelPlayerTeam.Text = _manager.PlayerData.Team.ToString();
+                DateTime date = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(_manager.PlayerData.CreationTimestampMs);
+                labelCreateDate.Text = date.ToString();
+                string tutocompleted = "Not Completed";
+                if (_manager.PlayerData.TutorialState.Contains(TutorialState.AccountCreation)
+                    && _manager.PlayerData.TutorialState.Contains(TutorialState.AvatarSelection)
+                    && _manager.PlayerData.TutorialState.Contains(TutorialState.FirstTimeExperienceComplete)
+                    && _manager.PlayerData.TutorialState.Contains(TutorialState.GymTutorial)
+                    && _manager.PlayerData.TutorialState.Contains(TutorialState.LegalScreen)
+                    && _manager.PlayerData.TutorialState.Contains(TutorialState.NameSelection)
+                    && _manager.PlayerData.TutorialState.Contains(TutorialState.PokemonBerry)
+                    && _manager.PlayerData.TutorialState.Contains(TutorialState.PokemonCapture)
+                    && _manager.PlayerData.TutorialState.Contains(TutorialState.PokestopTutorial)
+                    && _manager.PlayerData.TutorialState.Contains(TutorialState.UseItem)
+                    )
+                    tutocompleted = "Completed";
+                    labelTutorialState.Text = tutocompleted;
             }
         }
 
