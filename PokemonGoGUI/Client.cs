@@ -457,7 +457,7 @@ namespace PokemonGoGUI
             bool solved = false;
             int retries = 1;
 
-            while (retries-- > 0 && !solved)
+           while (retries-- > 0 && !solved)
             {
                 solved = await CaptchaManager.SolveCaptcha(this, e.CaptchaUrl);
             }

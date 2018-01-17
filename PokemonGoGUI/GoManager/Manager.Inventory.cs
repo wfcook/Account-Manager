@@ -232,15 +232,7 @@ namespace PokemonGoGUI.GoManager
         /// <summary>
         /// Load Inventory methodes.
         /// </summary>
-        /// <param name="index 0">Load All.</param>
-        /// <param name="index 1">Load Items.</param>
-        /// <param name="index 2">Load Pokemon.</param>
-        /// <param name="index 3">Load Pokedex.</param>
-        /// <param name="index 4">Load PokemonCandy.</param>
-        /// <param name="index 5">Load Incubators.</param>
-        /// <param name="index 6">Load Eggs.</param>
-        /// <param name="index 7">Load Stats.</param>
-        public void UpdateInventory(InventoryRefresh type)
+       public void UpdateInventory(InventoryRefresh type)
         {
             if (!_client.LoggedIn)
             {
@@ -386,6 +378,9 @@ namespace PokemonGoGUI.GoManager
                     }.ToByteString()
                 });
 
+                if (response == null)
+                    return new MethodResult();
+
                 RecycleInventoryItemResponse recycleInventoryItemResponse = RecycleInventoryItemResponse.Parser.ParseFrom(response);
 
                 switch (recycleInventoryItemResponse.Result)
@@ -431,6 +426,9 @@ namespace PokemonGoGUI.GoManager
                         IncenseType = item
                     }.ToByteString()
                 });
+
+                if (response == null)
+                    return new MethodResult();
 
                 UseIncenseResponse useIncenseResponse = UseIncenseResponse.Parser.ParseFrom(response);
 

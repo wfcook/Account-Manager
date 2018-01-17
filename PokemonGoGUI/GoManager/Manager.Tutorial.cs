@@ -29,7 +29,6 @@ namespace PokemonGoGUI.GoManager
                 return new MethodResult{ Success = false };
             }
 
-
             var completedTutorials = PlayerData.TutorialState;
 
             if (!completedTutorials.Contains(TutorialState.LegalScreen))
@@ -135,6 +134,9 @@ namespace PokemonGoGUI.GoManager
                     }.ToByteString()
                 },true,nobuddy,noinbox);
 
+                if (response == null)
+                    return new MethodResult();
+
                 MarkTutorialCompleteResponse markTutorialCompleteResponse = null;
 
                 markTutorialCompleteResponse = MarkTutorialCompleteResponse.Parser.ParseFrom(response);
@@ -174,6 +176,9 @@ namespace PokemonGoGUI.GoManager
                     }.ToByteString()
                 });
 
+                if (response == null)
+                    return new MethodResult();
+
                 EncounterTutorialCompleteResponse encounterTutorialCompleteResponse = null;
 
                 encounterTutorialCompleteResponse = EncounterTutorialCompleteResponse.Parser.ParseFrom(response);
@@ -212,6 +217,9 @@ namespace PokemonGoGUI.GoManager
                         PlayerAvatar = avatar
                     }.ToByteString()
                 },true,true,true);
+
+                if (response == null)
+                    return new MethodResult();
 
                 SetAvatarResponse setAvatarResponse = null;
 
@@ -253,6 +261,8 @@ namespace PokemonGoGUI.GoManager
                     }.ToByteString()
                 },true,true,true);
 
+                if (response == null)
+                    return new MethodResult();
 
                 var parsedResponse = ListAvatarCustomizationsResponse.Parser.ParseFrom(response);
                 LogCaller(new LoggerEventArgs("ListAvatarCustomizations set to defaults", LoggerTypes.Success));
@@ -291,6 +301,9 @@ namespace PokemonGoGUI.GoManager
                     }.ToByteString()
                 });
 
+                if (response == null)
+                    return new MethodResult();
+
                 SetAvatarItemAsViewedResponse setAvatarItemAsViewedResponse = null;
 
                 setAvatarItemAsViewedResponse = SetAvatarItemAsViewedResponse.Parser.ParseFrom(response);
@@ -328,6 +341,9 @@ namespace PokemonGoGUI.GoManager
                         Force  = false
                     }.ToByteString()
                 },true, false, true);
+
+                if (response == null)
+                    return new MethodResult();
 
                 var parsedResponse = ClaimCodenameResponse.Parser.ParseFrom(response);
                 LogCaller(new LoggerEventArgs("Set avatar item as viewed", LoggerTypes.Success));

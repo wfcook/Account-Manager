@@ -59,8 +59,6 @@ namespace POGOLib.Official.Net
             RequestType.DownloadSettings,
             RequestType.GetBuddyWalked,
             RequestType.GetInbox,
-            //if incense
-            //RequestType.GetIncensePokemon
         };
 
         private readonly ConcurrentQueue<RequestEnvelope> _rpcQueue = new ConcurrentQueue<RequestEnvelope>();
@@ -123,7 +121,6 @@ namespace POGOLib.Official.Net
             // and the real app does it to receive the "OkRpcUrlInResponse"
             // currently we does it calling to getplayer, that this call will 
             // be repeared at receive the "OkRpcUrlInResponse"
-
 
             // Send GetPlayer to check if we're connected and authenticated
             GetPlayerResponse playerResponse;
@@ -238,60 +235,75 @@ namespace POGOLib.Official.Net
         /// </summary>
         public async Task RefreshMapObjectsAsync()
         {
-            var cellIds = MapUtil.GetCellIdsForLatLong(_session.Player.Coordinate.Latitude, _session.Player.Coordinate.Longitude);
-            var sinceTimeMs = cellIds.Select(x => (long)0).ToArray();
-
-            var response = await SendRemoteProcedureCallAsync(new Request
+            ByteString response = null;
+            try
             {
-                RequestType = RequestType.GetMapObjects,
-                RequestMessage = new GetMapObjectsMessage
+                var cellIds = MapUtil.GetCellIdsForLatLong(_session.Player.Coordinate.Latitude, _session.Player.Coordinate.Longitude);
+                var sinceTimeMs = cellIds.Select(x => (long)0).ToArray();
+
+                response = await SendRemoteProcedureCallAsync(new Request
                 {
-                    CellId =
+                    RequestType = RequestType.GetMapObjects,
+                    RequestMessage = new GetMapObjectsMessage
+                    {
+                        CellId =
                     {
                         cellIds
                     },
-                    SinceTimestampMs =
+                        SinceTimestampMs =
                     {
                         sinceTimeMs
                     },
-                    Latitude = _session.Player.Coordinate.Latitude,
-                    Longitude = _session.Player.Coordinate.Longitude
-                }.ToByteString()
-            });
+                        Latitude = _session.Player.Coordinate.Latitude,
+                        Longitude = _session.Player.Coordinate.Longitude
+                    }.ToByteString()
+                });
 
-            if (response != null)
-            {
-                var mapObjects = GetMapObjectsResponse.Parser.ParseFrom(response);
-                if (mapObjects.Status == MapObjectsStatus.Success)
+                if (response != null)
                 {
-                    // TODO: Cleaner?
-                    var pokemonCatchable = mapObjects.MapCells.SelectMany(c => c.CatchablePokemons).Count();
-                    var pokemonWild = mapObjects.MapCells.SelectMany(c => c.WildPokemons).Count();
-                    var pokemonNearby = mapObjects.MapCells.SelectMany(c => c.NearbyPokemons).Count();
-                    var pokemonCount = pokemonCatchable + pokemonWild + pokemonNearby;
-
-                    _session.Logger.Debug($"Received '{mapObjects.MapCells.Count}' map cells.");
-                    _session.Logger.Debug($"Received '{pokemonCount}' pokemons. Catchable({pokemonCatchable}) Wild({pokemonWild}) Nearby({pokemonNearby})");
-                    _session.Logger.Debug($"Received '{mapObjects.MapCells.SelectMany(c => c.Forts).Count()}' forts.");
-
-                    if (mapObjects.MapCells.Count == 0)
+                    var mapObjects = GetMapObjectsResponse.Parser.ParseFrom(response);
+                    if (mapObjects.Status == MapObjectsStatus.Success)
                     {
-                        _session.Logger.Error("We received 0 map cells, are your GPS coordinates correct?");
-                        return;
-                    }
+                        // TODO: Cleaner?
+                        var pokemonCatchable = mapObjects.MapCells.SelectMany(c => c.CatchablePokemons).Count();
+                        var pokemonWild = mapObjects.MapCells.SelectMany(c => c.WildPokemons).Count();
+                        var pokemonNearby = mapObjects.MapCells.SelectMany(c => c.NearbyPokemons).Count();
+                        var pokemonCount = pokemonCatchable + pokemonWild + pokemonNearby;
 
-                    _session.Map.Cells = mapObjects.MapCells;
-                }
-                else
-                {
-                    _session.Logger.Error($"GetMapObjects status is: '{mapObjects.Status}'.");
+                        _session.Logger.Debug($"Received '{mapObjects.MapCells.Count}' map cells.");
+                        _session.Logger.Debug($"Received '{pokemonCount}' pokemons. Catchable({pokemonCatchable}) Wild({pokemonWild}) Nearby({pokemonNearby})");
+                        _session.Logger.Debug($"Received '{mapObjects.MapCells.SelectMany(c => c.Forts).Count()}' forts.");
+
+                        if (mapObjects.MapCells.Count == 0)
+                        {
+                            _session.Logger.Error("We received 0 map cells, are your GPS coordinates correct?");
+                            return;
+                        }
+
+                        _session.Map.Cells = mapObjects.MapCells;
+                    }
+                    else
+                    {
+                        _session.Logger.Debug($"GetMapObjects status is: '{mapObjects.Status}'.");
+                    }
                 }
             }
-            else if (_session.State != SessionState.Paused)
+            catch (ArgumentOutOfRangeException)
+            {
+                // Re-send
+                _session.Logger.Warn($"GetMapObjects re-send.");
+                await RefreshMapObjectsAsync();
+            }
+            catch (Exception)
             {
                 // POGOLib didn't expect this.
                 throw new NullReferenceException(nameof(response));
             }
+            /*else if (_session.State != SessionState.Paused)
+            {
+                // POGOLib didn't expect this.
+                throw new NullReferenceException(nameof(response));
+            }*/
         }
 
         /// <summary>
@@ -534,7 +546,7 @@ namespace POGOLib.Official.Net
 
                     case SessionState.Paused:
                         var requests = requestEnvelope.Requests.Select(x => x.RequestType).ToList();
-                        if (requests.Count != 1 || requests[0] == RequestType.VerifyChallenge)
+                        /*if (requests.Count >= 1 && requests[0] == RequestType.VerifyChallenge)
                         {
                             foreach (var req in requestEnvelope.Requests)
                             {
@@ -544,9 +556,19 @@ namespace POGOLib.Official.Net
                                     _session.Logger.Debug($"Removed bad request: [{req.RequestType.ToString()}]. The only request allowed is VerifyChallenge.");
                                 }
                             }
-                            break;
+                            // Re-sign envelope.
+                            var signature = requestEnvelope.PlatformRequests.FirstOrDefault(x => x.Type == PlatformRequestType.SendEncryptedSignature);
+                            if (signature != null)
+                            {
+                                requestEnvelope.PlatformRequests.Remove(signature);
+                            }
+
+                            requestEnvelope.PlatformRequests.Insert(0, await _rpcEncryption.GenerateSignatureAsync(requestEnvelope));
+
+                            // Re-send envelope.
+                            return await PerformRemoteProcedureCallAsync(requestEnvelope);
                         }
-                        else if (requests.Count != 1 || requests[0] != RequestType.VerifyChallenge)
+                        else*/ if (requests.Count != 1 || requests[0] != RequestType.VerifyChallenge)
                         {
                             _session.Logger.Debug("We tried to send a request while the session was paused. The only request allowed is VerifyChallenge.");
                             return null;
@@ -568,7 +590,7 @@ namespace POGOLib.Official.Net
                             throw new Exception("Received a non-success HTTP status code from the RPC server, see the console for the response.");
                         }
 
-                        var responseBytes = response.Content.ReadAsByteArrayAsync().Result;
+                        var responseBytes = await response.Content.ReadAsByteArrayAsync();
                         var responseEnvelope = ResponseEnvelope.Parser.ParseFrom(responseBytes);
 
                         switch (responseEnvelope.StatusCode)
@@ -609,8 +631,6 @@ namespace POGOLib.Official.Net
                                 await _session.Reauthenticate();
 
                                 // Apply new token.
-                                _session.Logger.Error("ID: " + _session.AccessToken.ProviderID + " token: " + _session.AccessToken.Token);
-
                                 requestEnvelope.AuthInfo = new RequestEnvelope.Types.AuthInfo
                                 {
                                     Provider = _session.AccessToken.ProviderID,
@@ -634,31 +654,33 @@ namespace POGOLib.Official.Net
                                 return await PerformRemoteProcedureCallAsync(requestEnvelope);
                             case ResponseEnvelope.Types.StatusCode.BadRequest:
                                 _session.SetTemporalBan();
-                                throw new Exception("Bad Request Received. The account is Temporal Banned");
+                                _session.Logger.Info("Bad Request Received. The account is Temporal Banned");
+                                break;
                             case ResponseEnvelope.Types.StatusCode.SessionInvalidated:
                                 //Need observation here
-                                _session.Logger.Info($"Session Invalidated status code, re-send...");
-                                _session.AccessToken.Expire();
-                                await _session.Reauthenticate();
+                                _session.Logger.Error($"Session Invalidated status code, re-send...");
 
-                                // Apply new token.
-                                _session.Logger.Error("ID: " + _session.AccessToken.ProviderID + " token: " + _session.AccessToken.Token);
-
-                                requestEnvelope.AuthInfo = new RequestEnvelope.Types.AuthInfo
+                                // Re-UkPTR8 envelope
+                                var ukptr8 = requestEnvelope.PlatformRequests.FirstOrDefault(x => x.Type == PlatformRequestType.UnknownPtr8);
+                                if (ukptr8 != null)
                                 {
-                                    Provider = _session.AccessToken.ProviderID,
-                                    Token = new RequestEnvelope.Types.AuthInfo.Types.JWT
+                                    requestEnvelope.PlatformRequests.Remove(ukptr8);
+                                }
+
+                                requestEnvelope.PlatformRequests.Add(new RequestEnvelope.Types.PlatformRequest
+                                {
+                                    Type = PlatformRequestType.UnknownPtr8,
+                                    RequestMessage = new UnknownPtr8Request
                                     {
-                                        Contents = _session.AccessToken.Token,
-                                        Unknown2 = 59
-                                    }
-                                };
+                                        Message = INITIAL_PTR8
+                                    }.ToByteString()
+                                });
 
                                 // Re-sign envelope.
-                                var signature1 = requestEnvelope.PlatformRequests.FirstOrDefault(x => x.Type == PlatformRequestType.SendEncryptedSignature);
-                                if (signature1 != null)
+                                var _encr = requestEnvelope.PlatformRequests.FirstOrDefault(x => x.Type == PlatformRequestType.SendEncryptedSignature);
+                                if (_encr != null)
                                 {
-                                    requestEnvelope.PlatformRequests.Remove(signature1);
+                                    requestEnvelope.PlatformRequests.Remove(_encr);
                                 }
 
                                 requestEnvelope.PlatformRequests.Insert(0, await _rpcEncryption.GenerateSignatureAsync(requestEnvelope));
@@ -671,28 +693,29 @@ namespace POGOLib.Official.Net
                                 break;
                             case ResponseEnvelope.Types.StatusCode.InvalidPlatformRequest:
                                 //Need observation here
-                                _session.Logger.Info($"Invalid Platform Request status code, re-send...");
-                                _session.AccessToken.Expire();
-                                await _session.Reauthenticate();
+                                _session.Logger.Error($"Invalid Platform Request status code, re-send...");
 
-                                // Apply new token.
-                                _session.Logger.Error("ID: " + _session.AccessToken.ProviderID + " token: " + _session.AccessToken.Token);
-
-                                requestEnvelope.AuthInfo = new RequestEnvelope.Types.AuthInfo
+                                // Re-UkPTR8 envelope
+                                var ptr8 = requestEnvelope.PlatformRequests.FirstOrDefault(x => x.Type == PlatformRequestType.UnknownPtr8);
+                                if (ptr8 != null)
                                 {
-                                    Provider = _session.AccessToken.ProviderID,
-                                    Token = new RequestEnvelope.Types.AuthInfo.Types.JWT
+                                    requestEnvelope.PlatformRequests.Remove(ptr8);
+                                }
+
+                                requestEnvelope.PlatformRequests.Add(new RequestEnvelope.Types.PlatformRequest
+                                {
+                                    Type = PlatformRequestType.UnknownPtr8,
+                                    RequestMessage = new UnknownPtr8Request
                                     {
-                                        Contents = _session.AccessToken.Token,
-                                        Unknown2 = 59
-                                    }
-                                };
+                                        Message = INITIAL_PTR8
+                                    }.ToByteString()
+                                });
 
                                 // Re-sign envelope.
-                                var signature2 = requestEnvelope.PlatformRequests.FirstOrDefault(x => x.Type == PlatformRequestType.SendEncryptedSignature);
-                                if (signature2 != null)
+                                var encr = requestEnvelope.PlatformRequests.FirstOrDefault(x => x.Type == PlatformRequestType.SendEncryptedSignature);
+                                if (encr != null)
                                 {
-                                    requestEnvelope.PlatformRequests.Remove(signature2);
+                                    requestEnvelope.PlatformRequests.Remove(encr);
                                 }
 
                                 requestEnvelope.PlatformRequests.Insert(0, await _rpcEncryption.GenerateSignatureAsync(requestEnvelope));
@@ -810,10 +833,10 @@ namespace POGOLib.Official.Net
                 var request = requestEnvelope.Requests[i];
                 if (_defaultRequests.Contains(request.RequestType))
                     responseIndexes.Add(i, request.RequestType);
-                if (request.RequestType == RequestType.VerifyChallenge)
-                    responseIndexes.Add(i, request.RequestType);
                 if (request.RequestType == RequestType.GetIncensePokemon)
                     responseIndexes.Add(i, request.RequestType);
+                //if (request.RequestType == RequestType.VerifyChallenge)
+                //    responseIndexes.Add(i, request.RequestType);
             }
 
             foreach (var responseIndex in responseIndexes)
@@ -900,14 +923,14 @@ namespace POGOLib.Official.Net
                         }
                         break;
 
-                    case RequestType.VerifyChallenge:
+                    /*case RequestType.VerifyChallenge:
                         var verifyChallenge = VerifyChallengeResponse.Parser.ParseFrom(bytes);
                         if (verifyChallenge.Success)
                         {
                             _session.Logger.Debug($"Verify Challenge succes'");
                             _session.ResumeAsync().Wait();
                         }
-                        break;
+                        break;*/
 
                     case RequestType.GetBuddyWalked:
                         var getBuddyWalked = GetBuddyWalkedResponse.Parser.ParseFrom(bytes);
@@ -929,6 +952,9 @@ namespace POGOLib.Official.Net
                                 SpawnPointId = getIncensePokemonResponse.EncounterLocation,
                                 PokemonDisplay = getIncensePokemonResponse.PokemonDisplay
                             };
+
+                            if (pokemon.PokemonId != PokemonId.Missingno)
+                                _session.Logger.Debug($"Received Incense Pokemon {pokemon.PokemonId.ToString()}");
                             _session.Map.IncensePokemon = pokemon;
                         }
                         break;

@@ -48,8 +48,6 @@ namespace PokemonGoGUI.GoManager
             if (iResponse.Data.PokemonId == PokemonId.Missingno)
                 return new MethodResult();
 
-            LogCaller(new LoggerEventArgs("Catchable Insence Pokemons: " + iResponse.Data.PokemonId.ToString(), LoggerTypes.Debug));
-
             if (!PokemonWithinCatchSettings(iResponse.Data.PokemonId))
             {
                 return new MethodResult();
@@ -215,6 +213,9 @@ namespace PokemonGoGUI.GoManager
                     }.ToByteString()
                 });
 
+                if (response == null)
+                    return new MethodResult();
+
                 DiskEncounterResponse eResponse = DiskEncounterResponse.Parser.ParseFrom(response);
 
                 switch(eResponse.Result)
@@ -314,6 +315,9 @@ namespace PokemonGoGUI.GoManager
                                     SpinModifier = 1
                                 }.ToByteString()
                             });
+
+                            if (catchresponse == null)
+                                return new MethodResult();
 
                             catchPokemonResponse = CatchPokemonResponse.Parser.ParseFrom(catchresponse);
                             string pokemon = String.Format("Name: {0}, CP: {1}, IV: {2:0.00}%", fortData.LureInfo.ActivePokemonId, eResponse.PokemonData.Cp, CalculateIVPerfection(eResponse.PokemonData));
@@ -440,6 +444,9 @@ namespace PokemonGoGUI.GoManager
                     SpawnPointId = mapPokemon.SpawnPointId
                 }.ToByteString()
             });
+
+            if (response == null)
+                return new MethodResult<EncounterResponse>();
 
             EncounterResponse eResponse = EncounterResponse.Parser.ParseFrom(response);
 
@@ -624,6 +631,9 @@ namespace PokemonGoGUI.GoManager
                             SpinModifier = 1
                         }.ToByteString()
                     });
+
+                    if (catchresponse == null)
+                        return new MethodResult();
 
                     catchPokemonResponse = CatchPokemonResponse.Parser.ParseFrom(catchresponse);
  
@@ -859,6 +869,9 @@ namespace PokemonGoGUI.GoManager
                     }.ToByteString()
                 });
 
+                if (response == null)
+                    return;
+
                 UseItemEncounterResponse useItemEncounterResponse = UseItemEncounterResponse.Parser.ParseFrom(response);
 
                 switch (useItemEncounterResponse.Status)
@@ -929,6 +942,9 @@ namespace PokemonGoGUI.GoManager
                     EncounterLocation = mapPokemon.SpawnPointId
                 }.ToByteString()
             });
+
+            if (response == null)
+                return new MethodResult<IncenseEncounterResponse>();
 
             IncenseEncounterResponse eResponse = IncenseEncounterResponse.Parser.ParseFrom(response);
 

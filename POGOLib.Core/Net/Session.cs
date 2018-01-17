@@ -260,6 +260,7 @@ namespace POGOLib.Official.Net
             {
                 AccessToken accessToken = null;
                 var tries = 0;
+
                 while (accessToken == null)
                 {
                     try
@@ -284,6 +285,7 @@ namespace POGOLib.Official.Net
                         }
                     }
                 }
+
                 AccessToken = accessToken;
                 OnAccessTokenUpdated();
             }

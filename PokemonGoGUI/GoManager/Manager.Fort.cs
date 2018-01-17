@@ -41,6 +41,9 @@ namespace PokemonGoGUI.GoManager
                         }.ToByteString()
                     });
 
+                    if (response == null)
+                        return new MethodResult();
+
                     fortResponse = FortSearchResponse.Parser.ParseFrom(response);
 
                     switch (fortResponse.Result)
@@ -230,6 +233,9 @@ namespace PokemonGoGUI.GoManager
                     }.ToByteString()
                 });
 
+                if (response == null)
+                    return new MethodResult<FortDetailsResponse>();
+
                 var fortDetailsResponse = FortDetailsResponse.Parser.ParseFrom(response);
 
                 if (fortDetailsResponse != null)
@@ -275,6 +281,9 @@ namespace PokemonGoGUI.GoManager
                         PlayerLngDegrees = _client.ClientSession.Player.Longitude
                     }.ToByteString()
                 });
+
+                if (response == null)
+                    return new MethodResult<GymGetInfoResponse>();
 
                 var gymGetInfoResponse = GymGetInfoResponse.Parser.ParseFrom(response);
 

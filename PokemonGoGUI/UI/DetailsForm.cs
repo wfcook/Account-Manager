@@ -237,10 +237,10 @@ namespace PokemonGoGUI.UI
             labelStardust.Text = _manager.TotalStardust.ToString();
             labelExpPerHour.Text = String.Format("{0:0}", _manager.ExpPerHour);
             labelExpGained.Text = _manager.ExpGained.ToString();
-            labelDistanceWalked.Text = String.Format("{0:0.00}km", _manager.Stats.KmWalked);
 
             if (_manager.Stats != null)
             {
+                labelDistanceWalked.Text = String.Format("{0:0.00}km", _manager.Stats.KmWalked);
                 labelPokemonCaught.Text = _manager.Stats.PokemonsCaptured.ToString();
                 labelPokestopVisits.Text = _manager.Stats.PokeStopVisits.ToString();
                 labelUniquePokemon.Text = _manager.Stats.UniquePokedexEntries.ToString();

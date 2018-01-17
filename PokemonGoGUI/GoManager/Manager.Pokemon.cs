@@ -47,6 +47,9 @@ namespace PokemonGoGUI.GoManager
                             RequestMessage = message.ToByteString()
                         });
 
+                        if (response == null)
+                            return new MethodResult();
+
                         ReleasePokemonResponse releasePokemonResponse = ReleasePokemonResponse.Parser.ParseFrom(response);
                         switch (releasePokemonResponse.Result)
                         {
@@ -124,6 +127,9 @@ namespace PokemonGoGUI.GoManager
                             PokemonIds = { PokemonIds }
                         }.ToByteString()
                     });
+
+                    if (response == null)
+                        return new MethodResult();
 
                     ReleasePokemonResponse releasePokemonResponse = ReleasePokemonResponse.Parser.ParseFrom(response);
 
@@ -408,7 +414,7 @@ namespace PokemonGoGUI.GoManager
             {
                 return new MethodResult<double>
                 {
-                    Data = -1,
+                    Data = 0,
                     Message = settingResult.Message
                 };
             }
@@ -475,6 +481,9 @@ namespace PokemonGoGUI.GoManager
                             IsFavorite = favorite
                         }.ToByteString()
                     });
+
+                    if (response == null)
+                        return new MethodResult();
 
                     SetFavoritePokemonResponse setFavoritePokemonResponse = null;
 
