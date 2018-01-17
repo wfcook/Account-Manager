@@ -254,8 +254,11 @@ namespace PokemonGoGUI
 
                 foreach (HashKey key in tempHashKeys)
                 {
-                    key.KeyInfo = TestHashKey(key.Key);
-                    _hashKeys.Add(key);
+                    HashKey tested = TestHashKey(key);
+                    if (!tested.IsValide)
+                        MessageBox.Show("HashKey " + tested.Key + " :" + tested.KeyInfo + ", Please remove this key of HashKeys tab.");
+
+                    _hashKeys.Add(tested);
                 }
 
                 fastObjectListViewMain.SetObjects(_managers);
@@ -2067,29 +2070,33 @@ namespace PokemonGoGUI
 
         private void AddToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            string newKew = Prompt.ShowDialog("Add Hash Key", "Hash Key");
-            var data = new HashKey
-            {
-                Key = newKew,
-                KeyInfo = TestHashKey(newKew)
-            };
+            string input = Prompt.ShowDialog("Add Hash Key", "Hash Key");
 
-            if (String.IsNullOrEmpty(data.Key))
+            if (String.IsNullOrEmpty(input))
             {
+                return;
+            }
+
+            HashKey newkey = new HashKey { Key = input, IsValide = false, KeyInfo = null };
+
+            HashKey tested = TestHashKey(newkey);
+            if (!tested.IsValide)
+            {
+                MessageBox.Show("HashKey " + tested.Key + " :" + tested.KeyInfo);
                 return;
             }
 
             foreach (HashKey key in _hashKeys)
             {
-                if (key.Key == data.Key)
+                if (key.Key == tested.Key)
                 {
-                    var msg = $"This key already existes {data.Key}, Hash key infos {data.KeyInfo}";
+                    var msg = $"This key already existes {tested.Key}, Hash key infos {tested.KeyInfo}";
                     MessageBox.Show(msg, "Duplicated key", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return;
                 }
             }
 
-            _hashKeys.Add(data);
+            _hashKeys.Add(tested);
             fastObjectListViewHashKeys.SetObjects(_hashKeys);
         }
 
@@ -2097,7 +2104,9 @@ namespace PokemonGoGUI
         {
             foreach (HashKey key in fastObjectListViewHashKeys.SelectedObjects)
             {
-                key.KeyInfo = TestHashKey(key.Key);
+                HashKey tested = TestHashKey(key);
+                if (!tested.IsValide)
+                    MessageBox.Show("HashKey " + tested.Key + " :" + tested.KeyInfo + ", Please remove this key of HashKeys tab.");
             }
         }
 
@@ -2149,8 +2158,10 @@ namespace PokemonGoGUI
                     {
                         if (existKeys.Contains(key.Key))
                             continue;
-                        key.KeyInfo = TestHashKey(key.Key);
-                        _hashKeys.Add(key);
+                        HashKey tested = TestHashKey(key);
+                        if (!tested.IsValide)
+                            MessageBox.Show("HashKey " + tested.Key + " :" + tested.KeyInfo + ", Please remove this key of HashKeys tab.");
+                        _hashKeys.Add(tested);
                         ++totalSuccess;
                     }
 
@@ -2209,16 +2220,21 @@ namespace PokemonGoGUI
             }
         }
 
-        private string TestHashKey(string key)
+        private HashKey TestHashKey(HashKey haskkey)
         {
-            string result = null;
+            HashKey result = new HashKey
+            {
+                Key = haskkey.Key,
+                IsValide = false
+            };
+
             string mode = null;
             try
             {
                 var client = new HttpClient();
                 string urlcheck = null;
-                client.DefaultRequestHeaders.Add("X-AuthToken", key);
-                if (key.Substring(0, 2) == "PH")
+                client.DefaultRequestHeaders.Add("X-AuthToken", result.Key);
+                if (result.Key.Substring(0, 2) == "PH")
                 {
                     urlcheck = $"http://hash.goman.io/api/v153_2/hash";
                     mode = "Remaining requests";
@@ -2234,11 +2250,14 @@ namespace PokemonGoGUI
                 string MaxRequestCount = response.Headers.GetValues("X-MaxRequestCount").FirstOrDefault();
                 DateTime AuthTokenExpiration = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Unspecified).AddSeconds(Convert.ToDouble(response.Headers.GetValues("X-AuthTokenExpiration").FirstOrDefault())).ToLocalTime();
                 TimeSpan Expiration = AuthTokenExpiration - DateTime.Now;
-                result = string.Format($"{mode}: {MaxRequestCount} Expires in: {(Convert.ToDecimal(Expiration.Days) + (Convert.ToDecimal(Expiration.Hours) / 24)):0.00} days ({AuthTokenExpiration})");
+                result.KeyInfo = string.Format($"{mode}: {MaxRequestCount} Expires in: {(Convert.ToDecimal(Expiration.Days) + (Convert.ToDecimal(Expiration.Hours) / 24)):0.00} days ({AuthTokenExpiration})");
+                if (AuthTokenExpiration > DateTime.Now)
+                    result.IsValide = true;
             }
             catch
             {
-                result = "The HashKey is invalid or has expired";
+                result.KeyInfo = "The HashKey is invalid or has expired";
+                result.IsValide = false;
             }
 
             return result;
