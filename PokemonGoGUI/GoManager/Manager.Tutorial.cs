@@ -14,7 +14,7 @@ namespace PokemonGoGUI.GoManager
 {
     public partial class Manager
     {
-        public async Task<MethodResult> MarkStartUpTutorialsComplete(bool forceAvatarUpdate)
+        private async Task<MethodResult> MarkStartUpTutorialsComplete(bool forceAvatarUpdate)
         {
             MethodResult reauthResult = await CheckReauthentication();
 
@@ -114,10 +114,16 @@ namespace PokemonGoGUI.GoManager
             };
         }
 
-        public async Task<MethodResult> MarkTutorialsComplete(TutorialState[] tutorials, bool nobuddy = true, bool noinbox= true)
+        private async Task<MethodResult> MarkTutorialsComplete(TutorialState[] tutorials, bool nobuddy = true, bool noinbox= true)
         {
-            try
+          try
             {
+                //Pause out of captcha loop to verifychallenge
+                if (WaitPaused())
+                {
+                    return new MethodResult();
+                }
+
                 var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                 {
                     RequestType = RequestType.MarkTutorialComplete,
@@ -149,10 +155,16 @@ namespace PokemonGoGUI.GoManager
             }
         }
 
-        public async Task<MethodResult> CompleteEncounterTutorial(PokemonId pokemon)
+        private async Task<MethodResult> CompleteEncounterTutorial(PokemonId pokemon)
         {
             try
             {
+                //Pause out of captcha loop to verifychallenge
+                if (WaitPaused())
+                {
+                    return new MethodResult();
+                }
+
                 var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                 {
                     RequestType = RequestType.EncounterTutorialComplete,
@@ -180,10 +192,16 @@ namespace PokemonGoGUI.GoManager
             }
         }
 
-        public async Task<MethodResult> SetPlayerAvatar()
+        private async Task<MethodResult> SetPlayerAvatar()
         {
             try
             {
+                //Pause out of captcha loop to verifychallenge
+                if (WaitPaused())
+                {
+                    return new MethodResult();
+                }
+
                 var avatar = new PlayerAvatar();
 
                 var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
@@ -214,10 +232,16 @@ namespace PokemonGoGUI.GoManager
             }
         }
 
-        public async Task<MethodResult> ListAvatarCustomizations()
+        private async Task<MethodResult> ListAvatarCustomizations()
         {
             try
             {
+                //Pause out of captcha loop to verifychallenge
+                if (WaitPaused())
+                {
+                    return new MethodResult();
+                }
+
                 var avatar = new PlayerAvatar();
 
                 var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
@@ -247,10 +271,16 @@ namespace PokemonGoGUI.GoManager
             }
         }
 
-        public async Task<MethodResult> SetAvatarItemAsViewed()
+        private async Task<MethodResult> SetAvatarItemAsViewed()
         {
             try
             {
+                //Pause out of captcha loop to verifychallenge
+                if (WaitPaused())
+                {
+                    return new MethodResult();
+                }
+
                 var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                 {
                     RequestType = RequestType.SetAvatarItemAsViewed,
@@ -278,10 +308,17 @@ namespace PokemonGoGUI.GoManager
                 return new MethodResult();
             }
         }
-        public async Task<MethodResult> ClaimCodename(string username)
+
+        private async Task<MethodResult> ClaimCodename(string username)
         {
             try
             {
+                //Pause out of captcha loop to verifychallenge
+                if (WaitPaused())
+                {
+                    return new MethodResult();
+                }
+
                 var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                 {
                     RequestType = RequestType.ClaimCodename,

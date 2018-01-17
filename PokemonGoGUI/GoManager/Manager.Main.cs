@@ -18,6 +18,7 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using POGOLib.Official.Util.Hash.PokeHash;
+using System.Windows.Forms;
 
 namespace PokemonGoGUI.GoManager
 {
@@ -513,6 +514,8 @@ namespace PokemonGoGUI.GoManager
                                     continue;
                                 }
 
+                                await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
+
                                 result = await MarkTutorialsComplete(new[] { TutorialState.GymTutorial });
 
                                 if (!result.Success)
@@ -529,6 +532,27 @@ namespace PokemonGoGUI.GoManager
                                 LogCaller(new LoggerEventArgs("Marking Gym tutorials completed.", LoggerTypes.Success));
 
                                 await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
+                            }
+
+                            //Check for missed tutorials
+                            foreach (TutorialState tutos in Enum.GetValues(typeof(TutorialState)))
+                            {
+                                if (!PlayerData.TutorialState.Contains(tutos))
+                                {
+                                    DialogResult box = MessageBox.Show($"Tutorial {tutos.ToString()} is not completed on this account {PlayerData.Username}! Complete this?", "Confirmation", MessageBoxButtons.YesNo);
+
+                                    if (box == DialogResult.Yes)
+                                    {
+                                        //Pause out of captcha loop to verifychallenge
+                                        if (WaitPaused())
+                                        {
+                                            continue;
+                                        }
+
+                                        result = await MarkTutorialsComplete(new[] { tutos });
+                                        await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
+                                    }
+                                }
                             }
                         }
                     }

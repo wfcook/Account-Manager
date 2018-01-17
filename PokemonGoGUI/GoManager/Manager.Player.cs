@@ -13,6 +13,7 @@ using POGOProtos.Networking.Requests;
 using POGOProtos.Networking.Requests.Messages;
 using Google.Protobuf;
 using PokemonGoGUI.Enums;
+using POGOProtos.Enums;
 
 namespace PokemonGoGUI.GoManager
 {
@@ -300,6 +301,45 @@ namespace PokemonGoGUI.GoManager
             catch (Exception ex)
             {
                 LogCaller(new LoggerEventArgs("Failed to get level up rewards", LoggerTypes.Exception, ex));
+                return new MethodResult();
+            }
+        }
+
+        private async Task<MethodResult> SetPlayerTeam(TeamColor team)
+        {
+            try
+            {
+                //Pause out of captcha loop to verifychallenge
+                if (WaitPaused())
+                {
+                    return new MethodResult();
+                }
+
+                var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
+                {
+                    RequestType = RequestType.SetPlayerTeam,
+                    RequestMessage = new SetPlayerTeamMessage
+                    {
+                        Team = team
+                    }.ToByteString()
+                }, true);
+
+                SetPlayerTeamResponse setPlayerTeamResponse = null;
+
+                setPlayerTeamResponse = SetPlayerTeamResponse.Parser.ParseFrom(response);
+                LogCaller(new LoggerEventArgs("Set player Team completion request wasn't successful", LoggerTypes.Success));
+
+                _client.ClientSession.Player.Data = setPlayerTeamResponse.PlayerData;
+
+                return new MethodResult
+                {
+                    Success = true
+                };
+            }
+            catch (Exception ex)
+            {
+                LogCaller(new LoggerEventArgs("Failed to set player team", LoggerTypes.Exception, ex));
+
                 return new MethodResult();
             }
         }
