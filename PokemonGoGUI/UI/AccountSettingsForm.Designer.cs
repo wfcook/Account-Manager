@@ -233,6 +233,8 @@
             this.toolTipProxy = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipMinAccountState = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipHumanizeThrows = new System.Windows.Forms.ToolTip(this.components);
+            this.cbTeam = new System.Windows.Forms.ComboBox();
+            this.label47 = new System.Windows.Forms.Label();
             this.tabControlMain.SuspendLayout();
             this.tabPageDetails.SuspendLayout();
             this.tabControlSettings.SuspendLayout();
@@ -433,6 +435,8 @@
             // 
             // tabPageActions
             // 
+            this.tabPageActions.Controls.Add(this.label47);
+            this.tabPageActions.Controls.Add(this.cbTeam);
             this.tabPageActions.Controls.Add(this.checkBoxCompleteTutorial);
             this.tabPageActions.Controls.Add(this.groupBoxPlayerActions);
             this.tabPageActions.Controls.Add(this.cbAutoUpdate);
@@ -814,7 +818,7 @@
             // 
             this.checkBoxEnabeRaids.AutoSize = true;
             this.checkBoxEnabeRaids.Enabled = false;
-            this.checkBoxEnabeRaids.Location = new System.Drawing.Point(383, 286);
+            this.checkBoxEnabeRaids.Location = new System.Drawing.Point(383, 303);
             this.checkBoxEnabeRaids.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.checkBoxEnabeRaids.Name = "checkBoxEnabeRaids";
             this.checkBoxEnabeRaids.Size = new System.Drawing.Size(104, 21);
@@ -826,7 +830,7 @@
             // 
             this.checkBoxSendBerries.AutoSize = true;
             this.checkBoxSendBerries.Enabled = false;
-            this.checkBoxSendBerries.Location = new System.Drawing.Point(383, 258);
+            this.checkBoxSendBerries.Location = new System.Drawing.Point(383, 274);
             this.checkBoxSendBerries.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.checkBoxSendBerries.Name = "checkBoxSendBerries";
             this.checkBoxSendBerries.Size = new System.Drawing.Size(161, 21);
@@ -838,7 +842,7 @@
             // 
             this.checkBoxDeployToGym.AutoSize = true;
             this.checkBoxDeployToGym.Enabled = false;
-            this.checkBoxDeployToGym.Location = new System.Drawing.Point(383, 231);
+            this.checkBoxDeployToGym.Location = new System.Drawing.Point(383, 245);
             this.checkBoxDeployToGym.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.checkBoxDeployToGym.Name = "checkBoxDeployToGym";
             this.checkBoxDeployToGym.Size = new System.Drawing.Size(130, 21);
@@ -850,7 +854,7 @@
             // 
             this.checkBoxEnableBattles.AutoSize = true;
             this.checkBoxEnableBattles.Enabled = false;
-            this.checkBoxEnableBattles.Location = new System.Drawing.Point(383, 204);
+            this.checkBoxEnableBattles.Location = new System.Drawing.Point(383, 219);
             this.checkBoxEnableBattles.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.checkBoxEnableBattles.Name = "checkBoxEnableBattles";
             this.checkBoxEnableBattles.Size = new System.Drawing.Size(121, 21);
@@ -861,7 +865,7 @@
             // checkBoxSpinGyms
             // 
             this.checkBoxSpinGyms.AutoSize = true;
-            this.checkBoxSpinGyms.Location = new System.Drawing.Point(383, 178);
+            this.checkBoxSpinGyms.Location = new System.Drawing.Point(383, 191);
             this.checkBoxSpinGyms.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.checkBoxSpinGyms.Name = "checkBoxSpinGyms";
             this.checkBoxSpinGyms.Size = new System.Drawing.Size(98, 21);
@@ -2530,6 +2534,24 @@
             this.restoreDefaultsToolStripMenuItem2.Text = "Restore Defaults";
             this.restoreDefaultsToolStripMenuItem2.Click += new System.EventHandler(this.RestoreDefaultsToolStripMenuItem2_Click);
             // 
+            // cbTeam
+            // 
+            this.cbTeam.FormattingEnabled = true;
+            this.cbTeam.Location = new System.Drawing.Point(460, 159);
+            this.cbTeam.Name = "cbTeam";
+            this.cbTeam.Size = new System.Drawing.Size(161, 24);
+            this.cbTeam.TabIndex = 75;
+            this.cbTeam.Text = "Neutral";
+            // 
+            // label47
+            // 
+            this.label47.AutoSize = true;
+            this.label47.Location = new System.Drawing.Point(348, 162);
+            this.label47.Name = "label47";
+            this.label47.Size = new System.Drawing.Size(97, 17);
+            this.label47.TabIndex = 76;
+            this.label47.Text = "Default Team:";
+            // 
             // AccountSettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -2806,5 +2828,7 @@
         private System.Windows.Forms.TextBox ProxyPortCaptcha;
         private System.Windows.Forms.Label label22;
         private System.Windows.Forms.CheckBox cbUseIncense;
+        private System.Windows.Forms.ComboBox cbTeam;
+        private System.Windows.Forms.Label label47;
     }
 }

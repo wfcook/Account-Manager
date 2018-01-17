@@ -1,4 +1,5 @@
-﻿using PokemonGoGUI.Enums;
+﻿using POGOProtos.Enums;
+using PokemonGoGUI.Enums;
 using PokemonGoGUI.Extensions;
 using PokemonGoGUI.GoManager;
 using PokemonGoGUI.Models;
@@ -11,7 +12,7 @@ using System.Windows.Forms;
 
 namespace PokemonGoGUI.UI
 {
-    public partial class AccountSettingsForm : Form
+    public partial class AccountSettingsForm : System.Windows.Forms.Form
     {
         private Manager _manager;
 
@@ -72,6 +73,11 @@ namespace PokemonGoGUI.UI
                 comboBoxMinAccountState.Items.Add(state);
             }
 
+            foreach (TeamColor team in Enum.GetValues(typeof(TeamColor)))
+            {
+                cbTeam.Items.Add(team);
+            }
+
             UpdateDetails(_manager.UserSettings);
 
             UpdateListViews();
@@ -123,6 +129,7 @@ namespace PokemonGoGUI.UI
             checkBoxStopOnAPIUpdate.Checked = settings.StopOnAPIUpdate;
             checkBoxSpinGyms.Checked = settings.SpinGyms;
             cbUseIncense.Checked = settings.UseIncense;
+            cbTeam.Text = settings.DefaultTeam;
 
             //Humanization
             checkBoxHumanizeThrows.Checked = settings.EnableHumanization;
@@ -449,6 +456,7 @@ namespace PokemonGoGUI.UI
             }
             userSettings.AutoCaptchaRetries = autoCaptchaRetries;
             userSettings.TwoCaptchaAPIKey = TwoCaptchaAPIKey.Text;
+            userSettings.DefaultTeam = cbTeam.Text;
 
             return true;
         }

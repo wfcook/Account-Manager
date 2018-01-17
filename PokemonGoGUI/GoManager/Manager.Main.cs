@@ -18,6 +18,7 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using POGOLib.Official.Util.Hash.PokeHash;
+using System.Windows.Forms;
 
 namespace PokemonGoGUI.GoManager
 {
@@ -487,30 +488,72 @@ namespace PokemonGoGUI.GoManager
                             await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
                         }
 
-                        if (!PlayerData.TutorialState.Contains(TutorialState.GymTutorial) && Level >= 5)
+                        if (!PlayerData.TutorialState.Contains(TutorialState.GymTutorial) && Level >= 5 && UserSettings.DefaultTeam != TeamColor.Neutral.ToString())
                         {
+                            TeamColor team = TeamColor.Neutral;
+
+                            foreach (TeamColor _team in Enum.GetValues(typeof(TeamColor)))
+                            {
+                                if (UserSettings.DefaultTeam == _team.ToString())
+                                    team = _team;
+                            }
+
                             //Pause out of captcha loop to verifychallenge
                             if (WaitPaused())
                             {
                                 continue;
                             }
 
-                            result = await MarkTutorialsComplete(new[] { TutorialState.GymTutorial });
+                            var setplayerteam = await SetPlayerTeam(team);
 
-                            if (!result.Success)
+                            if (setplayerteam.Success)
                             {
-                                LogCaller(new LoggerEventArgs("Failed. Marking Gym tutorials completed..", LoggerTypes.Warning));
+                                //Pause out of captcha loop to verifychallenge
+                                if (WaitPaused())
+                                {
+                                    continue;
+                                }
 
-                                Stop();
+                                await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
-                                await Task.Delay(failedWaitTime);
+                                result = await MarkTutorialsComplete(new[] { TutorialState.GymTutorial });
 
-                                continue;
+                                if (!result.Success)
+                                {
+                                    LogCaller(new LoggerEventArgs("Failed. Marking Gym tutorials completed..", LoggerTypes.Warning));
+
+                                    Stop();
+
+                                    await Task.Delay(failedWaitTime);
+
+                                    continue;
+                                }
+
+                                LogCaller(new LoggerEventArgs("Marking Gym tutorials completed.", LoggerTypes.Success));
+
+                                await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
                             }
 
-                            LogCaller(new LoggerEventArgs("Marking Gym tutorials completed.", LoggerTypes.Success));
+                            //Check for missed tutorials
+                            foreach (TutorialState tutos in Enum.GetValues(typeof(TutorialState)))
+                            {
+                                if (!PlayerData.TutorialState.Contains(tutos))
+                                {
+                                    DialogResult box = MessageBox.Show($"Tutorial {tutos.ToString()} is not completed on this account {PlayerData.Username}! Complete this?", "Confirmation", MessageBoxButtons.YesNo);
 
-                            await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
+                                    if (box == DialogResult.Yes)
+                                    {
+                                        //Pause out of captcha loop to verifychallenge
+                                        if (WaitPaused())
+                                        {
+                                            continue;
+                                        }
+
+                                        result = await MarkTutorialsComplete(new[] { tutos });
+                                        await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
+                                    }
+                                }
+                            }
                         }
                     }
 

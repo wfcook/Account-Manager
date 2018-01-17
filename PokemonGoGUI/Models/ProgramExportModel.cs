@@ -19,5 +19,6 @@ namespace PokemonGoGUI.Models
     public class HashKey {
         public string Key;
         public string KeyInfo;
+        public bool IsValide;
     }
 }
