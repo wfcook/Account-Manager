@@ -31,6 +31,8 @@
             this.components = new System.ComponentModel.Container();
             this.tabControlMain = new System.Windows.Forms.TabControl();
             this.tabPageStats = new System.Windows.Forms.TabPage();
+            this.labelCreateDate = new System.Windows.Forms.Label();
+            this.label14 = new System.Windows.Forms.Label();
             this.buttonUpdateStats = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
@@ -119,6 +121,8 @@
             this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copyStackTraceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.label15 = new System.Windows.Forms.Label();
+            this.labelTutorialState = new System.Windows.Forms.Label();
             this.tabControlMain.SuspendLayout();
             this.tabPageStats.SuspendLayout();
             this.tabPagePokedex.SuspendLayout();
@@ -158,6 +162,10 @@
             // 
             // tabPageStats
             // 
+            this.tabPageStats.Controls.Add(this.labelTutorialState);
+            this.tabPageStats.Controls.Add(this.label15);
+            this.tabPageStats.Controls.Add(this.labelCreateDate);
+            this.tabPageStats.Controls.Add(this.label14);
             this.tabPageStats.Controls.Add(this.buttonUpdateStats);
             this.tabPageStats.Controls.Add(this.label5);
             this.tabPageStats.Controls.Add(this.label4);
@@ -196,6 +204,24 @@
             this.tabPageStats.Text = "Stats";
             this.tabPageStats.UseVisualStyleBackColor = true;
             // 
+            // labelCreateDate
+            // 
+            this.labelCreateDate.AutoSize = true;
+            this.labelCreateDate.Location = new System.Drawing.Point(137, 339);
+            this.labelCreateDate.Name = "labelCreateDate";
+            this.labelCreateDate.Size = new System.Drawing.Size(64, 17);
+            this.labelCreateDate.TabIndex = 3;
+            this.labelCreateDate.Text = "xx/xx/xxxx";
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(34, 339);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(99, 17);
+            this.label14.TabIndex = 2;
+            this.label14.Text = "Creation Date:";
+            // 
             // buttonUpdateStats
             // 
             this.buttonUpdateStats.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -229,7 +255,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(29, 309);
+            this.label9.Location = new System.Drawing.Point(24, 309);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(111, 17);
             this.label9.TabIndex = 0;
@@ -1002,6 +1028,24 @@
             this.exportToolStripMenuItem.Text = "Export";
             this.exportToolStripMenuItem.Click += new System.EventHandler(this.ExportToolStripMenuItem_Click);
             // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(35, 367);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(97, 17);
+            this.label15.TabIndex = 4;
+            this.label15.Text = "Tutorial State:";
+            // 
+            // labelTutorialState
+            // 
+            this.labelTutorialState.AutoSize = true;
+            this.labelTutorialState.Location = new System.Drawing.Point(137, 367);
+            this.labelTutorialState.Name = "labelTutorialState";
+            this.labelTutorialState.Size = new System.Drawing.Size(32, 17);
+            this.labelTutorialState.TabIndex = 5;
+            this.labelTutorialState.Text = "???";
+            // 
             // DetailsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -1128,5 +1172,9 @@
         private System.Windows.Forms.ToolStripMenuItem copyStackTraceToolStripMenuItem;
         private BrightIdeasSoftware.OLVColumn olvColumnPokemonIdNumber;
         private System.Windows.Forms.ToolStripMenuItem showFutureTransfersToolStripMenuItem;
+        private System.Windows.Forms.Label labelCreateDate;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.Label labelTutorialState;
+        private System.Windows.Forms.Label label15;
     }
 }

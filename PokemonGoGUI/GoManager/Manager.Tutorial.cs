@@ -34,7 +34,7 @@ namespace PokemonGoGUI.GoManager
 
             if (!completedTutorials.Contains(TutorialState.LegalScreen))
             {
-                await MarkTutorialsComplete ( new[] {TutorialState.LegalScreen});
+                await MarkTutorialsComplete ( new[] {TutorialState.AccountCreation, TutorialState.LegalScreen});
                 await GetPlayer();
             }
             await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));

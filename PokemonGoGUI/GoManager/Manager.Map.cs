@@ -121,95 +121,45 @@ namespace PokemonGoGUI.GoManager
             };
         }
 
-        private async Task<MethodResult<List<MapPokemon>>> GetIncensePokemons()
+        private async Task<MethodResult<MapPokemon>> GetIncensePokemons()
         {
-            var appliedItems = GetAppliedItems().ToDictionary(item => item.ItemId, item => new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(item.ExpireMs));
-            DateTime expires = new DateTime(0);
-            ItemId itemUsed = ItemId.ItemUnknown;
-
-            foreach (var item in Items)
+            if (!_client.ClientSession.IncenseUsed)
             {
-                if (appliedItems.ContainsKey(item.ItemId))
-                {
-                    expires = appliedItems[item.ItemId];
-                    itemUsed = item.ItemId;
-                }
-            }
-
-            var time = expires - DateTime.UtcNow;
-            if (expires.Ticks == 0 || time.TotalSeconds < 0)
-            {
-                itemUsed = ItemId.ItemUnknown;
                 if (UserSettings.UseIncense)
                 {
-                    // use basic incense only ...
                     var incenses = Items.Where(x => x.ItemId == ItemId.ItemIncenseOrdinary
-                    //|| x.ItemId == ItemId.ItemIncenseCool
-                    //|| x.ItemId == ItemId.ItemIncenseFloral
-                    //|| x.ItemId == ItemId.ItemIncenseSpicy
+                    || x.ItemId == ItemId.ItemIncenseCool
+                    || x.ItemId == ItemId.ItemIncenseFloral
+                    || x.ItemId == ItemId.ItemIncenseSpicy
                     );
 
                     if (incenses.Count() > 0)
                     {
                         await UseIncense(incenses.FirstOrDefault().ItemId);
+
+                        if (_client.ClientSession.Map.IncensePokemon != null)
+                        {
+                            return new MethodResult<MapPokemon>
+                            {
+                                Data = _client.ClientSession.Map.IncensePokemon,
+                                Success = true,
+                                Message = "Succes"
+                            };
+                        }
                     }
-                    else
-                        return new MethodResult<List<MapPokemon>>();
                 }
-                else
-                    return new MethodResult<List<MapPokemon>>();
             }
-            else
+
+            if (_client.ClientSession.Map.IncensePokemon != null)
             {
-                if (itemUsed == ItemId.ItemUnknown)
-                    return new MethodResult<List<MapPokemon>>();
-
-                //Pause out of captcha loop to verifychallenge
-                if (WaitPaused())
+                return new MethodResult<MapPokemon>
                 {
-                    return new MethodResult<List<MapPokemon>>();
-                }
-
-                LogCaller(new LoggerEventArgs(String.Format("Incense {0} actived {1}m {2}s.", itemUsed, time.Minutes, Math.Abs(time.Seconds)), LoggerTypes.Info));
-
-                var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
-                {
-                    RequestType = RequestType.GetIncensePokemon,
-                    RequestMessage = new GetIncensePokemonMessage
-                    {
-                        PlayerLatitude = _client.ClientSession.Player.Latitude,
-                        PlayerLongitude = _client.ClientSession.Player.Longitude
-                    }.ToByteString()
-                });
-
-                GetIncensePokemonResponse getIncensePokemonResponse = GetIncensePokemonResponse.Parser.ParseFrom(response);
-
-                switch (getIncensePokemonResponse.Result)
-                {
-                    case GetIncensePokemonResponse.Types.Result.IncenseEncounterAvailable:
-                        var pokemon = new MapPokemon
-                        {
-                            EncounterId = getIncensePokemonResponse.EncounterId,
-                            ExpirationTimestampMs = getIncensePokemonResponse.DisappearTimestampMs,
-                            Latitude = getIncensePokemonResponse.Latitude,
-                            Longitude = getIncensePokemonResponse.Longitude,
-                            PokemonId = getIncensePokemonResponse.PokemonId,
-                            SpawnPointId = getIncensePokemonResponse.EncounterLocation,
-                            PokemonDisplay = getIncensePokemonResponse.PokemonDisplay
-                        };
-                        return new MethodResult<List<MapPokemon>>
-                        {
-                            Data = new List<MapPokemon> { pokemon },
-                            Success = true,
-                            Message = "Succes"                            
-                        };
-                    case GetIncensePokemonResponse.Types.Result.IncenseEncounterNotAvailable:
-                        return new MethodResult<List<MapPokemon>>();
-                    case GetIncensePokemonResponse.Types.Result.IncenseEncounterUnknown:
-                        return new MethodResult<List<MapPokemon>>();
-                }
+                    Data = _client.ClientSession.Map.IncensePokemon,
+                    Success = true,
+                    Message = "Succes"
+                };
             }
-            return new MethodResult<List<MapPokemon>>();
+            return new MethodResult<MapPokemon>();
         }
     }
 }
