@@ -214,116 +214,81 @@ namespace PokemonGoGUI.GoManager
 
         private async Task<MethodResult<FortDetailsResponse>> FortDetails(FortData pokestop)
         {
-            try
+            //Pause out of captcha loop to verifychallenge
+            if (WaitPaused())
             {
-                //Pause out of captcha loop to verifychallenge
-                if (WaitPaused())
-                {
-                    return new MethodResult<FortDetailsResponse>();
-                }
-
-                var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
-                {
-                    RequestType = RequestType.FortDetails,
-                    RequestMessage = new FortDetailsMessage
-                    {
-                        FortId = pokestop.Id,
-                        Latitude = pokestop.Latitude,
-                        Longitude = pokestop.Longitude,
-                    }.ToByteString()
-                });
-
-                if (response == null)
-                    return new MethodResult<FortDetailsResponse>();
-
-                var fortDetailsResponse = FortDetailsResponse.Parser.ParseFrom(response);
-
-                if (fortDetailsResponse != null)
-                    return new MethodResult<FortDetailsResponse>
-                    {
-                        Data = fortDetailsResponse,
-                        Success = true
-                    };
-                else
-                    return new MethodResult<FortDetailsResponse>();
+                return new MethodResult<FortDetailsResponse>();
             }
-            catch (Exception ex)
-            {
-                LogCaller(new LoggerEventArgs("Failed getting fort info", LoggerTypes.Exception, ex));
 
+            var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
+            {
+                RequestType = RequestType.FortDetails,
+                RequestMessage = new FortDetailsMessage
+                {
+                    FortId = pokestop.Id,
+                    Latitude = pokestop.Latitude,
+                    Longitude = pokestop.Longitude,
+                }.ToByteString()
+            });
+
+            if (response == null)
+                return new MethodResult<FortDetailsResponse>();
+
+            var fortDetailsResponse = FortDetailsResponse.Parser.ParseFrom(response);
+
+            if (fortDetailsResponse != null)
                 return new MethodResult<FortDetailsResponse>
                 {
-                    Data = new FortDetailsResponse(),
-                    Message = "Failed getting fort info"
+                    Data = fortDetailsResponse,
+                    Success = true
                 };
-            }
+            else
+                return new MethodResult<FortDetailsResponse>();
         }
 
         private async Task<MethodResult<GymGetInfoResponse>> GymGetInfo(FortData pokestop)
         {
-           try
+            //Pause out of captcha loop to verifychallenge
+            if (WaitPaused())
             {
-                //Pause out of captcha loop to verifychallenge
-                if (WaitPaused())
-                {
-                    return new MethodResult<GymGetInfoResponse>();
-                }
-
-                var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
-                {
-                    RequestType = RequestType.GymGetInfo,
-                    RequestMessage = new GymGetInfoMessage
-                    {
-                        GymId = pokestop.Id,
-                        GymLatDegrees = pokestop.Latitude,
-                        GymLngDegrees = pokestop.Longitude,
-                        PlayerLatDegrees = _client.ClientSession.Player.Latitude,
-                        PlayerLngDegrees = _client.ClientSession.Player.Longitude
-                    }.ToByteString()
-                });
-
-                if (response == null)
-                    return new MethodResult<GymGetInfoResponse>();
-
-                var gymGetInfoResponse = GymGetInfoResponse.Parser.ParseFrom(response);
-
-                switch (gymGetInfoResponse.Result)
-                {
-                    case GymGetInfoResponse.Types.Result.ErrorGymDisabled:
-                        return new MethodResult<GymGetInfoResponse>
-                        {
-                            Message = "Failed getting gym info"
-                        };
-                    case GymGetInfoResponse.Types.Result.ErrorNotInRange:
-                        return new MethodResult<GymGetInfoResponse>
-                        {
-                            Message = "Failed getting gym info"
-                        };
-                    case GymGetInfoResponse.Types.Result.Success:
-                        return new MethodResult<GymGetInfoResponse>
-                        {
-                            Data = gymGetInfoResponse,
-                            Message = "Succes"
-                        };
-                    case GymGetInfoResponse.Types.Result.Unset:
-                        return new MethodResult<GymGetInfoResponse>
-                        {
-                            Message = "Failed getting gym info"
-                        };
-
-                }
                 return new MethodResult<GymGetInfoResponse>();
             }
-            catch (Exception ex)
-            {
-                LogCaller(new LoggerEventArgs("Failed getting gym info", LoggerTypes.Exception, ex));
 
-                return new MethodResult<GymGetInfoResponse>
+            var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
+            {
+                RequestType = RequestType.GymGetInfo,
+                RequestMessage = new GymGetInfoMessage
                 {
-                    Data = new GymGetInfoResponse { Result = GymGetInfoResponse.Types.Result.Unset },
-                    Message = "Failed getting gym info"
-                };
+                    GymId = pokestop.Id,
+                    GymLatDegrees = pokestop.Latitude,
+                    GymLngDegrees = pokestop.Longitude,
+                    PlayerLatDegrees = _client.ClientSession.Player.Latitude,
+                    PlayerLngDegrees = _client.ClientSession.Player.Longitude
+                }.ToByteString()
+            });
+
+            if (response == null)
+                return new MethodResult<GymGetInfoResponse>();
+
+            var gymGetInfoResponse = GymGetInfoResponse.Parser.ParseFrom(response);
+
+            switch (gymGetInfoResponse.Result)
+            {
+                case GymGetInfoResponse.Types.Result.ErrorGymDisabled:
+                    return new MethodResult<GymGetInfoResponse>();
+                case GymGetInfoResponse.Types.Result.ErrorNotInRange:
+                    return new MethodResult<GymGetInfoResponse>();
+                case GymGetInfoResponse.Types.Result.Success:
+                    return new MethodResult<GymGetInfoResponse>
+                    {
+                        Data = gymGetInfoResponse,
+                        Message = "Succes",
+                        Success = true
+                    };
+                case GymGetInfoResponse.Types.Result.Unset:
+                    return new MethodResult<GymGetInfoResponse>();
             }
+            return new MethodResult<GymGetInfoResponse>();
         }
     }
 }

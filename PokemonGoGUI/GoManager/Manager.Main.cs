@@ -813,23 +813,16 @@ namespace PokemonGoGUI.GoManager
                                 {
                                     if (!UserSettings.SpinGyms)
                                         continue;
-                                    try
-                                    {
 
-                                        //Pause out of captcha loop to verifychallenge
-                                        if (WaitPaused())
-                                        {
-                                            continue;
-                                        }
-
-                                        MethodResult<GymGetInfoResponse> _result = await GymGetInfo(pokestop);
-                                        LogCaller(new LoggerEventArgs("Gym Name: " + _result.Data.Name, LoggerTypes.Info));
-                                    }
-                                    catch (Exception)
+                                    //Pause out of captcha loop to verifychallenge
+                                    if (WaitPaused())
                                     {
-                                        LogCaller(new LoggerEventArgs("Skypped Gym...", LoggerTypes.Warning));
                                         continue;
                                     }
+
+                                    MethodResult<GymGetInfoResponse> _result = await GymGetInfo(pokestop);
+                                    if (_result.Success)
+                                        LogCaller(new LoggerEventArgs("Gym Name: " + _result.Data.Name, LoggerTypes.Info));
                                 }
                                 else
                                 {
@@ -841,7 +834,8 @@ namespace PokemonGoGUI.GoManager
                                     }
 
                                     var fortDetails = await FortDetails(pokestop);
-                                    LogCaller(new LoggerEventArgs("Fort Name: " + fortDetails.Data.Name, LoggerTypes.Info));
+                                    if (fortDetails.Success)
+                                        LogCaller(new LoggerEventArgs("Fort Name: " + fortDetails.Data.Name, LoggerTypes.Info));
                                 }
 
                                 //Pause out of captcha loop to verifychallenge

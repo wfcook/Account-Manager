@@ -220,6 +220,52 @@ namespace POGOLib.Official.Net
             return true;
         }
 
+
+        // NOTE: Call this on SessionInvalidate, continue working but it is not that the real app does now.
+        internal async Task<bool> RevalidateSession()
+        {
+            // Send GetPlayer to check if we're connected and authenticated
+            GetPlayerResponse playerResponse;
+
+            int loop = 0;
+
+            do
+            {
+                var response = await SendRemoteProcedureCallAsync(new[]
+                {
+                    new Request
+                    {
+                        RequestType = RequestType.GetPlayer,
+                        RequestMessage = new GetPlayerMessage
+                        {
+                            // Get Player locale information
+                            PlayerLocale = _session.Player.PlayerLocale
+                        }.ToByteString()
+                    },
+                    new Request
+                    {
+                        RequestType = RequestType.CheckChallenge,
+                        RequestMessage = new CheckChallengeMessage
+                        {
+                            DebugRequest = false
+                        }.ToByteString()
+                    }
+                });
+                playerResponse = GetPlayerResponse.Parser.ParseFrom(response);
+                if (!playerResponse.Success)
+                {
+                    await Task.Delay(TimeSpan.FromMilliseconds(1000));
+                }
+                loop++;
+            } while (!playerResponse.Success && loop < 10);
+
+            _session.Player.Banned = playerResponse.Banned;
+            _session.Player.Warn = playerResponse.Warn;
+            _session.Player.Data = playerResponse.PlayerData;
+
+            return true;
+        }
+
         /// <summary>
         ///     It is not recommended to call this. Map objects will update automatically and fire the map update event.
         /// </summary>
@@ -508,6 +554,9 @@ namespace POGOLib.Official.Net
             });
         }
 
+        private bool ReCall = false;
+        private RequestEnvelope ReCallEnvelope = new RequestEnvelope();
+
         private async Task<ByteString> PerformRemoteProcedureCallAsync(RequestEnvelope requestEnvelope)
         {
             try
@@ -581,102 +630,43 @@ namespace POGOLib.Official.Net
                             // The login token is invalid.
                             // TODO: Make cleaner to reduce duplicate code with the GetRequestEnvelopeAsync method.
                             case ResponseEnvelope.Types.StatusCode.InvalidAuthToken:
-                                _session.Logger.Debug("Received StatusCode 102, reauthenticating.");
+                                _session.Logger.Error("Received StatusCode 102, reauthenticating.");
+
+                                ReCall = true;
+                                ReCallEnvelope = requestEnvelope;
 
                                 _session.AccessToken.Expire();
                                 await _session.Reauthenticate();
 
-                                // Apply new token.
-                                requestEnvelope.AuthInfo = new RequestEnvelope.Types.AuthInfo
-                                {
-                                    Provider = _session.AccessToken.ProviderID,
-                                    Token = new RequestEnvelope.Types.AuthInfo.Types.JWT
-                                    {
-                                        Contents = _session.AccessToken.Token,
-                                        Unknown2 = 59
-                                    }
-                                };
+                                // Re-call GetPlayer
+                                await RevalidateSession();
 
-                                // Re-sign envelope.
-                                var signature = requestEnvelope.PlatformRequests.FirstOrDefault(x => x.Type == PlatformRequestType.SendEncryptedSignature);
-                                if (signature != null)
-                                {
-                                    requestEnvelope.PlatformRequests.Remove(signature);
-                                }
-
-                                requestEnvelope.PlatformRequests.Insert(0, await _rpcEncryption.GenerateSignatureAsync(requestEnvelope));
-
-                                // Re-send envelope.
-                                return await PerformRemoteProcedureCallAsync(requestEnvelope);
+                                break;
                             case ResponseEnvelope.Types.StatusCode.BadRequest:
                                 // Not set bans here.
                                 break;
                             case ResponseEnvelope.Types.StatusCode.SessionInvalidated:
                                 //Need observation here
-                                _session.Logger.Error($"Session Invalidated status code, re-send...");
+                                _session.Logger.Error($"Session Invalidated status code, re-validate...");
+                                ReCall = true;
+                                ReCallEnvelope = requestEnvelope;
 
-                                // Re-UkPTR8 envelope
-                                var ukptr8 = requestEnvelope.PlatformRequests.FirstOrDefault(x => x.Type == PlatformRequestType.UnknownPtr8);
-                                if (ukptr8 != null)
-                                {
-                                    requestEnvelope.PlatformRequests.Remove(ukptr8);
-                                }
-
-                                requestEnvelope.PlatformRequests.Add(new RequestEnvelope.Types.PlatformRequest
-                                {
-                                    Type = PlatformRequestType.UnknownPtr8,
-                                    RequestMessage = new UnknownPtr8Request
-                                    {
-                                        Message = INITIAL_PTR8
-                                    }.ToByteString()
-                                });
-
-                                // Re-sign envelope.
-                                var _encr = requestEnvelope.PlatformRequests.FirstOrDefault(x => x.Type == PlatformRequestType.SendEncryptedSignature);
-                                if (_encr != null)
-                                {
-                                    requestEnvelope.PlatformRequests.Remove(_encr);
-                                }
-
-                                requestEnvelope.PlatformRequests.Insert(0, await _rpcEncryption.GenerateSignatureAsync(requestEnvelope));
-
-                                // Re-send envelope.
-                                return await PerformRemoteProcedureCallAsync(requestEnvelope);
+                                // Re-call GetPlayer
+                                await RevalidateSession();
+                                break;
                             case ResponseEnvelope.Types.StatusCode.Unknown:
                                 //Need observation here
                                 _session.Logger.Error($"Unknown status code.");
                                 break;
                             case ResponseEnvelope.Types.StatusCode.InvalidPlatformRequest:
                                 //Need observation here
-                                _session.Logger.Error($"Invalid Platform Request status code, re-send...");
-
-                                // Re-UkPTR8 envelope
-                                var ptr8 = requestEnvelope.PlatformRequests.FirstOrDefault(x => x.Type == PlatformRequestType.UnknownPtr8);
-                                if (ptr8 != null)
-                                {
-                                    requestEnvelope.PlatformRequests.Remove(ptr8);
-                                }
-
-                                requestEnvelope.PlatformRequests.Add(new RequestEnvelope.Types.PlatformRequest
-                                {
-                                    Type = PlatformRequestType.UnknownPtr8,
-                                    RequestMessage = new UnknownPtr8Request
-                                    {
-                                        Message = INITIAL_PTR8
-                                    }.ToByteString()
-                                });
-
-                                // Re-sign envelope.
-                                var encr = requestEnvelope.PlatformRequests.FirstOrDefault(x => x.Type == PlatformRequestType.SendEncryptedSignature);
-                                if (encr != null)
-                                {
-                                    requestEnvelope.PlatformRequests.Remove(encr);
-                                }
-
-                                requestEnvelope.PlatformRequests.Insert(0, await _rpcEncryption.GenerateSignatureAsync(requestEnvelope));
-
-                                // Re-send envelope.
-                                return await PerformRemoteProcedureCallAsync(requestEnvelope);
+                                _session.Logger.Error($"Invalid Platform Request status code, re-validate...");
+                                ReCall = true;
+                                ReCallEnvelope = requestEnvelope;
+                                
+                                // Re-call GetPlayer
+                                await RevalidateSession();
+                                break;
                             default:
                                 _session.Logger.Error($"Unknown status code: {responseEnvelope.StatusCode}");
                                 break;
@@ -703,7 +693,41 @@ namespace POGOLib.Official.Net
                             _mapKey = unknownPtr8Response.Message;
                         }
 
-                        return HandleResponseEnvelope(requestEnvelope, responseEnvelope);
+                        // Get for status code and re-send request
+                        if (!ReCall)
+                        {
+                            return HandleResponseEnvelope(requestEnvelope, responseEnvelope);
+                        }
+                        else if (ReCall && ReCallEnvelope != null)
+                        {
+                            ReCall = false;
+
+                            // Re-sign envelope.
+                            var signature = ReCallEnvelope.PlatformRequests.FirstOrDefault(x => x.Type == PlatformRequestType.SendEncryptedSignature);
+                            if (signature != null)
+                            {
+                                ReCallEnvelope.PlatformRequests.Remove(signature);
+                                ReCallEnvelope.PlatformRequests.Insert(0, await _rpcEncryption.GenerateSignatureAsync(ReCallEnvelope));
+                            }
+
+                            var ukptr8 = ReCallEnvelope.PlatformRequests.FirstOrDefault(x => x.Type == PlatformRequestType.UnknownPtr8);
+                            if (ukptr8 != null)
+                            {
+                                ReCallEnvelope.PlatformRequests.Remove(ukptr8);
+                                ReCallEnvelope.PlatformRequests.Add(new RequestEnvelope.Types.PlatformRequest
+                                {
+                                    Type = PlatformRequestType.UnknownPtr8,
+                                    RequestMessage = new UnknownPtr8Request
+                                    {
+                                        Message = _mapKey
+                                    }.ToByteString()
+                                });
+                            }
+
+                            // Re-send envelope.
+                            return await PerformRemoteProcedureCallAsync(ReCallEnvelope);
+                        }
+                        return null;
                     }
                 }
             }
@@ -713,7 +737,7 @@ namespace POGOLib.Official.Net
             }
             catch (Exception e)
             {
-                _session.Logger.Error($"SendRemoteProcedureCall exception: {e}");
+                _session.Logger.Error($"PerformRemoteProcedureCallAsync exception: {e}");
                 return null;
             }
         }

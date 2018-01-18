@@ -17,6 +17,7 @@ using POGOProtos.Networking.Requests.Messages;
 using Google.Protobuf;
 using POGOProtos.Networking.Responses;
 using System.Diagnostics;
+using POGOLib.Official.Net;
 
 namespace PokemonGoGUI.Captcha
 {
@@ -128,30 +129,30 @@ namespace PokemonGoGUI.Captcha
         private static async Task<bool> Resolve(Client client, string captchaResponse)
         {
             if (string.IsNullOrEmpty(captchaResponse)) return false;
-            try
+
+            if (!client.LoggedIn)
             {
-                if (!client.LoggedIn)
+                MethodResult result = await client.ClientManager.AcLogin();
+
+                if (!result.Success)
                 {
-                    MethodResult result = await client.ClientManager.AcLogin();
-
-                    if (!result.Success)
-                    {
-                        return false;
-                    }
-                }
-
-                var response = await client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
-                {
-                    RequestType = RequestType.VerifyChallenge,
-                    RequestMessage = new VerifyChallengeMessage
-                    {
-                        Token = captchaResponse
-                    }.ToByteString()
-                }, false, false, false);
-
-                if (response == null)
                     return false;
+                }
+            }
 
+            var response = await client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
+            {
+                RequestType = RequestType.VerifyChallenge,
+                RequestMessage = new VerifyChallengeMessage
+                {
+                    Token = captchaResponse
+                }.ToByteString()
+            }, false, false, false);
+
+            if (response == null)
+                await Resolve(client, captchaResponse);
+            else
+            {
                 var verifyChallengeResponse = VerifyChallengeResponse.Parser.ParseFrom(response);
 
                 if (!verifyChallengeResponse.Success)
@@ -159,18 +160,10 @@ namespace PokemonGoGUI.Captcha
                     client.ClientManager.LogCaller(new LoggerEventArgs($"(CAPTCHA) Failed to resolve captcha, try resolved captcha by official app. ", LoggerTypes.Warning));
                     return false;
                 }
-                client.ClientManager.LogCaller(new LoggerEventArgs($"(CAPTCHA) Great!!! Captcha has been by passed",LoggerTypes.Success));
-                //resume session after solve
-                //client.ClientManager.UnPause();
-                if(client.ClientSession.State == POGOLib.Official.Net.SessionState.Paused)
-                    await client.ClientSession.ResumeAsync();
+                client.ClientManager.LogCaller(new LoggerEventArgs($"(CAPTCHA) Great!!! Captcha has been by passed", LoggerTypes.Success));
                 return verifyChallengeResponse.Success;
             }
-            catch (Exception ex)
-            {
-                client.ClientManager.LogCaller(new LoggerEventArgs("(CAPTCHA) error.", LoggerTypes.Exception, ex));
-                return false;
-            }
+            return false;
         }
 
         private static async Task<string> GetCaptchaResposeByAntiCaptcha(Client client, string captchaUrl)
