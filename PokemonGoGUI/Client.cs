@@ -51,11 +51,12 @@ namespace PokemonGoGUI
 
         public void Logout()
         {
+            if (!LoggedIn)
+                return;
+
             if (ClientManager.AccountState == AccountState.Conecting)
                 ClientManager.AccountState = AccountState.Good;
 
-            if (!LoggedIn)
-                return;
             LoggedIn = false;
             ClientSession.AssetDigestUpdated -= OnAssetDisgestReceived;
             ClientSession.ItemTemplatesUpdated -= OnItemTemplatesReceived;
@@ -68,7 +69,8 @@ namespace PokemonGoGUI
             ClientSession.CheckAwardedBadgesReceived -= OnCheckAwardedBadgesReceived;
             ClientSession.HatchedEggsReceived -= OnHatchedEggsReceived;
             ClientSession.TemporalBanReceived -= TempBanReceived;
-            ClientSession.Shutdown();
+            if (ClientSession.State != SessionState.Stopped)
+                ClientSession.Shutdown();
         }
 
         private void LoggerFucntion(LogLevel logLevel, string message)

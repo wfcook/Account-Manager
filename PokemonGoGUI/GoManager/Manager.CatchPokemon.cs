@@ -109,6 +109,9 @@ namespace PokemonGoGUI.GoManager
 
             foreach (MapPokemon pokemon in catchableResponse.Data)
             {
+                if (pokemon.PokemonId == PokemonId.Missingno)
+                    continue;
+
                 if (!PokemonWithinCatchSettings(pokemon))
                 {
                     continue;
