@@ -195,11 +195,14 @@ namespace POGOLib.Official.Net
             var requestsBytes = requestEnvelope.Requests.Select(x => x.ToByteArray()).ToArray();
 
             HashData hashData;
-            try {
+            try
+            {
                 hashData = await Configuration.Hasher.GetHashDataAsync(requestEnvelope, signature, locationBytes, requestsBytes, serializedTicket);
-            } catch (Exception ex1) {
+            }
+            catch (Exception ex1)
+            {
                 _session.Logger.Error(ex1.Message);
-                throw ex1;
+                throw new PokeHashException(ex1.Message);
             }
 
             if (hashData == null)
@@ -207,7 +210,6 @@ namespace POGOLib.Official.Net
 
             signature.LocationHash1 = (int)hashData.LocationAuthHash;
             signature.LocationHash2 = (int)hashData.LocationHash;
-
             signature.RequestHash.AddRange(hashData.RequestHashes);
 
             var encryptedSignature = new PlatformRequest

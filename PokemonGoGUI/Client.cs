@@ -196,19 +196,21 @@ namespace PokemonGoGUI
 
                         msgStr = "The account is banned.";
                     }
-                    if (ClientSession.State == SessionState.TemporalBanned)
-                    {
-                        ClientManager.AccountState = AccountState.TemporalBan;
-                        ClientManager.LogCaller(new LoggerEventArgs("The account is banned temporally.", LoggerTypes.FatalError));
-
-                        //Remove proxy
-                        ClientManager.RemoveProxy();
-
-                        ClientManager.Stop();
-
-                        msgStr = "The account is banned temporally.";
-                    }
                 }
+            }
+            catch (SessionStateException ex)
+            {
+                if (ClientSession.State == SessionState.TemporalBanned)
+                {
+                    //Remove proxy
+                    ClientManager.RemoveProxy();
+
+                    ClientManager.Stop();
+
+                    msgStr = "The account is banned temporally.";                    
+                }
+                else
+                ClientManager.LogCaller(new LoggerEventArgs(ex.Message, LoggerTypes.Warning));
             }
             catch (PtcOfflineException) // poex
             {
@@ -339,18 +341,17 @@ namespace PokemonGoGUI
             }
             catch (ArgumentNullException) // anex
             {
-                ClientManager.AccountState = AccountState.TemporalBan;
+                //ClientManager.AccountState = AccountState.TemporalBan;
                 ClientManager.Stop();
                 ClientManager.RemoveProxy();
-                msgStr = "This account is banned temporally.";
+                msgStr = "Argument Null Exception.";
             }
 
             catch (PokeHashException phex)
             {
                 ClientManager.AccountState = AccountState.HashIssues;
-
                 msgStr = "Hash issues";
-                ClientManager.LogCaller(new LoggerEventArgs(phex.Message, LoggerTypes.FatalError, phex));
+                ClientManager.LogCaller(new LoggerEventArgs("Hash issues", LoggerTypes.FatalError, phex));
             }
             catch (Exception ex)
             {

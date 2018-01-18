@@ -41,9 +41,7 @@ namespace PokemonGoGUI.GoManager
 
             if (!forts.Any()) {
                 return new MethodResult<List<FortData>> {
-                    Data = fortData,
                     Message = "No pokestop data found. Potential temp IP ban or bad location",
-                    Success = true
                 };
             }
 

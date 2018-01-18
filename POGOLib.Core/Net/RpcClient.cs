@@ -20,6 +20,7 @@ using POGOProtos.Networking.Platform.Requests;
 using POGOProtos.Networking.Platform.Responses;
 using POGOLib.Official.Extensions;
 using POGOProtos.Map.Pokemon;
+using POGOLib.Official.Exceptions;
 
 namespace POGOLib.Official.Net
 {
@@ -162,18 +163,7 @@ namespace POGOLib.Official.Net
                 return false;
             }
 
-            try
-            {
-                await DownloadRemoteConfig();
-            }
-            catch (Exception ex1)
-            {
-                if (ex1.Message.Contains("Bad Request"))
-                {
-                    return false;
-                }
-                throw ex1;
-            }
+            await DownloadRemoteConfig();        
 
             if (manageResources)
             {
@@ -233,84 +223,69 @@ namespace POGOLib.Official.Net
         /// <summary>
         ///     It is not recommended to call this. Map objects will update automatically and fire the map update event.
         /// </summary>
-        public async Task RefreshMapObjectsAsync()
+        internal async Task RefreshMapObjectsAsync()
         {
-            ByteString response = null;
-            try
-            {
-                var cellIds = MapUtil.GetCellIdsForLatLong(_session.Player.Coordinate.Latitude, _session.Player.Coordinate.Longitude);
-                var sinceTimeMs = cellIds.Select(x => (long)0).ToArray();
+            var cellIds = MapUtil.GetCellIdsForLatLong(_session.Player.Coordinate.Latitude, _session.Player.Coordinate.Longitude);
+            var sinceTimeMs = cellIds.Select(x => (long)0).ToArray();
 
-                response = await SendRemoteProcedureCallAsync(new Request
+            var response = await SendRemoteProcedureCallAsync(new Request
+            {
+                RequestType = RequestType.GetMapObjects,
+                RequestMessage = new GetMapObjectsMessage
                 {
-                    RequestType = RequestType.GetMapObjects,
-                    RequestMessage = new GetMapObjectsMessage
-                    {
-                        CellId =
+                    CellId =
                     {
                         cellIds
                     },
-                        SinceTimestampMs =
+                    SinceTimestampMs =
                     {
                         sinceTimeMs
                     },
-                        Latitude = _session.Player.Coordinate.Latitude,
-                        Longitude = _session.Player.Coordinate.Longitude
-                    }.ToByteString()
-                });
+                    Latitude = _session.Player.Coordinate.Latitude,
+                    Longitude = _session.Player.Coordinate.Longitude
+                }.ToByteString()
+            });
 
-                if (response != null)
+            if (response != null)
+            {
+                var mapObjects = GetMapObjectsResponse.Parser.ParseFrom(response);
+                if (mapObjects.Status == MapObjectsStatus.Success)
                 {
-                    var mapObjects = GetMapObjectsResponse.Parser.ParseFrom(response);
-                    if (mapObjects.Status == MapObjectsStatus.Success)
+                    // TODO: Cleaner?
+                    var pokemonCatchable = mapObjects.MapCells.SelectMany(c => c.CatchablePokemons).Count();
+                    var pokemonWild = mapObjects.MapCells.SelectMany(c => c.WildPokemons).Count();
+                    var pokemonNearby = mapObjects.MapCells.SelectMany(c => c.NearbyPokemons).Count();
+                    var pokemonCount = pokemonCatchable + pokemonWild + pokemonNearby;
+
+                    _session.Logger.Debug($"Received '{mapObjects.MapCells.Count}' map cells.");
+                    _session.Logger.Debug($"Received '{pokemonCount}' pokemons. Catchable({pokemonCatchable}) Wild({pokemonWild}) Nearby({pokemonNearby})");
+                    _session.Logger.Debug($"Received '{mapObjects.MapCells.SelectMany(c => c.Forts).Count()}' forts.");
+
+                    if (mapObjects.MapCells.Count == 0)
                     {
-                        // TODO: Cleaner?
-                        var pokemonCatchable = mapObjects.MapCells.SelectMany(c => c.CatchablePokemons).Count();
-                        var pokemonWild = mapObjects.MapCells.SelectMany(c => c.WildPokemons).Count();
-                        var pokemonNearby = mapObjects.MapCells.SelectMany(c => c.NearbyPokemons).Count();
-                        var pokemonCount = pokemonCatchable + pokemonWild + pokemonNearby;
-
-                        _session.Logger.Debug($"Received '{mapObjects.MapCells.Count}' map cells.");
-                        _session.Logger.Debug($"Received '{pokemonCount}' pokemons. Catchable({pokemonCatchable}) Wild({pokemonWild}) Nearby({pokemonNearby})");
-                        _session.Logger.Debug($"Received '{mapObjects.MapCells.SelectMany(c => c.Forts).Count()}' forts.");
-
-                        if (mapObjects.MapCells.Count == 0)
-                        {
-                            _session.Logger.Error("We received 0 map cells, are your GPS coordinates correct?");
-                            return;
-                        }
-
-                        _session.Map.Cells = mapObjects.MapCells;
+                        _session.Logger.Error("We received 0 map cells, are your GPS coordinates correct?");
+                        return;
                     }
-                    else
-                    {
-                        _session.Logger.Debug($"GetMapObjects status is: '{mapObjects.Status}'.");
-                    }
+
+                    _session.Map.Cells = mapObjects.MapCells;
+                }
+                else
+                {
+                    _session.Logger.Warn($"GetMapObjects status is: '{mapObjects.Status}'.");
                 }
             }
-            catch (ArgumentOutOfRangeException)
-            {
-                // Re-send
-                _session.Logger.Warn($"GetMapObjects re-send.");
-                await RefreshMapObjectsAsync();
-            }
-            catch (Exception)
+            else if (_session.State != SessionState.Paused)
             {
                 // POGOLib didn't expect this.
                 throw new NullReferenceException(nameof(response));
             }
-            /*else if (_session.State != SessionState.Paused)
-            {
-                // POGOLib didn't expect this.
-                throw new NullReferenceException(nameof(response));
-            }*/
         }
 
         /// <summary>
         ///     Gets the next request id for the <see cref="RequestEnvelope" />.
         /// </summary>
         /// <returns></returns>
-        private ulong GetNextRequestId()
+        internal ulong GetNextRequestId()
         {
             //Change to random requestId https://github.com/pogodevorg/pgoapi/pull/217
 
@@ -322,7 +297,7 @@ namespace POGOLib.Official.Net
         ///     <see cref="Request" />.
         /// </summary>
         /// <returns></returns>
-        private IEnumerable<Request> GetDefaultRequests(bool nobuddy, bool noinbox)
+        internal IEnumerable<Request> GetDefaultRequests(bool nobuddy, bool noinbox)
         {
             var request = new List<Request>
             {
@@ -499,10 +474,9 @@ namespace POGOLib.Official.Net
         {
             return Task.Run(async () =>
             {
-                _rpcQueue.Enqueue(requestEnvelope);
-
                 try
                 {
+                    _rpcQueue.Enqueue(requestEnvelope);
                     _rpcQueueMutex.WaitOne();
 
                     RequestEnvelope processRequestEnvelope;
@@ -522,6 +496,10 @@ namespace POGOLib.Official.Net
                     ByteString ret;
                     _rpcResponses.TryRemove(requestEnvelope, out ret);
                     return ret;
+                } 
+                catch (ArgumentOutOfRangeException)
+                {                  
+                    return null;
                 }
                 finally
                 {
@@ -546,31 +524,9 @@ namespace POGOLib.Official.Net
 
                     case SessionState.Paused:
                         var requests = requestEnvelope.Requests.Select(x => x.RequestType).ToList();
-                        /*if (requests.Count >= 1 && requests[0] == RequestType.VerifyChallenge)
+                        if (requests.Count != 1 || requests[0] != RequestType.VerifyChallenge)
                         {
-                            foreach (var req in requestEnvelope.Requests)
-                            {
-                                if (req.RequestType != RequestType.VerifyChallenge)
-                                {
-                                    requestEnvelope.Requests.Remove(req);
-                                    _session.Logger.Debug($"Removed bad request: [{req.RequestType.ToString()}]. The only request allowed is VerifyChallenge.");
-                                }
-                            }
-                            // Re-sign envelope.
-                            var signature = requestEnvelope.PlatformRequests.FirstOrDefault(x => x.Type == PlatformRequestType.SendEncryptedSignature);
-                            if (signature != null)
-                            {
-                                requestEnvelope.PlatformRequests.Remove(signature);
-                            }
-
-                            requestEnvelope.PlatformRequests.Insert(0, await _rpcEncryption.GenerateSignatureAsync(requestEnvelope));
-
-                            // Re-send envelope.
-                            return await PerformRemoteProcedureCallAsync(requestEnvelope);
-                        }
-                        else*/ if (requests.Count != 1 || requests[0] != RequestType.VerifyChallenge)
-                        {
-                            _session.Logger.Debug("We tried to send a request while the session was paused. The only request allowed is VerifyChallenge.");
+                            _session.Logger.Info("We tried to send a request while the session was paused. The only request allowed is VerifyChallenge.");
                             return null;
                         }
                         break;
@@ -653,8 +609,7 @@ namespace POGOLib.Official.Net
                                 // Re-send envelope.
                                 return await PerformRemoteProcedureCallAsync(requestEnvelope);
                             case ResponseEnvelope.Types.StatusCode.BadRequest:
-                                _session.SetTemporalBan();
-                                _session.Logger.Info("Bad Request Received. The account is Temporal Banned");
+                                // Not set bans here.
                                 break;
                             case ResponseEnvelope.Types.StatusCode.SessionInvalidated:
                                 //Need observation here
@@ -689,7 +644,7 @@ namespace POGOLib.Official.Net
                                 return await PerformRemoteProcedureCallAsync(requestEnvelope);
                             case ResponseEnvelope.Types.StatusCode.Unknown:
                                 //Need observation here
-                                _session.Logger.Info($"Unknown status code.");
+                                _session.Logger.Error($"Unknown status code.");
                                 break;
                             case ResponseEnvelope.Types.StatusCode.InvalidPlatformRequest:
                                 //Need observation here
@@ -723,7 +678,7 @@ namespace POGOLib.Official.Net
                                 // Re-send envelope.
                                 return await PerformRemoteProcedureCallAsync(requestEnvelope);
                             default:
-                                _session.Logger.Info($"Unknown status code: {responseEnvelope.StatusCode}");
+                                _session.Logger.Error($"Unknown status code: {responseEnvelope.StatusCode}");
                                 break;
                         }
 
@@ -751,6 +706,10 @@ namespace POGOLib.Official.Net
                         return HandleResponseEnvelope(requestEnvelope, responseEnvelope);
                     }
                 }
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                return null;
             }
             catch (Exception e)
             {
@@ -833,10 +792,8 @@ namespace POGOLib.Official.Net
                 var request = requestEnvelope.Requests[i];
                 if (_defaultRequests.Contains(request.RequestType))
                     responseIndexes.Add(i, request.RequestType);
-                if (request.RequestType == RequestType.GetIncensePokemon)
+                if (request.RequestType == RequestType.GetIncensePokemon && _session.IncenseUsed)
                     responseIndexes.Add(i, request.RequestType);
-                //if (request.RequestType == RequestType.VerifyChallenge)
-                //    responseIndexes.Add(i, request.RequestType);
             }
 
             foreach (var responseIndex in responseIndexes)
@@ -923,15 +880,6 @@ namespace POGOLib.Official.Net
                         }
                         break;
 
-                    /*case RequestType.VerifyChallenge:
-                        var verifyChallenge = VerifyChallengeResponse.Parser.ParseFrom(bytes);
-                        if (verifyChallenge.Success)
-                        {
-                            _session.Logger.Debug($"Verify Challenge succes'");
-                            _session.ResumeAsync().Wait();
-                        }
-                        break;*/
-
                     case RequestType.GetBuddyWalked:
                         var getBuddyWalked = GetBuddyWalkedResponse.Parser.ParseFrom(bytes);
                         _session.Player.BuddyCandy = getBuddyWalked.CandyEarnedCount;
@@ -981,7 +929,7 @@ namespace POGOLib.Official.Net
             _session.Logger.Debug("EmptyRequest response:" + response.ToString());
         }
 
-        public async Task DownloadRemoteConfig()
+        private async Task DownloadRemoteConfig()
         {
             var msg = new DownloadRemoteConfigVersionMessage
             {
@@ -996,15 +944,25 @@ namespace POGOLib.Official.Net
                 RequestType = RequestType.DownloadRemoteConfigVersion,
                 RequestMessage = msg.ToByteString()
             };
-            var response = await SendRemoteProcedureCallAsync(request, true, true, true);
-            var downloadRemoteConfigVersionMessage = DownloadRemoteConfigVersionResponse.Parser.ParseFrom(response);
-            _session.Templates.AssetDigestTimestampMs = downloadRemoteConfigVersionMessage.AssetDigestTimestampMs;
-            _session.Templates.ItemTemplatesTimestampMs = downloadRemoteConfigVersionMessage.ItemTemplatesTimestampMs;
-            _session.Templates.LocalConfigVersion = downloadRemoteConfigVersionMessage;
-            _session.OnRemoteConfigVersionReceived(downloadRemoteConfigVersionMessage);
+
+            ByteString response = await SendRemoteProcedureCallAsync(request, true, true, true);
+
+            if (response != null)
+            {
+                var downloadRemoteConfigVersionMessage = DownloadRemoteConfigVersionResponse.Parser.ParseFrom(response);
+                _session.Templates.AssetDigestTimestampMs = downloadRemoteConfigVersionMessage.AssetDigestTimestampMs;
+                _session.Templates.ItemTemplatesTimestampMs = downloadRemoteConfigVersionMessage.ItemTemplatesTimestampMs;
+                _session.Templates.LocalConfigVersion = downloadRemoteConfigVersionMessage;
+                _session.OnRemoteConfigVersionReceived(downloadRemoteConfigVersionMessage);
+            }
+            else if (_session.State != SessionState.Paused)
+            {
+                _session.SetTemporalBan();
+                throw new SessionStateException(nameof(response));
+            }
         }
 
-        public async Task DownloadItemTemplates()
+        private async Task DownloadItemTemplates()
         {
             var pageOffset = 0;
             var timestamp = 0ul;
@@ -1014,11 +972,9 @@ namespace POGOLib.Official.Net
             if (_session.Templates.LocalConfigVersion != null)
                local_config_version = _session.Templates.LocalConfigVersion;
             
-            if ( _session.Templates.ItemTemplates != null 
-                && (_session.Templates.ItemTemplatesTimestampMs <= local_config_version.ItemTemplatesTimestampMs) 
-               ) {
-                    return;
-            }
+            if ( _session.Templates.ItemTemplates != null  && (_session.Templates.ItemTemplatesTimestampMs <= local_config_version.ItemTemplatesTimestampMs))
+                return;
+
             do
             {
                 var response = await SendRemoteProcedureCallAsync(new Request
@@ -1032,12 +988,19 @@ namespace POGOLib.Official.Net
                     }.ToByteString()
                 }, true, true, true);
 
-                var downloadItemTemplatesResponse = DownloadItemTemplatesResponse.Parser.ParseFrom(response);
+                if (response != null)
+                {
+                    var downloadItemTemplatesResponse = DownloadItemTemplatesResponse.Parser.ParseFrom(response);
 
-                pageOffset = downloadItemTemplatesResponse.PageOffset;
-                timestamp = downloadItemTemplatesResponse.TimestampMs;
+                    pageOffset = downloadItemTemplatesResponse.PageOffset;
+                    timestamp = downloadItemTemplatesResponse.TimestampMs;
 
-                templates.AddRange(downloadItemTemplatesResponse.ItemTemplates);
+                    templates.AddRange(downloadItemTemplatesResponse.ItemTemplates);
+                }
+                else if (_session.State != SessionState.Paused)
+                {
+                    throw new NullReferenceException(nameof(response));
+                }
 
             } while (pageOffset != 0);
 
@@ -1045,13 +1008,13 @@ namespace POGOLib.Official.Net
             _session.OnItemTemplatesReceived(templates);
         }
 
-        void HandleEventHandler(object sender, Newtonsoft.Json.Serialization.ErrorEventArgs errorArgs)
+        private void HandleEventHandler(object sender, Newtonsoft.Json.Serialization.ErrorEventArgs errorArgs)
         {
             var currentError = errorArgs.ErrorContext.Error.Message;
             errorArgs.ErrorContext.Handled = true;
         }
 
-        public async Task GetAssetDigest()
+        private async Task GetAssetDigest()
         {
             var pageOffset = 0;
             var timestamp = 0ul;
@@ -1061,11 +1024,9 @@ namespace POGOLib.Official.Net
             if (_session.Templates.LocalConfigVersion != null)
                 local_config_version = _session.Templates.LocalConfigVersion;
 
-            if (_session.Templates.AssetDigests != null 
-                && (_session.Templates.AssetDigestTimestampMs <= local_config_version.AssetDigestTimestampMs) 
-               ) {
-                     return;
-            }
+            if (_session.Templates.AssetDigests != null && (_session.Templates.AssetDigestTimestampMs <= local_config_version.AssetDigestTimestampMs))
+                return;
+
             do
             {
                 var response = await SendRemoteProcedureCallAsync(new Request
@@ -1084,12 +1045,19 @@ namespace POGOLib.Official.Net
                     }.ToByteString()
                 }, true, true, true);
 
-                var getAssetDigestResponse = GetAssetDigestResponse.Parser.ParseFrom(response);
+                if (response != null)
+                {
+                    var getAssetDigestResponse = GetAssetDigestResponse.Parser.ParseFrom(response);
 
-                pageOffset = getAssetDigestResponse.PageOffset;
-                timestamp = getAssetDigestResponse.TimestampMs;
+                    pageOffset = getAssetDigestResponse.PageOffset;
+                    timestamp = getAssetDigestResponse.TimestampMs;
 
-                digests.AddRange(getAssetDigestResponse.Digest);
+                    digests.AddRange(getAssetDigestResponse.Digest);
+                }
+                else if (_session.State != SessionState.Paused)
+                {
+                    throw new NullReferenceException(nameof(response));
+                }
 
             } while (pageOffset != 0);
 
@@ -1097,7 +1065,7 @@ namespace POGOLib.Official.Net
             _session.OnAssetDigestReceived(digests);
         }
 
-        public async Task GetDownloadURLs()
+        private async Task GetDownloadURLs()
         {
             var toCheck = new[] {
                 "i18n_general",
@@ -1107,7 +1075,8 @@ namespace POGOLib.Official.Net
 
             await GetDownloadURLs(toCheck);
         }
-        public async Task GetDownloadURLs(string[] toCheck)
+
+        private async Task GetDownloadURLs(string[] toCheck)
         {
             var dowloadUrls = new List<POGOProtos.Data.DownloadUrlEntry>();
             if (_session.Templates.DownloadUrls != null) {
@@ -1134,13 +1103,19 @@ namespace POGOLib.Official.Net
                 }.ToByteString()
             }, true, true, true);
 
+            if (response != null)
+            {
+                var getDownloadUrlsResponse = GetDownloadUrlsResponse.Parser.ParseFrom(response);
 
-            var getDownloadUrlsResponse = GetDownloadUrlsResponse.Parser.ParseFrom(response);
+                dowloadUrls.AddRange(getDownloadUrlsResponse.DownloadUrls);
 
-            dowloadUrls.AddRange(getDownloadUrlsResponse.DownloadUrls);
-
-            _session.Templates.DownloadUrls = dowloadUrls;
-            _session.OnUrlsReceived(dowloadUrls);
+                _session.Templates.DownloadUrls = dowloadUrls;
+                _session.OnUrlsReceived(dowloadUrls);
+            }
+            else if (_session.State != SessionState.Paused)
+            {
+                throw new NullReferenceException(nameof(response));
+            }
         }
     }
 }

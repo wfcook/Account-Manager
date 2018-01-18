@@ -114,6 +114,8 @@ namespace POGOLib.Official.Net
         {
             State = SessionState.TemporalBanned;
             OnTemporalBanReceived();
+            if (State != SessionState.Stopped)
+                Shutdown();
         }
 
         /// <summary>

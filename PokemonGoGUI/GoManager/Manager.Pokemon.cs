@@ -23,7 +23,7 @@ namespace PokemonGoGUI.GoManager
         {
             var pokemonToTransfer = pokemonsToTransfer.Where(x => x.Favorite != 1 && !x.IsEgg && string.IsNullOrEmpty(x.DeployedFortId) && x.Id != PlayerData.BuddyPokemon?.Id && x != null);
 
-            if (pokemonsToTransfer.Count() < 1)
+            if (pokemonsToTransfer.Count() == 0)
                 return new MethodResult();
 
             LogCaller(new LoggerEventArgs(String.Format("Transferring {0} pokemon", pokemonToTransfer.Count()), LoggerTypes.Info));
