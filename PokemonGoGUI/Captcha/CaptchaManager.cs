@@ -149,6 +149,9 @@ namespace PokemonGoGUI.Captcha
                     }.ToByteString()
                 }, false, false, false);
 
+                if (response == null)
+                    return false;
+
                 var verifyChallengeResponse = VerifyChallengeResponse.Parser.ParseFrom(response);
 
                 if (!verifyChallengeResponse.Success)
@@ -156,9 +159,11 @@ namespace PokemonGoGUI.Captcha
                     client.ClientManager.LogCaller(new LoggerEventArgs($"(CAPTCHA) Failed to resolve captcha, try resolved captcha by official app. ", LoggerTypes.Warning));
                     return false;
                 }
-                //resume session after solve
-                await client.ClientSession.ResumeAsync();
                 client.ClientManager.LogCaller(new LoggerEventArgs($"(CAPTCHA) Great!!! Captcha has been by passed",LoggerTypes.Success));
+                //resume session after solve
+                //client.ClientManager.UnPause();
+                if(client.ClientSession.State == POGOLib.Official.Net.SessionState.Paused)
+                    await client.ClientSession.ResumeAsync();
                 return verifyChallengeResponse.Success;
             }
             catch (Exception ex)
@@ -241,12 +246,12 @@ namespace PokemonGoGUI.Captcha
                 );
                 //wait.Until(ExpectedConditions.ElementIsVisible(By.Id("recaptcha-verify-button")));
                 wait.Until(d =>
-                {
-                    var ele = d.FindElement(By.Id("g-recaptcha-response"));
+                 {
+                     var ele = d.FindElement(By.Id("g-recaptcha-response"));
 
-                    if (ele == null) return false;
-                    return ele.GetAttribute("value").Length > 0;
-                });
+                     if (ele == null) return false;
+                     return ele.GetAttribute("value").Length > 0;
+                 });
 
                 string token = wait.Until<string>(driver =>
                 {

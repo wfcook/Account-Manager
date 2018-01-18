@@ -67,6 +67,7 @@ namespace PokemonGoGUI
             ClientSession.MapUpdate -= SessionMapUpdate;
             ClientSession.CheckAwardedBadgesReceived -= OnCheckAwardedBadgesReceived;
             ClientSession.HatchedEggsReceived -= OnHatchedEggsReceived;
+            ClientSession.TemporalBanReceived -= TempBanReceived;
             ClientSession.Shutdown();
         }
 
@@ -153,6 +154,8 @@ namespace PokemonGoGUI
                 ClientSession.MapUpdate += SessionMapUpdate;
                 ClientSession.CheckAwardedBadgesReceived += OnCheckAwardedBadgesReceived;
                 ClientSession.HatchedEggsReceived += OnHatchedEggsReceived;
+                ClientSession.TemporalBanReceived += TempBanReceived;
+
                 ClientSession.Logger.RegisterLogOutput(LoggerFucntion);
 
                 if (await ClientSession.StartupAsync(ClientManager.UserSettings.DownloadResources))
@@ -193,19 +196,21 @@ namespace PokemonGoGUI
 
                         msgStr = "The account is banned.";
                     }
-                    if (ClientSession.State == SessionState.TemporalBanned)
-                    {
-                        ClientManager.AccountState = AccountState.TemporalBan;
-                        ClientManager.LogCaller(new LoggerEventArgs("The account is banned temporally.", LoggerTypes.FatalError));
-
-                        //Remove proxy
-                        ClientManager.RemoveProxy();
-
-                        ClientManager.Stop();
-
-                        msgStr = "The account is banned temporally.";
-                    }
                 }
+            }
+            catch (SessionStateException ex)
+            {
+                if (ClientSession.State == SessionState.TemporalBanned)
+                {
+                    //Remove proxy
+                    ClientManager.RemoveProxy();
+
+                    ClientManager.Stop();
+
+                    msgStr = "The account is banned temporally.";                    
+                }
+                else
+                ClientManager.LogCaller(new LoggerEventArgs(ex.Message, LoggerTypes.Warning));
             }
             catch (PtcOfflineException) // poex
             {
@@ -336,18 +341,17 @@ namespace PokemonGoGUI
             }
             catch (ArgumentNullException) // anex
             {
-                ClientManager.AccountState = AccountState.TemporalBan;
+                //ClientManager.AccountState = AccountState.TemporalBan;
                 ClientManager.Stop();
                 ClientManager.RemoveProxy();
-                msgStr = "This account is banned temporally.";
+                msgStr = "Argument Null Exception.";
             }
 
             catch (PokeHashException phex)
             {
                 ClientManager.AccountState = AccountState.HashIssues;
-
                 msgStr = "Hash issues";
-                ClientManager.LogCaller(new LoggerEventArgs(phex.Message, LoggerTypes.FatalError, phex));
+                ClientManager.LogCaller(new LoggerEventArgs("Hash issues", LoggerTypes.FatalError, phex));
             }
             catch (Exception ex)
             {
@@ -454,7 +458,7 @@ namespace PokemonGoGUI
             bool solved = false;
             int retries = 1;
 
-            while (retries-- > 0 && !solved)
+           while (retries-- > 0 && !solved)
             {
                 solved = await CaptchaManager.SolveCaptcha(this, e.CaptchaUrl);
             }
@@ -489,6 +493,12 @@ namespace PokemonGoGUI
         private void SessionAccessTokenUpdated(object sender, EventArgs e)
         {
             SaveAccessToken(ClientSession.AccessToken);
+        }
+
+        private void TempBanReceived(object sender, EventArgs e)
+        {
+            ClientManager.AccountState = AccountState.TemporalBan;
+            ClientManager.Stop();
         }
 
         public void SetSettings(Manager manager)

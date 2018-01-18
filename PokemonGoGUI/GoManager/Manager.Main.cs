@@ -205,14 +205,14 @@ namespace PokemonGoGUI.GoManager
 
             _pauser.Reset();
             _runningStopwatch.Stop();
-            _client.ClientSession.Pause();
+            //_client.ClientSession.Pause();
 
             LogCaller(new LoggerEventArgs("Pausing bot ...", LoggerTypes.Info));
 
             State = BotState.Pausing;
         }
 
-        public async void UnPause()
+        public void UnPause()
         {
             if (!IsRunning)
             {
@@ -221,7 +221,7 @@ namespace PokemonGoGUI.GoManager
 
             _pauser.Set();
             _runningStopwatch.Start();
-            await _client.ClientSession.ResumeAsync();
+            //await _client.ClientSession.ResumeAsync();
 
             LogCaller(new LoggerEventArgs("Unpausing bot ...", LoggerTypes.Info));
 
@@ -316,6 +316,12 @@ namespace PokemonGoGUI.GoManager
 
                 if (currentFails >= UserSettings.MaxFailBeforeReset)
                 {
+                    //Pause out of captcha loop to verifychallenge
+                    if (WaitPaused())
+                    {
+                        continue;
+                    }
+
                     currentFails = 0;
                     _client.Logout();
                 }

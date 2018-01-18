@@ -70,9 +70,10 @@ namespace PokemonGoGUI.GoManager
                     }.ToByteString()
                 });
 
-                UseItemEggIncubatorResponse useItemEggIncubatorResponse = null;
+                if (response == null)
+                    return new MethodResult();
 
-                useItemEggIncubatorResponse = UseItemEggIncubatorResponse.Parser.ParseFrom(response);
+                var useItemEggIncubatorResponse = UseItemEggIncubatorResponse.Parser.ParseFrom(response);
 
                 var incitem = incubatorResponse.Data.Id;
                 var _egg = egg.PokemonId;

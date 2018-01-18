@@ -164,6 +164,9 @@ namespace PokemonGoGUI.GoManager
                     }.ToByteString()
                 });
 
+                if (response == null)
+                    return new MethodResult();
+
                 LevelUpRewardsResponse levelUpRewardsResponse = null;
 
                 levelUpRewardsResponse = LevelUpRewardsResponse.Parser.ParseFrom(response);
@@ -202,6 +205,9 @@ namespace PokemonGoGUI.GoManager
 
                     }.ToByteString()
                 });
+
+                if (response == null)
+                    return new MethodResult<GetBuddyWalkedResponse>();
 
                 getBuddyWalkedResponse = GetBuddyWalkedResponse.Parser.ParseFrom(response);
             }
@@ -248,6 +254,8 @@ namespace PokemonGoGUI.GoManager
                     }.ToByteString()
                 }, true, nobuddy, noinbox);
 
+                if (response == null)
+                    return new MethodResult();
 
                 var parsedResponse = GetPlayerResponse.Parser.ParseFrom(response);
 
@@ -264,7 +272,6 @@ namespace PokemonGoGUI.GoManager
         }
         private async Task<MethodResult> GetPlayerProfile()
         {
-
             try
             {
                 if (!_client.LoggedIn)
@@ -289,6 +296,8 @@ namespace PokemonGoGUI.GoManager
                     }.ToByteString()
                 }, true, false, true);
 
+                if (response == null)
+                    return new MethodResult();
 
                 var parsedResponse = GetPlayerProfileResponse.Parser.ParseFrom(response);
 
@@ -323,6 +332,9 @@ namespace PokemonGoGUI.GoManager
                         Team = team
                     }.ToByteString()
                 }, true);
+
+                if (response == null)
+                    return new MethodResult();
 
                 SetPlayerTeamResponse setPlayerTeamResponse = null;
 

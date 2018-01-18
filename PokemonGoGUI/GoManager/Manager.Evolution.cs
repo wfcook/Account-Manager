@@ -111,6 +111,9 @@ namespace PokemonGoGUI.GoManager
                         }.ToByteString()
                     });
 
+                    if (response == null)
+                        return new MethodResult();
+
                     EvolvePokemonResponse evolvePokemonResponse = EvolvePokemonResponse.Parser.ParseFrom(response);
                     switch (evolvePokemonResponse.Result)
                     {
@@ -316,6 +319,9 @@ namespace PokemonGoGUI.GoManager
                         ItemId = ItemId.ItemLuckyEgg
                     }.ToByteString()
                 });
+
+                if (response == null)
+                    return new MethodResult();
 
                 UseItemXpBoostResponse useItemXpBoostResponse = null;
 

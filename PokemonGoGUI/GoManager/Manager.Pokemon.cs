@@ -23,7 +23,7 @@ namespace PokemonGoGUI.GoManager
         {
             var pokemonToTransfer = pokemonsToTransfer.Where(x => x.Favorite != 1 && !x.IsEgg && string.IsNullOrEmpty(x.DeployedFortId) && x.Id != PlayerData.BuddyPokemon?.Id && x != null);
 
-            if (pokemonsToTransfer.Count() < 1)
+            if (pokemonsToTransfer.Count() == 0)
                 return new MethodResult();
 
             LogCaller(new LoggerEventArgs(String.Format("Transferring {0} pokemon", pokemonToTransfer.Count()), LoggerTypes.Info));
@@ -46,6 +46,9 @@ namespace PokemonGoGUI.GoManager
                             RequestType = RequestType.ReleasePokemon,
                             RequestMessage = message.ToByteString()
                         });
+
+                        if (response == null)
+                            return new MethodResult();
 
                         ReleasePokemonResponse releasePokemonResponse = ReleasePokemonResponse.Parser.ParseFrom(response);
                         switch (releasePokemonResponse.Result)
@@ -124,6 +127,9 @@ namespace PokemonGoGUI.GoManager
                             PokemonIds = { PokemonIds }
                         }.ToByteString()
                     });
+
+                    if (response == null)
+                        return new MethodResult();
 
                     ReleasePokemonResponse releasePokemonResponse = ReleasePokemonResponse.Parser.ParseFrom(response);
 
@@ -408,7 +414,7 @@ namespace PokemonGoGUI.GoManager
             {
                 return new MethodResult<double>
                 {
-                    Data = -1,
+                    Data = 0,
                     Message = settingResult.Message
                 };
             }
@@ -475,6 +481,9 @@ namespace PokemonGoGUI.GoManager
                             IsFavorite = favorite
                         }.ToByteString()
                     });
+
+                    if (response == null)
+                        return new MethodResult();
 
                     SetFavoritePokemonResponse setFavoritePokemonResponse = null;
 
