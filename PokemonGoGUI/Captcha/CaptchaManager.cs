@@ -42,7 +42,7 @@ namespace PokemonGoGUI.Captcha
                 {
                     client.ClientManager.LogCaller(new LoggerEventArgs("Captcha has been stopped for this AccessToken ", LoggerTypes.Captcha));
                     break;
-                }
+                }///
 
                 //Use captcha solution to resolve captcha
                 if (!Resolved && client.ClientManager.UserSettings.EnableCaptchaSolutions &&
@@ -57,7 +57,7 @@ namespace PokemonGoGUI.Captcha
                     {
                         Resolved = await Resolve(client, captchaResponse);
                     }
-                }
+                }//*/
 
                 //use 2 captcha
                 if (!Resolved && client.ClientManager.UserSettings.Enable2Captcha &&
@@ -223,7 +223,7 @@ namespace PokemonGoGUI.Captcha
                     client.ClientManager.LogCaller(new LoggerEventArgs("Captcha has been stopped for this AccessToken ", LoggerTypes.Captcha));
                     break;
                 }
-
+                
                 TwoCaptchaClient _client = new TwoCaptchaClient(client.ClientManager.UserSettings.TwoCaptchaAPIKey);
 
                 result = await _client.SolveRecaptchaV2(client, POKEMON_GO_GOOGLE_KEY, captchaUrl, string.Empty, ProxyType.HTTP);
