@@ -20,6 +20,7 @@ using System.Threading.Tasks;
 using POGOLib.Official.Util.Hash.PokeHash;
 using System.Windows.Forms;
 using POGOLib.Official.Exceptions;
+using PokemonGoGUI.Captcha;
 
 namespace PokemonGoGUI.GoManager
 {
@@ -45,6 +46,8 @@ namespace PokemonGoGUI.GoManager
         private bool CatchDisabled = false;
 
         public bool _proxyIssue = false;
+        //Manager captcha solver
+        public CaptchaManager CaptchaSolver = new CaptchaManager();
 
         //Needs to be saved on close
         public GoProxy CurrentProxy { get; set; }
