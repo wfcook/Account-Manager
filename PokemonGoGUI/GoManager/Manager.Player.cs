@@ -19,7 +19,7 @@ namespace PokemonGoGUI.GoManager
 {
     public partial class Manager
     {
-        
+
         public async Task<MethodResult> UpdateDetails()
         {
             //TODO: review what we need do here.
@@ -137,89 +137,55 @@ namespace PokemonGoGUI.GoManager
                 return new MethodResult();
             }
 
-            try
+            if (!_client.LoggedIn)
             {
-                if (!_client.LoggedIn)
-                {
-                    MethodResult result = await AcLogin();
+                MethodResult result = await AcLogin();
 
-                    if (!result.Success)
-                    {
-                        return result;
-                    }
+                if (!result.Success)
+                {
+                    return result;
                 }
-
-                //Pause out of captcha loop to verifychallenge
-                if (WaitPaused())
-                {
-                    return new MethodResult();
-                }
-
-                var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
-                {
-                    RequestType = RequestType.LevelUpRewards,
-                    RequestMessage = new LevelUpRewardsMessage
-                    {
-                        Level = level
-                    }.ToByteString()
-                });
-
-                if (response == null)
-                    return new MethodResult();
-
-                LevelUpRewardsResponse levelUpRewardsResponse = null;
-
-                levelUpRewardsResponse = LevelUpRewardsResponse.Parser.ParseFrom(response);
-                string rewards = StringUtil.GetSummedFriendlyNameOfItemAwardList(levelUpRewardsResponse.ItemsAwarded);
-                LogCaller(new LoggerEventArgs(String.Format("Grabbed rewards for level {0}. Rewards: {1}", level, rewards), LoggerTypes.Info));
-
-                return new MethodResult
-                {
-                    Success = true
-                };
             }
-            catch (Exception ex)
+
+            var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
-                LogCaller(new LoggerEventArgs("Failed to get level up rewards", LoggerTypes.Exception, ex));
+                RequestType = RequestType.LevelUpRewards,
+                RequestMessage = new LevelUpRewardsMessage
+                {
+                    Level = level
+                }.ToByteString()
+            });
+
+            if (response == null)
                 return new MethodResult();
-            }
+
+            LevelUpRewardsResponse levelUpRewardsResponse = null;
+
+            levelUpRewardsResponse = LevelUpRewardsResponse.Parser.ParseFrom(response);
+            string rewards = StringUtil.GetSummedFriendlyNameOfItemAwardList(levelUpRewardsResponse.ItemsAwarded);
+            LogCaller(new LoggerEventArgs(String.Format("Grabbed rewards for level {0}. Rewards: {1}", level, rewards), LoggerTypes.Info));
+
+            return new MethodResult
+            {
+                Success = true
+            };
         }
 
         private async Task<MethodResult<GetBuddyWalkedResponse>> GetBuddyWalked()
         {
-            GetBuddyWalkedResponse getBuddyWalkedResponse = null;
-
-            try
+            var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
-                //Pause out of captcha loop to verifychallenge
-                if (WaitPaused())
+                RequestType = RequestType.GetBuddyWalked,
+                RequestMessage = new GetBuddyWalkedMessage
                 {
-                    return new MethodResult<GetBuddyWalkedResponse>();
-                }
 
-                var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
-                {
-                    RequestType = RequestType.GetBuddyWalked,
-                    RequestMessage = new GetBuddyWalkedMessage
-                    {
+                }.ToByteString()
+            });
 
-                    }.ToByteString()
-                });
+            if (response == null)
+                return new MethodResult<GetBuddyWalkedResponse>();
 
-                if (response == null)
-                    return new MethodResult<GetBuddyWalkedResponse>();
-
-                getBuddyWalkedResponse = GetBuddyWalkedResponse.Parser.ParseFrom(response);
-            }
-            catch (Exception ex)
-            {
-                LogCaller(new LoggerEventArgs("GetBuddyWalkedResponse is empty", LoggerTypes.Exception, ex));
-
-                return new MethodResult<GetBuddyWalkedResponse>
-                {
-                    Data = getBuddyWalkedResponse
-                };
-            }
+            GetBuddyWalkedResponse getBuddyWalkedResponse = GetBuddyWalkedResponse.Parser.ParseFrom(response);
 
             return new MethodResult<GetBuddyWalkedResponse>
             {
@@ -227,133 +193,96 @@ namespace PokemonGoGUI.GoManager
                 Success = true
             };
         }
-        private async Task<MethodResult> GetPlayer(bool nobuddy =true, bool noinbox =true)
+
+        private async Task<MethodResult> GetPlayer(bool nobuddy = true, bool noinbox = true)
         {
-            try
+            if (!_client.LoggedIn)
             {
-                if (!_client.LoggedIn)
-                {
-                    MethodResult result = await AcLogin();
+                MethodResult result = await AcLogin();
 
-                    if (!result.Success)
-                    {
-                        return result;
-                    }
+                if (!result.Success)
+                {
+                    return result;
                 }
-
-                //Pause out of captcha loop to verifychallenge
-                if (WaitPaused())
-                {
-                    return new MethodResult();
-                }
-
-                var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request {
-                    RequestType = RequestType.GetPlayer,
-                    RequestMessage = new GetPlayerMessage {
-                        PlayerLocale = _client.PlayerLocale
-                    }.ToByteString()
-                }, true, nobuddy, noinbox);
-
-                if (response == null)
-                    return new MethodResult();
-
-                var parsedResponse = GetPlayerResponse.Parser.ParseFrom(response);
-
-                return new MethodResult
-                {
-                    Success = true
-                };
             }
-            catch (Exception ex)
+
+            var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
-                LogCaller(new LoggerEventArgs("Failed to get level up rewards", LoggerTypes.Exception, ex));
+                RequestType = RequestType.GetPlayer,
+                RequestMessage = new GetPlayerMessage
+                {
+                    PlayerLocale = _client.PlayerLocale
+                }.ToByteString()
+            }, true, nobuddy, noinbox);
+
+            if (response == null)
                 return new MethodResult();
-            }
+
+            var parsedResponse = GetPlayerResponse.Parser.ParseFrom(response);
+
+            return new MethodResult
+            {
+                Success = true
+            };
         }
+
         private async Task<MethodResult> GetPlayerProfile()
         {
-            try
+            if (!_client.LoggedIn)
             {
-                if (!_client.LoggedIn)
-                {
-                    MethodResult result = await AcLogin();
+                MethodResult result = await AcLogin();
 
-                    if (!result.Success)
-                    {
-                        return result;
-                    }
+                if (!result.Success)
+                {
+                    return result;
                 }
-                
-                //Pause out of captcha loop to verifychallenge
-                if (WaitPaused())
-                {
-                    return new MethodResult();
-                }
-
-                var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request {
-                    RequestType = RequestType.GetPlayerProfile,
-                    RequestMessage = new GetPlayerProfileMessage {
-                    }.ToByteString()
-                }, true, false, true);
-
-                if (response == null)
-                    return new MethodResult();
-
-                var parsedResponse = GetPlayerProfileResponse.Parser.ParseFrom(response);
-
-
-                return new MethodResult
-                {
-                    Success = true
-                };
             }
-            catch (Exception ex)
+
+            var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
-                LogCaller(new LoggerEventArgs("Failed to get level up rewards", LoggerTypes.Exception, ex));
+                RequestType = RequestType.GetPlayerProfile,
+                RequestMessage = new GetPlayerProfileMessage
+                {
+                }.ToByteString()
+            }, true, false, true);
+
+            if (response == null)
                 return new MethodResult();
-            }
+
+            var parsedResponse = GetPlayerProfileResponse.Parser.ParseFrom(response);
+
+
+            return new MethodResult
+            {
+                Success = true
+            };
         }
 
         private async Task<MethodResult> SetPlayerTeam(TeamColor team)
         {
-            try
+            var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
-                //Pause out of captcha loop to verifychallenge
-                if (WaitPaused())
+                RequestType = RequestType.SetPlayerTeam,
+                RequestMessage = new SetPlayerTeamMessage
                 {
-                    return new MethodResult();
-                }
+                    Team = team
+                }.ToByteString()
+            }, true);
 
-                var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
-                {
-                    RequestType = RequestType.SetPlayerTeam,
-                    RequestMessage = new SetPlayerTeamMessage
-                    {
-                        Team = team
-                    }.ToByteString()
-                }, true);
-
-                if (response == null)
-                    return new MethodResult();
-
-                SetPlayerTeamResponse setPlayerTeamResponse = null;
-
-                setPlayerTeamResponse = SetPlayerTeamResponse.Parser.ParseFrom(response);
-                LogCaller(new LoggerEventArgs("Set player Team completion request wasn't successful", LoggerTypes.Success));
-
-                _client.ClientSession.Player.Data = setPlayerTeamResponse.PlayerData;
-
-                return new MethodResult
-                {
-                    Success = true
-                };
-            }
-            catch (Exception ex)
-            {
-                LogCaller(new LoggerEventArgs("Failed to set player team", LoggerTypes.Exception, ex));
-
+            if (response == null)
                 return new MethodResult();
-            }
+
+            SetPlayerTeamResponse setPlayerTeamResponse = null;
+
+            setPlayerTeamResponse = SetPlayerTeamResponse.Parser.ParseFrom(response);
+            LogCaller(new LoggerEventArgs("Set player Team completion request wasn't successful", LoggerTypes.Success));
+
+            _client.ClientSession.Player.Data = setPlayerTeamResponse.PlayerData;
+
+            return new MethodResult
+            {
+                Success = true
+            };
         }
     }
 }

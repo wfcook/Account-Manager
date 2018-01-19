@@ -317,12 +317,6 @@ namespace PokemonGoGUI.GoManager
 
             foreach (ItemData item in Items)
             {
-                //Break out of captcha loop to verifychallenge
-                if (WaitPaused())
-                {
-                    break;
-                }
-
                 InventoryItemSetting itemSetting = UserSettings.ItemSettings.FirstOrDefault(x => x.Id == item.ItemId);
 
                 if (itemSetting == null)
@@ -360,102 +354,74 @@ namespace PokemonGoGUI.GoManager
 
         public async Task<MethodResult> RecycleItem(InventoryItemSetting itemSetting, int toDelete)
         {
-            try
+            var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
-                //Pause out of captcha loop to verifychallenge
-                if (WaitPaused())
+                RequestType = RequestType.RecycleInventoryItem,
+                RequestMessage = new RecycleInventoryItemMessage
                 {
-                    return new MethodResult();
-                }
+                    Count = toDelete,
+                    ItemId = itemSetting.Id
+                }.ToByteString()
+            });
 
-                var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
-                {
-                    RequestType = RequestType.RecycleInventoryItem,
-                    RequestMessage = new RecycleInventoryItemMessage
+            if (response == null)
+                return new MethodResult();
+
+            RecycleInventoryItemResponse recycleInventoryItemResponse = RecycleInventoryItemResponse.Parser.ParseFrom(response);
+
+            switch (recycleInventoryItemResponse.Result)
+            {
+                case RecycleInventoryItemResponse.Types.Result.ErrorCannotRecycleIncubators:
+                    return new MethodResult();
+                case RecycleInventoryItemResponse.Types.Result.ErrorNotEnoughCopies:
+                    return new MethodResult();
+                case RecycleInventoryItemResponse.Types.Result.Success:
+                    LogCaller(new LoggerEventArgs(String.Format("Deleted {0} {1}. Remaining {2}", toDelete, itemSetting.FriendlyName, recycleInventoryItemResponse.NewCount), LoggerTypes.Recycle));
+
+                    return new MethodResult
                     {
-                        Count = toDelete,
-                        ItemId = itemSetting.Id
-                    }.ToByteString()
-                });
-
-                if (response == null)
+                        Success = true
+                    };
+                case RecycleInventoryItemResponse.Types.Result.Unset:
                     return new MethodResult();
-
-                RecycleInventoryItemResponse recycleInventoryItemResponse = RecycleInventoryItemResponse.Parser.ParseFrom(response);
-
-                switch (recycleInventoryItemResponse.Result)
-                {
-                    case RecycleInventoryItemResponse.Types.Result.ErrorCannotRecycleIncubators:
-                        return new MethodResult();
-                    case RecycleInventoryItemResponse.Types.Result.ErrorNotEnoughCopies:
-                        return new MethodResult();
-                    case RecycleInventoryItemResponse.Types.Result.Success:
-                        LogCaller(new LoggerEventArgs(String.Format("Deleted {0} {1}. Remaining {2}", toDelete, itemSetting.FriendlyName, recycleInventoryItemResponse.NewCount), LoggerTypes.Recycle));
-
-                        return new MethodResult
-                        {
-                            Success = true
-                        };
-                    case RecycleInventoryItemResponse.Types.Result.Unset:
-                        return new MethodResult();
-                }
-                return new MethodResult();
             }
-            catch (Exception ex)
-            {
-                LogCaller(new LoggerEventArgs(String.Format("Failed to recycle iventory item {0}", itemSetting.FriendlyName), LoggerTypes.Warning, ex));
-                return new MethodResult();
-            }
+            return new MethodResult();
         }
 
         private async Task<MethodResult> UseIncense(ItemId item = ItemId.ItemIncenseOrdinary)
         {
-            try
+            var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
-                //Pause out of captcha loop to verifychallenge
-                if (WaitPaused())
+                RequestType = RequestType.UseIncense,
+                RequestMessage = new UseIncenseMessage
                 {
-                    return new MethodResult();
-                }
+                    IncenseType = item
+                }.ToByteString()
+            });
 
-                var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
-                {
-                    RequestType = RequestType.UseIncense,
-                    RequestMessage = new UseIncenseMessage
+            if (response == null)
+                return new MethodResult();
+
+            UseIncenseResponse useIncenseResponse = UseIncenseResponse.Parser.ParseFrom(response);
+
+            switch (useIncenseResponse.Result)
+            {
+                case UseIncenseResponse.Types.Result.IncenseAlreadyActive:
+                    return new MethodResult();
+                case UseIncenseResponse.Types.Result.LocationUnset:
+                    return new MethodResult();
+                case UseIncenseResponse.Types.Result.Success:
+                    LogCaller(new LoggerEventArgs(String.Format("Used incense {0}.", item), LoggerTypes.Success));
+                    return new MethodResult
                     {
-                        IncenseType = item
-                    }.ToByteString()
-                });
-
-                if (response == null)
+                        Success = true
+                    };
+                case UseIncenseResponse.Types.Result.NoneInInventory:
                     return new MethodResult();
-
-                UseIncenseResponse useIncenseResponse = UseIncenseResponse.Parser.ParseFrom(response);
-
-                switch (useIncenseResponse.Result)
-                {
-                    case UseIncenseResponse.Types.Result.IncenseAlreadyActive:
-                        return new MethodResult();
-                    case UseIncenseResponse.Types.Result.LocationUnset:
-                        return new MethodResult();
-                    case UseIncenseResponse.Types.Result.Success:
-                        LogCaller(new LoggerEventArgs(String.Format("Used incense {0}.", item), LoggerTypes.Success));
-                        return new MethodResult
-                        {
-                            Success = true
-                        };
-                    case UseIncenseResponse.Types.Result.NoneInInventory:
-                        return new MethodResult();
-                    case UseIncenseResponse.Types.Result.Unknown:
-                        return new MethodResult();
-                }
-                return new MethodResult();
+                case UseIncenseResponse.Types.Result.Unknown:
+                    return new MethodResult();
             }
-            catch (Exception ex)
-            {
-                LogCaller(new LoggerEventArgs(String.Format("Failed to use incense item {0}", item), LoggerTypes.Warning, ex));
-                return new MethodResult();
-            }
+            return new MethodResult();
         }
 
         public double FilledInventoryStorage()

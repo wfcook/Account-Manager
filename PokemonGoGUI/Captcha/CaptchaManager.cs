@@ -17,88 +17,94 @@ using POGOProtos.Networking.Requests.Messages;
 using Google.Protobuf;
 using POGOProtos.Networking.Responses;
 using System.Diagnostics;
+using POGOLib.Official.Net;
+using POGOLib.Official.Net.Authentication.Data;
 
 namespace PokemonGoGUI.Captcha
 {
     public class CaptchaManager
     {
         const string POKEMON_GO_GOOGLE_KEY = "6LeeTScTAAAAADqvhqVMhPpr_vB9D364Ia-1dSgK";
+        private static AccessToken accessToken;
+        private static bool Resolved = false;
 
         public static async Task<bool> SolveCaptcha(Client client, string captchaUrl)
         {
             string captchaResponse = "";
-            bool resolved = false;
             int retry = client.ClientManager.UserSettings.AutoCaptchaRetries;
+            accessToken = client.ClientSession.AccessToken;
 
-            while (retry-- > 0 && !resolved)
+            while (retry-- > 0 && !Resolved)
             {
-                //Use captcha solution to resolve captcha
-                if (client.ClientManager.UserSettings.EnableCaptchaSolutions)
+                //Break if accesstoken as changed
+                if (accessToken != client.ClientSession.AccessToken)
                 {
-                   client.ClientManager.LogCaller(new LoggerEventArgs("Auto resolving captcha by using captcha solution service, please wait..........", LoggerTypes.Captcha));
+                    client.ClientManager.LogCaller(new LoggerEventArgs("Captcha has been stopped for this AccessToken ", LoggerTypes.Captcha));
+                    break;
+                }
+
+                //Use captcha solution to resolve captcha
+                if (!Resolved && client.ClientManager.UserSettings.EnableCaptchaSolutions &&
+                    !string.IsNullOrEmpty(client.ClientManager.UserSettings.CaptchaSolutionAPIKey) &&
+                    !string.IsNullOrEmpty(client.ClientManager.UserSettings.CaptchaSolutionsSecretKey))
+                {
+                    client.ClientManager.LogCaller(new LoggerEventArgs("Auto resolving captcha by using captcha solution service, please wait..........", LoggerTypes.Captcha));
                     CaptchaSolutionClient _client = new CaptchaSolutionClient(client.ClientManager.UserSettings.CaptchaSolutionAPIKey,
                         client.ClientManager.UserSettings.CaptchaSolutionsSecretKey, client.ClientManager.UserSettings.AutoCaptchaTimeout);
                     captchaResponse = await _client.ResolveCaptcha(client, POKEMON_GO_GOOGLE_KEY, captchaUrl);
                     if (!string.IsNullOrEmpty(captchaResponse))
                     {
-                        resolved = await Resolve(client, captchaResponse);
-                    }
-                }         
-
-                //use 2 captcha
-                if (!resolved && client.ClientManager.UserSettings.Enable2Captcha &&
-                    !string.IsNullOrEmpty(client.ClientManager.UserSettings.TwoCaptchaAPIKey))
-                {
-                    /*if (needGetNewCaptcha)
-                    {
-                        captchaUrl = await GetNewCaptchaURL(client);
-                    }*/
-                    if (string.IsNullOrEmpty(captchaUrl)) return true;
-
-                    client.ClientManager.LogCaller(new LoggerEventArgs("Auto resolving captcha by using 2Captcha service", LoggerTypes.Captcha));
-                    captchaResponse = await GetCaptchaResposeBy2Captcha(client, captchaUrl);
-                    if (!string.IsNullOrEmpty(captchaResponse))
-                    {
-                        resolved = await Resolve(client, captchaResponse);
+                        Resolved = await Resolve(client, captchaResponse);
                     }
                 }
 
-                if (!resolved && client.ClientManager.UserSettings.EnableAntiCaptcha && !string.IsNullOrEmpty(client.ClientManager.UserSettings.AntiCaptchaAPIKey))
+                //use 2 captcha
+                if (!Resolved && client.ClientManager.UserSettings.Enable2Captcha &&
+                    !string.IsNullOrEmpty(client.ClientManager.UserSettings.TwoCaptchaAPIKey))
                 {
-                   if (string.IsNullOrEmpty(captchaUrl)) return true;
+                    if (string.IsNullOrEmpty(captchaUrl)) return true;
 
-                    client.ClientManager.LogCaller(new LoggerEventArgs("Auto resolving captcha by using anti captcha service", LoggerTypes.Captcha));
-                    captchaResponse = await GetCaptchaResposeByAntiCaptcha(client, captchaUrl);
+                    client.ClientManager.LogCaller(new LoggerEventArgs("Auto resolving captcha by using 2Captcha service", LoggerTypes.Captcha));
+                    captchaResponse = await GetCaptchaResponseBy2Captcha(client, captchaUrl);
                     if (!string.IsNullOrEmpty(captchaResponse))
                     {
-                        resolved = await Resolve(client, captchaResponse);
+                        Resolved = await Resolve(client, captchaResponse);
+                    }
+                }
+
+                if (!Resolved && client.ClientManager.UserSettings.EnableAntiCaptcha && !string.IsNullOrEmpty(client.ClientManager.UserSettings.AntiCaptchaAPIKey))
+                {
+                    if (string.IsNullOrEmpty(captchaUrl)) return true;
+
+                    client.ClientManager.LogCaller(new LoggerEventArgs("Auto resolving captcha by using anti captcha service", LoggerTypes.Captcha));
+                    captchaResponse = await GetCaptchaResponseByAntiCaptcha(client, captchaUrl);
+                    if (!string.IsNullOrEmpty(captchaResponse))
+                    {
+                        Resolved = await Resolve(client, captchaResponse);
                     }
                 }
             }
 
             //captchaRespose = "";
-            if (!resolved)
+            if (!Resolved)
             {
                 if (client.ClientManager.UserSettings.PlaySoundOnCaptcha)
                 {
                     SystemSounds.Asterisk.Play();
                 }
 
-                captchaResponse = GetCaptchaResposeManually(client, captchaUrl);
+                captchaResponse = GetCaptchaResponseManually(client, captchaUrl);
                 //captchaResponse = await GetCaptchaTokenWithInternalForm(captchaUrl);
 
                 if (!string.IsNullOrEmpty(captchaResponse))
                 {
-                    resolved = await Resolve(client, captchaResponse);
+                    Resolved = await Resolve(client, captchaResponse);
                 }
             }
-
-            return resolved;
+            return Resolved;
         }
 
-
         //NOT WORKING  SINCE WEB BROWSER CONTROL IS IE7, doesn't work with captcha page
-
         private static async Task<string> GetCaptchaTokenWithInternalForm(string captchaUrl)
         {
             string response = "";
@@ -128,30 +134,30 @@ namespace PokemonGoGUI.Captcha
         private static async Task<bool> Resolve(Client client, string captchaResponse)
         {
             if (string.IsNullOrEmpty(captchaResponse)) return false;
-            try
+
+            if (!client.LoggedIn)
             {
-                if (!client.LoggedIn)
+                MethodResult result = await client.ClientManager.AcLogin();
+
+                if (!result.Success)
                 {
-                    MethodResult result = await client.ClientManager.AcLogin();
-
-                    if (!result.Success)
-                    {
-                        return false;
-                    }
-                }
-
-                var response = await client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
-                {
-                    RequestType = RequestType.VerifyChallenge,
-                    RequestMessage = new VerifyChallengeMessage
-                    {
-                        Token = captchaResponse
-                    }.ToByteString()
-                }, false, false, false);
-
-                if (response == null)
                     return false;
+                }
+            }
 
+            var response = await client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
+            {
+                RequestType = RequestType.VerifyChallenge,
+                RequestMessage = new VerifyChallengeMessage
+                {
+                    Token = captchaResponse
+                }.ToByteString()
+            }, false, false, false);
+
+            if (response == null)
+                await Resolve(client, captchaResponse);
+            else
+            {
                 var verifyChallengeResponse = VerifyChallengeResponse.Parser.ParseFrom(response);
 
                 if (!verifyChallengeResponse.Success)
@@ -159,21 +165,13 @@ namespace PokemonGoGUI.Captcha
                     client.ClientManager.LogCaller(new LoggerEventArgs($"(CAPTCHA) Failed to resolve captcha, try resolved captcha by official app. ", LoggerTypes.Warning));
                     return false;
                 }
-                client.ClientManager.LogCaller(new LoggerEventArgs($"(CAPTCHA) Great!!! Captcha has been by passed",LoggerTypes.Success));
-                //resume session after solve
-                //client.ClientManager.UnPause();
-                if(client.ClientSession.State == POGOLib.Official.Net.SessionState.Paused)
-                    await client.ClientSession.ResumeAsync();
+                client.ClientManager.LogCaller(new LoggerEventArgs($"(CAPTCHA) Great!!! Captcha has been by passed", LoggerTypes.Success));
                 return verifyChallengeResponse.Success;
             }
-            catch (Exception ex)
-            {
-                client.ClientManager.LogCaller(new LoggerEventArgs("(CAPTCHA) error.", LoggerTypes.Exception, ex));
-                return false;
-            }
+            return false;
         }
 
-        private static async Task<string> GetCaptchaResposeByAntiCaptcha(Client client, string captchaUrl)
+        private static async Task<string> GetCaptchaResponseByAntiCaptcha(Client client, string captchaUrl)
         {
             bool solved = false;
             int retries = client.ClientManager.UserSettings.AutoCaptchaRetries;
@@ -181,6 +179,17 @@ namespace PokemonGoGUI.Captcha
 
             while (retries-- > 0 && !solved)
             {
+                //Check if other as resolved
+                if (Resolved)
+                    break;
+
+                //Break if accesstoken as changed
+                if (accessToken != client.ClientSession.AccessToken)
+                {
+                    client.ClientManager.LogCaller(new LoggerEventArgs("Captcha has been stopped for this AccessToken ", LoggerTypes.Captcha));
+                    break;
+                }
+
                 result = await AntiCaptchaClient.SolveCaptcha(client, captchaUrl,
                     client.ClientManager.UserSettings.AntiCaptchaAPIKey,
                     POKEMON_GO_GOOGLE_KEY,
@@ -196,8 +205,7 @@ namespace PokemonGoGUI.Captcha
             return String.Empty;
         }
 
-
-        private static async Task<string> GetCaptchaResposeBy2Captcha(Client client, string captchaUrl)
+        private static async Task<string> GetCaptchaResponseBy2Captcha(Client client, string captchaUrl)
         {
             bool solved = false;
             int retries = client.ClientManager.UserSettings.AutoCaptchaRetries;
@@ -205,6 +213,17 @@ namespace PokemonGoGUI.Captcha
 
             while (retries-- > 0 && !solved)
             {
+                //Check if other as resolved
+                if (Resolved)
+                    break;
+
+                //Break if accesstoken as changed
+                if (accessToken != client.ClientSession.AccessToken)
+                {
+                    client.ClientManager.LogCaller(new LoggerEventArgs("Captcha has been stopped for this AccessToken ", LoggerTypes.Captcha));
+                    break;
+                }
+
                 TwoCaptchaClient _client = new TwoCaptchaClient(client.ClientManager.UserSettings.TwoCaptchaAPIKey);
 
                 result = await _client.SolveRecaptchaV2(client, POKEMON_GO_GOOGLE_KEY, captchaUrl, string.Empty, ProxyType.HTTP);
@@ -218,7 +237,7 @@ namespace PokemonGoGUI.Captcha
             return String.Empty;
         }
 
-        public static string GetCaptchaResposeManually(Client client, string url)
+        public static string GetCaptchaResponseManually(Client client, string url)
         {
             if (!client.ClientManager.UserSettings.AllowManualCaptchaResolve) return null;
 

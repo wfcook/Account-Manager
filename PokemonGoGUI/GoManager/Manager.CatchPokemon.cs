@@ -67,7 +67,7 @@ namespace PokemonGoGUI.GoManager
             {
                 await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
 
-                return new MethodResult(); 
+                return new MethodResult();
             }
 
             MethodResult catchResult = await CatchPokemon(result.Data, iResponse.Data);
@@ -136,7 +136,7 @@ namespace PokemonGoGUI.GoManager
 
                 MethodResult catchResult = await CatchPokemon(result.Data, pokemon);
 
-                await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));            
+                await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
             }
 
             return new MethodResult
@@ -194,231 +194,197 @@ namespace PokemonGoGUI.GoManager
         //Catch lured pokemon
         private async Task<MethodResult> CatchPokemon(FortData fortData)
         {
-            try
+            var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
-                //Pause out of captcha loop to verifychallenge
-                if (WaitPaused())
+                RequestType = RequestType.DiskEncounter,
+                RequestMessage = new DiskEncounterMessage
                 {
-                    return new MethodResult();
-                }
+                    EncounterId = fortData.LureInfo.EncounterId,
+                    FortId = fortData.Id,
+                    GymLatDegrees = fortData.Latitude,
+                    GymLngDegrees = fortData.Longitude,
+                    PlayerLatitude = _client.ClientSession.Player.Latitude,
+                    PlayerLongitude = _client.ClientSession.Player.Longitude
+                }.ToByteString()
+            });
 
-                var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
-                {
-                    RequestType = RequestType.DiskEncounter,
-                    RequestMessage = new DiskEncounterMessage
+            if (response == null)
+                return new MethodResult();
+
+            DiskEncounterResponse eResponse = DiskEncounterResponse.Parser.ParseFrom(response);
+
+            switch (eResponse.Result)
+            {
+                case DiskEncounterResponse.Types.Result.Success:
+                    CatchPokemonResponse catchPokemonResponse = null;
+                    int attemptCount = 1;
+                    var berryUsed = false;
+
+                    do
                     {
-                        EncounterId = fortData.LureInfo.EncounterId,
-                        FortId = fortData.Id,
-                        GymLatDegrees = fortData.Latitude,
-                        GymLngDegrees = fortData.Longitude,
-                        PlayerLatitude = _client.ClientSession.Player.Latitude,
-                        PlayerLongitude = _client.ClientSession.Player.Longitude
-                    }.ToByteString()
-                });
+                        //Uses lowest capture probability
+                        float probability = eResponse.CaptureProbability.CaptureProbability_[0];
+                        ItemId pokeBall = GetBestBall(eResponse.PokemonData);
 
-                if (response == null)
-                    return new MethodResult();
-
-                DiskEncounterResponse eResponse = DiskEncounterResponse.Parser.ParseFrom(response);
-
-                switch(eResponse.Result)
-                {
-                    case DiskEncounterResponse.Types.Result.Success:
-                        CatchPokemonResponse catchPokemonResponse = null;
-                        int attemptCount = 1;
-                        var berryUsed = false;
-
-                        do
+                        if (pokeBall == ItemId.ItemUnknown)
                         {
-                            //Uses lowest capture probability
-                            float probability = eResponse.CaptureProbability.CaptureProbability_[0];
-                            ItemId pokeBall = GetBestBall(eResponse.PokemonData);
+                            LogCaller(new LoggerEventArgs("No pokeballs remaining (lure)", LoggerTypes.Warning));
 
-                            if (pokeBall == ItemId.ItemUnknown)
+                            return new MethodResult
                             {
-                                LogCaller(new LoggerEventArgs("No pokeballs remaining (lure)", LoggerTypes.Warning));
+                                Message = "No pokeballs remaining"
+                            };
+                        }
 
-                                return new MethodResult
-                                {
-                                    Message = "No pokeballs remaining"
-                                };
-                            }
+                        if (UserSettings.UseBerries)
+                        {
+                            bool isLowProbability = probability < 0.35;
+                            bool isHighCp = eResponse.PokemonData.Cp > 700;
+                            bool isHighPerfection = CalculateIVPerfection(eResponse.PokemonData) > 90;
 
-                            if (UserSettings.UseBerries)
+                            if (!berryUsed)
                             {
-                                bool isLowProbability = probability < 0.35;
-                                bool isHighCp = eResponse.PokemonData.Cp > 700;
-                                bool isHighPerfection = CalculateIVPerfection(eResponse.PokemonData) > 90;
-
-                                if (!berryUsed)
+                                if ((isLowProbability && isHighCp) || isHighPerfection)
                                 {
-                                    if ((isLowProbability && isHighCp) || isHighPerfection)
+                                    await UseBerry(fortData.LureInfo.EncounterId, fortData.Id, ItemId.ItemRazzBerry);
+                                    berryUsed = true;
+                                }
+                                else
+                                {
+                                    bool isHighProbability = probability > 0.65;
+                                    var catchSettings = UserSettings.CatchSettings.FirstOrDefault(x => x.Id == eResponse.PokemonData.PokemonId);
+                                    var usePinap = catchSettings != null && catchSettings.UsePinap;
+                                    if (isHighProbability && usePinap)
                                     {
-                                        await UseBerry(fortData.LureInfo.EncounterId, fortData.Id, ItemId.ItemRazzBerry);
+                                        await UseBerry(fortData.LureInfo.EncounterId, fortData.Id, ItemId.ItemPinapBerry);
                                         berryUsed = true;
                                     }
-                                    else
+                                    else if (new Random().Next(0, 100) < 50)
                                     {
-                                        bool isHighProbability = probability > 0.65;
-                                        var catchSettings = UserSettings.CatchSettings.FirstOrDefault(x => x.Id == eResponse.PokemonData.PokemonId);
-                                        var usePinap = catchSettings != null && catchSettings.UsePinap;
-                                        if (isHighProbability && usePinap)
-                                        {
-                                            await UseBerry(fortData.LureInfo.EncounterId, fortData.Id, ItemId.ItemPinapBerry);
-                                            berryUsed = true;
-                                        }
-                                        else if (new Random().Next(0, 100) < 50)
-                                        {
-                                            // IF we dont use razz neither use pinap, then we will use nanab randomly the 50% of times.
-                                            await UseBerry(fortData.LureInfo.EncounterId, fortData.Id, ItemId.ItemNanabBerry);
-                                            berryUsed = true;
-                                        }
+                                        // IF we dont use razz neither use pinap, then we will use nanab randomly the 50% of times.
+                                        await UseBerry(fortData.LureInfo.EncounterId, fortData.Id, ItemId.ItemNanabBerry);
+                                        berryUsed = true;
                                     }
                                 }
                             }
+                        }
 
-                            double reticuleSize = 1.95;
-                            bool hitInsideReticule = true;
+                        double reticuleSize = 1.95;
+                        bool hitInsideReticule = true;
 
-                            //Humanization
-                            if (UserSettings.EnableHumanization)
+                        //Humanization
+                        if (UserSettings.EnableHumanization)
+                        {
+                            reticuleSize = (double)_rand.Next(10, 195) / 100;
+                            hitInsideReticule = HitInsideReticle();
+                        }
+
+                        //End humanization
+                        var arPlusValues = new ARPlusEncounterValues();
+                        if (UserSettings.GetArBonus)
+                        {
+                            LogCaller(new LoggerEventArgs("Using AR Bonus Values", LoggerTypes.Debug));
+                            arPlusValues.Awareness = (float)UserSettings.ARBonusAwareness;
+                            arPlusValues.Proximity = (float)UserSettings.ARBonusProximity;
+                            arPlusValues.PokemonFrightened = false;
+                        }
+
+                        var catchresponse = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
+                        {
+                            RequestType = RequestType.CatchPokemon,
+                            RequestMessage = new CatchPokemonMessage
                             {
-                                reticuleSize = (double)_rand.Next(10, 195) / 100;
-                                hitInsideReticule = HitInsideReticle();
-                            }
+                                ArPlusValues = arPlusValues,
+                                EncounterId = fortData.LureInfo.EncounterId,
+                                HitPokemon = hitInsideReticule,
+                                NormalizedHitPosition = 1,
+                                NormalizedReticleSize = reticuleSize,
+                                Pokeball = pokeBall,
+                                SpawnPointId = fortData.Id,
+                                SpinModifier = 1
+                            }.ToByteString()
+                        });
 
-                            //End humanization
-                            var arPlusValues = new ARPlusEncounterValues();
-                            if (UserSettings.GetArBonus)
-                            {
-                                LogCaller(new LoggerEventArgs("Using AR Bonus Values", LoggerTypes.Debug));
-                                arPlusValues.Awareness = (float)UserSettings.ARBonusAwareness;
-                                arPlusValues.Proximity = (float)UserSettings.ARBonusProximity;
-                                arPlusValues.PokemonFrightened = false;
-                            }
+                        if (catchresponse == null)
+                            return new MethodResult();
 
-                            //Pause out of captcha loop to verifychallenge
-                            if (WaitPaused())
-                            {
-                                return new MethodResult();
-                            }
+                        catchPokemonResponse = CatchPokemonResponse.Parser.ParseFrom(catchresponse);
+                        string pokemon = String.Format("Name: {0}, CP: {1}, IV: {2:0.00}%", fortData.LureInfo.ActivePokemonId, eResponse.PokemonData.Cp, CalculateIVPerfection(eResponse.PokemonData));
+                        string pokeBallName = pokeBall.ToString().Replace("Item", "");
 
-                            var catchresponse = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
-                            {
-                                RequestType = RequestType.CatchPokemon,
-                                RequestMessage = new CatchPokemonMessage
+                        switch (catchPokemonResponse.Status)
+                        {
+                            case CatchPokemonResponse.Types.CatchStatus.CatchError:
+                                LogCaller(new LoggerEventArgs(String.Format("Unknown Error. {0}. Attempt #{1}. Status: {2}", pokemon, attemptCount, catchPokemonResponse.Status), LoggerTypes.Warning));
+                                continue;
+                            case CatchPokemonResponse.Types.CatchStatus.CatchEscape:
+                                LogCaller(new LoggerEventArgs(String.Format("Escaped ball. {0}. Attempt #{1}.", pokemon, attemptCount), LoggerTypes.PokemonEscape));
+                                berryUsed = false;
+                                continue;
+                            case CatchPokemonResponse.Types.CatchStatus.CatchFlee:
+                                LogCaller(new LoggerEventArgs(String.Format("Pokemon fled. {0}. Attempt #{1}", pokemon, attemptCount), LoggerTypes.PokemonFlee));
+                                continue;
+                            case CatchPokemonResponse.Types.CatchStatus.CatchMissed:
+                                LogCaller(new LoggerEventArgs(String.Format("Missed. {0}. Attempt #{1}. Status: {2}", pokemon, attemptCount, catchPokemonResponse.Status), LoggerTypes.Warning));
+                                continue;
+                            case CatchPokemonResponse.Types.CatchStatus.CatchSuccess:
+                                int expGained = catchPokemonResponse.CaptureAward.Xp.Sum();
+                                int candyGained = catchPokemonResponse.CaptureAward.Candy.Sum();
+
+                                Tracker.AddValues(1, 0);
+
+                                ExpIncrease(expGained);
+
+                                //_expGained += expGained;
+
+                                fortData.LureInfo = null;
+
+                                LogCaller(new LoggerEventArgs(String.Format("[Lured] Pokemon Caught. {0}. Exp {1}. Candy {2}. Attempt #{3}. Ball: {4}", pokemon, expGained, candyGained, attemptCount, pokeBallName), LoggerTypes.Success));
+
+                                Pokemon.Add(eResponse.PokemonData);
+
+                                return new MethodResult
                                 {
-                                    ArPlusValues = arPlusValues,
-                                    EncounterId = fortData.LureInfo.EncounterId,
-                                    HitPokemon = hitInsideReticule,
-                                    NormalizedHitPosition = 1,
-                                    NormalizedReticleSize = reticuleSize,
-                                    Pokeball = pokeBall,
-                                    SpawnPointId = fortData.Id,
-                                    SpinModifier = 1
-                                }.ToByteString()
-                            });
+                                    Message = "Pokemon caught",
+                                    Success = true
+                                };
+                        }
+                        ++attemptCount;
 
-                            if (catchresponse == null)
-                                return new MethodResult();
+                        await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+                    } while (catchPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchMissed || catchPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchEscape);
+                    break;
+                case DiskEncounterResponse.Types.Result.EncounterAlreadyFinished:
+                    return new MethodResult
+                    {
+                        Message = "Encounter not available"
+                    };
+                case DiskEncounterResponse.Types.Result.NotAvailable:
+                    return new MethodResult
+                    {
+                        Message = "Encounter not available"
+                    };
+                case DiskEncounterResponse.Types.Result.NotInRange:
+                    LogCaller(new LoggerEventArgs(String.Format("Lured encounter failed with response {0}", eResponse.Result), LoggerTypes.Warning));
+                    return new MethodResult
+                    {
+                        Message = "Encounter failed"
+                    };
+                case DiskEncounterResponse.Types.Result.PokemonInventoryFull:
+                    LogCaller(new LoggerEventArgs("Encounter failed. Pokemon inventory full", LoggerTypes.Warning));
 
-                            catchPokemonResponse = CatchPokemonResponse.Parser.ParseFrom(catchresponse);
-                            string pokemon = String.Format("Name: {0}, CP: {1}, IV: {2:0.00}%", fortData.LureInfo.ActivePokemonId, eResponse.PokemonData.Cp, CalculateIVPerfection(eResponse.PokemonData));
-                            string pokeBallName = pokeBall.ToString().Replace("Item", "");
+                    return new MethodResult
+                    {
+                        Message = "Encounter failed. Pokemon inventory full"
+                    };
+                case DiskEncounterResponse.Types.Result.Unknown:
+                    LogCaller(new LoggerEventArgs(String.Format("Lured encounter failed with response {0}", eResponse.Result), LoggerTypes.Warning));
 
-                            switch (catchPokemonResponse.Status)
-                            {
-                                case CatchPokemonResponse.Types.CatchStatus.CatchError:
-                                    LogCaller(new LoggerEventArgs(String.Format("Unknown Error. {0}. Attempt #{1}. Status: {2}", pokemon, attemptCount, catchPokemonResponse.Status), LoggerTypes.Warning));
-                                    continue;
-                                case CatchPokemonResponse.Types.CatchStatus.CatchEscape:
-                                    LogCaller(new LoggerEventArgs(String.Format("Escaped ball. {0}. Attempt #{1}.", pokemon, attemptCount), LoggerTypes.PokemonEscape));
-                                    berryUsed = false;
-                                    continue;
-                                case CatchPokemonResponse.Types.CatchStatus.CatchFlee:
-                                    LogCaller(new LoggerEventArgs(String.Format("Pokemon fled. {0}. Attempt #{1}", pokemon, attemptCount), LoggerTypes.PokemonFlee));
-                                    continue;
-                                case CatchPokemonResponse.Types.CatchStatus.CatchMissed:
-                                    LogCaller(new LoggerEventArgs(String.Format("Missed. {0}. Attempt #{1}. Status: {2}", pokemon, attemptCount, catchPokemonResponse.Status), LoggerTypes.Warning));
-                                    continue;
-                                case CatchPokemonResponse.Types.CatchStatus.CatchSuccess:
-                                    int expGained = catchPokemonResponse.CaptureAward.Xp.Sum();
-                                    int candyGained = catchPokemonResponse.CaptureAward.Candy.Sum();
-
-                                    Tracker.AddValues(1, 0);
-
-                                    ExpIncrease(expGained);
-
-                                    //_expGained += expGained;
-
-                                    fortData.LureInfo = null;
-
-                                    LogCaller(new LoggerEventArgs(String.Format("[Lured] Pokemon Caught. {0}. Exp {1}. Candy {2}. Attempt #{3}. Ball: {4}", pokemon, expGained, candyGained, attemptCount, pokeBallName), LoggerTypes.Success));
-
-                                    Pokemon.Add(eResponse.PokemonData);
-
-                                    return new MethodResult
-                                    {
-                                        Message = "Pokemon caught",
-                                        Success = true
-                                    };
-                            }
-                            ++attemptCount;
-
-                            await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
-                        } while (catchPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchMissed || catchPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchEscape);
-                        break;
-                    case DiskEncounterResponse.Types.Result.EncounterAlreadyFinished:
-                        return new MethodResult
-                        {
-                            Message = "Encounter not available"
-                        };
-                    case DiskEncounterResponse.Types.Result.NotAvailable:
-                        return new MethodResult
-                        {
-                            Message = "Encounter not available"
-                        };
-                    case DiskEncounterResponse.Types.Result.NotInRange:
-                        LogCaller(new LoggerEventArgs(String.Format("Lured encounter failed with response {0}", eResponse.Result), LoggerTypes.Warning));
-                        return new MethodResult
-                        {
-                            Message = "Encounter failed"
-                        };
-                    case DiskEncounterResponse.Types.Result.PokemonInventoryFull:
-                        LogCaller(new LoggerEventArgs("Encounter failed. Pokemon inventory full", LoggerTypes.Warning));
-
-                        return new MethodResult
-                        {
-                            Message = "Encounter failed. Pokemon inventory full"
-                        };
-                    case DiskEncounterResponse.Types.Result.Unknown:
-                        LogCaller(new LoggerEventArgs(String.Format("Lured encounter failed with response {0}", eResponse.Result), LoggerTypes.Warning));
-
-                        return new MethodResult
-                        {
-                            Message = "Encounter failed"
-                        };
-                }
+                    return new MethodResult
+                    {
+                        Message = "Encounter failed"
+                    };
             }
-            catch (ArgumentOutOfRangeException ex)
-            {
-                LogCaller(new LoggerEventArgs("Failed to catch lured pokemon due to error", LoggerTypes.Exception, ex));
-
-                return new MethodResult
-                {
-                    Message = "Failed to catch lured pokemon"
-                };
-            }
-            catch (Exception ex)
-            {
-                LogCaller(new LoggerEventArgs("Failed to catch lured pokemon due to error", LoggerTypes.Exception, ex));
-
-                return new MethodResult
-                {
-                    Message = "Failed to catch lured pokemon"
-                };
-            }
-
             return new MethodResult();
         }
 
@@ -427,12 +393,6 @@ namespace PokemonGoGUI.GoManager
             if (mapPokemon == null || mapPokemon.ExpirationTimestampMs >= DateTime.UtcNow.ToUnixTime())
             {
                 LogCaller(new LoggerEventArgs("Encounter expired....", LoggerTypes.Warning));
-                return new MethodResult<EncounterResponse>();
-            }
-
-            //Pause out of captcha loop to verifychallenge
-            if (WaitPaused())
-            {
                 return new MethodResult<EncounterResponse>();
             }
 
@@ -453,7 +413,7 @@ namespace PokemonGoGUI.GoManager
 
             EncounterResponse eResponse = EncounterResponse.Parser.ParseFrom(response);
 
-            switch(eResponse.Status)
+            switch (eResponse.Status)
             {
                 case EncounterResponse.Types.Status.EncounterAlreadyHappened:
                     return new MethodResult<EncounterResponse>
@@ -531,7 +491,7 @@ namespace PokemonGoGUI.GoManager
                                 + eResponse.WildPokemon?.TimeTillHiddenMs;
                 _spawnPointId = eResponse.WildPokemon?.SpawnPointId;
                 _encounterId = eResponse.WildPokemon?.EncounterId;
-                _pokemonType = "Normal";                   
+                _pokemonType = "Normal";
             }
             // Calling from CatchIncensePokemon
             else if (eResponse is IncenseEncounterResponse &&
@@ -544,190 +504,162 @@ namespace PokemonGoGUI.GoManager
                 _pokemonType = "Incense";
             }
 
-            try
+            CatchPokemonResponse catchPokemonResponse = null;
+            int attemptCount = 1;
+
+            do
             {
-                CatchPokemonResponse catchPokemonResponse = null;
-                int attemptCount = 1;
+                if (mapPokemon == null)
+                    return new MethodResult();
 
-                do
+                //Uses lowest capture probability
+                float probability = eResponse.CaptureProbability.CaptureProbability_[0];
+                ItemId pokeBall = GetBestBall(_encounteredPokemon);
+
+                if (pokeBall == ItemId.ItemUnknown)
                 {
-                    if (mapPokemon == null)
-                        return new MethodResult();
+                    LogCaller(new LoggerEventArgs("No pokeballs remaining (encounter)", LoggerTypes.Warning));
 
-                    //Uses lowest capture probability
-                    float probability = eResponse.CaptureProbability.CaptureProbability_[0];
-                    ItemId pokeBall = GetBestBall(_encounteredPokemon);
-
-                    if (pokeBall == ItemId.ItemUnknown)
+                    return new MethodResult
                     {
-                        LogCaller(new LoggerEventArgs("No pokeballs remaining (encounter)", LoggerTypes.Warning));
+                        Message = "No pokeballs remaining"
+                    };
+                }
+
+                bool isLowProbability = probability < 0.40;
+                bool isHighCp = _encounteredPokemon.Cp > 800;
+                bool isHighPerfection = CalculateIVPerfection(_encounteredPokemon) > 95;
+
+                if (UserSettings.UseBerries)
+                {
+                    if ((isLowProbability && isHighCp) || isHighPerfection)
+                    {
+                        await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+
+                        await UseBerry(mapPokemon, ItemId.ItemRazzBerry);
+                    }
+                    else
+                    {
+                        bool isHighProbability = probability > 0.65;
+                        if (isHighProbability)
+                            await UseBerry(mapPokemon, ItemId.ItemPinapBerry);
+                        else if (new Random().Next(0, 100) < 50)
+                        {
+                            // IF we dont use razz neither use pinap, then we will use nanab randomly the 50% of times.
+                            await UseBerry(mapPokemon, ItemId.ItemNanabBerry);
+                        }
+                    }
+                }
+
+                await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+
+                double reticuleSize = 1.95;
+                bool hitInsideReticule = true;
+
+                //Humanization
+                if (UserSettings.EnableHumanization)
+                {
+                    reticuleSize = (double)_rand.Next(10, 195) / 100;
+                    hitInsideReticule = HitInsideReticle();
+                }
+                var arPlusValues = new ARPlusEncounterValues();
+                if (UserSettings.GetArBonus)
+                {
+                    LogCaller(new LoggerEventArgs("Using AR Bonus Values", LoggerTypes.Debug));
+                    arPlusValues.Awareness = (float)UserSettings.ARBonusAwareness;
+                    arPlusValues.Proximity = (float)UserSettings.ARBonusProximity;
+                    arPlusValues.PokemonFrightened = false;
+                }
+
+                var catchresponse = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
+                {
+                    RequestType = RequestType.CatchPokemon,
+                    RequestMessage = new CatchPokemonMessage
+                    {
+                        ArPlusValues = arPlusValues,
+                        EncounterId = _encounterId,
+                        HitPokemon = hitInsideReticule,
+                        NormalizedHitPosition = 1,
+                        NormalizedReticleSize = reticuleSize,
+                        Pokeball = pokeBall,
+                        SpawnPointId = _spawnPointId,
+                        SpinModifier = 1
+                    }.ToByteString()
+                });
+
+                if (catchresponse == null)
+                    return new MethodResult();
+
+                catchPokemonResponse = CatchPokemonResponse.Parser.ParseFrom(catchresponse);
+
+                string pokemon = String.Format("Name: {0}, CP: {1}, IV: {2:0.00}%", mapPokemon.PokemonId, _encounteredPokemon.Cp, CalculateIVPerfection(_encounteredPokemon));
+                string pokeBallName = pokeBall.ToString().Replace("Item", "");
+
+                switch (catchPokemonResponse.Status)
+                {
+                    case CatchPokemonResponse.Types.CatchStatus.CatchError:
+                        LogCaller(new LoggerEventArgs(String.Format("Unknown Error. {0}. Attempt #{1}. Status: {2}", pokemon, attemptCount, catchPokemonResponse.Status), LoggerTypes.Warning));
+                        continue;
+                    case CatchPokemonResponse.Types.CatchStatus.CatchEscape:
+                        //If we get this response, means we're good
+                        _fleeingPokemonResponses = 0;
+                        _potentialPokemonBan = false;
+
+                        if (AccountState == Enums.AccountState.SoftBan)
+                        {
+                            AccountState = Enums.AccountState.Good;
+
+                            LogCaller(new LoggerEventArgs("Pokemon ban was lifted", LoggerTypes.Info));
+                        }
+
+                        LogCaller(new LoggerEventArgs(String.Format("Escaped ball. {0}. Attempt #{1}. Ball: {2}", pokemon, attemptCount, pokeBallName), LoggerTypes.PokemonEscape));
+                        continue;
+                    case CatchPokemonResponse.Types.CatchStatus.CatchFlee:
+                        ++_fleeingPokemonResponses;
+                        LogCaller(new LoggerEventArgs(String.Format("Pokemon fled. {0}. Attempt #{1}. Ball: {2}", pokemon, attemptCount, pokeBallName), LoggerTypes.PokemonFlee));
+                        continue;
+                    case CatchPokemonResponse.Types.CatchStatus.CatchMissed:
+                        LogCaller(new LoggerEventArgs(String.Format("Missed. {0}. Attempt #{1}. Status: {2}", pokemon, attemptCount, catchPokemonResponse.Status), LoggerTypes.Warning));
+                        continue;
+                    case CatchPokemonResponse.Types.CatchStatus.CatchSuccess:
+                        //Reset data
+                        _fleeingPokemonResponses = 0;
+                        Tracker.AddValues(1, 0);
+                        _potentialPokemonBan = false;
+
+                        int expGained = catchPokemonResponse.CaptureAward.Xp.Sum();
+                        int candyGained = catchPokemonResponse.CaptureAward.Candy.Sum();
+
+                        ExpIncrease(expGained);
+
+                        //_expGained += expGained;
+
+                        //NOTE: To be sure that we don't repeat this encounter, we will delete it from the cell
+                        var cell = _client.ClientSession.Map.Cells.FirstOrDefault(x => x.CatchablePokemons.FirstOrDefault(y => y.EncounterId == mapPokemon.EncounterId) != null);
+                        if (cell != null)
+                        {
+                            var mapPokemonFound = cell.CatchablePokemons.FirstOrDefault(y => y.EncounterId == mapPokemon.EncounterId);
+                            if (mapPokemonFound != null)
+                            {
+                                cell.CatchablePokemons.Remove(mapPokemonFound);
+                            }
+                        }
+
+                        LogCaller(new LoggerEventArgs(String.Format("[{0}] Pokemon Caught. {1}. Exp {2}. Candy: {3}. Attempt #{4}. Ball: {5}", _pokemonType, pokemon, expGained, candyGained, attemptCount, pokeBallName), LoggerTypes.Success));
+
+                        Pokemon.Add(_encounteredPokemon);
 
                         return new MethodResult
                         {
-                            Message = "No pokeballs remaining"
+                            Message = "Pokemon caught",
+                            Success = true
                         };
-                    }
+                }
 
-                    bool isLowProbability = probability < 0.40;
-                    bool isHighCp = _encounteredPokemon.Cp > 800;
-                    bool isHighPerfection = CalculateIVPerfection(_encounteredPokemon) > 95;
+                ++attemptCount;
 
-                    if (UserSettings.UseBerries)
-                    {
-                        if ((isLowProbability && isHighCp) || isHighPerfection)
-                        {
-                            await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
-
-                            await UseBerry(mapPokemon, ItemId.ItemRazzBerry);
-                        }
-                        else
-                        {
-                            bool isHighProbability = probability > 0.65;
-                            if (isHighProbability)
-                                await UseBerry(mapPokemon, ItemId.ItemPinapBerry);
-                            else if (new Random().Next(0, 100) < 50)
-                            {
-                                // IF we dont use razz neither use pinap, then we will use nanab randomly the 50% of times.
-                                await UseBerry(mapPokemon, ItemId.ItemNanabBerry);
-                            }
-                        }
-                    }
-
-                    await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
-
-                    double reticuleSize = 1.95;
-                    bool hitInsideReticule = true;
-
-                    //Humanization
-                    if (UserSettings.EnableHumanization)
-                    {
-                        reticuleSize = (double)_rand.Next(10, 195) / 100;
-                        hitInsideReticule = HitInsideReticle();
-                    }
-                    var arPlusValues = new ARPlusEncounterValues();
-                    if (UserSettings.GetArBonus)
-                    {
-                        LogCaller(new LoggerEventArgs("Using AR Bonus Values", LoggerTypes.Debug));
-                        arPlusValues.Awareness = (float)UserSettings.ARBonusAwareness;
-                        arPlusValues.Proximity = (float)UserSettings.ARBonusProximity;
-                        arPlusValues.PokemonFrightened = false;
-                    }
-
-                    //Pause out of captcha loop to verifychallenge
-                    if (WaitPaused())
-                    {
-                        return new MethodResult();
-                    }
-
-                    var catchresponse = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
-                    {
-                        RequestType = RequestType.CatchPokemon,
-                        RequestMessage = new CatchPokemonMessage
-                        {
-                            ArPlusValues = arPlusValues,
-                            EncounterId = _encounterId,
-                            HitPokemon = hitInsideReticule,
-                            NormalizedHitPosition = 1,
-                            NormalizedReticleSize = reticuleSize,
-                            Pokeball = pokeBall,
-                            SpawnPointId = _spawnPointId,
-                            SpinModifier = 1
-                        }.ToByteString()
-                    });
-
-                    if (catchresponse == null)
-                        return new MethodResult();
-
-                    catchPokemonResponse = CatchPokemonResponse.Parser.ParseFrom(catchresponse);
- 
-                    string pokemon = String.Format("Name: {0}, CP: {1}, IV: {2:0.00}%", mapPokemon.PokemonId, _encounteredPokemon.Cp, CalculateIVPerfection(_encounteredPokemon));
-                    string pokeBallName = pokeBall.ToString().Replace("Item", "");
-
-                    switch(catchPokemonResponse.Status)
-                    {
-                        case CatchPokemonResponse.Types.CatchStatus.CatchError:
-                            LogCaller(new LoggerEventArgs(String.Format("Unknown Error. {0}. Attempt #{1}. Status: {2}", pokemon, attemptCount, catchPokemonResponse.Status), LoggerTypes.Warning));
-                            continue;
-                        case CatchPokemonResponse.Types.CatchStatus.CatchEscape:
-                            //If we get this response, means we're good
-                            _fleeingPokemonResponses = 0;
-                            _potentialPokemonBan = false;
-
-                            if (AccountState == Enums.AccountState.SoftBan)
-                            {
-                                AccountState = Enums.AccountState.Good;
-
-                                LogCaller(new LoggerEventArgs("Pokemon ban was lifted", LoggerTypes.Info));
-                            }
-
-                            LogCaller(new LoggerEventArgs(String.Format("Escaped ball. {0}. Attempt #{1}. Ball: {2}", pokemon, attemptCount, pokeBallName), LoggerTypes.PokemonEscape));
-                            continue;
-                        case CatchPokemonResponse.Types.CatchStatus.CatchFlee:
-                            ++_fleeingPokemonResponses;
-                            LogCaller(new LoggerEventArgs(String.Format("Pokemon fled. {0}. Attempt #{1}. Ball: {2}", pokemon, attemptCount, pokeBallName), LoggerTypes.PokemonFlee));
-                            continue;
-                        case CatchPokemonResponse.Types.CatchStatus.CatchMissed:
-                            LogCaller(new LoggerEventArgs(String.Format("Missed. {0}. Attempt #{1}. Status: {2}", pokemon, attemptCount, catchPokemonResponse.Status), LoggerTypes.Warning));
-                            continue;
-                        case CatchPokemonResponse.Types.CatchStatus.CatchSuccess:
-                            //Reset data
-                            _fleeingPokemonResponses = 0;
-                            Tracker.AddValues(1, 0);
-                            _potentialPokemonBan = false;
-
-                            int expGained = catchPokemonResponse.CaptureAward.Xp.Sum();
-                            int candyGained = catchPokemonResponse.CaptureAward.Candy.Sum();
-
-                            ExpIncrease(expGained);
-
-                            //_expGained += expGained;
-
-                            //NOTE: To be sure that we don't repeat this encounter, we will delete it from the cell
-                            var cell = _client.ClientSession.Map.Cells.FirstOrDefault(x => x.CatchablePokemons.FirstOrDefault(y => y.EncounterId == mapPokemon.EncounterId) != null);
-                            if (cell != null)
-                            {
-                                var mapPokemonFound = cell.CatchablePokemons.FirstOrDefault(y => y.EncounterId == mapPokemon.EncounterId);
-                                if (mapPokemonFound != null)
-                                {
-                                    cell.CatchablePokemons.Remove(mapPokemonFound);
-                                }
-                            }
-
-                            LogCaller(new LoggerEventArgs(String.Format("[{0}] Pokemon Caught. {1}. Exp {2}. Candy: {3}. Attempt #{4}. Ball: {5}", _pokemonType, pokemon, expGained, candyGained, attemptCount, pokeBallName), LoggerTypes.Success));
-
-                            Pokemon.Add(_encounteredPokemon);
-
-                            return new MethodResult
-                            {
-                                Message = "Pokemon caught",
-                                Success = true
-                            };
-                    }
-
-                    ++attemptCount;
-
-                    await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
-                } while (catchPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchMissed || catchPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchEscape);
-            }
-            catch (ArgumentOutOfRangeException ex)
-            {
-                LogCaller(new LoggerEventArgs("Failed to catch pokemon due to error", LoggerTypes.Exception, ex));
-
-                return new MethodResult
-                {
-                    Message = "Failed to catch pokemon"
-                };
-            }
-            catch (Exception ex)
-            {
-                LogCaller(new LoggerEventArgs("Failed to catch pokemon due to error", LoggerTypes.Exception, ex));
-
-                return new MethodResult
-                {
-                    Message = "Failed to catch pokemon",
-                };
-            }
-
+                await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+            } while (catchPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchMissed || catchPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchEscape);
             return new MethodResult();
         }
 
@@ -768,7 +700,7 @@ namespace PokemonGoGUI.GoManager
 
             return catchSettings.Catch;
         }
-        
+
         private ItemId GetBestBall(PokemonData pokemonData)
         {
             if (Items == null)
@@ -853,57 +785,43 @@ namespace PokemonGoGUI.GoManager
                 return;
             }
 
-            try
+            var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
-                //Pause out of captcha loop to verifychallenge
-                if (WaitPaused())
+                RequestType = RequestType.UseItemEncounter,
+                RequestMessage = new UseItemEncounterMessage
                 {
-                    return;
-                }
+                    EncounterId = encounterId,
+                    Item = berryData.ItemId,
+                    SpawnPointGuid = spawnId
+                }.ToByteString()
+            });
 
-                var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
-                {
-                    RequestType = RequestType.UseItemEncounter,
-                    RequestMessage = new UseItemEncounterMessage
-                    {
-                        EncounterId = encounterId,
-                        Item = berryData.ItemId,
-                        SpawnPointGuid = spawnId
-                    }.ToByteString()
-                });
+            if (response == null)
+                return;
 
-                if (response == null)
-                    return;
+            UseItemEncounterResponse useItemEncounterResponse = UseItemEncounterResponse.Parser.ParseFrom(response);
 
-                UseItemEncounterResponse useItemEncounterResponse = UseItemEncounterResponse.Parser.ParseFrom(response);
-
-                switch (useItemEncounterResponse.Status)
-                {
-                    case UseItemEncounterResponse.Types.Status.ActiveItemExists:
-                        LogCaller(new LoggerEventArgs("Faill: " + useItemEncounterResponse.Status, LoggerTypes.Debug));
-                        break;
-                    case UseItemEncounterResponse.Types.Status.AlreadyCompleted:
-                        LogCaller(new LoggerEventArgs("Faill: " + useItemEncounterResponse.Status, LoggerTypes.Debug));
-                        break;
-                    case UseItemEncounterResponse.Types.Status.InvalidItemCategory:
-                        LogCaller(new LoggerEventArgs("Faill: " + useItemEncounterResponse.Status, LoggerTypes.Debug));
-                        break;
-                    case UseItemEncounterResponse.Types.Status.NoItemInInventory:
-                        LogCaller(new LoggerEventArgs("Faill: " + useItemEncounterResponse.Status, LoggerTypes.Debug));
-                        break;
-                    case UseItemEncounterResponse.Types.Status.Success:
-                        int remaining = berryData.Count - 1;
-                        berryData.Count = remaining;
-                        LogCaller(new LoggerEventArgs(String.Format("Successfully used {0}. Remaining: {1}", berryData.ItemId.ToString().Replace("Item",""), remaining), LoggerTypes.Success));
-
-                        await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
-                        break;
-                }
-            }
-            catch (Exception ex1)
+            switch (useItemEncounterResponse.Status)
             {
-                LogCaller(new LoggerEventArgs(String.Format("Failed using berry {0}. Remaining: {1}", berryData.ItemId, berryData.Count), LoggerTypes.Warning));
-                LogCaller(new LoggerEventArgs(String.Format("Exception Message:" + ex1.Message), LoggerTypes.Debug));
+                case UseItemEncounterResponse.Types.Status.ActiveItemExists:
+                    LogCaller(new LoggerEventArgs("Faill: " + useItemEncounterResponse.Status, LoggerTypes.Debug));
+                    break;
+                case UseItemEncounterResponse.Types.Status.AlreadyCompleted:
+                    LogCaller(new LoggerEventArgs("Faill: " + useItemEncounterResponse.Status, LoggerTypes.Debug));
+                    break;
+                case UseItemEncounterResponse.Types.Status.InvalidItemCategory:
+                    LogCaller(new LoggerEventArgs("Faill: " + useItemEncounterResponse.Status, LoggerTypes.Debug));
+                    break;
+                case UseItemEncounterResponse.Types.Status.NoItemInInventory:
+                    LogCaller(new LoggerEventArgs("Faill: " + useItemEncounterResponse.Status, LoggerTypes.Debug));
+                    break;
+                case UseItemEncounterResponse.Types.Status.Success:
+                    int remaining = berryData.Count - 1;
+                    berryData.Count = remaining;
+                    LogCaller(new LoggerEventArgs(String.Format("Successfully used {0}. Remaining: {1}", berryData.ItemId.ToString().Replace("Item", ""), remaining), LoggerTypes.Success));
+
+                    await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+                    break;
             }
         }
 
@@ -924,18 +842,6 @@ namespace PokemonGoGUI.GoManager
         //Encounter Incense
         private async Task<MethodResult<IncenseEncounterResponse>> EncounterIncensePokemon(MapPokemon mapPokemon)
         {
-            /*if (mapPokemon == null || mapPokemon.ExpirationTimestampMs >= DateTime.UtcNow.ToUnixTime())
-            {
-                LogCaller(new LoggerEventArgs("Encounter expired....", LoggerTypes.Warning));
-                return new MethodResult<IncenseEncounterResponse>();
-            }*/
-
-            //Pause out of captcha loop to verifychallenge
-            if (WaitPaused())
-            {
-                return new MethodResult<IncenseEncounterResponse>();
-            }
-
             var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
                 RequestType = RequestType.IncenseEncounter,
