@@ -620,7 +620,7 @@ namespace POGOLib.Official.Net
                                 return await PerformRemoteProcedureCallAsync(requestEnvelope);
                             case ResponseEnvelope.Types.StatusCode.BadRequest:
                                 // Your account may be banned! please try from the official client.
-                                throw new APIBadRequestException("BAD REQUEST \r\n" + JsonConvert.SerializeObject(requestEnvelope));
+                                throw new APIBadRequestException("BAD REQUEST");
                             case ResponseEnvelope.Types.StatusCode.SessionInvalidated:
                                 throw new SessionInvalidatedException("SESSION INVALIDATED EXCEPTION");
                             case ResponseEnvelope.Types.StatusCode.Unknown:

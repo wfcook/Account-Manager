@@ -2,7 +2,7 @@
 
 namespace POGOLib.Official.Exceptions
 {
-    internal class SessionUnknowException : Exception
+    public class SessionUnknowException : Exception
     {
         public SessionUnknowException()
         {

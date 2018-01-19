@@ -19,6 +19,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using POGOLib.Official.Util.Hash.PokeHash;
 using System.Windows.Forms;
+using POGOLib.Official.Exceptions;
 
 namespace PokemonGoGUI.GoManager
 {
@@ -79,12 +80,6 @@ namespace PokemonGoGUI.GoManager
         {
             LogCaller(new LoggerEventArgs("Attempting to login ...", LoggerTypes.Debug));
             AccountState = AccountState.Conecting;
- 
-            //Pause out of captcha loop to verifychallenge
-            if (WaitPaused())
-            {
-                return new MethodResult();
-            }
 
             MethodResult result = await _client.DoLogin(this);
             LogCaller(new LoggerEventArgs(result.Message, LoggerTypes.Debug));
@@ -232,7 +227,7 @@ namespace PokemonGoGUI.GoManager
             }
         }
 
-        /*private bool WaitPaused()
+        private bool WaitPaused()
         {
             if (_isPaused)
             {
@@ -245,7 +240,7 @@ namespace PokemonGoGUI.GoManager
             }
 
             return false;
-        }*/
+        }
 
         private bool CheckTime()
         {
@@ -512,10 +507,7 @@ namespace PokemonGoGUI.GoManager
 
                     _failedInventoryReponses = 0;
 
-                    if (WaitPaused())
-                    {
-                        continue;
-                    }
+                    WaitPaused();
 
                     //End startup phase
                     StartingUp = false;
@@ -843,21 +835,40 @@ namespace PokemonGoGUI.GoManager
                         }
                     }
                 }
-                catch (ArgumentOutOfRangeException)// ex
+                catch (APIBadRequestException)// ex
                 {
-                    LogCaller(new LoggerEventArgs("Skipping request ...", LoggerTypes.Warning));
+                    LogCaller(new LoggerEventArgs("API Bad Request, continue ...", LoggerTypes.Warning));
+                    continue;
+                }
+                catch (InvalidPlatformException)// ex
+                {
+                    LogCaller(new LoggerEventArgs("Invalid Platform, continue  ...", LoggerTypes.Warning));
+                    continue;
+                }
+                catch (SessionInvalidatedException)// ex
+                {
+                    LogCaller(new LoggerEventArgs("Session Invalidated, continue ...", LoggerTypes.Warning));
                     continue;
                 }
                 catch (PokeHashException ex)
                 {
                     AccountState = AccountState.HashIssues;
-                    LogCaller(new LoggerEventArgs("Hash service exception occured. Restarting ...", LoggerTypes.Exception, ex));
-                    _firstRun = true;
+                    LogCaller(new LoggerEventArgs("Hash service exception occured, continue ...", LoggerTypes.Exception, ex));
+                    continue;
+                }
+                catch (SessionUnknowException)// ex
+                {
+                    AccountState = AccountState.Unknown;
+                    LogCaller(new LoggerEventArgs("Skipping request. Restarting ...", LoggerTypes.Warning));
+                }
+                catch (ArgumentOutOfRangeException)// ex
+                {
+                    AccountState = AccountState.Unknown;
+                    LogCaller(new LoggerEventArgs("Skipping request. Restarting ...", LoggerTypes.Warning));
                 }
                 catch (Exception ex)
                 {
                     LogCaller(new LoggerEventArgs("Unknown exception occured. Restarting ...", LoggerTypes.Exception, ex));
-                    _firstRun = true;
                 }
 
                 #endregion
