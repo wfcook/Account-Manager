@@ -42,6 +42,7 @@ namespace PokemonGoGUI
         public GetPlayerMessage.Types.PlayerLocale PlayerLocale;
         private DeviceWrapper ClientDeviceWrapper;
         public Manager ClientManager;
+        private event EventHandler<int> OnPokehashSleeping;
 
         public Client()
         {
@@ -122,7 +123,7 @@ namespace PokemonGoGUI
                 // Used on Windows phone background app
                 //((PokeHashHasher)Configuration.Hasher).PokehashSleeping += OnPokehashSleeping;
             }
-            // *****
+            // */
 
             ILoginProvider loginProvider;
 
@@ -348,7 +349,6 @@ namespace PokemonGoGUI
                 ClientManager.RemoveProxy();
                 msgStr = "Argument Null Exception.";
             }
-
             catch (PokeHashException phex)
             {
                 ClientManager.AccountState = AccountState.HashIssues;
@@ -431,8 +431,6 @@ namespace PokemonGoGUI
                 ClientManager.LogCaller(new LoggerEventArgs("LocalConfigVersion could not be saved sucessfully", LoggerTypes.Warning, ex1));
             }
         }
-
-        private event EventHandler<int> OnPokehashSleeping;
 
         private void PokehashSleeping(object sender, int sleepTime)
         {

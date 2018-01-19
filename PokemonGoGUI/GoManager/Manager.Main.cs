@@ -449,9 +449,9 @@ namespace PokemonGoGUI.GoManager
                             await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
                         }
 
-                        if (!PlayerData.TutorialState.Contains(TutorialState.GymTutorial) && Level >= 5)
+                        if (!PlayerData.TutorialState.Contains(TutorialState.GymTutorial) && Level >= 5 && !string.IsNullOrEmpty(UserSettings.DefaultTeam))
                         {
-                            if (PlayerData.Team != TeamColor.Neutral)
+                            if (PlayerData.Team == TeamColor.Neutral)
                             {
                                 TeamColor team = TeamColor.Neutral;
 

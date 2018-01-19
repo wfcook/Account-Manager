@@ -22,6 +22,7 @@ using POGOLib.Official.Extensions;
 using POGOProtos.Map.Pokemon;
 using POGOLib.Official.Exceptions;
 using Newtonsoft.Json;
+using POGOLib.Official.Util.Hash;
 
 namespace POGOLib.Official.Net
 {
@@ -164,7 +165,7 @@ namespace POGOLib.Official.Net
                 return false;
             }
 
-            await DownloadRemoteConfig();        
+            await DownloadRemoteConfig();
 
             if (manageResources)
             {
@@ -497,9 +498,9 @@ namespace POGOLib.Official.Net
                     ByteString ret;
                     _rpcResponses.TryRemove(requestEnvelope, out ret);
                     return ret;
-                } 
+                }
                 catch (ArgumentOutOfRangeException)
-                {                  
+                {
                     return null;
                 }
                 finally
@@ -583,42 +584,8 @@ namespace POGOLib.Official.Net
                             // TODO: Make cleaner to reduce duplicate code with the GetRequestEnvelopeAsync method.
                             case ResponseEnvelope.Types.StatusCode.InvalidAuthToken:
                                 _session.Logger.Debug("Received StatusCode 102, reauthenticating.");
-
-                                _session.AccessToken.Expire();
-                                await _session.Reauthenticate();
-
-                                // Apply new token.
-                                requestEnvelope.AuthTicket = null;
-                                requestEnvelope.AuthInfo = new RequestEnvelope.Types.AuthInfo
-                                {
-                                    Provider = _session.AccessToken.ProviderID,
-                                    Token = new RequestEnvelope.Types.AuthInfo.Types.JWT
-                                    {
-                                        Contents = _session.AccessToken.Token,
-                                        Unknown2 = 59
-                                    }
-                                };
-
-                                // Clear all PlatformRequests.
-                                requestEnvelope.PlatformRequests.Clear();
-
-                                // Apply new UnknownPtr8.
-                                var plat8Message = new UnknownPtr8Request()
-                                {
-                                    Message = _mapKey
-                                };
-
-                                requestEnvelope.PlatformRequests.Add(new RequestEnvelope.Types.PlatformRequest()
-                                {
-                                    Type = PlatformRequestType.UnknownPtr8,
-                                    RequestMessage = plat8Message.ToByteString()
-                                });
-
-                                // Apply new PlatformRequests to envelope.
-                                requestEnvelope.PlatformRequests.Add(await _rpcEncryption.GenerateSignatureAsync(requestEnvelope));
-
                                 // Re-send envelope.
-                                return await PerformRemoteProcedureCallAsync(requestEnvelope);
+                                return await PerformRemoteProcedureCallAsync(await RequestEnvelopeWithNewAccessToken(requestEnvelope));
                             case ResponseEnvelope.Types.StatusCode.BadRequest:
                                 // Your account may be banned! please try from the official client.
                                 throw new APIBadRequestException("BAD REQUEST");
@@ -920,9 +887,9 @@ namespace POGOLib.Official.Net
             var local_config_version = new DownloadRemoteConfigVersionResponse();
 
             if (_session.Templates.LocalConfigVersion != null)
-               local_config_version = _session.Templates.LocalConfigVersion;
-            
-            if ( _session.Templates.ItemTemplates != null  && (_session.Templates.ItemTemplatesTimestampMs <= local_config_version.ItemTemplatesTimestampMs))
+                local_config_version = _session.Templates.LocalConfigVersion;
+
+            if (_session.Templates.ItemTemplates != null && (_session.Templates.ItemTemplatesTimestampMs <= local_config_version.ItemTemplatesTimestampMs))
                 return;
 
             do
@@ -1029,8 +996,9 @@ namespace POGOLib.Official.Net
         private async Task GetDownloadURLs(string[] toCheck)
         {
             var dowloadUrls = new List<POGOProtos.Data.DownloadUrlEntry>();
-            if (_session.Templates.DownloadUrls != null) {
-                    return;
+            if (_session.Templates.DownloadUrls != null)
+            {
+                return;
             }
             var toDownload = new List<string>();
 
@@ -1066,6 +1034,46 @@ namespace POGOLib.Official.Net
             {
                 throw new NullReferenceException(nameof(response));
             }
+        }
+
+        public async Task<RequestEnvelope> RequestEnvelopeWithNewAccessToken(RequestEnvelope requestEnvelope)
+        {
+            _session.AccessToken.Expire();
+            await _session.Reauthenticate();
+
+            // Apply new token.
+            requestEnvelope.AuthTicket = null;
+            requestEnvelope.AuthInfo = new RequestEnvelope.Types.AuthInfo
+            {
+                Provider = _session.AccessToken.ProviderID,
+                Token = new RequestEnvelope.Types.AuthInfo.Types.JWT
+                {
+                    Contents = _session.AccessToken.Token,
+                    Unknown2 = 59
+                }
+            };
+            requestEnvelope.AuthTicket = _session.AccessToken.AuthTicket;
+
+            // Clear all PlatformRequests.
+            requestEnvelope.PlatformRequests.Clear();
+
+            // Apply new UnknownPtr8.
+            if (Configuration.Hasher.AppVersion > 4500)
+            {
+                var plat8Message = new UnknownPtr8Request()
+                {
+                    Message = _mapKey
+                };
+
+                requestEnvelope.PlatformRequests.Add(new RequestEnvelope.Types.PlatformRequest()
+                {
+                    Type = PlatformRequestType.UnknownPtr8,
+                    RequestMessage = plat8Message.ToByteString()
+                });
+            }
+            // Apply new PlatformRequests to envelope.
+            requestEnvelope.PlatformRequests.Add(await _rpcEncryption.GenerateSignatureAsync(requestEnvelope));
+            return requestEnvelope;
         }
     }
 }

@@ -12,7 +12,7 @@ namespace POGOLib.Official.Util.Hash
     ///     Android version: 0.45.0
     ///     IOS version: 1.15.0
     /// </summary>
-    internal class LegacyHasher : IHasher
+    public class LegacyHasher : IHasher
     {
         public Version PokemonVersion { get; } = new Version("0.45.0");
         public uint AppVersion { get; } = 4500;

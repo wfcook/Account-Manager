@@ -19,6 +19,7 @@ using POGOProtos.Networking.Responses;
 using System.Diagnostics;
 using POGOLib.Official.Net;
 using POGOLib.Official.Net.Authentication.Data;
+using PokemonGoGUI.Enums;
 
 namespace PokemonGoGUI.Captcha
 {
@@ -26,7 +27,7 @@ namespace PokemonGoGUI.Captcha
     {
         const string POKEMON_GO_GOOGLE_KEY = "6LeeTScTAAAAADqvhqVMhPpr_vB9D364Ia-1dSgK";
         private AccessToken accessToken;
-        private bool Resolved = false;
+        public bool Resolved = false;
 
         public async Task<bool> SolveCaptcha(Client client, string captchaUrl)
         {
@@ -85,7 +86,6 @@ namespace PokemonGoGUI.Captcha
                 }
             }
 
-            //captchaRespose = "";
             if (!Resolved)
             {
                 if (client.ClientManager.UserSettings.PlaySoundOnCaptcha)

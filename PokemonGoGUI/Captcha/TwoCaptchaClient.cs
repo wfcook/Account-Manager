@@ -62,11 +62,15 @@ namespace PokemonGoGUI.Captcha
                     {
                         if (response.Substring(0, 3) == "OK|")
                         {
-                            string captchaID = response.Remove(0, 3);
+                           string captchaID = response.Remove(0, 3);
+
                             client.ClientManager.LogCaller(new LoggerEventArgs($"Captcha has been sent to 2Captcha, Your captcha ID :  {captchaID}", LoggerTypes.Info));
 
                             for (int i = 0; i < 29; i++)
                             {
+                                if (client.ClientManager.CaptchaSolver.Resolved)
+                                    return string.Empty;
+ 
                                 WebRequest getAnswer = WebRequest.Create("http://2captcha.com/res.php?key=" + APIKey + "&action=get&id=" + captchaID);
 
                                 using (WebResponse answerResp = getAnswer.GetResponse())
@@ -91,7 +95,6 @@ namespace PokemonGoGUI.Captcha
                                     }
                                     client.ClientManager.LogCaller(new LoggerEventArgs($"Waiting response captcha from 2Captcha workers...", LoggerTypes.Captcha));
                                 }
-
                                 await Task.Delay(3000);
                             }
                             return string.Empty;
