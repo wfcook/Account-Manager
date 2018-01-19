@@ -68,7 +68,7 @@ namespace PokemonGoGUI.Captcha
 
                             for (int i = 0; i < 29; i++)
                             {
-                                if (client.ClientManager.AccountState != AccountState.CaptchaReceived)
+                                if (client.ClientManager.AccountState != AccountState.CaptchaReceived || client.ClientManager.State == BotState.Stopping)
                                     break;
 
                                 WebRequest getAnswer = WebRequest.Create("http://2captcha.com/res.php?key=" + APIKey + "&action=get&id=" + captchaID);

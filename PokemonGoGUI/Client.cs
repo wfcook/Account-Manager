@@ -25,7 +25,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
-using PokemonGoGUI.Captcha;
 using static POGOProtos.Networking.Envelopes.Signature.Types;
 
 #endregion

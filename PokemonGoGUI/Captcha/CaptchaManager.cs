@@ -11,14 +11,13 @@ using PokemonGoGUI.Captcha.Anti_Captcha;
 using PokemonGoGUI.UI;
 using PokemonGoGUI.GoManager;
 using PokemonGoGUI.GoManager.Models;
-using PokemonGoGUI.Extensions;
 using POGOProtos.Networking.Requests;
 using POGOProtos.Networking.Requests.Messages;
 using Google.Protobuf;
 using POGOProtos.Networking.Responses;
 using System.Diagnostics;
-using POGOLib.Official.Net;
 using POGOLib.Official.Net.Authentication.Data;
+using PokemonGoGUI.Enums;
 
 namespace PokemonGoGUI.Captcha
 {
@@ -135,15 +134,8 @@ namespace PokemonGoGUI.Captcha
         {
             if (string.IsNullOrEmpty(captchaResponse)) return false;
 
-            if (!client.LoggedIn)
-            {
-                MethodResult result = await client.ClientManager.AcLogin();
-
-                if (!result.Success)
-                {
-                    return false;
-                }
-            }
+            if (!client.LoggedIn || client.ClientManager.AccountState != AccountState.CaptchaReceived || client.ClientManager.State == BotState.Stopping)
+                return false;
 
             var response = await client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {

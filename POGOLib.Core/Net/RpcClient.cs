@@ -21,8 +21,6 @@ using POGOProtos.Networking.Platform.Responses;
 using POGOLib.Official.Extensions;
 using POGOProtos.Map.Pokemon;
 using POGOLib.Official.Exceptions;
-using Newtonsoft.Json;
-using POGOLib.Official.Util.Hash;
 
 namespace POGOLib.Official.Net
 {
