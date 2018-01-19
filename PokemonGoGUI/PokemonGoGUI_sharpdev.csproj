@@ -144,7 +144,7 @@
       <HintPath>..\..\packages\ObjectListView.Official.2.9.1\lib\net20\ObjectListView.dll</HintPath>
     </Reference>
     <Reference Include="POGOLib.Core">
-      <HintPath>..\..\packages\POGOLib.Core.1.8.7\lib\netstandard1.1\POGOLib.Core.dll</HintPath>
+      <HintPath>..\..\packages\POGOLib.Core.1.8.8\lib\netstandard1.1\POGOLib.Core.dll</HintPath>
     </Reference>
     <Reference Include="POGOProtos.Core, Version=2.21.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\POGOProtos.Core.2.21.1\lib\net45\POGOProtos.Core.dll</HintPath>
@@ -195,13 +195,10 @@
     <Compile Include="Enums\SchedulerOption.cs" />
     <Compile Include="Enums\TransferType.cs" />
     <Compile Include="Exceptions\AccountNotVerifiedException.cs" />
-    <Compile Include="Exceptions\APIBadRequestExceltion.cs" />
     <Compile Include="Exceptions\AuthConfigException.cs" />
     <Compile Include="Exceptions\InvalidResponseException.cs" />
     <Compile Include="Exceptions\LoginFailedException.cs" />
     <Compile Include="Exceptions\MinimumClientVersionException.cs" />
-    <Compile Include="Exceptions\PTCOfflineException.cs" />
-    <Compile Include="Exceptions\SessionInvalidatedException.cs" />
     <Compile Include="Extensions\ComboBoxEx.cs" />
     <Compile Include="Extensions\Compression.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />

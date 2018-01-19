@@ -25,10 +25,10 @@ namespace PokemonGoGUI.Captcha
     public class CaptchaManager
     {
         const string POKEMON_GO_GOOGLE_KEY = "6LeeTScTAAAAADqvhqVMhPpr_vB9D364Ia-1dSgK";
-        private static AccessToken accessToken;
-        private static bool Resolved = false;
+        private AccessToken accessToken;
+        private bool Resolved = false;
 
-        public static async Task<bool> SolveCaptcha(Client client, string captchaUrl)
+        public async Task<bool> SolveCaptcha(Client client, string captchaUrl)
         {
             string captchaResponse = "";
             int retry = client.ClientManager.UserSettings.AutoCaptchaRetries;
@@ -105,7 +105,7 @@ namespace PokemonGoGUI.Captcha
         }
 
         //NOT WORKING  SINCE WEB BROWSER CONTROL IS IE7, doesn't work with captcha page
-        private static async Task<string> GetCaptchaTokenWithInternalForm(string captchaUrl)
+        private async Task<string> GetCaptchaTokenWithInternalForm(string captchaUrl)
         {
             string response = "";
             var t = new Thread(() =>
@@ -131,7 +131,7 @@ namespace PokemonGoGUI.Captcha
             return response;
         }
 
-        private static async Task<bool> Resolve(Client client, string captchaResponse)
+        private async Task<bool> Resolve(Client client, string captchaResponse)
         {
             if (string.IsNullOrEmpty(captchaResponse)) return false;
 
@@ -171,7 +171,7 @@ namespace PokemonGoGUI.Captcha
             return false;
         }
 
-        private static async Task<string> GetCaptchaResponseByAntiCaptcha(Client client, string captchaUrl)
+        private async Task<string> GetCaptchaResponseByAntiCaptcha(Client client, string captchaUrl)
         {
             bool solved = false;
             int retries = client.ClientManager.UserSettings.AutoCaptchaRetries;
@@ -205,7 +205,7 @@ namespace PokemonGoGUI.Captcha
             return String.Empty;
         }
 
-        private static async Task<string> GetCaptchaResponseBy2Captcha(Client client, string captchaUrl)
+        private async Task<string> GetCaptchaResponseBy2Captcha(Client client, string captchaUrl)
         {
             bool solved = false;
             int retries = client.ClientManager.UserSettings.AutoCaptchaRetries;
@@ -237,7 +237,7 @@ namespace PokemonGoGUI.Captcha
             return String.Empty;
         }
 
-        public static string GetCaptchaResponseManually(Client client, string url)
+        public string GetCaptchaResponseManually(Client client, string url)
         {
             if (!client.ClientManager.UserSettings.AllowManualCaptchaResolve) return null;
 
