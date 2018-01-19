@@ -32,7 +32,7 @@ namespace PokemonGoGUI.GoManager
 
             LogCaller(new LoggerEventArgs(String.Format("{0} pokemon to evolve", response.Data.Count), LoggerTypes.Info));
 
-            if (response.Data.Count < UserSettings.MinPokemonBeforeEvolve && !LuckyEggActive && FilledPokemonInventorySpace() <= UserSettings.ForceEvolveAbovePercent)
+            if (response.Data.Count < UserSettings.MinPokemonBeforeEvolve && !_client.ClientSession.LuckyEggsUsed && FilledPokemonInventorySpace() <= UserSettings.ForceEvolveAbovePercent)
             {
                 LogCaller(new LoggerEventArgs(String.Format("Not enough pokemon to evolve. {0} of {1} evolvable pokemon", response.Data.Count, UserSettings.MinPokemonBeforeEvolve), LoggerTypes.Info));
 
@@ -43,7 +43,7 @@ namespace PokemonGoGUI.GoManager
                 };
             }
 
-            if (!LuckyEggActive)
+            if (!_client.ClientSession.LuckyEggsUsed)
             {
                 if (UserSettings.UseLuckyEgg)
                 {
@@ -271,15 +271,7 @@ namespace PokemonGoGUI.GoManager
 
         private async Task<MethodResult> UseLuckyEgg()
         {
-            if (LuckyEggActive)
-            {
-                return new MethodResult
-                {
-                    Success = true
-                };
-            }
-
-            ItemData data = Items.FirstOrDefault(x => x.ItemId == POGOProtos.Inventory.Item.ItemId.ItemLuckyEgg);
+           ItemData data = Items.FirstOrDefault(x => x.ItemId == POGOProtos.Inventory.Item.ItemId.ItemLuckyEgg);
 
             if (data == null || data.Count == 0)
             {
@@ -291,25 +283,23 @@ namespace PokemonGoGUI.GoManager
                 };
             }
 
-            var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
+            if (!_client.ClientSession.LuckyEggsUsed)
             {
-                RequestType = RequestType.UseItemXpBoost,
-                RequestMessage = new UseItemXpBoostMessage
+                var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                 {
-                    ItemId = ItemId.ItemLuckyEgg
-                }.ToByteString()
-            });
+                    RequestType = RequestType.UseItemXpBoost,
+                    RequestMessage = new UseItemXpBoostMessage
+                    {
+                        ItemId = ItemId.ItemLuckyEgg
+                    }.ToByteString()
+                });
 
-            if (response == null)
-                return new MethodResult();
+                if (response == null)
+                    return new MethodResult();
 
-            UseItemXpBoostResponse useItemXpBoostResponse = null;
+                UseItemXpBoostResponse useItemXpBoostResponse = null;
 
-            useItemXpBoostResponse = UseItemXpBoostResponse.Parser.ParseFrom(response);
-
-            if (useItemXpBoostResponse.Result == UseItemXpBoostResponse.Types.Result.Success)
-            {
-                LastLuckyEgg = DateTime.Now;
+                useItemXpBoostResponse = UseItemXpBoostResponse.Parser.ParseFrom(response);
 
                 LogCaller(new LoggerEventArgs(String.Format("Lucky egg used. Remaining: {0}", data.Count - 1), LoggerTypes.Info));
 
@@ -318,35 +308,8 @@ namespace PokemonGoGUI.GoManager
                     Success = true
                 };
             }
-            else if (useItemXpBoostResponse.Result == UseItemXpBoostResponse.Types.Result.ErrorNoItemsRemaining)
-            {
-                LogCaller(new LoggerEventArgs("No lucky eggs left", LoggerTypes.Info));
-
-                return new MethodResult
-                {
-                    Message = "No lucky eggs",
-                    Success = true
-                };
-            }
-            else if (useItemXpBoostResponse.Result == UseItemXpBoostResponse.Types.Result.ErrorXpBoostAlreadyActive)
-            {
-                LogCaller(new LoggerEventArgs("Lucky egg already active", LoggerTypes.Info));
-
-                return new MethodResult
-                {
-                    Message = "Lucky egg already active",
-                    Success = true
-                };
-            }
-            else
-            {
-                LogCaller(new LoggerEventArgs(String.Format("Unknown response from lucky egg request. Response: {0}", useItemXpBoostResponse.Result), LoggerTypes.Info));
-
-                return new MethodResult
-                {
-                    Message = "Unknown response from lucky egg request"
-                };
-            }
+            LogCaller(new LoggerEventArgs("Lucky egg already active", LoggerTypes.Info));
+            return new MethodResult();
         }
 
         public double FilledPokemonInventorySpace()

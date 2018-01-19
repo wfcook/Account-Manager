@@ -856,15 +856,15 @@ namespace PokemonGoGUI.GoManager
                     LogCaller(new LoggerEventArgs("Hash service exception occured, continue ...", LoggerTypes.Exception, ex));
                     continue;
                 }
-                catch (SessionUnknowException)// ex
+                catch (SessionUnknowException ex)
                 {
                     AccountState = AccountState.Unknown;
-                    LogCaller(new LoggerEventArgs("Skipping request. Restarting ...", LoggerTypes.Warning));
+                    LogCaller(new LoggerEventArgs("Skipping request. Restarting ...", LoggerTypes.Exception, ex));
                 }
-                catch (ArgumentOutOfRangeException)// ex
+                catch (ArgumentOutOfRangeException ex)
                 {
                     AccountState = AccountState.Unknown;
-                    LogCaller(new LoggerEventArgs("Skipping request. Restarting ...", LoggerTypes.Warning));
+                    LogCaller(new LoggerEventArgs("Skipping request. Restarting ...", LoggerTypes.Exception, ex));
                 }
                 catch (Exception ex)
                 {

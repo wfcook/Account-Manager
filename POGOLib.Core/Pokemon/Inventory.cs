@@ -155,13 +155,24 @@ namespace POGOLib.Official.Pokemon
                         // check item
                         if (item.ItemId == ItemId.ItemIncenseCool || item.ItemId == ItemId.ItemIncenseFloral || item.ItemId == ItemId.ItemIncenseOrdinary || item.ItemId == ItemId.ItemIncenseSpicy)
                             _session.IncenseUsed = false;
+
+                        if (item.ItemId == ItemId.ItemLuckyEgg)
+                            _session.LuckyEggsUsed = false;
                     }
                     else
                     {
                         // check item
                         if (item.ItemId == ItemId.ItemIncenseCool || item.ItemId == ItemId.ItemIncenseFloral || item.ItemId == ItemId.ItemIncenseOrdinary || item.ItemId == ItemId.ItemIncenseSpicy)
+                        {
                             _session.IncenseUsed = true;
-                        _session.Logger.Info($"Session applied item: {item.ItemId.ToString().Replace("Item", "")} active for: {time.Minutes}m {Math.Abs(time.Seconds)}s.");
+                            _session.Logger.Info($"Session applied item: {item.ItemId.ToString().Replace("Item", "")} active for: {time.Minutes}m {Math.Abs(time.Seconds)}s.");
+                        }
+
+                        if (item.ItemId == ItemId.ItemLuckyEgg)
+                        {
+                            _session.LuckyEggsUsed = true;
+                            _session.Logger.Info($"Session applied item: {item.ItemId.ToString().Replace("Item", "")} active for: {time.Minutes}m {Math.Abs(time.Seconds)}s.");
+                        }
                     }
                 }
             }

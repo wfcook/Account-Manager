@@ -27,7 +27,10 @@ namespace POGOLib.Official.Net
     public class Session : IDisposable
     {
         private SessionState _state;
+
         private bool _incenseUsed;
+
+        private bool _luckyEggsUsed;
 
         /// <summary>
         /// This is the <see cref="HeartbeatDispatcher" /> which is responsible for retrieving events and updating gps location.
@@ -93,6 +96,18 @@ namespace POGOLib.Official.Net
             internal set
             {
                 _incenseUsed = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets LukyEggs active of the <see cref="Session" />.
+        /// </summary>
+        public bool LuckyEggsUsed
+        {
+            get { return _luckyEggsUsed; }
+            internal set
+            {
+                _luckyEggsUsed = value;
             }
         }
 

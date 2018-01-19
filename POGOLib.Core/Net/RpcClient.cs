@@ -607,6 +607,7 @@ namespace POGOLib.Official.Net
                                 {
                                     Message = _mapKey
                                 };
+
                                 requestEnvelope.PlatformRequests.Add(new RequestEnvelope.Types.PlatformRequest()
                                 {
                                     Type = PlatformRequestType.UnknownPtr8,
@@ -628,8 +629,7 @@ namespace POGOLib.Official.Net
                             case ResponseEnvelope.Types.StatusCode.InvalidPlatformRequest:
                                 throw new InvalidPlatformException("INVALID PLATFORM EXCEPTION");
                             default:
-                                _session.Logger.Error($"Unknown status code: {responseEnvelope.StatusCode}");
-                                break;
+                                throw new Exception($"Unknown status code: {responseEnvelope.StatusCode}");
                         }
 
                         LastRpcRequest = DateTime.UtcNow;

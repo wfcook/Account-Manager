@@ -361,12 +361,15 @@ namespace PokemonGoGUI.GoManager
         {
             get
             {
-                return DateTime.Now < LastLuckyEgg.AddMinutes(30);
-
+                if (_client.LoggedIn)
+                    return _client.ClientSession.LuckyEggsUsed;
+                else
+                    return false;
             }
         }
 
         private Stopwatch _runningStopwatch = new Stopwatch();
+
         private int _expGained = 0;
 
         private void ExpIncrease(int amount)
