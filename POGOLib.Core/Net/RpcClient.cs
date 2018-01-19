@@ -867,10 +867,17 @@ namespace POGOLib.Official.Net
             if (response != null)
             {
                 var downloadRemoteConfigVersionMessage = DownloadRemoteConfigVersionResponse.Parser.ParseFrom(response);
-                _session.Templates.AssetDigestTimestampMs = downloadRemoteConfigVersionMessage.AssetDigestTimestampMs;
-                _session.Templates.ItemTemplatesTimestampMs = downloadRemoteConfigVersionMessage.ItemTemplatesTimestampMs;
-                _session.Templates.LocalConfigVersion = downloadRemoteConfigVersionMessage;
-                _session.OnRemoteConfigVersionReceived(downloadRemoteConfigVersionMessage);
+
+                if (downloadRemoteConfigVersionMessage.Result == DownloadRemoteConfigVersionResponse.Types.Result.Success)
+                {
+                    _session.Templates.AssetDigestTimestampMs = downloadRemoteConfigVersionMessage.AssetDigestTimestampMs;
+                    _session.Templates.ItemTemplatesTimestampMs = downloadRemoteConfigVersionMessage.ItemTemplatesTimestampMs;
+                    _session.Templates.LocalConfigVersion = downloadRemoteConfigVersionMessage;
+                    _session.OnRemoteConfigVersionReceived(downloadRemoteConfigVersionMessage);
+                    return;
+                }
+                _session.SetTemporalBan();
+                throw new SessionStateException(nameof(response));
             }
             else if (_session.State != SessionState.Paused)
             {
@@ -909,10 +916,24 @@ namespace POGOLib.Official.Net
                 {
                     var downloadItemTemplatesResponse = DownloadItemTemplatesResponse.Parser.ParseFrom(response);
 
-                    pageOffset = downloadItemTemplatesResponse.PageOffset;
-                    timestamp = downloadItemTemplatesResponse.TimestampMs;
+                    switch (downloadItemTemplatesResponse.Result)
+                    {
+                        case DownloadItemTemplatesResponse.Types.Result.Success:
+                            pageOffset = downloadItemTemplatesResponse.PageOffset;
+                            timestamp = downloadItemTemplatesResponse.TimestampMs;
 
-                    templates.AddRange(downloadItemTemplatesResponse.ItemTemplates);
+                            templates.AddRange(downloadItemTemplatesResponse.ItemTemplates);
+                            break;
+                        case DownloadItemTemplatesResponse.Types.Result.Page:
+                            //Pages is here xelwon
+                            break;
+                        case DownloadItemTemplatesResponse.Types.Result.Retry:
+                            await DownloadItemTemplates();
+                            break;
+                        case DownloadItemTemplatesResponse.Types.Result.Unset:
+                            _session.SetTemporalBan();
+                            throw new SessionStateException(nameof(response));
+                    }
                 }
                 else if (_session.State != SessionState.Paused)
                 {
@@ -967,10 +988,23 @@ namespace POGOLib.Official.Net
                 {
                     var getAssetDigestResponse = GetAssetDigestResponse.Parser.ParseFrom(response);
 
-                    pageOffset = getAssetDigestResponse.PageOffset;
-                    timestamp = getAssetDigestResponse.TimestampMs;
-
-                    digests.AddRange(getAssetDigestResponse.Digest);
+                    switch (getAssetDigestResponse.Result)
+                    {
+                        case GetAssetDigestResponse.Types.Result.Success:
+                            pageOffset = getAssetDigestResponse.PageOffset;
+                            timestamp = getAssetDigestResponse.TimestampMs;
+                            digests.AddRange(getAssetDigestResponse.Digest);
+                            break;
+                        case GetAssetDigestResponse.Types.Result.Retry:
+                            await GetAssetDigest();
+                            break;
+                        case GetAssetDigestResponse.Types.Result.Page:
+                            //Pages is here xelwon
+                            break;
+                        case GetAssetDigestResponse.Types.Result.Unset:
+                            _session.SetTemporalBan();
+                            throw new SessionStateException(nameof(response));
+                    }
                 }
                 else if (_session.State != SessionState.Paused)
                 {
@@ -1025,9 +1059,7 @@ namespace POGOLib.Official.Net
             if (response != null)
             {
                 var getDownloadUrlsResponse = GetDownloadUrlsResponse.Parser.ParseFrom(response);
-
                 dowloadUrls.AddRange(getDownloadUrlsResponse.DownloadUrls);
-
                 _session.Templates.DownloadUrls = dowloadUrls;
                 _session.OnUrlsReceived(dowloadUrls);
             }
