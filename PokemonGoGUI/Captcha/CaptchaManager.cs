@@ -19,7 +19,6 @@ using POGOProtos.Networking.Responses;
 using System.Diagnostics;
 using POGOLib.Official.Net;
 using POGOLib.Official.Net.Authentication.Data;
-using PokemonGoGUI.Enums;
 
 namespace PokemonGoGUI.Captcha
 {
@@ -27,7 +26,7 @@ namespace PokemonGoGUI.Captcha
     {
         const string POKEMON_GO_GOOGLE_KEY = "6LeeTScTAAAAADqvhqVMhPpr_vB9D364Ia-1dSgK";
         private AccessToken accessToken;
-        public bool Resolved = false;
+        private bool Resolved = false;
 
         public async Task<bool> SolveCaptcha(Client client, string captchaUrl)
         {
@@ -42,7 +41,7 @@ namespace PokemonGoGUI.Captcha
                 {
                     client.ClientManager.LogCaller(new LoggerEventArgs("Captcha has been stopped for this AccessToken ", LoggerTypes.Captcha));
                     break;
-                }///
+                }
 
                 //Use captcha solution to resolve captcha
                 if (!Resolved && client.ClientManager.UserSettings.EnableCaptchaSolutions &&
@@ -57,7 +56,7 @@ namespace PokemonGoGUI.Captcha
                     {
                         Resolved = await Resolve(client, captchaResponse);
                     }
-                }//*/
+                }
 
                 //use 2 captcha
                 if (!Resolved && client.ClientManager.UserSettings.Enable2Captcha &&
@@ -86,6 +85,7 @@ namespace PokemonGoGUI.Captcha
                 }
             }
 
+            //captchaRespose = "";
             if (!Resolved)
             {
                 if (client.ClientManager.UserSettings.PlaySoundOnCaptcha)
@@ -223,7 +223,7 @@ namespace PokemonGoGUI.Captcha
                     client.ClientManager.LogCaller(new LoggerEventArgs("Captcha has been stopped for this AccessToken ", LoggerTypes.Captcha));
                     break;
                 }
-                
+
                 TwoCaptchaClient _client = new TwoCaptchaClient(client.ClientManager.UserSettings.TwoCaptchaAPIKey);
 
                 result = await _client.SolveRecaptchaV2(client, POKEMON_GO_GOOGLE_KEY, captchaUrl, string.Empty, ProxyType.HTTP);

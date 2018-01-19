@@ -201,6 +201,28 @@ namespace PokemonGoGUI
                     }
                 }
             }
+            catch (APIBadRequestException)// ex
+            {
+                ClientManager.LogCaller(new LoggerEventArgs("API Bad Request, this account is maybe banned ...", LoggerTypes.Warning));
+            }
+            catch (InvalidPlatformException)// ex
+            {
+                ClientManager.LogCaller(new LoggerEventArgs("Invalid Platform, continue  ...", LoggerTypes.Warning));
+            }
+            catch (SessionInvalidatedException)// ex
+            {
+                ClientManager.LogCaller(new LoggerEventArgs("Session Invalidated, continue ...", LoggerTypes.Warning));
+            }
+            catch (SessionUnknowException)
+            {
+                ClientManager.AccountState = AccountState.Unknown;
+                msgStr = "Skipping request. Restarting ...";
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                ClientManager.AccountState = AccountState.Unknown;
+                msgStr = "Skipping request";
+            }
             catch (SessionStateException ex)
             {
                 if (ClientSession.State == SessionState.TemporalBanned)
@@ -210,10 +232,10 @@ namespace PokemonGoGUI
 
                     ClientManager.Stop();
 
-                    msgStr = "The account is banned temporally.";                    
+                    msgStr = "The account is banned temporally.";
                 }
                 else
-                ClientManager.LogCaller(new LoggerEventArgs(ex.Message, LoggerTypes.Warning));
+                    ClientManager.LogCaller(new LoggerEventArgs(ex.Message, LoggerTypes.Warning));
             }
             catch (PtcLoginException) // poex
             {
