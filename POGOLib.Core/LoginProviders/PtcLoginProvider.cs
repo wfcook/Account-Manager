@@ -44,7 +44,7 @@ namespace POGOLib.Official.LoginProviders
         /// Retrieves an <see cref="AccessToken"/> by logging into the Pokemon Trainer Club website.
         /// </summary>
         /// <returns>Returns an <see cref="AccessToken"/>.</returns>
-        public async Task<AccessToken> GetAccessToken()
+        public async Task<AccessToken> GetAccessToken(string useragent, string language)
         {
             using (var httpClientHandler = new HttpClientHandler())
             {
@@ -59,9 +59,8 @@ namespace POGOLib.Official.LoginProviders
                     httpClient.DefaultRequestHeaders.Host = "sso.pokemon.com";
                     httpClient.DefaultRequestHeaders.Connection.TryParseAdd("keep-alive");
                     httpClient.DefaultRequestHeaders.Accept.TryParseAdd("*/*");
-                    httpClient.DefaultRequestHeaders.UserAgent.TryParseAdd("pokemongo/1 CFNetwork/893.10 Darwin/17.3.0");  // iOS 11.2
-                    //TODO: use selected locale information
-                    httpClient.DefaultRequestHeaders.AcceptLanguage.TryParseAdd("en-US");
+                    httpClient.DefaultRequestHeaders.UserAgent.TryParseAdd($"pokemongo/1 {useragent}");
+                    httpClient.DefaultRequestHeaders.AcceptLanguage.TryParseAdd(language);
                     httpClient.DefaultRequestHeaders.AcceptEncoding.TryParseAdd("gzip-deflate");
                     httpClient.DefaultRequestHeaders.TryAddWithoutValidation("X-Unity-Version", "2017.1.2f1"); //"5.5.1f1";//"5.6.1f1";
                     httpClient.Timeout.Add(new TimeSpan(0, 10, 0));

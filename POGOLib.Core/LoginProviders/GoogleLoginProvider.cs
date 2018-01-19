@@ -35,7 +35,7 @@ namespace POGOLib.Official.LoginProviders
         /// Retrieves an <see cref="AccessToken"/> by logging into through the Google Play Services OAuth.
         /// </summary>
         /// <returns>Returns an <see cref="AccessToken"/>.</returns>
-        public async Task<AccessToken> GetAccessToken()
+        public async Task<AccessToken> GetAccessToken(string useragent, string language)
         {
             var googleClient = new GPSOAuthClient(_username, _password);
             var masterLoginResponse = await googleClient.PerformMasterLogin();

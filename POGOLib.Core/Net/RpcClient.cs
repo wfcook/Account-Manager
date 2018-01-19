@@ -916,7 +916,8 @@ namespace POGOLib.Official.Net
                 }
                 else if (_session.State != SessionState.Paused)
                 {
-                    throw new NullReferenceException(nameof(response));
+                    _session.SetTemporalBan();
+                    throw new SessionStateException(nameof(response));
                 }
 
             } while (pageOffset != 0);
@@ -973,7 +974,8 @@ namespace POGOLib.Official.Net
                 }
                 else if (_session.State != SessionState.Paused)
                 {
-                    throw new NullReferenceException(nameof(response));
+                    _session.SetTemporalBan();
+                    throw new SessionStateException(nameof(response));
                 }
 
             } while (pageOffset != 0);
@@ -987,8 +989,7 @@ namespace POGOLib.Official.Net
             var toCheck = new[] {
                 "i18n_general",
                 "i18n_moves",
-                "i18n_items"
-            };
+                "i18n_items"           };
 
             await GetDownloadURLs(toCheck);
         }
@@ -1032,7 +1033,8 @@ namespace POGOLib.Official.Net
             }
             else if (_session.State != SessionState.Paused)
             {
-                throw new NullReferenceException(nameof(response));
+                _session.SetTemporalBan();
+                throw new SessionStateException(nameof(response));
             }
         }
 

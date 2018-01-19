@@ -19,6 +19,6 @@ namespace POGOLib.Official.LoginProviders
         /// The method to obtain an <see cref="AccessToken"/> using this <see cref="ILoginProvider"/>.
         /// </summary>
         /// <returns>Returns an <see cref="AccessToken"/>.</returns>
-        Task<AccessToken> GetAccessToken();
+        Task<AccessToken> GetAccessToken(string useragent, string language);
     }
 }

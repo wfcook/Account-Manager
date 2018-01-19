@@ -282,7 +282,8 @@ namespace POGOLib.Official.Net
                 {
                     try
                     {
-                        accessToken = await LoginProvider.GetAccessToken();
+                        string language = this.Player.PlayerLocale.Language + "-" + this.Player.PlayerLocale.Country;
+                        accessToken = await LoginProvider.GetAccessToken(this.Device.UserAgent, language);
                         if (LoginProvider is PtcLoginProvider)
                             Logger.Debug("Authenticated through PTC.");
                         else

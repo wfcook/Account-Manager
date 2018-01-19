@@ -31,7 +31,6 @@ namespace POGOLib.Official.Net.Authentication
             var session = new Session(loginProvider, accessToken, new GeoCoordinate(initialLatitude, initialLongitude), deviceWrapper, playerLocale);
             session.Logger.Debug("Authenticated from cache.");
             return session;
-
         }
 
         /// <summary>
@@ -44,7 +43,8 @@ namespace POGOLib.Official.Net.Authentication
         /// <returns></returns>
         public static async Task<Session> GetSession(ILoginProvider loginProvider, double initialLatitude, double initialLongitude, DeviceWrapper deviceWrapper = null, GetPlayerMessage.Types.PlayerLocale playerLocale = null)
         {
-            var session = new Session(loginProvider, await loginProvider.GetAccessToken(), new GeoCoordinate(initialLatitude, initialLongitude), deviceWrapper, playerLocale);
+            string language = playerLocale.Language + "-" + playerLocale.Country;
+            var session = new Session(loginProvider, await loginProvider.GetAccessToken(deviceWrapper.UserAgent, language), new GeoCoordinate(initialLatitude, initialLongitude), deviceWrapper, playerLocale);
             if (loginProvider is PtcLoginProvider)
                 session.Logger.Debug("Authenticated through PTC.");
             else
@@ -82,7 +82,8 @@ namespace POGOLib.Official.Net.Authentication
         /// <returns></returns>
         public static async Task<Session> GetSession(ILoginProvider loginProvider, GeoCoordinate coordinate, DeviceWrapper deviceWrapper = null, GetPlayerMessage.Types.PlayerLocale playerLocale = null)
         {
-            var session = new Session(loginProvider, await loginProvider.GetAccessToken() , coordinate, deviceWrapper, playerLocale);
+            string language = playerLocale.Language + "-" + playerLocale.Country;
+            var session = new Session(loginProvider, await loginProvider.GetAccessToken(deviceWrapper.UserAgent, language) , coordinate, deviceWrapper, playerLocale);
             if (loginProvider is PtcLoginProvider)
                 session.Logger.Debug("Authenticated through PTC.");
             else
