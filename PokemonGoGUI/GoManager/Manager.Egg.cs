@@ -52,50 +52,35 @@ namespace PokemonGoGUI.GoManager
                 };
             }
 
-            try
+            var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
-                //Pause out of captcha loop to verifychallenge
-                if (WaitPaused())
+                RequestType = RequestType.UseItemEggIncubator,
+                RequestMessage = new UseItemEggIncubatorMessage
                 {
-                    return new MethodResult();
-                }
+                    ItemId = incubatorResponse.Data.Id,
+                    PokemonId = egg.Id
+                }.ToByteString()
+            });
 
-                var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
-                {
-                    RequestType = RequestType.UseItemEggIncubator,
-                    RequestMessage = new UseItemEggIncubatorMessage
-                    {
-                        ItemId = incubatorResponse.Data.Id,
-                        PokemonId = egg.Id
-                    }.ToByteString()
-                });
-
-                if (response == null)
-                    return new MethodResult();
-
-                var useItemEggIncubatorResponse = UseItemEggIncubatorResponse.Parser.ParseFrom(response);
-
-                var incitem = incubatorResponse.Data.Id;
-                var _egg = egg.PokemonId;
-                
-                LogCaller(new LoggerEventArgs(String.Format("Incubating egg in {0}. Pokemon Id: {1}", incitem, _egg), LoggerTypes.Incubate));
-
-                //TODO: Need tests
-                UpdateInventory(InventoryRefresh.Eggs);
-                UpdateInventory(InventoryRefresh.Incubators);
-
-                return new MethodResult
-                {
-                    Message = "Success",
-                    Success = true
-                };
-            }
-            catch (Exception ex)
-            {
-                LogCaller(new LoggerEventArgs("UseItemEggIncubatorResponse parsing failed because response was empty", LoggerTypes.Exception, ex));
-
+            if (response == null)
                 return new MethodResult();
-            }
+
+            var useItemEggIncubatorResponse = UseItemEggIncubatorResponse.Parser.ParseFrom(response);
+
+            var incitem = incubatorResponse.Data.Id;
+            var _egg = egg.PokemonId;
+
+            LogCaller(new LoggerEventArgs(String.Format("Incubating egg in {0}. Pokemon Id: {1}", incitem, _egg), LoggerTypes.Incubate));
+
+            //TODO: Need tests
+            UpdateInventory(InventoryRefresh.Eggs);
+            UpdateInventory(InventoryRefresh.Incubators);
+
+            return new MethodResult
+            {
+                Message = "Success",
+                Success = true
+            };
         }
 
         private MethodResult<EggIncubator> GetIncubator()

@@ -1,12 +1,7 @@
-﻿#region using directives
+﻿using System;
 
-using System;
-
-#endregion
-
-namespace PokemonGoGUI.Exceptions
+namespace POGOLib.Official.Exceptions
 {
-    [Serializable]
     public class SessionInvalidatedException : Exception
     {
         public SessionInvalidatedException()
@@ -14,6 +9,10 @@ namespace PokemonGoGUI.Exceptions
         }
 
         public SessionInvalidatedException(string message) : base(message)
+        {
+        }
+
+        public SessionInvalidatedException(string message, Exception innerException) : base(message, innerException)
         {
         }
     }

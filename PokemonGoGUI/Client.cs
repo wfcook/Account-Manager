@@ -214,7 +214,7 @@ namespace PokemonGoGUI
                 else
                 ClientManager.LogCaller(new LoggerEventArgs(ex.Message, LoggerTypes.Warning));
             }
-            catch (PtcOfflineException) // poex
+            catch (PtcLoginException) // poex
             {
                 ClientManager.Stop();
 

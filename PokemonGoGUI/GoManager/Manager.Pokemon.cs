@@ -33,73 +33,56 @@ namespace PokemonGoGUI.GoManager
                 foreach (PokemonData pokemon in pokemonToTransfer)
                 {
                     var message = new ReleasePokemonMessage { PokemonId = pokemon.Id };
-                    try
+
+                    var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                     {
-                        //Pause out of captcha loop to verifychallenge
-                        if (WaitPaused())
-                        {
-                            return new MethodResult();
-                        }
+                        RequestType = RequestType.ReleasePokemon,
+                        RequestMessage = message.ToByteString()
+                    });
 
-                        var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
-                        {
-                            RequestType = RequestType.ReleasePokemon,
-                            RequestMessage = message.ToByteString()
-                        });
-
-                        if (response == null)
-                            return new MethodResult();
-
-                        ReleasePokemonResponse releasePokemonResponse = ReleasePokemonResponse.Parser.ParseFrom(response);
-                        switch (releasePokemonResponse.Result)
-                        {
-                            case ReleasePokemonResponse.Types.Result.Success:
-                                LogCaller(new LoggerEventArgs(String.Format("Successully transferred {0}. Cp: {1}. IV: {2:0.00}%",
-                                    pokemon.PokemonId,
-                                    pokemon.Cp,
-                                    CalculateIVPerfection(pokemon)),
-                                    LoggerTypes.Transfer));
-
-                                await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
-
-                                RemoveInventoryItem(GetPokemonHashKey(pokemon.Id));
-
-                                continue;
-                            case ReleasePokemonResponse.Types.Result.ErrorPokemonIsBuddy:
-                                LogCaller(new LoggerEventArgs(String.Format("Faill to transfer {0}. Because: {1}.",
-                                    pokemon.PokemonId,
-                                    releasePokemonResponse.Result), LoggerTypes.Warning));
-                                continue;
-                            case ReleasePokemonResponse.Types.Result.ErrorPokemonIsEgg:
-                                LogCaller(new LoggerEventArgs(String.Format("Faill to transfer {0}. Because: {1}.",
-                                    pokemon.PokemonId,
-                                    releasePokemonResponse.Result), LoggerTypes.Warning));
-                                continue;
-                            case ReleasePokemonResponse.Types.Result.PokemonDeployed:
-                                LogCaller(new LoggerEventArgs(String.Format("Faill to transfer {0}. Because: {1}.",
-                                    pokemon.PokemonId,
-                                    releasePokemonResponse.Result), LoggerTypes.Warning));
-                                continue;
-                            case ReleasePokemonResponse.Types.Result.Failed:
-                                LogCaller(new LoggerEventArgs(String.Format("Faill to transfer {0}",
-                                    pokemon.PokemonId,
-                                    releasePokemonResponse.Result), LoggerTypes.Warning));
-                                continue;
-                            case ReleasePokemonResponse.Types.Result.Unset:
-                                LogCaller(new LoggerEventArgs(String.Format("Faill to transfer {0}. Because: {1}.",
-                                    pokemon.PokemonId,
-                                    releasePokemonResponse.Result), LoggerTypes.Warning));
-                                continue;
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        LogCaller(new LoggerEventArgs("ReleasePokemonResponse parsing failed because response was empty", LoggerTypes.Exception, ex));
-
-                        //if bug reload all test...
-                        //UpdateInventory(0);
-
+                    if (response == null)
                         return new MethodResult();
+
+                    ReleasePokemonResponse releasePokemonResponse = ReleasePokemonResponse.Parser.ParseFrom(response);
+                    switch (releasePokemonResponse.Result)
+                    {
+                        case ReleasePokemonResponse.Types.Result.Success:
+                            LogCaller(new LoggerEventArgs(String.Format("Successully transferred {0}. Cp: {1}. IV: {2:0.00}%",
+                                pokemon.PokemonId,
+                                pokemon.Cp,
+                                CalculateIVPerfection(pokemon)),
+                                LoggerTypes.Transfer));
+
+                            await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+
+                            RemoveInventoryItem(GetPokemonHashKey(pokemon.Id));
+
+                            continue;
+                        case ReleasePokemonResponse.Types.Result.ErrorPokemonIsBuddy:
+                            LogCaller(new LoggerEventArgs(String.Format("Faill to transfer {0}. Because: {1}.",
+                                pokemon.PokemonId,
+                                releasePokemonResponse.Result), LoggerTypes.Warning));
+                            continue;
+                        case ReleasePokemonResponse.Types.Result.ErrorPokemonIsEgg:
+                            LogCaller(new LoggerEventArgs(String.Format("Faill to transfer {0}. Because: {1}.",
+                                pokemon.PokemonId,
+                                releasePokemonResponse.Result), LoggerTypes.Warning));
+                            continue;
+                        case ReleasePokemonResponse.Types.Result.PokemonDeployed:
+                            LogCaller(new LoggerEventArgs(String.Format("Faill to transfer {0}. Because: {1}.",
+                                pokemon.PokemonId,
+                                releasePokemonResponse.Result), LoggerTypes.Warning));
+                            continue;
+                        case ReleasePokemonResponse.Types.Result.Failed:
+                            LogCaller(new LoggerEventArgs(String.Format("Faill to transfer {0}",
+                                pokemon.PokemonId,
+                                releasePokemonResponse.Result), LoggerTypes.Warning));
+                            continue;
+                        case ReleasePokemonResponse.Types.Result.Unset:
+                            LogCaller(new LoggerEventArgs(String.Format("Faill to transfer {0}. Because: {1}.",
+                                pokemon.PokemonId,
+                                releasePokemonResponse.Result), LoggerTypes.Warning));
+                            continue;
                     }
                 }
                 return new MethodResult
@@ -111,79 +94,62 @@ namespace PokemonGoGUI.GoManager
             {
                 var PokemonIds = pokemonToTransfer.Where(x => x != null && x.PokemonId != PokemonId.Missingno).Select(x => x.Id);
 
-                try
+                var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                 {
-                    //Pause out of captcha loop to verifychallenge
-                    if (WaitPaused())
+                    RequestType = RequestType.ReleasePokemon,
+                    RequestMessage = new ReleasePokemonMessage
                     {
-                        return new MethodResult();
-                    }
+                        PokemonIds = { PokemonIds }
+                    }.ToByteString()
+                });
 
-                    var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
-                    {
-                        RequestType = RequestType.ReleasePokemon,
-                        RequestMessage = new ReleasePokemonMessage
-                        {
-                            PokemonIds = { PokemonIds }
-                        }.ToByteString()
-                    });
-
-                    if (response == null)
-                        return new MethodResult();
-
-                    ReleasePokemonResponse releasePokemonResponse = ReleasePokemonResponse.Parser.ParseFrom(response);
-
-                    switch (releasePokemonResponse.Result)
-                    {
-                        case ReleasePokemonResponse.Types.Result.Success:
-                            LogCaller(new LoggerEventArgs(
-                                String.Format("Successully candy awarded {0} of {1} Pokemons.",
-                                    releasePokemonResponse.CandyAwarded,
-                                    pokemonToTransfer.Count()),
-                                LoggerTypes.Transfer));
-
-                            await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
-
-                            foreach (var pokemonId in PokemonIds)
-                            {
-                                RemoveInventoryItem(GetPokemonHashKey(pokemonId));
-                            } 
-
-                            break;
-                        case ReleasePokemonResponse.Types.Result.ErrorPokemonIsBuddy:
-                            LogCaller(new LoggerEventArgs(String.Format("Faill to transfer {0}. Because: {1}.",
-                                pokemonToTransfer.Count(),
-                                releasePokemonResponse.Result), LoggerTypes.Warning));
-                            break;
-                        case ReleasePokemonResponse.Types.Result.ErrorPokemonIsEgg:
-                            LogCaller(new LoggerEventArgs(String.Format("Faill to transfer {0}. Because: {1}.",
-                                pokemonToTransfer.Count(),
-                                releasePokemonResponse.Result), LoggerTypes.Warning));
-                            break;
-                        case ReleasePokemonResponse.Types.Result.PokemonDeployed:
-                            LogCaller(new LoggerEventArgs(String.Format("Faill to transfer {0}. Because: {1}.",
-                                pokemonToTransfer.Count(),
-                                releasePokemonResponse.Result), LoggerTypes.Warning));
-                            break;
-                        case ReleasePokemonResponse.Types.Result.Failed:
-                            LogCaller(new LoggerEventArgs(String.Format("Faill to transfer {0}",
-                                pokemonToTransfer.Count(),
-                                releasePokemonResponse.Result), LoggerTypes.Warning));
-                            break;
-                        case ReleasePokemonResponse.Types.Result.Unset:
-                            LogCaller(new LoggerEventArgs(String.Format("Faill to transfer {0}. Because: {1}.",
-                                pokemonToTransfer.Count(),
-                                releasePokemonResponse.Result), LoggerTypes.Warning));
-                            break;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    LogCaller(new LoggerEventArgs("ReleasePokemonResponse parsing failed because response was empty", LoggerTypes.Exception, ex));
-
-                    //if bug reload all test...
-                    //UpdateInventory(0);
+                if (response == null)
                     return new MethodResult();
+
+                ReleasePokemonResponse releasePokemonResponse = ReleasePokemonResponse.Parser.ParseFrom(response);
+
+                switch (releasePokemonResponse.Result)
+                {
+                    case ReleasePokemonResponse.Types.Result.Success:
+                        LogCaller(new LoggerEventArgs(
+                            String.Format("Successully candy awarded {0} of {1} Pokemons.",
+                                releasePokemonResponse.CandyAwarded,
+                                pokemonToTransfer.Count()),
+                            LoggerTypes.Transfer));
+
+                        await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+
+                        foreach (var pokemonId in PokemonIds)
+                        {
+                            RemoveInventoryItem(GetPokemonHashKey(pokemonId));
+                        }
+
+                        break;
+                    case ReleasePokemonResponse.Types.Result.ErrorPokemonIsBuddy:
+                        LogCaller(new LoggerEventArgs(String.Format("Faill to transfer {0}. Because: {1}.",
+                            pokemonToTransfer.Count(),
+                            releasePokemonResponse.Result), LoggerTypes.Warning));
+                        break;
+                    case ReleasePokemonResponse.Types.Result.ErrorPokemonIsEgg:
+                        LogCaller(new LoggerEventArgs(String.Format("Faill to transfer {0}. Because: {1}.",
+                            pokemonToTransfer.Count(),
+                            releasePokemonResponse.Result), LoggerTypes.Warning));
+                        break;
+                    case ReleasePokemonResponse.Types.Result.PokemonDeployed:
+                        LogCaller(new LoggerEventArgs(String.Format("Faill to transfer {0}. Because: {1}.",
+                            pokemonToTransfer.Count(),
+                            releasePokemonResponse.Result), LoggerTypes.Warning));
+                        break;
+                    case ReleasePokemonResponse.Types.Result.Failed:
+                        LogCaller(new LoggerEventArgs(String.Format("Faill to transfer {0}",
+                            pokemonToTransfer.Count(),
+                            releasePokemonResponse.Result), LoggerTypes.Warning));
+                        break;
+                    case ReleasePokemonResponse.Types.Result.Unset:
+                        LogCaller(new LoggerEventArgs(String.Format("Faill to transfer {0}. Because: {1}.",
+                            pokemonToTransfer.Count(),
+                            releasePokemonResponse.Result), LoggerTypes.Warning));
+                        break;
                 }
 
                 return new MethodResult
@@ -225,10 +191,12 @@ namespace PokemonGoGUI.GoManager
                 };
             }
 
-            if (!Pokemon.Any()) {
+            if (!Pokemon.Any())
+            {
                 LogCaller(new LoggerEventArgs("You have no pokemon", LoggerTypes.Info));
 
-                return new MethodResult<List<PokemonData>> {
+                return new MethodResult<List<PokemonData>>
+                {
                     Message = "You have no pokemon"
                 };
             }
@@ -464,51 +432,38 @@ namespace PokemonGoGUI.GoManager
                     continue;
                 }
 
-                try
+
+                var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                 {
-                    //Pause out of captcha loop to verifychallenge
-                    if (WaitPaused())
+                    RequestType = RequestType.SetFavoritePokemon,
+                    RequestMessage = new SetFavoritePokemonMessage
                     {
-                        return new MethodResult();
-                    }
+                        PokemonId = (long)pokemon.Id,
+                        IsFavorite = favorite
+                    }.ToByteString()
+                });
 
-                    var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
-                    {
-                        RequestType = RequestType.SetFavoritePokemon,
-                        RequestMessage = new SetFavoritePokemonMessage
-                        {
-                            PokemonId = (long)pokemon.Id,
-                            IsFavorite = favorite
-                        }.ToByteString()
-                    });
-
-                    if (response == null)
-                        return new MethodResult();
-
-                    SetFavoritePokemonResponse setFavoritePokemonResponse = null;
-
-                    setFavoritePokemonResponse = SetFavoritePokemonResponse.Parser.ParseFrom(response);
-                    LogCaller(new LoggerEventArgs(
-                        String.Format("Successully {3} {0}. Cp: {1}. IV: {2:0.00}%",
-                            pokemon.PokemonId,
-                            pokemon.Cp,
-                            CalculateIVPerfection(pokemon), message),
-                        LoggerTypes.Info));
-
-                    UpdateInventory(InventoryRefresh.Pokemon);
-
-                    await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
-
-                    return new MethodResult
-                    {
-                        Success = true
-                    };
-                }
-                catch (Exception ex)
-                {
-                    LogCaller(new LoggerEventArgs("Favorite request failed", LoggerTypes.Exception, ex));
+                if (response == null)
                     return new MethodResult();
-                }
+
+                SetFavoritePokemonResponse setFavoritePokemonResponse = null;
+
+                setFavoritePokemonResponse = SetFavoritePokemonResponse.Parser.ParseFrom(response);
+                LogCaller(new LoggerEventArgs(
+                    String.Format("Successully {3} {0}. Cp: {1}. IV: {2:0.00}%",
+                        pokemon.PokemonId,
+                        pokemon.Cp,
+                        CalculateIVPerfection(pokemon), message),
+                    LoggerTypes.Info));
+
+                UpdateInventory(InventoryRefresh.Pokemon);
+
+                await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+
+                return new MethodResult
+                {
+                    Success = true
+                };
             }
             return new MethodResult();
         }
