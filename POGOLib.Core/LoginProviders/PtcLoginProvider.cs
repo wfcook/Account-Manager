@@ -77,13 +77,15 @@ namespace POGOLib.Official.LoginProviders
 
         private async Task<string> LogOut(HttpClient httpClient)
         {
-            var uriBuilder = new UriBuilder("https://sso.pokemon.com/sso/logout");
-            uriBuilder.Port = -1;
-            uriBuilder.Query = await
+            var uriBuilder = new UriBuilder("https://sso.pokemon.com/sso/logout")
+            {
+                Port = -1,
+                Query = await
              new FormUrlEncodedContent(new Dictionary<string, string>
                 {
                     {"service", "https://sso.pokemon.com/sso/oauth2.0/callbackAuthorize" }
-                }).ReadAsStringAsync();
+                }).ReadAsStringAsync()
+            };
             var loginDataResponse = await httpClient.GetAsync(uriBuilder.ToString());
             //if (loginDataResponse.StatusCode ==  HttpStatusCode.OK){
             uriBuilder = new UriBuilder(loginDataResponse.Headers.Location);
@@ -100,15 +102,16 @@ namespace POGOLib.Official.LoginProviders
         /// <returns><see cref="LoginData" /> for <see cref="PostLogin" />.</returns>
         private async Task<LoginData> GetLoginData(HttpClient httpClient)
         {
-            var uriBuilder = new UriBuilder("https://sso.pokemon.com/sso/login");
-            uriBuilder.Port = -1;
-            //TODO: use selected locale information
-            uriBuilder.Query = await
-             new FormUrlEncodedContent(new Dictionary<string, string>
+            var uriBuilder = new UriBuilder("https://sso.pokemon.com/sso/login")
+            {
+                Port = -1,
+                //TODO: use selected locale information
+                Query = await new FormUrlEncodedContent(new Dictionary<string, string>
                 {
                     {"service", "https://sso.pokemon.com/sso/oauth2.0/callbackAuthorize" },
                     {"locale",  "en_US"}
-                }).ReadAsStringAsync();
+                }).ReadAsStringAsync()
+            };
             var loginDataResponse = await httpClient.GetAsync(uriBuilder.ToString());
             if (loginDataResponse.StatusCode == HttpStatusCode.OK)
             {
@@ -130,12 +133,14 @@ namespace POGOLib.Official.LoginProviders
         /// <returns></returns>
         private async Task<string> PostLogin(HttpClient httpClient, string username, string password, LoginData loginData, CookieContainer cookieContainer, string language)
         {
-            var uriBuilder = new UriBuilder("https://sso.pokemon.com/sso/login");
-            uriBuilder.Port = -1;
-            uriBuilder.Query = await new FormUrlEncodedContent(new Dictionary<string, string> {
+            var uriBuilder = new UriBuilder("https://sso.pokemon.com/sso/login")
+            {
+                Port = -1,
+                Query = await new FormUrlEncodedContent(new Dictionary<string, string> {
                      {"service", "https://sso.pokemon.com/sso/oauth2.0/callbackAuthorize"} ,
                      {"locale", "en_US"}
-                    }).ReadAsStringAsync();
+                    }).ReadAsStringAsync()
+            };
             var loginResponse =
                 await httpClient.PostAsync(uriBuilder.ToString(), new FormUrlEncodedContent(new Dictionary<string, string>
                 {

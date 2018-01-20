@@ -18,30 +18,22 @@ using POGOProtos.Networking.Responses;
 using System.Diagnostics;
 using POGOLib.Official.Net.Authentication.Data;
 using PokemonGoGUI.Enums;
+using PokemonGoGUI.Extensions;
 
 namespace PokemonGoGUI.Captcha
 {
     public class CaptchaManager
     {
         const string POKEMON_GO_GOOGLE_KEY = "6LeeTScTAAAAADqvhqVMhPpr_vB9D364Ia-1dSgK";
-        private AccessToken accessToken;
-        private bool Resolved = false;
 
         public async Task<bool> SolveCaptcha(Client client, string captchaUrl)
         {
+            bool Resolved = false;
             string captchaResponse = "";
             int retry = client.ClientManager.UserSettings.AutoCaptchaRetries;
-            accessToken = client.ClientSession.AccessToken;
 
             while (retry-- > 0 && !Resolved)
             {
-                //Break if accesstoken as changed
-                if (accessToken != client.ClientSession.AccessToken)
-                {
-                    client.ClientManager.LogCaller(new LoggerEventArgs("Captcha has been stopped for this AccessToken ", LoggerTypes.Captcha));
-                    break;
-                }
-
                 //Use captcha solution to resolve captcha
                 if (!Resolved && client.ClientManager.UserSettings.EnableCaptchaSolutions &&
                     !string.IsNullOrEmpty(client.ClientManager.UserSettings.CaptchaSolutionAPIKey) &&
@@ -134,8 +126,13 @@ namespace PokemonGoGUI.Captcha
         {
             if (string.IsNullOrEmpty(captchaResponse)) return false;
 
-            if (!client.LoggedIn || client.ClientManager.AccountState != AccountState.CaptchaReceived || client.ClientManager.State == BotState.Stopping)
-                return false;
+            if (!client.LoggedIn)
+            {
+                //if (client.ClientSession.State != POGOLib.Official.Net.SessionState.Paused)
+                //    await client.DoLogin(client.ClientManager);
+                //if (!client.LoggedIn)
+                    return false;
+            }
 
             var response = await client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
@@ -171,17 +168,6 @@ namespace PokemonGoGUI.Captcha
 
             while (retries-- > 0 && !solved)
             {
-                //Check if other as resolved
-                if (Resolved)
-                    break;
-
-                //Break if accesstoken as changed
-                if (accessToken != client.ClientSession.AccessToken)
-                {
-                    client.ClientManager.LogCaller(new LoggerEventArgs("Captcha has been stopped for this AccessToken ", LoggerTypes.Captcha));
-                    break;
-                }
-
                 result = await AntiCaptchaClient.SolveCaptcha(client, captchaUrl,
                     client.ClientManager.UserSettings.AntiCaptchaAPIKey,
                     POKEMON_GO_GOOGLE_KEY,
@@ -205,17 +191,6 @@ namespace PokemonGoGUI.Captcha
 
             while (retries-- > 0 && !solved)
             {
-                //Check if other as resolved
-                if (Resolved)
-                    break;
-
-                //Break if accesstoken as changed
-                if (accessToken != client.ClientSession.AccessToken)
-                {
-                    client.ClientManager.LogCaller(new LoggerEventArgs("Captcha has been stopped for this AccessToken ", LoggerTypes.Captcha));
-                    break;
-                }
-
                 TwoCaptchaClient _client = new TwoCaptchaClient(client.ClientManager.UserSettings.TwoCaptchaAPIKey);
 
                 result = await _client.SolveRecaptchaV2(client, POKEMON_GO_GOOGLE_KEY, captchaUrl, string.Empty, ProxyType.HTTP);

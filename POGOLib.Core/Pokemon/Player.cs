@@ -13,7 +13,7 @@ namespace POGOLib.Official.Pokemon
         internal Player(Session session, GeoCoordinate coordinate, GetPlayerMessage.Types.PlayerLocale playerLocale)
         {
             Coordinate = coordinate;
-            PlayerLocale = playerLocale ?? new GetPlayerMessage.Types.PlayerLocale { Country = "US", Language = "en", Timezone = "America/New_York" };
+            PlayerLocale = playerLocale;
             Inventory = new Inventory(session);
             session.InventoryUpdate += InventoryOnUpdate;
         }

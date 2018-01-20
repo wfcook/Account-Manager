@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using GeoCoordinatePortable;
+using POGOLib.Official.Exceptions;
 using POGOLib.Official.LoginProviders;
 using POGOLib.Official.Net.Authentication.Data;
 using POGOLib.Official.Util.Device;
@@ -21,14 +22,16 @@ namespace POGOLib.Official.Net.Authentication
         /// <param name="initialLatitude">The initial latitude you will spawn at after logging into PokémonGo.</param>
         /// <param name="initialLongitude">The initial longitude you will spawn at after logging into PokémonGo.</param>
         /// <param name="deviceWrapper">The <see cref="DeviceWrapper"/> used by the <see cref="Session"/>, keep null if you want a randomly generated <see cref="DeviceWrapper"/>.</param>
+        /// <param name = "playerLocale"></param>
         /// <returns></returns>
         public static Session GetSession(ILoginProvider loginProvider, AccessToken accessToken, double initialLatitude, double initialLongitude, DeviceWrapper deviceWrapper = null, GetPlayerMessage.Types.PlayerLocale playerLocale = null)
         {
             if (accessToken.IsExpired)
                 throw new Exception("AccessToken is expired.");
 
-
-            var session = new Session(loginProvider, accessToken, new GeoCoordinate(initialLatitude, initialLongitude), deviceWrapper, playerLocale);
+            DeviceWrapper device = deviceWrapper ?? DeviceInfoUtil.GetRandomDevice();
+            GetPlayerMessage.Types.PlayerLocale locale = playerLocale ?? new GetPlayerMessage.Types.PlayerLocale { Country = "US", Language = "en", Timezone = "America/New_York" };
+            var session = new Session(loginProvider, accessToken, new GeoCoordinate(initialLatitude, initialLongitude), device, locale);
             session.Logger.Debug("Authenticated from cache.");
             return session;
         }
@@ -40,18 +43,20 @@ namespace POGOLib.Official.Net.Authentication
         /// <param name="initialLatitude">The initial latitude you will spawn at after logging into PokémonGo.</param>
         /// <param name="initialLongitude">The initial longitude you will spawn at after logging into PokémonGo.</param>
         /// <param name="deviceWrapper">The <see cref="DeviceWrapper"/> used by the <see cref="Session"/>, keep null if you want a randomly generated <see cref="DeviceWrapper"/>.</param>
+        /// <param name = "playerLocale"></param>
         /// <returns></returns>
         public static async Task<Session> GetSession(ILoginProvider loginProvider, double initialLatitude, double initialLongitude, DeviceWrapper deviceWrapper = null, GetPlayerMessage.Types.PlayerLocale playerLocale = null)
         {
-            string language = playerLocale.Language + "-" + playerLocale.Country;
-            var session = new Session(loginProvider, await loginProvider.GetAccessToken(deviceWrapper.UserAgent, language), new GeoCoordinate(initialLatitude, initialLongitude), deviceWrapper, playerLocale);
+            DeviceWrapper device = deviceWrapper ?? DeviceInfoUtil.GetRandomDevice();
+            GetPlayerMessage.Types.PlayerLocale locale = playerLocale ?? new GetPlayerMessage.Types.PlayerLocale { Country = "US", Language = "en", Timezone = "America/New_York" };
+            string language = locale.Language + "-" + locale.Country;
+            var session = new Session(loginProvider, await loginProvider.GetAccessToken(device.UserAgent, language), new GeoCoordinate(initialLatitude, initialLongitude), device, locale);
             if (loginProvider is PtcLoginProvider)
                 session.Logger.Debug("Authenticated through PTC.");
             else
                 session.Logger.Debug("Authenticated through Google.");
             return session;
         }
-
         /// <summary>
         /// Login with a stored <see cref="AccessToken" />.
         /// </summary>
@@ -59,6 +64,7 @@ namespace POGOLib.Official.Net.Authentication
         /// <param name="accessToken">The <see cref="AccessToken"/> you want to re-use.</param>
         /// <param name="coordinate">The initial coordinate you will spawn at after logging into PokémonGo.</param>
         /// <param name="deviceWrapper">The <see cref="DeviceWrapper"/> used by the <see cref="Session"/>, keep null if you want a randomly generated <see cref="DeviceWrapper"/>.</param>
+        /// <param name = "playerLocale"></param>
         /// <returns></returns>
         public static Session GetSession(ILoginProvider loginProvider, AccessToken accessToken, GeoCoordinate coordinate, DeviceWrapper deviceWrapper = null, GetPlayerMessage.Types.PlayerLocale playerLocale = null)
         {
@@ -67,8 +73,14 @@ namespace POGOLib.Official.Net.Authentication
                 throw new ArgumentException($"{nameof(accessToken)} is expired.");
             }
 
-            var session = new Session(loginProvider, accessToken, coordinate, deviceWrapper, playerLocale);
+            DeviceWrapper device = deviceWrapper ?? DeviceInfoUtil.GetRandomDevice();
+            GetPlayerMessage.Types.PlayerLocale locale = playerLocale ?? new GetPlayerMessage.Types.PlayerLocale { Country = "US", Language = "en", Timezone = "America/New_York" };
+            var session = new Session(loginProvider, accessToken, coordinate, device, locale);
             session.Logger.Debug("Authenticated from cache.");
+            if (loginProvider is PtcLoginProvider)
+                session.Logger.Debug("Authenticated through PTC.");
+            else
+                session.Logger.Debug("Authenticated through Google.");
             return session;
         }
 
@@ -82,8 +94,10 @@ namespace POGOLib.Official.Net.Authentication
         /// <returns></returns>
         public static async Task<Session> GetSession(ILoginProvider loginProvider, GeoCoordinate coordinate, DeviceWrapper deviceWrapper = null, GetPlayerMessage.Types.PlayerLocale playerLocale = null)
         {
-            string language = playerLocale.Language + "-" + playerLocale.Country;
-            var session = new Session(loginProvider, await loginProvider.GetAccessToken(deviceWrapper.UserAgent, language) , coordinate, deviceWrapper, playerLocale);
+            DeviceWrapper device = deviceWrapper ?? DeviceInfoUtil.GetRandomDevice();
+            GetPlayerMessage.Types.PlayerLocale locale = playerLocale ?? new GetPlayerMessage.Types.PlayerLocale { Country = "US", Language = "en", Timezone = "America/New_York" };
+            string language = locale.Language + "-" + locale.Country;
+            var session = new Session(loginProvider, await loginProvider.GetAccessToken(device.UserAgent, language), coordinate, device, locale);
             if (loginProvider is PtcLoginProvider)
                 session.Logger.Debug("Authenticated through PTC.");
             else

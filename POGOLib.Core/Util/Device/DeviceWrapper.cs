@@ -7,7 +7,6 @@ namespace POGOLib.Official.Util.Device
     {
         public string UserAgent { get; set; }
         public IWebProxy Proxy { get; set; }
-
         public DeviceInfo DeviceInfo { get; set; }
     }
 }

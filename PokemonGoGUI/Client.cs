@@ -200,9 +200,14 @@ namespace PokemonGoGUI
                     }
                 }
             }
-            catch (APIBadRequestException)// ex
+            catch (HashVersionMismatchException ex)
             {
-                ClientManager.LogCaller(new LoggerEventArgs("API Bad Request, this account is maybe banned ...", LoggerTypes.Warning));
+                ClientManager.LogCaller(new LoggerEventArgs(ex.Message, LoggerTypes.Warning));
+                ClientManager.Stop();
+            }
+            catch (APIBadRequestException ex)
+            {
+                ClientManager.LogCaller(new LoggerEventArgs($"API {ex.Message}, this account is maybe banned ...", LoggerTypes.Warning));
             }
             catch (InvalidPlatformException)// ex
             {
@@ -231,7 +236,7 @@ namespace PokemonGoGUI
 
                     ClientManager.Stop();
 
-                    msgStr = "The account is banned temporally.";
+                    msgStr = ex.Message;
                 }
                 else
                     ClientManager.LogCaller(new LoggerEventArgs(ex.Message, LoggerTypes.Warning));
@@ -576,7 +581,6 @@ namespace PokemonGoGUI
         {
             var cacheDir = Path.Combine(Directory.GetCurrentDirectory(), "Cache");
             var fileName = Path.Combine(cacheDir, $"{loginProvider.UserId}-{loginProvider.ProviderId}.json");
-
             if (mayCache)
             {
                 if (!Directory.Exists(cacheDir))
@@ -604,9 +608,10 @@ namespace PokemonGoGUI
 
             return session;
         }
+
         private void LoadResources(Session session)
         {
-            //My files resources here       
+            //My files resources here  
             var filename = "data/" + ClientManager.UserSettings.DeviceId + "_IT.json";
             if (File.Exists(filename))
                 session.Templates.ItemTemplates = Serializer.FromJson<List<DownloadItemTemplatesResponse.Types.ItemTemplate>>(File.ReadAllText(filename));

@@ -21,6 +21,7 @@ using POGOLib.Official.Util.Hash.PokeHash;
 using System.Windows.Forms;
 using POGOLib.Official.Exceptions;
 using PokemonGoGUI.Captcha;
+using POGOLib.Official.Util.Hash;
 
 namespace PokemonGoGUI.GoManager
 {
@@ -837,6 +838,18 @@ namespace PokemonGoGUI.GoManager
                             break;
                         }
                     }
+                }
+                catch (HashVersionMismatchException ex)
+                {
+                    AccountState = AccountState.Unknown;
+                    LogCaller(new LoggerEventArgs(ex.Message, LoggerTypes.Warning));
+                    Stop();
+                }
+                catch (PtcLoginException ex)
+                {
+                    AccountState = AccountState.Unknown;
+                    LogCaller(new LoggerEventArgs(ex.Message, LoggerTypes.FatalError));
+                    Stop();
                 }
                 catch (APIBadRequestException)// ex
                 {

@@ -53,7 +53,7 @@ namespace POGOLib.Official.Net
         // public IDataCache DataCache { get; set; } = new MemoryDataCache();
         // public Templates Templates { get; private set; }
 
-        internal Session(ILoginProvider loginProvider, AccessToken accessToken, GeoCoordinate geoCoordinate, DeviceWrapper deviceWrapper = null, GetPlayerMessage.Types.PlayerLocale playerLocale = null)
+        internal Session(ILoginProvider loginProvider, AccessToken accessToken, GeoCoordinate geoCoordinate, DeviceWrapper deviceWrapper, GetPlayerMessage.Types.PlayerLocale playerLocale)
         {
             if (!ValidLoginProviders.Contains(loginProvider.ProviderId))
             {
@@ -62,17 +62,16 @@ namespace POGOLib.Official.Net
             Logger = new Logger();
 
             State = SessionState.Stopped;
-            Device = deviceWrapper ?? DeviceInfoUtil.GetRandomDevice();
 
+            Device = deviceWrapper;
+ 
             var handler = new HttpClientHandler
             {
-                AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
+                AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
+                UseProxy = Device.Proxy != null,
+                Proxy = Device.Proxy
             };
-            handler.UseProxy = Device.Proxy != null;
-            if (handler.UseProxy)
-            {
-                handler.Proxy = Device.Proxy;
-            }
+
             HttpClient = new HttpClient(handler);
 
             HttpClient.DefaultRequestHeaders.UserAgent.TryParseAdd(Constants.ApiUserAgent);
@@ -262,7 +261,7 @@ namespace POGOLib.Official.Net
                 var result = Configuration.Hasher.PokemonVersion.CompareTo(pogoVersion);
                 if (result < 0)
                 {
-                    throw new HashVersionMismatchException("The version of the " + nameof(Configuration.Hasher) + "(" + Configuration.Hasher.PokemonVersion + ") does not match the minimal API version of PokemonGo ({pogoVersion}). Set 'Configuration.IgnoreHashVersion' to true if you want to disable the version check.");
+                    throw new HashVersionMismatchException($"The version of the {nameof(Configuration.Hasher)} ({Configuration.Hasher.PokemonVersion}) does not match the minimal API version of PokemonGo ({pogoVersion}). Set 'Configuration.IgnoreHashVersion' to true if you want to disable the version check.");
                 }
             }
         }
@@ -288,6 +287,10 @@ namespace POGOLib.Official.Net
                             Logger.Debug("Authenticated through PTC.");
                         else
                             Logger.Debug("Authenticated through Google.");
+                    }
+                    catch (PtcLoginException ex)
+                    {
+                        throw new PtcLoginException(ex.Message);
                     }
                     catch (Exception exception)
                     {
