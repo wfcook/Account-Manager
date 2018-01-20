@@ -4,7 +4,6 @@ using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using GeoCoordinatePortable;
 using POGOLib.Official.Exceptions;
 using POGOLib.Official.Logging;
 using POGOLib.Official.LoginProviders;
@@ -18,6 +17,7 @@ using POGOProtos.Settings;
 using POGOProtos.Networking.Requests.Messages;
 using POGOProtos.Networking.Responses;
 using System.Collections.Generic;
+using POGOLib.Official.Extensions;
 
 namespace POGOLib.Official.Net
 {

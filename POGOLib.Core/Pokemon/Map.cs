@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using GeoCoordinatePortable;
 using Google.Protobuf.Collections;
+using POGOLib.Official.Extensions;
 using POGOLib.Official.Net;
 using POGOProtos.Map;
 using POGOProtos.Map.Fort;

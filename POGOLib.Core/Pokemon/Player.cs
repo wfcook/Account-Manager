@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using GeoCoordinatePortable;
+using POGOLib.Official.Extensions;
 using POGOLib.Official.Net;
 using POGOProtos.Data;
 using POGOProtos.Data.Player;

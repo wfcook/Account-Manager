@@ -1,4 +1,4 @@
-﻿using GeoCoordinatePortable;
+﻿using POGOLib.Official.Extensions;
 using POGOProtos.Inventory.Item;
 using POGOProtos.Map.Fort;
 using POGOProtos.Map.Pokemon;

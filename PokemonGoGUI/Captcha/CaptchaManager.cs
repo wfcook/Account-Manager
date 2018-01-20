@@ -16,9 +16,6 @@ using POGOProtos.Networking.Requests.Messages;
 using Google.Protobuf;
 using POGOProtos.Networking.Responses;
 using System.Diagnostics;
-using POGOLib.Official.Net.Authentication.Data;
-using PokemonGoGUI.Enums;
-using PokemonGoGUI.Extensions;
 
 namespace PokemonGoGUI.Captcha
 {

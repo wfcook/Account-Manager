@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using GeoCoordinatePortable;
-using POGOLib.Official.Exceptions;
+using POGOLib.Official.Extensions;
 using POGOLib.Official.LoginProviders;
 using POGOLib.Official.Net.Authentication.Data;
 using POGOLib.Official.Util.Device;

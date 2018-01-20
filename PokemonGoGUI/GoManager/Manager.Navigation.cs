@@ -1,8 +1,8 @@
 ﻿using PokemonGoGUI.GoManager.Models;
 using System;
-using GeoCoordinatePortable;
 using System.Threading.Tasks;
 using PokemonGoGUI.Extensions;
+using POGOLib.Official.Extensions;
 
 namespace PokemonGoGUI.GoManager
 {

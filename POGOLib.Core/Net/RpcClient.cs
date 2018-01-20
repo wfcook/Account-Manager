@@ -6,7 +6,6 @@ using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using GeoCoordinatePortable;
 using Google.Protobuf;
 using POGOLib.Official.Util;
 using POGOProtos.Map;
@@ -1067,7 +1066,7 @@ namespace POGOLib.Official.Net
             }
         }
 
-        /*private async Task GetDownloadURLs()
+        private async Task GetDownloadURLs()
         {
             var toCheck = new[] {
                 "i18n_general",
@@ -1077,17 +1076,15 @@ namespace POGOLib.Official.Net
 
             await GetDownloadURLs(toCheck);
         }
-        */
 
-        private async Task GetDownloadURLs()
+        private async Task GetDownloadURLs(string[] toCheck)
         {
-            if (_session.Templates.DownloadUrls != null)
+            if (_session.Templates.DownloadUrls != null && _session.Templates.AssetDigests != null)
             {
                 _session.Logger.Debug("Use cached values for GetDownloadUrls");
                 return;
             }
             var dowloadUrls = new List<POGOProtos.Data.DownloadUrlEntry>();
-            /*
             var toDownload = new List<string>();
 
             for (int i = 0; i < _session.Templates.AssetDigests.Count; i++)
@@ -1099,14 +1096,19 @@ namespace POGOLib.Official.Net
                         toDownload.Add(digest.AssetId);
                 }
             }
-            */
+
+            if (toDownload.Count == 0)
+            {
+                _session.Logger.Debug("Urls to load is empty, ignore request.");
+                return;
+            }
 
             var response = await SendRemoteProcedureCallAsync(new Request
             {
                 RequestType = RequestType.GetDownloadUrls,
                 RequestMessage = new GetDownloadUrlsMessage
                 {
-                    //AssetId = { toDownload.ToArray() }
+                    AssetId = { toDownload.ToArray() }
                 }.ToByteString()
             }, true, true, true);
 
