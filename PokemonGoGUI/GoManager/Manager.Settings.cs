@@ -1,4 +1,5 @@
-﻿using POGOProtos.Enums;
+﻿using POGOLib.Official.Util.Device;
+using POGOProtos.Enums;
 using POGOProtos.Settings.Master;
 using PokemonGoGUI.Extensions;
 using PokemonGoGUI.GoManager.Models;
@@ -233,7 +234,9 @@ namespace PokemonGoGUI.GoManager
                 settings.Language = settings.Language;
                 settings.TimeZone = settings.TimeZone;
                 settings.POSIX = settings.POSIX;
-                settings.DeviceId = settings.DeviceId;
+                //Randomize device id
+                var device = DeviceInfoUtil.GetRandomDevice();                
+                settings.DeviceId = device.DeviceInfo.DeviceId;
                 settings.DeviceBrand = settings.DeviceBrand;
                 settings.DeviceModel = settings.DeviceModel;
                 settings.DeviceModelBoot = settings.DeviceModelBoot;
@@ -346,6 +349,7 @@ namespace PokemonGoGUI.GoManager
         {
             UserSettings.RandomizeDeviceId();
         }
+
         public void RandomDevice()
         {
             UserSettings.RandomizeDevice();

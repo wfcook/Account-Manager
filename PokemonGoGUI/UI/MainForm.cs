@@ -650,7 +650,8 @@ namespace PokemonGoGUI
                             return;
                         }
                     }
-
+                    //Randomize device id;
+                    manager.RandomDeviceId();
                     manager.UserSettings.AccountName = importModel.Username.Trim();
                     manager.UserSettings.Username = importModel.Username.Trim();
                     manager.UserSettings.Password = importModel.Password.Trim();
