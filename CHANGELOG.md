@@ -1,5 +1,14 @@
 # Change Log
 
+## [v2.21.1.45](https://github.com/Furtif/Account-Manager/tree/v2.21.1.45) (2018-01-20)
+
+[Full Changelog](https://github.com/Furtif/Account-Manager/compare/v2.21.1.44...v2.21.1.45)
+
+**Closed issues:**
+
+- Evolve problem when lucky egg is using [\#56](https://github.com/Furtif/Account-Manager/issues/56)
+- Run Mass account, bot stopped [\#55](https://github.com/Furtif/Account-Manager/issues/55)
+
 ## [v2.21.1.44](https://github.com/Furtif/Account-Manager/tree/v2.21.1.44) (2018-01-19)
 
 [Full Changelog](https://github.com/Furtif/Account-Manager/compare/v2.21.1.43...v2.21.1.44)
