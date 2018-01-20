@@ -273,7 +273,7 @@ namespace POGOLib.Official.Net
             else if (_session.State != SessionState.Paused)
             {
                 // POGOLib didn't expect this.
-                throw new NullReferenceException(nameof(response));
+                throw new SessionStateException("We received 0 map cells or status is empty.");
             }
         }
 
@@ -939,6 +939,12 @@ namespace POGOLib.Official.Net
 
         private async Task DownloadItemTemplates(int pageOffset = 0, ulong timestamp = 0ul)
         {
+            if (_session.Templates.ItemTemplates != null)
+            {
+                _session.Logger.Debug("Use cached values for DownloadItemTemplates");
+                return;
+            }
+
             var time = timestamp != 0ul ? timestamp : _session.Templates.ItemTemplatesTimestampMs;
             var templates = new List<DownloadItemTemplatesResponse.Types.ItemTemplate>();
             var local_config_version = new DownloadRemoteConfigVersionResponse();
@@ -946,12 +952,6 @@ namespace POGOLib.Official.Net
 
             if (_session.Templates.LocalConfigVersion != null)
                 local_config_version = _session.Templates.LocalConfigVersion;
-
-            if (_session.Templates.ItemTemplates != null || _session.Templates.ItemTemplatesTimestampMs <= local_config_version.ItemTemplatesTimestampMs)
-            {
-                _session.Logger.Debug("Use cached values for DownloadItemTemplates");
-                return;
-            }
 
             var response = await SendRemoteProcedureCallAsync(new Request
             {
@@ -1004,6 +1004,12 @@ namespace POGOLib.Official.Net
 
         private async Task GetAssetDigest(int pageOffset = 0, ulong timestamp = 0ul)
         {
+            if (_session.Templates.AssetDigests != null)
+            {
+                _session.Logger.Debug("Use cached values for GetAssetDigest");
+                return;
+            }
+
             var time = timestamp != 0ul ? timestamp : _session.Templates.AssetDigestTimestampMs;
             var digests = new List<POGOProtos.Data.AssetDigestEntry>();
             var local_config_version = new DownloadRemoteConfigVersionResponse();
@@ -1011,12 +1017,6 @@ namespace POGOLib.Official.Net
 
             if (_session.Templates.LocalConfigVersion != null)
                 local_config_version = _session.Templates.LocalConfigVersion;
-
-            if (_session.Templates.AssetDigests != null || _session.Templates.AssetDigestTimestampMs <= local_config_version.AssetDigestTimestampMs)
-            {
-                _session.Logger.Debug("Use cached values for GetAssetDigest");
-                return;
-            }
 
             var response = await SendRemoteProcedureCallAsync(new Request
             {
@@ -1067,7 +1067,7 @@ namespace POGOLib.Official.Net
             }
         }
 
-        private async Task GetDownloadURLs()
+        /*private async Task GetDownloadURLs()
         {
             var toCheck = new[] {
                 "i18n_general",
@@ -1077,17 +1077,18 @@ namespace POGOLib.Official.Net
 
             await GetDownloadURLs(toCheck);
         }
+        */
 
-        private async Task GetDownloadURLs(string[] toCheck)
+        private async Task GetDownloadURLs()
         {
             if (_session.Templates.DownloadUrls != null)
             {
                 _session.Logger.Debug("Use cached values for GetDownloadUrls");
                 return;
             }
-
-            var toDownload = new List<string>();
             var dowloadUrls = new List<POGOProtos.Data.DownloadUrlEntry>();
+            /*
+            var toDownload = new List<string>();
 
             for (int i = 0; i < _session.Templates.AssetDigests.Count; i++)
             {
@@ -1098,13 +1099,14 @@ namespace POGOLib.Official.Net
                         toDownload.Add(digest.AssetId);
                 }
             }
+            */
 
             var response = await SendRemoteProcedureCallAsync(new Request
             {
                 RequestType = RequestType.GetDownloadUrls,
                 RequestMessage = new GetDownloadUrlsMessage
                 {
-                    AssetId = { toDownload.ToArray() }
+                    //AssetId = { toDownload.ToArray() }
                 }.ToByteString()
             }, true, true, true);
 
