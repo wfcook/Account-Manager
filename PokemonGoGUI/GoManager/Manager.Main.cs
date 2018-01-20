@@ -21,6 +21,7 @@ using POGOLib.Official.Util.Hash.PokeHash;
 using System.Windows.Forms;
 using POGOLib.Official.Exceptions;
 using PokemonGoGUI.Captcha;
+using POGOLib.Official.Util.Hash;
 
 namespace PokemonGoGUI.GoManager
 {
@@ -449,9 +450,9 @@ namespace PokemonGoGUI.GoManager
                             await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
                         }
 
-                        if (!PlayerData.TutorialState.Contains(TutorialState.GymTutorial) && Level >= 5)
+                        if (!PlayerData.TutorialState.Contains(TutorialState.GymTutorial) && Level >= 5 && !string.IsNullOrEmpty(UserSettings.DefaultTeam))
                         {
-                            if (PlayerData.Team != TeamColor.Neutral)
+                            if (PlayerData.Team == TeamColor.Neutral)
                             {
                                 TeamColor team = TeamColor.Neutral;
 
@@ -837,6 +838,18 @@ namespace PokemonGoGUI.GoManager
                             break;
                         }
                     }
+                }
+                catch (HashVersionMismatchException ex)
+                {
+                    AccountState = AccountState.Unknown;
+                    LogCaller(new LoggerEventArgs(ex.Message, LoggerTypes.Warning));
+                    Stop();
+                }
+                catch (PtcLoginException ex)
+                {
+                    AccountState = AccountState.Unknown;
+                    LogCaller(new LoggerEventArgs(ex.Message, LoggerTypes.FatalError));
+                    Stop();
                 }
                 catch (APIBadRequestException)// ex
                 {

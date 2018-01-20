@@ -25,7 +25,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
-using PokemonGoGUI.Captcha;
 using static POGOProtos.Networking.Envelopes.Signature.Types;
 
 #endregion
@@ -42,6 +41,7 @@ namespace PokemonGoGUI
         public GetPlayerMessage.Types.PlayerLocale PlayerLocale;
         private DeviceWrapper ClientDeviceWrapper;
         public Manager ClientManager;
+        private event EventHandler<int> OnPokehashSleeping;
 
         public Client()
         {
@@ -122,7 +122,7 @@ namespace PokemonGoGUI
                 // Used on Windows phone background app
                 //((PokeHashHasher)Configuration.Hasher).PokehashSleeping += OnPokehashSleeping;
             }
-            // *****
+            // */
 
             ILoginProvider loginProvider;
 
@@ -200,6 +200,33 @@ namespace PokemonGoGUI
                     }
                 }
             }
+            catch (HashVersionMismatchException ex)
+            {
+                ClientManager.LogCaller(new LoggerEventArgs(ex.Message, LoggerTypes.Warning));
+                ClientManager.Stop();
+            }
+            catch (APIBadRequestException ex)
+            {
+                ClientManager.LogCaller(new LoggerEventArgs($"API {ex.Message}, this account is maybe banned ...", LoggerTypes.Warning));
+            }
+            catch (InvalidPlatformException)// ex
+            {
+                ClientManager.LogCaller(new LoggerEventArgs("Invalid Platform, continue  ...", LoggerTypes.Warning));
+            }
+            catch (SessionInvalidatedException)// ex
+            {
+                ClientManager.LogCaller(new LoggerEventArgs("Session Invalidated, continue ...", LoggerTypes.Warning));
+            }
+            catch (SessionUnknowException)
+            {
+                ClientManager.AccountState = AccountState.Unknown;
+                msgStr = "Skipping request. Restarting ...";
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                ClientManager.AccountState = AccountState.Unknown;
+                msgStr = "Skipping request";
+            }
             catch (SessionStateException ex)
             {
                 if (ClientSession.State == SessionState.TemporalBanned)
@@ -209,10 +236,10 @@ namespace PokemonGoGUI
 
                     ClientManager.Stop();
 
-                    msgStr = "The account is banned temporally.";                    
+                    msgStr = ex.Message;
                 }
                 else
-                ClientManager.LogCaller(new LoggerEventArgs(ex.Message, LoggerTypes.Warning));
+                    ClientManager.LogCaller(new LoggerEventArgs(ex.Message, LoggerTypes.Warning));
             }
             catch (PtcLoginException) // poex
             {
@@ -348,7 +375,6 @@ namespace PokemonGoGUI
                 ClientManager.RemoveProxy();
                 msgStr = "Argument Null Exception.";
             }
-
             catch (PokeHashException phex)
             {
                 ClientManager.AccountState = AccountState.HashIssues;
@@ -432,8 +458,6 @@ namespace PokemonGoGUI
             }
         }
 
-        private event EventHandler<int> OnPokehashSleeping;
-
         private void PokehashSleeping(object sender, int sleepTime)
         {
             OnPokehashSleeping?.Invoke(sender, sleepTime);
@@ -446,7 +470,7 @@ namespace PokemonGoGUI
             //ClientManager.LogCaller(new LoggerEventArgs(msg, LoggerTypes.Success));
         }
 
-        public async void SessionOnCaptchaReceived(object sender, CaptchaEventArgs e)
+        public void SessionOnCaptchaReceived(object sender, CaptchaEventArgs e)
         {
             AccountState accountState = ClientManager.AccountState;
 
@@ -456,13 +480,8 @@ namespace PokemonGoGUI
 
             ClientManager.LogCaller(new LoggerEventArgs("Bot paused VerifyChallenge...", LoggerTypes.Captcha));
 
-            bool solved = false;
-            int retries = 1;
+            bool solved = ClientManager.CaptchaSolver.SolveCaptcha(this, e.CaptchaUrl).Result;
 
-           while (retries-- > 0 && !solved)
-            {
-                solved = await ClientManager.CaptchaSolver.SolveCaptcha(this, e.CaptchaUrl);
-            }
             if (solved)
             {
                 ClientManager.LogCaller(new LoggerEventArgs("Unpausing bot Challenge finished...", LoggerTypes.Captcha));
@@ -562,7 +581,6 @@ namespace PokemonGoGUI
         {
             var cacheDir = Path.Combine(Directory.GetCurrentDirectory(), "Cache");
             var fileName = Path.Combine(cacheDir, $"{loginProvider.UserId}-{loginProvider.ProviderId}.json");
-
             if (mayCache)
             {
                 if (!Directory.Exists(cacheDir))
@@ -590,9 +608,10 @@ namespace PokemonGoGUI
 
             return session;
         }
+
         private void LoadResources(Session session)
         {
-            //My files resources here       
+            //My files resources here  
             var filename = "data/" + ClientManager.UserSettings.DeviceId + "_IT.json";
             if (File.Exists(filename))
                 session.Templates.ItemTemplates = Serializer.FromJson<List<DownloadItemTemplatesResponse.Types.ItemTemplate>>(File.ReadAllText(filename));

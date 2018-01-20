@@ -1,4 +1,5 @@
-﻿using PokemonGoGUI.GoManager;
+﻿using PokemonGoGUI.Enums;
+using PokemonGoGUI.GoManager;
 using PokemonGoGUI.GoManager.Models;
 using System;
 using System.IO;
@@ -9,7 +10,7 @@ namespace PokemonGoGUI.Captcha
 {
     public class TwoCaptchaClient
     {
-        public string APIKey { get; private set; }
+        private string APIKey { get;  set; }
 
         public TwoCaptchaClient(string apiKey)
         {
