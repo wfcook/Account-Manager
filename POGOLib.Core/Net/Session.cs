@@ -32,6 +32,8 @@ namespace POGOLib.Official.Net
 
         private bool _luckyEggsUsed;
 
+        private bool _manageresources;
+
         /// <summary>
         /// This is the <see cref="HeartbeatDispatcher" /> which is responsible for retrieving events and updating gps location.
         /// </summary>
@@ -111,6 +113,18 @@ namespace POGOLib.Official.Net
         }
 
         /// <summary>
+        /// Gets ManageRessources active of the <see cref="Session" />.
+        /// </summary>
+        public bool ManageRessources
+        {
+            get { return _manageresources; }
+            set
+            {
+                _manageresources = value;
+            }
+        }
+
+        /// <summary>
         /// Gets the <see cref="SessionState"/> of the <see cref="Session"/>.
         /// </summary>
         public SessionState State
@@ -181,7 +195,7 @@ namespace POGOLib.Official.Net
 
         public Templates Templates { get; private set; }
 
-        public async Task<bool> StartupAsync(bool manageResources = false)
+        public async Task<bool> StartupAsync()
         {
             if (State != SessionState.Stopped)
             {
@@ -195,7 +209,7 @@ namespace POGOLib.Official.Net
 
             State = SessionState.Started;
 
-            if (!await RpcClient.StartupAsync(manageResources))
+            if (!await RpcClient.StartupAsync())
             {
                 return false;
             }

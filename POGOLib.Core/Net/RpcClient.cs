@@ -116,7 +116,7 @@ namespace POGOLib.Official.Net
         /// Sends all requests which the (ios-)client sends on startup
         /// </summary>
         // NOTE: this is the new login process in the real app, after of 0.45 API
-        internal async Task<bool> StartupAsync(bool manageResources)
+        internal async Task<bool> StartupAsync()
         {
             //await EmptyRequest(); // TODO: review this call, is failing
             // and the real app does it to receive the "OkRpcUrlInResponse"
@@ -164,13 +164,9 @@ namespace POGOLib.Official.Net
             }
 
             await DownloadRemoteConfig();
-
-            if (manageResources)
-            {
-                await GetAssetDigest();
-                await DownloadItemTemplates();
-                await GetDownloadURLs();
-            }
+            await GetAssetDigest();
+            await DownloadItemTemplates();
+            await GetDownloadURLs();
 
             return true;
         }
@@ -934,15 +930,16 @@ namespace POGOLib.Official.Net
                     _session.Templates.AssetDigestTimestampMs = downloadRemoteConfigVersionMessage.AssetDigestTimestampMs;
                     _session.Templates.ItemTemplatesTimestampMs = downloadRemoteConfigVersionMessage.ItemTemplatesTimestampMs;
                     _session.Templates.LocalConfigVersion = downloadRemoteConfigVersionMessage;
-                    _session.OnRemoteConfigVersionReceived(downloadRemoteConfigVersionMessage);
-                    return;
+
+                    if (_session.ManageRessources)
+                        _session.OnRemoteConfigVersionReceived(downloadRemoteConfigVersionMessage);
                 }
             }
-         }
+        }
 
         private async Task DownloadItemTemplates(int pageOffset = 0, ulong timestamp = 0ul)
         {
-            var time = timestamp != 0ul ? timestamp : 0ul;
+            var time = timestamp != 0ul ? timestamp : _session.Templates.ItemTemplatesTimestampMs;
             var templates = new List<DownloadItemTemplatesResponse.Types.ItemTemplate>();
             var local_config_version = new DownloadRemoteConfigVersionResponse();
             int page = pageOffset > 0 ? pageOffset : 0;
@@ -950,48 +947,53 @@ namespace POGOLib.Official.Net
             if (_session.Templates.LocalConfigVersion != null)
                 local_config_version = _session.Templates.LocalConfigVersion;
 
-            if (_session.Templates.ItemTemplates != null && (_session.Templates.ItemTemplatesTimestampMs <= local_config_version.ItemTemplatesTimestampMs))
-                return;
-
-            do
+            if (_session.Templates.ItemTemplates != null || _session.Templates.ItemTemplatesTimestampMs <= local_config_version.ItemTemplatesTimestampMs)
             {
-                var response = await SendRemoteProcedureCallAsync(new Request
-                {
-                    RequestType = RequestType.DownloadItemTemplates,
-                    RequestMessage = new DownloadItemTemplatesMessage
-                    {
-                        PageOffset = page,
-                        Paginate = true,
-                        PageTimestamp = time
-                    }.ToByteString()
-                }, true, true, true);
+                _session.Logger.Debug("Use cached values for DownloadItemTemplates");
+                return;
+            }
 
-                if (response != null)
+            var response = await SendRemoteProcedureCallAsync(new Request
+            {
+                RequestType = RequestType.DownloadItemTemplates,
+                RequestMessage = new DownloadItemTemplatesMessage
                 {
-                    var downloadItemTemplatesResponse = DownloadItemTemplatesResponse.Parser.ParseFrom(response);
+                    // PageOffset = page,
+                    // Paginate = true,
+                    // PageTimestamp = time
+                }.ToByteString()
+            }, true, true, true);
 
-                    switch (downloadItemTemplatesResponse.Result)
-                    {
-                        case DownloadItemTemplatesResponse.Types.Result.Success:
-                            templates.AddRange(downloadItemTemplatesResponse.ItemTemplates);
-                            break;
-                        case DownloadItemTemplatesResponse.Types.Result.Page:
-                            //Pages is here xelwon
-                            _session.Logger.Debug(String.Format("Page Templates: {0}", page));
-                            break;
-                        case DownloadItemTemplatesResponse.Types.Result.Retry:
-                            await DownloadItemTemplates(downloadItemTemplatesResponse.PageOffset, downloadItemTemplatesResponse.TimestampMs);
-                            break;
-                        case DownloadItemTemplatesResponse.Types.Result.Unset:
-                            _session.SetTemporalBan();
-                            throw new SessionStateException(nameof(response));
-                    }
-                    page++;
+            if (response != null)
+            {
+                var downloadItemTemplatesResponse = DownloadItemTemplatesResponse.Parser.ParseFrom(response);
+
+                switch (downloadItemTemplatesResponse.Result)
+                {
+                    case DownloadItemTemplatesResponse.Types.Result.Success:
+                        // Success?!
+                        // Comment next line if you uses paginate true
+                        templates.AddRange(downloadItemTemplatesResponse.ItemTemplates);
+                        break;
+                    case DownloadItemTemplatesResponse.Types.Result.Page:
+                        // Pages is here xelwon
+                        // here if paginate recuperate values for current page
+                        // _session.Logger.Debug(String.Format("Page Templates: {0}", downloadItemTemplatesResponse.PageOffset));
+                        // templates.AddRange(downloadItemTemplatesResponse.ItemTemplates);
+                        break;
+                    case DownloadItemTemplatesResponse.Types.Result.Retry:
+                        // Retry re-send request
+                        await DownloadItemTemplates(downloadItemTemplatesResponse.PageOffset, downloadItemTemplatesResponse.TimestampMs);
+                        break;
+                    case DownloadItemTemplatesResponse.Types.Result.Unset:
+                        break;
                 }
-            } while (pageOffset != 0);
 
-            _session.Templates.ItemTemplates = templates;
-            _session.OnItemTemplatesReceived(templates);
+                _session.Templates.ItemTemplates = templates;
+
+                if (_session.ManageRessources)
+                    _session.OnItemTemplatesReceived(templates);
+            }
         }
 
         private void HandleEventHandler(object sender, Newtonsoft.Json.Serialization.ErrorEventArgs errorArgs)
@@ -1002,7 +1004,7 @@ namespace POGOLib.Official.Net
 
         private async Task GetAssetDigest(int pageOffset = 0, ulong timestamp = 0ul)
         {
-            var time = timestamp != 0ul ? timestamp : 0ul;
+            var time = timestamp != 0ul ? timestamp : _session.Templates.AssetDigestTimestampMs;
             var digests = new List<POGOProtos.Data.AssetDigestEntry>();
             var local_config_version = new DownloadRemoteConfigVersionResponse();
             int page = pageOffset > 0 ? pageOffset : 0;
@@ -1010,53 +1012,59 @@ namespace POGOLib.Official.Net
             if (_session.Templates.LocalConfigVersion != null)
                 local_config_version = _session.Templates.LocalConfigVersion;
 
-            if (_session.Templates.AssetDigests != null && (_session.Templates.AssetDigestTimestampMs <= local_config_version.AssetDigestTimestampMs))
-                return;
-
-            do
+            if (_session.Templates.AssetDigests != null || _session.Templates.AssetDigestTimestampMs <= local_config_version.AssetDigestTimestampMs)
             {
-                var response = await SendRemoteProcedureCallAsync(new Request
-                {
-                    RequestType = RequestType.GetAssetDigest,
-                    RequestMessage = new GetAssetDigestMessage
-                    {
-                        Platform = GetPlatform(),
-                        DeviceManufacturer = _session.Device.DeviceInfo.HardwareManufacturer,
-                        DeviceModel = _session.Device.DeviceInfo.DeviceModel,
-                        Locale = _session.Player.PlayerLocale.Language + "_" + _session.Player.PlayerLocale.Country,
-                        AppVersion = Configuration.Hasher.AppVersion,
-                        PageOffset = page,
-                        Paginate = true,
-                        PageTimestamp = time
-                    }.ToByteString()
-                }, true, true, true);
+                _session.Logger.Debug("Use cached values for GetAssetDigest");
+                return;
+            }
 
-                if (response != null)
+            var response = await SendRemoteProcedureCallAsync(new Request
+            {
+                RequestType = RequestType.GetAssetDigest,
+                RequestMessage = new GetAssetDigestMessage
                 {
-                    var getAssetDigestResponse = GetAssetDigestResponse.Parser.ParseFrom(response);
+                    Platform = GetPlatform(),
+                    DeviceManufacturer = _session.Device.DeviceInfo.HardwareManufacturer,
+                    DeviceModel = _session.Device.DeviceInfo.DeviceModel,
+                    Locale = _session.Player.PlayerLocale.Language + "_" + _session.Player.PlayerLocale.Country,
+                    AppVersion = Configuration.Hasher.AppVersion,
+                    //PageOffset = page,
+                    //Paginate = true,
+                    //PageTimestamp = time
+                }.ToByteString()
+            }, true, true, true);
 
-                    switch (getAssetDigestResponse.Result)
-                    {
-                        case GetAssetDigestResponse.Types.Result.Success:
-                            digests.AddRange(getAssetDigestResponse.Digest);
-                            break;
-                        case GetAssetDigestResponse.Types.Result.Retry:
-                            await GetAssetDigest(getAssetDigestResponse.PageOffset, getAssetDigestResponse.TimestampMs);
-                            break;
-                        case GetAssetDigestResponse.Types.Result.Page:
-                            //Pages is here xelwon
-                            _session.Logger.Debug(String.Format("Page AssetDigest: {0}", page));
-                            break;
-                        case GetAssetDigestResponse.Types.Result.Unset:
-                            _session.SetTemporalBan();
-                            throw new SessionStateException(nameof(response));
-                    }
-                    page++;
+            if (response != null)
+            {
+                var getAssetDigestResponse = GetAssetDigestResponse.Parser.ParseFrom(response);
+
+                switch (getAssetDigestResponse.Result)
+                {
+                    case GetAssetDigestResponse.Types.Result.Success:
+                        // Success?!
+                        // Comment next line if you uses paginate true
+                        digests.AddRange(getAssetDigestResponse.Digest);
+                        break;
+                    case GetAssetDigestResponse.Types.Result.Retry:
+                        // Retry re-send request
+                        await GetAssetDigest(getAssetDigestResponse.PageOffset, getAssetDigestResponse.TimestampMs);
+                        break;
+                    case GetAssetDigestResponse.Types.Result.Page:
+                        // Pages is here xelwon
+                        // here if paginate recuperate values for current page
+                        // _session.Logger.Debug(String.Format("Page AssetDigest: {0}", getAssetDigestResponse.PageOffset));
+                        // digests.AddRange(getAssetDigestResponse.Digest);
+                        break;
+                    case GetAssetDigestResponse.Types.Result.Unset:
+                        _session.SetTemporalBan();
+                        throw new SessionStateException(nameof(response));
                 }
-             } while (pageOffset != 0);
 
-            _session.Templates.AssetDigests = digests;
-            _session.OnAssetDigestReceived(digests);
+                _session.Templates.AssetDigests = digests;
+
+                if (_session.ManageRessources)
+                    _session.OnAssetDigestReceived(digests);
+            }
         }
 
         private async Task GetDownloadURLs()
@@ -1074,6 +1082,7 @@ namespace POGOLib.Official.Net
         {
             if (_session.Templates.DownloadUrls != null)
             {
+                _session.Logger.Debug("Use cached values for GetDownloadUrls");
                 return;
             }
 
@@ -1104,7 +1113,9 @@ namespace POGOLib.Official.Net
                 var getDownloadUrlsResponse = GetDownloadUrlsResponse.Parser.ParseFrom(response);
                 dowloadUrls.AddRange(getDownloadUrlsResponse.DownloadUrls);
                 _session.Templates.DownloadUrls = dowloadUrls;
-                _session.OnUrlsReceived(dowloadUrls);
+
+                if (_session.ManageRessources)
+                    _session.OnUrlsReceived(dowloadUrls);
             }
         }
     }

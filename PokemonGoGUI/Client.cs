@@ -160,7 +160,9 @@ namespace PokemonGoGUI
 
                 ClientSession.Logger.RegisterLogOutput(LoggerFucntion);
 
-                if (await ClientSession.StartupAsync(ClientManager.UserSettings.DownloadResources))
+                ClientSession.ManageRessources = ClientManager.UserSettings.DownloadResources;
+
+                if (await ClientSession.StartupAsync())
                 {
                     LoggedIn = true;
                     msgStr = "Successfully logged into server.";
