@@ -1,4 +1,5 @@
 ﻿using Google.Protobuf;
+using POGOProtos.Inventory.Item;
 using POGOProtos.Map.Fort;
 using POGOProtos.Networking.Requests;
 using POGOProtos.Networking.Requests.Messages;
@@ -225,43 +226,49 @@ namespace PokemonGoGUI.GoManager
                 return new MethodResult<FortDetailsResponse>();
         }
 
-        private async Task<MethodResult<GymGetInfoResponse>> GymGetInfo(FortData pokestop)
+        private async Task<MethodResult<AddFortModifierResponse>> AddFortModifier(string fortId, ItemId modifierType = ItemId.ItemTroyDisk)
         {
             var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
-                RequestType = RequestType.GymGetInfo,
-                RequestMessage = new GymGetInfoMessage
+                RequestType = RequestType.AddFortModifier,
+                RequestMessage = new AddFortModifierMessage
                 {
-                    GymId = pokestop.Id,
-                    GymLatDegrees = pokestop.Latitude,
-                    GymLngDegrees = pokestop.Longitude,
-                    PlayerLatDegrees = _client.ClientSession.Player.Latitude,
-                    PlayerLngDegrees = _client.ClientSession.Player.Longitude
+                    FortId = fortId,
+                    ModifierType = modifierType,
+                    PlayerLatitude = _client.ClientSession.Player.Latitude,
+                    PlayerLongitude = _client.ClientSession.Player.Longitude
                 }.ToByteString()
             });
 
             if (response == null)
-                return new MethodResult<GymGetInfoResponse>();
+                return new MethodResult<AddFortModifierResponse>();
 
-            var gymGetInfoResponse = GymGetInfoResponse.Parser.ParseFrom(response);
+            var addFortModifierResponse = AddFortModifierResponse.Parser.ParseFrom(response);
 
-            switch (gymGetInfoResponse.Result)
+            switch (addFortModifierResponse.Result)
             {
-                case GymGetInfoResponse.Types.Result.ErrorGymDisabled:
-                    return new MethodResult<GymGetInfoResponse>();
-                case GymGetInfoResponse.Types.Result.ErrorNotInRange:
-                    return new MethodResult<GymGetInfoResponse>();
-                case GymGetInfoResponse.Types.Result.Success:
-                    return new MethodResult<GymGetInfoResponse>
+                case AddFortModifierResponse.Types.Result.Success:
+                    LogCaller(new LoggerEventArgs(String.Format("Add fort modifier {0} success.", modifierType.ToString().Replace("Item","")), LoggerTypes.Success));
+                    return new MethodResult<AddFortModifierResponse>
                     {
-                        Data = gymGetInfoResponse,
-                        Message = "Succes",
-                        Success = true
+                        Success = true,
+                        Message = "Success",
+                        Data = addFortModifierResponse
                     };
-                case GymGetInfoResponse.Types.Result.Unset:
-                    return new MethodResult<GymGetInfoResponse>();
-            }
-            return new MethodResult<GymGetInfoResponse>();
+                case AddFortModifierResponse.Types.Result.FortAlreadyHasModifier:
+                    LogCaller(new LoggerEventArgs(String.Format("Failed to search Fort. Response: {0}", addFortModifierResponse.Result), LoggerTypes.Warning));
+                    break;
+                case AddFortModifierResponse.Types.Result.NoItemInInventory:
+                    LogCaller(new LoggerEventArgs(String.Format("Failed to search Fort. Response: {0}", addFortModifierResponse.Result), LoggerTypes.Warning));
+                    break;
+                case AddFortModifierResponse.Types.Result.PoiInaccessible:
+                    LogCaller(new LoggerEventArgs(String.Format("Failed to search Fort. Response: {0}", addFortModifierResponse.Result), LoggerTypes.Warning));
+                    break;
+                case AddFortModifierResponse.Types.Result.TooFarAway:
+                    LogCaller(new LoggerEventArgs(String.Format("Failed to search Fort. Response: {0}", addFortModifierResponse.Result), LoggerTypes.Warning));
+                    break;
+           }
+            return new MethodResult<AddFortModifierResponse>();
         }
     }
 }

@@ -3,7 +3,6 @@ using Newtonsoft.Json;
 using POGOProtos.Data.Player;
 using POGOProtos.Enums;
 using POGOProtos.Map.Fort;
-using POGOProtos.Networking.Responses;
 using PokemonGoGUI.AccountScheduler;
 using PokemonGoGUI.Enums;
 using PokemonGoGUI.Extensions;
@@ -661,9 +660,9 @@ namespace PokemonGoGUI.GoManager
                         {
                             if (pokestop.CooldownCompleteTimestampMs < DateTime.UtcNow.ToUnixTime())
                             {
-                                if (pokestop.Type == FortType.Gym)
+                                if (pokestop.Type == FortType.Gym && Level >= 5 && (!string.IsNullOrEmpty(UserSettings.DefaultTeam) || UserSettings.DefaultTeam != "Neutral"))
                                 {
-                                    if (!PlayerData.TutorialState.Contains(TutorialState.GymTutorial) && Level >= 5 && !string.IsNullOrEmpty(UserSettings.DefaultTeam))
+                                    if (!PlayerData.TutorialState.Contains(TutorialState.GymTutorial))
                                     {
                                         if (PlayerData.Team == TeamColor.Neutral)
                                         {
@@ -720,9 +719,39 @@ namespace PokemonGoGUI.GoManager
                                             }
                                         }
                                     }
-                                    var gyminfo = await GymGetInfo(pokestop);
-                                    if (gyminfo.Success)
-                                        LogCaller(new LoggerEventArgs("Gym Name: " + gyminfo.Data.Name, LoggerTypes.Info));
+                                    else
+                                    {
+                                        var gyminfo = await GymGetInfo(pokestop);
+                                        if (gyminfo.Success)
+                                            LogCaller(new LoggerEventArgs("Gym Name: " + gyminfo.Data.Name, LoggerTypes.Info));
+
+                                        MethodResult spingym = await SearchPokestop(pokestop);
+
+                                        //OutOfRange will show up as a success
+                                        if (spingym.Success)
+                                        {
+                                            currentFailedStops = 0;
+                                            //Try to deploy, full gym is 6 now
+                                            if (gyminfo.Data.GymStatusAndDefenders.GymDefender.Count < 6)
+                                            {
+                                                //Checks team color if same of player or Neutral
+                                                if (pokestop.OwnedByTeam == PlayerData.Team || pokestop.OwnedByTeam == TeamColor.Neutral)
+                                                    //Check if config as deploy actived
+                                                    if (UserSettings.DeployPokemon)
+                                                    {
+                                                        //Try to deploy
+                                                        await GymDeploy(pokestop);
+                                                    }
+                                                continue;
+                                            }
+                                            //Here try to attack gym not released yet
+                                            //
+                                        }
+                                        else
+                                        {
+                                            ++currentFailedStops;
+                                        }
+                                    }
                                 }
                                 else
                                 {
@@ -730,20 +759,18 @@ namespace PokemonGoGUI.GoManager
                                     if (fortDetails.Success)
                                         LogCaller(new LoggerEventArgs("Fort Name: " + fortDetails.Data.Name, LoggerTypes.Info));
 
-                                }
+                                    MethodResult searchResult = await SearchPokestop(pokestop);
 
-                                MethodResult searchResult = await SearchPokestop(pokestop);
-
-                                //OutOfRange will show up as a success
-                                if (searchResult.Success)
-                                {
-                                    currentFailedStops = 0;
+                                    //OutOfRange will show up as a success
+                                    if (searchResult.Success)
+                                    {
+                                        currentFailedStops = 0;
+                                    }
+                                    else
+                                    {
+                                        ++currentFailedStops;
+                                    }
                                 }
-                                else
-                                {
-                                    ++currentFailedStops;
-                                }
-
                             }
                             else
                             {

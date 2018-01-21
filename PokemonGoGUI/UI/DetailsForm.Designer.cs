@@ -31,6 +31,12 @@
             this.components = new System.ComponentModel.Container();
             this.tabControlMain = new System.Windows.Forms.TabControl();
             this.tabPageStats = new System.Windows.Forms.TabPage();
+            this.labelPokemonBuddy = new System.Windows.Forms.Label();
+            this.label17 = new System.Windows.Forms.Label();
+            this.labelDeployedPokemons = new System.Windows.Forms.Label();
+            this.label16 = new System.Windows.Forms.Label();
+            this.labelTutorialState = new System.Windows.Forms.Label();
+            this.label15 = new System.Windows.Forms.Label();
             this.labelCreateDate = new System.Windows.Forms.Label();
             this.label14 = new System.Windows.Forms.Label();
             this.buttonUpdateStats = new System.Windows.Forms.Button();
@@ -95,6 +101,8 @@
             this.evolveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.transferToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showFutureTransfersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.setABuddyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabPageEggs = new System.Windows.Forms.TabPage();
             this.fastObjectListViewEggs = new BrightIdeasSoftware.FastObjectListView();
             this.olvColumnEggId = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
@@ -121,8 +129,6 @@
             this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copyStackTraceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.label15 = new System.Windows.Forms.Label();
-            this.labelTutorialState = new System.Windows.Forms.Label();
             this.tabControlMain.SuspendLayout();
             this.tabPageStats.SuspendLayout();
             this.tabPagePokedex.SuspendLayout();
@@ -162,6 +168,10 @@
             // 
             // tabPageStats
             // 
+            this.tabPageStats.Controls.Add(this.labelPokemonBuddy);
+            this.tabPageStats.Controls.Add(this.label17);
+            this.tabPageStats.Controls.Add(this.labelDeployedPokemons);
+            this.tabPageStats.Controls.Add(this.label16);
             this.tabPageStats.Controls.Add(this.labelTutorialState);
             this.tabPageStats.Controls.Add(this.label15);
             this.tabPageStats.Controls.Add(this.labelCreateDate);
@@ -204,10 +214,64 @@
             this.tabPageStats.Text = "Stats";
             this.tabPageStats.UseVisualStyleBackColor = true;
             // 
+            // labelPokemonBuddy
+            // 
+            this.labelPokemonBuddy.AutoSize = true;
+            this.labelPokemonBuddy.Location = new System.Drawing.Point(173, 332);
+            this.labelPokemonBuddy.Name = "labelPokemonBuddy";
+            this.labelPokemonBuddy.Size = new System.Drawing.Size(53, 17);
+            this.labelPokemonBuddy.TabIndex = 9;
+            this.labelPokemonBuddy.Text = "Not set";
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(30, 332);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(115, 17);
+            this.label17.TabIndex = 8;
+            this.label17.Text = "Pokemon Buddy:";
+            // 
+            // labelDeployedPokemons
+            // 
+            this.labelDeployedPokemons.AutoSize = true;
+            this.labelDeployedPokemons.Location = new System.Drawing.Point(173, 311);
+            this.labelDeployedPokemons.Name = "labelDeployedPokemons";
+            this.labelDeployedPokemons.Size = new System.Drawing.Size(14, 17);
+            this.labelDeployedPokemons.TabIndex = 7;
+            this.labelDeployedPokemons.Text = "x";
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(3, 311);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(142, 17);
+            this.label16.TabIndex = 6;
+            this.label16.Text = "Deployed Pokemons:";
+            // 
+            // labelTutorialState
+            // 
+            this.labelTutorialState.AutoSize = true;
+            this.labelTutorialState.Location = new System.Drawing.Point(173, 367);
+            this.labelTutorialState.Name = "labelTutorialState";
+            this.labelTutorialState.Size = new System.Drawing.Size(32, 17);
+            this.labelTutorialState.TabIndex = 5;
+            this.labelTutorialState.Text = "???";
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(48, 367);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(97, 17);
+            this.label15.TabIndex = 4;
+            this.label15.Text = "Tutorial State:";
+            // 
             // labelCreateDate
             // 
             this.labelCreateDate.AutoSize = true;
-            this.labelCreateDate.Location = new System.Drawing.Point(137, 339);
+            this.labelCreateDate.Location = new System.Drawing.Point(173, 292);
             this.labelCreateDate.Name = "labelCreateDate";
             this.labelCreateDate.Size = new System.Drawing.Size(64, 17);
             this.labelCreateDate.TabIndex = 3;
@@ -216,7 +280,7 @@
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(34, 339);
+            this.label14.Location = new System.Drawing.Point(46, 292);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(99, 17);
             this.label14.TabIndex = 2;
@@ -237,7 +301,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(16, 228);
+            this.label5.Location = new System.Drawing.Point(25, 209);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(120, 17);
             this.label5.TabIndex = 0;
@@ -246,7 +310,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(25, 249);
+            this.label4.Location = new System.Drawing.Point(35, 230);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(110, 17);
             this.label4.TabIndex = 0;
@@ -255,7 +319,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(24, 309);
+            this.label9.Location = new System.Drawing.Point(34, 271);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(111, 17);
             this.label9.TabIndex = 0;
@@ -264,7 +328,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(25, 290);
+            this.label7.Location = new System.Drawing.Point(33, 250);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(112, 17);
             this.label7.TabIndex = 0;
@@ -273,7 +337,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(17, 208);
+            this.label3.Location = new System.Drawing.Point(25, 189);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(120, 17);
             this.label3.TabIndex = 0;
@@ -282,7 +346,7 @@
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(17, 169);
+            this.label13.Location = new System.Drawing.Point(27, 169);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(118, 17);
             this.label13.TabIndex = 0;
@@ -291,7 +355,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(37, 150);
+            this.label11.Location = new System.Drawing.Point(45, 150);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(100, 17);
             this.label11.TabIndex = 0;
@@ -300,7 +364,7 @@
             // labelDistanceWalked
             // 
             this.labelDistanceWalked.AutoSize = true;
-            this.labelDistanceWalked.Location = new System.Drawing.Point(137, 169);
+            this.labelDistanceWalked.Location = new System.Drawing.Point(173, 169);
             this.labelDistanceWalked.Name = "labelDistanceWalked";
             this.labelDistanceWalked.Size = new System.Drawing.Size(16, 17);
             this.labelDistanceWalked.TabIndex = 0;
@@ -309,7 +373,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(71, 130);
+            this.label10.Location = new System.Drawing.Point(80, 130);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(65, 17);
             this.label10.TabIndex = 0;
@@ -318,7 +382,7 @@
             // labelRunningTime
             // 
             this.labelRunningTime.AutoSize = true;
-            this.labelRunningTime.Location = new System.Drawing.Point(137, 150);
+            this.labelRunningTime.Location = new System.Drawing.Point(173, 150);
             this.labelRunningTime.Name = "labelRunningTime";
             this.labelRunningTime.Size = new System.Drawing.Size(16, 17);
             this.labelRunningTime.TabIndex = 0;
@@ -327,7 +391,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(83, 112);
+            this.label8.Location = new System.Drawing.Point(93, 112);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(52, 17);
             this.label8.TabIndex = 0;
@@ -336,7 +400,7 @@
             // labelStardust
             // 
             this.labelStardust.AutoSize = true;
-            this.labelStardust.Location = new System.Drawing.Point(137, 130);
+            this.labelStardust.Location = new System.Drawing.Point(173, 130);
             this.labelStardust.Name = "labelStardust";
             this.labelStardust.Size = new System.Drawing.Size(16, 17);
             this.labelStardust.TabIndex = 0;
@@ -345,7 +409,7 @@
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(51, 94);
+            this.label12.Location = new System.Drawing.Point(60, 94);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(85, 17);
             this.label12.TabIndex = 0;
@@ -354,7 +418,7 @@
             // label18
             // 
             this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(57, 14);
+            this.label18.Location = new System.Drawing.Point(68, 14);
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(77, 17);
             this.label18.TabIndex = 0;
@@ -363,7 +427,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(97, 74);
+            this.label2.Location = new System.Drawing.Point(110, 74);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(35, 17);
             this.label2.TabIndex = 0;
@@ -372,7 +436,7 @@
             // labelExpPerHour
             // 
             this.labelExpPerHour.AutoSize = true;
-            this.labelExpPerHour.Location = new System.Drawing.Point(137, 112);
+            this.labelExpPerHour.Location = new System.Drawing.Point(173, 112);
             this.labelExpPerHour.Name = "labelExpPerHour";
             this.labelExpPerHour.Size = new System.Drawing.Size(16, 17);
             this.labelExpPerHour.TabIndex = 0;
@@ -381,7 +445,7 @@
             // labelExpGained
             // 
             this.labelExpGained.AutoSize = true;
-            this.labelExpGained.Location = new System.Drawing.Point(137, 94);
+            this.labelExpGained.Location = new System.Drawing.Point(173, 94);
             this.labelExpGained.Name = "labelExpGained";
             this.labelExpGained.Size = new System.Drawing.Size(16, 17);
             this.labelExpGained.TabIndex = 0;
@@ -390,7 +454,7 @@
             // labelPlayerTeam
             // 
             this.labelPlayerTeam.AutoSize = true;
-            this.labelPlayerTeam.Location = new System.Drawing.Point(137, 54);
+            this.labelPlayerTeam.Location = new System.Drawing.Point(173, 54);
             this.labelPlayerTeam.Name = "labelPlayerTeam";
             this.labelPlayerTeam.Size = new System.Drawing.Size(54, 17);
             this.labelPlayerTeam.TabIndex = 0;
@@ -399,7 +463,7 @@
             // labelExp
             // 
             this.labelExp.AutoSize = true;
-            this.labelExp.Location = new System.Drawing.Point(137, 74);
+            this.labelExp.Location = new System.Drawing.Point(173, 74);
             this.labelExp.Name = "labelExp";
             this.labelExp.Size = new System.Drawing.Size(62, 17);
             this.labelExp.TabIndex = 0;
@@ -408,7 +472,7 @@
             // labelInventoryCount
             // 
             this.labelInventoryCount.AutoSize = true;
-            this.labelInventoryCount.Location = new System.Drawing.Point(137, 309);
+            this.labelInventoryCount.Location = new System.Drawing.Point(173, 271);
             this.labelInventoryCount.Name = "labelInventoryCount";
             this.labelInventoryCount.Size = new System.Drawing.Size(16, 17);
             this.labelInventoryCount.TabIndex = 0;
@@ -417,7 +481,7 @@
             // labelPokestopVisits
             // 
             this.labelPokestopVisits.AutoSize = true;
-            this.labelPokestopVisits.Location = new System.Drawing.Point(137, 249);
+            this.labelPokestopVisits.Location = new System.Drawing.Point(173, 230);
             this.labelPokestopVisits.Name = "labelPokestopVisits";
             this.labelPokestopVisits.Size = new System.Drawing.Size(16, 17);
             this.labelPokestopVisits.TabIndex = 0;
@@ -426,7 +490,7 @@
             // labelPokemonCount
             // 
             this.labelPokemonCount.AutoSize = true;
-            this.labelPokemonCount.Location = new System.Drawing.Point(137, 290);
+            this.labelPokemonCount.Location = new System.Drawing.Point(173, 250);
             this.labelPokemonCount.Name = "labelPokemonCount";
             this.labelPokemonCount.Size = new System.Drawing.Size(16, 17);
             this.labelPokemonCount.TabIndex = 0;
@@ -435,7 +499,7 @@
             // labelUniquePokemon
             // 
             this.labelUniquePokemon.AutoSize = true;
-            this.labelUniquePokemon.Location = new System.Drawing.Point(137, 228);
+            this.labelUniquePokemon.Location = new System.Drawing.Point(173, 209);
             this.labelUniquePokemon.Name = "labelUniquePokemon";
             this.labelUniquePokemon.Size = new System.Drawing.Size(16, 17);
             this.labelUniquePokemon.TabIndex = 0;
@@ -444,7 +508,7 @@
             // labelPokemonCaught
             // 
             this.labelPokemonCaught.AutoSize = true;
-            this.labelPokemonCaught.Location = new System.Drawing.Point(137, 208);
+            this.labelPokemonCaught.Location = new System.Drawing.Point(173, 189);
             this.labelPokemonCaught.Name = "labelPokemonCaught";
             this.labelPokemonCaught.Size = new System.Drawing.Size(16, 17);
             this.labelPokemonCaught.TabIndex = 0;
@@ -453,7 +517,7 @@
             // labelPlayerUsername
             // 
             this.labelPlayerUsername.AutoSize = true;
-            this.labelPlayerUsername.Location = new System.Drawing.Point(137, 14);
+            this.labelPlayerUsername.Location = new System.Drawing.Point(173, 14);
             this.labelPlayerUsername.Name = "labelPlayerUsername";
             this.labelPlayerUsername.Size = new System.Drawing.Size(32, 17);
             this.labelPlayerUsername.TabIndex = 0;
@@ -462,7 +526,7 @@
             // labelPlayerLevel
             // 
             this.labelPlayerLevel.AutoSize = true;
-            this.labelPlayerLevel.Location = new System.Drawing.Point(137, 34);
+            this.labelPlayerLevel.Location = new System.Drawing.Point(173, 34);
             this.labelPlayerLevel.Name = "labelPlayerLevel";
             this.labelPlayerLevel.Size = new System.Drawing.Size(16, 17);
             this.labelPlayerLevel.TabIndex = 0;
@@ -471,7 +535,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(87, 34);
+            this.label6.Location = new System.Drawing.Point(99, 34);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(46, 17);
             this.label6.TabIndex = 0;
@@ -480,7 +544,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(84, 54);
+            this.label1.Location = new System.Drawing.Point(97, 54);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(48, 17);
             this.label1.TabIndex = 0;
@@ -714,9 +778,11 @@
             this.upgradeToolStripMenuItem,
             this.evolveToolStripMenuItem,
             this.transferToolStripMenuItem,
-            this.showFutureTransfersToolStripMenuItem});
+            this.showFutureTransfersToolStripMenuItem,
+            this.toolStripSeparator1,
+            this.setABuddyToolStripMenuItem});
             this.contextMenuStripPokemonDetails.Name = "contextMenuStripPokemonDetails";
-            this.contextMenuStripPokemonDetails.Size = new System.Drawing.Size(218, 124);
+            this.contextMenuStripPokemonDetails.Size = new System.Drawing.Size(218, 154);
             // 
             // favoriteToolStripMenuItem
             // 
@@ -743,7 +809,6 @@
             // 
             // upgradeToolStripMenuItem
             // 
-            this.upgradeToolStripMenuItem.Enabled = false;
             this.upgradeToolStripMenuItem.Name = "upgradeToolStripMenuItem";
             this.upgradeToolStripMenuItem.Size = new System.Drawing.Size(217, 24);
             this.upgradeToolStripMenuItem.Text = "Upgrade";
@@ -769,6 +834,18 @@
             this.showFutureTransfersToolStripMenuItem.Size = new System.Drawing.Size(217, 24);
             this.showFutureTransfersToolStripMenuItem.Text = "Show future transfers";
             this.showFutureTransfersToolStripMenuItem.Click += new System.EventHandler(this.ShowFutureTransfersToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(214, 6);
+            // 
+            // setABuddyToolStripMenuItem
+            // 
+            this.setABuddyToolStripMenuItem.Name = "setABuddyToolStripMenuItem";
+            this.setABuddyToolStripMenuItem.Size = new System.Drawing.Size(217, 24);
+            this.setABuddyToolStripMenuItem.Text = "Set a buddy";
+            this.setABuddyToolStripMenuItem.Click += new System.EventHandler(this.SetABuddyToolStripMenuItem_Click);
             // 
             // tabPageEggs
             // 
@@ -1028,24 +1105,6 @@
             this.exportToolStripMenuItem.Text = "Export";
             this.exportToolStripMenuItem.Click += new System.EventHandler(this.ExportToolStripMenuItem_Click);
             // 
-            // label15
-            // 
-            this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(35, 367);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(97, 17);
-            this.label15.TabIndex = 4;
-            this.label15.Text = "Tutorial State:";
-            // 
-            // labelTutorialState
-            // 
-            this.labelTutorialState.AutoSize = true;
-            this.labelTutorialState.Location = new System.Drawing.Point(137, 367);
-            this.labelTutorialState.Name = "labelTutorialState";
-            this.labelTutorialState.Size = new System.Drawing.Size(32, 17);
-            this.labelTutorialState.TabIndex = 5;
-            this.labelTutorialState.Text = "???";
-            // 
             // DetailsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -1176,5 +1235,11 @@
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.Label labelTutorialState;
         private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.Label labelDeployedPokemons;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.Label labelPokemonBuddy;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem setABuddyToolStripMenuItem;
     }
 }

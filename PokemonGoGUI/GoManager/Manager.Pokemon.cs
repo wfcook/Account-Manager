@@ -491,5 +491,57 @@ namespace PokemonGoGUI.GoManager
 
             return pokemonSettings.Stats.BaseAttack * Math.Sqrt(pokemonSettings.Stats.BaseDefense) * Math.Sqrt(pokemonSettings.Stats.BaseStamina);
         }
+
+        public async Task<MethodResult> UpgradePokemon(IEnumerable<PokemonData> pokemonsToUpgrade)
+        {
+            if (pokemonsToUpgrade.Count() == 0)
+                return new MethodResult();
+
+            foreach (var pokemon in pokemonsToUpgrade)
+            {
+                var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
+                {
+                    RequestType = RequestType.UpgradePokemon,
+                    RequestMessage = new UpgradePokemonMessage
+                    {
+                        PokemonId = pokemon.Id
+                    }.ToByteString()
+                });
+
+                if (response == null)
+                    return new MethodResult();
+
+                var upgradePokemonResponse = UpgradePokemonResponse.Parser.ParseFrom(response);
+
+                switch (upgradePokemonResponse.Result)
+                {
+                    case UpgradePokemonResponse.Types.Result.Success:
+                        UpdateInventory(InventoryRefresh.Pokemon);
+                        LogCaller(new LoggerEventArgs(String.Format("Upgrade pokemon {0} success.", pokemon.PokemonId), LoggerTypes.Success));
+                        break;
+                     case UpgradePokemonResponse.Types.Result.ErrorInsufficientResources:
+                        LogCaller(new LoggerEventArgs(String.Format("Failed to upgrade pokemon. Response: {0}", upgradePokemonResponse.Result), LoggerTypes.Warning));
+                        break;
+                    case UpgradePokemonResponse.Types.Result.ErrorPokemonIsDeployed:
+                        LogCaller(new LoggerEventArgs(String.Format("Failed to upgrade pokemon. Response: {0}", upgradePokemonResponse.Result), LoggerTypes.Warning));
+                        break;
+                    case UpgradePokemonResponse.Types.Result.ErrorPokemonNotFound:
+                        LogCaller(new LoggerEventArgs(String.Format("Failed to upgrade pokemon. Response: {0}", upgradePokemonResponse.Result), LoggerTypes.Warning));
+                        break;
+                    case UpgradePokemonResponse.Types.Result.ErrorUpgradeNotAvailable:
+                        LogCaller(new LoggerEventArgs(String.Format("Failed to upgrade pokemon. Response: {0}", upgradePokemonResponse.Result), LoggerTypes.Warning));
+                        break;
+                    case UpgradePokemonResponse.Types.Result.Unset:
+                        LogCaller(new LoggerEventArgs(String.Format("Failed to upgrade pokemon. Response: {0}", upgradePokemonResponse.Result), LoggerTypes.Warning));
+                        break;
+                }
+            }
+
+            return new MethodResult
+            {
+                Success = true,
+                Message = "Success",
+            };
+        }
     }
 }

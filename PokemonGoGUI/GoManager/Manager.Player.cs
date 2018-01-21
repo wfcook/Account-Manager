@@ -272,9 +272,8 @@ namespace PokemonGoGUI.GoManager
             if (response == null)
                 return new MethodResult();
 
-            SetPlayerTeamResponse setPlayerTeamResponse = null;
+            SetPlayerTeamResponse setPlayerTeamResponse = SetPlayerTeamResponse.Parser.ParseFrom(response);
 
-            setPlayerTeamResponse = SetPlayerTeamResponse.Parser.ParseFrom(response);
             LogCaller(new LoggerEventArgs($"Set player Team completion request wasn't successful. Team: {team.ToString()}", LoggerTypes.Success));
 
             _client.ClientSession.Player.Data = setPlayerTeamResponse.PlayerData;
@@ -283,6 +282,59 @@ namespace PokemonGoGUI.GoManager
             {
                 Success = true
             };
+        }
+
+        public async Task<MethodResult> SetBuddyPokemon(PokemonData pokemon, BuddyPokemon oldbuddy)
+        {
+            var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
+            {
+                RequestType = RequestType.SetBuddyPokemon,
+                RequestMessage = new SetBuddyPokemonMessage
+                {
+                    PokemonId = pokemon.Id
+                }.ToByteString()
+            }, true);
+
+            if (response == null)
+                return new MethodResult();
+
+            SetBuddyPokemonResponse setBuddyPokemonResponse = SetBuddyPokemonResponse.Parser.ParseFrom(response);
+
+            switch (setBuddyPokemonResponse.Result)
+            {
+                case SetBuddyPokemonResponse.Types.Result.ErrorInvalidPokemon:
+                    LogCaller(new LoggerEventArgs($"Faill to set buddy pokemon, reason: {setBuddyPokemonResponse.Result.ToString()}", LoggerTypes.Info));
+                    break;
+                case SetBuddyPokemonResponse.Types.Result.ErrorPokemonDeployed:
+                    LogCaller(new LoggerEventArgs($"Faill to set buddy pokemon, reason: {setBuddyPokemonResponse.Result.ToString()}", LoggerTypes.Info));
+                    break;
+                case SetBuddyPokemonResponse.Types.Result.ErrorPokemonIsEgg:
+                    LogCaller(new LoggerEventArgs($"Faill to set buddy pokemon, reason: {setBuddyPokemonResponse.Result.ToString()}", LoggerTypes.Info));
+                    break;
+                case SetBuddyPokemonResponse.Types.Result.ErrorPokemonNotOwned:
+                    LogCaller(new LoggerEventArgs($"Faill to set buddy pokemon, reason: {setBuddyPokemonResponse.Result.ToString()}", LoggerTypes.Info));
+                    break;
+                case SetBuddyPokemonResponse.Types.Result.Success:
+                    setBuddyPokemonResponse.UpdatedBuddy = new BuddyPokemon
+                    {
+                        Id = pokemon.Id,
+                        LastKmAwarded = oldbuddy.LastKmAwarded,
+                        StartKmWalked = oldbuddy.StartKmWalked
+                    };
+
+                    LogCaller(new LoggerEventArgs($"Set buddy pokemon completion request wasn't successful. pokemon buddy: {pokemon.PokemonId.ToString()}", LoggerTypes.Success));
+
+                    UpdateInventory(InventoryRefresh.Pokemon);
+
+                    return new MethodResult
+                    {
+                        Success = true
+                    };
+                case SetBuddyPokemonResponse.Types.Result.Unest:
+                    LogCaller(new LoggerEventArgs($"Faill to set buddy pokemon, reason: {setBuddyPokemonResponse.Result.ToString()}", LoggerTypes.Info));
+                    break;
+            }
+            return new MethodResult();
         }
     }
 }

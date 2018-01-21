@@ -232,6 +232,7 @@ namespace PokemonGoGUI.UI
             }
 
             labelPlayerLevel.Text = _manager.Level.ToString();
+            labelPlayerTeam.Text = !String.IsNullOrEmpty(_manager.Team) ? _manager.Team : "Neutral";
             labelExp.Text = _manager.ExpRatio.ToString();
             labelRunningTime.Text = _manager.RunningTime;
             labelStardust.Text = _manager.TotalStardust.ToString();
@@ -249,6 +250,7 @@ namespace PokemonGoGUI.UI
             if (_manager.Pokemon != null)
             {
                 labelPokemonCount.Text = String.Format("{0}/{1}", _manager.Pokemon.Count + _manager.Eggs.Count, _manager.MaxPokemonStorage);
+                labelDeployedPokemons.Text = _manager.Pokemon.Where(w => w.Id != _manager.PlayerData.BuddyPokemon?.Id && !string.IsNullOrEmpty(w.DeployedFortId)).Count().ToString();
             }
 
             if (_manager.Items != null)
@@ -258,8 +260,10 @@ namespace PokemonGoGUI.UI
 
             if (_manager.PlayerData != null)
             {
+                PokemonData setbuddy = _manager.Pokemon.Where(w => w.Id == _manager.PlayerData?.BuddyPokemon?.Id && _manager.PlayerData?.BuddyPokemon?.Id > 0).Select(w => w).FirstOrDefault();
+                PokemonData buddy = setbuddy ?? new PokemonData();
+                labelPokemonBuddy.Text = buddy.PokemonId != PokemonId.Missingno ? buddy.PokemonId.ToString() : "Not set";
                 labelPlayerUsername.Text = _manager.PlayerData.Username;
-                labelPlayerTeam.Text = _manager.PlayerData.Team.ToString();
                 DateTime date = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(_manager.PlayerData.CreationTimestampMs);
                 labelCreateDate.Text = date.ToString();
                 string tutocompleted = "Not Completed";
@@ -275,7 +279,7 @@ namespace PokemonGoGUI.UI
                     && _manager.PlayerData.TutorialState.Contains(TutorialState.UseItem)
                     )
                     tutocompleted = "Completed";
-                    labelTutorialState.Text = tutocompleted;
+                labelTutorialState.Text = tutocompleted;
             }
         }
 
@@ -388,7 +392,7 @@ namespace PokemonGoGUI.UI
             }
         }
 
-        private void UpgradeToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void UpgradeToolStripMenuItem_Click(object sender, EventArgs e)
         {
             DialogResult result = MessageBox.Show(String.Format("Are you sure you want to upgrade {0} pokemon?", fastObjectListViewPokemon.SelectedObjects.Count), "Confirmation", MessageBoxButtons.YesNo);
 
@@ -397,7 +401,17 @@ namespace PokemonGoGUI.UI
                 return;
             }
 
+            contextMenuStripPokemonDetails.Enabled = false;
+
+            MethodResult managerResult = await _manager.UpgradePokemon(fastObjectListViewPokemon.SelectedObjects.Cast<PokemonData>());
+
+            DisplayDetails();
+
+            contextMenuStripPokemonDetails.Enabled = true;
+
             fastObjectListViewPokemon.SetObjects(_manager.Pokemon);
+
+            MessageBox.Show("Finished upgrade pokemon");
         }
 
         private async void TransferToolStripMenuItem_Click(object sender, EventArgs e)
@@ -549,8 +563,8 @@ namespace PokemonGoGUI.UI
         private async void RecycleToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string data = Prompt.ShowDialog("Amount to recycle", "Set recycle amount");
-            int amount;
 
+            int amount;
             if (String.IsNullOrEmpty(data) || !Int32.TryParse(data, out amount) || amount <= 0)
             {
                 return;
@@ -629,6 +643,38 @@ namespace PokemonGoGUI.UI
             }
             else if (e.Column == olvColumnEggDistance)
                 e.SubItem.Text = String.Format("{0:0.00}km", egg.EggKmWalkedTarget);
+        }
+
+        private async void SetABuddyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (fastObjectListViewPokemon.SelectedObjects.Cast<PokemonData>().Count() > 1)
+            {
+                MessageBox.Show(String.Format("Select one pokemon to set a buddy you have set {0} pokemons.", fastObjectListViewPokemon.SelectedObjects.Cast<PokemonData>().Count()), "Information", MessageBoxButtons.OK);
+
+                return;
+            }
+
+            DialogResult result = MessageBox.Show(String.Format("Are you sure you want to set a buddy {0} pokemon?", fastObjectListViewPokemon.SelectedObjects.Cast<PokemonData>().FirstOrDefault().PokemonId), "Confirmation", MessageBoxButtons.YesNo);
+
+            if (result != DialogResult.Yes)
+            {
+                return;
+            }
+
+            BuddyPokemon _oldbuddy = _manager.PlayerData?.BuddyPokemon;
+            BuddyPokemon oldbuddy = _oldbuddy ?? new BuddyPokemon();
+
+            contextMenuStripPokemonDetails.Enabled = false;
+
+            MethodResult managerResult = await _manager.SetBuddyPokemon(fastObjectListViewPokemon.SelectedObjects.Cast<PokemonData>().FirstOrDefault(), oldbuddy);
+
+            DisplayDetails();
+
+            contextMenuStripPokemonDetails.Enabled = true;
+
+            fastObjectListViewPokemon.SetObjects(_manager.Pokemon);
+
+            MessageBox.Show("Finished set a buddy pokemon");
         }
     }
 }

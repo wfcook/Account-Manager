@@ -32,7 +32,7 @@ namespace PokemonGoGUI.GoManager
 
             if (FilledPokemonInventorySpace() <= UserSettings.ForceEvolveAbovePercent)
             {
-                LogCaller(new LoggerEventArgs(String.Format("Not enough pokemon inventory space. {0:0.00}% of {1:0.00}% force evolve above percent.", FilledPokemonInventorySpace(), UserSettings.ForceEvolveAbovePercent), LoggerTypes.Info));
+                LogCaller(new LoggerEventArgs(String.Format("Not enough pokemon inventory space {0:0.00}% of {1:0.00}% force evolve above percent.", FilledPokemonInventorySpace(), UserSettings.ForceEvolveAbovePercent), LoggerTypes.Info));
 
                 return new MethodResult();             
             }

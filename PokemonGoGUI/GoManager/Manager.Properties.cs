@@ -26,6 +26,7 @@ namespace PokemonGoGUI.GoManager
         public Scheduler AccountScheduler { get; set; }
         public DateTime LastLuckyEgg { get; set; }
         public PlayerStats Stats { get; set; }
+        //public TeamColor Team { get; set; }
 
         [JsonIgnore]
         public string SchedulerName
@@ -93,9 +94,6 @@ namespace PokemonGoGUI.GoManager
         [JsonIgnore]
         public List<Log> Logs { get; private set; }
 
-        //[JsonIgnore]
-        //public PlayerStats Stats { get;  private set; }
-
         [JsonIgnore]
         public List<ItemData> Items { get; private set; } = new List<ItemData>();
 
@@ -135,7 +133,6 @@ namespace PokemonGoGUI.GoManager
             get
             {
                 return Logs == null ? 0 : Logs.Count;
-
             }
         }
 
@@ -154,7 +151,6 @@ namespace PokemonGoGUI.GoManager
                     string message = Logs.Last().Message;
 
                     return String.IsNullOrEmpty(message) ? String.Empty : message;
-
                 }
             }
         }
@@ -165,7 +161,6 @@ namespace PokemonGoGUI.GoManager
             get
             {
                 return UserSettings == null ? "???" : UserSettings.AccountName;
-
             }
         }
 
@@ -175,7 +170,15 @@ namespace PokemonGoGUI.GoManager
             get
             {
                 return Stats == null ? 0 : Stats.Level;
+            }
+        }
 
+        [JsonIgnore]
+        public string Team
+        {
+            get
+            {
+                return Stats == null ? TeamColor.Neutral.ToString() : UserSettings.DefaultTeam;
             }
         }
 
@@ -185,7 +188,6 @@ namespace PokemonGoGUI.GoManager
             get
             {
                 return UserSettings == null ? 0 : UserSettings.MaxLevel;
-
             }
         }
 
@@ -220,7 +222,6 @@ namespace PokemonGoGUI.GoManager
                 }
 
                 return time.TotalHours >= 24 ? String.Format("{0:0}d {1:0}h {2:00}m", time.Days, time.Hours, time.Seconds) : String.Format("{0:0}h {1:00}m {2:00}s", time.Hours, time.Minutes, time.Seconds);
-
             }
         }
 
@@ -243,7 +244,6 @@ namespace PokemonGoGUI.GoManager
                 }
 
                 return time.TotalHours >= 24 ? String.Format("{0:0}d {1:0}h {2:00}m", time.Days, time.Hours, time.Seconds) : String.Format("{0:0}h {1:00}m {2:00}s", time.Hours, time.Minutes, time.Seconds);
-
             }
         }
 
@@ -277,7 +277,6 @@ namespace PokemonGoGUI.GoManager
             get
             {
                 return PlayerData == null ? 350 : PlayerData.MaxItemStorage;
-
             }
         }
 
@@ -287,7 +286,6 @@ namespace PokemonGoGUI.GoManager
             get
             {
                 return PlayerData == null ? 250 : PlayerData.MaxPokemonStorage;
-
             }
         }
 
@@ -352,7 +350,6 @@ namespace PokemonGoGUI.GoManager
             get
             {
                 return UserSettings == null ? 0 : UserSettings.RunForHours;
-
             }
         }
 
