@@ -558,13 +558,13 @@ namespace PokemonGoGUI.GoManager
 
                         string fort = "pokestop";
 
-                        if (pokestop.Type == FortType.Gym && UserSettings.SpinGyms)
+                        if (pokestop.Type == FortType.Gym)
                         {
+                            if (!UserSettings.SpinGyms)
+                                continue;
                             fort = "Gym";
                         }
-                        else
-                            continue;
-
+                        
                         LogCaller(new LoggerEventArgs(String.Format("Going to {0} {1} of {2}. Distance {3:0.00}m", fort, pokeStopNumber, totalStops, distance), pokestop.Type == FortType.Checkpoint ? LoggerTypes.Info : LoggerTypes.FortGym));
 
                         //Go to pokestops
@@ -717,21 +717,21 @@ namespace PokemonGoGUI.GoManager
                                                         }
                                                     }
                                                 }
+                                            }
+                                        }
 
-                                                if (UserSettings.SpinGyms)
-                                                {
-                                                    MethodResult searchResult = await SearchPokestop(pokestop);
+                                        if (UserSettings.SpinGyms)
+                                        {
+                                            MethodResult searchResult = await SearchPokestop(pokestop);
 
-                                                    //OutOfRange will show up as a success
-                                                    if (searchResult.Success)
-                                                    {
-                                                        currentFailedStops = 0;
-                                                    }
-                                                    else
-                                                    {
-                                                        ++currentFailedStops;
-                                                    }
-                                                }
+                                            //OutOfRange will show up as a success
+                                            if (searchResult.Success)
+                                            {
+                                                currentFailedStops = 0;
+                                            }
+                                            else
+                                            {
+                                                ++currentFailedStops;
                                             }
                                         }
                                     }
