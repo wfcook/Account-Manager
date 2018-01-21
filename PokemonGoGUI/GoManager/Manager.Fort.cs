@@ -21,6 +21,8 @@ namespace PokemonGoGUI.GoManager
             FortSearchResponse fortResponse = null;
             const int maxFortAttempts = 5;
 
+            string fort = pokestop.Type == FortType.Checkpoint ? "Fort" : "Gym";
+
             for (int i = 0; i < maxFortAttempts; i++)
             {
                 var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
@@ -44,26 +46,25 @@ namespace PokemonGoGUI.GoManager
                 switch (fortResponse.Result)
                 {
                     case FortSearchResponse.Types.Result.ExceededDailyLimit:
-                        LogCaller(new LoggerEventArgs(String.Format("Failed to search fort. Response: {0}", fortResponse.Result), LoggerTypes.Warning));
+                        LogCaller(new LoggerEventArgs(String.Format("Failed to search {0}. Response: {1}", fort, fortResponse.Result), LoggerTypes.Warning));
                         return new MethodResult
                         {
                             Message = "Failed to search fort"
                         };
                     case FortSearchResponse.Types.Result.InCooldownPeriod:
-                        //review for this 
-                        LogCaller(new LoggerEventArgs(String.Format("Failed to search fort. Response: {0}", fortResponse.Result), LoggerTypes.Warning));
+                        LogCaller(new LoggerEventArgs(String.Format("Failed to search {0}. Response: {1}", fort, fortResponse.Result), LoggerTypes.Warning));
                         return new MethodResult
                         {
                             Message = "Failed to search fort"
                         };
                     case FortSearchResponse.Types.Result.InventoryFull:
-                        LogCaller(new LoggerEventArgs(String.Format("Failed to search fort. Response: {0}", fortResponse.Result), LoggerTypes.Warning));
+                        LogCaller(new LoggerEventArgs(String.Format("Failed to search {0}. Response: {1}", fort, fortResponse.Result), LoggerTypes.Warning));
                         return new MethodResult
                         {
                             Message = "Failed to search fort"
                         };
                     case FortSearchResponse.Types.Result.NoResultSet:
-                        LogCaller(new LoggerEventArgs(String.Format("Failed to search fort. Response: {0}", fortResponse.Result), LoggerTypes.Warning));
+                        LogCaller(new LoggerEventArgs(String.Format("Failed to search {0}. Response: {1}", fort, fortResponse.Result), LoggerTypes.Warning));
                         return new MethodResult
                         {
                             Message = "Failed to search fort"
@@ -134,13 +135,14 @@ namespace PokemonGoGUI.GoManager
                         //Let it continue down
                         continue;
                     case FortSearchResponse.Types.Result.PoiInaccessible:
-                        LogCaller(new LoggerEventArgs(String.Format("Failed to search fort. Response: {0}", fortResponse.Result), LoggerTypes.Warning));
+                        LogCaller(new LoggerEventArgs(String.Format("Failed to search {0}. Response: {1}", fort, fortResponse.Result), LoggerTypes.Warning));
                         return new MethodResult
                         {
                             Message = "Failed to search fort"
                         };
                     case FortSearchResponse.Types.Result.Success:
-                        string message = String.Format("Searched Fort. Exp: {0}. Items: {1}.", // Badge: {2}. BonusLoot: {3}. Gems: {4}. Loot: {5}, Eggs: {6:0.0}. RaidTickets: {7}. TeamBonusLoot: {8}",
+                        string message = String.Format("Searched {0}. Exp: {1}. Items: {2}.", // Badge: {3}. BonusLoot: {4}. Gems: {5}. Loot: {6}, Eggs: {7:0.0}. RaidTickets: {8}. TeamBonusLoot: {9}",
+                            fort,
                             fortResponse.ExperienceAwarded,
                             StringUtil.GetSummedFriendlyNameOfItemAwardList(fortResponse.ItemsAwarded.ToList())
                             /*,
@@ -152,10 +154,8 @@ namespace PokemonGoGUI.GoManager
                             fortResponse.RaidTickets.ToString(),
                             fortResponse.TeamBonusLoot.LootItem.ToString()*/);
 
-                        // var itemDictionary = new Dictionary<ItemId, ItemData>();
-
                         //Successfully grabbed stop
-                        if (AccountState == Enums.AccountState.SoftBan)
+                        if (AccountState == Enums.AccountState.SoftBan || AccountState == Enums.AccountState.HashIssues)
                         {
                             AccountState = Enums.AccountState.Good;
 

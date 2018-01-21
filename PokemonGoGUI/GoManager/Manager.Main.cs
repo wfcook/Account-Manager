@@ -719,22 +719,10 @@ namespace PokemonGoGUI.GoManager
                                                 }
                                             }
                                         }
-
-                                        if (UserSettings.SpinGyms)
-                                        {
-                                            MethodResult searchResult = await SearchPokestop(pokestop);
-
-                                            //OutOfRange will show up as a success
-                                            if (searchResult.Success)
-                                            {
-                                                currentFailedStops = 0;
-                                            }
-                                            else
-                                            {
-                                                ++currentFailedStops;
-                                            }
-                                        }
                                     }
+                                    var gyminfo = await GymGetInfo(pokestop);
+                                    if (gyminfo.Success)
+                                        LogCaller(new LoggerEventArgs("Gym Name: " + gyminfo.Data.Name, LoggerTypes.Info));
                                 }
                                 else
                                 {
@@ -742,18 +730,20 @@ namespace PokemonGoGUI.GoManager
                                     if (fortDetails.Success)
                                         LogCaller(new LoggerEventArgs("Fort Name: " + fortDetails.Data.Name, LoggerTypes.Info));
 
-                                    MethodResult searchResult = await SearchPokestop(pokestop);
-
-                                    //OutOfRange will show up as a success
-                                    if (searchResult.Success)
-                                    {
-                                        currentFailedStops = 0;
-                                    }
-                                    else
-                                    {
-                                        ++currentFailedStops;
-                                    }
                                 }
+
+                                MethodResult searchResult = await SearchPokestop(pokestop);
+
+                                //OutOfRange will show up as a success
+                                if (searchResult.Success)
+                                {
+                                    currentFailedStops = 0;
+                                }
+                                else
+                                {
+                                    ++currentFailedStops;
+                                }
+
                             }
                             else
                             {
