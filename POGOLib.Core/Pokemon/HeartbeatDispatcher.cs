@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using POGOLib.Official.Exceptions;
 using POGOLib.Official.Net;
 
 namespace POGOLib.Official.Pokemon
@@ -71,9 +72,13 @@ namespace POGOLib.Official.Pokemon
                     {
                         await Dispatch();
                     }
+                    catch (SessionInvalidatedException ex)
+                    {
+                        throw new SessionStateException($"Map refresh failed: {ex}");
+                    }
                     catch (Exception e)
                     {
-                        _session.Logger.Error($"Map refresh failed: {e}");
+                        _session.Logger.Error($"Unknown Exeption: {e}");
                     }
                 }
 

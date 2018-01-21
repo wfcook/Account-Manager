@@ -320,7 +320,7 @@ namespace POGOLib.Official.Net
                         }
                     }
                 }
-
+          
                 AccessToken = accessToken;
                 OnAccessTokenUpdated();
             }

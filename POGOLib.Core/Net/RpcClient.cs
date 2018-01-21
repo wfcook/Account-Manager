@@ -582,7 +582,12 @@ namespace POGOLib.Official.Net
                                 await _session.Reauthenticate();
 
                                 // Apply new token.
-                                requestEnvelope.AuthTicket = null;
+                                if (_session.AccessToken.AuthTicket != null && _session.AccessToken.AuthTicket.ExpireTimestampMs < ((ulong)TimeUtil.GetCurrentTimestampInMilliseconds() - (60000 * 2)))
+                                {
+                                    // Check for almost expired AuthTicket (2 minute buffer). Null out the AuthTicket so that AccessToken is used.
+                                    _session.AccessToken.AuthTicket = null;
+                                }
+
                                 var token = string.IsNullOrEmpty(_session.AccessToken?.Token) ? String.Empty : _session.AccessToken?.Token;
 
                                 requestEnvelope.AuthInfo = new RequestEnvelope.Types.AuthInfo
