@@ -127,9 +127,18 @@ namespace PokemonGoGUI.UI
             numericUpDownSearchFortBelow.Value = new Decimal(settings.SearchFortBelowPercent);
             numericUpDownForceEvolveAbove.Value = new Decimal(settings.ForceEvolveAbovePercent);
             checkBoxStopOnAPIUpdate.Checked = settings.StopOnAPIUpdate;
-            checkBoxSpinGyms.Checked = settings.SpinGyms;
-            cbUseIncense.Checked = settings.UseIncense;
-            cbTeam.Text = settings.DefaultTeam;
+
+            if (!string.IsNullOrEmpty(settings.DefaultTeam) && settings.DefaultTeam != "Neutral")
+            {
+                checkBoxSpinGyms.Enabled = true;
+                checkBoxSpinGyms.Checked = settings.SpinGyms;
+            }
+            else
+            {
+                checkBoxSpinGyms.Enabled = false;
+            }
+           
+            cbUseIncense.Checked = settings.UseIncense;           
 
             //Humanization
             checkBoxHumanizeThrows.Checked = settings.EnableHumanization;
@@ -210,6 +219,15 @@ namespace PokemonGoGUI.UI
                 if((AccountState)comboBoxMinAccountState.Items[i] == settings.StopAtMinAccountState)
                 {
                     comboBoxMinAccountState.SelectedIndex = i;
+                    break;
+                }
+            }
+
+            for (int i = 0; i < cbTeam.Items.Count; i++)
+            {
+                if (cbTeam.Items[i].ToString() == settings.DefaultTeam)
+                {
+                    cbTeam.SelectedIndex = i;
                     break;
                 }
             }
@@ -456,7 +474,7 @@ namespace PokemonGoGUI.UI
             }
             userSettings.AutoCaptchaRetries = autoCaptchaRetries;
             userSettings.TwoCaptchaAPIKey = TwoCaptchaAPIKey.Text;
-            userSettings.DefaultTeam = cbTeam.Text;
+            userSettings.DefaultTeam = cbTeam.SelectedItem.ToString();
 
             return true;
         }
@@ -775,6 +793,14 @@ namespace PokemonGoGUI.UI
                 cSetting.UsePinap = !cSetting.UsePinap;
 
             fastObjectListViewCatch.RefreshSelectedObjects();
+        }
+
+        private void CbTeam_TextChanged(object sender, EventArgs e)
+        {
+            if (cbTeam.SelectedItem.ToString() != "Neutral")
+                checkBoxSpinGyms.Enabled = true;
+            else
+                checkBoxSpinGyms.Enabled = false;
         }
     }
 }

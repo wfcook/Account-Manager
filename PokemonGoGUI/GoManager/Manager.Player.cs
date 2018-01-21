@@ -275,7 +275,7 @@ namespace PokemonGoGUI.GoManager
             SetPlayerTeamResponse setPlayerTeamResponse = null;
 
             setPlayerTeamResponse = SetPlayerTeamResponse.Parser.ParseFrom(response);
-            LogCaller(new LoggerEventArgs("Set player Team completion request wasn't successful", LoggerTypes.Success));
+            LogCaller(new LoggerEventArgs($"Set player Team completion request wasn't successful. Team: {team.ToString()}", LoggerTypes.Success));
 
             _client.ClientSession.Player.Data = setPlayerTeamResponse.PlayerData;
 

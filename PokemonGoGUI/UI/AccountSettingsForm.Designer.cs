@@ -42,6 +42,8 @@
             this.label3 = new System.Windows.Forms.Label();
             this.labelUsername = new System.Windows.Forms.Label();
             this.tabPageActions = new System.Windows.Forms.TabPage();
+            this.label47 = new System.Windows.Forms.Label();
+            this.cbTeam = new System.Windows.Forms.ComboBox();
             this.checkBoxCompleteTutorial = new System.Windows.Forms.CheckBox();
             this.groupBoxPlayerActions = new System.Windows.Forms.GroupBox();
             this.cbUseIncense = new System.Windows.Forms.CheckBox();
@@ -233,8 +235,6 @@
             this.toolTipProxy = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipMinAccountState = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipHumanizeThrows = new System.Windows.Forms.ToolTip(this.components);
-            this.cbTeam = new System.Windows.Forms.ComboBox();
-            this.label47 = new System.Windows.Forms.Label();
             this.tabControlMain.SuspendLayout();
             this.tabPageDetails.SuspendLayout();
             this.tabControlSettings.SuspendLayout();
@@ -462,6 +462,25 @@
             this.tabPageActions.TabIndex = 6;
             this.tabPageActions.Text = "Actions";
             this.tabPageActions.UseVisualStyleBackColor = true;
+            // 
+            // label47
+            // 
+            this.label47.AutoSize = true;
+            this.label47.Location = new System.Drawing.Point(348, 162);
+            this.label47.Name = "label47";
+            this.label47.Size = new System.Drawing.Size(97, 17);
+            this.label47.TabIndex = 76;
+            this.label47.Text = "Default Team:";
+            // 
+            // cbTeam
+            // 
+            this.cbTeam.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbTeam.FormattingEnabled = true;
+            this.cbTeam.Location = new System.Drawing.Point(460, 159);
+            this.cbTeam.Name = "cbTeam";
+            this.cbTeam.Size = new System.Drawing.Size(161, 24);
+            this.cbTeam.TabIndex = 75;
+            this.cbTeam.TextChanged += new System.EventHandler(this.CbTeam_TextChanged);
             // 
             // checkBoxCompleteTutorial
             // 
@@ -865,6 +884,7 @@
             // checkBoxSpinGyms
             // 
             this.checkBoxSpinGyms.AutoSize = true;
+            this.checkBoxSpinGyms.Enabled = false;
             this.checkBoxSpinGyms.Location = new System.Drawing.Point(383, 191);
             this.checkBoxSpinGyms.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.checkBoxSpinGyms.Name = "checkBoxSpinGyms";
@@ -2533,24 +2553,6 @@
             this.restoreDefaultsToolStripMenuItem2.Size = new System.Drawing.Size(187, 24);
             this.restoreDefaultsToolStripMenuItem2.Text = "Restore Defaults";
             this.restoreDefaultsToolStripMenuItem2.Click += new System.EventHandler(this.RestoreDefaultsToolStripMenuItem2_Click);
-            // 
-            // cbTeam
-            // 
-            this.cbTeam.FormattingEnabled = true;
-            this.cbTeam.Location = new System.Drawing.Point(460, 159);
-            this.cbTeam.Name = "cbTeam";
-            this.cbTeam.Size = new System.Drawing.Size(161, 24);
-            this.cbTeam.TabIndex = 75;
-            this.cbTeam.Text = "Neutral";
-            // 
-            // label47
-            // 
-            this.label47.AutoSize = true;
-            this.label47.Location = new System.Drawing.Point(348, 162);
-            this.label47.Name = "label47";
-            this.label47.Size = new System.Drawing.Size(97, 17);
-            this.label47.TabIndex = 76;
-            this.label47.Text = "Default Team:";
             // 
             // AccountSettingsForm
             // 
