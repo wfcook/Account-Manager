@@ -155,7 +155,7 @@ namespace PokemonGoGUI.GoManager
                             fortResponse.TeamBonusLoot.LootItem.ToString()*/);
 
                         //Successfully grabbed stop
-                        if (AccountState == Enums.AccountState.SoftBan || AccountState == Enums.AccountState.HashIssues)
+                        if (AccountState == Enums.AccountState.SoftBan)// || AccountState == Enums.AccountState.HashIssues)
                         {
                             AccountState = Enums.AccountState.Good;
 

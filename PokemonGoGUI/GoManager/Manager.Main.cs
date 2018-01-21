@@ -549,7 +549,7 @@ namespace PokemonGoGUI.GoManager
                         }
 
                         FortData pokestop = pokestopsToFarm.Dequeue();
-                        LogCaller(new LoggerEventArgs("fort Dequeued: " + pokestop.Id, LoggerTypes.Debug));
+                        LogCaller(new LoggerEventArgs("Fort Dequeued: " + pokestop.Id, LoggerTypes.Debug));
 
                         var currentLocation = new GeoCoordinate(_client.ClientSession.Player.Latitude, _client.ClientSession.Player.Longitude);
                         var fortLocation = new GeoCoordinate(pokestop.Latitude, pokestop.Longitude);
