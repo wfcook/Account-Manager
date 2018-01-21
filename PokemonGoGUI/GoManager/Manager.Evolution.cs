@@ -21,9 +21,7 @@ namespace PokemonGoGUI.GoManager
     {
         private async Task<MethodResult> EvolveFilteredPokemon()
         {
-            //TODO: Revise
-            //return new MethodResult { Message = "Dev mode sorry" };
-            MethodResult<List<PokemonData>> response = GetPokemonToEvolve();
+           MethodResult<List<PokemonData>> response = GetPokemonToEvolve();
 
             if (response.Data.Count == 0)
             {
@@ -36,11 +34,7 @@ namespace PokemonGoGUI.GoManager
             {
                 LogCaller(new LoggerEventArgs(String.Format("Not enough pokemon to evolve. {0} of {1} evolvable pokemon", response.Data.Count, UserSettings.MinPokemonBeforeEvolve), LoggerTypes.Info));
 
-                return new MethodResult
-                {
-                    Message = "Success",
-                    Success = true
-                };
+                return new MethodResult();             
             }
 
             if (!_client.ClientSession.LuckyEggsUsed)
@@ -56,13 +50,16 @@ namespace PokemonGoGUI.GoManager
                 }
             }
 
-            await EvolvePokemon(response.Data);
-
-            return new MethodResult
+            MethodResult evole = await EvolvePokemon(response.Data);
+            if (evole.Success)
             {
-                Success = true,
-                Message = "Success"
-            };
+                return new MethodResult
+                {
+                    Success = true,
+                    Message = "Success"
+                };
+            }
+            return new MethodResult();
         }
 
         public async Task<MethodResult> EvolvePokemon(IEnumerable<PokemonData> pokemonToEvolve)

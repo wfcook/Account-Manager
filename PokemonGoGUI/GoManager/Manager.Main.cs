@@ -1,5 +1,4 @@
 using System.Globalization;
-using GeoCoordinatePortable;
 using Newtonsoft.Json;
 using POGOProtos.Data.Player;
 using POGOProtos.Enums;
@@ -22,6 +21,7 @@ using System.Windows.Forms;
 using POGOLib.Official.Exceptions;
 using PokemonGoGUI.Captcha;
 using POGOLib.Official.Util.Hash;
+using POGOLib.Official.Extensions;
 
 namespace PokemonGoGUI.GoManager
 {

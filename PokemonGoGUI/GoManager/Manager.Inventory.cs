@@ -315,34 +315,42 @@ namespace PokemonGoGUI.GoManager
                 };
             }
 
-            foreach (ItemData item in Items)
+            //TODO: skip ThrowInvalidOperationException(ExceptionResource resource)
+            try
             {
-                InventoryItemSetting itemSetting = UserSettings.ItemSettings.FirstOrDefault(x => x.Id == item.ItemId);
-
-                if (itemSetting == null)
+                foreach (ItemData item in Items)
                 {
-                    continue;
+                    InventoryItemSetting itemSetting = UserSettings.ItemSettings.FirstOrDefault(x => x.Id == item.ItemId);
+
+                    if (itemSetting == null)
+                    {
+                        continue;
+                    }
+
+                    int toDelete = item.Count - itemSetting.MaxInventory;
+
+                    if (toDelete <= 0)
+                    {
+                        continue;
+                    }
+
+                    await RecycleItem(itemSetting, toDelete);
+
+                    await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
                 }
 
-                int toDelete = item.Count - itemSetting.MaxInventory;
+                UpdateInventory(InventoryRefresh.Items);
 
-                if (toDelete <= 0)
+                return new MethodResult
                 {
-                    continue;
-                }
-
-                await RecycleItem(itemSetting, toDelete);
-
-                await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+                    Message = "Success",
+                    Success = true
+                };
             }
-
-            UpdateInventory(InventoryRefresh.Items);
-
-            return new MethodResult
+            catch
             {
-                Message = "Success",
-                Success = true
-            };
+                return new MethodResult();
+            }
         }
 
         public async Task<MethodResult> RecycleItem(ItemData item, int toDelete)
