@@ -558,14 +558,20 @@ namespace PokemonGoGUI.GoManager
                         string fort = "pokestop";
                         LoggerTypes loggerTypes = LoggerTypes.Info;
 
-                        if (pokestop.Type == FortType.Gym && Level >= 5 && (!string.IsNullOrEmpty(UserSettings.DefaultTeam) || UserSettings.DefaultTeam != "Neutral"))
+                        if (pokestop.Type == FortType.Gym && Level >= 5 && PlayerData.Team != TeamColor.Neutral && PlayerData.TutorialState.Contains(TutorialState.GymTutorial))
                         {
                             if (!UserSettings.SpinGyms)
                                 continue;
+
                             fort = "Gym";
                             loggerTypes = LoggerTypes.FortGym;
                         }
-                        
+
+                        if (pokestop.Type == FortType.Gym && PlayerData.Team == TeamColor.Neutral && !PlayerData.TutorialState.Contains(TutorialState.GymTutorial))
+                        {
+                            continue;
+                        }
+
                         LogCaller(new LoggerEventArgs(String.Format("Going to {0} {1} of {2}. Distance {3:0.00}m", fort, pokeStopNumber, totalStops, distance), loggerTypes));
 
                         //Go to pokestops
