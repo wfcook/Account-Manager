@@ -75,7 +75,7 @@ namespace PokemonGoGUI.UI
 
             foreach (TeamColor team in Enum.GetValues(typeof(TeamColor)))
             {
-                cbTeam.Items.Add(team);
+                cbTeam.Items.Add(team.ToString());
             }
 
             UpdateDetails(_manager.UserSettings);
@@ -480,7 +480,7 @@ namespace PokemonGoGUI.UI
             }
             userSettings.AutoCaptchaRetries = autoCaptchaRetries;
             userSettings.TwoCaptchaAPIKey = TwoCaptchaAPIKey.Text;
-            userSettings.DefaultTeam = (string)cbTeam.SelectedItem;
+            userSettings.DefaultTeam = (string)cbTeam.SelectedItem ?? "Neutral";
 
             return true;
         }

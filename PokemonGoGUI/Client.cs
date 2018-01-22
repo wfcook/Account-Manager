@@ -163,13 +163,12 @@ namespace PokemonGoGUI
                 ClientSession.Logger.RegisterLogOutput(LoggerFucntion);
 
                 ClientSession.ManageRessources = ClientManager.UserSettings.DownloadResources;
+                ClientManager.LogCaller(new LoggerEventArgs("Succefully added all events to the client.", LoggerTypes.Debug));
 
                 if (await ClientSession.StartupAsync())
                 {
                     LoggedIn = true;
                     msgStr = "Successfully logged into server.";
-
-                    ClientManager.LogCaller(new LoggerEventArgs("Succefully added all events to the client.", LoggerTypes.Debug));
 
                     if (ClientSession.Player.Warn)
                     {
@@ -186,10 +185,6 @@ namespace PokemonGoGUI
                         }
                     }
 
-                    SaveAccessToken(ClientSession.AccessToken);
-                }
-                else
-                {
                     if (ClientSession.Player.Banned)
                     {
                         ClientManager.AccountState = AccountState.PermanentBan;
@@ -202,6 +197,8 @@ namespace PokemonGoGUI
 
                         msgStr = "The account is banned.";
                     }
+
+                    SaveAccessToken(ClientSession.AccessToken);
                 }
             }
             catch (HashVersionMismatchException ex)
@@ -398,7 +395,7 @@ namespace PokemonGoGUI
             return new MethodResult<bool>()
             {
                 Success = LoggedIn,
-                Message = msgStr
+                Message = msgStr,
             };
         }
 

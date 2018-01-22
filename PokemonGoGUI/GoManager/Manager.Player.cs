@@ -284,7 +284,7 @@ namespace PokemonGoGUI.GoManager
             };
         }
 
-        public async Task<MethodResult> SetBuddyPokemon(PokemonData pokemon, BuddyPokemon oldbuddy)
+        public async Task<MethodResult> SetBuddyPokemon(PokemonData pokemon)
         {
             var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
@@ -318,9 +318,11 @@ namespace PokemonGoGUI.GoManager
                     setBuddyPokemonResponse.UpdatedBuddy = new BuddyPokemon
                     {
                         Id = pokemon.Id,
-                        LastKmAwarded = oldbuddy.LastKmAwarded,
-                        StartKmWalked = oldbuddy.StartKmWalked
+                        LastKmAwarded = PokeSettings[pokemon.PokemonId].KmBuddyDistance,
+                        StartKmWalked = PokeSettings[pokemon.PokemonId].KmDistanceToHatch
                     };
+
+                    PlayerData.BuddyPokemon = setBuddyPokemonResponse.UpdatedBuddy;
 
                     LogCaller(new LoggerEventArgs($"Set buddy pokemon completion request wasn't successful. pokemon buddy: {pokemon.PokemonId.ToString()}", LoggerTypes.Success));
 

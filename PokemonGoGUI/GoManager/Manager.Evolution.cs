@@ -7,6 +7,7 @@ using POGOProtos.Networking.Requests;
 using POGOProtos.Networking.Requests.Messages;
 using POGOProtos.Networking.Responses;
 using POGOProtos.Settings.Master;
+using PokemonGoGUI.Enums;
 using PokemonGoGUI.Extensions;
 using PokemonGoGUI.GoManager.Models;
 using PokemonGoGUI.Models;
@@ -95,7 +96,7 @@ namespace PokemonGoGUI.GoManager
                     continue;
                 }
 
-                var EvoleBranch = new EvoleBranch(pokemon, GetPokemonSetting(pokemon.PokemonId).Data).EvolutionBranchs.FirstOrDefault();
+                PokemonSettings pokemonSettings = GetPokemonSetting((pokemon).PokemonId).Data;
 
                 var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                 {
@@ -103,7 +104,7 @@ namespace PokemonGoGUI.GoManager
                     RequestMessage = new EvolvePokemonMessage
                     {
                         PokemonId = pokemon.Id,
-                        EvolutionItemRequirement = EvoleBranch.ItemNeed
+                        EvolutionItemRequirement = pokemonSettings.EvolutionBranch.Select(x => x.EvolutionItemRequirement).FirstOrDefault()
                     }.ToByteString()
                 });
 
@@ -120,7 +121,7 @@ namespace PokemonGoGUI.GoManager
                         LogCaller(new LoggerEventArgs(
                                 String.Format("Successully evolved {0} to {1}. Experience: {2}. Cp: {3} -> {4}. IV: {5:0.00}%",
                                             pokemon.PokemonId,
-                                            EvoleBranch.Pokemon,
+                                            pokemonSettings.EvolutionBranch.Select(x => x.Evolution).FirstOrDefault(),
                                             evolvePokemonResponse.ExperienceAwarded,
                                             pokemon.Cp,
                                             evolvePokemonResponse.EvolvedPokemonData.Cp,
@@ -132,10 +133,10 @@ namespace PokemonGoGUI.GoManager
                         if (Pokemon.Contains(pokemon))
                             Pokemon.Remove(pokemon);
 
-                        var newPok = _client.ClientSession.Player.Inventory?.InventoryItems.Where(x => x?.InventoryItemData?.PokemonData?.PokemonId == EvoleBranch.Pokemon).Select(x => x.InventoryItemData.PokemonData).FirstOrDefault();
+                        var newPok = _client.ClientSession.Player.Inventory.InventoryItems.Where(x => x.InventoryItemData.PokemonData.PokemonId == pokemonSettings.EvolutionBranch.Select(p => p.Evolution).FirstOrDefault()).FirstOrDefault();
 
                         if (newPok != null)
-                            Pokemon.Add(newPok);
+                            Pokemon.Add(newPok.InventoryItemData.PokemonData);
                         continue;
                     case EvolvePokemonResponse.Types.Result.FailedInsufficientResources:
                         LogCaller(new LoggerEventArgs("Evolve request failed: Failed Insufficient Resources", LoggerTypes.Debug));

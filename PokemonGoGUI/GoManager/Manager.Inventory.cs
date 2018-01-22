@@ -129,7 +129,7 @@ namespace PokemonGoGUI.GoManager
         {
             return InventoryItems
                 .Select(kvp => kvp.Value.InventoryItemData?.PokemonData)
-                .Where(p => p != null && p.PokemonId > 0);
+                .Where(p => p != null && !p.IsEgg && p.PokemonId > 0);
         }
 
         private IEnumerable<Candy> GetCandies()
@@ -294,7 +294,7 @@ namespace PokemonGoGUI.GoManager
             }
             catch (Exception ex1)
             {
-                LogCaller(new LoggerEventArgs(String.Format("Failed updating inventory."), LoggerTypes.Debug, ex1));
+                LogCaller(new LoggerEventArgs(String.Format("Failed updating inventory."), LoggerTypes.Exception, ex1));
                 ++_failedInventoryReponses;
             }
         }

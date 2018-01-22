@@ -1,5 +1,15 @@
 # Change Log
 
+## [v2.21.1.48](https://github.com/Furtif/Account-Manager/tree/v2.21.1.48) (2018-01-22)
+
+[Full Changelog](https://github.com/Furtif/Account-Manager/compare/v2.21.1.47...v2.21.1.48)
+
+**Closed issues:**
+
+- A bug about the evolution [\#59](https://github.com/Furtif/Account-Manager/issues/59)
+- key not found [\#58](https://github.com/Furtif/Account-Manager/issues/58)
+- Getting exception, evolve fail [\#57](https://github.com/Furtif/Account-Manager/issues/57)
+
 ## [v2.21.1.47](https://github.com/Furtif/Account-Manager/tree/v2.21.1.47) (2018-01-21)
 
 [Full Changelog](https://github.com/Furtif/Account-Manager/compare/v2.21.1.46...v2.21.1.47)

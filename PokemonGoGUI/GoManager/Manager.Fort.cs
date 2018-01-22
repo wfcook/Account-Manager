@@ -217,11 +217,14 @@ namespace PokemonGoGUI.GoManager
             var fortDetailsResponse = FortDetailsResponse.Parser.ParseFrom(response);
 
             if (fortDetailsResponse != null)
+            {
+                LogCaller(new LoggerEventArgs("Fort details success.", LoggerTypes.Success));
                 return new MethodResult<FortDetailsResponse>
                 {
                     Data = fortDetailsResponse,
                     Success = true
                 };
+            }
             else
                 return new MethodResult<FortDetailsResponse>();
         }

@@ -14,7 +14,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using static POGOProtos.Networking.Responses.DownloadItemTemplatesResponse.Types;
 
 namespace PokemonGoGUI.GoManager
 {
@@ -37,7 +36,39 @@ namespace PokemonGoGUI.GoManager
         public GymBattleSettings BattleSettings { get; private set; }
         [JsonIgnore]
         public PokemonUpgradeSettings UpgradeSettings { get; private set; }
- 
+        [JsonIgnore]
+        public MoveSequenceSettings GetMoveSequenceSettings { get; private set; }
+        [JsonIgnore]
+        public EncounterSettings GetEncounterSettings { get; private set; }
+        [JsonIgnore]
+        public IapItemDisplay GetIapItemDisplay { get; private set; }
+        [JsonIgnore]
+        public IapSettings GetIapSettings { get; private set; }
+        [JsonIgnore]
+        public EquippedBadgeSettings GetEquippedBadgeSettings { get; private set; }
+        [JsonIgnore]
+        public QuestSettings GetQuestSettings { get; private set; }
+        [JsonIgnore]
+        public AvatarCustomizationSettings GetAvatarCustomizationSettings { get; private set; }
+        [JsonIgnore]
+        public FormSettings GetFormSettings { get; private set; }
+        [JsonIgnore]
+        public GenderSettings GetGenderSettings { get; private set; }
+        [JsonIgnore]
+        public GymBadgeGmtSettings GetGymBadgeGmtSettings { get; private set; }
+        [JsonIgnore]
+        public WeatherAffinity GetWeatherAffinity { get; private set; }
+        [JsonIgnore]
+        public WeatherBonus GetWeatherBonus { get; private set; }
+        [JsonIgnore]
+        public PokemonScaleSetting GetPokemonScaleSetting { get; private set; }
+        [JsonIgnore]
+        public TypeEffectiveSettings GetTypeEffectiveSettings { get; private set; }
+        [JsonIgnore]
+        public CameraSettings GetCameraSettings { get; private set; }
+        [JsonIgnore]
+        public GymLevelSettings GetGymLevelSettings { get; private set; }
+
         [JsonIgnore]
         public string SchedulerName
         {

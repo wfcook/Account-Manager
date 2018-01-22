@@ -79,8 +79,7 @@ namespace PokemonGoGUI.UI
             olvColumnCandyToEvolve.AspectGetter = delegate (object pokemon)
             {
                 PokemonSettings pokemonSettings = _manager.GetPokemonSetting((pokemon as PokemonData).PokemonId).Data;
-                return pokemonSettings == null ? -1 : pokemonSettings.CandyToEvolve;
-
+                return pokemonSettings == null ? 0 : pokemonSettings.EvolutionBranch.Select(x => x.CandyCost).FirstOrDefault();
             };
 
             olvColumnPokemonCandy.AspectGetter = delegate (object pokemon)
@@ -88,7 +87,7 @@ namespace PokemonGoGUI.UI
 
                 if (!_manager.PokemonCandy.Any())
                 {
-                    return -1;
+                    return 0;
                 }
 
                 PokemonSettings settings = _manager.GetPokemonSetting((pokemon as PokemonData).PokemonId).Data;
@@ -260,9 +259,9 @@ namespace PokemonGoGUI.UI
 
             if (_manager.PlayerData != null)
             {
-                PokemonData setbuddy = _manager.Pokemon.Where(w => w.Id == _manager.PlayerData?.BuddyPokemon?.Id && _manager.PlayerData?.BuddyPokemon?.Id > 0).Select(w => w).FirstOrDefault();
-                PokemonData buddy = setbuddy ?? new PokemonData();
-                labelPokemonBuddy.Text = buddy.PokemonId != PokemonId.Missingno ? buddy.PokemonId.ToString() : "Not set";
+                BuddyPokemon buddy = _manager.PlayerData.BuddyPokemon ?? new BuddyPokemon();
+                PokemonData myBuddy = _manager.Pokemon.Where(x => x.Id == buddy.Id).FirstOrDefault() ?? new PokemonData();
+                labelPokemonBuddy.Text = myBuddy.PokemonId != PokemonId.Missingno ? String.Format("{0}", myBuddy.PokemonId) : "Not set";
                 labelPlayerUsername.Text = _manager.PlayerData.Username;
                 DateTime date = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(_manager.PlayerData.CreationTimestampMs);
                 labelCreateDate.Text = date.ToString();
@@ -282,7 +281,6 @@ namespace PokemonGoGUI.UI
                 labelTutorialState.Text = tutocompleted;
             }
         }
-
 
         private void ButtonUpdateStats_Click(object sender, EventArgs e)
         {
@@ -675,12 +673,12 @@ namespace PokemonGoGUI.UI
                 return;
             }
 
-            BuddyPokemon _oldbuddy = _manager.PlayerData?.BuddyPokemon;
-            BuddyPokemon oldbuddy = _oldbuddy ?? new BuddyPokemon();
+            //BuddyPokemon _oldbuddy = _manager.PlayerData?.BuddyPokemon;
+            //BuddyPokemon oldbuddy = _oldbuddy ?? new BuddyPokemon();
 
             contextMenuStripPokemonDetails.Enabled = false;
 
-            MethodResult managerResult = await _manager.SetBuddyPokemon(fastObjectListViewPokemon.SelectedObjects.Cast<PokemonData>().FirstOrDefault(), oldbuddy);
+            MethodResult managerResult = await _manager.SetBuddyPokemon(fastObjectListViewPokemon.SelectedObjects.Cast<PokemonData>().FirstOrDefault());
 
             DisplayDetails();
 
