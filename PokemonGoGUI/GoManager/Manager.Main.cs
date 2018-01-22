@@ -556,15 +556,17 @@ namespace PokemonGoGUI.GoManager
                         double distance = CalculateDistanceInMeters(currentLocation, fortLocation);
 
                         string fort = "pokestop";
+                        LoggerTypes loggerTypes = LoggerTypes.Info;
 
-                        if (pokestop.Type == FortType.Gym)
+                        if (pokestop.Type == FortType.Gym && Level >= 5 && (!string.IsNullOrEmpty(UserSettings.DefaultTeam) || UserSettings.DefaultTeam != "Neutral"))
                         {
                             if (!UserSettings.SpinGyms)
                                 continue;
                             fort = "Gym";
+                            loggerTypes = LoggerTypes.FortGym;
                         }
                         
-                        LogCaller(new LoggerEventArgs(String.Format("Going to {0} {1} of {2}. Distance {3:0.00}m", fort, pokeStopNumber, totalStops, distance), pokestop.Type == FortType.Checkpoint ? LoggerTypes.Info : LoggerTypes.FortGym));
+                        LogCaller(new LoggerEventArgs(String.Format("Going to {0} {1} of {2}. Distance {3:0.00}m", fort, pokeStopNumber, totalStops, distance), loggerTypes));
 
                         //Go to pokestops
                         MethodResult walkResult = await GoToLocation(new GeoCoordinate(pokestop.Latitude, pokestop.Longitude));
