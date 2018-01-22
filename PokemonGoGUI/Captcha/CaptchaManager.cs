@@ -10,12 +10,12 @@ using OpenQA.Selenium.Support.UI;
 using PokemonGoGUI.Captcha.Anti_Captcha;
 using PokemonGoGUI.UI;
 using PokemonGoGUI.GoManager;
-using PokemonGoGUI.GoManager.Models;
 using POGOProtos.Networking.Requests;
 using POGOProtos.Networking.Requests.Messages;
 using Google.Protobuf;
 using POGOProtos.Networking.Responses;
 using System.Diagnostics;
+using PokemonGoGUI.Enums;
 
 namespace PokemonGoGUI.Captcha
 {

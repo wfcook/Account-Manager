@@ -189,6 +189,7 @@
     <Compile Include="Enums\BotState.cs" />
     <Compile Include="Enums\CheckType.cs" />
     <Compile Include="Enums\InventoryLoad.cs" />
+    <Compile Include="Enums\LoggerTypes.cs" />
     <Compile Include="Enums\SchedulerOption.cs" />
     <Compile Include="Enums\TransferType.cs" />
     <Compile Include="Exceptions\AccountNotVerifiedException.cs" />

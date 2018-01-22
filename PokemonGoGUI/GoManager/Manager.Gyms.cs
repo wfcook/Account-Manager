@@ -10,7 +10,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using PokemonGoGUI.Extensions;
-using PokemonGoGUI.GoManager.Models;
 using POGOProtos.Data.Battle;
 using PokemonGoGUI.Enums;
 using POGOProtos.Enums;
@@ -28,6 +27,8 @@ namespace PokemonGoGUI.GoManager
 
             if (pokemon == null || pokemon.PokemonId == PokemonId.Missingno)
                 return new MethodResult<GymDeployResponse>();
+
+            LogCaller(new LoggerEventArgs(String.Format("Try to deploy pokemon {0}.", pokemon.PokemonId), LoggerTypes.Info));
 
             var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
@@ -105,7 +106,7 @@ namespace PokemonGoGUI.GoManager
                     LogCaller(new LoggerEventArgs(String.Format("Faill to deploy pokemon {0}.", gymDeployResponse.Result), LoggerTypes.Info));
                     break;
                 case GymDeployResponse.Types.Result.Success:
-                    LogCaller(new LoggerEventArgs("Gym deploy success.", LoggerTypes.Success));
+                    LogCaller(new LoggerEventArgs("Gym deploy success.", LoggerTypes.Deploy));
                     return new MethodResult<GymDeployResponse>
                     {
                         Success = true,

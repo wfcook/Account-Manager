@@ -19,7 +19,6 @@ using PokemonGoGUI.Enums;
 using PokemonGoGUI.Exceptions;
 using PokemonGoGUI.Extensions;
 using PokemonGoGUI.GoManager;
-using PokemonGoGUI.GoManager.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;

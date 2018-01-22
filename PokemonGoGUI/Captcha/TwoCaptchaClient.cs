@@ -1,5 +1,5 @@
-﻿using PokemonGoGUI.GoManager;
-using PokemonGoGUI.GoManager.Models;
+﻿using PokemonGoGUI.Enums;
+using PokemonGoGUI.GoManager;
 using System;
 using System.IO;
 using System.Net;

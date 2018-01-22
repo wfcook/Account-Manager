@@ -56,6 +56,7 @@ namespace PokemonGoGUI
         public string DefaultTeam { get; set; }
         public double DisableCatchDelay { get; set; }
         public bool SpinGyms { get; set; }
+        public bool GoOnlyToGyms { get; set; }
         public bool DeployPokemon { get; set; }
         public string GroupName { get; set; }
         public string AccountName { get; set; }
@@ -202,6 +203,7 @@ namespace PokemonGoGUI
             AutoCaptchaRetries = 3;
             DefaultTeam = "Neutral";
             ShowDebugLogs = false;
+            GoOnlyToGyms = false;
         }
 
         public void LoadCatchSettings()

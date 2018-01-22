@@ -9,7 +9,6 @@ using POGOProtos.Networking.Requests;
 using POGOProtos.Networking.Requests.Messages;
 using POGOProtos.Networking.Responses;
 using PokemonGoGUI.Extensions;
-using PokemonGoGUI.GoManager.Models;
 using PokemonGoGUI.Models;
 using System;
 using System.Collections.Generic;

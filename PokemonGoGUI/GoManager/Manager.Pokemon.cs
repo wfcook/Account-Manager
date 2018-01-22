@@ -8,7 +8,6 @@ using POGOProtos.Networking.Responses;
 using POGOProtos.Settings.Master;
 using PokemonGoGUI.Enums;
 using PokemonGoGUI.Extensions;
-using PokemonGoGUI.GoManager.Models;
 using PokemonGoGUI.Models;
 using System;
 using System.Collections.Generic;
