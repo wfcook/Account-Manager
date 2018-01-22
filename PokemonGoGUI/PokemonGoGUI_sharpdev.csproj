@@ -226,7 +226,6 @@
     <Compile Include="Models\AccountExportModel.cs" />
     <Compile Include="Models\AccountImport.cs" />
     <Compile Include="Models\CatchSetting.cs" />
-    <Compile Include="Models\EvoleBranch.cs" />
     <Compile Include="Models\EvolveSetting.cs" />
     <Compile Include="Models\FarmLocation.cs" />
     <Compile Include="Models\GoProxy.cs" />

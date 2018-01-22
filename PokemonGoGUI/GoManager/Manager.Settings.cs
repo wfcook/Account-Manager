@@ -10,7 +10,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using static POGOProtos.Networking.Responses.DownloadItemTemplatesResponse.Types;
 
 namespace PokemonGoGUI.GoManager
 {
@@ -28,7 +27,6 @@ namespace PokemonGoGUI.GoManager
 
                 //API throttles
                 return returnDelay <= 500 ? 500 : returnDelay;
-
             }
         }
 
@@ -105,6 +103,22 @@ namespace PokemonGoGUI.GoManager
                 var itemSettings = new Dictionary<ItemId, ItemSettings>();
                 var battleSettings = new GymBattleSettings();
                 var upgradeSettings = new PokemonUpgradeSettings();
+                var moveSequenceSettings = new MoveSequenceSettings();
+                var encounterSettings = new EncounterSettings();
+                var iapItemDisplay = new IapItemDisplay();
+                var iapSettings = new IapSettings();
+                var equippedBadge = new EquippedBadgeSettings();
+                var questSettings = new QuestSettings();
+                var avatarCustomization = new AvatarCustomizationSettings();
+                var formSettings = new FormSettings();
+                var genderSettings = new GenderSettings();
+                var gymBadgeSettings = new GymBadgeGmtSettings();
+                var weatherAffinities = new WeatherAffinity();
+                var weatherBonusSettings = new WeatherBonus();
+                var pokemonScaleSettings = new PokemonScaleSetting();
+                var typeEffective = new TypeEffectiveSettings();
+                var camera = new CameraSettings();
+                var gymLevel = new GymLevelSettings();
 
                 foreach (var template in _client.ClientSession.Templates.ItemTemplates)
                 {
@@ -139,9 +153,73 @@ namespace PokemonGoGUI.GoManager
                             itemSettings.Remove(template.ItemSettings.ItemId);
                         itemSettings.Add(template.ItemSettings.ItemId, template.ItemSettings);
                     }
+                    else if (template.EncounterSettings != null)
+                    {
+                        encounterSettings = template.EncounterSettings;
+                    }
+                    else if (template.MoveSequenceSettings != null)
+                    {
+                        moveSequenceSettings = template.MoveSequenceSettings;
+                    }
                     else if (template.BattleSettings != null)
                     {
                         battleSettings = template.BattleSettings;
+                    }
+                    else if (template.IapItemDisplay != null)
+                    {
+                        iapItemDisplay = template.IapItemDisplay;
+                    }
+                    else if (template.IapSettings != null)
+                    {
+                        iapSettings = template.IapSettings;
+                    }
+                    else if (template.EquippedBadges != null)
+                    {
+                        equippedBadge = template.EquippedBadges;
+                    }
+                    else if (template.QuestSettings != null)
+                    {
+                        questSettings = template.QuestSettings;
+                    }
+                    else if (template.AvatarCustomization != null)
+                    {
+                        avatarCustomization = template.AvatarCustomization;
+                    }
+                    else if (template.FormSettings != null)
+                    {
+                        formSettings = template.FormSettings;
+                    }
+                    else if (template.GenderSettings != null)
+                    {
+                        genderSettings = template.GenderSettings;
+                    }
+                    else if (template.GymBadgeSettings != null)
+                    {
+                        gymBadgeSettings = template.GymBadgeSettings;
+                    }
+                    else if (template.WeatherAffinities != null)
+                    {
+                        weatherAffinities = template.WeatherAffinities;
+                    }
+                    else if (template.WeatherBonusSettings != null)
+                    {
+                        weatherBonusSettings = template.WeatherBonusSettings;
+                    }
+                    else if (template.PokemonScaleSettings != null)
+                    {
+                        pokemonScaleSettings = template.PokemonScaleSettings;
+                    }
+                    else if (template.TypeEffective != null)
+                    {
+                        typeEffective = template.TypeEffective;
+                    }
+                    else if (template.Camera != null)
+                    {
+                        camera = template.Camera;
+                    }
+                    else if (template.GymLevel != null)
+                    {
+                        gymLevel = template.GymLevel;
                     }
                     else if (template.PokemonUpgrades != null)
                     {
@@ -155,6 +233,22 @@ namespace PokemonGoGUI.GoManager
                 ItemSettings = itemSettings;
                 BadgeSettings = badgeSettings;
                 UpgradeSettings = upgradeSettings;
+                GetMoveSequenceSettings = moveSequenceSettings;
+                GetEncounterSettings = encounterSettings;
+                GetIapItemDisplay = iapItemDisplay;
+                GetIapSettings = iapSettings;
+                GetEquippedBadgeSettings = equippedBadge;
+                GetQuestSettings = questSettings;
+                GetAvatarCustomizationSettings = avatarCustomization;
+                GetFormSettings = formSettings;
+                GetGenderSettings = genderSettings;
+                GetGymBadgeGmtSettings = gymBadgeSettings;
+                GetWeatherAffinity = weatherAffinities;
+                GetWeatherBonus = weatherBonusSettings;
+                GetPokemonScaleSetting = pokemonScaleSettings;
+                GetTypeEffectiveSettings = typeEffective;
+                GetCameraSettings = camera;
+                GetGymLevelSettings = gymLevel;
 
                 return new MethodResult<Dictionary<PokemonId, PokemonSettings>>
                 {

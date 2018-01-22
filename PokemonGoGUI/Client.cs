@@ -41,6 +41,7 @@ namespace PokemonGoGUI
         public GetPlayerMessage.Types.PlayerLocale PlayerLocale;
         private DeviceWrapper ClientDeviceWrapper;
         public Manager ClientManager;
+        private string RessourcesFolder;
         private event EventHandler<int> OnPokehashSleeping;
 
         public Client()
@@ -118,6 +119,7 @@ namespace PokemonGoGUI
                 //Configuration.IgnoreHashVersion = true;
                 VersionStr = Configuration.Hasher.PokemonVersion;
                 AppVersion = Configuration.Hasher.AppVersion;
+                RessourcesFolder = $"data/{VersionStr.ToString()}";
                 // TODO: Revise sleeping
                 // Used on Windows phone background app
                 ((PokeHashHasher)Configuration.Hasher).PokehashSleeping += OnPokehashSleeping;
@@ -161,13 +163,12 @@ namespace PokemonGoGUI
                 ClientSession.Logger.RegisterLogOutput(LoggerFucntion);
 
                 ClientSession.ManageRessources = ClientManager.UserSettings.DownloadResources;
+                ClientManager.LogCaller(new LoggerEventArgs("Succefully added all events to the client.", LoggerTypes.Debug));
 
                 if (await ClientSession.StartupAsync())
                 {
                     LoggedIn = true;
                     msgStr = "Successfully logged into server.";
-
-                    ClientManager.LogCaller(new LoggerEventArgs("Succefully added all events to the client.", LoggerTypes.Debug));
 
                     if (ClientSession.Player.Warn)
                     {
@@ -184,10 +185,6 @@ namespace PokemonGoGUI
                         }
                     }
 
-                    SaveAccessToken(ClientSession.AccessToken);
-                }
-                else
-                {
                     if (ClientSession.Player.Banned)
                     {
                         ClientManager.AccountState = AccountState.PermanentBan;
@@ -200,6 +197,8 @@ namespace PokemonGoGUI
 
                         msgStr = "The account is banned.";
                     }
+
+                    SaveAccessToken(ClientSession.AccessToken);
                 }
             }
             catch (HashVersionMismatchException ex)
@@ -396,67 +395,75 @@ namespace PokemonGoGUI
             return new MethodResult<bool>()
             {
                 Success = LoggedIn,
-                Message = msgStr
+                Message = msgStr,
             };
         }
 
         private void OnAssetDisgestReceived(object sender, List<POGOProtos.Data.AssetDigestEntry> data)
         {
-            var filename = "data/" + ClientManager.UserSettings.DeviceId + "_AD.json";
-            if (!Directory.Exists("data"))
-                Directory.CreateDirectory("data");
+            if (!Directory.Exists(RessourcesFolder))
+                Directory.CreateDirectory(RessourcesFolder);
+
+            var filename = RessourcesFolder + "/" + ClientManager.UserSettings.DeviceId + "_AD.json";
+
             try
             {
                 File.WriteAllText(filename, Serializer.ToJson(data));
             }
-            catch (Exception ex1)
+            catch (Exception)
             {
-                ClientManager.LogCaller(new LoggerEventArgs("AssetDigests could not be saved sucessfully", LoggerTypes.Warning, ex1));
+                ClientManager.LogCaller(new LoggerEventArgs("AssetDigests could not be saved sucessfully", LoggerTypes.Warning));
             }
         }
 
         private void OnItemTemplatesReceived(object sender, List<DownloadItemTemplatesResponse.Types.ItemTemplate> data)
         {
-            if (!Directory.Exists("data"))
-                Directory.CreateDirectory("data");
-            var filename = "data/" + ClientManager.UserSettings.DeviceId + "_IT.json";
+            if (!Directory.Exists(RessourcesFolder))
+                Directory.CreateDirectory(RessourcesFolder);
+
+            var filename = RessourcesFolder + "/" + ClientManager.UserSettings.DeviceId + "_IT.json";
+
             try
             {
                 File.WriteAllText(filename, Serializer.ToJson(data));
             }
-            catch (Exception ex1)
+            catch (Exception)
             {
-                ClientManager.LogCaller(new LoggerEventArgs("ItemTemplates could not be saved sucessfully", LoggerTypes.Warning, ex1));
+                ClientManager.LogCaller(new LoggerEventArgs("ItemTemplates could not be saved sucessfully", LoggerTypes.Warning));
             }
         }
 
         private void OnDownloadUrlsReceived(object sender, List<POGOProtos.Data.DownloadUrlEntry> data)
         {
-            if (!Directory.Exists("data"))
-                Directory.CreateDirectory("data");
-            var filename = "data/" + ClientManager.UserSettings.DeviceId + "_UR.json";
+            if (!Directory.Exists(RessourcesFolder))
+                Directory.CreateDirectory(RessourcesFolder);
+
+            var filename = RessourcesFolder + "/" + ClientManager.UserSettings.DeviceId + "_UR.json";
+
             try
             {
                 File.WriteAllText(filename, Serializer.ToJson(data));
             }
-            catch (Exception ex1)
+            catch (Exception)
             {
-                ClientManager.LogCaller(new LoggerEventArgs("Urls could not be saved sucessfully", LoggerTypes.Warning, ex1));
+                ClientManager.LogCaller(new LoggerEventArgs("Urls could not be saved sucessfully", LoggerTypes.Warning));
             }
         }
 
         private void OnLocalConfigVersionReceived(object sender, DownloadRemoteConfigVersionResponse data)
         {
-            if (!Directory.Exists("data"))
-                Directory.CreateDirectory("data");
-            var filename = "data/" + ClientManager.UserSettings.DeviceId + "_LCV.json";
+            if (!Directory.Exists(RessourcesFolder))
+                Directory.CreateDirectory(RessourcesFolder);
+
+            var filename = RessourcesFolder + "/" + ClientManager.UserSettings.DeviceId + "_LCV.json";
+
             try
             {
                 File.WriteAllText(filename, Serializer.ToJson(data));
             }
-            catch (Exception ex1)
+            catch (Exception)
             {
-                ClientManager.LogCaller(new LoggerEventArgs("LocalConfigVersion could not be saved sucessfully", LoggerTypes.Warning, ex1));
+                ClientManager.LogCaller(new LoggerEventArgs("LocalConfigVersion could not be saved sucessfully", LoggerTypes.Warning));
             }
         }
 
@@ -482,8 +489,13 @@ namespace PokemonGoGUI
 
             ClientManager.LogCaller(new LoggerEventArgs("Bot paused VerifyChallenge...", LoggerTypes.Captcha));
 
-            bool solved = ClientManager.CaptchaSolver.SolveCaptcha(this, e.CaptchaUrl).Result;
+            bool solved = false;
+            //int retries = 1;
 
+            //while (retries-- > 0 && !solved)
+            //{
+            solved = ClientManager.CaptchaSolver.SolveCaptcha(this, e.CaptchaUrl).Result;
+            //}
             if (solved)
             {
                 ClientManager.LogCaller(new LoggerEventArgs("Unpausing bot Challenge finished...", LoggerTypes.Captcha));
@@ -614,16 +626,16 @@ namespace PokemonGoGUI
         private void LoadResources(Session session)
         {
             //My files resources here  
-            var filename = "data/" + ClientManager.UserSettings.DeviceId + "_IT.json";
+            var filename = RessourcesFolder + "/" + ClientManager.UserSettings.DeviceId + "_IT.json";
             if (File.Exists(filename))
                 session.Templates.ItemTemplates = Serializer.FromJson<List<DownloadItemTemplatesResponse.Types.ItemTemplate>>(File.ReadAllText(filename));
-            filename = "data/" + ClientManager.UserSettings.DeviceId + "_UR.json";
+            filename = RessourcesFolder + "/" + ClientManager.UserSettings.DeviceId + "_UR.json";
             if (File.Exists(filename))
                 session.Templates.DownloadUrls = Serializer.FromJson<List<DownloadUrlEntry>>(File.ReadAllText(filename));
-            filename = "data/" + ClientManager.UserSettings.DeviceId + "_AD.json";
+            filename = RessourcesFolder + "/" + ClientManager.UserSettings.DeviceId + "_AD.json";
             if (File.Exists(filename))
                 session.Templates.AssetDigests = Serializer.FromJson<List<AssetDigestEntry>>(File.ReadAllText(filename));
-            filename = "data/" + ClientManager.UserSettings.DeviceId + "_LCV.json";
+            filename = RessourcesFolder + "/" + ClientManager.UserSettings.DeviceId + "_LCV.json";
             if (File.Exists(filename))
                 session.Templates.LocalConfigVersion = Serializer.FromJson<DownloadRemoteConfigVersionResponse>(File.ReadAllText(filename));
         }
