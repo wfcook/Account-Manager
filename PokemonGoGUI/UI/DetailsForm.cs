@@ -250,7 +250,7 @@ namespace PokemonGoGUI.UI
             if (_manager.Pokemon != null)
             {
                 labelPokemonCount.Text = String.Format("{0}/{1}", _manager.Pokemon.Count + _manager.Eggs.Count, _manager.MaxPokemonStorage);
-                labelDeployedPokemons.Text = _manager.Pokemon.Where(w => w.Id != _manager.PlayerData.BuddyPokemon?.Id && !string.IsNullOrEmpty(w.DeployedFortId)).Count().ToString();
+                labelDeployedPokemons.Text = _manager.Pokemon.Where(i => !string.IsNullOrEmpty(i.DeployedFortId)).Count().ToString();
             }
 
             if (_manager.Items != null)

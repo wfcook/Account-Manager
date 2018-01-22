@@ -480,7 +480,7 @@ namespace PokemonGoGUI.UI
             }
             userSettings.AutoCaptchaRetries = autoCaptchaRetries;
             userSettings.TwoCaptchaAPIKey = TwoCaptchaAPIKey.Text;
-            userSettings.DefaultTeam = cbTeam.SelectedItem.ToString();
+            userSettings.DefaultTeam = (string)cbTeam.SelectedItem;
 
             return true;
         }
