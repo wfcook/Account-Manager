@@ -565,16 +565,32 @@ namespace PokemonGoGUI.GoManager
             return (float)(Math.Round((level) * 2) / 2.0);
         }
 
-        private PokemonUpgradeSettings UpgradeSettings;
+        /* Un-Used reference only
+        private double GetPokemonLevel(double cpMultiplier)
+        {
+            double pokemonLevel;
+            if (cpMultiplier < 0.734)
+            {
+                pokemonLevel = (58.35178527 * cpMultiplier * cpMultiplier - 2.838007664 * cpMultiplier + 0.8539209906);
+            }
+            else
+            {
+                pokemonLevel = 171.0112688 * cpMultiplier - 95.20425243;
+            }
+            pokemonLevel = (Math.Round(pokemonLevel) * 2) / 2;
+
+            return pokemonLevel;
+        }
+        */
 
         private int GetStardustCostsForPowerup(double combinedCpMultiplier, int level)
         {
-            return UpgradeSettings.StardustCost[level];
+            return _client.ClientSession.Templates.ItemTemplates.Select(x => x.PokemonUpgrades.StardustCost[level]).FirstOrDefault();
         }
 
         private int GetCandyCostsForPowerup(double combinedCpMultiplier, int level)
         {
-            return UpgradeSettings.CandyCost[level];
+            return _client.ClientSession.Templates.ItemTemplates.Select(x => x.PokemonUpgrades.CandyCost[level]).FirstOrDefault();
         }
 
         public bool CanUpgradePokemon(PokemonData pokemon)
