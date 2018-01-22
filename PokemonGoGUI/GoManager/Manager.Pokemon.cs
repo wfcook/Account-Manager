@@ -21,7 +21,10 @@ namespace PokemonGoGUI.GoManager
     {
         public async Task<MethodResult> TransferPokemon(IEnumerable<PokemonData> pokemonsToTransfer)
         {
-            var pokemonToTransfer = pokemonsToTransfer.Where(x => x.Favorite != 1 && !x.IsEgg && string.IsNullOrEmpty(x.DeployedFortId) && x.Id != PlayerData.BuddyPokemon?.Id && x != null);
+            PokemonData settedbuddy = Pokemon.Where(w => w.Id == PlayerData?.BuddyPokemon?.Id && PlayerData?.BuddyPokemon?.Id > 0).Select(w => w).FirstOrDefault();
+            PokemonData currentbuddy = settedbuddy ?? new PokemonData();
+
+            var pokemonToTransfer = pokemonsToTransfer.Where(x => x.Favorite != 1 && !x.IsEgg && string.IsNullOrEmpty(x.DeployedFortId) && x.Id != currentbuddy.Id && x != null);
 
             if (pokemonsToTransfer.Count() == 0)
                 return new MethodResult();
@@ -542,6 +545,63 @@ namespace PokemonGoGUI.GoManager
                 Success = true,
                 Message = "Success",
             };
+        }
+
+        private float GetLevelFromCpMultiplier(double combinedCpMultiplier)
+        {
+            double level;
+            if (combinedCpMultiplier < 0.734f)
+            {
+                // compute polynomial approximation obtained by regression
+                level = 58.35178527 * combinedCpMultiplier * combinedCpMultiplier
+                        - 2.838007664 * combinedCpMultiplier + 0.8539209906;
+            }
+            else
+            {
+                // compute linear approximation obtained by regression
+                level = 171.0112688 * combinedCpMultiplier - 95.20425243;
+            }
+            // round to nearest .5 value and return
+            return (float)(Math.Round((level) * 2) / 2.0);
+        }
+
+        private PokemonUpgradeSettings UpgradeSettings;
+
+        private int GetStardustCostsForPowerup(double combinedCpMultiplier, int level)
+        {
+            return UpgradeSettings.StardustCost[level];
+        }
+
+        private int GetCandyCostsForPowerup(double combinedCpMultiplier, int level)
+        {
+            return UpgradeSettings.CandyCost[level];
+        }
+
+        public bool CanUpgradePokemon(PokemonData pokemon)
+        {
+            // Can't upgrade pokemon in gyms.
+            if (!string.IsNullOrEmpty(pokemon.DeployedFortId))
+                return false;
+
+            int pokemonLevel = (int)GetLevelFromCpMultiplier(pokemon.CpMultiplier + pokemon.AdditionalCpMultiplier);
+
+            // Can't evolve unless pokemon level is lower than trainer.
+            if (pokemonLevel >=  Level + 2)
+                return false;
+
+            int familyCandy = PokemonCandy.Where(x => x.FamilyId == GetPokemonSetting(pokemon.PokemonId).Data.FamilyId).FirstOrDefault().Candy_;
+
+            // Can't evolve if not enough candy.
+            int pokemonCandyNeededAlready = GetCandyCostsForPowerup(pokemon.CpMultiplier + pokemon.AdditionalCpMultiplier, pokemonLevel);
+            if (familyCandy < pokemonCandyNeededAlready)
+                return false;
+
+            // Can't evolve if not enough stardust.
+            var stardustToUpgrade = GetStardustCostsForPowerup(pokemon.CpMultiplier + pokemon.AdditionalCpMultiplier, pokemonLevel);
+            if (TotalStardust < stardustToUpgrade)
+                return false;
+
+            return true;
         }
     }
 }

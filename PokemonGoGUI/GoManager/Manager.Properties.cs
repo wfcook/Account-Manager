@@ -26,7 +26,6 @@ namespace PokemonGoGUI.GoManager
         public Scheduler AccountScheduler { get; set; }
         public DateTime LastLuckyEgg { get; set; }
         public PlayerStats Stats { get; set; }
-        //public TeamColor Team { get; set; }
 
         [JsonIgnore]
         public string SchedulerName
@@ -34,7 +33,6 @@ namespace PokemonGoGUI.GoManager
             get
             {
                 return AccountScheduler == null ? String.Empty : AccountScheduler.Name;
-
             }
         }
 
@@ -44,7 +42,6 @@ namespace PokemonGoGUI.GoManager
             get
             {
                 return Tracker == null ? 0 : Tracker.PokemonCaught;
-
             }
         }
 
@@ -54,7 +51,6 @@ namespace PokemonGoGUI.GoManager
             get
             {
                 return Tracker == null ? 0 : Tracker.PokestopsFarmed;
-
             }
         }
 
@@ -64,7 +60,6 @@ namespace PokemonGoGUI.GoManager
             get
             {
                 return String.IsNullOrEmpty(UserSettings.GroupName) ? String.Empty : UserSettings.GroupName;
-
             }
         }
 

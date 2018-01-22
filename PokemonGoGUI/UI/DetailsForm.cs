@@ -394,16 +394,30 @@ namespace PokemonGoGUI.UI
 
         private async void UpgradeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            DialogResult result = MessageBox.Show(String.Format("Are you sure you want to upgrade {0} pokemon?", fastObjectListViewPokemon.SelectedObjects.Count), "Confirmation", MessageBoxButtons.YesNo);
+            List<PokemonData> pokemonsToUpgrade = fastObjectListViewPokemon.SelectedObjects.Cast<PokemonData>().ToList();
+            DialogResult result = MessageBox.Show(String.Format("Are you sure you want to upgrade {0} pokemon?", pokemonsToUpgrade.Count()), "Confirmation", MessageBoxButtons.YesNo);
 
             if (result != DialogResult.Yes)
             {
                 return;
             }
 
+            foreach (var pokemon in pokemonsToUpgrade)
+            {
+                if (!_manager.CanUpgradePokemon(pokemon))
+                {
+                    MessageBox.Show($"Skipped! {pokemon.PokemonId.ToString()}  does not have data required to upgrade.");
+                    pokemonsToUpgrade.Remove(pokemon);
+                    continue;
+                }
+            }
+
+            if (pokemonsToUpgrade.Count() == 0)
+                return;
+
             contextMenuStripPokemonDetails.Enabled = false;
 
-            MethodResult managerResult = await _manager.UpgradePokemon(fastObjectListViewPokemon.SelectedObjects.Cast<PokemonData>());
+            MethodResult managerResult = await _manager.UpgradePokemon(pokemonsToUpgrade.ToList());
 
             DisplayDetails();
 
