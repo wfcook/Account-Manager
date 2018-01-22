@@ -198,6 +198,7 @@
     <Compile Include="GoManager\Manager.Egg.cs" />
     <Compile Include="GoManager\Manager.Evolution.cs" />
     <Compile Include="GoManager\Manager.Fort.cs" />
+    <Compile Include="GoManager\Manager.Gyms.cs" />
     <Compile Include="GoManager\Manager.Map.cs" />
     <Compile Include="GoManager\Manager.Navigation.cs" />
     <Compile Include="GoManager\Manager.Player.cs" />
