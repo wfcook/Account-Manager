@@ -583,16 +583,6 @@ namespace PokemonGoGUI.GoManager
         }
         */
 
-        private int GetStardustCostsForPowerup(double combinedCpMultiplier, int level)
-        {
-            return _client.ClientSession.Templates.ItemTemplates.Select(x => x.PokemonUpgrades.StardustCost[level]).FirstOrDefault();
-        }
-
-        private int GetCandyCostsForPowerup(double combinedCpMultiplier, int level)
-        {
-            return _client.ClientSession.Templates.ItemTemplates.Select(x => x.PokemonUpgrades.CandyCost[level]).FirstOrDefault();
-        }
-
         public bool CanUpgradePokemon(PokemonData pokemon)
         {
             // Can't upgrade pokemon in gyms.
@@ -608,12 +598,12 @@ namespace PokemonGoGUI.GoManager
             int familyCandy = PokemonCandy.Where(x => x.FamilyId == GetPokemonSetting(pokemon.PokemonId).Data.FamilyId).FirstOrDefault().Candy_;
 
             // Can't evolve if not enough candy.
-            int pokemonCandyNeededAlready = GetCandyCostsForPowerup(pokemon.CpMultiplier + pokemon.AdditionalCpMultiplier, pokemonLevel);
+            int pokemonCandyNeededAlready = UpgradeSettings.CandyCost[pokemonLevel];
             if (familyCandy < pokemonCandyNeededAlready)
                 return false;
 
             // Can't evolve if not enough stardust.
-            var stardustToUpgrade = GetStardustCostsForPowerup(pokemon.CpMultiplier + pokemon.AdditionalCpMultiplier, pokemonLevel);
+            var stardustToUpgrade = UpgradeSettings.StardustCost[pokemonLevel];
             if (TotalStardust < stardustToUpgrade)
                 return false;
 

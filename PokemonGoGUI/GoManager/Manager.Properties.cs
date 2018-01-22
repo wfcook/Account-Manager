@@ -14,6 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using static POGOProtos.Networking.Responses.DownloadItemTemplatesResponse.Types;
 
 namespace PokemonGoGUI.GoManager
 {
@@ -24,9 +25,19 @@ namespace PokemonGoGUI.GoManager
         public Settings UserSettings { get; set; }
         public Tracker Tracker { get; set; }
         public Scheduler AccountScheduler { get; set; }
-        public DateTime LastLuckyEgg { get; set; }
         public PlayerStats Stats { get; set; }
 
+        [JsonIgnore]
+        public Dictionary<PokemonMove, MoveSettings> MoveSettings { get; private set; }
+        [JsonIgnore]
+        public Dictionary<BadgeType, BadgeSettings> BadgeSettings { get; private set; }
+        [JsonIgnore]
+        public Dictionary<ItemId, ItemSettings> ItemSettings { get; private set; }
+        [JsonIgnore]
+        public GymBattleSettings BattleSettings { get; private set; }
+        [JsonIgnore]
+        public PokemonUpgradeSettings UpgradeSettings { get; private set; }
+ 
         [JsonIgnore]
         public string SchedulerName
         {

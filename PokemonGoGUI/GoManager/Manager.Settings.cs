@@ -1,5 +1,6 @@
 ﻿using POGOLib.Official.Util.Device;
 using POGOProtos.Enums;
+using POGOProtos.Inventory.Item;
 using POGOProtos.Settings.Master;
 using PokemonGoGUI.Extensions;
 using PokemonGoGUI.GoManager.Models;
@@ -9,6 +10,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using static POGOProtos.Networking.Responses.DownloadItemTemplatesResponse.Types;
 
 namespace PokemonGoGUI.GoManager
 {
@@ -98,6 +100,12 @@ namespace PokemonGoGUI.GoManager
                 }
 
                 var pokemonSettings = new Dictionary<PokemonId, PokemonSettings>();
+                var moveSettings = new Dictionary<PokemonMove, MoveSettings>();
+                var badgeSettings = new Dictionary<BadgeType, BadgeSettings>();
+                var itemSettings = new Dictionary<ItemId, ItemSettings>();
+                var battleSettings = new GymBattleSettings();
+                var upgradeSettings = new PokemonUpgradeSettings();
+
                 foreach (var template in _client.ClientSession.Templates.ItemTemplates)
                 {
                     if (template.PlayerLevel != null)
@@ -113,10 +121,40 @@ namespace PokemonGoGUI.GoManager
                             pokemonSettings.Remove(template.PokemonSettings.PokemonId);
                         pokemonSettings.Add(template.PokemonSettings.PokemonId, template.PokemonSettings);
                     }
+                    else if (template.MoveSettings != null)
+                    {
+                        if (moveSettings.ContainsKey(template.MoveSettings.MovementId))
+                            moveSettings.Remove(template.MoveSettings.MovementId);
+                        moveSettings.Add(template.MoveSettings.MovementId, template.MoveSettings);
+                    }
+                    else if (template.BadgeSettings != null)
+                    {
+                        if (badgeSettings.ContainsKey(template.BadgeSettings.BadgeType))
+                            badgeSettings.Remove(template.BadgeSettings.BadgeType);
+                        badgeSettings.Add(template.BadgeSettings.BadgeType, template.BadgeSettings);
+                    }
+                    else if (template.ItemSettings != null)
+                    {
+                        if (itemSettings.ContainsKey(template.ItemSettings.ItemId))
+                            itemSettings.Remove(template.ItemSettings.ItemId);
+                        itemSettings.Add(template.ItemSettings.ItemId, template.ItemSettings);
+                    }
+                    else if (template.BattleSettings != null)
+                    {
+                        battleSettings = template.BattleSettings;
+                    }
+                    else if (template.PokemonUpgrades != null)
+                    {
+                        upgradeSettings = template.PokemonUpgrades;
+                    }
                 }
 
                 PokeSettings = pokemonSettings;
-                
+                MoveSettings = moveSettings;
+                BadgeSettings = badgeSettings;
+                ItemSettings = itemSettings;
+                BadgeSettings = badgeSettings;
+                UpgradeSettings = upgradeSettings;
 
                 return new MethodResult<Dictionary<PokemonId, PokemonSettings>>
                 {
