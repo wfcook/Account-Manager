@@ -21,7 +21,10 @@ namespace PokemonGoGUI.GoManager
     {
         public async Task<MethodResult> TransferPokemon(IEnumerable<PokemonData> pokemonsToTransfer)
         {
-            var pokemonToTransfer = pokemonsToTransfer.Where(x => x.Favorite != 1 && !x.IsEgg && string.IsNullOrEmpty(x.DeployedFortId) && x.Id != PlayerData.BuddyPokemon?.Id && x != null);
+            PokemonData settedbuddy = Pokemon.Where(w => w.Id == PlayerData?.BuddyPokemon?.Id && PlayerData?.BuddyPokemon?.Id > 0).Select(w => w).FirstOrDefault();
+            PokemonData currentbuddy = settedbuddy ?? new PokemonData();
+
+            var pokemonToTransfer = pokemonsToTransfer.Where(x => x.Favorite != 1 && !x.IsEgg && string.IsNullOrEmpty(x.DeployedFortId) && x.Id != currentbuddy.Id && x != null);
 
             if (pokemonsToTransfer.Count() == 0)
                 return new MethodResult();
@@ -490,6 +493,121 @@ namespace PokemonGoGUI.GoManager
             PokemonSettings pokemonSettings = GetPokemonSetting(poke.PokemonId).Data;
 
             return pokemonSettings.Stats.BaseAttack * Math.Sqrt(pokemonSettings.Stats.BaseDefense) * Math.Sqrt(pokemonSettings.Stats.BaseStamina);
+        }
+
+        public async Task<MethodResult> UpgradePokemon(IEnumerable<PokemonData> pokemonsToUpgrade)
+        {
+            if (pokemonsToUpgrade.Count() == 0)
+                return new MethodResult();
+
+            foreach (var pokemon in pokemonsToUpgrade)
+            {
+                var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
+                {
+                    RequestType = RequestType.UpgradePokemon,
+                    RequestMessage = new UpgradePokemonMessage
+                    {
+                        PokemonId = pokemon.Id
+                    }.ToByteString()
+                });
+
+                if (response == null)
+                    return new MethodResult();
+
+                var upgradePokemonResponse = UpgradePokemonResponse.Parser.ParseFrom(response);
+
+                switch (upgradePokemonResponse.Result)
+                {
+                    case UpgradePokemonResponse.Types.Result.Success:
+                        UpdateInventory(InventoryRefresh.Pokemon);
+                        LogCaller(new LoggerEventArgs(String.Format("Upgrade pokemon {0} success.", pokemon.PokemonId), LoggerTypes.Success));
+                        break;
+                     case UpgradePokemonResponse.Types.Result.ErrorInsufficientResources:
+                        LogCaller(new LoggerEventArgs(String.Format("Failed to upgrade pokemon. Response: {0}", upgradePokemonResponse.Result), LoggerTypes.Warning));
+                        break;
+                    case UpgradePokemonResponse.Types.Result.ErrorPokemonIsDeployed:
+                        LogCaller(new LoggerEventArgs(String.Format("Failed to upgrade pokemon. Response: {0}", upgradePokemonResponse.Result), LoggerTypes.Warning));
+                        break;
+                    case UpgradePokemonResponse.Types.Result.ErrorPokemonNotFound:
+                        LogCaller(new LoggerEventArgs(String.Format("Failed to upgrade pokemon. Response: {0}", upgradePokemonResponse.Result), LoggerTypes.Warning));
+                        break;
+                    case UpgradePokemonResponse.Types.Result.ErrorUpgradeNotAvailable:
+                        LogCaller(new LoggerEventArgs(String.Format("Failed to upgrade pokemon. Response: {0}", upgradePokemonResponse.Result), LoggerTypes.Warning));
+                        break;
+                    case UpgradePokemonResponse.Types.Result.Unset:
+                        LogCaller(new LoggerEventArgs(String.Format("Failed to upgrade pokemon. Response: {0}", upgradePokemonResponse.Result), LoggerTypes.Warning));
+                        break;
+                }
+            }
+
+            return new MethodResult
+            {
+                Success = true,
+                Message = "Success",
+            };
+        }
+
+        private float GetLevelFromCpMultiplier(double combinedCpMultiplier)
+        {
+            double level;
+            if (combinedCpMultiplier < 0.734f)
+            {
+                // compute polynomial approximation obtained by regression
+                level = 58.35178527 * combinedCpMultiplier * combinedCpMultiplier
+                        - 2.838007664 * combinedCpMultiplier + 0.8539209906;
+            }
+            else
+            {
+                // compute linear approximation obtained by regression
+                level = 171.0112688 * combinedCpMultiplier - 95.20425243;
+            }
+            // round to nearest .5 value and return
+            return (float)(Math.Round((level) * 2) / 2.0);
+        }
+
+        /* Un-Used reference only
+        private double GetPokemonLevel(double cpMultiplier)
+        {
+            double pokemonLevel;
+            if (cpMultiplier < 0.734)
+            {
+                pokemonLevel = (58.35178527 * cpMultiplier * cpMultiplier - 2.838007664 * cpMultiplier + 0.8539209906);
+            }
+            else
+            {
+                pokemonLevel = 171.0112688 * cpMultiplier - 95.20425243;
+            }
+            pokemonLevel = (Math.Round(pokemonLevel) * 2) / 2;
+
+            return pokemonLevel;
+        }
+        */
+
+        public bool CanUpgradePokemon(PokemonData pokemon)
+        {
+            // Can't upgrade pokemon in gyms.
+            if (!string.IsNullOrEmpty(pokemon.DeployedFortId))
+                return false;
+
+            int pokemonLevel = (int)GetLevelFromCpMultiplier(pokemon.CpMultiplier + pokemon.AdditionalCpMultiplier);
+
+            // Can't evolve unless pokemon level is lower than trainer.
+            if (pokemonLevel >=  Level + 2)
+                return false;
+
+            int familyCandy = PokemonCandy.Where(x => x.FamilyId == GetPokemonSetting(pokemon.PokemonId).Data.FamilyId).FirstOrDefault().Candy_;
+
+            // Can't evolve if not enough candy.
+            int pokemonCandyNeededAlready = UpgradeSettings.CandyCost[pokemonLevel];
+            if (familyCandy < pokemonCandyNeededAlready)
+                return false;
+
+            // Can't evolve if not enough stardust.
+            var stardustToUpgrade = UpgradeSettings.StardustCost[pokemonLevel];
+            if (TotalStardust < stardustToUpgrade)
+                return false;
+
+            return true;
         }
     }
 }

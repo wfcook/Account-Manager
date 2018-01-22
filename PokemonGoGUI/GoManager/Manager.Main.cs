@@ -3,7 +3,6 @@ using Newtonsoft.Json;
 using POGOProtos.Data.Player;
 using POGOProtos.Enums;
 using POGOProtos.Map.Fort;
-using POGOProtos.Networking.Responses;
 using PokemonGoGUI.AccountScheduler;
 using PokemonGoGUI.Enums;
 using PokemonGoGUI.Extensions;
@@ -449,64 +448,6 @@ namespace PokemonGoGUI.GoManager
 
                             await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
                         }
-
-                        if (!PlayerData.TutorialState.Contains(TutorialState.GymTutorial) && Level >= 5 && !string.IsNullOrEmpty(UserSettings.DefaultTeam))
-                        {
-                            if (PlayerData.Team == TeamColor.Neutral)
-                            {
-                                TeamColor team = TeamColor.Neutral;
-
-                                foreach (TeamColor _team in Enum.GetValues(typeof(TeamColor)))
-                                {
-                                    if (UserSettings.DefaultTeam == _team.ToString())
-                                    {
-                                        team = _team;
-                                    }
-                                }
-
-                                if (team != TeamColor.Neutral)
-                                {
-                                    var setplayerteam = await SetPlayerTeam(team);
-
-                                    if (setplayerteam.Success)
-                                    {
-                                        await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
-
-                                        result = await MarkTutorialsComplete(new[] { TutorialState.GymTutorial });
-
-                                        if (!result.Success)
-                                        {
-                                            LogCaller(new LoggerEventArgs("Failed. Marking Gym tutorials completed..", LoggerTypes.Warning));
-
-                                            Stop();
-
-                                            await Task.Delay(failedWaitTime);
-
-                                            continue;
-                                        }
-
-                                        LogCaller(new LoggerEventArgs("Marking Gym tutorials completed.", LoggerTypes.Success));
-
-                                        await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
-                                    }
-
-                                    //Check for missed tutorials
-                                    foreach (TutorialState tutos in Enum.GetValues(typeof(TutorialState)))
-                                    {
-                                        if (!PlayerData.TutorialState.Contains(tutos))
-                                        {
-                                            DialogResult box = MessageBox.Show($"Tutorial {tutos.ToString()} is not completed on this account {PlayerData.Username}! Complete this?", "Confirmation", MessageBoxButtons.YesNo);
-
-                                            if (box == DialogResult.Yes)
-                                            {
-                                                result = await MarkTutorialsComplete(new[] { tutos });
-                                                await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
                     }
 
                     _failedInventoryReponses = 0;
@@ -607,15 +548,22 @@ namespace PokemonGoGUI.GoManager
                         }
 
                         FortData pokestop = pokestopsToFarm.Dequeue();
-                        LogCaller(new LoggerEventArgs("fort Dequeued: " + pokestop.Id, LoggerTypes.Debug));
+                        LogCaller(new LoggerEventArgs("Fort Dequeued: " + pokestop.Id, LoggerTypes.Debug));
 
                         var currentLocation = new GeoCoordinate(_client.ClientSession.Player.Latitude, _client.ClientSession.Player.Longitude);
                         var fortLocation = new GeoCoordinate(pokestop.Latitude, pokestop.Longitude);
 
                         double distance = CalculateDistanceInMeters(currentLocation, fortLocation);
 
-                        string fort = (pokestop.Type == FortType.Gym) ? "gym" : "pokestop";
+                        string fort = "pokestop";
 
+                        if (pokestop.Type == FortType.Gym)
+                        {
+                            if (!UserSettings.SpinGyms)
+                                continue;
+                            fort = "Gym";
+                        }
+                        
                         LogCaller(new LoggerEventArgs(String.Format("Going to {0} {1} of {2}. Distance {3:0.00}m", fort, pokeStopNumber, totalStops, distance), pokestop.Type == FortType.Checkpoint ? LoggerTypes.Info : LoggerTypes.FortGym));
 
                         //Go to pokestops
@@ -712,32 +660,116 @@ namespace PokemonGoGUI.GoManager
                         {
                             if (pokestop.CooldownCompleteTimestampMs < DateTime.UtcNow.ToUnixTime())
                             {
-                                if (pokestop.Type == FortType.Gym)
+                                if (pokestop.Type == FortType.Gym && Level >= 5 && (!string.IsNullOrEmpty(UserSettings.DefaultTeam) || UserSettings.DefaultTeam != "Neutral"))
                                 {
-                                    if (!UserSettings.SpinGyms)
-                                        continue;
+                                    if (!PlayerData.TutorialState.Contains(TutorialState.GymTutorial))
+                                    {
+                                        if (PlayerData.Team == TeamColor.Neutral)
+                                        {
+                                            TeamColor team = TeamColor.Neutral;
 
-                                    MethodResult<GymGetInfoResponse> _result = await GymGetInfo(pokestop);
-                                    if (_result.Success)
-                                        LogCaller(new LoggerEventArgs("Gym Name: " + _result.Data.Name, LoggerTypes.Info));
+                                            foreach (TeamColor _team in Enum.GetValues(typeof(TeamColor)))
+                                            {
+                                                if (UserSettings.DefaultTeam == _team.ToString())
+                                                {
+                                                    team = _team;
+                                                }
+                                            }
+
+                                            if (team != TeamColor.Neutral)
+                                            {
+                                                var setplayerteam = await SetPlayerTeam(team);
+
+                                                if (setplayerteam.Success)
+                                                {
+                                                    await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
+
+                                                    result = await MarkTutorialsComplete(new[] { TutorialState.GymTutorial });
+
+                                                    if (!result.Success)
+                                                    {
+                                                        LogCaller(new LoggerEventArgs("Failed. Marking Gym tutorials completed..", LoggerTypes.Warning));
+
+                                                        Stop();
+
+                                                        await Task.Delay(failedWaitTime);
+
+                                                        continue;
+                                                    }
+
+                                                    LogCaller(new LoggerEventArgs("Marking Gym tutorials completed.", LoggerTypes.Success));
+
+                                                    await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
+                                                }
+
+                                                //Check for missed tutorials
+                                                foreach (TutorialState tutos in Enum.GetValues(typeof(TutorialState)))
+                                                {
+                                                    if (!PlayerData.TutorialState.Contains(tutos))
+                                                    {
+                                                        DialogResult box = MessageBox.Show($"Tutorial {tutos.ToString()} is not completed on this account {PlayerData.Username}! Complete this?", "Confirmation", MessageBoxButtons.YesNo);
+
+                                                        if (box == DialogResult.Yes)
+                                                        {
+                                                            result = await MarkTutorialsComplete(new[] { tutos });
+                                                            await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        var gyminfo = await GymGetInfo(pokestop);
+                                        if (gyminfo.Success)
+                                            LogCaller(new LoggerEventArgs("Gym Name: " + gyminfo.Data.Name, LoggerTypes.Info));
+
+                                        MethodResult spingym = await SearchPokestop(pokestop);
+
+                                        //OutOfRange will show up as a success
+                                        if (spingym.Success)
+                                        {
+                                            currentFailedStops = 0;
+                                            //Try to deploy, full gym is 6 now
+                                            if (gyminfo.Data.GymStatusAndDefenders.GymDefender.Count < 6)
+                                            {
+                                                //Checks team color if same of player or Neutral
+                                                if (pokestop.OwnedByTeam == PlayerData.Team || pokestop.OwnedByTeam == TeamColor.Neutral)
+                                                    //Check if config as deploy actived
+                                                    if (UserSettings.DeployPokemon)
+                                                    {
+                                                        //Try to deploy
+                                                        await GymDeploy(pokestop);
+                                                    }
+                                                continue;
+                                            }
+                                            //Here try to attack gym not released yet
+                                            //
+                                        }
+                                        else
+                                        {
+                                            ++currentFailedStops;
+                                        }
+                                    }
                                 }
                                 else
                                 {
                                     var fortDetails = await FortDetails(pokestop);
                                     if (fortDetails.Success)
                                         LogCaller(new LoggerEventArgs("Fort Name: " + fortDetails.Data.Name, LoggerTypes.Info));
-                                }
 
-                                MethodResult searchResult = await SearchPokestop(pokestop);
+                                    MethodResult searchResult = await SearchPokestop(pokestop);
 
-                                //OutOfRange will show up as a success
-                                if (searchResult.Success)
-                                {
-                                    currentFailedStops = 0;
-                                }
-                                else
-                                {
-                                    ++currentFailedStops;
+                                    //OutOfRange will show up as a success
+                                    if (searchResult.Success)
+                                    {
+                                        currentFailedStops = 0;
+                                    }
+                                    else
+                                    {
+                                        ++currentFailedStops;
+                                    }
                                 }
                             }
                             else

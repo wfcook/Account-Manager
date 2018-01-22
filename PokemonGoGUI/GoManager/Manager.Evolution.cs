@@ -30,11 +30,18 @@ namespace PokemonGoGUI.GoManager
 
             LogCaller(new LoggerEventArgs(String.Format("{0} pokemon to evolve", response.Data.Count), LoggerTypes.Info));
 
-            if (response.Data.Count < UserSettings.MinPokemonBeforeEvolve && !_client.ClientSession.LuckyEggsUsed && FilledPokemonInventorySpace() <= UserSettings.ForceEvolveAbovePercent)
+            if (FilledPokemonInventorySpace() <= UserSettings.ForceEvolveAbovePercent)
             {
-                LogCaller(new LoggerEventArgs(String.Format("Not enough pokemon to evolve. {0} of {1} evolvable pokemon", response.Data.Count, UserSettings.MinPokemonBeforeEvolve), LoggerTypes.Info));
+                LogCaller(new LoggerEventArgs(String.Format("Not enough pokemon inventory space {0:0.00}% of {1:0.00}% force evolve above percent.", FilledPokemonInventorySpace(), UserSettings.ForceEvolveAbovePercent), LoggerTypes.Info));
 
                 return new MethodResult();             
+            }
+
+            if (response.Data.Count < UserSettings.MinPokemonBeforeEvolve)
+            {
+                LogCaller(new LoggerEventArgs(String.Format("Not enough pokemon to evolve. {0} of {1} evolvable pokemon.", response.Data.Count, UserSettings.MinPokemonBeforeEvolve), LoggerTypes.Info));
+
+                return new MethodResult();
             }
 
             if (!_client.ClientSession.LuckyEggsUsed)
@@ -157,17 +164,16 @@ namespace PokemonGoGUI.GoManager
             };
         }
 
-        private MethodResult<int> GetEvolutionCandy(PokemonId pokemonId)
+        private async Task<MethodResult<int>> GetEvolutionCandy(PokemonId pokemonId)
         {
             if (PokeSettings == null)
-            {
-                //TODO: really is needed here?
-                /*MethodResult result = await GetItemTemplates();
+            {                
+                MethodResult result = await GetItemTemplates();
 
                 if(!result.Success)
                 {
                     return (MethodResult<int>)result;
-                }*/
+                }
             }
 
             MethodResult<PokemonSettings> settingsResult = GetPokemonSetting(pokemonId);
@@ -268,7 +274,7 @@ namespace PokemonGoGUI.GoManager
 
         private async Task<MethodResult> UseLuckyEgg()
         {
-           ItemData data = Items.FirstOrDefault(x => x.ItemId == POGOProtos.Inventory.Item.ItemId.ItemLuckyEgg);
+           ItemData data = Items.FirstOrDefault(x => x.ItemId == ItemId.ItemLuckyEgg);
 
             if (data == null || data.Count == 0)
             {
@@ -298,7 +304,7 @@ namespace PokemonGoGUI.GoManager
 
                 useItemXpBoostResponse = UseItemXpBoostResponse.Parser.ParseFrom(response);
 
-                LogCaller(new LoggerEventArgs(String.Format("Lucky egg used. Remaining: {0}", data.Count - 1), LoggerTypes.Info));
+                LogCaller(new LoggerEventArgs(String.Format("Lucky egg used. Remaining: {0}", data.Count - 1), LoggerTypes.Success));
 
                 return new MethodResult
                 {

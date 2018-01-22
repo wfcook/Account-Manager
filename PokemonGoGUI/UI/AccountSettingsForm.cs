@@ -127,9 +127,21 @@ namespace PokemonGoGUI.UI
             numericUpDownSearchFortBelow.Value = new Decimal(settings.SearchFortBelowPercent);
             numericUpDownForceEvolveAbove.Value = new Decimal(settings.ForceEvolveAbovePercent);
             checkBoxStopOnAPIUpdate.Checked = settings.StopOnAPIUpdate;
-            checkBoxSpinGyms.Checked = settings.SpinGyms;
-            cbUseIncense.Checked = settings.UseIncense;
-            cbTeam.Text = settings.DefaultTeam;
+
+            if (!string.IsNullOrEmpty(settings.DefaultTeam) && settings.DefaultTeam != "Neutral")
+            {
+                checkBoxSpinGyms.Enabled = true;
+                checkBoxDeployToGym.Enabled = true;
+                checkBoxSpinGyms.Checked = settings.SpinGyms;
+                checkBoxDeployToGym.Checked = settings.DeployPokemon;
+            }
+            else
+            {
+                checkBoxSpinGyms.Enabled = false;
+                checkBoxDeployToGym.Enabled = false;
+            }
+           
+            cbUseIncense.Checked = settings.UseIncense;           
 
             //Humanization
             checkBoxHumanizeThrows.Checked = settings.EnableHumanization;
@@ -210,6 +222,17 @@ namespace PokemonGoGUI.UI
                 if((AccountState)comboBoxMinAccountState.Items[i] == settings.StopAtMinAccountState)
                 {
                     comboBoxMinAccountState.SelectedIndex = i;
+                    break;
+                }
+            }
+
+            for (int i = 0; i < cbTeam.Items.Count; i++)
+            {
+                if (cbTeam.Items[i].ToString() == settings.DefaultTeam)
+                {
+                    cbTeam.SelectedIndex = i;
+                    if (cbTeam.SelectedItem.ToString() != "Neutral" && !string.IsNullOrEmpty(settings.DefaultTeam))
+                        cbTeam.Enabled = false;
                     break;
                 }
             }
@@ -337,6 +360,7 @@ namespace PokemonGoGUI.UI
             userSettings.ClaimLevelUpRewards = checkBoxClaimLevelUp.Checked;
             userSettings.StopOnAPIUpdate = checkBoxStopOnAPIUpdate.Checked;
             userSettings.SpinGyms = checkBoxSpinGyms.Checked;
+            userSettings.DeployPokemon = checkBoxDeployToGym.Checked;
             AutoUpdate = cbAutoUpdate.Checked;
             userSettings.UseBerries = checkBoxUseBerries.Checked;
             userSettings.DisableCatchDelay = (int)numericUpDownDisableCatchDelay.Value;
@@ -456,7 +480,7 @@ namespace PokemonGoGUI.UI
             }
             userSettings.AutoCaptchaRetries = autoCaptchaRetries;
             userSettings.TwoCaptchaAPIKey = TwoCaptchaAPIKey.Text;
-            userSettings.DefaultTeam = cbTeam.Text;
+            userSettings.DefaultTeam = (string)cbTeam.SelectedItem;
 
             return true;
         }
@@ -775,6 +799,20 @@ namespace PokemonGoGUI.UI
                 cSetting.UsePinap = !cSetting.UsePinap;
 
             fastObjectListViewCatch.RefreshSelectedObjects();
+        }
+
+        private void CbTeam_TextChanged(object sender, EventArgs e)
+        {
+            if (cbTeam.SelectedItem.ToString() != "Neutral")
+            {
+                checkBoxSpinGyms.Enabled = true;
+                checkBoxDeployToGym.Enabled = true;
+            }
+            else
+            {
+                checkBoxSpinGyms.Enabled = false;
+                checkBoxDeployToGym.Enabled = false;
+            }
         }
     }
 }

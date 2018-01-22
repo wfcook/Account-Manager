@@ -1,4 +1,5 @@
 ﻿using Google.Protobuf;
+using POGOProtos.Inventory.Item;
 using POGOProtos.Map.Fort;
 using POGOProtos.Networking.Requests;
 using POGOProtos.Networking.Requests.Messages;
@@ -20,6 +21,8 @@ namespace PokemonGoGUI.GoManager
 
             FortSearchResponse fortResponse = null;
             const int maxFortAttempts = 5;
+
+            string fort = pokestop.Type == FortType.Checkpoint ? "Fort" : "Gym";
 
             for (int i = 0; i < maxFortAttempts; i++)
             {
@@ -44,26 +47,25 @@ namespace PokemonGoGUI.GoManager
                 switch (fortResponse.Result)
                 {
                     case FortSearchResponse.Types.Result.ExceededDailyLimit:
-                        LogCaller(new LoggerEventArgs(String.Format("Failed to search fort. Response: {0}", fortResponse.Result), LoggerTypes.Warning));
+                        LogCaller(new LoggerEventArgs(String.Format("Failed to search {0}. Response: {1}", fort, fortResponse.Result), LoggerTypes.Warning));
                         return new MethodResult
                         {
                             Message = "Failed to search fort"
                         };
                     case FortSearchResponse.Types.Result.InCooldownPeriod:
-                        //review for this 
-                        LogCaller(new LoggerEventArgs(String.Format("Failed to search fort. Response: {0}", fortResponse.Result), LoggerTypes.Warning));
+                        LogCaller(new LoggerEventArgs(String.Format("Failed to search {0}. Response: {1}", fort, fortResponse.Result), LoggerTypes.Warning));
                         return new MethodResult
                         {
                             Message = "Failed to search fort"
                         };
                     case FortSearchResponse.Types.Result.InventoryFull:
-                        LogCaller(new LoggerEventArgs(String.Format("Failed to search fort. Response: {0}", fortResponse.Result), LoggerTypes.Warning));
+                        LogCaller(new LoggerEventArgs(String.Format("Failed to search {0}. Response: {1}", fort, fortResponse.Result), LoggerTypes.Warning));
                         return new MethodResult
                         {
                             Message = "Failed to search fort"
                         };
                     case FortSearchResponse.Types.Result.NoResultSet:
-                        LogCaller(new LoggerEventArgs(String.Format("Failed to search fort. Response: {0}", fortResponse.Result), LoggerTypes.Warning));
+                        LogCaller(new LoggerEventArgs(String.Format("Failed to search {0}. Response: {1}", fort, fortResponse.Result), LoggerTypes.Warning));
                         return new MethodResult
                         {
                             Message = "Failed to search fort"
@@ -134,13 +136,14 @@ namespace PokemonGoGUI.GoManager
                         //Let it continue down
                         continue;
                     case FortSearchResponse.Types.Result.PoiInaccessible:
-                        LogCaller(new LoggerEventArgs(String.Format("Failed to search fort. Response: {0}", fortResponse.Result), LoggerTypes.Warning));
+                        LogCaller(new LoggerEventArgs(String.Format("Failed to search {0}. Response: {1}", fort, fortResponse.Result), LoggerTypes.Warning));
                         return new MethodResult
                         {
                             Message = "Failed to search fort"
                         };
                     case FortSearchResponse.Types.Result.Success:
-                        string message = String.Format("Searched Fort. Exp: {0}. Items: {1}.", // Badge: {2}. BonusLoot: {3}. Gems: {4}. Loot: {5}, Eggs: {6:0.0}. RaidTickets: {7}. TeamBonusLoot: {8}",
+                        string message = String.Format("Searched {0}. Exp: {1}. Items: {2}.", // Badge: {3}. BonusLoot: {4}. Gems: {5}. Loot: {6}, Eggs: {7:0.0}. RaidTickets: {8}. TeamBonusLoot: {9}",
+                            fort,
                             fortResponse.ExperienceAwarded,
                             StringUtil.GetSummedFriendlyNameOfItemAwardList(fortResponse.ItemsAwarded.ToList())
                             /*,
@@ -152,10 +155,8 @@ namespace PokemonGoGUI.GoManager
                             fortResponse.RaidTickets.ToString(),
                             fortResponse.TeamBonusLoot.LootItem.ToString()*/);
 
-                        // var itemDictionary = new Dictionary<ItemId, ItemData>();
-
                         //Successfully grabbed stop
-                        if (AccountState == Enums.AccountState.SoftBan)
+                        if (AccountState == Enums.AccountState.SoftBan)// || AccountState == Enums.AccountState.HashIssues)
                         {
                             AccountState = Enums.AccountState.Good;
 
@@ -225,43 +226,49 @@ namespace PokemonGoGUI.GoManager
                 return new MethodResult<FortDetailsResponse>();
         }
 
-        private async Task<MethodResult<GymGetInfoResponse>> GymGetInfo(FortData pokestop)
+        private async Task<MethodResult<AddFortModifierResponse>> AddFortModifier(string fortId, ItemId modifierType = ItemId.ItemTroyDisk)
         {
             var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
-                RequestType = RequestType.GymGetInfo,
-                RequestMessage = new GymGetInfoMessage
+                RequestType = RequestType.AddFortModifier,
+                RequestMessage = new AddFortModifierMessage
                 {
-                    GymId = pokestop.Id,
-                    GymLatDegrees = pokestop.Latitude,
-                    GymLngDegrees = pokestop.Longitude,
-                    PlayerLatDegrees = _client.ClientSession.Player.Latitude,
-                    PlayerLngDegrees = _client.ClientSession.Player.Longitude
+                    FortId = fortId,
+                    ModifierType = modifierType,
+                    PlayerLatitude = _client.ClientSession.Player.Latitude,
+                    PlayerLongitude = _client.ClientSession.Player.Longitude
                 }.ToByteString()
             });
 
             if (response == null)
-                return new MethodResult<GymGetInfoResponse>();
+                return new MethodResult<AddFortModifierResponse>();
 
-            var gymGetInfoResponse = GymGetInfoResponse.Parser.ParseFrom(response);
+            var addFortModifierResponse = AddFortModifierResponse.Parser.ParseFrom(response);
 
-            switch (gymGetInfoResponse.Result)
+            switch (addFortModifierResponse.Result)
             {
-                case GymGetInfoResponse.Types.Result.ErrorGymDisabled:
-                    return new MethodResult<GymGetInfoResponse>();
-                case GymGetInfoResponse.Types.Result.ErrorNotInRange:
-                    return new MethodResult<GymGetInfoResponse>();
-                case GymGetInfoResponse.Types.Result.Success:
-                    return new MethodResult<GymGetInfoResponse>
+                case AddFortModifierResponse.Types.Result.Success:
+                    LogCaller(new LoggerEventArgs(String.Format("Add fort modifier {0} success.", modifierType.ToString().Replace("Item","")), LoggerTypes.Success));
+                    return new MethodResult<AddFortModifierResponse>
                     {
-                        Data = gymGetInfoResponse,
-                        Message = "Succes",
-                        Success = true
+                        Success = true,
+                        Message = "Success",
+                        Data = addFortModifierResponse
                     };
-                case GymGetInfoResponse.Types.Result.Unset:
-                    return new MethodResult<GymGetInfoResponse>();
-            }
-            return new MethodResult<GymGetInfoResponse>();
+                case AddFortModifierResponse.Types.Result.FortAlreadyHasModifier:
+                    LogCaller(new LoggerEventArgs(String.Format("Failed to search Fort. Response: {0}", addFortModifierResponse.Result), LoggerTypes.Warning));
+                    break;
+                case AddFortModifierResponse.Types.Result.NoItemInInventory:
+                    LogCaller(new LoggerEventArgs(String.Format("Failed to search Fort. Response: {0}", addFortModifierResponse.Result), LoggerTypes.Warning));
+                    break;
+                case AddFortModifierResponse.Types.Result.PoiInaccessible:
+                    LogCaller(new LoggerEventArgs(String.Format("Failed to search Fort. Response: {0}", addFortModifierResponse.Result), LoggerTypes.Warning));
+                    break;
+                case AddFortModifierResponse.Types.Result.TooFarAway:
+                    LogCaller(new LoggerEventArgs(String.Format("Failed to search Fort. Response: {0}", addFortModifierResponse.Result), LoggerTypes.Warning));
+                    break;
+           }
+            return new MethodResult<AddFortModifierResponse>();
         }
     }
 }
