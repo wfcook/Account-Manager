@@ -3,9 +3,9 @@
 namespace PokemonGoGUI.Exceptions
 {
     [Serializable]
-    public class AuthConfigException  : Exception
+    public class AuthConfigException : Exception
     {
-            public AuthConfigException(string message): base(message)
+        public AuthConfigException(string message) : base(message)
         {
 
         }

@@ -16,7 +16,6 @@ namespace PokemonGoGUI.Extensions
 
                     break;
                 }
-
                 i++;
             }
         }

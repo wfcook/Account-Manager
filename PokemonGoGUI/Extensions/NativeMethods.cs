@@ -25,7 +25,6 @@ namespace PokemonGoGUI.Extensions
         [DllImport("kernel32.dll")]
         internal static extern IntPtr GetConsoleWindow();
 
-
         //const int SW_HIDE = 0;
         //const int SW_SHOW = 5;
 
@@ -81,6 +80,7 @@ namespace PokemonGoGUI.Extensions
         {
             return NativeMethods.SendMessage(hWnd, msg, wp, lp);
         }
+
         // Find window by Caption
         public IntPtr FindWindow(string windowName)
         {

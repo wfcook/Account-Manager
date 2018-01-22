@@ -433,7 +433,6 @@ namespace PokemonGoGUI.GoManager
                     continue;
                 }
 
-
                 var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                 {
                     RequestType = RequestType.SetFavoritePokemon,

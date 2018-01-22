@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using PokemonGoGUI.Enums;
 
 namespace PokemonGoGUI.GoManager
 {
@@ -341,7 +342,8 @@ namespace PokemonGoGUI.GoManager
 
                                 LogCaller(new LoggerEventArgs(String.Format("[Lured] Pokemon Caught. {0}. Exp {1}. Candy {2}. Attempt #{3}. Ball: {4}", pokemon, expGained, candyGained, attemptCount, pokeBallName), LoggerTypes.Success));
 
-                                Pokemon.Add(eResponse.PokemonData);
+                                //Pokemon.Add(eResponse.PokemonData);
+                                UpdateInventory(InventoryRefresh.Pokemon);
 
                                 return new MethodResult
                                 {
@@ -641,7 +643,8 @@ namespace PokemonGoGUI.GoManager
 
                         LogCaller(new LoggerEventArgs(String.Format("[{0}] Pokemon Caught. {1}. Exp {2}. Candy: {3}. Attempt #{4}. Ball: {5}", _pokemonType, pokemon, expGained, candyGained, attemptCount, pokeBallName), LoggerTypes.Success));
 
-                        Pokemon.Add(_encounteredPokemon);
+                        //Pokemon.Add(_encounteredPokemon);
+                        UpdateInventory(InventoryRefresh.Pokemon);
 
                         return new MethodResult
                         {

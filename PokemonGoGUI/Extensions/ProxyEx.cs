@@ -51,7 +51,6 @@ namespace PokemonGoGUI.Extensions
             }
 
             int port = 0;
-
             if (!Int32.TryParse(parts[1], out port))
             {
                 //throw new ArgumentException(String.Format("Invalid port value \"{0}\"", parts[1]));

@@ -19,14 +19,11 @@ namespace PokemonGoGUI.Extensions
 {
     public class VersionCheckState
     {
-        public const string VersionUri =
-            "https://raw.githubusercontent.com/Furtif/GoManager/master/PokemonGoGUI/Properties/AssemblyInfo.cs";
+        public const string VersionUri = "https://raw.githubusercontent.com/Furtif/GoManager/master/PokemonGoGUI/Properties/AssemblyInfo.cs";
 
-        public const string RemoteReleaseUrl =
-            "https://github.com/Furtif/GoManager/releases/download/v";
+        public const string RemoteReleaseUrl = "https://github.com/Furtif/GoManager/releases/download/v";
 
-        public const string ChangelogUri =
-             "https://raw.githubusercontent.com/Furtif/GoManager/master/CHANGELOG.md";
+        public const string ChangelogUri = "https://raw.githubusercontent.com/Furtif/GoManager/master/CHANGELOG.md";
 
         public static Version RemoteVersion;
 
@@ -58,7 +55,6 @@ namespace PokemonGoGUI.Extensions
 
             updated = (autoUpdateForm.ShowDialog() == DialogResult.OK);
 
-
             if (!updated)
             {
                 //Logger.Write("Update Skipped", LogLevel.Update);
@@ -84,15 +80,6 @@ namespace PokemonGoGUI.Extensions
             {
                 Directory.Delete(tmpDir, true);
             }
-
-            /*/Clean caches on startup
-            var cacheDir = Path.Combine(Directory.GetCurrentDirectory(), "Cache");
-
-            if (Directory.Exists(cacheDir))
-            {
-                Directory.Delete(cacheDir, true);
-            }
-            //*/
 
             var di = new DirectoryInfo(Directory.GetCurrentDirectory());
             var files = di.GetFiles("*.old", SearchOption.AllDirectories);
@@ -127,7 +114,6 @@ namespace PokemonGoGUI.Extensions
             return JObject.Parse(File.ReadAllText(filePath));
         }
 
-
         public static async Task<bool> IsLatest()
         {
             try
@@ -147,7 +133,6 @@ namespace PokemonGoGUI.Extensions
             {
                 return true; //better than just doing nothing when git server down
             }
-
             return true;
         }
 
