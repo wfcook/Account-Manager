@@ -394,7 +394,7 @@ namespace PokemonGoGUI.GoManager
 
                         if (!result.Success)
                         {
-                            if (AccountState != AccountState.CaptchaReceived)
+                            if (AccountState != AccountState.CaptchaReceived || AccountState != AccountState.HashIssues)
                                 AccountState = AccountState.TemporalBan;
                             LogCaller(new LoggerEventArgs("Load pokemon settings failed", LoggerTypes.FatalError, new Exception("Maybe this account is banned ...")));
                             Stop();
