@@ -9,7 +9,6 @@ using POGOProtos.Networking.Responses;
 using POGOProtos.Settings.Master;
 using PokemonGoGUI.Enums;
 using PokemonGoGUI.Extensions;
-using PokemonGoGUI.GoManager.Models;
 using PokemonGoGUI.Models;
 using System;
 using System.Collections.Generic;
@@ -97,6 +96,7 @@ namespace PokemonGoGUI.GoManager
                 }
 
                 PokemonSettings pokemonSettings = GetPokemonSetting((pokemon).PokemonId).Data;
+                ItemId itemNeeded = pokemonSettings.EvolutionBranch.Select(x => x.EvolutionItemRequirement).FirstOrDefault();
 
                 var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                 {
@@ -104,7 +104,7 @@ namespace PokemonGoGUI.GoManager
                     RequestMessage = new EvolvePokemonMessage
                     {
                         PokemonId = pokemon.Id,
-                        EvolutionItemRequirement = pokemonSettings.EvolutionBranch.Select(x => x.EvolutionItemRequirement).FirstOrDefault()
+                        EvolutionItemRequirement = itemNeeded
                     }.ToByteString()
                 });
 
@@ -128,15 +128,10 @@ namespace PokemonGoGUI.GoManager
                                             CalculateIVPerfection(evolvePokemonResponse.EvolvedPokemonData)),
                                             LoggerTypes.Evolve));
 
+                        UpdateInventory(InventoryRefresh.Pokemon);
+
                         await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
 
-                        if (Pokemon.Contains(pokemon))
-                            Pokemon.Remove(pokemon);
-
-                        var newPok = _client.ClientSession.Player.Inventory.InventoryItems.Where(x => x.InventoryItemData.PokemonData.PokemonId == pokemonSettings.EvolutionBranch.Select(p => p.Evolution).FirstOrDefault()).FirstOrDefault();
-
-                        if (newPok != null)
-                            Pokemon.Add(newPok.InventoryItemData.PokemonData);
                         continue;
                     case EvolvePokemonResponse.Types.Result.FailedInsufficientResources:
                         LogCaller(new LoggerEventArgs("Evolve request failed: Failed Insufficient Resources", LoggerTypes.Debug));
@@ -189,7 +184,7 @@ namespace PokemonGoGUI.GoManager
 
             return new MethodResult<int>
             {
-                Data = settingsResult.Data.CandyToEvolve,
+                Data = settingsResult.Data.EvolutionBranch.Select(x => x.CandyCost).FirstOrDefault(),
                 Message = "Success",
                 Success = true
             };
@@ -253,7 +248,7 @@ namespace PokemonGoGUI.GoManager
                     continue;
                 }
 
-                int candyToEvolve = setting.CandyToEvolve;
+                int candyToEvolve = setting.EvolutionBranch.Select(x => x.CandyCost).FirstOrDefault();
                 int totalPokemon = pokemonGroupToEvolve.Count;
                 int totalCandy = pokemonCandy.Candy_;
 

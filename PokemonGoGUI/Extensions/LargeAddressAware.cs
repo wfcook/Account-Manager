@@ -11,6 +11,7 @@ namespace PokemonGoGUI.Extensions
                 return IsLargeAware(fs);
             }
         }
+
         /// <summary>
         /// Checks if the stream is a MZ header and if it is large address aware
         /// </summary>

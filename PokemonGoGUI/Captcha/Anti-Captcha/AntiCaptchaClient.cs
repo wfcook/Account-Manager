@@ -1,5 +1,5 @@
-﻿using PokemonGoGUI.GoManager;
-using PokemonGoGUI.GoManager.Models;
+﻿using PokemonGoGUI.Enums;
+using PokemonGoGUI.GoManager;
 using System.Threading.Tasks;
 
 namespace PokemonGoGUI.Captcha.Anti_Captcha

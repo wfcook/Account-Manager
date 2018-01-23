@@ -550,21 +550,27 @@ namespace PokemonGoGUI.GoManager
                         FortData pokestop = pokestopsToFarm.Dequeue();
                         LogCaller(new LoggerEventArgs("Fort Dequeued: " + pokestop.Id, LoggerTypes.Debug));
 
+                        if (pokestop.Type == FortType.Checkpoint && UserSettings.GoOnlyToGyms)
+                            continue;
+
                         var currentLocation = new GeoCoordinate(_client.ClientSession.Player.Latitude, _client.ClientSession.Player.Longitude);
                         var fortLocation = new GeoCoordinate(pokestop.Latitude, pokestop.Longitude);
 
                         double distance = CalculateDistanceInMeters(currentLocation, fortLocation);
 
                         string fort = "pokestop";
+                        LoggerTypes loggerTypes = LoggerTypes.Info;
 
-                        if (pokestop.Type == FortType.Gym)
+                        if (pokestop.Type == FortType.Gym && Level >= 5 && !UserSettings.DefaultTeam.Equals("Neutral") && !String.IsNullOrEmpty(UserSettings.DefaultTeam))
                         {
                             if (!UserSettings.SpinGyms)
                                 continue;
+
                             fort = "Gym";
+                            loggerTypes = LoggerTypes.Gym;
                         }
-                        
-                        LogCaller(new LoggerEventArgs(String.Format("Going to {0} {1} of {2}. Distance {3:0.00}m", fort, pokeStopNumber, totalStops, distance), pokestop.Type == FortType.Checkpoint ? LoggerTypes.Info : LoggerTypes.FortGym));
+     
+                        LogCaller(new LoggerEventArgs(String.Format("Going to {0} {1} of {2}. Distance {3:0.00}m", fort, pokeStopNumber, totalStops, distance), loggerTypes));
 
                         //Go to pokestops
                         MethodResult walkResult = await GoToLocation(new GeoCoordinate(pokestop.Latitude, pokestop.Longitude));
@@ -736,13 +742,14 @@ namespace PokemonGoGUI.GoManager
                                             {
                                                 //Checks team color if same of player or Neutral
                                                 if (pokestop.OwnedByTeam == PlayerData.Team || pokestop.OwnedByTeam == TeamColor.Neutral)
+                                                {
                                                     //Check if config as deploy actived
                                                     if (UserSettings.DeployPokemon)
                                                     {
                                                         //Try to deploy
                                                         await GymDeploy(pokestop);
                                                     }
-                                                continue;
+                                                }
                                             }
                                             //Here try to attack gym not released yet
                                             //

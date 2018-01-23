@@ -175,13 +175,13 @@
     <Compile Include="Enums\BotState.cs" />
     <Compile Include="Enums\CheckType.cs" />
     <Compile Include="Enums\InventoryLoad.cs" />
+    <Compile Include="Enums\LoggerTypes.cs" />
     <Compile Include="Enums\SchedulerOption.cs" />
     <Compile Include="Enums\TransferType.cs" />
     <Compile Include="Exceptions\AccountNotVerifiedException.cs" />
     <Compile Include="Exceptions\AuthConfigException.cs" />
     <Compile Include="Exceptions\InvalidResponseException.cs" />
     <Compile Include="Exceptions\LoginFailedException.cs" />
-    <Compile Include="Exceptions\MinimumClientVersionException.cs" />
     <Compile Include="Extensions\ComboBoxEx.cs" />
     <Compile Include="Extensions\Compression.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />

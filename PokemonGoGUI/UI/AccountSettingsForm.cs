@@ -26,7 +26,7 @@ namespace PokemonGoGUI.UI
 
             #region Catching
 
-            olvColumnCatchId.AspectGetter = delegate(object x)
+            olvColumnCatchId.AspectGetter = delegate (object x)
             {
                 var setting = (CatchSetting)x;
 
@@ -37,7 +37,7 @@ namespace PokemonGoGUI.UI
 
             #region Evolving
 
-            olvColumnEvolveId.AspectGetter = delegate(object x)
+            olvColumnEvolveId.AspectGetter = delegate (object x)
             {
                 var setting = (EvolveSetting)x;
 
@@ -48,7 +48,7 @@ namespace PokemonGoGUI.UI
 
             #region Transfer
 
-            olvColumnTransferId.AspectGetter = delegate(object x)
+            olvColumnTransferId.AspectGetter = delegate (object x)
             {
                 var setting = (TransferSetting)x;
 
@@ -65,7 +65,7 @@ namespace PokemonGoGUI.UI
 
             foreach (AccountState state in Enum.GetValues(typeof(AccountState)))
             {
-                if(state == AccountState.Good || state == AccountState.Conecting || state == AccountState.HashIssues || state == AccountState.Unknown)
+                if (state == AccountState.Good || state == AccountState.Conecting || state == AccountState.HashIssues || state == AccountState.Unknown)
                 {
                     continue;
                 }
@@ -131,17 +131,23 @@ namespace PokemonGoGUI.UI
             if (!string.IsNullOrEmpty(settings.DefaultTeam) && settings.DefaultTeam != "Neutral")
             {
                 checkBoxSpinGyms.Enabled = true;
-                checkBoxDeployToGym.Enabled = true;
                 checkBoxSpinGyms.Checked = settings.SpinGyms;
+                checkBoxDeployToGym.Enabled = true;
                 checkBoxDeployToGym.Checked = settings.DeployPokemon;
+                checkBoxGoToGymsOnly.Enabled = true;
+                checkBoxGoToGymsOnly.Checked = settings.GoOnlyToGyms;
             }
             else
             {
                 checkBoxSpinGyms.Enabled = false;
+                checkBoxSpinGyms.Checked = false;
                 checkBoxDeployToGym.Enabled = false;
+                checkBoxDeployToGym.Checked = false;
+                checkBoxGoToGymsOnly.Enabled = false;
+                checkBoxGoToGymsOnly.Checked = false;
             }
-           
-            cbUseIncense.Checked = settings.UseIncense;           
+
+            cbUseIncense.Checked = settings.UseIncense;
 
             //Humanization
             checkBoxHumanizeThrows.Checked = settings.EnableHumanization;
@@ -175,7 +181,7 @@ namespace PokemonGoGUI.UI
             cbHashEndpoint.Text = settings.HashEndpoint;
             tbAuthHashKey.Text = settings.AuthAPIKey;
             cbUseOnlyThisHashKey.Checked = settings.UseOnlyOneKey;
-            
+
             checkBoxUseBerries.Checked = settings.UseBerries;
             checkBoxGetARBonus.Checked = settings.GetArBonus;
             checkBoxCompleteTutorial.Checked = settings.CompleteTutorial;
@@ -187,7 +193,7 @@ namespace PokemonGoGUI.UI
             tbAuthHashKey.Text = _manager.UserSettings.AuthAPIKey;
             cbAutoUpdate.Checked = AutoUpdate;
             numericUpDownDisableCatchDelay.Value = new Decimal(_manager.UserSettings.DisableCatchDelay);
-            
+
             checkBoxShowDebugLogs.Checked = settings.ShowDebugLogs;
             checkBoxDownloadResources.Checked = settings.DownloadResources;
 
@@ -219,7 +225,7 @@ namespace PokemonGoGUI.UI
 
             for (int i = 0; i < comboBoxMinAccountState.Items.Count; i++)
             {
-                if((AccountState)comboBoxMinAccountState.Items[i] == settings.StopAtMinAccountState)
+                if ((AccountState)comboBoxMinAccountState.Items[i] == settings.StopAtMinAccountState)
                 {
                     comboBoxMinAccountState.SelectedIndex = i;
                     break;
@@ -240,10 +246,10 @@ namespace PokemonGoGUI.UI
 
         private void CheckBoxMimicWalking_CheckedChanged(object sender, EventArgs e)
         {
-            textBoxWalkSpeed.Enabled = false; 
+            textBoxWalkSpeed.Enabled = false;
             checkBoxEncounterWhileWalking.Enabled = false;
 
-            if(checkBoxMimicWalking.Checked)
+            if (checkBoxMimicWalking.Checked)
             {
                 textBoxWalkSpeed.Enabled = true;
                 checkBoxEncounterWhileWalking.Enabled = true;
@@ -278,7 +284,7 @@ namespace PokemonGoGUI.UI
                 return false;
             }
             int walkingSpeed;
-            if (!Int32.TryParse(textBoxWalkSpeed.Text, out  walkingSpeed) || walkingSpeed <= 0)
+            if (!Int32.TryParse(textBoxWalkSpeed.Text, out walkingSpeed) || walkingSpeed <= 0)
             {
                 MessageBox.Show("Invalid walking speed", "Warning");
                 return false;
@@ -331,11 +337,11 @@ namespace PokemonGoGUI.UI
                 return false;
             }
 
-            userSettings.AuthType = textBoxPtcUsername.Text.Contains("@") ?  AuthType.Google : AuthType.Ptc;
+            userSettings.AuthType = textBoxPtcUsername.Text.Contains("@") ? AuthType.Google : AuthType.Ptc;
 
             userSettings.MimicWalking = checkBoxMimicWalking.Checked;
             userSettings.ShufflePokestops = checkBoxShufflePokestops.Checked;
-            
+
             userSettings.Username = textBoxPtcUsername.Text.Trim();
             userSettings.Password = textBoxPtcPassword.Text.Trim();
             userSettings.Latitude = defaultLat;
@@ -356,7 +362,7 @@ namespace PokemonGoGUI.UI
             userSettings.CatchPokemon = checkBoxCatchPokemon.Checked;
             userSettings.StopAtMinAccountState = (AccountState)comboBoxMinAccountState.SelectedItem;
             userSettings.SearchFortBelowPercent = (double)numericUpDownSearchFortBelow.Value;
-            userSettings.ForceEvolveAbovePercent = (double) numericUpDownForceEvolveAbove.Value;
+            userSettings.ForceEvolveAbovePercent = (double)numericUpDownForceEvolveAbove.Value;
             userSettings.ClaimLevelUpRewards = checkBoxClaimLevelUp.Checked;
             userSettings.StopOnAPIUpdate = checkBoxStopOnAPIUpdate.Checked;
             userSettings.SpinGyms = checkBoxSpinGyms.Checked;
@@ -413,7 +419,7 @@ namespace PokemonGoGUI.UI
             userSettings.Language = x[cbTimeZones.Text].Item2;
             userSettings.POSIX = x[cbTimeZones.Text].Item3;
             //End location time zones
-            
+
             userSettings.GetArBonus = checkBoxGetARBonus.Checked;
             userSettings.CompleteTutorial = checkBoxCompleteTutorial.Checked;
             userSettings.TransferAtOnce = checkBoxTransferAtOnce.Checked;
@@ -432,7 +438,7 @@ namespace PokemonGoGUI.UI
                 userSettings.ProxyIP = null;
                 userSettings.ProxyPort = 0;
             }
-            
+
             userSettings.ARBonusProximity = numericUpDownProximity.Value;
             userSettings.ARBonusAwareness = numericUpDownAwareness.Value;
 
@@ -481,6 +487,7 @@ namespace PokemonGoGUI.UI
             userSettings.AutoCaptchaRetries = autoCaptchaRetries;
             userSettings.TwoCaptchaAPIKey = TwoCaptchaAPIKey.Text;
             userSettings.DefaultTeam = (string)cbTeam.SelectedItem ?? "Neutral";
+            userSettings.GoOnlyToGyms = checkBoxGoToGymsOnly.Checked;
 
             return true;
         }
@@ -499,21 +506,21 @@ namespace PokemonGoGUI.UI
         {
             int totalObjects = fastObjectListViewRecycling.SelectedObjects.Count;
 
-            if(totalObjects == 0)
+            if (totalObjects == 0)
             {
                 return;
             }
 
             var iiSettings = fastObjectListViewRecycling.SelectedObjects[0] as InventoryItemSetting;
 
-            if(iiSettings == null)
+            if (iiSettings == null)
             {
                 return;
             }
 
             string num = Prompt.ShowDialog("Max Inventory Amount", "Edit Amount", iiSettings.MaxInventory.ToString());
 
-            if(String.IsNullOrEmpty(num))
+            if (String.IsNullOrEmpty(num))
             {
                 return;
             }
@@ -538,17 +545,17 @@ namespace PokemonGoGUI.UI
         private void TrueToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var tSMI = sender as ToolStripMenuItem;
- 
-            if(tSMI == null)
+
+            if (tSMI == null)
             {
                 return;
             }
 
             var checkType = (CheckType)Int32.Parse(tSMI.Tag.ToString());
 
-            foreach(CatchSetting cSetting in fastObjectListViewCatch.SelectedObjects)
+            foreach (CatchSetting cSetting in fastObjectListViewCatch.SelectedObjects)
             {
-                if(checkType == CheckType.Toggle)
+                if (checkType == CheckType.Toggle)
                 {
                     cSetting.Catch = !cSetting.Catch;
                 }
@@ -569,7 +576,7 @@ namespace PokemonGoGUI.UI
         {
             DialogResult result = MessageBox.Show("Reset defaults?", "Confirmation", MessageBoxButtons.YesNoCancel);
 
-            if(result != DialogResult.Yes)
+            if (result != DialogResult.Yes)
             {
                 return;
             }
@@ -601,7 +608,7 @@ namespace PokemonGoGUI.UI
         {
             int count = fastObjectListViewEvolve.SelectedObjects.Count;
 
-            if(count == 0)
+            if (count == 0)
             {
                 return;
             }
@@ -610,7 +617,7 @@ namespace PokemonGoGUI.UI
 
             string cp = Prompt.ShowDialog("Enter minimum CP:", "Edit CP", defaultCP.ToString());
 
-            if(String.IsNullOrEmpty(cp))
+            if (String.IsNullOrEmpty(cp))
             {
                 return;
             }
@@ -666,7 +673,7 @@ namespace PokemonGoGUI.UI
 
         private void EditTransferSettings(List<TransferSetting> settings)
         {
-            if(settings.Count == 0)
+            if (settings.Count == 0)
             {
                 return;
             }
@@ -717,7 +724,7 @@ namespace PokemonGoGUI.UI
 
         private async void ButtonExportConfig_Click(object sender, EventArgs e)
         {
-            if(!SaveSettings())
+            if (!SaveSettings())
             {
                 return;
             }
@@ -754,7 +761,7 @@ namespace PokemonGoGUI.UI
 
                 MethodResult result = await _manager.ImportConfigFromFile(ofd.FileName);
 
-                if(!result.Success)
+                if (!result.Success)
                 {
                     return;
                 }
@@ -792,10 +799,10 @@ namespace PokemonGoGUI.UI
 
         void SetUsePinapToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (fastObjectListViewCatch.SelectedObjects== null)
+            if (fastObjectListViewCatch.SelectedObjects == null)
                 return;
 
-            foreach(CatchSetting cSetting in fastObjectListViewCatch.SelectedObjects)
+            foreach (CatchSetting cSetting in fastObjectListViewCatch.SelectedObjects)
                 cSetting.UsePinap = !cSetting.UsePinap;
 
             fastObjectListViewCatch.RefreshSelectedObjects();
@@ -807,11 +814,16 @@ namespace PokemonGoGUI.UI
             {
                 checkBoxSpinGyms.Enabled = true;
                 checkBoxDeployToGym.Enabled = true;
+                checkBoxGoToGymsOnly.Enabled = true;
             }
             else
             {
                 checkBoxSpinGyms.Enabled = false;
+                checkBoxSpinGyms.Checked = false;
                 checkBoxDeployToGym.Enabled = false;
+                checkBoxDeployToGym.Checked = false;
+                checkBoxGoToGymsOnly.Enabled = false;
+                checkBoxGoToGymsOnly.Checked = false;
             }
         }
     }

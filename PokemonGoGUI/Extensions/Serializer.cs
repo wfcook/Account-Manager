@@ -24,6 +24,7 @@ namespace PokemonGoGUI.Extensions
                 Error = HandleEventHandler
             });
         }
+
         private static void HandleEventHandler(object sender, Newtonsoft.Json.Serialization.ErrorEventArgs errorArgs)
         {
             var currentError = errorArgs.ErrorContext.Error.Message;

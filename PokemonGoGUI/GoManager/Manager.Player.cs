@@ -2,7 +2,6 @@
 using POGOProtos.Inventory;
 using POGOProtos.Networking.Responses;
 using POGOProtos.Settings.Master;
-using PokemonGoGUI.GoManager.Models;
 using System;
 using System.IO;
 using System.Linq;

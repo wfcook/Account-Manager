@@ -1,4 +1,5 @@
-﻿using PokemonGoGUI.GoManager.Models;
+﻿using PokemonGoGUI.Enums;
+using PokemonGoGUI.GoManager.Models;
 using System;
 
 namespace PokemonGoGUI.GoManager

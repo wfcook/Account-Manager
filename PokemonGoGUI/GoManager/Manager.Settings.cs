@@ -3,7 +3,7 @@ using POGOProtos.Enums;
 using POGOProtos.Inventory.Item;
 using POGOProtos.Settings.Master;
 using PokemonGoGUI.Extensions;
-using PokemonGoGUI.GoManager.Models;
+using PokemonGoGUI.Enums;
 using PokemonGoGUI.Models;
 using System;
 using System.Collections.Generic;

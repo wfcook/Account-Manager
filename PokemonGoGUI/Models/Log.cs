@@ -1,10 +1,9 @@
-﻿using System;
+﻿using PokemonGoGUI.Enums;
+using System;
 using System.Drawing;
 
 namespace PokemonGoGUI.GoManager.Models
 {
-    public enum LoggerTypes { Debug, Info, Warning, Exception, FatalError, PokemonEscape, PokemonFlee, LocationUpdate, FortGym, Transfer, Evolve, Incubate, Recycle, ProxyIssue, Success, Captcha };
-
     public class Log
     {
         public LoggerTypes LoggerType { get; private set; }
@@ -73,12 +72,13 @@ namespace PokemonGoGUI.GoManager.Models
                     return Color.DarkGray;
                 case LoggerTypes.LocationUpdate:
                     return Color.LightGreen;
-                case LoggerTypes.FortGym:
+                case LoggerTypes.Gym:
                     return Color.Magenta;
                 case LoggerTypes.Captcha:
                     return Color.Tomato;
+                case LoggerTypes.Deploy:
+                    return Color.DeepSkyBlue;
             }
-
             return SystemColors.WindowText;
         }
 

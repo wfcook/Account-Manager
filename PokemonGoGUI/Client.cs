@@ -19,7 +19,6 @@ using PokemonGoGUI.Enums;
 using PokemonGoGUI.Exceptions;
 using PokemonGoGUI.Extensions;
 using PokemonGoGUI.GoManager;
-using PokemonGoGUI.GoManager.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -48,6 +47,7 @@ namespace PokemonGoGUI
         {
             VersionStr = new Version("0.87.5");
             AppVersion = 8700;
+            RessourcesFolder = $"data/{VersionStr.ToString()}/";
         }
 
         public void Logout()
@@ -118,8 +118,7 @@ namespace PokemonGoGUI
                 // TODO: make this configurable. To avoid bans (may be with a checkbox in hash keys tab).
                 //Configuration.IgnoreHashVersion = true;
                 VersionStr = Configuration.Hasher.PokemonVersion;
-                AppVersion = Configuration.Hasher.AppVersion;
-                RessourcesFolder = $"data/{VersionStr.ToString()}";
+                AppVersion = Configuration.Hasher.AppVersion;                
                 // TODO: Revise sleeping
                 // Used on Windows phone background app
                 ((PokeHashHasher)Configuration.Hasher).PokehashSleeping += OnPokehashSleeping;
@@ -404,7 +403,7 @@ namespace PokemonGoGUI
             if (!Directory.Exists(RessourcesFolder))
                 Directory.CreateDirectory(RessourcesFolder);
 
-            var filename = RessourcesFolder + "/" + ClientManager.UserSettings.DeviceId + "_AD.json";
+            var filename = RessourcesFolder + ClientManager.UserSettings.DeviceId + "_AD.json";
 
             try
             {
@@ -421,7 +420,7 @@ namespace PokemonGoGUI
             if (!Directory.Exists(RessourcesFolder))
                 Directory.CreateDirectory(RessourcesFolder);
 
-            var filename = RessourcesFolder + "/" + ClientManager.UserSettings.DeviceId + "_IT.json";
+            var filename = RessourcesFolder + ClientManager.UserSettings.DeviceId + "_IT.json";
 
             try
             {
@@ -438,7 +437,7 @@ namespace PokemonGoGUI
             if (!Directory.Exists(RessourcesFolder))
                 Directory.CreateDirectory(RessourcesFolder);
 
-            var filename = RessourcesFolder + "/" + ClientManager.UserSettings.DeviceId + "_UR.json";
+            var filename = RessourcesFolder + ClientManager.UserSettings.DeviceId + "_UR.json";
 
             try
             {
@@ -455,7 +454,7 @@ namespace PokemonGoGUI
             if (!Directory.Exists(RessourcesFolder))
                 Directory.CreateDirectory(RessourcesFolder);
 
-            var filename = RessourcesFolder + "/" + ClientManager.UserSettings.DeviceId + "_LCV.json";
+            var filename = RessourcesFolder + ClientManager.UserSettings.DeviceId + "_LCV.json";
 
             try
             {
@@ -580,7 +579,6 @@ namespace PokemonGoGUI
         private void SaveAccessToken(AccessToken accessToken)
         {
             var fileName = Path.Combine(Directory.GetCurrentDirectory(), "Cache", $"{accessToken.Uid}.json");
-
             File.WriteAllText(fileName, JsonConvert.SerializeObject(accessToken, Formatting.Indented));
         }
 
@@ -616,7 +614,6 @@ namespace PokemonGoGUI
             var session = await Login.GetSession(loginProvider, initLat, initLong, ClientDeviceWrapper, PlayerLocale);
             LoadResources(session);
 
-
             if (mayCache)
                 SaveAccessToken(session.AccessToken);
 
@@ -626,16 +623,16 @@ namespace PokemonGoGUI
         private void LoadResources(Session session)
         {
             //My files resources here  
-            var filename = RessourcesFolder + "/" + ClientManager.UserSettings.DeviceId + "_IT.json";
+            var filename = RessourcesFolder + ClientManager.UserSettings.DeviceId + "_IT.json";
             if (File.Exists(filename))
                 session.Templates.ItemTemplates = Serializer.FromJson<List<DownloadItemTemplatesResponse.Types.ItemTemplate>>(File.ReadAllText(filename));
-            filename = RessourcesFolder + "/" + ClientManager.UserSettings.DeviceId + "_UR.json";
+            filename = RessourcesFolder +  ClientManager.UserSettings.DeviceId + "_UR.json";
             if (File.Exists(filename))
                 session.Templates.DownloadUrls = Serializer.FromJson<List<DownloadUrlEntry>>(File.ReadAllText(filename));
-            filename = RessourcesFolder + "/" + ClientManager.UserSettings.DeviceId + "_AD.json";
+            filename = RessourcesFolder + ClientManager.UserSettings.DeviceId + "_AD.json";
             if (File.Exists(filename))
                 session.Templates.AssetDigests = Serializer.FromJson<List<AssetDigestEntry>>(File.ReadAllText(filename));
-            filename = RessourcesFolder + "/" + ClientManager.UserSettings.DeviceId + "_LCV.json";
+            filename = RessourcesFolder + ClientManager.UserSettings.DeviceId + "_LCV.json";
             if (File.Exists(filename))
                 session.Templates.LocalConfigVersion = Serializer.FromJson<DownloadRemoteConfigVersionResponse>(File.ReadAllText(filename));
         }

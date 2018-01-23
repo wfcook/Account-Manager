@@ -235,6 +235,7 @@
             this.toolTipProxy = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipMinAccountState = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipHumanizeThrows = new System.Windows.Forms.ToolTip(this.components);
+            this.checkBoxGoToGymsOnly = new System.Windows.Forms.CheckBox();
             this.tabControlMain.SuspendLayout();
             this.tabPageDetails.SuspendLayout();
             this.tabControlSettings.SuspendLayout();
@@ -435,6 +436,7 @@
             // 
             // tabPageActions
             // 
+            this.tabPageActions.Controls.Add(this.checkBoxGoToGymsOnly);
             this.tabPageActions.Controls.Add(this.label47);
             this.tabPageActions.Controls.Add(this.cbTeam);
             this.tabPageActions.Controls.Add(this.checkBoxCompleteTutorial);
@@ -837,7 +839,7 @@
             // 
             this.checkBoxEnabeRaids.AutoSize = true;
             this.checkBoxEnabeRaids.Enabled = false;
-            this.checkBoxEnabeRaids.Location = new System.Drawing.Point(383, 303);
+            this.checkBoxEnabeRaids.Location = new System.Drawing.Point(336, 219);
             this.checkBoxEnabeRaids.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.checkBoxEnabeRaids.Name = "checkBoxEnabeRaids";
             this.checkBoxEnabeRaids.Size = new System.Drawing.Size(104, 21);
@@ -849,7 +851,7 @@
             // 
             this.checkBoxSendBerries.AutoSize = true;
             this.checkBoxSendBerries.Enabled = false;
-            this.checkBoxSendBerries.Location = new System.Drawing.Point(383, 274);
+            this.checkBoxSendBerries.Location = new System.Drawing.Point(460, 245);
             this.checkBoxSendBerries.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.checkBoxSendBerries.Name = "checkBoxSendBerries";
             this.checkBoxSendBerries.Size = new System.Drawing.Size(161, 21);
@@ -861,7 +863,7 @@
             // 
             this.checkBoxDeployToGym.AutoSize = true;
             this.checkBoxDeployToGym.Enabled = false;
-            this.checkBoxDeployToGym.Location = new System.Drawing.Point(383, 245);
+            this.checkBoxDeployToGym.Location = new System.Drawing.Point(460, 191);
             this.checkBoxDeployToGym.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.checkBoxDeployToGym.Name = "checkBoxDeployToGym";
             this.checkBoxDeployToGym.Size = new System.Drawing.Size(130, 21);
@@ -873,7 +875,7 @@
             // 
             this.checkBoxEnableBattles.AutoSize = true;
             this.checkBoxEnableBattles.Enabled = false;
-            this.checkBoxEnableBattles.Location = new System.Drawing.Point(383, 219);
+            this.checkBoxEnableBattles.Location = new System.Drawing.Point(336, 245);
             this.checkBoxEnableBattles.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.checkBoxEnableBattles.Name = "checkBoxEnableBattles";
             this.checkBoxEnableBattles.Size = new System.Drawing.Size(121, 21);
@@ -885,7 +887,7 @@
             // 
             this.checkBoxSpinGyms.AutoSize = true;
             this.checkBoxSpinGyms.Enabled = false;
-            this.checkBoxSpinGyms.Location = new System.Drawing.Point(383, 191);
+            this.checkBoxSpinGyms.Location = new System.Drawing.Point(336, 191);
             this.checkBoxSpinGyms.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.checkBoxSpinGyms.Name = "checkBoxSpinGyms";
             this.checkBoxSpinGyms.Size = new System.Drawing.Size(98, 21);
@@ -2554,6 +2556,16 @@
             this.restoreDefaultsToolStripMenuItem2.Text = "Restore Defaults";
             this.restoreDefaultsToolStripMenuItem2.Click += new System.EventHandler(this.RestoreDefaultsToolStripMenuItem2_Click);
             // 
+            // checkBoxGoToGymsOnly
+            // 
+            this.checkBoxGoToGymsOnly.AutoSize = true;
+            this.checkBoxGoToGymsOnly.Location = new System.Drawing.Point(460, 219);
+            this.checkBoxGoToGymsOnly.Name = "checkBoxGoToGymsOnly";
+            this.checkBoxGoToGymsOnly.Size = new System.Drawing.Size(138, 21);
+            this.checkBoxGoToGymsOnly.TabIndex = 77;
+            this.checkBoxGoToGymsOnly.Text = "Go to Gyms Only";
+            this.checkBoxGoToGymsOnly.UseVisualStyleBackColor = true;
+            // 
             // AccountSettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -2832,5 +2844,6 @@
         private System.Windows.Forms.CheckBox cbUseIncense;
         private System.Windows.Forms.ComboBox cbTeam;
         private System.Windows.Forms.Label label47;
+        private System.Windows.Forms.CheckBox checkBoxGoToGymsOnly;
     }
 }
