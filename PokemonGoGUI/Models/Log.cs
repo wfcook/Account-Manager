@@ -80,6 +80,10 @@ namespace PokemonGoGUI.GoManager.Models
                     return Color.DeepSkyBlue;
                 case LoggerTypes.Buddy:
                     return Color.LightGreen;
+                case LoggerTypes.AwardedBadges:
+                    return Color.Beige;
+                case LoggerTypes.HatchedEggs:
+                    return Color.Coral;
             }
             return SystemColors.WindowText;
         }

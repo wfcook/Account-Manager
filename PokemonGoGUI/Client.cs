@@ -520,17 +520,17 @@ namespace PokemonGoGUI
         private void SessionInventoryUpdate(object sender, EventArgs e)
         {
             //TODO: review needed here            
-            //ClientManager.UpdateInventory(0); // <- this line should be the unique line updating the inventory
+            //ClientManager.UpdateInventory(InventoryRefresh.All); // <- this line should be the unique line updating the inventory
         }
 
         private void OnHatchedEggsReceived(object sender, GetHatchedEggsResponse hatchedEggResponse)
         {
-            //
+            ClientManager.LogCaller(new LoggerEventArgs(String.Format("Egg hatched: {0}, Candy awarded: {1}, XP: {2}, Egg km walked: {3:0.00}, Stardust awarded: {4} Eggs: {5}.", hatchedEggResponse.PokemonId, hatchedEggResponse.CandyAwarded, hatchedEggResponse.ExperienceAwarded, hatchedEggResponse.EggKmWalked, hatchedEggResponse.StardustAwarded, hatchedEggResponse.HatchedPokemon.Count), LoggerTypes.HatchedEggs));
         }
 
         private void OnCheckAwardedBadgesReceived(object sender, CheckAwardedBadgesResponse e)
         {
-            //
+            ClientManager.LogCaller(new LoggerEventArgs(String.Format("Avatar template ids: {0}, Awarded badge levels: {1}, Awarded badges: {2}.", e.AvatarTemplateIds.Count, e.AwardedBadgeLevels.Count, e.AwardedBadges.Count), LoggerTypes.AwardedBadges));
         }
 
         private void SessionAccessTokenUpdated(object sender, EventArgs e)
@@ -540,7 +540,8 @@ namespace PokemonGoGUI
 
         private void TempBanReceived(object sender, EventArgs e)
         {
-            ClientManager.AccountState = AccountState.TemporalBan;
+            if (ClientManager.AccountState != AccountState.CaptchaReceived || ClientManager.AccountState != AccountState.HashIssues)
+                ClientManager.AccountState = AccountState.TemporalBan;
             ClientManager.Stop();
         }
 
