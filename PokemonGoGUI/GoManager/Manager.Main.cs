@@ -15,11 +15,9 @@ using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
-using POGOLib.Official.Util.Hash.PokeHash;
 using System.Windows.Forms;
 using POGOLib.Official.Exceptions;
 using PokemonGoGUI.Captcha;
-using POGOLib.Official.Util.Hash;
 using POGOLib.Official.Extensions;
 
 namespace PokemonGoGUI.GoManager
@@ -396,7 +394,8 @@ namespace PokemonGoGUI.GoManager
 
                         if (!result.Success)
                         {
-                            AccountState = AccountState.SoftBan;
+                            if (AccountState != AccountState.CaptchaReceived)
+                                AccountState = AccountState.TemporalBan;
                             LogCaller(new LoggerEventArgs("Load pokemon settings failed", LoggerTypes.FatalError, new Exception("Maybe this account is banned ...")));
                             Stop();
                             continue;

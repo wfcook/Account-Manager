@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace POGOLib.Official.Util.Hash.PokeHash
+namespace POGOLib.Official.Exceptions
 {
     public class PokeHashException : Exception
     {

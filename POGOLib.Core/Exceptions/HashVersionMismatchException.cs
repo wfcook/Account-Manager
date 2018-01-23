@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace POGOLib.Official.Util.Hash
+namespace POGOLib.Official.Exceptions
 {
     public class HashVersionMismatchException : Exception
     {

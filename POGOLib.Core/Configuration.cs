@@ -29,6 +29,6 @@ namespace POGOLib.Official
         /// <summary>
         /// Gets or sets the <see cref="HashEndpoint"/> used in <see cref="POGOLib.Official.Util.Hash.PokeHashHasher"/>.
         /// </summary>
-        public static string HashEndpoint { get; set; } = "api/v157_5/hash";
+        public static string HashEndpoint { get; set; } = "api/v159_1/hash";
     }
 }

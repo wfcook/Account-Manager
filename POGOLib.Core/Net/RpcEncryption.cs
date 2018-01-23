@@ -12,7 +12,7 @@ using POGOProtos.Networking.Platform;
 using POGOProtos.Networking.Platform.Requests;
 using static POGOProtos.Networking.Envelopes.Signature.Types;
 using static POGOProtos.Networking.Envelopes.RequestEnvelope.Types;
-using POGOLib.Official.Util.Hash.PokeHash;
+using POGOLib.Official.Exceptions;
 
 namespace POGOLib.Official.Net
 {
@@ -135,7 +135,7 @@ namespace POGOLib.Official.Net
         {
             if (Configuration.Hasher == null)
             {
-                throw new NullReferenceException($"{nameof(Configuration.Hasher)} is not set, which is required to send valid calls to PokemonGo.");
+                throw new PokeHashException($"{nameof(Configuration.Hasher)} is not set, which is required to send valid calls to PokemonGo.");
             }
 
             var timestampSinceStart = TimestampSinceStartMs;

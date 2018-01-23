@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using POGOLib.Official.Exceptions;
 using POGOLib.Official.Util.Encryption.PokeHash;
 using POGOLib.Official.Util.Hash.PokeHash;
 using POGOProtos.Networking.Envelopes;
@@ -20,8 +21,8 @@ namespace POGOLib.Official.Util.Hash
     ///     to buy an API key, go to this url.
     ///     https://talk.pogodev.org/d/51-api-hashing-service-by-pokefarmer
     /// 
-    ///     Android version: 0.87.5
-    ///     IOS version: 1.57.5
+    ///     Android version: 0.89.1
+    ///     IOS version: 1.59.1
     /// </summary>
     public class PokeHashHasher : IHasher
     {
@@ -31,12 +32,12 @@ namespace POGOLib.Official.Util.Hash
 
         private readonly Semaphore _keySelection;
 
-		public Version PokemonVersion { get; } = new Version("0.87.5");
+		public Version PokemonVersion { get; } = new Version("0.89.1");
         
 		// NOTE: Warning: Sotmetimes, this value is not the same that API version, so we need know it for each new API version.
-        public uint AppVersion { get; } = 8700;
+        public uint AppVersion { get; } = 8900;
 
-        public long Unknown25 { get; } = unchecked((long)0x3E75FB078C4573FA);
+        public long Unknown25 { get; } = unchecked((long)0xF522F8878F08FFD6);
     
         /// <summary>
         ///     Initializes the <see cref="PokeHashHasher"/>.
@@ -67,7 +68,7 @@ namespace POGOLib.Official.Util.Hash
         public PokeHashHasher(string[] authKeys)
         {
             if (authKeys.Length < 1)
-                throw new ArgumentException($"{nameof(authKeys)} may not be empty.");
+                throw new PokeHashException($"{nameof(authKeys)} may not be empty.");
 
             _authKeys = new List<PokeHashAuthKey>();
 
@@ -76,7 +77,7 @@ namespace POGOLib.Official.Util.Hash
             {
                 var pokeHashAuthKey = new PokeHashAuthKey(authKey);
                 if (_authKeys.Contains(pokeHashAuthKey))
-                    throw new Exception($"The auth key '{authKey}' is a duplicate.");
+                    throw new PokeHashException($"The auth key '{authKey}' is a duplicate.");
                 _authKeys.Add(pokeHashAuthKey);
             }
 
@@ -148,7 +149,7 @@ namespace POGOLib.Official.Util.Hash
                     //Logger.Error(message);
 
                     if (retryCount == 10)
-                        throw new Exception(message);
+                        throw new PokeHashException(message);
 
                     retryCount++;
                 }
@@ -230,7 +231,7 @@ namespace POGOLib.Official.Util.Hash
 
                 if (response.StatusCode == HttpStatusCode.BadRequest)
                 {
-                    throw new Exception("Pokehash key seems invalid");
+                    throw new PokeHashException("Pokehash key seems invalid");
                 }
 
                 // Handle response
@@ -252,12 +253,12 @@ namespace POGOLib.Official.Util.Hash
                             !int.TryParse(requestsRemainingValue.First(), out rateRequestsRemaining) ||
                             !int.TryParse(ratePeriodEndValue.FirstOrDefault(), out ratePeriodEndSeconds))
                         {
-                            throw new Exception("Failed parsing pokehash response header values.");
+                            throw new PokeHashException("Failed parsing pokehash response header values.");
                         }
                     }
                     else
                     {
-                        throw new Exception("Failed parsing pokehash response headers.");
+                        throw new PokeHashException("Failed parsing pokehash response headers.");
                     }
 
                     // Use parsed headers

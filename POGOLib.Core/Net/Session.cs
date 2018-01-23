@@ -11,7 +11,6 @@ using POGOLib.Official.Net.Authentication.Data;
 using POGOLib.Official.Net.Captcha;
 using POGOLib.Official.Pokemon;
 using POGOLib.Official.Util.Device;
-using POGOLib.Official.Util.Hash;
 using POGOProtos.Data;
 using POGOProtos.Settings;
 using POGOProtos.Networking.Requests.Messages;
@@ -368,20 +367,32 @@ namespace POGOLib.Official.Net
             ItemTemplatesUpdated?.Invoke(this, new List<DownloadItemTemplatesResponse.Types.ItemTemplate>(itemtemplates));
         }
 
-        internal void OnAssetDigestReceived(List<POGOProtos.Data.AssetDigestEntry> assetdigest)
+        internal void OnAssetDigestReceived(List<AssetDigestEntry> assetdigest)
         {
-            AssetDigestUpdated?.Invoke(this, new List<POGOProtos.Data.AssetDigestEntry>(assetdigest));
+            AssetDigestUpdated?.Invoke(this, new List<AssetDigestEntry>(assetdigest));
         }
 
-        internal void OnUrlsReceived(List<POGOProtos.Data.DownloadUrlEntry> urls)
+        internal void OnUrlsReceived(List<DownloadUrlEntry> urls)
         {
-            UrlsUpdated?.Invoke(this, new List<POGOProtos.Data.DownloadUrlEntry>(urls));
+            UrlsUpdated?.Invoke(this, new List<DownloadUrlEntry>(urls));
         }
 
         internal void OnRemoteConfigVersionReceived(DownloadRemoteConfigVersionResponse downloadRemoteConfigVersionResponse)
         {
             RemoteConfigVersionUpdated?.Invoke(this, new DownloadRemoteConfigVersionResponse(downloadRemoteConfigVersionResponse));
         }
+
+        internal void OnBuddyWalked(GetBuddyWalkedResponse buddyWalked)
+        {
+            BuddyWalked?.Invoke(this, new GetBuddyWalkedResponse(buddyWalked));
+        }
+
+        internal void OnInboxNotification(GetInboxResponse inboxdata)
+        {
+            InboxDataReceived?.Invoke(this, new GetInboxResponse(inboxdata));
+        }
+
+        public event EventHandler<GetInboxResponse> InboxDataReceived;
 
         public event EventHandler<EventArgs> TemporalBanReceived;
 
@@ -401,8 +412,9 @@ namespace POGOLib.Official.Net
 
         public event EventHandler<GetHatchedEggsResponse> HatchedEggsReceived;
 
-        public event EventHandler<CheckAwardedBadgesResponse> CheckAwardedBadgesReceived;
+        public event EventHandler<GetBuddyWalkedResponse> BuddyWalked;
 
+        public event EventHandler<CheckAwardedBadgesResponse> CheckAwardedBadgesReceived;
 
         /// <summary>
         /// If you have successfully solved the captcha using VerifyChallegenge, 

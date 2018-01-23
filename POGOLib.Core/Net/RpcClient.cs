@@ -58,7 +58,7 @@ namespace POGOLib.Official.Net
             RequestType.CheckAwardedBadges,
             RequestType.DownloadSettings,
             RequestType.GetBuddyWalked,
-            RequestType.GetInbox,
+            RequestType.GetInbox
         };
 
         private readonly ConcurrentQueue<RequestEnvelope> _rpcQueue = new ConcurrentQueue<RequestEnvelope>();
@@ -690,6 +690,22 @@ namespace POGOLib.Official.Net
             {
                 throw new ArgumentOutOfRangeException(ex.Message);
             }
+            catch (PokeHashException ex)
+            {
+                throw new PokeHashException(ex.Message);
+            }
+            catch (PtcLoginException ex)
+            {
+                throw new PtcLoginException(ex.Message);
+            }
+            catch (HashVersionMismatchException ex)
+            {
+                throw new HashVersionMismatchException(ex.Message);
+            }
+            catch (GoogleLoginException ex)
+            {
+                throw new GoogleLoginException(ex.Message);
+            }
             catch (Exception e)
             {
                 _session.Logger.Error($"PerformRemoteProcedureCallAsync exception: {e}");
@@ -861,7 +877,10 @@ namespace POGOLib.Official.Net
 
                     case RequestType.GetBuddyWalked:
                         var getBuddyWalked = GetBuddyWalkedResponse.Parser.ParseFrom(bytes);
-                        _session.Player.BuddyCandy = getBuddyWalked.CandyEarnedCount;
+                        if (getBuddyWalked.Success && getBuddyWalked.CandyEarnedCount > 0)
+                        {
+                            _session.OnBuddyWalked(getBuddyWalked);
+                        }
                         break;
 
                     case RequestType.GetIncensePokemon:
@@ -883,6 +902,14 @@ namespace POGOLib.Official.Net
                             if (pokemon.PokemonId != PokemonId.Missingno)
                                 _session.Logger.Debug($"Received Incense Pokemon {pokemon.PokemonId.ToString()}");
                             _session.Map.IncensePokemon = pokemon;
+                        }
+                        break;
+
+                    case RequestType.GetInbox:
+                        var getInboxResponse = GetInboxResponse.Parser.ParseFrom(bytes);
+                        if (getInboxResponse.Inbox.Notifications.Count > 0)
+                        {
+                            _session.OnInboxNotification(getInboxResponse);
                         }
                         break;
                 }
@@ -1084,11 +1111,18 @@ namespace POGOLib.Official.Net
 
         private async Task GetDownloadURLs(string[] toCheck)
         {
-            if (_session.Templates.DownloadUrls != null && _session.Templates.AssetDigests != null)
+            if (_session.Templates.DownloadUrls != null)
             {
                 _session.Logger.Debug("Use cached values for GetDownloadUrls");
                 return;
             }
+
+            if (_session.Templates.AssetDigests == null)
+            {
+                _session.Logger.Warn("AssetDigests values needed for GetDownloadUrls is empty, skip request.");               
+                return;
+            }
+
             var dowloadUrls = new List<POGOProtos.Data.DownloadUrlEntry>();
             var toDownload = new List<string>();
 

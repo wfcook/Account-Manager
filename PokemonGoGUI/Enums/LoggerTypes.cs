@@ -18,6 +18,7 @@
         ProxyIssue,
         Success,
         Captcha,
-        Deploy
+        Deploy,
+        Buddy
     };
 }

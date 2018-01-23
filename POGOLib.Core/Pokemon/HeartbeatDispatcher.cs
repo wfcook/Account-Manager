@@ -106,7 +106,7 @@ namespace POGOLib.Official.Pokemon
         {
             if (_heartbeatTask != null)
             {
-                throw new Exception("Heartbeat task already running");
+                throw new SessionStateException("Heartbeat task already running");
             }
 
             var firstRefreshCompleted = new TaskCompletionSource<bool>();

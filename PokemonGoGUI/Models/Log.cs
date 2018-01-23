@@ -78,6 +78,8 @@ namespace PokemonGoGUI.GoManager.Models
                     return Color.Tomato;
                 case LoggerTypes.Deploy:
                     return Color.DeepSkyBlue;
+                case LoggerTypes.Buddy:
+                    return Color.LightGreen;
             }
             return SystemColors.WindowText;
         }

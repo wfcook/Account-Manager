@@ -67,8 +67,6 @@ namespace POGOLib.Official.Pokemon
         /// </summary>
         public bool Warn { get; set; }
 
-        public int BuddyCandy { get; set; }
-
         public PlayerData Data { get; set; }
 
         /// <summary>
