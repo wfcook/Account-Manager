@@ -94,12 +94,12 @@ namespace PokemonGoGUI.UI
 
                 if (settings == null)
                 {
-                    return -1;
+                    return 0;
                 }
 
                 Candy family = _manager.PokemonCandy.FirstOrDefault(y => y.FamilyId == settings.FamilyId);
 
-                return family == null ? -1 : family.Candy_;
+                return family == null ? 0 : family.Candy_;
 
             };
 

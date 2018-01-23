@@ -11,7 +11,6 @@ using POGOLib.Official.Net.Authentication.Data;
 using POGOLib.Official.Net.Captcha;
 using POGOLib.Official.Util.Device;
 using POGOLib.Official.Util.Hash;
-using POGOLib.Official.Util.Hash.PokeHash;
 using POGOProtos.Data;
 using POGOProtos.Networking.Requests.Messages;
 using POGOProtos.Networking.Responses;
@@ -45,8 +44,8 @@ namespace PokemonGoGUI
 
         public Client()
         {
-            VersionStr = new Version("0.87.5");
-            AppVersion = 8700;
+            VersionStr = new Version("0.89.1");
+            AppVersion = 8900;
             RessourcesFolder = $"data/{VersionStr.ToString()}/";
         }
 
@@ -70,6 +69,9 @@ namespace PokemonGoGUI
             ClientSession.CheckAwardedBadgesReceived -= OnCheckAwardedBadgesReceived;
             ClientSession.HatchedEggsReceived -= OnHatchedEggsReceived;
             ClientSession.TemporalBanReceived -= TempBanReceived;
+            ClientSession.BuddyWalked -= OnBuddyWalked;
+            ClientSession.InboxDataReceived -= OnInboxDataReceived;
+
             if (ClientSession.State != SessionState.Stopped)
                 ClientSession.Shutdown();
         }
@@ -158,6 +160,8 @@ namespace PokemonGoGUI
                 ClientSession.CheckAwardedBadgesReceived += OnCheckAwardedBadgesReceived;
                 ClientSession.HatchedEggsReceived += OnHatchedEggsReceived;
                 ClientSession.TemporalBanReceived += TempBanReceived;
+                ClientSession.BuddyWalked += OnBuddyWalked;
+                ClientSession.InboxDataReceived += OnInboxDataReceived;
 
                 ClientSession.Logger.RegisterLogOutput(LoggerFucntion);
 
@@ -398,7 +402,17 @@ namespace PokemonGoGUI
             };
         }
 
-        private void OnAssetDisgestReceived(object sender, List<POGOProtos.Data.AssetDigestEntry> data)
+        private void OnBuddyWalked(object sender, GetBuddyWalkedResponse data)
+        {
+            ClientManager.LogCaller(new LoggerEventArgs($"Buddy Walked CandyID: {data.FamilyCandyId}, Candy Count: {data.CandyEarnedCount}", LoggerTypes.Buddy));
+        }
+
+        private void OnInboxDataReceived(object sender, GetInboxResponse data)
+        {
+            // Inbox data 
+        }
+
+        private void OnAssetDisgestReceived(object sender, List<AssetDigestEntry> data)
         {
             if (!Directory.Exists(RessourcesFolder))
                 Directory.CreateDirectory(RessourcesFolder);
@@ -432,7 +446,7 @@ namespace PokemonGoGUI
             }
         }
 
-        private void OnDownloadUrlsReceived(object sender, List<POGOProtos.Data.DownloadUrlEntry> data)
+        private void OnDownloadUrlsReceived(object sender, List<DownloadUrlEntry> data)
         {
             if (!Directory.Exists(RessourcesFolder))
                 Directory.CreateDirectory(RessourcesFolder);
@@ -473,9 +487,7 @@ namespace PokemonGoGUI
 
         private void SessionMapUpdate(object sender, EventArgs e)
         {
-            // Update BuddyPokemon Stats
-            //var msg = $"BuddyWalked Candy: {ClientSession.Player.BuddyCandy}";
-            //ClientManager.LogCaller(new LoggerEventArgs(msg, LoggerTypes.Success));
+            // Update Map
         }
 
         public void SessionOnCaptchaReceived(object sender, CaptchaEventArgs e)

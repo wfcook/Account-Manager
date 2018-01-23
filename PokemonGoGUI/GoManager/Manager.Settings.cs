@@ -82,190 +82,184 @@ namespace PokemonGoGUI.GoManager
                 };
             }
 
-            try
+            if (!_client.LoggedIn)
             {
-                if (!_client.LoggedIn)
-                {
-                    MethodResult result = await AcLogin();
+                MethodResult result = await AcLogin();
 
-                    if (!result.Success)
+                if (!result.Success)
+                {
+                    return new MethodResult<Dictionary<PokemonId, PokemonSettings>>
                     {
-                        return new MethodResult<Dictionary<PokemonId, PokemonSettings>>
-                        {
-                            Message = result.Message
-                        };
-                    }
+                        Message = result.Message
+                    };
                 }
-
-                var pokemonSettings = new Dictionary<PokemonId, PokemonSettings>();
-                var moveSettings = new Dictionary<PokemonMove, MoveSettings>();
-                var badgeSettings = new Dictionary<BadgeType, BadgeSettings>();
-                var itemSettings = new Dictionary<ItemId, ItemSettings>();
-                var battleSettings = new GymBattleSettings();
-                var upgradeSettings = new PokemonUpgradeSettings();
-                var moveSequenceSettings = new MoveSequenceSettings();
-                var encounterSettings = new EncounterSettings();
-                var iapItemDisplay = new IapItemDisplay();
-                var iapSettings = new IapSettings();
-                var equippedBadge = new EquippedBadgeSettings();
-                var questSettings = new QuestSettings();
-                var avatarCustomization = new AvatarCustomizationSettings();
-                var formSettings = new FormSettings();
-                var genderSettings = new GenderSettings();
-                var gymBadgeSettings = new GymBadgeGmtSettings();
-                var weatherAffinities = new WeatherAffinity();
-                var weatherBonusSettings = new WeatherBonus();
-                var pokemonScaleSettings = new PokemonScaleSetting();
-                var typeEffective = new TypeEffectiveSettings();
-                var camera = new CameraSettings();
-                var gymLevel = new GymLevelSettings();
-
-                foreach (var template in _client.ClientSession.Templates.ItemTemplates)
-                {
-                    if (template.PlayerLevel != null)
-                    {
-                        LevelSettings = template.PlayerLevel;
-
-                        continue;
-                    }
-
-                    if (template.PokemonSettings != null)
-                    {
-                        if (pokemonSettings.ContainsKey(template.PokemonSettings.PokemonId))
-                            pokemonSettings.Remove(template.PokemonSettings.PokemonId);
-                        pokemonSettings.Add(template.PokemonSettings.PokemonId, template.PokemonSettings);
-                    }
-                    else if (template.MoveSettings != null)
-                    {
-                        if (moveSettings.ContainsKey(template.MoveSettings.MovementId))
-                            moveSettings.Remove(template.MoveSettings.MovementId);
-                        moveSettings.Add(template.MoveSettings.MovementId, template.MoveSettings);
-                    }
-                    else if (template.BadgeSettings != null)
-                    {
-                        if (badgeSettings.ContainsKey(template.BadgeSettings.BadgeType))
-                            badgeSettings.Remove(template.BadgeSettings.BadgeType);
-                        badgeSettings.Add(template.BadgeSettings.BadgeType, template.BadgeSettings);
-                    }
-                    else if (template.ItemSettings != null)
-                    {
-                        if (itemSettings.ContainsKey(template.ItemSettings.ItemId))
-                            itemSettings.Remove(template.ItemSettings.ItemId);
-                        itemSettings.Add(template.ItemSettings.ItemId, template.ItemSettings);
-                    }
-                    else if (template.EncounterSettings != null)
-                    {
-                        encounterSettings = template.EncounterSettings;
-                    }
-                    else if (template.MoveSequenceSettings != null)
-                    {
-                        moveSequenceSettings = template.MoveSequenceSettings;
-                    }
-                    else if (template.BattleSettings != null)
-                    {
-                        battleSettings = template.BattleSettings;
-                    }
-                    else if (template.IapItemDisplay != null)
-                    {
-                        iapItemDisplay = template.IapItemDisplay;
-                    }
-                    else if (template.IapSettings != null)
-                    {
-                        iapSettings = template.IapSettings;
-                    }
-                    else if (template.EquippedBadges != null)
-                    {
-                        equippedBadge = template.EquippedBadges;
-                    }
-                    else if (template.QuestSettings != null)
-                    {
-                        questSettings = template.QuestSettings;
-                    }
-                    else if (template.AvatarCustomization != null)
-                    {
-                        avatarCustomization = template.AvatarCustomization;
-                    }
-                    else if (template.FormSettings != null)
-                    {
-                        formSettings = template.FormSettings;
-                    }
-                    else if (template.GenderSettings != null)
-                    {
-                        genderSettings = template.GenderSettings;
-                    }
-                    else if (template.GymBadgeSettings != null)
-                    {
-                        gymBadgeSettings = template.GymBadgeSettings;
-                    }
-                    else if (template.WeatherAffinities != null)
-                    {
-                        weatherAffinities = template.WeatherAffinities;
-                    }
-                    else if (template.WeatherBonusSettings != null)
-                    {
-                        weatherBonusSettings = template.WeatherBonusSettings;
-                    }
-                    else if (template.PokemonScaleSettings != null)
-                    {
-                        pokemonScaleSettings = template.PokemonScaleSettings;
-                    }
-                    else if (template.TypeEffective != null)
-                    {
-                        typeEffective = template.TypeEffective;
-                    }
-                    else if (template.Camera != null)
-                    {
-                        camera = template.Camera;
-                    }
-                    else if (template.GymLevel != null)
-                    {
-                        gymLevel = template.GymLevel;
-                    }
-                    else if (template.PokemonUpgrades != null)
-                    {
-                        upgradeSettings = template.PokemonUpgrades;
-                    }
-                }
-
-                PokeSettings = pokemonSettings;
-                MoveSettings = moveSettings;
-                BadgeSettings = badgeSettings;
-                ItemSettings = itemSettings;
-                BadgeSettings = badgeSettings;
-                UpgradeSettings = upgradeSettings;
-                GetMoveSequenceSettings = moveSequenceSettings;
-                GetEncounterSettings = encounterSettings;
-                GetIapItemDisplay = iapItemDisplay;
-                GetIapSettings = iapSettings;
-                GetEquippedBadgeSettings = equippedBadge;
-                GetQuestSettings = questSettings;
-                GetAvatarCustomizationSettings = avatarCustomization;
-                GetFormSettings = formSettings;
-                GetGenderSettings = genderSettings;
-                GetGymBadgeGmtSettings = gymBadgeSettings;
-                GetWeatherAffinity = weatherAffinities;
-                GetWeatherBonus = weatherBonusSettings;
-                GetPokemonScaleSetting = pokemonScaleSettings;
-                GetTypeEffectiveSettings = typeEffective;
-                GetCameraSettings = camera;
-                GetGymLevelSettings = gymLevel;
-
-                return new MethodResult<Dictionary<PokemonId, PokemonSettings>>
-                {
-                    Data = pokemonSettings,
-                    Message = "Success",
-                    Success = true
-                };
             }
-            catch (Exception ex)
-            {
-                LogCaller(new LoggerEventArgs("Failed to get setting templates", LoggerTypes.Exception, ex));
 
+            if (_client.ClientSession.Templates.ItemTemplates == null)
                 return new MethodResult<Dictionary<PokemonId, PokemonSettings>>
                 {
                     Message = "Failed to get setting templates"
                 };
+
+            var pokemonSettings = new Dictionary<PokemonId, PokemonSettings>();
+            var moveSettings = new Dictionary<PokemonMove, MoveSettings>();
+            var badgeSettings = new Dictionary<BadgeType, BadgeSettings>();
+            var itemSettings = new Dictionary<ItemId, ItemSettings>();
+            var battleSettings = new GymBattleSettings();
+            var upgradeSettings = new PokemonUpgradeSettings();
+            var moveSequenceSettings = new MoveSequenceSettings();
+            var encounterSettings = new EncounterSettings();
+            var iapItemDisplay = new IapItemDisplay();
+            var iapSettings = new IapSettings();
+            var equippedBadge = new EquippedBadgeSettings();
+            var questSettings = new QuestSettings();
+            var avatarCustomization = new AvatarCustomizationSettings();
+            var formSettings = new FormSettings();
+            var genderSettings = new GenderSettings();
+            var gymBadgeSettings = new GymBadgeGmtSettings();
+            var weatherAffinities = new WeatherAffinity();
+            var weatherBonusSettings = new WeatherBonus();
+            var pokemonScaleSettings = new PokemonScaleSetting();
+            var typeEffective = new TypeEffectiveSettings();
+            var camera = new CameraSettings();
+            var gymLevel = new GymLevelSettings();
+
+            foreach (var template in _client.ClientSession.Templates.ItemTemplates)
+            {
+                if (template.PlayerLevel != null)
+                {
+                    LevelSettings = template.PlayerLevel;
+
+                    continue;
+                }
+
+                if (template.PokemonSettings != null)
+                {
+                    if (pokemonSettings.ContainsKey(template.PokemonSettings.PokemonId))
+                        pokemonSettings.Remove(template.PokemonSettings.PokemonId);
+                    pokemonSettings.Add(template.PokemonSettings.PokemonId, template.PokemonSettings);
+                }
+                else if (template.MoveSettings != null)
+                {
+                    if (moveSettings.ContainsKey(template.MoveSettings.MovementId))
+                        moveSettings.Remove(template.MoveSettings.MovementId);
+                    moveSettings.Add(template.MoveSettings.MovementId, template.MoveSettings);
+                }
+                else if (template.BadgeSettings != null)
+                {
+                    if (badgeSettings.ContainsKey(template.BadgeSettings.BadgeType))
+                        badgeSettings.Remove(template.BadgeSettings.BadgeType);
+                    badgeSettings.Add(template.BadgeSettings.BadgeType, template.BadgeSettings);
+                }
+                else if (template.ItemSettings != null)
+                {
+                    if (itemSettings.ContainsKey(template.ItemSettings.ItemId))
+                        itemSettings.Remove(template.ItemSettings.ItemId);
+                    itemSettings.Add(template.ItemSettings.ItemId, template.ItemSettings);
+                }
+                else if (template.EncounterSettings != null)
+                {
+                    encounterSettings = template.EncounterSettings;
+                }
+                else if (template.MoveSequenceSettings != null)
+                {
+                    moveSequenceSettings = template.MoveSequenceSettings;
+                }
+                else if (template.BattleSettings != null)
+                {
+                    battleSettings = template.BattleSettings;
+                }
+                else if (template.IapItemDisplay != null)
+                {
+                    iapItemDisplay = template.IapItemDisplay;
+                }
+                else if (template.IapSettings != null)
+                {
+                    iapSettings = template.IapSettings;
+                }
+                else if (template.EquippedBadges != null)
+                {
+                    equippedBadge = template.EquippedBadges;
+                }
+                else if (template.QuestSettings != null)
+                {
+                    questSettings = template.QuestSettings;
+                }
+                else if (template.AvatarCustomization != null)
+                {
+                    avatarCustomization = template.AvatarCustomization;
+                }
+                else if (template.FormSettings != null)
+                {
+                    formSettings = template.FormSettings;
+                }
+                else if (template.GenderSettings != null)
+                {
+                    genderSettings = template.GenderSettings;
+                }
+                else if (template.GymBadgeSettings != null)
+                {
+                    gymBadgeSettings = template.GymBadgeSettings;
+                }
+                else if (template.WeatherAffinities != null)
+                {
+                    weatherAffinities = template.WeatherAffinities;
+                }
+                else if (template.WeatherBonusSettings != null)
+                {
+                    weatherBonusSettings = template.WeatherBonusSettings;
+                }
+                else if (template.PokemonScaleSettings != null)
+                {
+                    pokemonScaleSettings = template.PokemonScaleSettings;
+                }
+                else if (template.TypeEffective != null)
+                {
+                    typeEffective = template.TypeEffective;
+                }
+                else if (template.Camera != null)
+                {
+                    camera = template.Camera;
+                }
+                else if (template.GymLevel != null)
+                {
+                    gymLevel = template.GymLevel;
+                }
+                else if (template.PokemonUpgrades != null)
+                {
+                    upgradeSettings = template.PokemonUpgrades;
+                }
             }
+
+            PokeSettings = pokemonSettings;
+            MoveSettings = moveSettings;
+            BadgeSettings = badgeSettings;
+            ItemSettings = itemSettings;
+            BadgeSettings = badgeSettings;
+            UpgradeSettings = upgradeSettings;
+            GetMoveSequenceSettings = moveSequenceSettings;
+            GetEncounterSettings = encounterSettings;
+            GetIapItemDisplay = iapItemDisplay;
+            GetIapSettings = iapSettings;
+            GetEquippedBadgeSettings = equippedBadge;
+            GetQuestSettings = questSettings;
+            GetAvatarCustomizationSettings = avatarCustomization;
+            GetFormSettings = formSettings;
+            GetGenderSettings = genderSettings;
+            GetGymBadgeGmtSettings = gymBadgeSettings;
+            GetWeatherAffinity = weatherAffinities;
+            GetWeatherBonus = weatherBonusSettings;
+            GetPokemonScaleSetting = pokemonScaleSettings;
+            GetTypeEffectiveSettings = typeEffective;
+            GetCameraSettings = camera;
+            GetGymLevelSettings = gymLevel;
+
+            return new MethodResult<Dictionary<PokemonId, PokemonSettings>>
+            {
+                Data = pokemonSettings,
+                Message = "Success",
+                Success = true
+            };
         }
 
         public MethodResult<PokemonSettings> GetPokemonSetting(PokemonId pokemon)

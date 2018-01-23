@@ -42,6 +42,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.labelUsername = new System.Windows.Forms.Label();
             this.tabPageActions = new System.Windows.Forms.TabPage();
+            this.checkBoxGoToGymsOnly = new System.Windows.Forms.CheckBox();
             this.label47 = new System.Windows.Forms.Label();
             this.cbTeam = new System.Windows.Forms.ComboBox();
             this.checkBoxCompleteTutorial = new System.Windows.Forms.CheckBox();
@@ -235,7 +236,6 @@
             this.toolTipProxy = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipMinAccountState = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipHumanizeThrows = new System.Windows.Forms.ToolTip(this.components);
-            this.checkBoxGoToGymsOnly = new System.Windows.Forms.CheckBox();
             this.tabControlMain.SuspendLayout();
             this.tabPageDetails.SuspendLayout();
             this.tabControlSettings.SuspendLayout();
@@ -464,6 +464,16 @@
             this.tabPageActions.TabIndex = 6;
             this.tabPageActions.Text = "Actions";
             this.tabPageActions.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxGoToGymsOnly
+            // 
+            this.checkBoxGoToGymsOnly.AutoSize = true;
+            this.checkBoxGoToGymsOnly.Location = new System.Drawing.Point(460, 219);
+            this.checkBoxGoToGymsOnly.Name = "checkBoxGoToGymsOnly";
+            this.checkBoxGoToGymsOnly.Size = new System.Drawing.Size(138, 21);
+            this.checkBoxGoToGymsOnly.TabIndex = 77;
+            this.checkBoxGoToGymsOnly.Text = "Go to Gyms Only";
+            this.checkBoxGoToGymsOnly.UseVisualStyleBackColor = true;
             // 
             // label47
             // 
@@ -1848,13 +1858,14 @@
             "api/v143_1/hash",
             "api/v147_1/hash",
             "api/v153_2/hash",
-            "api/v157_5/hash"});
+            "api/v157_5/hash",
+            "api/v159_1/hash"});
             this.cbHashEndpoint.Location = new System.Drawing.Point(188, 60);
             this.cbHashEndpoint.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.cbHashEndpoint.Name = "cbHashEndpoint";
             this.cbHashEndpoint.Size = new System.Drawing.Size(283, 24);
             this.cbHashEndpoint.TabIndex = 2;
-            this.cbHashEndpoint.Text = "api/v157_5/hash";
+            this.cbHashEndpoint.Text = "api/v159_1/hash";
             // 
             // label51
             // 
@@ -2555,16 +2566,6 @@
             this.restoreDefaultsToolStripMenuItem2.Size = new System.Drawing.Size(187, 24);
             this.restoreDefaultsToolStripMenuItem2.Text = "Restore Defaults";
             this.restoreDefaultsToolStripMenuItem2.Click += new System.EventHandler(this.RestoreDefaultsToolStripMenuItem2_Click);
-            // 
-            // checkBoxGoToGymsOnly
-            // 
-            this.checkBoxGoToGymsOnly.AutoSize = true;
-            this.checkBoxGoToGymsOnly.Location = new System.Drawing.Point(460, 219);
-            this.checkBoxGoToGymsOnly.Name = "checkBoxGoToGymsOnly";
-            this.checkBoxGoToGymsOnly.Size = new System.Drawing.Size(138, 21);
-            this.checkBoxGoToGymsOnly.TabIndex = 77;
-            this.checkBoxGoToGymsOnly.Text = "Go to Gyms Only";
-            this.checkBoxGoToGymsOnly.UseVisualStyleBackColor = true;
             // 
             // AccountSettingsForm
             // 
