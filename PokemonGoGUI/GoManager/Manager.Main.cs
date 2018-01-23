@@ -376,7 +376,8 @@ namespace PokemonGoGUI.GoManager
                         }
                         catch (Exception ex1)
                         {
-                            AccountState = AccountState.TemporalBan;
+                            if (AccountState != AccountState.CaptchaReceived || AccountState != AccountState.HashIssues)
+                                AccountState = AccountState.TemporalBan;
                             LogCaller(new LoggerEventArgs("Exception: " + ex1, LoggerTypes.Debug));
                             LogCaller(new LoggerEventArgs("Game settings failed", LoggerTypes.FatalError, new Exception("Maybe this account is banned ...")));
                             Stop();

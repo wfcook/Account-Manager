@@ -19,6 +19,8 @@
         Success,
         Captcha,
         Deploy,
-        Buddy
+        Buddy,
+        AwardedBadges,
+        HatchedEggs
     };
 }
