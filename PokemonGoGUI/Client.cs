@@ -211,15 +211,17 @@ namespace PokemonGoGUI
             }
             catch (APIBadRequestException ex)
             {
+                if (ClientManager.AccountState != AccountState.CaptchaReceived || ClientManager.AccountState != AccountState.HashIssues)
+                    ClientManager.AccountState = AccountState.TemporalBan;
                 ClientManager.LogCaller(new LoggerEventArgs($"API {ex.Message}, this account is maybe banned ...", LoggerTypes.Warning));
             }
             catch (InvalidPlatformException)// ex
             {
-                ClientManager.LogCaller(new LoggerEventArgs("Invalid Platform, continue  ...", LoggerTypes.Warning));
+                ClientManager.LogCaller(new LoggerEventArgs("Invalid Platform or token session refresh, continue  ...", LoggerTypes.Warning));
             }
             catch (SessionInvalidatedException)// ex
             {
-                ClientManager.LogCaller(new LoggerEventArgs("Session Invalidated, continue ...", LoggerTypes.Warning));
+                ClientManager.LogCaller(new LoggerEventArgs("Session Invalidated or token session refresh, continue ...", LoggerTypes.Warning));
             }
             catch (SessionUnknowException)
             {
@@ -480,9 +482,9 @@ namespace PokemonGoGUI
             }
         }
 
-        private void PokehashSleeping(object sender, int sleepTime)
+        private async void PokehashSleeping(object sender, int sleepTime)
         {
-            OnPokehashSleeping?.Invoke(sender, sleepTime);
+            await Task.Delay(sleepTime);
         }
 
         private void SessionMapUpdate(object sender, EventArgs e)

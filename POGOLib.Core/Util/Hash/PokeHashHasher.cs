@@ -197,6 +197,13 @@ namespace POGOLib.Official.Util.Hash
                         // We have to receive the new rate period end.
                         extendedSelection = true;
                     }
+
+                    // Add hashkey
+                    requestContent.Headers.Add("X-AuthToken", authKey.AuthKey);
+                }
+                catch (Exception ex)
+                {
+                    throw new PokeHashException(ex.Message);
                 }
                 finally
                 {
@@ -206,37 +213,24 @@ namespace POGOLib.Official.Util.Hash
                     }
                 }
 
-                requestContent.Headers.Add("X-AuthToken", authKey.AuthKey);
-
-                HttpResponseMessage response = null;
-                try
+                // Initialize HttpClient.
+                var _httpClient = new HttpClient
                 {
-                    // Initialize HttpClient.
-                    using (var _httpClient = new HttpClient
-                    {
-                        BaseAddress = GetHashUri(authKey.AuthKey)
-                    })
-                    {
-                        _httpClient.DefaultRequestHeaders.Clear();
-                        _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                        _httpClient.DefaultRequestHeaders.UserAgent.TryParseAdd("POGOLib.Core (https://github.com/Furtif/POGOLib)");
-                        response = await _httpClient.PostAsync(Configuration.HashEndpoint, requestContent);
-                        _httpClient.Dispose();
-                    };
-                }
-                catch (Exception ex)
-                {
-                    throw new PokeHashException(ex.Message);
-                }
-
-                if (response.StatusCode == HttpStatusCode.BadRequest)
-                {
-                    throw new PokeHashException("Pokehash key seems invalid");
-                }
+                    BaseAddress = GetHashUri(authKey.AuthKey),
+                };
 
                 // Handle response
                 try
                 {
+                    _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    _httpClient.DefaultRequestHeaders.UserAgent.TryParseAdd("POGOLib.Core (https://github.com/Furtif/POGOLib)");
+                    HttpResponseMessage response = await _httpClient.PostAsync(Configuration.HashEndpoint, requestContent);
+
+                    if (response.StatusCode == HttpStatusCode.BadRequest)
+                    {
+                        throw new PokeHashException("Pokehash key seems invalid");
+                    }
+
                     // Parse headers
                     int maxRequestCount;
                     int rateRequestsRemaining;
@@ -262,7 +256,6 @@ namespace POGOLib.Official.Util.Hash
                     }
 
                     // Use parsed headers
-
                     if (!authKey.IsInitialized)
                     {
                         authKey.MaxRequestCount = maxRequestCount;
@@ -278,12 +271,18 @@ namespace POGOLib.Official.Util.Hash
 
                     return response;
                 }
+                catch (Exception ex)
+                {
+                    throw new PokeHashException(ex.Message);
+                }
                 finally
                 {
                     if (extendedSelection)
                     {
                         _keySelection.Release();
                     }
+
+                    _httpClient.Dispose();
                 }
             });
         }

@@ -124,29 +124,30 @@ namespace POGOLib.Official.Net
 
             // Send GetPlayer to check if we're connected and authenticated
             GetPlayerResponse playerResponse;
+            int loop = 0;
+
             do
             {
-                var request = new Request
+                var response = await SendRemoteProcedureCallAsync(new Request
                 {
-                    RequestType = RequestType.GetPlayer
-                };
-
-                request.RequestMessage = new GetPlayerMessage
-                {
-                    PlayerLocale = _session.Player.PlayerLocale
-                }.ToByteString();
-
-                var response = await SendRemoteProcedureCallAsync(new[]
-                {
-                    request
+                    RequestType = RequestType.GetPlayer,
+                    RequestMessage = new GetPlayerMessage
+                    {
+                        PlayerLocale = _session.Player.PlayerLocale
+                    }.ToByteString()
                 });
 
+                if (response == null)
+                    _session.Logger.Warn("Pokemon Go service as maybe issues, Please try later");
+
                 playerResponse = GetPlayerResponse.Parser.ParseFrom(response);
+
                 if (!playerResponse.Success)
                 {
                     await Task.Delay(TimeSpan.FromMilliseconds(1000));
                 }
-            } while (!playerResponse.Success);
+                loop++;
+            } while (!playerResponse.Success && loop < 5);
 
             _session.Player.Data = playerResponse.PlayerData;
             _session.Player.Banned = playerResponse.Banned;
@@ -166,51 +167,6 @@ namespace POGOLib.Official.Net
             await GetAssetDigest();
             await DownloadItemTemplates();
             await GetDownloadURLs();
-
-            return true;
-        }
-
-        // NOTE: This was the login before of 0.45 API, continue working but it is not that the real app does now.
-        internal async Task<bool> StartupAsync_0_45_API()
-        {
-            // Send GetPlayer to check if we're connected and authenticated
-            GetPlayerResponse playerResponse;
-
-            int loop = 0;
-
-            do
-            {
-                var response = await SendRemoteProcedureCallAsync(new[]
-                {
-                    new Request
-                    {
-                        RequestType = RequestType.GetPlayer,
-                        RequestMessage = new GetPlayerMessage
-                        {
-                            // Get Player locale information
-                            PlayerLocale = _session.Player.PlayerLocale
-                        }.ToByteString()
-                    },
-                    new Request
-                    {
-                        RequestType = RequestType.CheckChallenge,
-                        RequestMessage = new CheckChallengeMessage
-                        {
-                            DebugRequest = false
-                        }.ToByteString()
-                    }
-                });
-                playerResponse = GetPlayerResponse.Parser.ParseFrom(response);
-                if (!playerResponse.Success)
-                {
-                    await Task.Delay(TimeSpan.FromMilliseconds(1000));
-                }
-                loop++;
-            } while (!playerResponse.Success && loop < 10);
-
-            _session.Player.Banned = playerResponse.Banned;
-            _session.Player.Warn = playerResponse.Warn;
-            _session.Player.Data = playerResponse.PlayerData;
 
             return true;
         }

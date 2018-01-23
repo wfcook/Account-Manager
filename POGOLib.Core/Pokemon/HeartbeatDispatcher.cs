@@ -76,6 +76,14 @@ namespace POGOLib.Official.Pokemon
                     {
                         throw new SessionStateException($"Map refresh failed: {ex}");
                     }
+                    catch (PokeHashException ex)
+                    {
+                        throw new PokeHashException($"Hash problem: {ex}");
+                    }
+                    catch (HashVersionMismatchException ex)
+                    {
+                        throw new HashVersionMismatchException(ex.Message);
+                    }
                     catch (Exception e)
                     {
                         _session.Logger.Error($"Unknown Exeption: {e}");
