@@ -386,18 +386,22 @@ namespace POGOLib.Official.Net
 
             requestEnvelope.PlatformRequests.Add(await _rpcEncryption.GenerateSignatureAsync(requestEnvelope));
 
-            if (requestEnvelope.Requests.Count > 0 && (
+            // Apply new UnknownPtr8.
+            if (Configuration.Hasher.AppVersion > 4500)
+            {
+                if (requestEnvelope.Requests.Count > 0 && (
                     requestEnvelope.Requests[0].RequestType == RequestType.GetMapObjects ||
                     requestEnvelope.Requests[0].RequestType == RequestType.GetPlayer))
-            {
-                requestEnvelope.PlatformRequests.Add(new RequestEnvelope.Types.PlatformRequest
                 {
-                    Type = PlatformRequestType.UnknownPtr8,
-                    RequestMessage = new UnknownPtr8Request
+                    requestEnvelope.PlatformRequests.Add(new RequestEnvelope.Types.PlatformRequest
                     {
-                        Message = _mapKey
-                    }.ToByteString()
-                });
+                        Type = PlatformRequestType.UnknownPtr8,
+                        RequestMessage = new UnknownPtr8Request
+                        {
+                            Message = _mapKey
+                        }.ToByteString()
+                    });
+                }
             }
 
             return requestEnvelope;
@@ -423,14 +427,29 @@ namespace POGOLib.Official.Net
 
         private Task<ByteString> SendRemoteProcedureCall(RequestEnvelope requestEnvelope)
         {
+            if (requestEnvelope.Requests.FirstOrDefault().RequestType == RequestType.VerifyChallenge)
+            {
+                var request = Task.Run(async () =>
+                {
+                    _rpcResponses.GetOrAdd(requestEnvelope, await PerformRemoteProcedureCallAsync(requestEnvelope));
+
+                    ByteString req;
+                    _rpcResponses.TryRemove(requestEnvelope, out req);
+
+                    return req;
+                });
+            }
+
             return Task.Run(async () =>
             {
+                _rpcQueue.Enqueue(requestEnvelope);
+
                 try
                 {
-                    _rpcQueue.Enqueue(requestEnvelope);
                     _rpcQueueMutex.WaitOne();
 
                     RequestEnvelope processRequestEnvelope;
+
                     while (_rpcQueue.TryDequeue(out processRequestEnvelope))
                     {
                         //var diff = Math.Max(0, DateTime.Now.Millisecond - LastRpcRequest.Millisecond);
@@ -444,8 +463,10 @@ namespace POGOLib.Official.Net
 
                         _rpcResponses.GetOrAdd(processRequestEnvelope, await PerformRemoteProcedureCallAsync(processRequestEnvelope));
                     }
+
                     ByteString ret;
                     _rpcResponses.TryRemove(requestEnvelope, out ret);
+
                     return ret;
                 }
                 catch (ArgumentOutOfRangeException)
