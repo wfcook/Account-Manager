@@ -42,7 +42,7 @@ namespace PokemonGoGUI
         public Manager ClientManager;
         private string RessourcesFolder;
         private event EventHandler<int> OnPokehashSleeping;
-        private readonly CancellationTokenSource CancellationTokenSource = new CancellationTokenSource();
+        private /*static maybe */readonly CancellationTokenSource CancellationTokenSource = new CancellationTokenSource();
 
         public Client()
         {
