@@ -336,9 +336,25 @@ namespace PokemonGoGUI.GoManager
                     return 0;
                 }
 
-                Currency stardust = PlayerData.Currencies.FirstOrDefault(x => x.Name == "STARDUST");
+                //Currency stardust = PlayerData.Currencies.FirstOrDefault(x => x.Name == "STARDUST");
+                //return stardust == 0 ? 0 : stardust.Amount;
+                return PlayerData.Currencies[1].Amount;
+            }
+        }
 
-                return stardust == null ? 0 : stardust.Amount;
+        [JsonIgnore]
+        public int TotalPokeCoins
+        {
+            get
+            {
+                if (PlayerData == null)
+                {
+                    return 0;
+                }
+
+                //Currency pokecoins = PlayerData.Currencies.FirstOrDefault(x => x.Name == "POKECOIN");
+                //return pokecoins == 0 ? 0 : pokecoins.Amount;
+                return PlayerData.Currencies[0].Amount;
             }
         }
 
