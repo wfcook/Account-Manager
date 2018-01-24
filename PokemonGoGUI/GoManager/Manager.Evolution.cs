@@ -97,7 +97,7 @@ namespace PokemonGoGUI.GoManager
 
                 if (!CanEvolvePokemon(pokemon))
                 {
-                    LogCaller(new LoggerEventArgs(String.Format("Skipped {0}, this pokemon cant not be upgrated maybe is a favorit, is deployed or is a buddy pokemon.", pokemon.PokemonId), LoggerTypes.Info));
+                    LogCaller(new LoggerEventArgs(String.Format("Skipped {0}, this pokemon cant not be upgrated maybe is deployed pokemon or you not have needed resources.", pokemon.PokemonId), LoggerTypes.Info));
                     continue;
                 }
 

@@ -505,7 +505,7 @@ namespace PokemonGoGUI.GoManager
             {
                 if (!CanUpgradePokemon(pokemon))
                 {
-                    LogCaller(new LoggerEventArgs(String.Format("Skipped {0}, this pokemon cant not be upgraded maybe is a favorit, is deployed or is a buddy pokemon.", pokemon.PokemonId), LoggerTypes.Info));
+                    LogCaller(new LoggerEventArgs(String.Format("Skipped {0}, this pokemon cant not be upgraded maybe is deployed pokemon or you not have needed resources.", pokemon.PokemonId), LoggerTypes.Info));
                     continue;
                 }
 
