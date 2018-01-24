@@ -429,7 +429,7 @@ namespace POGOLib.Official.Net
         {
             if (requestEnvelope.Requests.FirstOrDefault().RequestType == RequestType.VerifyChallenge)
             {
-                var request = Task.Run(async () =>
+                return Task.Run(async () =>
                 {
                     _rpcResponses.GetOrAdd(requestEnvelope, await PerformRemoteProcedureCallAsync(requestEnvelope));
 
