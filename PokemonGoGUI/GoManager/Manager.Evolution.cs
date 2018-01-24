@@ -135,6 +135,7 @@ namespace PokemonGoGUI.GoManager
                                             LoggerTypes.Evolve));
 
                         UpdateInventory(InventoryRefresh.Pokemon);
+                        UpdateInventory(InventoryRefresh.PokemonCandy);
 
                         await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
 

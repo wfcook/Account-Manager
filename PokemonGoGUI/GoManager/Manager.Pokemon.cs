@@ -527,6 +527,7 @@ namespace PokemonGoGUI.GoManager
                 {
                     case UpgradePokemonResponse.Types.Result.Success:
                         UpdateInventory(InventoryRefresh.Pokemon);
+                        UpdateInventory(InventoryRefresh.PokemonCandy);
                         LogCaller(new LoggerEventArgs(String.Format("Upgrade pokemon {0} success.", pokemon.PokemonId), LoggerTypes.Success));
                         break;
                     case UpgradePokemonResponse.Types.Result.ErrorInsufficientResources:
