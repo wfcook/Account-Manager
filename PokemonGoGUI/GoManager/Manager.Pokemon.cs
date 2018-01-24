@@ -64,7 +64,7 @@ namespace PokemonGoGUI.GoManager
                             await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
 
                             RemoveInventoryItem(GetPokemonHashKey(pokemon.Id));
-
+                            UpdateInventory(InventoryRefresh.PokemonCandy);
                             continue;
                         case ReleasePokemonResponse.Types.Result.ErrorPokemonIsBuddy:
                             LogCaller(new LoggerEventArgs(String.Format("Faill to transfer {0}. Because: {1}.",
@@ -130,6 +130,7 @@ namespace PokemonGoGUI.GoManager
                         {
                             RemoveInventoryItem(GetPokemonHashKey(pokemonId));
                         }
+                        UpdateInventory(InventoryRefresh.PokemonCandy);
                         break;
                     case ReleasePokemonResponse.Types.Result.ErrorPokemonIsBuddy:
                         LogCaller(new LoggerEventArgs(String.Format("Faill to transfer {0}. Because: {1}.",
