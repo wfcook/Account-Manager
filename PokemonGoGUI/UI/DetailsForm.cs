@@ -393,7 +393,6 @@ namespace PokemonGoGUI.UI
 
         private async void UpgradeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            List<PokemonData> pokemonsToUpgrade = fastObjectListViewPokemon.SelectedObjects.Cast<PokemonData>().ToList();
             DialogResult result = MessageBox.Show(String.Format("Are you sure you want to upgrade {0} pokemon?", fastObjectListViewPokemon.SelectedObjects.Cast<PokemonData>().Count()), "Confirmation", MessageBoxButtons.YesNo);
 
             if (result != DialogResult.Yes)
@@ -401,22 +400,12 @@ namespace PokemonGoGUI.UI
                 return;
             }
 
-            foreach (var pokemon in fastObjectListViewPokemon.SelectedObjects.Cast<PokemonData>())
-            {
-                if (!_manager.CanUpgradePokemon(pokemon))
-                {
-                    MessageBox.Show($"Skipped! {pokemon.PokemonId.ToString()}  does not have data required to upgrade.");
-                    pokemonsToUpgrade.Remove(pokemon);
-                    continue;
-                }
-            }
-
-            if (pokemonsToUpgrade.Count() == 0)
+            if (fastObjectListViewPokemon.SelectedObjects.Count == 0 || fastObjectListViewPokemon.SelectedObjects.Cast<PokemonData>().FirstOrDefault() == null)
                 return;
 
             contextMenuStripPokemonDetails.Enabled = false;
 
-            MethodResult managerResult = await _manager.UpgradePokemon(pokemonsToUpgrade.ToList());
+            MethodResult managerResult = await _manager.UpgradePokemon(fastObjectListViewPokemon.SelectedObjects.Cast<PokemonData>());
 
             DisplayDetails();
 
@@ -435,6 +424,9 @@ namespace PokemonGoGUI.UI
             {
                 return;
             }
+
+            if (fastObjectListViewPokemon.SelectedObjects.Count == 0 || fastObjectListViewPokemon.SelectedObjects.Cast<PokemonData>().FirstOrDefault() == null)
+                return;
 
             contextMenuStripPokemonDetails.Enabled = false;
 
@@ -457,6 +449,9 @@ namespace PokemonGoGUI.UI
             {
                 return;
             }
+
+            if (fastObjectListViewPokemon.SelectedObjects.Count == 0 || fastObjectListViewPokemon.SelectedObjects.Cast<PokemonData>().FirstOrDefault() == null)
+                return;
 
             contextMenuStripPokemonDetails.Enabled = false;
 

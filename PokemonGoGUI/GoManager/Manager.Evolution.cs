@@ -21,7 +21,7 @@ namespace PokemonGoGUI.GoManager
     {
         private async Task<MethodResult> EvolveFilteredPokemon()
         {
-           MethodResult<List<PokemonData>> response = GetPokemonToEvolve();
+            MethodResult<List<PokemonData>> response = GetPokemonToEvolve();
 
             if (response.Data.Count == 0)
             {
@@ -34,7 +34,7 @@ namespace PokemonGoGUI.GoManager
             {
                 LogCaller(new LoggerEventArgs(String.Format("Not enough pokemon inventory space {0:0.00}% of {1:0.00}% force evolve above percent.", FilledPokemonInventorySpace(), UserSettings.ForceEvolveAbovePercent), LoggerTypes.Info));
 
-                return new MethodResult();             
+                return new MethodResult();
             }
 
             if (response.Data.Count < UserSettings.MinPokemonBeforeEvolve)
@@ -92,6 +92,12 @@ namespace PokemonGoGUI.GoManager
                 {
                     LogCaller(new LoggerEventArgs(String.Format("Pokemon {0} is slashed.", pokemon.PokemonId), LoggerTypes.Warning));
                     //await TransferPokemon(new List<PokemonData> { pokemon });
+                    continue;
+                }
+
+                if (!CanEvolvePokemon(pokemon))
+                {
+                    LogCaller(new LoggerEventArgs(String.Format("Skipped {0}, this pokemon cant not be upgrated maybe is deployed pokemon or you not have needed resources.", pokemon.PokemonId), LoggerTypes.Info));
                     continue;
                 }
 
@@ -163,10 +169,10 @@ namespace PokemonGoGUI.GoManager
         private async Task<MethodResult<int>> GetEvolutionCandy(PokemonId pokemonId)
         {
             if (PokeSettings == null)
-            {                
+            {
                 MethodResult result = await GetItemTemplates();
 
-                if(!result.Success)
+                if (!result.Success)
                 {
                     return (MethodResult<int>)result;
                 }
@@ -270,7 +276,7 @@ namespace PokemonGoGUI.GoManager
 
         private async Task<MethodResult> UseLuckyEgg()
         {
-           ItemData data = Items.FirstOrDefault(x => x.ItemId == ItemId.ItemLuckyEgg);
+            ItemData data = Items.FirstOrDefault(x => x.ItemId == ItemId.ItemLuckyEgg);
 
             if (data == null || data.Count == 0)
             {
@@ -319,6 +325,43 @@ namespace PokemonGoGUI.GoManager
             }
 
             return (double)(Pokemon.Count + Eggs.Count) / PlayerData.MaxPokemonStorage * 100;
+        }
+
+        private bool CanEvolvePokemon(PokemonData pokemon)
+        {
+            // Can't evolve pokemon in gyms.
+            if (!string.IsNullOrEmpty(pokemon.DeployedFortId))
+                return false;
+
+            var settings = PokeSettings.SingleOrDefault(x => x.Value.PokemonId == pokemon.PokemonId);
+
+            // Can't evolve pokemon that are not evolvable.
+            if (settings.Value.EvolutionIds.Count == 0 && settings.Value.EvolutionBranch.Count == 0)
+                return false;
+
+            int familyCandy = PokemonCandy.FirstOrDefault(x => x.FamilyId == settings.Value.FamilyId).Candy_;
+
+            bool canEvolve = false;
+            // Check requirements for all branches, if we meet the requirements for any of them then we return true.
+            foreach (var branch in settings.Value.EvolutionBranch)
+            {
+                var itemCount = Items.Count(x => x.ItemId == branch.EvolutionItemRequirement);
+                var Candies2Evolve = branch.CandyCost; // GetCandyToEvolve(settings);
+                var Evolutions = familyCandy / Candies2Evolve;
+
+                if (branch.EvolutionItemRequirement != ItemId.ItemUnknown)
+                {
+                    if (itemCount == 0)
+                        continue;  // Cannot evolve so check next branch
+                }
+
+                if (familyCandy < branch.CandyCost)
+                    continue;  // Cannot evolve so check next branch
+
+                // If we got here, then we can evolve so break out of loop.
+                canEvolve = true;
+            }
+            return canEvolve;
         }
     }
 }

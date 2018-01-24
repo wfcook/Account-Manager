@@ -20,12 +20,17 @@ namespace PokemonGoGUI.GoManager
     {
         public async Task<MethodResult> TransferPokemon(IEnumerable<PokemonData> pokemonsToTransfer)
         {
-            BuddyPokemon buddy = PlayerData.BuddyPokemon ?? new BuddyPokemon();
-            PokemonData myBuddy = Pokemon.Where(x => x.Id == buddy.Id).FirstOrDefault() ?? new PokemonData();
+            List<PokemonData> pokemonToTransfer = new List<PokemonData>();
 
-            var pokemonToTransfer = pokemonsToTransfer.Where(x => !x.Favorite.Equals(1) && !x.IsEgg && string.IsNullOrEmpty(x.DeployedFortId) && !x.Id.Equals(myBuddy.Id) && !x.PokemonId.Equals(PokemonId.Missingno) && !x.Equals(null));
+            foreach (var pokToTranfer in pokemonsToTransfer)
+            {
+                if (!CanTransferPokemon(pokToTranfer))
+                    LogCaller(new LoggerEventArgs(String.Format("Skipped {0}, this pokemon cant not be transfered maybe is a favorit, is deployed or is a buddy pokemon.", pokToTranfer.PokemonId), LoggerTypes.Info));
+                else
+                    pokemonToTransfer.Add(pokToTranfer);
+            }
 
-            if (pokemonsToTransfer.Count() == 0)
+            if (pokemonsToTransfer.Count() == 0 || pokemonsToTransfer.FirstOrDefault() == null)
                 return new MethodResult();
 
             LogCaller(new LoggerEventArgs(String.Format("Transferring {0} pokemon", pokemonToTransfer.Count()), LoggerTypes.Info));
@@ -493,11 +498,17 @@ namespace PokemonGoGUI.GoManager
 
         public async Task<MethodResult> UpgradePokemon(IEnumerable<PokemonData> pokemonsToUpgrade)
         {
-            if (pokemonsToUpgrade.Count() == 0)
+            if (pokemonsToUpgrade.Count() == 0 || pokemonsToUpgrade.FirstOrDefault() == null)
                 return new MethodResult();
 
             foreach (var pokemon in pokemonsToUpgrade)
             {
+                if (!CanUpgradePokemon(pokemon))
+                {
+                    LogCaller(new LoggerEventArgs(String.Format("Skipped {0}, this pokemon cant not be upgraded maybe is deployed pokemon or you not have needed resources.", pokemon.PokemonId), LoggerTypes.Info));
+                    continue;
+                }
+
                 var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                 {
                     RequestType = RequestType.UpgradePokemon,
@@ -579,7 +590,25 @@ namespace PokemonGoGUI.GoManager
         }
         */
 
-        public bool CanUpgradePokemon(PokemonData pokemon)
+        private bool CanTransferPokemon(PokemonData pokemon)
+        {
+            // Can't transfer pokemon in gyms.
+            if (!string.IsNullOrEmpty(pokemon.DeployedFortId))
+                return false;
+
+            // Can't transfer buddy pokemon
+            var buddy = PlayerData.BuddyPokemon;
+            if (buddy != null && buddy.Id == pokemon.Id)
+                return false;
+
+            // Can't transfer favorite
+            if (pokemon.Favorite == 1)
+                return false;
+
+            return true;
+        }
+
+        private bool CanUpgradePokemon(PokemonData pokemon)
         {
             // Can't upgrade pokemon in gyms.
             if (!string.IsNullOrEmpty(pokemon.DeployedFortId))
