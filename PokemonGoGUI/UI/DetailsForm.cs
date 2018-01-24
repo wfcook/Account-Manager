@@ -401,6 +401,9 @@ namespace PokemonGoGUI.UI
                 return;
             }
 
+            if (fastObjectListViewPokemon.SelectedObjects.Count == 0 || fastObjectListViewPokemon.SelectedObjects.Cast<PokemonData>().FirstOrDefault() == null)
+                return;
+
             foreach (var pokemon in fastObjectListViewPokemon.SelectedObjects.Cast<PokemonData>())
             {
                 if (!_manager.CanUpgradePokemon(pokemon))
@@ -410,9 +413,6 @@ namespace PokemonGoGUI.UI
                     continue;
                 }
             }
-
-            if (pokemonsToUpgrade.Count() == 0)
-                return;
 
             contextMenuStripPokemonDetails.Enabled = false;
 
@@ -436,6 +436,9 @@ namespace PokemonGoGUI.UI
                 return;
             }
 
+            if (fastObjectListViewPokemon.SelectedObjects.Count == 0 || fastObjectListViewPokemon.SelectedObjects.Cast<PokemonData>().FirstOrDefault() == null)
+                return;
+
             contextMenuStripPokemonDetails.Enabled = false;
 
             MethodResult managerResult = await _manager.TransferPokemon(fastObjectListViewPokemon.SelectedObjects.Cast<PokemonData>());
@@ -457,6 +460,9 @@ namespace PokemonGoGUI.UI
             {
                 return;
             }
+
+            if (fastObjectListViewPokemon.SelectedObjects.Count == 0 || fastObjectListViewPokemon.SelectedObjects.Cast<PokemonData>().FirstOrDefault() == null)
+                return;
 
             contextMenuStripPokemonDetails.Enabled = false;
 
