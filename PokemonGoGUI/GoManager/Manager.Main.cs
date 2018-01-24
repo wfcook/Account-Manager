@@ -376,8 +376,8 @@ namespace PokemonGoGUI.GoManager
                         }
                         catch (Exception ex1)
                         {
-                            if (AccountState != AccountState.CaptchaReceived || AccountState != AccountState.HashIssues)
-                                AccountState = AccountState.TemporalBan;
+                            //if (AccountState != AccountState.CaptchaReceived || AccountState != AccountState.HashIssues)
+                            //    AccountState = AccountState.TemporalBan;
                             LogCaller(new LoggerEventArgs("Exception: " + ex1, LoggerTypes.Debug));
                             LogCaller(new LoggerEventArgs("Game settings failed", LoggerTypes.FatalError, new Exception("Maybe this account is banned ...")));
                             Stop();
@@ -395,8 +395,8 @@ namespace PokemonGoGUI.GoManager
 
                         if (!result.Success)
                         {
-                            if (AccountState != AccountState.CaptchaReceived || AccountState != AccountState.HashIssues)
-                                AccountState = AccountState.TemporalBan;
+                            //if (AccountState != AccountState.CaptchaReceived || AccountState != AccountState.HashIssues)
+                            //    AccountState = AccountState.TemporalBan;
                             LogCaller(new LoggerEventArgs("Load pokemon settings failed", LoggerTypes.FatalError, new Exception("Maybe this account is banned ...")));
                             Stop();
                             continue;
@@ -884,6 +884,12 @@ namespace PokemonGoGUI.GoManager
                     LogCaller(new LoggerEventArgs(ex.Message, LoggerTypes.Warning));
                     Stop();
                 }
+                catch (GoogleLoginException ex)
+                {
+                    AccountState = AccountState.Unknown;
+                    LogCaller(new LoggerEventArgs(ex.Message, LoggerTypes.FatalError));
+                    Stop();
+                }
                 catch (PtcLoginException ex)
                 {
                     AccountState = AccountState.Unknown;
@@ -897,12 +903,12 @@ namespace PokemonGoGUI.GoManager
                 }
                 catch (InvalidPlatformException)// ex
                 {
-                    LogCaller(new LoggerEventArgs("Invalid Platform, continue  ...", LoggerTypes.Warning));
+                    LogCaller(new LoggerEventArgs("Invalid Platform or token session refresh, continue  ...", LoggerTypes.Warning));
                     continue;
                 }
                 catch (SessionInvalidatedException)// ex
                 {
-                    LogCaller(new LoggerEventArgs("Session Invalidated, continue ...", LoggerTypes.Warning));
+                    LogCaller(new LoggerEventArgs("Session Invalidated or token session refresh, continue ...", LoggerTypes.Warning));
                     continue;
                 }
                 catch (PokeHashException ex)

@@ -129,6 +129,8 @@
             this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copyStackTraceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.label19 = new System.Windows.Forms.Label();
+            this.labelPokeCoins = new System.Windows.Forms.Label();
             this.tabControlMain.SuspendLayout();
             this.tabPageStats.SuspendLayout();
             this.tabPagePokedex.SuspendLayout();
@@ -168,6 +170,8 @@
             // 
             // tabPageStats
             // 
+            this.tabPageStats.Controls.Add(this.labelPokeCoins);
+            this.tabPageStats.Controls.Add(this.label19);
             this.tabPageStats.Controls.Add(this.labelPokemonBuddy);
             this.tabPageStats.Controls.Add(this.label17);
             this.tabPageStats.Controls.Add(this.labelDeployedPokemons);
@@ -217,7 +221,7 @@
             // labelPokemonBuddy
             // 
             this.labelPokemonBuddy.AutoSize = true;
-            this.labelPokemonBuddy.Location = new System.Drawing.Point(173, 332);
+            this.labelPokemonBuddy.Location = new System.Drawing.Point(173, 348);
             this.labelPokemonBuddy.Name = "labelPokemonBuddy";
             this.labelPokemonBuddy.Size = new System.Drawing.Size(53, 17);
             this.labelPokemonBuddy.TabIndex = 9;
@@ -226,7 +230,7 @@
             // label17
             // 
             this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(30, 332);
+            this.label17.Location = new System.Drawing.Point(30, 348);
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(115, 17);
             this.label17.TabIndex = 8;
@@ -253,7 +257,7 @@
             // labelTutorialState
             // 
             this.labelTutorialState.AutoSize = true;
-            this.labelTutorialState.Location = new System.Drawing.Point(173, 367);
+            this.labelTutorialState.Location = new System.Drawing.Point(173, 381);
             this.labelTutorialState.Name = "labelTutorialState";
             this.labelTutorialState.Size = new System.Drawing.Size(32, 17);
             this.labelTutorialState.TabIndex = 5;
@@ -262,7 +266,7 @@
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(48, 367);
+            this.label15.Location = new System.Drawing.Point(48, 381);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(97, 17);
             this.label15.TabIndex = 4;
@@ -1105,6 +1109,24 @@
             this.exportToolStripMenuItem.Text = "Export";
             this.exportToolStripMenuItem.Click += new System.EventHandler(this.ExportToolStripMenuItem_Click);
             // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(66, 330);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(79, 17);
+            this.label19.TabIndex = 10;
+            this.label19.Text = "PokeCoins:";
+            // 
+            // labelPokeCoins
+            // 
+            this.labelPokeCoins.AutoSize = true;
+            this.labelPokeCoins.Location = new System.Drawing.Point(173, 330);
+            this.labelPokeCoins.Name = "labelPokeCoins";
+            this.labelPokeCoins.Size = new System.Drawing.Size(16, 17);
+            this.labelPokeCoins.TabIndex = 11;
+            this.labelPokeCoins.Text = "0";
+            // 
             // DetailsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -1241,5 +1263,7 @@
         private System.Windows.Forms.Label label17;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem setABuddyToolStripMenuItem;
+        private System.Windows.Forms.Label labelPokeCoins;
+        private System.Windows.Forms.Label label19;
     }
 }

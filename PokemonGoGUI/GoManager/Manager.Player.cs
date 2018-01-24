@@ -170,29 +170,6 @@ namespace PokemonGoGUI.GoManager
             };
         }
 
-        private async Task<MethodResult<GetBuddyWalkedResponse>> GetBuddyWalked()
-        {
-            var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
-            {
-                RequestType = RequestType.GetBuddyWalked,
-                RequestMessage = new GetBuddyWalkedMessage
-                {
-
-                }.ToByteString()
-            });
-
-            if (response == null)
-                return new MethodResult<GetBuddyWalkedResponse>();
-
-            GetBuddyWalkedResponse getBuddyWalkedResponse = GetBuddyWalkedResponse.Parser.ParseFrom(response);
-
-            return new MethodResult<GetBuddyWalkedResponse>
-            {
-                Data = getBuddyWalkedResponse,
-                Success = true
-            };
-        }
-
         private async Task<MethodResult> GetPlayer(bool nobuddy = true, bool noinbox = true)
         {
             if (!_client.LoggedIn)
@@ -249,7 +226,6 @@ namespace PokemonGoGUI.GoManager
                 return new MethodResult();
 
             var parsedResponse = GetPlayerProfileResponse.Parser.ParseFrom(response);
-
 
             return new MethodResult
             {
@@ -314,14 +290,14 @@ namespace PokemonGoGUI.GoManager
                     LogCaller(new LoggerEventArgs($"Faill to set buddy pokemon, reason: {setBuddyPokemonResponse.Result.ToString()}", LoggerTypes.Info));
                     break;
                 case SetBuddyPokemonResponse.Types.Result.Success:
-                    setBuddyPokemonResponse.UpdatedBuddy = new BuddyPokemon
+                    PlayerData.BuddyPokemon = new BuddyPokemon
                     {
                         Id = pokemon.Id,
-                        LastKmAwarded = PokeSettings[pokemon.PokemonId].KmBuddyDistance,
-                        StartKmWalked = PokeSettings[pokemon.PokemonId].KmDistanceToHatch
+                        //LastKmAwarded = PokeSettings[pokemon.PokemonId].KmBuddyDistance,
+                        //StartKmWalked = PokeSettings[pokemon.PokemonId].KmDistanceToHatch
                     };
 
-                    PlayerData.BuddyPokemon = setBuddyPokemonResponse.UpdatedBuddy;
+                    setBuddyPokemonResponse.UpdatedBuddy = PlayerData.BuddyPokemon;
 
                     LogCaller(new LoggerEventArgs($"Set buddy pokemon completion request wasn't successful. pokemon buddy: {pokemon.PokemonId.ToString()}", LoggerTypes.Success));
 

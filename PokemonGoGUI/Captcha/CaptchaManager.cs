@@ -123,13 +123,15 @@ namespace PokemonGoGUI.Captcha
         {
             if (string.IsNullOrEmpty(captchaResponse)) return false;
 
-            if (!client.LoggedIn)
+            /*if (!client.LoggedIn)
             {
-                //if (client.ClientSession.State != POGOLib.Official.Net.SessionState.Paused)
-                //    await client.DoLogin(client.ClientManager);
-                //if (!client.LoggedIn)
-                    return false;
-            }
+                MethodResult result = await client.ClientManager.AcLogin();
+
+                if (!result.Success)
+                {
+                    return result.Success;
+                }
+            }*/
 
             var response = await client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
@@ -154,6 +156,7 @@ namespace PokemonGoGUI.Captcha
                 client.ClientManager.LogCaller(new LoggerEventArgs($"(CAPTCHA) Great!!! Captcha has been by passed", LoggerTypes.Success));
                 return verifyChallengeResponse.Success;
             }
+
             return false;
         }
 
