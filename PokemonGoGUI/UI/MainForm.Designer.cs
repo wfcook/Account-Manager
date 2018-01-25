@@ -1019,7 +1019,7 @@
             this.tabPageHashKeys.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabPageHashKeys.Name = "tabPageHashKeys";
             this.tabPageHashKeys.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.tabPageHashKeys.Size = new System.Drawing.Size(1175, 426);
+            this.tabPageHashKeys.Size = new System.Drawing.Size(1175, 428);
             this.tabPageHashKeys.TabIndex = 3;
             this.tabPageHashKeys.Text = "HashKeys";
             this.tabPageHashKeys.UseVisualStyleBackColor = true;
@@ -1042,7 +1042,7 @@
             this.fastObjectListViewHashKeys.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.fastObjectListViewHashKeys.Name = "fastObjectListViewHashKeys";
             this.fastObjectListViewHashKeys.ShowGroups = false;
-            this.fastObjectListViewHashKeys.Size = new System.Drawing.Size(1169, 422);
+            this.fastObjectListViewHashKeys.Size = new System.Drawing.Size(1169, 424);
             this.fastObjectListViewHashKeys.TabIndex = 3;
             this.fastObjectListViewHashKeys.UseCellFormatEvents = true;
             this.fastObjectListViewHashKeys.UseCompatibleStateImageBehavior = false;
@@ -1070,7 +1070,7 @@
             this.tabPageScheduler.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabPageScheduler.Name = "tabPageScheduler";
             this.tabPageScheduler.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.tabPageScheduler.Size = new System.Drawing.Size(1175, 426);
+            this.tabPageScheduler.Size = new System.Drawing.Size(1175, 428);
             this.tabPageScheduler.TabIndex = 2;
             this.tabPageScheduler.Text = "Scheduler";
             this.tabPageScheduler.UseVisualStyleBackColor = true;
@@ -1104,7 +1104,7 @@
             this.fastObjectListViewScheduler.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.fastObjectListViewScheduler.Name = "fastObjectListViewScheduler";
             this.fastObjectListViewScheduler.ShowGroups = false;
-            this.fastObjectListViewScheduler.Size = new System.Drawing.Size(1169, 422);
+            this.fastObjectListViewScheduler.Size = new System.Drawing.Size(1169, 424);
             this.fastObjectListViewScheduler.TabIndex = 2;
             this.fastObjectListViewScheduler.UseCellFormatEvents = true;
             this.fastObjectListViewScheduler.UseCompatibleStateImageBehavior = false;
@@ -1168,7 +1168,7 @@
             this.tabPageProxies.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabPageProxies.Name = "tabPageProxies";
             this.tabPageProxies.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.tabPageProxies.Size = new System.Drawing.Size(1175, 426);
+            this.tabPageProxies.Size = new System.Drawing.Size(1175, 428);
             this.tabPageProxies.TabIndex = 1;
             this.tabPageProxies.Text = "Proxies";
             this.tabPageProxies.UseVisualStyleBackColor = true;
@@ -1198,7 +1198,7 @@
             this.fastObjectListViewProxies.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.fastObjectListViewProxies.Name = "fastObjectListViewProxies";
             this.fastObjectListViewProxies.ShowGroups = false;
-            this.fastObjectListViewProxies.Size = new System.Drawing.Size(1169, 422);
+            this.fastObjectListViewProxies.Size = new System.Drawing.Size(1169, 424);
             this.fastObjectListViewProxies.TabIndex = 1;
             this.fastObjectListViewProxies.UseCellFormatEvents = true;
             this.fastObjectListViewProxies.UseCompatibleStateImageBehavior = false;
