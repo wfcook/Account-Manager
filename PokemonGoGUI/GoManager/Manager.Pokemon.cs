@@ -39,6 +39,16 @@ namespace PokemonGoGUI.GoManager
             {
                 foreach (PokemonData pokemon in pokemonToTransfer)
                 {
+                    if (!_client.LoggedIn)
+                    {
+                        MethodResult result = await AcLogin();
+
+                        if (!result.Success)
+                        {
+                            return result;
+                        }
+                    }
+
                     var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                     {
                         RequestType = RequestType.ReleasePokemon,
@@ -100,6 +110,16 @@ namespace PokemonGoGUI.GoManager
             else
             {
                 var PokemonIds = pokemonToTransfer.Select(x => x.Id);
+
+                if (!_client.LoggedIn)
+                {
+                    MethodResult result = await AcLogin();
+
+                    if (!result.Success)
+                    {
+                        return result;
+                    }
+                }
 
                 var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                 {
@@ -438,6 +458,16 @@ namespace PokemonGoGUI.GoManager
                     continue;
                 }
 
+                if (!_client.LoggedIn)
+                {
+                    MethodResult result = await AcLogin();
+
+                    if (!result.Success)
+                    {
+                        return result;
+                    }
+                }
+
                 var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                 {
                     RequestType = RequestType.SetFavoritePokemon,
@@ -508,6 +538,16 @@ namespace PokemonGoGUI.GoManager
                 {
                     LogCaller(new LoggerEventArgs(String.Format("Skipped {0}, this pokemon cant not be upgraded maybe is deployed pokemon or you not have needed resources.", pokemon.PokemonId), LoggerTypes.Info));
                     continue;
+                }
+
+                if (!_client.LoggedIn)
+                {
+                    MethodResult result = await AcLogin();
+
+                    if (!result.Success)
+                    {
+                        return result;
+                    }
                 }
 
                 var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request

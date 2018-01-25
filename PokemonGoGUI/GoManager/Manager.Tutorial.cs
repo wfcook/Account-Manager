@@ -116,6 +116,16 @@ namespace PokemonGoGUI.GoManager
 
         private async Task<MethodResult> MarkTutorialsComplete(TutorialState[] tutorials, bool nobuddy = true, bool noinbox = true)
         {
+            if (!_client.LoggedIn)
+            {
+                MethodResult result = await AcLogin();
+
+                if (!result.Success)
+                {
+                    return result;
+                }
+            }
+
             var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
                 RequestType = RequestType.MarkTutorialComplete,
@@ -145,6 +155,16 @@ namespace PokemonGoGUI.GoManager
 
         private async Task<MethodResult> CompleteEncounterTutorial(PokemonId pokemon)
         {
+            if (!_client.LoggedIn)
+            {
+                MethodResult result = await AcLogin();
+
+                if (!result.Success)
+                {
+                    return result;
+                }
+            }
+
             var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
                 RequestType = RequestType.EncounterTutorialComplete,
@@ -171,6 +191,16 @@ namespace PokemonGoGUI.GoManager
         private async Task<MethodResult> SetPlayerAvatar()
         {
             var avatar = new PlayerAvatar();
+
+            if (!_client.LoggedIn)
+            {
+                MethodResult result = await AcLogin();
+
+                if (!result.Success)
+                {
+                    return result;
+                }
+            }
 
             var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
@@ -200,6 +230,16 @@ namespace PokemonGoGUI.GoManager
         {
             var avatar = new PlayerAvatar();
 
+            if (!_client.LoggedIn)
+            {
+                MethodResult result = await AcLogin();
+
+                if (!result.Success)
+                {
+                    return result;
+                }
+            }
+
             var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
                 RequestType = RequestType.ListAvatarCustomizations,
@@ -224,6 +264,16 @@ namespace PokemonGoGUI.GoManager
 
         private async Task<MethodResult> SetAvatarItemAsViewed()
         {
+            if (!_client.LoggedIn)
+            {
+                MethodResult result = await AcLogin();
+
+                if (!result.Success)
+                {
+                    return result;
+                }
+            }
+
             var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
                 RequestType = RequestType.SetAvatarItemAsViewed,
@@ -250,6 +300,16 @@ namespace PokemonGoGUI.GoManager
 
         private async Task<MethodResult> ClaimCodename(string username)
         {
+            if (!_client.LoggedIn)
+            {
+                MethodResult result = await AcLogin();
+
+                if (!result.Success)
+                {
+                    return result;
+                }
+            }
+
             var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
                 RequestType = RequestType.ClaimCodename,
