@@ -1,0 +1,3 @@
+[submodule "POGOLib"]
+	path = POGOLib
+	url = https://github.com/Furtif/POGOLib.git
