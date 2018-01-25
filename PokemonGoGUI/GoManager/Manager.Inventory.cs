@@ -361,6 +361,16 @@ namespace PokemonGoGUI.GoManager
 
         public async Task<MethodResult> RecycleItem(InventoryItemSetting itemSetting, int toDelete)
         {
+            if (!_client.LoggedIn)
+            {
+                MethodResult result = await AcLogin();
+
+                if (!result.Success)
+                {
+                    return result;
+                }
+            }
+
             var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
                 RequestType = RequestType.RecycleInventoryItem,
@@ -397,6 +407,16 @@ namespace PokemonGoGUI.GoManager
 
         private async Task<MethodResult> UseIncense(ItemId item = ItemId.ItemIncenseOrdinary)
         {
+            if (!_client.LoggedIn)
+            {
+                MethodResult result = await AcLogin();
+
+                if (!result.Success)
+                {
+                    return result;
+                }
+            }
+
             var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
                 RequestType = RequestType.UseIncense,

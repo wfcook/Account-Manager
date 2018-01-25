@@ -194,6 +194,16 @@ namespace PokemonGoGUI.GoManager
         //Catch lured pokemon
         private async Task<MethodResult> CatchPokemon(FortData fortData)
         {
+            if (!_client.LoggedIn)
+            {
+                MethodResult result = await AcLogin();
+
+                if (!result.Success)
+                {
+                    return result;
+                }
+            }
+
             var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
                 RequestType = RequestType.DiskEncounter,
@@ -287,6 +297,16 @@ namespace PokemonGoGUI.GoManager
                             arPlusValues.Awareness = (float)UserSettings.ARBonusAwareness;
                             arPlusValues.Proximity = (float)UserSettings.ARBonusProximity;
                             arPlusValues.PokemonFrightened = false;
+                        }
+
+                        if (!_client.LoggedIn)
+                        {
+                            MethodResult result = await AcLogin();
+
+                            if (!result.Success)
+                            {
+                                return result;
+                            }
                         }
 
                         var catchresponse = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
@@ -391,6 +411,16 @@ namespace PokemonGoGUI.GoManager
 
         private async Task<MethodResult<EncounterResponse>> EncounterPokemon(MapPokemon mapPokemon)
         {
+            if (!_client.LoggedIn)
+            {
+                MethodResult result = await AcLogin();
+
+                if (!result.Success)
+                {
+                    return new MethodResult<EncounterResponse>();
+                }
+            }
+
             var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
                 RequestType = RequestType.Encounter,
@@ -564,6 +594,16 @@ namespace PokemonGoGUI.GoManager
                     arPlusValues.Awareness = (float)UserSettings.ARBonusAwareness;
                     arPlusValues.Proximity = (float)UserSettings.ARBonusProximity;
                     arPlusValues.PokemonFrightened = false;
+                }
+
+                if (!_client.LoggedIn)
+                {
+                    MethodResult result = await AcLogin();
+
+                    if (!result.Success)
+                    {
+                        return result;
+                    }
                 }
 
                 var catchresponse = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
@@ -781,6 +821,16 @@ namespace PokemonGoGUI.GoManager
                 return;
             }
 
+            if (!_client.LoggedIn)
+            {
+                MethodResult result = await AcLogin();
+
+                if (!result.Success)
+                {
+                    return;
+                }
+            }
+
             var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
                 RequestType = RequestType.UseItemEncounter,
@@ -838,6 +888,16 @@ namespace PokemonGoGUI.GoManager
         //Encounter Incense
         private async Task<MethodResult<IncenseEncounterResponse>> EncounterIncensePokemon(MapPokemon mapPokemon)
         {
+            if (!_client.LoggedIn)
+            {
+                MethodResult result = await AcLogin();
+
+                if (!result.Success)
+                {
+                    return new MethodResult<IncenseEncounterResponse>();
+                }
+            }
+
             var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
                 RequestType = RequestType.IncenseEncounter,

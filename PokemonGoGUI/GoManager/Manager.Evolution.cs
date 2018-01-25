@@ -104,6 +104,16 @@ namespace PokemonGoGUI.GoManager
                 PokemonSettings pokemonSettings = GetPokemonSetting((pokemon).PokemonId).Data;
                 ItemId itemNeeded = pokemonSettings.EvolutionBranch.Select(x => x.EvolutionItemRequirement).FirstOrDefault();
 
+                if (!_client.LoggedIn)
+                {
+                    MethodResult result = await AcLogin();
+
+                    if (!result.Success)
+                    {
+                        return result;
+                    }
+                }
+
                 var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                 {
                     RequestType = RequestType.EvolvePokemon,
@@ -135,6 +145,7 @@ namespace PokemonGoGUI.GoManager
                                             LoggerTypes.Evolve));
 
                         UpdateInventory(InventoryRefresh.Pokemon);
+                        UpdateInventory(InventoryRefresh.PokemonCandy);
 
                         await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
 
@@ -290,6 +301,16 @@ namespace PokemonGoGUI.GoManager
 
             if (!_client.ClientSession.LuckyEggsUsed)
             {
+                if (!_client.LoggedIn)
+                {
+                    MethodResult result = await AcLogin();
+
+                    if (!result.Success)
+                    {
+                        return result;
+                    }
+                }
+
                 var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                 {
                     RequestType = RequestType.UseItemXpBoost,

@@ -26,6 +26,16 @@ namespace PokemonGoGUI.GoManager
 
             for (int i = 0; i < maxFortAttempts; i++)
             {
+                if (!_client.LoggedIn)
+                {
+                    MethodResult result = await AcLogin();
+
+                    if (!result.Success)
+                    {
+                        return result;
+                    }
+                }
+
                 var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                 {
                     RequestType = RequestType.FortSearch,
@@ -200,6 +210,16 @@ namespace PokemonGoGUI.GoManager
 
         private async Task<MethodResult<FortDetailsResponse>> FortDetails(FortData pokestop)
         {
+            if (!_client.LoggedIn)
+            {
+                MethodResult result = await AcLogin();
+
+                if (!result.Success)
+                {
+                    return new MethodResult<FortDetailsResponse>();
+                }
+            }
+
             var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
                 RequestType = RequestType.FortDetails,
@@ -231,6 +251,16 @@ namespace PokemonGoGUI.GoManager
 
         private async Task<MethodResult<AddFortModifierResponse>> AddFortModifier(string fortId, ItemId modifierType = ItemId.ItemTroyDisk)
         {
+            if (!_client.LoggedIn)
+            {
+                MethodResult result = await AcLogin();
+
+                if (!result.Success)
+                {
+                    return new MethodResult<AddFortModifierResponse>();
+                }
+            }
+
             var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
                 RequestType = RequestType.AddFortModifier,

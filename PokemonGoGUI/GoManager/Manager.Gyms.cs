@@ -30,6 +30,16 @@ namespace PokemonGoGUI.GoManager
 
             LogCaller(new LoggerEventArgs(String.Format("Try to deploy pokemon {0}.", pokemon.PokemonId), LoggerTypes.Info));
 
+            if (!_client.LoggedIn)
+            {
+                MethodResult result = await AcLogin();
+
+                if (!result.Success)
+                {
+                    return new MethodResult<GymDeployResponse>();
+                }
+            }
+
             var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
                 RequestType = RequestType.GymDeploy,
@@ -120,6 +130,16 @@ namespace PokemonGoGUI.GoManager
 
         private async Task<MethodResult<GetRaidDetailsResponse>> GetRaidDetails(FortData gym, long raidSeed, int[] lobbyids)
         {
+            if (!_client.LoggedIn)
+            {
+                MethodResult result = await AcLogin();
+
+                if (!result.Success)
+                {
+                    return new MethodResult<GetRaidDetailsResponse>();
+                }
+            }
+
             var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
                 RequestType = RequestType.GetRaidDetails,
@@ -173,6 +193,16 @@ namespace PokemonGoGUI.GoManager
 
         private async Task<MethodResult<StartRaidBattleResponse>> StartRaidBattle(FortData gym, long raidSeed, ulong[] attackingpokemonids, int[] lobbyids)
         {
+            if (!_client.LoggedIn)
+            {
+                MethodResult result = await AcLogin();
+
+                if (!result.Success)
+                {
+                    return new MethodResult<StartRaidBattleResponse>();
+                }
+            }
+
             var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
                 RequestType = RequestType.StartRaidBattle,
@@ -239,6 +269,16 @@ namespace PokemonGoGUI.GoManager
 
         private async Task<MethodResult<AttackRaidBattleResponse>> AttackRaidBattle(FortData gym, long raidSeed, ulong[] attackingpokemonids, int[] lobbyids)
         {
+            if (!_client.LoggedIn)
+            {
+                MethodResult result = await AcLogin();
+
+                if (!result.Success)
+                {
+                    return new MethodResult<AttackRaidBattleResponse>();
+                }
+            }
+
             var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
                 RequestType = RequestType.AttackRaid,
@@ -293,6 +333,16 @@ namespace PokemonGoGUI.GoManager
 
         private async Task<MethodResult<JoinLobbyResponse>> JoinLobby(FortData gym, long raidSeed, bool _private, int[] lobbyids)
         {
+            if (!_client.LoggedIn)
+            {
+                MethodResult result = await AcLogin();
+
+                if (!result.Success)
+                {
+                    return new MethodResult<JoinLobbyResponse>();
+                }
+            }
+
             var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
                 RequestType = RequestType.JoinLobby,
@@ -356,6 +406,16 @@ namespace PokemonGoGUI.GoManager
 
         private async Task<MethodResult<LeaveLobbyResponse>> LeaveLobby(FortData gym, long raidSeed, int[] lobbyids)
         {
+            if (!_client.LoggedIn)
+            {
+                MethodResult result = await AcLogin();
+
+                if (!result.Success)
+                {
+                    return new MethodResult<LeaveLobbyResponse>();
+                }
+            }
+
             var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
                 RequestType = RequestType.LeaveLobby,
@@ -398,6 +458,16 @@ namespace PokemonGoGUI.GoManager
 
         private async Task<MethodResult<SetLobbyPokemonResponse>> SetLobbyPokemon(FortData gym, long raidSeed, ulong[] pokemonids, int[] lobbyids)
         {
+            if (!_client.LoggedIn)
+            {
+                MethodResult result = await AcLogin();
+
+                if (!result.Success)
+                {
+                    return new MethodResult<SetLobbyPokemonResponse>(); ;
+                }
+            }
+
             var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
                 RequestType = RequestType.SetLobbyPokemon,
@@ -444,6 +514,16 @@ namespace PokemonGoGUI.GoManager
 
         private async Task<MethodResult<SetLobbyVisibilityResponse>> SetLobbyVisibility(FortData gym, long raidSeed, int[] lobbyids)
         {
+            if (!_client.LoggedIn)
+            {
+                MethodResult result = await AcLogin();
+
+                if (!result.Success)
+                {
+                    return new MethodResult<SetLobbyVisibilityResponse>();
+                }
+            }
+
             var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
                 RequestType = RequestType.SetLobbyVisibility,
@@ -489,6 +569,16 @@ namespace PokemonGoGUI.GoManager
 
         private async Task<MethodResult<GetGymBadgeDetailsResponse>> GetGymBadgeDetails(FortData gym, double latitude, double longitude)
         {
+            if (!_client.LoggedIn)
+            {
+                MethodResult result = await AcLogin();
+
+                if (!result.Success)
+                {
+                    return new MethodResult<GetGymBadgeDetailsResponse>();
+                }
+            }
+
             var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
                 RequestType = RequestType.GetGymBadgeDetails,
@@ -520,6 +610,16 @@ namespace PokemonGoGUI.GoManager
 
         private async Task<MethodResult<UseItemGymResponse>> UseItemInGym(FortData gym, ItemId itemId)
         {
+            if (!_client.LoggedIn)
+            {
+                MethodResult result = await AcLogin();
+
+                if (!result.Success)
+                {
+                    return new MethodResult<UseItemGymResponse>();
+                }
+            }
+
             var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
                 RequestType = RequestType.UseItemGym,
@@ -562,6 +662,16 @@ namespace PokemonGoGUI.GoManager
 
         private async Task<MethodResult<GymStartSessionResponse>> GymStartSession(FortData gym, ulong defendingPokemonId, IEnumerable<ulong> attackingPokemonIds)
         {
+            if (!_client.LoggedIn)
+            {
+                MethodResult result = await AcLogin();
+
+                if (!result.Success)
+                {
+                    return new MethodResult<GymStartSessionResponse>();
+                }
+            }
+
             var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
                 RequestType = RequestType.GymStartSession,
@@ -644,6 +754,16 @@ namespace PokemonGoGUI.GoManager
             if (gym.OwnedByTeam == PlayerData.Team)
                 return new MethodResult<GymBattleAttackResponse>();
 
+            if (!_client.LoggedIn)
+            {
+                MethodResult result = await AcLogin();
+
+                if (!result.Success)
+                {
+                    return new MethodResult<GymBattleAttackResponse>();
+                }
+            }
+
             var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
                 RequestType = RequestType.GymBattleAttack,
@@ -695,6 +815,16 @@ namespace PokemonGoGUI.GoManager
 
         private async Task<MethodResult<GymGetInfoResponse>> GymGetInfo(FortData pokestop)
         {
+            if (!_client.LoggedIn)
+            {
+                MethodResult result = await AcLogin();
+
+                if (!result.Success)
+                {
+                    return new MethodResult<GymGetInfoResponse>();
+                }
+            }
+
             var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
                 RequestType = RequestType.GymGetInfo,
@@ -740,6 +870,16 @@ namespace PokemonGoGUI.GoManager
         {
             if (gym.OwnedByTeam != PlayerData.Team)
                 return new MethodResult<GymFeedPokemonResponse>();
+
+            if (!_client.LoggedIn)
+            {
+                MethodResult result = await AcLogin();
+
+                if (!result.Success)
+                {
+                    return new MethodResult<GymFeedPokemonResponse>();
+                }
+            }
 
             var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
@@ -924,6 +1064,16 @@ namespace PokemonGoGUI.GoManager
 
         private async Task<bool> UseMaxPotion(PokemonData pokemon, int maxPotions)
         {
+            if (!_client.LoggedIn)
+            {
+                MethodResult result = await AcLogin();
+
+                if (!result.Success)
+                {
+                    return false;
+                }
+            }
+
             var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
                 RequestType = RequestType.UseItemPotion,
@@ -958,6 +1108,16 @@ namespace PokemonGoGUI.GoManager
 
         private async Task<bool> UseHyperPotion(PokemonData pokemon, int hyperPotions)
         {
+            if (!_client.LoggedIn)
+            {
+                MethodResult result = await AcLogin();
+
+                if (!result.Success)
+                {
+                    return false;
+                }
+            }
+
             var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
                 RequestType = RequestType.UseItemPotion,
@@ -994,6 +1154,16 @@ namespace PokemonGoGUI.GoManager
 
         private async Task<bool> UseSuperPotion(PokemonData pokemon, int superPotions)
         {
+            if (!_client.LoggedIn)
+            {
+                MethodResult result = await AcLogin();
+
+                if (!result.Success)
+                {
+                    return false;
+                }
+            }
+
             var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
                 RequestType = RequestType.UseItemPotion,
@@ -1030,6 +1200,16 @@ namespace PokemonGoGUI.GoManager
 
         private async Task<bool> UsePotion(PokemonData pokemon, int normalPotions)
         {
+            if (!_client.LoggedIn)
+            {
+                MethodResult result = await AcLogin();
+
+                if (!result.Success)
+                {
+                    return false;
+                }
+            }
+
             var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
                 RequestType = RequestType.UseItemPotion,
@@ -1084,6 +1264,16 @@ namespace PokemonGoGUI.GoManager
 
             if ((healPower >= pokemon.StaminaMax / 2 || maxRevives == 0) && normalRevives > 0 && pokemon.Stamina <= 0)
             {
+                if (!_client.LoggedIn)
+                {
+                    MethodResult result = await AcLogin();
+
+                    if (!result.Success)
+                    {
+                        return;
+                    }
+                }
+
                 var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                 {
                     RequestType = RequestType.UseItemRevive,
@@ -1119,6 +1309,16 @@ namespace PokemonGoGUI.GoManager
 
             if (maxRevives > 0 && pokemon.Stamina <= 0)
             {
+                if (!_client.LoggedIn)
+                {
+                    MethodResult result = await AcLogin();
+
+                    if (!result.Success)
+                    {
+                        return;
+                    }
+                }
+
                 var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                 {
                     RequestType = RequestType.UseItemRevive,

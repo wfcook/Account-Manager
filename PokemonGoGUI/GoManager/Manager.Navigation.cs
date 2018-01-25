@@ -164,7 +164,8 @@ namespace PokemonGoGUI.GoManager
                 UserSettings.Latitude = _client.ClientSession.Player.Latitude;
                 UserSettings.Longitude = _client.ClientSession.Player.Longitude;
 
-                string message = String.Format("Location updated to {0}, {1}. Distance: {2:0.00}m", location.Latitude, location.Longitude, distance);
+                //string message = String.Format("Location updated to {0}, {1}. Distance: {2:0.00}m", location.Latitude, location.Longitude, distance);
+                string message = String.Format("Location distance: {0:0.00}m",  distance);
 
                 LogCaller(new LoggerEventArgs(message, LoggerTypes.LocationUpdate));
 

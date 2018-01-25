@@ -51,6 +51,16 @@ namespace PokemonGoGUI.GoManager
                 };
             }
 
+            if (!_client.LoggedIn)
+            {
+                MethodResult result = await AcLogin();
+
+                if (!result.Success)
+                {
+                    return result;
+                }
+            }
+
             var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
                 RequestType = RequestType.UseItemEggIncubator,

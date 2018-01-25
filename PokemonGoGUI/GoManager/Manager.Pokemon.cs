@@ -39,6 +39,16 @@ namespace PokemonGoGUI.GoManager
             {
                 foreach (PokemonData pokemon in pokemonToTransfer)
                 {
+                    if (!_client.LoggedIn)
+                    {
+                        MethodResult result = await AcLogin();
+
+                        if (!result.Success)
+                        {
+                            return result;
+                        }
+                    }
+
                     var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                     {
                         RequestType = RequestType.ReleasePokemon,
@@ -64,7 +74,7 @@ namespace PokemonGoGUI.GoManager
                             await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
 
                             RemoveInventoryItem(GetPokemonHashKey(pokemon.Id));
-
+                            UpdateInventory(InventoryRefresh.PokemonCandy);
                             continue;
                         case ReleasePokemonResponse.Types.Result.ErrorPokemonIsBuddy:
                             LogCaller(new LoggerEventArgs(String.Format("Faill to transfer {0}. Because: {1}.",
@@ -101,6 +111,16 @@ namespace PokemonGoGUI.GoManager
             {
                 var PokemonIds = pokemonToTransfer.Select(x => x.Id);
 
+                if (!_client.LoggedIn)
+                {
+                    MethodResult result = await AcLogin();
+
+                    if (!result.Success)
+                    {
+                        return result;
+                    }
+                }
+
                 var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                 {
                     RequestType = RequestType.ReleasePokemon,
@@ -130,6 +150,7 @@ namespace PokemonGoGUI.GoManager
                         {
                             RemoveInventoryItem(GetPokemonHashKey(pokemonId));
                         }
+                        UpdateInventory(InventoryRefresh.PokemonCandy);
                         break;
                     case ReleasePokemonResponse.Types.Result.ErrorPokemonIsBuddy:
                         LogCaller(new LoggerEventArgs(String.Format("Faill to transfer {0}. Because: {1}.",
@@ -437,6 +458,16 @@ namespace PokemonGoGUI.GoManager
                     continue;
                 }
 
+                if (!_client.LoggedIn)
+                {
+                    MethodResult result = await AcLogin();
+
+                    if (!result.Success)
+                    {
+                        return result;
+                    }
+                }
+
                 var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                 {
                     RequestType = RequestType.SetFavoritePokemon,
@@ -509,6 +540,16 @@ namespace PokemonGoGUI.GoManager
                     continue;
                 }
 
+                if (!_client.LoggedIn)
+                {
+                    MethodResult result = await AcLogin();
+
+                    if (!result.Success)
+                    {
+                        return result;
+                    }
+                }
+
                 var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                 {
                     RequestType = RequestType.UpgradePokemon,
@@ -527,6 +568,7 @@ namespace PokemonGoGUI.GoManager
                 {
                     case UpgradePokemonResponse.Types.Result.Success:
                         UpdateInventory(InventoryRefresh.Pokemon);
+                        UpdateInventory(InventoryRefresh.PokemonCandy);
                         LogCaller(new LoggerEventArgs(String.Format("Upgrade pokemon {0} success.", pokemon.PokemonId), LoggerTypes.Success));
                         break;
                     case UpgradePokemonResponse.Types.Result.ErrorInsufficientResources:

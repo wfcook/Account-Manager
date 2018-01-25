@@ -162,7 +162,7 @@ namespace PokemonGoGUI.GoManager
 
             levelUpRewardsResponse = LevelUpRewardsResponse.Parser.ParseFrom(response);
             string rewards = StringUtil.GetSummedFriendlyNameOfItemAwardList(levelUpRewardsResponse.ItemsAwarded);
-            LogCaller(new LoggerEventArgs(String.Format("Grabbed rewards for level {0}. Rewards: {1}", level, rewards), LoggerTypes.Info));
+            LogCaller(new LoggerEventArgs(String.Format("Grabbed rewards for level {0}. Rewards: {1}", level, rewards), LoggerTypes.Success));
 
             return new MethodResult
             {
@@ -235,6 +235,16 @@ namespace PokemonGoGUI.GoManager
 
         private async Task<MethodResult> SetPlayerTeam(TeamColor team)
         {
+            if (!_client.LoggedIn)
+            {
+                MethodResult result = await AcLogin();
+
+                if (!result.Success)
+                {
+                    return result;
+                }
+            }
+
             var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
                 RequestType = RequestType.SetPlayerTeam,
@@ -261,6 +271,16 @@ namespace PokemonGoGUI.GoManager
 
         public async Task<MethodResult> SetBuddyPokemon(PokemonData pokemon)
         {
+            if (!_client.LoggedIn)
+            {
+                MethodResult result = await AcLogin();
+
+                if (!result.Success)
+                {
+                    return result;
+                }
+            }
+
             var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
                 RequestType = RequestType.SetBuddyPokemon,

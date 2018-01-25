@@ -55,17 +55,5 @@ namespace PokemonGoGUI.UI
 
             e.Item.ForeColor = log.GetLogColor();
         }
-
-        private void FastObjectListViewLogs_FormatCell(object sender, BrightIdeasSoftware.FormatCellEventArgs e)
-        {
-            Log log = e.Model as Log;
-
-            if (log == null)
-            {
-                return;
-            }
-
-            e.Item.ForeColor = log.GetLogColor();
-        }
     }
 }

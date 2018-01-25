@@ -14,6 +14,10 @@ namespace PokemonGoGUI.GoManager
     {
         public MethodResult<List<MapPokemon>> GetCatchablePokemon()
         {
+            if (_client.ClientSession.Map.Cells.Count == 0 || _client.ClientSession.Map == null)
+            {
+                return new MethodResult<List<MapPokemon>>();
+            }
 
             var cells = _client.ClientSession.Map.Cells;
 
@@ -30,6 +34,11 @@ namespace PokemonGoGUI.GoManager
 
         public MethodResult<List<FortData>> GetPokeStops()
         {
+            if (_client.ClientSession.Map.Cells.Count == 0 || _client.ClientSession.Map == null)
+            {
+                return new MethodResult<List<FortData>>();
+            }
+
             var forts = _client.ClientSession.Map.Cells.SelectMany(x => x.Forts);
 
             var fortData = new List<FortData>();
@@ -87,6 +96,11 @@ namespace PokemonGoGUI.GoManager
 
         private MethodResult<List<FortData>> GetGyms()
         {
+            if (_client.ClientSession.Map.Cells.Count == 0 || _client.ClientSession.Map == null)
+            {
+                return new MethodResult<List<FortData>>();
+            }
+
             var forts = _client.ClientSession.Map.Cells.SelectMany(x => x.Forts).Where(y => y.Type == FortType.Gym);
 
             var fortData = new List<FortData>();
