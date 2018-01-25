@@ -127,7 +127,7 @@ namespace PokemonGoGUI
                     AppVersion = Configuration.Hasher.AppVersion;
                     // TODO: Revise sleeping
                     // Used on Windows phone background app
-                    ((PokeHashHasher)Configuration.Hasher).PokehashSleeping += OnPokehashSleeping;
+                    //((PokeHashHasher)Configuration.Hasher).PokehashSleeping += OnPokehashSleeping;
                 }
                 // */
 

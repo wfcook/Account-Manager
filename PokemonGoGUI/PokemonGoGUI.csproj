@@ -126,6 +126,9 @@
     <Reference Include="ObjectListView, Version=2.9.1.1072, Culture=neutral, PublicKeyToken=b1c5bf581481bcd4, processorArchitecture=MSIL">
       <HintPath>..\packages\ObjectListView.Official.2.9.1\lib\net20\ObjectListView.dll</HintPath>
     </Reference>
+    <Reference Include="POGOLib.Core, Version=1.9.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\POGOLib.Core.1.9.5\lib\netstandard1.1\POGOLib.Core.dll</HintPath>
+    </Reference>
     <Reference Include="POGOProtos.Core, Version=2.21.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\POGOProtos.Core.2.21.1\lib\net45\POGOProtos.Core.dll</HintPath>
     </Reference>
@@ -356,12 +359,6 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\POGOLib\POGOLib.Core\POGOLib.Core.csproj">
-      <Project>{a4b8d0fa-d922-441d-82f6-4dc879805489}</Project>
-      <Name>POGOLib.Core</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
