@@ -450,6 +450,11 @@ namespace PokemonGoGUI.GoManager
             }
         }
 
+        public void RestoreUpgradeDefaults()
+        {
+            UserSettings.LoadUpgradeSettings();
+        }
+
         public void RestoreCatchDefaults()
         {
             UserSettings.LoadCatchSettings();

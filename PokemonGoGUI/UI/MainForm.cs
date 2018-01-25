@@ -2238,12 +2238,12 @@ namespace PokemonGoGUI
                 client.DefaultRequestHeaders.Add("X-AuthToken", result.Key);
                 if (result.Key.Substring(0, 2) == "PH")
                 {
-                    urlcheck = $"http://hash.goman.io/api/v153_2/hash";
+                    urlcheck = $"http://hash.goman.io/api/v159_1/hash";
                     mode = "Remaining requests";
                 }
                 else
                 {
-                    urlcheck = $"https://pokehash.buddyauth.com/api/v153_2/hash";
+                    urlcheck = $"https://pokehash.buddyauth.com/api/v159_1/hash";
                     mode = "RPM";
                 }
                 //result = $"Hash End-Point Set to '{urlcheck}'";

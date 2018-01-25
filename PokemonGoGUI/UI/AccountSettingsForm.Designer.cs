@@ -233,9 +233,21 @@
             this.contextMenuStripTransfer = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.editToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.restoreDefaultsToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.tabPageUpgrade = new System.Windows.Forms.TabPage();
+            this.fastObjectListViewUpgrade = new BrightIdeasSoftware.FastObjectListView();
+            this.olvColumnUpgradeId = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnUpgradeName = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnUpgrade = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.contextMenuStripUpgrade = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.editToolStripMenuItemUpgrade = new System.Windows.Forms.ToolStripMenuItem();
+            this.trueToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.falseToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toggleToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.restoreDefaultsToolStripMenuItemUpgrade = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTipProxy = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipMinAccountState = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipHumanizeThrows = new System.Windows.Forms.ToolTip(this.components);
+            this.checkBoxUpgradePokemons = new System.Windows.Forms.CheckBox();
             this.tabControlMain.SuspendLayout();
             this.tabPageDetails.SuspendLayout();
             this.tabControlSettings.SuspendLayout();
@@ -278,6 +290,9 @@
             this.tabPageTransfer.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewTransfer)).BeginInit();
             this.contextMenuStripTransfer.SuspendLayout();
+            this.tabPageUpgrade.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewUpgrade)).BeginInit();
+            this.contextMenuStripUpgrade.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControlMain
@@ -287,6 +302,7 @@
             this.tabControlMain.Controls.Add(this.tabPageEvolving);
             this.tabControlMain.Controls.Add(this.tabPageCatching);
             this.tabControlMain.Controls.Add(this.tabPageTransfer);
+            this.tabControlMain.Controls.Add(this.tabPageUpgrade);
             this.tabControlMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControlMain.Location = new System.Drawing.Point(0, 0);
             this.tabControlMain.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
@@ -507,6 +523,7 @@
             // 
             // groupBoxPlayerActions
             // 
+            this.groupBoxPlayerActions.Controls.Add(this.checkBoxUpgradePokemons);
             this.groupBoxPlayerActions.Controls.Add(this.cbUseIncense);
             this.groupBoxPlayerActions.Controls.Add(this.numericUpDownDisableCatchDelay);
             this.groupBoxPlayerActions.Controls.Add(this.label16);
@@ -615,9 +632,7 @@
             // checkBoxUseBerries
             // 
             this.checkBoxUseBerries.AutoSize = true;
-            this.checkBoxUseBerries.Checked = true;
-            this.checkBoxUseBerries.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxUseBerries.Location = new System.Drawing.Point(15, 234);
+            this.checkBoxUseBerries.Location = new System.Drawing.Point(175, 74);
             this.checkBoxUseBerries.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.checkBoxUseBerries.Name = "checkBoxUseBerries";
             this.checkBoxUseBerries.Size = new System.Drawing.Size(104, 21);
@@ -2567,6 +2582,118 @@
             this.restoreDefaultsToolStripMenuItem2.Text = "Restore Defaults";
             this.restoreDefaultsToolStripMenuItem2.Click += new System.EventHandler(this.RestoreDefaultsToolStripMenuItem2_Click);
             // 
+            // tabPageUpgrade
+            // 
+            this.tabPageUpgrade.Controls.Add(this.fastObjectListViewUpgrade);
+            this.tabPageUpgrade.Location = new System.Drawing.Point(4, 25);
+            this.tabPageUpgrade.Name = "tabPageUpgrade";
+            this.tabPageUpgrade.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageUpgrade.Size = new System.Drawing.Size(646, 524);
+            this.tabPageUpgrade.TabIndex = 6;
+            this.tabPageUpgrade.Text = "Upgrade";
+            this.tabPageUpgrade.UseVisualStyleBackColor = true;
+            // 
+            // fastObjectListViewUpgrade
+            // 
+            this.fastObjectListViewUpgrade.AllColumns.Add(this.olvColumnUpgradeId);
+            this.fastObjectListViewUpgrade.AllColumns.Add(this.olvColumnUpgradeName);
+            this.fastObjectListViewUpgrade.AllColumns.Add(this.olvColumnUpgrade);
+            this.fastObjectListViewUpgrade.CellEditUseWholeCell = false;
+            this.fastObjectListViewUpgrade.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.olvColumnUpgradeId,
+            this.olvColumnUpgradeName,
+            this.olvColumnUpgrade});
+            this.fastObjectListViewUpgrade.ContextMenuStrip = this.contextMenuStripUpgrade;
+            this.fastObjectListViewUpgrade.Cursor = System.Windows.Forms.Cursors.Default;
+            this.fastObjectListViewUpgrade.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.fastObjectListViewUpgrade.FullRowSelect = true;
+            this.fastObjectListViewUpgrade.Location = new System.Drawing.Point(3, 3);
+            this.fastObjectListViewUpgrade.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.fastObjectListViewUpgrade.Name = "fastObjectListViewUpgrade";
+            this.fastObjectListViewUpgrade.ShowGroups = false;
+            this.fastObjectListViewUpgrade.Size = new System.Drawing.Size(640, 518);
+            this.fastObjectListViewUpgrade.TabIndex = 3;
+            this.fastObjectListViewUpgrade.UseCompatibleStateImageBehavior = false;
+            this.fastObjectListViewUpgrade.UseFiltering = true;
+            this.fastObjectListViewUpgrade.View = System.Windows.Forms.View.Details;
+            this.fastObjectListViewUpgrade.VirtualMode = true;
+            // 
+            // olvColumnUpgradeId
+            // 
+            this.olvColumnUpgradeId.Text = "Id";
+            // 
+            // olvColumnUpgradeName
+            // 
+            this.olvColumnUpgradeName.AspectName = "Name";
+            this.olvColumnUpgradeName.Text = "Name";
+            this.olvColumnUpgradeName.Width = 146;
+            // 
+            // olvColumnUpgrade
+            // 
+            this.olvColumnUpgrade.AspectName = "Upgrade";
+            this.olvColumnUpgrade.Text = "Upgrade";
+            this.olvColumnUpgrade.Width = 129;
+            // 
+            // contextMenuStripUpgrade
+            // 
+            this.contextMenuStripUpgrade.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.contextMenuStripUpgrade.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.editToolStripMenuItemUpgrade,
+            this.restoreDefaultsToolStripMenuItemUpgrade});
+            this.contextMenuStripUpgrade.Name = "contextMenuStripUpgrade";
+            this.contextMenuStripUpgrade.Size = new System.Drawing.Size(188, 80);
+            // 
+            // editToolStripMenuItemUpgrade
+            // 
+            this.editToolStripMenuItemUpgrade.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.trueToolStripMenuItem2,
+            this.falseToolStripMenuItem2,
+            this.toggleToolStripMenuItem2});
+            this.editToolStripMenuItemUpgrade.Name = "editToolStripMenuItemUpgrade";
+            this.editToolStripMenuItemUpgrade.Size = new System.Drawing.Size(187, 24);
+            this.editToolStripMenuItemUpgrade.Text = "Set Upgrade";
+            // 
+            // trueToolStripMenuItem2
+            // 
+            this.trueToolStripMenuItem2.Name = "trueToolStripMenuItem2";
+            this.trueToolStripMenuItem2.Size = new System.Drawing.Size(130, 26);
+            this.trueToolStripMenuItem2.Tag = "1";
+            this.trueToolStripMenuItem2.Text = "True";
+            this.trueToolStripMenuItem2.Click += new System.EventHandler(this.TrueToolStripMenuItemUpgrade_Click);
+            // 
+            // falseToolStripMenuItem2
+            // 
+            this.falseToolStripMenuItem2.Name = "falseToolStripMenuItem2";
+            this.falseToolStripMenuItem2.Size = new System.Drawing.Size(130, 26);
+            this.falseToolStripMenuItem2.Tag = "0";
+            this.falseToolStripMenuItem2.Text = "False";
+            this.falseToolStripMenuItem2.Click += new System.EventHandler(this.TrueToolStripMenuItemUpgrade_Click);
+            // 
+            // toggleToolStripMenuItem2
+            // 
+            this.toggleToolStripMenuItem2.Name = "toggleToolStripMenuItem2";
+            this.toggleToolStripMenuItem2.Size = new System.Drawing.Size(130, 26);
+            this.toggleToolStripMenuItem2.Tag = "3";
+            this.toggleToolStripMenuItem2.Text = "Toggle";
+            this.toggleToolStripMenuItem2.Click += new System.EventHandler(this.TrueToolStripMenuItemUpgrade_Click);
+            // 
+            // restoreDefaultsToolStripMenuItemUpgrade
+            // 
+            this.restoreDefaultsToolStripMenuItemUpgrade.Name = "restoreDefaultsToolStripMenuItemUpgrade";
+            this.restoreDefaultsToolStripMenuItemUpgrade.Size = new System.Drawing.Size(187, 24);
+            this.restoreDefaultsToolStripMenuItemUpgrade.Text = "Restore Defaults";
+            this.restoreDefaultsToolStripMenuItemUpgrade.Click += new System.EventHandler(this.RestoreDefaultsToolStripMenuItemUpgrade_Click);
+            // 
+            // checkBoxUpgradePokemons
+            // 
+            this.checkBoxUpgradePokemons.AutoSize = true;
+            this.checkBoxUpgradePokemons.Location = new System.Drawing.Point(15, 234);
+            this.checkBoxUpgradePokemons.Name = "checkBoxUpgradePokemons";
+            this.checkBoxUpgradePokemons.Size = new System.Drawing.Size(155, 21);
+            this.checkBoxUpgradePokemons.TabIndex = 78;
+            this.checkBoxUpgradePokemons.Text = "Upgrade Pokemons";
+            this.checkBoxUpgradePokemons.UseVisualStyleBackColor = true;
+            // 
             // AccountSettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -2633,6 +2760,9 @@
             this.tabPageTransfer.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewTransfer)).EndInit();
             this.contextMenuStripTransfer.ResumeLayout(false);
+            this.tabPageUpgrade.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewUpgrade)).EndInit();
+            this.contextMenuStripUpgrade.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -2846,5 +2976,17 @@
         private System.Windows.Forms.ComboBox cbTeam;
         private System.Windows.Forms.Label label47;
         private System.Windows.Forms.CheckBox checkBoxGoToGymsOnly;
+        private System.Windows.Forms.TabPage tabPageUpgrade;
+        private BrightIdeasSoftware.FastObjectListView fastObjectListViewUpgrade;
+        private BrightIdeasSoftware.OLVColumn olvColumnUpgradeId;
+        private BrightIdeasSoftware.OLVColumn olvColumnUpgradeName;
+        private BrightIdeasSoftware.OLVColumn olvColumnUpgrade;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStripUpgrade;
+        private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItemUpgrade;
+        private System.Windows.Forms.ToolStripMenuItem restoreDefaultsToolStripMenuItemUpgrade;
+        private System.Windows.Forms.ToolStripMenuItem trueToolStripMenuItem2;
+        private System.Windows.Forms.ToolStripMenuItem falseToolStripMenuItem2;
+        private System.Windows.Forms.ToolStripMenuItem toggleToolStripMenuItem2;
+        private System.Windows.Forms.CheckBox checkBoxUpgradePokemons;
     }
 }

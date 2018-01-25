@@ -550,6 +550,8 @@ namespace PokemonGoGUI.GoManager
                     }
                 }
 
+                int cpBefore = pokemon.Cp;
+
                 var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
                 {
                     RequestType = RequestType.UpgradePokemon,
@@ -569,7 +571,7 @@ namespace PokemonGoGUI.GoManager
                     case UpgradePokemonResponse.Types.Result.Success:
                         UpdateInventory(InventoryRefresh.Pokemon);
                         UpdateInventory(InventoryRefresh.PokemonCandy);
-                        LogCaller(new LoggerEventArgs(String.Format("Upgrade pokemon {0} success.", pokemon.PokemonId), LoggerTypes.Success));
+                        LogCaller(new LoggerEventArgs(String.Format("Upgrade pokemon {0} success, CP before: {1} CP after: {2}.", pokemon.PokemonId, cpBefore, upgradePokemonResponse.UpgradedPokemon.Cp), LoggerTypes.Upgrade));
                         break;
                     case UpgradePokemonResponse.Types.Result.ErrorInsufficientResources:
                         LogCaller(new LoggerEventArgs(String.Format("Failed to upgrade pokemon. Response: {0}", upgradePokemonResponse.Result), LoggerTypes.Warning));
@@ -675,6 +677,81 @@ namespace PokemonGoGUI.GoManager
                 return false;
 
             return true;
+        }
+
+        private async Task<MethodResult> UpgradeFilteredPokemon()
+        {
+            MethodResult<List<PokemonData>> upgradeResult = GetPokemonToUpgrade();
+
+            if (!upgradeResult.Success || upgradeResult.Data.Count == 0)
+            {
+                return new MethodResult();
+            }
+
+            LogCaller(new LoggerEventArgs(upgradeResult.Message, LoggerTypes.Info));
+
+            await UpgradePokemon(upgradeResult.Data);
+
+            return new MethodResult
+            {
+                Success = true,
+                Message = "Success"
+            };
+        }
+
+        public MethodResult<List<PokemonData>> GetPokemonToUpgrade()
+        {
+            if (!UserSettings.UpgradePokemon)
+            {
+                LogCaller(new LoggerEventArgs("Upgrade disabled", LoggerTypes.Debug));
+
+                return new MethodResult<List<PokemonData>>
+                {
+                    Data = new List<PokemonData>(),
+                    Message = "Upgrade disabled",
+                    Success = true
+                };
+            }
+
+            if (!Pokemon.Any())
+            {
+                LogCaller(new LoggerEventArgs("You have no pokemon", LoggerTypes.Info));
+
+                return new MethodResult<List<PokemonData>>
+                {
+                    Message = "You have no pokemon"
+                };
+            }
+
+            var pokemonToUpgrade = new List<PokemonData>();
+
+            IEnumerable<IGrouping<PokemonId, PokemonData>> groupedPokemon = Pokemon.GroupBy(x => x.PokemonId);
+
+            foreach (IGrouping<PokemonId, PokemonData> group in groupedPokemon)
+            {
+                UpgradeSetting settings = UserSettings.UpgradeSettings.FirstOrDefault(x => x.Id == group.Key);
+
+                if (settings == null)
+                {
+                    LogCaller(new LoggerEventArgs(String.Format("Failed to find upgrade settings for pokemon {0}", group.Key), LoggerTypes.Warning));
+
+                    continue;
+                }
+
+                if (!settings.Upgrade)
+                {
+                    continue;
+                }
+
+                pokemonToUpgrade.AddRange(group.ToList());
+            }
+
+            return new MethodResult<List<PokemonData>>
+            {
+                Data = pokemonToUpgrade,
+                Message = String.Format("Found {0} pokemon to upgrade", pokemonToUpgrade.Count),
+                Success = true
+            };
         }
     }
 }

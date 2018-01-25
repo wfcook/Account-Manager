@@ -57,6 +57,17 @@ namespace PokemonGoGUI.UI
 
             #endregion
 
+            #region Upgrade
+
+            olvColumnUpgradeId.AspectGetter = delegate (object x)
+            {
+                var setting = (UpgradeSetting)x;
+
+                return (int)setting.Id;
+            };
+
+            #endregion
+
         }
 
         private void AccountSettingsForm_Load(object sender, EventArgs e)
@@ -92,6 +103,7 @@ namespace PokemonGoGUI.UI
             fastObjectListViewCatch.SetObjects(_manager.UserSettings.CatchSettings);
             fastObjectListViewEvolve.SetObjects(_manager.UserSettings.EvolveSettings);
             fastObjectListViewTransfer.SetObjects(_manager.UserSettings.TransferSettings);
+            fastObjectListViewUpgrade.SetObjects(_manager.UserSettings.UpgradeSettings);
         }
 
         private void UpdateDetails(Settings settings)
@@ -188,6 +200,7 @@ namespace PokemonGoGUI.UI
             checkBoxTransferAtOnce.Checked = settings.TransferAtOnce;
             numericUpDownProximity.Value = settings.ARBonusProximity;
             numericUpDownAwareness.Value = settings.ARBonusAwareness;
+            checkBoxUpgradePokemons.Checked = settings.UpgradePokemon;
 
             cbUseOnlyThisHashKey.Checked = _manager.UserSettings.UseOnlyOneKey;
             tbAuthHashKey.Text = _manager.UserSettings.AuthAPIKey;
@@ -488,6 +501,7 @@ namespace PokemonGoGUI.UI
             userSettings.TwoCaptchaAPIKey = TwoCaptchaAPIKey.Text;
             userSettings.DefaultTeam = (string)cbTeam.SelectedItem ?? "Neutral";
             userSettings.GoOnlyToGyms = checkBoxGoToGymsOnly.Checked;
+            userSettings.UpgradePokemon = checkBoxUpgradePokemons.Checked;
 
             return true;
         }
@@ -701,6 +715,54 @@ namespace PokemonGoGUI.UI
             _manager.RestoreTransferDefaults();
 
             fastObjectListViewTransfer.SetObjects(_manager.UserSettings.TransferSettings);
+        }
+
+        #endregion
+
+        #region Upgrade
+
+        private void TrueToolStripMenuItemUpgrade_Click(object sender, EventArgs e)
+        {
+            var tSMI = sender as ToolStripMenuItem;
+
+            if (tSMI == null)
+            {
+                return;
+            }
+
+            var checkType = (CheckType)Int32.Parse(tSMI.Tag.ToString());
+
+            foreach (UpgradeSetting cSetting in fastObjectListViewUpgrade.SelectedObjects)
+            {
+                if (checkType == CheckType.Toggle)
+                {
+                    cSetting.Upgrade = !cSetting.Upgrade;
+                }
+                else if (checkType == CheckType.True)
+                {
+                    cSetting.Upgrade = true;
+                }
+                else
+                {
+                    cSetting.Upgrade = false;
+                }
+            }
+
+            fastObjectListViewUpgrade.RefreshSelectedObjects();
+        }
+
+        private void RestoreDefaultsToolStripMenuItemUpgrade_Click(object sender, EventArgs e)
+        {
+            DialogResult result = MessageBox.Show("Reset defaults?", "Confirmation", MessageBoxButtons.YesNoCancel);
+
+            if (result != DialogResult.Yes)
+            {
+                return;
+            }
+
+            _manager.RestoreUpgradeDefaults();
+
+            fastObjectListViewUpgrade.SetObjects(_manager.UserSettings.UpgradeSettings);
         }
 
         #endregion

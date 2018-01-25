@@ -73,6 +73,7 @@ namespace PokemonGoGUI
         public bool RecycleItems { get; set; }
         public bool TransferPokemon { get; set; }
         public bool EvolvePokemon { get; set; }
+        public bool UpgradePokemon { get; set; }
         public bool CatchPokemon { get; set; }
         public bool IncubateEggs { get; set; }
         public int MaxLevel { get; set; }
@@ -139,6 +140,7 @@ namespace PokemonGoGUI
         public List<TransferSetting> TransferSettings { get; set; }
         public List<CatchSetting> CatchSettings { get; set; }
         public List<EvolveSetting> EvolveSettings { get; set; }
+        public List<UpgradeSetting> UpgradeSettings { get; set; }
 
         [JsonConstructor]
         public Settings(bool jsonConstructor = true)
@@ -155,6 +157,7 @@ namespace PokemonGoGUI
             LoadCatchSettings();
             LoadEvolveSettings();
             LoadTransferSettings();
+            LoadUpgradeSettings();
         }
 
         public void LoadDefaults()
@@ -261,17 +264,41 @@ namespace PokemonGoGUI
         {
             TransferSettings = new List<TransferSetting>();
 
-            foreach (PokemonId pokemon in Enum.GetValues(typeof(PokemonId))) {
-                if (pokemon == PokemonId.Missingno) {
+            foreach (PokemonId pokemon in Enum.GetValues(typeof(PokemonId)))
+            {
+                if (pokemon == PokemonId.Missingno)
+                {
                     continue;
                 }
 
-                var setting = new TransferSetting {
+                var setting = new TransferSetting
+                {
                     Id = pokemon,
                     Transfer = true
                 };
 
                 TransferSettings.Add(setting);
+            }
+        }
+
+        public void LoadUpgradeSettings()
+        {
+            UpgradeSettings = new List<UpgradeSetting>();
+
+            foreach (PokemonId pokemon in Enum.GetValues(typeof(PokemonId)))
+            {
+                if (pokemon == PokemonId.Missingno)
+                {
+                    continue;
+                }
+
+                var setting = new UpgradeSetting
+                {
+                    Id = pokemon,
+                    //Upgrade = true
+                };
+
+                UpgradeSettings.Add(setting);
             }
         }
 
