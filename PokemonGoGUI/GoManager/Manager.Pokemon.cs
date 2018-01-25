@@ -33,7 +33,7 @@ namespace PokemonGoGUI.GoManager
             if (pokemonsToTransfer.Count() == 0 || pokemonsToTransfer.FirstOrDefault() == null)
                 return new MethodResult();
 
-            LogCaller(new LoggerEventArgs(String.Format("Transferring {0} pokemon", pokemonToTransfer.Count()), LoggerTypes.Info));
+            LogCaller(new LoggerEventArgs(String.Format("Found {0} pokemon to transfer", pokemonToTransfer.Count()), LoggerTypes.Info));
 
             if (!UserSettings.TransferAtOnce)
             {
