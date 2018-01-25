@@ -357,7 +357,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\POGOLib.Core\POGOLib.Core.csproj">
+    <ProjectReference Include="..\POGOLib\POGOLib.Core\POGOLib.Core.csproj">
       <Project>{a4b8d0fa-d922-441d-82f6-4dc879805489}</Project>
       <Name>POGOLib.Core</Name>
     </ProjectReference>

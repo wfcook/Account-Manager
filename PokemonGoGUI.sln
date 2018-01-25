@@ -8,7 +8,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokemonGoGUI", "PokemonGoGU
 		{A4B8D0FA-D922-441D-82F6-4DC879805489} = {A4B8D0FA-D922-441D-82F6-4DC879805489}
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "POGOLib.Core", "POGOLib.Core\POGOLib.Core.csproj", "{A4B8D0FA-D922-441D-82F6-4DC879805489}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "POGOLib.Core", "POGOLib\POGOLib.Core\POGOLib.Core.csproj", "{A4B8D0FA-D922-441D-82F6-4DC879805489}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
