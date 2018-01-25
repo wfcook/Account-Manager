@@ -237,6 +237,7 @@
     <Compile Include="Models\ProgramExportModel.cs" />
     <Compile Include="Models\TransferSettings.cs" />
     <Compile Include="Extensions\ProxyEx.cs" />
+	<Compile Include="Models\UpgradeSetting.cs" />
     <Compile Include="ProxyManager\ProxyHandler.cs" />
     <Compile Include="UI\AccountSettingsForm.cs">
       <SubType>Form</SubType>

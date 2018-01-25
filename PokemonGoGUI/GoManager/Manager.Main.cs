@@ -607,6 +607,8 @@ namespace PokemonGoGUI.GoManager
                             {
                                 //Catch nearby pokemon
                                 MethodResult nearbyPokemonResponse = await CatchNeabyPokemon();
+                                if (!nearbyPokemonResponse.Success)
+                                    continue;
 
                                 await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
@@ -823,6 +825,16 @@ namespace PokemonGoGUI.GoManager
                                 MethodResult transferResult = await TransferFilteredPokemon();
 
                                 if (transferResult.Success)
+                                {
+                                    await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
+                                }
+                            }
+
+                            if (UserSettings.UpgradePokemon)
+                            {
+                                MethodResult upgradeResult = await UpgradeFilteredPokemon();
+
+                                if (upgradeResult.Success)
                                 {
                                     await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
                                 }

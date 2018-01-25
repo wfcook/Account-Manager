@@ -21,6 +21,7 @@
         Deploy,
         Buddy,
         AwardedBadges,
-        HatchedEggs
+        HatchedEggs,
+        Upgrade
     };
 }

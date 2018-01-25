@@ -84,6 +84,8 @@ namespace PokemonGoGUI.GoManager.Models
                     return Color.Beige;
                 case LoggerTypes.HatchedEggs:
                     return Color.Coral;
+                case LoggerTypes.Upgrade:
+                    return Color.Aqua;
             }
             return SystemColors.WindowText;
         }
