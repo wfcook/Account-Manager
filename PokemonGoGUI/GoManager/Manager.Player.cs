@@ -319,7 +319,7 @@ namespace PokemonGoGUI.GoManager
 
                     setBuddyPokemonResponse.UpdatedBuddy = PlayerData.BuddyPokemon;
 
-                    LogCaller(new LoggerEventArgs($"Set buddy pokemon completion request wasn't successful. pokemon buddy: {pokemon.PokemonId.ToString()}", LoggerTypes.Success));
+                    LogCaller(new LoggerEventArgs($"Set buddy pokemon completion request wasn't successful. pokemon buddy: {pokemon.PokemonId.ToString()}", LoggerTypes.Buddy));
 
                     UpdateInventory(InventoryRefresh.Pokemon);
 
