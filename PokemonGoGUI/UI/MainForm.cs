@@ -37,7 +37,7 @@ namespace PokemonGoGUI
         public MainForm()
         {
             InitializeComponent();
-
+            
             fastObjectListViewMain.BackColor = Color.FromArgb(0, 0, 0);
             fastObjectListViewMain.ForeColor = Color.LightGray;
 
@@ -49,7 +49,7 @@ namespace PokemonGoGUI
 
             fastObjectListViewHashKeys.BackColor = Color.FromArgb(0, 0, 0);
             fastObjectListViewHashKeys.ForeColor = Color.LightGray;
-
+            
             //BackColor = Color.FromArgb(43, 43, 43);
 
             //tabPage1.BorderStyle = BorderStyle.None;
@@ -249,6 +249,7 @@ namespace PokemonGoGUI
                     {
                         manager.AccountState = AccountState.Good;
                     }
+
                     _managers.Add(manager);
                 }
 
@@ -769,16 +770,16 @@ namespace PokemonGoGUI
             if (isChecked)
             {
 
-                fastObjectListViewMain.BackColor = Color.FromArgb(43, 43, 43);
+                fastObjectListViewMain.BackColor = Color.FromArgb(0, 0, 0);
                 fastObjectListViewMain.ForeColor = Color.LightGray;
 
-                fastObjectListViewProxies.BackColor = Color.FromArgb(43, 43, 43);
+                fastObjectListViewProxies.BackColor = Color.FromArgb(0, 0, 0);
                 fastObjectListViewProxies.ForeColor = Color.LightGray;
 
-                fastObjectListViewScheduler.BackColor = Color.FromArgb(43, 43, 43);
+                fastObjectListViewScheduler.BackColor = Color.FromArgb(0, 0, 0);
                 fastObjectListViewScheduler.ForeColor = Color.LightGray;
 
-                fastObjectListViewHashKeys.BackColor = Color.FromArgb(43, 43, 43);
+                fastObjectListViewHashKeys.BackColor = Color.FromArgb(0, 0, 0);
                 fastObjectListViewHashKeys.ForeColor = Color.LightGray;
 
             }

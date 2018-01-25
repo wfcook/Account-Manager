@@ -15,12 +15,12 @@ namespace PokemonGoGUI.GoManager
         {
             lock (Logs)
             {
-                if (log.LoggerType != LoggerTypes.LocationUpdate)
-                {
+                //if (log.LoggerType != LoggerTypes.LocationUpdate)
+                //{
                     if (log.LoggerType != LoggerTypes.Debug || UserSettings.ShowDebugLogs){
                         Logs.Add(log);
                     }
-                }
+                //}
 
                 if(Logs.Count >= UserSettings.MaxLogs)
                 {
