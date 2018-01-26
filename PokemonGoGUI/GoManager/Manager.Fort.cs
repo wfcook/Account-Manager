@@ -58,37 +58,25 @@ namespace PokemonGoGUI.GoManager
                 {
                     case FortSearchResponse.Types.Result.ExceededDailyLimit:
                         LogCaller(new LoggerEventArgs(String.Format("Failed to search {0}. Response: {1}", fort, fortResponse.Result), LoggerTypes.Warning));
-                        return new MethodResult
-                        {
-                            Message = "Failed to search fort"
-                        };
-                    case FortSearchResponse.Types.Result.InCooldownPeriod:
+                        break;
+                   case FortSearchResponse.Types.Result.InCooldownPeriod:
                         LogCaller(new LoggerEventArgs(String.Format("Failed to search {0}. Response: {1}", fort, fortResponse.Result), LoggerTypes.Warning));
-                        return new MethodResult
-                        {
-                            Message = "Failed to search fort"
-                        };
+                        break;
                     case FortSearchResponse.Types.Result.InventoryFull:
                         LogCaller(new LoggerEventArgs(String.Format("Failed to search {0}. Response: {1}", fort, fortResponse.Result), LoggerTypes.Warning));
-                        return new MethodResult
-                        {
-                            Message = "Failed to search fort"
-                        };
+                        break;
                     case FortSearchResponse.Types.Result.NoResultSet:
                         LogCaller(new LoggerEventArgs(String.Format("Failed to search {0}. Response: {1}", fort, fortResponse.Result), LoggerTypes.Warning));
-                        return new MethodResult
-                        {
-                            Message = "Failed to search fort"
-                        };
+                        break;
                     case FortSearchResponse.Types.Result.OutOfRange:
                         if (_potentialPokeStopBan)
                         {
-                            if (AccountState != Enums.AccountState.SoftBan)
+                            if (AccountState != AccountState.SoftBan)
                             {
                                 LogCaller(new LoggerEventArgs("Pokestop ban detected. Marking state", LoggerTypes.Warning));
                             }
 
-                            AccountState = Enums.AccountState.SoftBan;
+                            AccountState = AccountState.SoftBan;
 
                             if (fortResponse.ExperienceAwarded != 0)
                             {
@@ -102,13 +90,13 @@ namespace PokemonGoGUI.GoManager
                                 else if (_fleeingPokemonResponses >= _fleeingPokemonUntilBan)
                                 {
                                     //Already pokestop banned
-                                    if (AccountState == Enums.AccountState.SoftBan)
+                                    if (AccountState == AccountState.SoftBan)
                                     {
                                         _potentialPokemonBan = false;
                                         _potentialPokemonBan = false;
                                     }
 
-                                    if (AccountState != Enums.AccountState.SoftBan)
+                                    if (AccountState != AccountState.SoftBan)
                                     {
                                         //Only occurs when out of range is found
                                         if (fortResponse.ExperienceAwarded == 0)
@@ -121,7 +109,7 @@ namespace PokemonGoGUI.GoManager
                                         }
                                     }
 
-                                    if (UserSettings.StopAtMinAccountState == Enums.AccountState.SoftBan)
+                                    if (UserSettings.StopAtMinAccountState == AccountState.SoftBan)
                                     {
                                         LogCaller(new LoggerEventArgs("Auto stopping bot ...", LoggerTypes.Info));
 
@@ -147,10 +135,7 @@ namespace PokemonGoGUI.GoManager
                         continue;
                     case FortSearchResponse.Types.Result.PoiInaccessible:
                         LogCaller(new LoggerEventArgs(String.Format("Failed to search {0}. Response: {1}", fort, fortResponse.Result), LoggerTypes.Warning));
-                        return new MethodResult
-                        {
-                            Message = "Failed to search fort"
-                        };
+                        break;
                     case FortSearchResponse.Types.Result.Success:
                         string message = String.Format("Searched {0}. Exp: {1}. Items: {2}.", // Badge: {3}. BonusLoot: {4}. Gems: {5}. Loot: {6}, Eggs: {7:0.0}. RaidTickets: {8}. TeamBonusLoot: {9}",
                             fort,
@@ -166,9 +151,9 @@ namespace PokemonGoGUI.GoManager
                             fortResponse.TeamBonusLoot.LootItem.ToString()*/);
 
                         //Successfully grabbed stop
-                        if (AccountState == Enums.AccountState.SoftBan)// || AccountState == Enums.AccountState.HashIssues)
+                        if (AccountState == AccountState.SoftBan)// || AccountState == Enums.AccountState.HashIssues)
                         {
-                            AccountState = Enums.AccountState.Good;
+                            AccountState = AccountState.Good;
 
                             LogCaller(new LoggerEventArgs("Soft ban was removed", LoggerTypes.Info));
                         }
@@ -201,11 +186,7 @@ namespace PokemonGoGUI.GoManager
                 }
             }
 
-            return new MethodResult
-            {
-                Success = true,
-                Message = "Success"
-            };
+            return new MethodResult();
         }
 
         private async Task<MethodResult<FortDetailsResponse>> FortDetails(FortData pokestop)

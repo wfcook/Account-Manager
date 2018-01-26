@@ -370,18 +370,18 @@ namespace PokemonGoGUI.GoManager
                 return new List<PokemonData>();
             }
 
-            Candy pokemonCandy = PokemonCandy.FirstOrDefault(x => x.FamilyId == setting.FamilyId);
+            int pokemonCandy = PokemonCandy.Where(x => x.FamilyId == setting.FamilyId).FirstOrDefault().Candy_;
+            //int pokemonCandy = PokemonCandy.SingleOrDefault(x => x.FamilyId == setting.FamilyId).Candy_;
 
             int candyToEvolve = setting.EvolutionBranch.Select(x => x.CandyCost).FirstOrDefault();
             int totalPokemon = pokemon.Count();
-            int totalCandy = pokemonCandy.Candy_;
 
             if (candyToEvolve == 0)
             {
                 return new List<PokemonData>();
             }
 
-            int maxPokemon = totalCandy / candyToEvolve;
+            int maxPokemon = pokemonCandy / candyToEvolve;
 
             if (maxPokemon > limit)
             {

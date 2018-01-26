@@ -865,10 +865,10 @@ namespace PokemonGoGUI
                 switch (manager.State)
                 {
                     case BotState.Running:
-                        e.SubItem.ForeColor = Color.Green;
+                        e.SubItem.ForeColor = Color.LightGreen;
                         break;
                     case BotState.Starting:
-                        e.SubItem.ForeColor = Color.LightGreen;
+                        e.SubItem.ForeColor = Color.Aqua;
                         break;
                     case BotState.Stopping:
                         e.SubItem.ForeColor = Color.OrangeRed;
