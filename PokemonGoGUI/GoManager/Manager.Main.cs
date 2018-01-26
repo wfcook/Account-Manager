@@ -38,7 +38,7 @@ namespace PokemonGoGUI.GoManager
         /*private int _failedPokestopResponse = 0;*/
         private bool _autoRestart = false;
         private bool _wasAutoRestarted = false;
-
+        private AccountState _currentAccountState;
         private ManualResetEvent _pauser = new ManualResetEvent(true);
         private DateTime TimeAutoCatch = DateTime.Now;
         private bool CatchDisabled = false;
@@ -888,7 +888,7 @@ namespace PokemonGoGUI.GoManager
                             //Break out of pokestop loop to test for ip ban
                             break;
                         }
-                    }
+                    }                    
                 }
                 catch (HashVersionMismatchException ex)
                 {
@@ -938,6 +938,14 @@ namespace PokemonGoGUI.GoManager
                 {
                     AccountState = AccountState.Unknown;
                     LogCaller(new LoggerEventArgs("Skipping request. Restarting ...", LoggerTypes.Exception, ex));
+                }
+                catch (SessionStateException ex)
+                {
+                    AccountState = AccountState.Unknown;
+                    LogCaller(new LoggerEventArgs(ex.Message, LoggerTypes.Exception, ex));
+                    LogCaller(new LoggerEventArgs("Maybe clean data if DownloadRessources if set true.", LoggerTypes.Debug));
+                    //Maybe clean data if DownloadRessources if set true.
+                    Stop();
                 }
                 catch (Exception ex)
                 {

@@ -21,8 +21,7 @@ namespace PokemonGoGUI.GoManager
 
         public async Task<MethodResult> UpdateDetails()
         {
-            //TODO: review what we need do here.
-            UpdateInventory(InventoryRefresh.All);// <- should not be needed
+            UpdateInventory(InventoryRefresh.All);
 
             LogCaller(new LoggerEventArgs("Updating details", LoggerTypes.Debug));
 
@@ -226,7 +225,7 @@ namespace PokemonGoGUI.GoManager
                 return new MethodResult();
 
             var parsedResponse = GetPlayerProfileResponse.Parser.ParseFrom(response);
-
+            
             return new MethodResult
             {
                 Success = true

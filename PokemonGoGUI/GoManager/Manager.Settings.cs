@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace PokemonGoGUI.GoManager
 {
@@ -35,23 +36,17 @@ namespace PokemonGoGUI.GoManager
             if(Stats == null)
             {
                 LogCaller(new LoggerEventArgs(String.Format("No stats found for {0}. Please update details", UserSettings.Username), LoggerTypes.Warning));
-
-                return new MethodResult<AccountExportModel>();
             }
 
             if (!Items.Any()) {
                 LogCaller(new LoggerEventArgs(String.Format("No items found for {0}. Please update details", UserSettings.Username), LoggerTypes.Warning));
-
-                return new MethodResult<AccountExportModel>();
             }
 
             if (!Pokedex.Any()) {
                 LogCaller(new LoggerEventArgs(String.Format("No pokedex found for {0}. Please update details", UserSettings.Username), LoggerTypes.Warning));
-
-                return new MethodResult<AccountExportModel>();
             }
 
-            var exportModel = new AccountExportModel
+            var exportModel = new AccountExportModel()
             {
                 Level = Stats.Level,
                 Type = UserSettings.AuthType,
@@ -60,7 +55,9 @@ namespace PokemonGoGUI.GoManager
                 Pokedex = Pokedex.Select(x => new PokedexEntryExportModel(x)).ToList(),
                 Pokemon = Pokemon.Select(x => new PokemonDataExportModel(x, CalculateIVPerfection(x))).ToList(),
                 Items = Items.Select(x => new ItemDataExportModel(x)).ToList(),
-                Eggs = Eggs.Select(x => new EggDataExportModel(x)).ToList()
+                Eggs = Eggs.Select(x => new EggDataExportModel(x)).ToList(),
+                UserSettings = UserSettings,
+                ExportTime = DateTime.Now
             };
 
             return new MethodResult<AccountExportModel>
@@ -298,23 +295,24 @@ namespace PokemonGoGUI.GoManager
             };
         }
 
-        public async Task<MethodResult> ExportConfig(string filename)
-        {
+        public async Task<MethodResult> ExportConfig(string filename, bool fullconfig)// = false)
+        {           
             try
             {
-                string usernameTemp = UserSettings.Username;
-                string passwordTemp = UserSettings.Password;
-                string nameTemp = UserSettings.AccountName;
+                Settings userSettings = UserSettings;
+                if (!fullconfig)
+                {
+                    userSettings.AccountName = String.Empty;
+                    userSettings.Password = String.Empty;
+                    userSettings.Username = String.Empty;
+                    userSettings.HashKeys = new List<string>();
+                    userSettings.TwoCaptchaAPIKey = String.Empty;
+                    userSettings.CaptchaSolutionAPIKey = String.Empty;
+                    userSettings.CaptchaSolutionsSecretKey = String.Empty;
+                    userSettings.AntiCaptchaAPIKey = String.Empty;
+                }
 
-                UserSettings.AccountName = String.Empty;
-                UserSettings.Password = String.Empty;
-                UserSettings.Username = String.Empty;
-
-                string data = Serializer.ToJson<Settings>(UserSettings);
-
-                UserSettings.AccountName = nameTemp;
-                UserSettings.Password = passwordTemp;
-                UserSettings.Username = usernameTemp;
+                string data = JsonConvert.SerializeObject(userSettings, Formatting.Indented);
 
                 await Task.Run(() => File.WriteAllText(filename, data));
 
@@ -340,6 +338,39 @@ namespace PokemonGoGUI.GoManager
         {
             try
             {
+                List<Manager> managers = Serializer.FromJson<List<Manager>>(data) ?? new List<Manager> { new Manager { UserSettings = Serializer.FromJson<Settings>(data) } };
+                foreach (Manager manager in managers)
+                {
+                    Settings settings = manager.UserSettings;
+                    settings.AccountName = UserSettings.AccountName;
+                    settings.Password = UserSettings.Password;
+                    settings.Username = UserSettings.Username;
+                    settings.AuthType = UserSettings.AuthType;
+                    settings.ProxyIP = UserSettings.ProxyIP;
+                    settings.ProxyPassword = UserSettings.ProxyPassword;
+                    settings.ProxyPort = UserSettings.ProxyPort;
+                    settings.ProxyUsername = UserSettings.ProxyUsername;
+                    settings.GroupName = UserSettings.GroupName;
+
+                    //Randomize device id
+                    var device = DeviceInfoUtil.GetRandomDevice();
+                    settings.DeviceId = device.DeviceInfo.DeviceId;
+                    settings.DeviceBrand = device.DeviceInfo.DeviceBrand;
+                    settings.DeviceModel = device.DeviceInfo.DeviceModel;
+                    settings.DeviceModelBoot = device.DeviceInfo.DeviceModelBoot;
+                    settings.HardwareManufacturer = device.DeviceInfo.HardwareManufacturer;
+                    settings.HardwareModel = device.DeviceInfo.HardwareModel;
+                    settings.FirmwareBrand = device.DeviceInfo.FirmwareBrand;
+                    settings.FirmwareType = device.DeviceInfo.FirmwareType;
+
+                    UserSettings = settings;
+
+                    if (String.IsNullOrEmpty(UserSettings.DeviceBrand))
+                    {
+                        UserSettings.RandomizeDevice();
+                    }
+                }
+                /*
                 Settings settings = Serializer.FromJson<Settings>(data);
                 settings.AccountName = UserSettings.AccountName;
                 settings.Password = UserSettings.Password;
@@ -351,54 +382,17 @@ namespace PokemonGoGUI.GoManager
                 settings.ProxyUsername = UserSettings.ProxyUsername;
                 settings.GroupName = UserSettings.GroupName;
 
-                //new values added 
-
-                settings.Latitude = settings.Latitude;
-                settings.Longitude = settings.Longitude;
-                settings.Altitude = settings.Altitude;
-                settings.Country = settings.Country;
-                settings.Language = settings.Language;
-                settings.TimeZone = settings.TimeZone;
-                settings.POSIX = settings.POSIX;
                 //Randomize device id
-                var device = DeviceInfoUtil.GetRandomDevice();                
+                var device = DeviceInfoUtil.GetRandomDevice();
                 settings.DeviceId = device.DeviceInfo.DeviceId;
-                settings.DeviceBrand = settings.DeviceBrand;
-                settings.DeviceModel = settings.DeviceModel;
-                settings.DeviceModelBoot = settings.DeviceModelBoot;
-                settings.HardwareManufacturer = settings.HardwareManufacturer;
-                settings.HardwareModel = settings.HardwareModel;
-                settings.FirmwareBrand = settings.FirmwareBrand;
-                settings.FirmwareType = settings.FirmwareType;
-
-                foreach (var element in settings.EvolveSettings)
-                {
-                    var pokemonSetting = settings.EvolveSettings.FirstOrDefault(x => x.Id == element.Id);
-                    if (pokemonSetting != null)
-                    {
-                        pokemonSetting.Evolve = element.Evolve;
-                        pokemonSetting.MinCP = element.MinCP;
-                    }
-                }
-                foreach (var element in settings.TransferSettings)
-                {
-                    var pokemonSetting = settings.TransferSettings.FirstOrDefault(x => x.Id == element.Id);
-                    if (pokemonSetting != null)
-                    {
-                        pokemonSetting.Transfer = element.Transfer;
-                        pokemonSetting.MinCP = element.MinCP;
-                        pokemonSetting.IVPercent = element.IVPercent;
-                        pokemonSetting.KeepMax = element.KeepMax;
-                        pokemonSetting.Type = element.Type;
-                    }
-                }
-
-                UserSettings = settings;
-
-                if (String.IsNullOrEmpty(UserSettings.DeviceBrand))
-                {
-                    UserSettings.RandomizeDevice();
-                }
+                settings.DeviceBrand = device.DeviceInfo.DeviceBrand;
+                settings.DeviceModel = device.DeviceInfo.DeviceModel;
+                settings.DeviceModelBoot = device.DeviceInfo.DeviceModelBoot;
+                settings.HardwareManufacturer = device.DeviceInfo.HardwareManufacturer;
+                settings.HardwareModel = device.DeviceInfo.HardwareModel;
+                settings.FirmwareBrand = device.DeviceInfo.FirmwareBrand;
+                settings.FirmwareType = device.DeviceInfo.FirmwareType;
+                */
 
                 LogCaller(new LoggerEventArgs("Successfully imported config file", LoggerTypes.Info));
 
@@ -410,14 +404,15 @@ namespace PokemonGoGUI.GoManager
             }
             catch (Exception ex)
             {
+ 
                 string message = String.Format("Failed to import config. Ex: {0}", ex.Message);
 
                 LogCaller(new LoggerEventArgs(message, LoggerTypes.Exception, ex));
 
-                return new MethodResult
-                {
+                 return new MethodResult
+                 {
                     Message = message
-                };
+                 };
             }
         }
 
