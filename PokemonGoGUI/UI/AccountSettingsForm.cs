@@ -800,7 +800,15 @@ namespace PokemonGoGUI.UI
                     return;
                 }
 
-                MethodResult result = await _manager.ExportConfig(sfd.FileName);
+                SaveSettings();
+                
+                bool full = false;
+                DialogResult dialogResult = MessageBox.Show("Export full config? ", "Info", MessageBoxButtons.YesNo);
+
+                if (DialogResult.Yes == dialogResult)
+                    full = true;
+
+                MethodResult result = await _manager.ExportConfig(sfd.FileName, full);
 
                 if (result.Success)
                 {

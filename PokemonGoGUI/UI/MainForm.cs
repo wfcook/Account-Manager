@@ -1517,14 +1517,6 @@ namespace PokemonGoGUI
         private void ExportJsonToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string fileName = String.Empty;
-            var exportModels = new List<AccountExportModel>();
-
-            DialogResult dialogResult = MessageBox.Show("Update details before exporting?", "Update details", MessageBoxButtons.YesNoCancel);
-
-            if (dialogResult == DialogResult.Cancel)
-            {
-                return;
-            }
 
             using (var sfd = new SaveFileDialog())
             {
@@ -1546,26 +1538,12 @@ namespace PokemonGoGUI
             };
 
             IEnumerable<Manager> selectedManagers = fastObjectListViewMain.SelectedObjects.Cast<Manager>();
+            var exportModels = new List<Manager>();
 
-            Task.Run(() =>
-                  {
-                      Parallel.ForEach(selectedManagers, options, (manager) =>
-                        {
-                            if (dialogResult == DialogResult.Yes)
-                            {
-                                manager.UpdateDetails().Wait();
-                            }
-
-                            MethodResult<AccountExportModel> result = manager.GetAccountExport();
-
-                            if (!result.Success)
-                            {
-                                return;
-                            }
-
-                            exportModels.Add(result.Data);
-                        });
-                  });
+            foreach (Manager manager in selectedManagers)
+            {
+                exportModels.Add(manager);
+            }
 
             try
             {
@@ -1604,8 +1582,6 @@ namespace PokemonGoGUI
                 fastObjectListViewMain.Height = this.Height - scrollBarHeight;
             }
         }
-
-
 
         private void ImportConfigToolStripMenuItem_Click(object sender, EventArgs e)
         {
