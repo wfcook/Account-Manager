@@ -15,14 +15,12 @@ namespace PokemonGoGUI.GoManager
         {
             lock (Logs)
             {
-                //if (log.LoggerType != LoggerTypes.LocationUpdate)
-                //{
-                    if (log.LoggerType != LoggerTypes.Debug || UserSettings.ShowDebugLogs){
-                        Logs.Add(log);
-                    }
-                //}
+                if (log.LoggerType != LoggerTypes.Debug || UserSettings.ShowDebugLogs)
+                {
+                    Logs.Add(log);
+                }
 
-                if(Logs.Count >= UserSettings.MaxLogs)
+                if (Logs.Count >= UserSettings.MaxLogs)
                 {
                     IEnumerable<Log> tempLogs = Logs.Reverse<Log>().Take(UserSettings.MaxLogs / 4); ;
 
@@ -33,7 +31,7 @@ namespace PokemonGoGUI.GoManager
 
         public void ClearLog()
         {
-            lock(Logs)
+            lock (Logs)
             {
                 Logs.Clear();
             }
@@ -45,7 +43,7 @@ namespace PokemonGoGUI.GoManager
             {
                 string data = String.Empty;
 
-                lock(Logs)
+                lock (Logs)
                 {
                     data = Serializer.ToJson<List<Log>>(Logs);
                 }
@@ -58,7 +56,7 @@ namespace PokemonGoGUI.GoManager
                     Success = true
                 };
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 LogCaller(new LoggerEventArgs("Failed to export logs", LoggerTypes.Exception, ex));
 
