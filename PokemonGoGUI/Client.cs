@@ -390,12 +390,12 @@ namespace PokemonGoGUI
                     };
                 }, CancellationTokenSource.Token);
             }
-            catch
+            catch (Exception ex)
             {
                 ClientManager.AccountState = AccountState.Unknown;
                 return new MethodResult<bool>
                 {
-                    Message = "Unknown error."
+                    Message = "Unknown error." + ex
                 };
             }
         }

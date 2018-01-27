@@ -124,7 +124,8 @@ namespace PokemonGoGUI
 
         private void RefreshManager(Manager manager)
         {
-            fastObjectListViewMain.RefreshObject(manager);
+            //TODO: review this
+            //fastObjectListViewMain.RefreshObject(manager);
         }
 
         private async void MainForm_Load(object sender, EventArgs e)
