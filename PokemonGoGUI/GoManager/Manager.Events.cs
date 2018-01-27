@@ -33,6 +33,7 @@ namespace PokemonGoGUI.GoManager
         {
             if (!disposing) return;
 
+            _client.Dispose();
             _pauser.Dispose();
         }
     }

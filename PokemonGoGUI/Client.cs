@@ -30,7 +30,7 @@ using static POGOProtos.Networking.Envelopes.Signature.Types;
 
 namespace PokemonGoGUI
 {
-    public class Client
+    public class Client: IDisposable
     {
         public ProxyEx Proxy;
         public Version VersionStr;
@@ -75,6 +75,8 @@ namespace PokemonGoGUI
 
             if (ClientSession.State != SessionState.Stopped)
                 ClientSession.Shutdown();
+
+            Dispose();
         }
 
         private void LoggerFucntion(LogLevel logLevel, string message)
@@ -629,5 +631,41 @@ namespace PokemonGoGUI
             if (File.Exists(filename))
                 session.Templates.LocalConfigVersion = Serializer.FromJson<DownloadRemoteConfigVersionResponse>(File.ReadAllText(filename));
         }
+
+        #region IDisposable Support
+        private bool disposedValue = false; // Pour détecter les appels redondants
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    // TODO: supprimer l'état managé (objets managés).
+                    CancellationTokenSource.Dispose();
+                }
+
+                // TODO: libérer les ressources non managées (objets non managés) et remplacer un finaliseur ci-dessous.
+                // TODO: définir les champs de grande taille avec la valeur Null.
+
+                disposedValue = true;
+            }
+        }
+
+        // TODO: remplacer un finaliseur seulement si la fonction Dispose(bool disposing) ci-dessus a du code pour libérer les ressources non managées.
+        // ~Client() {
+        //   // Ne modifiez pas ce code. Placez le code de nettoyage dans Dispose(bool disposing) ci-dessus.
+        //   Dispose(false);
+        // }
+
+        // Ce code est ajouté pour implémenter correctement le modèle supprimable.
+        public void Dispose()
+        {
+            // Ne modifiez pas ce code. Placez le code de nettoyage dans Dispose(bool disposing) ci-dessus.
+            Dispose(true);
+            // TODO: supprimer les marques de commentaire pour la ligne suivante si le finaliseur est remplacé ci-dessus.
+            // GC.SuppressFinalize(this);
+        }
+        #endregion
     }
 }
