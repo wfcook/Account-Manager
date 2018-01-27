@@ -124,8 +124,13 @@ namespace PokemonGoGUI
 
         private void RefreshManager(Manager manager)
         {
-            //TODO: review this
-            //fastObjectListViewMain.RefreshObject(manager);
+            //Update logs
+            if (fastObjectListViewMain.IsDisposed || fastObjectListViewMain.Disposing)
+            {
+                return;
+            }
+
+            fastObjectListViewMain.RefreshObject(manager);
         }
 
         private async void MainForm_Load(object sender, EventArgs e)
@@ -355,7 +360,7 @@ namespace PokemonGoGUI
 
             DialogResult dResult = MessageBox.Show(String.Format("Delete {0} accounts?", totalAccounts), "Are you sure?", MessageBoxButtons.YesNoCancel);
 
-            if (dResult != System.Windows.Forms.DialogResult.Yes)
+            if (dResult != DialogResult.Yes)
             {
                 return;
             }
