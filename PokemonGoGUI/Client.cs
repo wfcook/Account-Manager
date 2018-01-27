@@ -104,289 +104,300 @@ namespace PokemonGoGUI
         {
             SetSettings(manager);
             // TODO: see how do this only once better.
-            return await Task.Run(async () =>
+            try
             {
-                if (!(Configuration.Hasher is PokeHashHasher))
+                return await Task.Run(async () =>
                 {
+                    if (!(Configuration.Hasher is PokeHashHasher))
+                    {
                     // By default Configuration.Hasher is LegacyHasher type  (see Configuration.cs in the pogolib source code)
                     // -> So this comparation only will run once.
                     if (ClientManager.UserSettings.UseOnlyOneKey)
-                    {
-                        Configuration.Hasher = new PokeHashHasher(ClientManager.UserSettings.AuthAPIKey);
-                        Configuration.HasherUrl = ClientManager.UserSettings.HashHost;
-                        Configuration.HashEndpoint = ClientManager.UserSettings.HashEndpoint;
-                    }
-                    else
-                    {
+                        {
+                            Configuration.Hasher = new PokeHashHasher(ClientManager.UserSettings.AuthAPIKey);
+                            Configuration.HasherUrl = ClientManager.UserSettings.HashHost;
+                            Configuration.HashEndpoint = ClientManager.UserSettings.HashEndpoint;
+                        }
+                        else
+                        {
                         //Need valid keys but this send all
                         Configuration.Hasher = new PokeHashHasher(ClientManager.UserSettings.HashKeys.ToArray());
-                    }
+                        }
 
                     // TODO: make this configurable. To avoid bans (may be with a checkbox in hash keys tab).
                     //Configuration.IgnoreHashVersion = true;
                     VersionStr = Configuration.Hasher.PokemonVersion;
-                    AppVersion = Configuration.Hasher.AppVersion;
-                }
+                        AppVersion = Configuration.Hasher.AppVersion;
+                    }
                 // */
 
                 ILoginProvider loginProvider;
 
-                switch (ClientManager.UserSettings.AuthType)
-                {
-                    case AuthType.Google:
-                        loginProvider = new GoogleLoginProvider(ClientManager.UserSettings.Username, ClientManager.UserSettings.Password);
-                        break;
-                    case AuthType.Ptc:
-                        loginProvider = new PtcLoginProvider(ClientManager.UserSettings.Username, ClientManager.UserSettings.Password, Proxy.AsWebProxy());
-                        break;
-                    default:
-                        throw new ArgumentException("Login provider must be either \"google\" or \"ptc\".");
-                }
+                    switch (ClientManager.UserSettings.AuthType)
+                    {
+                        case AuthType.Google:
+                            loginProvider = new GoogleLoginProvider(ClientManager.UserSettings.Username, ClientManager.UserSettings.Password);
+                            break;
+                        case AuthType.Ptc:
+                            loginProvider = new PtcLoginProvider(ClientManager.UserSettings.Username, ClientManager.UserSettings.Password, Proxy.AsWebProxy());
+                            break;
+                        default:
+                            throw new ArgumentException("Login provider must be either \"google\" or \"ptc\".");
+                    }
 
-                ClientSession = await GetSession(loginProvider, ClientManager.UserSettings.Latitude, ClientManager.UserSettings.Longitude, true);
+                    ClientSession = await GetSession(loginProvider, ClientManager.UserSettings.Latitude, ClientManager.UserSettings.Longitude, true);
 
                 // Send initial requests and start HeartbeatDispatcher.
                 // This makes sure that the initial heartbeat request finishes and the "session.Map.Cells" contains stuff.
                 var msgStr = "Session couldn't start up.";
-                LoggedIn = false;
-                try
-                {
-                    ClientSession.AssetDigestUpdated += OnAssetDisgestReceived;
-                    ClientSession.ItemTemplatesUpdated += OnItemTemplatesReceived;
-                    ClientSession.UrlsUpdated += OnDownloadUrlsReceived;
-                    ClientSession.RemoteConfigVersionUpdated += OnLocalConfigVersionReceived;
-                    ClientSession.AccessTokenUpdated += SessionAccessTokenUpdated;
-                    ClientSession.CaptchaReceived += SessionOnCaptchaReceived;
-                    ClientSession.InventoryUpdate += SessionInventoryUpdate;
-                    ClientSession.MapUpdate += SessionMapUpdate;
-                    ClientSession.CheckAwardedBadgesReceived += OnCheckAwardedBadgesReceived;
-                    ClientSession.HatchedEggsReceived += OnHatchedEggsReceived;
-                    ClientSession.TemporalBanReceived += TempBanReceived;
-                    ClientSession.BuddyWalked += OnBuddyWalked;
-                    ClientSession.InboxDataReceived += OnInboxDataReceived;
-
-                    ClientSession.Logger.RegisterLogOutput(LoggerFucntion);
-
-                    ClientSession.ManageRessources = ClientManager.UserSettings.DownloadResources;
-                    ClientManager.LogCaller(new LoggerEventArgs("Succefully added all events to the client.", LoggerTypes.Debug));
-
-                    if (await ClientSession.StartupAsync())
+                    LoggedIn = false;
+                    try
                     {
-                        LoggedIn = true;
-                        msgStr = "Successfully logged into server.";
+                        ClientSession.AssetDigestUpdated += OnAssetDisgestReceived;
+                        ClientSession.ItemTemplatesUpdated += OnItemTemplatesReceived;
+                        ClientSession.UrlsUpdated += OnDownloadUrlsReceived;
+                        ClientSession.RemoteConfigVersionUpdated += OnLocalConfigVersionReceived;
+                        ClientSession.AccessTokenUpdated += SessionAccessTokenUpdated;
+                        ClientSession.CaptchaReceived += SessionOnCaptchaReceived;
+                        ClientSession.InventoryUpdate += SessionInventoryUpdate;
+                        ClientSession.MapUpdate += SessionMapUpdate;
+                        ClientSession.CheckAwardedBadgesReceived += OnCheckAwardedBadgesReceived;
+                        ClientSession.HatchedEggsReceived += OnHatchedEggsReceived;
+                        ClientSession.TemporalBanReceived += TempBanReceived;
+                        ClientSession.BuddyWalked += OnBuddyWalked;
+                        ClientSession.InboxDataReceived += OnInboxDataReceived;
 
-                        if (ClientSession.Player.Warn)
+                        ClientSession.Logger.RegisterLogOutput(LoggerFucntion);
+
+                        ClientSession.ManageRessources = ClientManager.UserSettings.DownloadResources;
+                        ClientManager.LogCaller(new LoggerEventArgs("Succefully added all events to the client.", LoggerTypes.Debug));
+
+                        if (await ClientSession.StartupAsync())
                         {
-                            ClientManager.AccountState = AccountState.Flagged;
-                            ClientManager.LogCaller(new LoggerEventArgs("The account is flagged.", LoggerTypes.Warning));
+                            LoggedIn = true;
+                            msgStr = "Successfully logged into server.";
 
-                            if (ClientManager.UserSettings.StopAtMinAccountState == AccountState.Flagged)
+                            if (ClientSession.Player.Warn)
                             {
+                                ClientManager.AccountState = AccountState.Flagged;
+                                ClientManager.LogCaller(new LoggerEventArgs("The account is flagged.", LoggerTypes.Warning));
+
+                                if (ClientManager.UserSettings.StopAtMinAccountState == AccountState.Flagged)
+                                {
+                                    ClientManager.Stop();
+
+                                    msgStr = "The account is flagged.";
+                                }
+                            }
+
+                            if (ClientSession.Player.Banned)
+                            {
+                                ClientManager.AccountState = AccountState.PermanentBan;
+                                ClientManager.LogCaller(new LoggerEventArgs("The account is banned.", LoggerTypes.FatalError));
                                 ClientManager.Stop();
 
-                                msgStr = "The account is flagged.";
+                                msgStr = "The account is banned.";
                             }
-                        }
 
-                        if (ClientSession.Player.Banned)
+                            SaveAccessToken(ClientSession.AccessToken);
+                        }
+                    }
+                    catch (HashVersionMismatchException ex)
+                    {
+                        ClientManager.LogCaller(new LoggerEventArgs(ex.Message, LoggerTypes.Warning));
+                        ClientManager.Stop();
+                    }
+                    catch (APIBadRequestException ex)
+                    {
+                        if (ClientManager.AccountState != AccountState.CaptchaReceived || ClientManager.AccountState != AccountState.HashIssues)
+                            ClientManager.AccountState = AccountState.TemporalBan;
+                        ClientManager.LogCaller(new LoggerEventArgs($"API {ex.Message}, this account is maybe banned ...", LoggerTypes.Warning));
+                    }
+                    catch (InvalidPlatformException)// ex
+                {
+                        ClientManager.LogCaller(new LoggerEventArgs("Invalid Platform or token session refresh, continue  ...", LoggerTypes.Warning));
+                    }
+                    catch (SessionInvalidatedException)// ex
+                {
+                        ClientManager.LogCaller(new LoggerEventArgs("Session Invalidated or token session refresh, continue ...", LoggerTypes.Warning));
+                    }
+                    catch (SessionUnknowException)
+                    {
+                        ClientManager.AccountState = AccountState.Unknown;
+                        msgStr = "Skipping request. Restarting ...";
+                    }
+                    catch (ArgumentOutOfRangeException)
+                    {
+                        ClientManager.AccountState = AccountState.Unknown;
+                        msgStr = "Skipping request";
+                    }
+                    catch (SessionStateException ex)
+                    {
+                        if (ClientSession.State == SessionState.TemporalBanned)
                         {
-                            ClientManager.AccountState = AccountState.PermanentBan;
-                            ClientManager.LogCaller(new LoggerEventArgs("The account is banned.", LoggerTypes.FatalError));
                             ClientManager.Stop();
 
-                            msgStr = "The account is banned.";
+                            msgStr = ex.Message;
                         }
-
-                        SaveAccessToken(ClientSession.AccessToken);
+                        else
+                            ClientManager.LogCaller(new LoggerEventArgs(ex.Message, LoggerTypes.Warning));
                     }
-                }
-                catch (HashVersionMismatchException ex)
+                    catch (PtcLoginException) // poex
                 {
-                    ClientManager.LogCaller(new LoggerEventArgs(ex.Message, LoggerTypes.Warning));
-                    ClientManager.Stop();
-                }
-                catch (APIBadRequestException ex)
+                        ClientManager.Stop();
+
+                        ClientManager.LogCaller(new LoggerEventArgs("Ptc server offline. Please try again later.", LoggerTypes.Warning));
+
+                        msgStr = "Ptc server offline.";
+                    }
+                    catch (AccountNotVerifiedException) // anvex
                 {
-                    if (ClientManager.AccountState != AccountState.CaptchaReceived || ClientManager.AccountState != AccountState.HashIssues)
-                        ClientManager.AccountState = AccountState.TemporalBan;
-                    ClientManager.LogCaller(new LoggerEventArgs($"API {ex.Message}, this account is maybe banned ...", LoggerTypes.Warning));
-                }
-                catch (InvalidPlatformException)// ex
-                {
-                    ClientManager.LogCaller(new LoggerEventArgs("Invalid Platform or token session refresh, continue  ...", LoggerTypes.Warning));
-                }
-                catch (SessionInvalidatedException)// ex
-                {
-                    ClientManager.LogCaller(new LoggerEventArgs("Session Invalidated or token session refresh, continue ...", LoggerTypes.Warning));
-                }
-                catch (SessionUnknowException)
-                {
-                    ClientManager.AccountState = AccountState.Unknown;
-                    msgStr = "Skipping request. Restarting ...";
-                }
-                catch (ArgumentOutOfRangeException)
-                {
-                    ClientManager.AccountState = AccountState.Unknown;
-                    msgStr = "Skipping request";
-                }
-                catch (SessionStateException ex)
-                {
-                    if (ClientSession.State == SessionState.TemporalBanned)
+                        ClientManager.Stop();
+                        ClientManager.LogCaller(new LoggerEventArgs("Account not verified. Stopping ...", LoggerTypes.Warning));
+                        ClientManager.AccountState = Enums.AccountState.NotVerified;
+                        msgStr = "Account not verified.";
+                    }
+                    catch (WebException wex)
                     {
                         ClientManager.Stop();
 
-                        msgStr = ex.Message;
+                        if (wex.Status == WebExceptionStatus.Timeout)
+                        {
+                            if (String.IsNullOrEmpty(ClientManager.Proxy))
+                            {
+                                ClientManager.LogCaller(new LoggerEventArgs("Login request has timed out.", LoggerTypes.Warning));
+                            }
+                            else
+                            {
+                                ClientManager._proxyIssue = true;
+                                ClientManager.LogCaller(new LoggerEventArgs("Login request has timed out. Possible bad proxy.", LoggerTypes.ProxyIssue));
+                            }
+
+                            msgStr = "Request has timed out.";
+                        }
+
+                        if (!String.IsNullOrEmpty(ClientManager.Proxy))
+                        {
+                            if (wex.Status == WebExceptionStatus.ConnectionClosed)
+                            {
+                                ClientManager._proxyIssue = true;
+                                ClientManager.LogCaller(new LoggerEventArgs("Potential http proxy detected. Only https proxies will work.", LoggerTypes.ProxyIssue));
+
+                                msgStr = "Http proxy detected";
+                            }
+                            else if (wex.Status == WebExceptionStatus.ConnectFailure || wex.Status == WebExceptionStatus.ProtocolError || wex.Status == WebExceptionStatus.ReceiveFailure
+                                || wex.Status == WebExceptionStatus.ServerProtocolViolation)
+                            {
+                                ClientManager._proxyIssue = true;
+                                ClientManager.LogCaller(new LoggerEventArgs("Proxy is offline", LoggerTypes.ProxyIssue));
+
+                                msgStr = "Proxy is offline";
+                            }
+                        }
+
+                        ClientManager._proxyIssue |= !String.IsNullOrEmpty(ClientManager.Proxy);
+
+                        ClientManager.LogCaller(new LoggerEventArgs("Failed to login due to request error", LoggerTypes.Exception, wex.InnerException));
+
+                        msgStr = "Failed to login due to request error";
                     }
-                    else
-                        ClientManager.LogCaller(new LoggerEventArgs(ex.Message, LoggerTypes.Warning));
-                }
-                catch (PtcLoginException) // poex
+                    catch (TaskCanceledException) // tce
                 {
-                    ClientManager.Stop();
+                        ClientManager.Stop();
 
-                    ClientManager.LogCaller(new LoggerEventArgs("Ptc server offline. Please try again later.", LoggerTypes.Warning));
-
-                    msgStr = "Ptc server offline.";
-                }
-                catch (AccountNotVerifiedException) // anvex
-                {
-                    ClientManager.Stop();
-                    ClientManager.LogCaller(new LoggerEventArgs("Account not verified. Stopping ...", LoggerTypes.Warning));
-                    ClientManager.AccountState = Enums.AccountState.NotVerified;
-                    msgStr = "Account not verified.";
-                }
-                catch (WebException wex)
-                {
-                    ClientManager.Stop();
-
-                    if (wex.Status == WebExceptionStatus.Timeout)
-                    {
                         if (String.IsNullOrEmpty(ClientManager.Proxy))
                         {
-                            ClientManager.LogCaller(new LoggerEventArgs("Login request has timed out.", LoggerTypes.Warning));
+                            ClientManager.LogCaller(new LoggerEventArgs("Login request has timed out", LoggerTypes.Warning));
                         }
                         else
                         {
                             ClientManager._proxyIssue = true;
-                            ClientManager.LogCaller(new LoggerEventArgs("Login request has timed out. Possible bad proxy.", LoggerTypes.ProxyIssue));
+                            ClientManager.LogCaller(new LoggerEventArgs("Login request has timed out. Possible bad proxy", LoggerTypes.ProxyIssue));
                         }
 
-                        msgStr = "Request has timed out.";
+                        msgStr = "Login request has timed out";
                     }
-
-                    if (!String.IsNullOrEmpty(ClientManager.Proxy))
+                    catch (InvalidCredentialsException icex)
                     {
-                        if (wex.Status == WebExceptionStatus.ConnectionClosed)
-                        {
-                            ClientManager._proxyIssue = true;
-                            ClientManager.LogCaller(new LoggerEventArgs("Potential http proxy detected. Only https proxies will work.", LoggerTypes.ProxyIssue));
-
-                            msgStr = "Http proxy detected";
-                        }
-                        else if (wex.Status == WebExceptionStatus.ConnectFailure || wex.Status == WebExceptionStatus.ProtocolError || wex.Status == WebExceptionStatus.ReceiveFailure
-                            || wex.Status == WebExceptionStatus.ServerProtocolViolation)
-                        {
-                            ClientManager._proxyIssue = true;
-                            ClientManager.LogCaller(new LoggerEventArgs("Proxy is offline", LoggerTypes.ProxyIssue));
-
-                            msgStr = "Proxy is offline";
-                        }
-                    }
-
-                    ClientManager._proxyIssue |= !String.IsNullOrEmpty(ClientManager.Proxy);
-
-                    ClientManager.LogCaller(new LoggerEventArgs("Failed to login due to request error", LoggerTypes.Exception, wex.InnerException));
-
-                    msgStr = "Failed to login due to request error";
-                }
-                catch (TaskCanceledException) // tce
-                {
-                    ClientManager.Stop();
-
-                    if (String.IsNullOrEmpty(ClientManager.Proxy))
-                    {
-                        ClientManager.LogCaller(new LoggerEventArgs("Login request has timed out", LoggerTypes.Warning));
-                    }
-                    else
-                    {
-                        ClientManager._proxyIssue = true;
-                        ClientManager.LogCaller(new LoggerEventArgs("Login request has timed out. Possible bad proxy", LoggerTypes.ProxyIssue));
-                    }
-
-                    msgStr = "Login request has timed out";
-                }
-                catch (InvalidCredentialsException icex)
-                {
                     //Puts stopping log before other log.
                     ClientManager.Stop();
-                    ClientManager.LogCaller(new LoggerEventArgs("Invalid credentials or account lockout. Stopping bot...", LoggerTypes.Warning, icex));
+                        ClientManager.LogCaller(new LoggerEventArgs("Invalid credentials or account lockout. Stopping bot...", LoggerTypes.Warning, icex));
 
-                    msgStr = "Username or password incorrect";
-                }
-                catch (IPBannedException) // ipex
-                {
-                    if (ClientManager.UserSettings.StopOnIPBan)
-                    {
-                        ClientManager.Stop();
+                        msgStr = "Username or password incorrect";
                     }
-
-                    string message = String.Empty;
-
-                    if (!String.IsNullOrEmpty(ClientManager.Proxy))
-                    {
-                        if (ClientManager.CurrentProxy != null)
+                    catch (IPBannedException) // ipex
+                {
+                        if (ClientManager.UserSettings.StopOnIPBan)
                         {
-                            ClientManager.ProxyHandler.MarkProxy(ClientManager.CurrentProxy, true);
+                            ClientManager.Stop();
                         }
 
-                        message = "Proxy IP is banned.";
+                        string message = String.Empty;
+
+                        if (!String.IsNullOrEmpty(ClientManager.Proxy))
+                        {
+                            if (ClientManager.CurrentProxy != null)
+                            {
+                                ClientManager.ProxyHandler.MarkProxy(ClientManager.CurrentProxy, true);
+                            }
+
+                            message = "Proxy IP is banned.";
+                        }
+                        else
+                        {
+                            message = "IP address is banned.";
+                        }
+
+                        ClientManager._proxyIssue = true;
+
+                        ClientManager.LogCaller(new LoggerEventArgs(message, LoggerTypes.ProxyIssue));
+
+                        msgStr = message;
                     }
-                    else
+                    catch (GoogleLoginException glex)
                     {
-                        message = "IP address is banned.";
+                        ClientManager.Stop();
+                        ClientManager.LogCaller(new LoggerEventArgs(glex.Message, LoggerTypes.Warning));
+
+                        msgStr = "Failed to login";
                     }
-
-                    ClientManager._proxyIssue = true;
-
-                    ClientManager.LogCaller(new LoggerEventArgs(message, LoggerTypes.ProxyIssue));
-
-                    msgStr = message;
-                }
-                catch (GoogleLoginException glex)
-                {
-                    ClientManager.Stop();
-                    ClientManager.LogCaller(new LoggerEventArgs(glex.Message, LoggerTypes.Warning));
-
-                    msgStr = "Failed to login";
-                }
-                catch (ArgumentNullException) // anex
+                    catch (ArgumentNullException) // anex
                 {
                     //ClientManager.AccountState = AccountState.TemporalBan;
                     ClientManager.Stop();
-                    msgStr = "Argument Null Exception.";
-                }
-                catch (PokeHashException phex)
-                {
-                    ClientManager.AccountState = AccountState.HashIssues;
-                    msgStr = "Hash issues";
-                    ClientManager.LogCaller(new LoggerEventArgs("Hash issues", LoggerTypes.Warning, phex));
-                }
-                catch (Exception ex)
-                {
-                    ClientManager.Stop();
+                        msgStr = "Argument Null Exception.";
+                    }
+                    catch (PokeHashException phex)
+                    {
+                        ClientManager.AccountState = AccountState.HashIssues;
+                        msgStr = "Hash issues";
+                        ClientManager.LogCaller(new LoggerEventArgs("Hash issues", LoggerTypes.Warning, phex));
+                    }
+                    catch (Exception ex)
+                    {
+                        ClientManager.Stop();
                     //RemoveProxy();
 
                     ClientManager.LogCaller(new LoggerEventArgs("Failed to login", LoggerTypes.Exception, ex));
 
-                    msgStr = "Failed to login";
-                }
+                        msgStr = "Failed to login";
+                    }
 
-                return new MethodResult<bool>()
+                    return new MethodResult<bool>()
+                    {
+                        Success = LoggedIn,
+                        Message = msgStr,
+                    };
+                }, CancellationTokenSource.Token);
+            }
+            catch
+            {
+                ClientManager.AccountState = AccountState.Unknown;
+                return new MethodResult<bool>
                 {
-                    Success = LoggedIn,
-                    Message = msgStr,
+                    Message = "Unknown error."
                 };
-            }, CancellationTokenSource.Token);
+            }
         }
 
         private void OnBuddyWalked(object sender, GetBuddyWalkedResponse data)
@@ -646,7 +657,9 @@ namespace PokemonGoGUI
                     {
                         ClientManager.Stop();
                         CancellationTokenSource.Dispose();
+                        return;
                     }
+                    ClientManager.LogCaller(new LoggerEventArgs("Session closed!", LoggerTypes.Warning));
                 }
 
                 // TODO: libérer les ressources non managées (objets non managés) et remplacer un finaliseur ci-dessous.

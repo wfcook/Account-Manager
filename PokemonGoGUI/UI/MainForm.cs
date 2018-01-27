@@ -303,8 +303,6 @@ namespace PokemonGoGUI
 
         private void Manager_OnInventoryUpdate(object sender, EventArgs e)
         {
-            //return;
-
             var manager = sender as Manager;
 
             if (manager == null)
@@ -317,8 +315,6 @@ namespace PokemonGoGUI
 
         private void Manager_OnLog(object sender, LoggerEventArgs e)
         {
-            //return;
-
             var manager = sender as Manager;
 
             if (manager == null)

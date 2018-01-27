@@ -417,7 +417,7 @@ namespace PokemonGoGUI.GoManager
                                 LogCaller(new LoggerEventArgs("Failed. Marking pokestop, pokemonberry, useitem, pokemoncapture tutorials completed..", LoggerTypes.Warning));
 
                                 Stop();
-                         }
+                            }
 
                             LogCaller(new LoggerEventArgs("Marking pokestop, pokemonberry, useitem, pokemoncapture tutorials completed.", LoggerTypes.Success));
 
@@ -437,7 +437,7 @@ namespace PokemonGoGUI.GoManager
                     {
                         State = BotState.Running;
                     }
-                
+
                     //Update location
                     if (_firstRun)
                     {
@@ -466,7 +466,7 @@ namespace PokemonGoGUI.GoManager
 
                     if (!pokestops.Success)
                     {
-                        await Task.Delay(failedWaitTime);                        
+                        await Task.Delay(failedWaitTime);
                         continue;
                     }
 
@@ -537,7 +537,7 @@ namespace PokemonGoGUI.GoManager
                             fort = "Gym";
                             loggerTypes = LoggerTypes.Gym;
                         }
-     
+
                         LogCaller(new LoggerEventArgs(String.Format("Going to {0} {1} of {2}. Distance {3:0.00}m", fort, pokeStopNumber, totalStops, distance), loggerTypes));
 
                         //Go to pokestops
@@ -859,7 +859,7 @@ namespace PokemonGoGUI.GoManager
                             //Break out of pokestop loop to test for ip ban
                             break;
                         }
-                    }                    
+                    }
                 }
                 catch (StackOverflowException ex)
                 {
@@ -980,46 +980,6 @@ namespace PokemonGoGUI.GoManager
             _firstRun = true;
         }
 
-        /*
-        private async Task<MethodResult> RepeatAction(Func<Task<MethodResult>> action, int tries)
-        {
-        MethodResult result = new MethodResult();
-
-        for(int i = 0; i < tries; i++)
-        {
-         result = await action();
-
-         if(result.Success)
-         {
-             return result;
-         }
-
-         await Task.Delay(CalculateDelay(1000, 200));
-        }
-
-        return result;
-        }
-
-        private async Task<MethodResult<T>> RepeatAction<T>(Func<Task<MethodResult<T>>> action, int tries)
-        {
-        MethodResult<T> result = new MethodResult<T>();
-
-        for (int i = 0; i < tries; i++)
-        {
-         result = await action();
-
-         if (result.Success)
-         {
-             return result;
-         }
-
-         await Task.Delay(CalculateDelay(1000, 200));
-        }
-
-        return result;
-        }
-        */
-
         private async Task<MethodResult> CheckReauthentication()
         {
             if (!_client.ClientSession.AccessToken.IsExpired)
@@ -1034,22 +994,19 @@ namespace PokemonGoGUI.GoManager
             {
                 LogCaller(new LoggerEventArgs("Session expired. Logging back in", LoggerTypes.Debug));
 
-                await _client.DoLogin(_client.ClientManager);
+                MethodResult result = await AcLogin();
+
+                if (!result.Success)
+                {
+                    Stop();
+                    return new MethodResult();
+                }
 
                 return new MethodResult
                 {
                     Success = true
                 };
             }
-            /*catch (BadImageFormatException)
-            {
-                LogCaller(new LoggerEventArgs("Incorrect encrypt dll used. Please delete 'encrypt.dll' and restart the program", LoggerTypes.FatalError));
-
-                return new MethodResult
-                {
-                    Message = "Incorrect DLL used"
-                };
-            }*/
             catch (Exception ex)
             {
                 LogCaller(new LoggerEventArgs("Failed to reauthenticate failed", LoggerTypes.Warning, ex));
