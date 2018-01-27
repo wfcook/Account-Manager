@@ -73,7 +73,7 @@ namespace PokemonGoGUI.GoManager.Models
                 case LoggerTypes.LocationUpdate:
                     return Color.LightGreen;
                 case LoggerTypes.Gym:
-                    return Color.Magenta;
+                    return Color.Turquoise;
                 case LoggerTypes.Captcha:
                     return Color.Tomato;
                 case LoggerTypes.Deploy:
@@ -86,6 +86,8 @@ namespace PokemonGoGUI.GoManager.Models
                     return Color.Coral;
                 case LoggerTypes.Upgrade:
                     return Color.Aqua;
+                case LoggerTypes.LevelUp:
+                    return Color.Gold;
             }
             return SystemColors.WindowText;
         }

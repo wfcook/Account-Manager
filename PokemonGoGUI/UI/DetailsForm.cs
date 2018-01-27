@@ -193,7 +193,7 @@ namespace PokemonGoGUI.UI
 
             DisplayDetails();
 
-            if (e.LogType != LoggerTypes.Debug || e.LogType != LoggerTypes.LocationUpdate)
+            if (e.LogType != LoggerTypes.LocationUpdate)
             {
                 Invoke(new MethodInvoker(() =>
                 {

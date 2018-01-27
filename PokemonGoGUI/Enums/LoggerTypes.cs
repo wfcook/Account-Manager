@@ -22,6 +22,7 @@
         Buddy,
         AwardedBadges,
         HatchedEggs,
-        Upgrade
+        Upgrade,
+        LevelUp
     };
 }

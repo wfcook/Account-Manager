@@ -47,6 +47,7 @@
             this.cbTeam = new System.Windows.Forms.ComboBox();
             this.checkBoxCompleteTutorial = new System.Windows.Forms.CheckBox();
             this.groupBoxPlayerActions = new System.Windows.Forms.GroupBox();
+            this.checkBoxUpgradePokemons = new System.Windows.Forms.CheckBox();
             this.cbUseIncense = new System.Windows.Forms.CheckBox();
             this.numericUpDownDisableCatchDelay = new System.Windows.Forms.NumericUpDown();
             this.label16 = new System.Windows.Forms.Label();
@@ -247,7 +248,6 @@
             this.toolTipProxy = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipMinAccountState = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipHumanizeThrows = new System.Windows.Forms.ToolTip(this.components);
-            this.checkBoxUpgradePokemons = new System.Windows.Forms.CheckBox();
             this.tabControlMain.SuspendLayout();
             this.tabPageDetails.SuspendLayout();
             this.tabControlSettings.SuspendLayout();
@@ -553,6 +553,16 @@
             this.groupBoxPlayerActions.TabIndex = 73;
             this.groupBoxPlayerActions.TabStop = false;
             this.groupBoxPlayerActions.Text = "Player Actions";
+            // 
+            // checkBoxUpgradePokemons
+            // 
+            this.checkBoxUpgradePokemons.AutoSize = true;
+            this.checkBoxUpgradePokemons.Location = new System.Drawing.Point(15, 234);
+            this.checkBoxUpgradePokemons.Name = "checkBoxUpgradePokemons";
+            this.checkBoxUpgradePokemons.Size = new System.Drawing.Size(155, 21);
+            this.checkBoxUpgradePokemons.TabIndex = 78;
+            this.checkBoxUpgradePokemons.Text = "Upgrade Pokemons";
+            this.checkBoxUpgradePokemons.UseVisualStyleBackColor = true;
             // 
             // cbUseIncense
             // 
@@ -963,7 +973,7 @@
             // 
             this.checkBoxRemoveOnStop.AutoSize = true;
             this.checkBoxRemoveOnStop.Enabled = false;
-            this.checkBoxRemoveOnStop.Location = new System.Drawing.Point(157, 127);
+            this.checkBoxRemoveOnStop.Location = new System.Drawing.Point(367, 81);
             this.checkBoxRemoveOnStop.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.checkBoxRemoveOnStop.Name = "checkBoxRemoveOnStop";
             this.checkBoxRemoveOnStop.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
@@ -975,7 +985,7 @@
             // checkBoxAutoRotateProxies
             // 
             this.checkBoxAutoRotateProxies.AutoSize = true;
-            this.checkBoxAutoRotateProxies.Location = new System.Drawing.Point(221, 101);
+            this.checkBoxAutoRotateProxies.Location = new System.Drawing.Point(175, 81);
             this.checkBoxAutoRotateProxies.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.checkBoxAutoRotateProxies.Name = "checkBoxAutoRotateProxies";
             this.checkBoxAutoRotateProxies.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
@@ -990,7 +1000,7 @@
             this.checkBoxStopOnIPBan.AutoSize = true;
             this.checkBoxStopOnIPBan.Checked = true;
             this.checkBoxStopOnIPBan.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxStopOnIPBan.Location = new System.Drawing.Point(251, 75);
+            this.checkBoxStopOnIPBan.Location = new System.Drawing.Point(19, 81);
             this.checkBoxStopOnIPBan.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.checkBoxStopOnIPBan.Name = "checkBoxStopOnIPBan";
             this.checkBoxStopOnIPBan.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
@@ -1001,7 +1011,7 @@
             // 
             // numericUpDownMaxFailBeforeReset
             // 
-            this.numericUpDownMaxFailBeforeReset.Location = new System.Drawing.Point(268, 46);
+            this.numericUpDownMaxFailBeforeReset.Location = new System.Drawing.Point(269, 46);
             this.numericUpDownMaxFailBeforeReset.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.numericUpDownMaxFailBeforeReset.Maximum = new decimal(new int[] {
             999999,
@@ -1009,7 +1019,7 @@
             0,
             0});
             this.numericUpDownMaxFailBeforeReset.Name = "numericUpDownMaxFailBeforeReset";
-            this.numericUpDownMaxFailBeforeReset.Size = new System.Drawing.Size(113, 22);
+            this.numericUpDownMaxFailBeforeReset.Size = new System.Drawing.Size(94, 22);
             this.numericUpDownMaxFailBeforeReset.TabIndex = 1;
             this.numericUpDownMaxFailBeforeReset.Value = new decimal(new int[] {
             3,
@@ -1022,7 +1032,7 @@
             this.textBoxProxy.Location = new System.Drawing.Point(200, 16);
             this.textBoxProxy.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBoxProxy.Name = "textBoxProxy";
-            this.textBoxProxy.Size = new System.Drawing.Size(180, 22);
+            this.textBoxProxy.Size = new System.Drawing.Size(163, 22);
             this.textBoxProxy.TabIndex = 0;
             this.toolTipProxy.SetToolTip(this.textBoxProxy, "Valid Formats:\r\nIP:Port\r\nIP:Port:Username:Password");
             // 
@@ -2641,7 +2651,7 @@
             this.editToolStripMenuItemUpgrade,
             this.restoreDefaultsToolStripMenuItemUpgrade});
             this.contextMenuStripUpgrade.Name = "contextMenuStripUpgrade";
-            this.contextMenuStripUpgrade.Size = new System.Drawing.Size(188, 80);
+            this.contextMenuStripUpgrade.Size = new System.Drawing.Size(188, 52);
             // 
             // editToolStripMenuItemUpgrade
             // 
@@ -2683,16 +2693,6 @@
             this.restoreDefaultsToolStripMenuItemUpgrade.Size = new System.Drawing.Size(187, 24);
             this.restoreDefaultsToolStripMenuItemUpgrade.Text = "Restore Defaults";
             this.restoreDefaultsToolStripMenuItemUpgrade.Click += new System.EventHandler(this.RestoreDefaultsToolStripMenuItemUpgrade_Click);
-            // 
-            // checkBoxUpgradePokemons
-            // 
-            this.checkBoxUpgradePokemons.AutoSize = true;
-            this.checkBoxUpgradePokemons.Location = new System.Drawing.Point(15, 234);
-            this.checkBoxUpgradePokemons.Name = "checkBoxUpgradePokemons";
-            this.checkBoxUpgradePokemons.Size = new System.Drawing.Size(155, 21);
-            this.checkBoxUpgradePokemons.TabIndex = 78;
-            this.checkBoxUpgradePokemons.Text = "Upgrade Pokemons";
-            this.checkBoxUpgradePokemons.UseVisualStyleBackColor = true;
             // 
             // AccountSettingsForm
             // 
