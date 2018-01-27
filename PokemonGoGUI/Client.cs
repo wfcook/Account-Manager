@@ -642,7 +642,11 @@ namespace PokemonGoGUI
                 if (disposing)
                 {
                     // TODO: supprimer l'état managé (objets managés).
-                    CancellationTokenSource.Dispose();
+                    if (CancellationTokenSource != null)
+                    {
+                        ClientManager.Stop();
+                        CancellationTokenSource.Dispose();
+                    }
                 }
 
                 // TODO: libérer les ressources non managées (objets non managés) et remplacer un finaliseur ci-dessous.
