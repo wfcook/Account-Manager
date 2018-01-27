@@ -1128,6 +1128,7 @@
             // 
             // comboBoxLocationPresets
             // 
+            this.comboBoxLocationPresets.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxLocationPresets.FormattingEnabled = true;
             this.comboBoxLocationPresets.Location = new System.Drawing.Point(191, 18);
             this.comboBoxLocationPresets.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
