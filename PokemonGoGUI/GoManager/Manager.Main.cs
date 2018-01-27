@@ -910,11 +910,13 @@ namespace PokemonGoGUI.GoManager
                 {
                     AccountState = AccountState.Unknown;
                     LogCaller(new LoggerEventArgs("Skipping request. Restarting ...", LoggerTypes.Exception, ex));
+                    Restart();
                 }
                 catch (ArgumentOutOfRangeException ex)
                 {
                     AccountState = AccountState.Unknown;
                     LogCaller(new LoggerEventArgs("Skipping request. Restarting ...", LoggerTypes.Exception, ex));
+                    Restart();
                 }
                 catch (SessionStateException ex)
                 {
@@ -927,6 +929,7 @@ namespace PokemonGoGUI.GoManager
                 catch (Exception ex)
                 {
                     LogCaller(new LoggerEventArgs("Unknown exception occured. Restarting ...", LoggerTypes.Exception, ex));
+                    Restart();
                 }
 
                 #endregion
