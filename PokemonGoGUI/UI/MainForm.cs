@@ -37,7 +37,7 @@ namespace PokemonGoGUI
         public MainForm()
         {
             InitializeComponent();
-            
+
             fastObjectListViewMain.BackColor = Color.FromArgb(0, 0, 0);
             fastObjectListViewMain.ForeColor = Color.LightGray;
 
@@ -49,7 +49,7 @@ namespace PokemonGoGUI
 
             fastObjectListViewHashKeys.BackColor = Color.FromArgb(0, 0, 0);
             fastObjectListViewHashKeys.ForeColor = Color.LightGray;
-            
+
             //BackColor = Color.FromArgb(43, 43, 43);
 
             //tabPage1.BorderStyle = BorderStyle.None;
@@ -508,6 +508,9 @@ namespace PokemonGoGUI
 
         private void AddManager(Manager manager)
         {
+            if (_managers.Contains(manager))
+                return;
+
             manager.OnLog += Manager_OnLog;
 
             _managers.Add(manager);
@@ -2302,5 +2305,40 @@ namespace PokemonGoGUI
             }
         }
         #endregion
+
+        private void ImportJsonToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string fileName = String.Empty;
+
+            using (var sfd = new OpenFileDialog())
+            {
+                sfd.Filter = "Json Files (*.json)|*.json|All Files (*.*)|*.*";
+
+                if (sfd.ShowDialog() == DialogResult.OK)
+                {
+                    fileName = sfd.FileName;
+                }
+                else
+                {
+                    return;
+                }
+            }
+
+            try
+            {
+                IEnumerable<Manager> selectedManagers = Serializer.FromJson<List<Manager>>(File.ReadAllText(fileName));
+
+                foreach (Manager manager in selectedManagers)
+                {
+                    AddManager(manager);
+                }
+
+                MessageBox.Show(String.Format("Successfully imported."));
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(String.Format("Failed to open to file. Ex: {0}", ex.Message));
+            }
+        }
     }
 }

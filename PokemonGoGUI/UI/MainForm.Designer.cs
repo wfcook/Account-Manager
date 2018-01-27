@@ -174,6 +174,8 @@
             this.olvColumnLastLogMessage = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.tabControlMain = new System.Windows.Forms.TabControl();
             this.Trayicon = new System.Windows.Forms.NotifyIcon(this.components);
+            this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
+            this.importJsonToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStripAccounts.SuspendLayout();
             this.statusStripStats.SuspendLayout();
             this.contextMenuStripScheduler.SuspendLayout();
@@ -228,7 +230,7 @@
             this.devToolsToolStripMenuItem,
             this.helpInfoToolStripMenuItem});
             this.contextMenuStripAccounts.Name = "contextMenuStrip1";
-            this.contextMenuStripAccounts.Size = new System.Drawing.Size(188, 580);
+            this.contextMenuStripAccounts.Size = new System.Drawing.Size(188, 608);
             this.contextMenuStripAccounts.Opening += new System.ComponentModel.CancelEventHandler(this.ContextMenuStripAccounts_Opening);
             // 
             // aboutToolStripMenuItem
@@ -518,7 +520,9 @@
             this.importToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.wConfigToolStripMenuItem,
             this.defaultToolStripMenuItem,
-            this.rMFormatToolStripMenuItem});
+            this.rMFormatToolStripMenuItem,
+            this.toolStripSeparator8,
+            this.importJsonToolStripMenuItem});
             this.importToolStripMenuItem.Name = "importToolStripMenuItem";
             this.importToolStripMenuItem.Size = new System.Drawing.Size(187, 26);
             this.importToolStripMenuItem.Text = "Import Accounts";
@@ -526,7 +530,7 @@
             // wConfigToolStripMenuItem
             // 
             this.wConfigToolStripMenuItem.Name = "wConfigToolStripMenuItem";
-            this.wConfigToolStripMenuItem.Size = new System.Drawing.Size(155, 26);
+            this.wConfigToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
             this.wConfigToolStripMenuItem.Tag = "true";
             this.wConfigToolStripMenuItem.Text = "w/ Config";
             this.wConfigToolStripMenuItem.Click += new System.EventHandler(this.WConfigToolStripMenuItem_Click);
@@ -534,7 +538,7 @@
             // defaultToolStripMenuItem
             // 
             this.defaultToolStripMenuItem.Name = "defaultToolStripMenuItem";
-            this.defaultToolStripMenuItem.Size = new System.Drawing.Size(155, 26);
+            this.defaultToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
             this.defaultToolStripMenuItem.Tag = "false";
             this.defaultToolStripMenuItem.Text = "Default";
             this.defaultToolStripMenuItem.Click += new System.EventHandler(this.WConfigToolStripMenuItem_Click);
@@ -542,7 +546,7 @@
             // rMFormatToolStripMenuItem
             // 
             this.rMFormatToolStripMenuItem.Name = "rMFormatToolStripMenuItem";
-            this.rMFormatToolStripMenuItem.Size = new System.Drawing.Size(155, 26);
+            this.rMFormatToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
             this.rMFormatToolStripMenuItem.Text = "RM format";
             this.rMFormatToolStripMenuItem.Click += new System.EventHandler(this.RMFormatToolStripMenuItem_Click);
             // 
@@ -564,19 +568,19 @@
             // importProxiesToolStripMenuItem
             // 
             this.importProxiesToolStripMenuItem.Name = "importProxiesToolStripMenuItem";
-            this.importProxiesToolStripMenuItem.Size = new System.Drawing.Size(180, 26);
+            this.importProxiesToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
             this.importProxiesToolStripMenuItem.Text = "Import Proxies";
             this.importProxiesToolStripMenuItem.Click += new System.EventHandler(this.ImportProxiesToolStripMenuItem_Click_1);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(178, 6);
             // 
             // clearProxiesToolStripMenuItem
             // 
             this.clearProxiesToolStripMenuItem.Name = "clearProxiesToolStripMenuItem";
-            this.clearProxiesToolStripMenuItem.Size = new System.Drawing.Size(180, 26);
+            this.clearProxiesToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
             this.clearProxiesToolStripMenuItem.Text = "Clear Proxies";
             this.clearProxiesToolStripMenuItem.Click += new System.EventHandler(this.ClearProxiesToolStripMenuItem_Click);
             // 
@@ -1403,6 +1407,18 @@
             this.Trayicon.Visible = true;
             this.Trayicon.MouseClick += new System.Windows.Forms.MouseEventHandler(this.TrayIcon_MouseClick);
             // 
+            // toolStripSeparator8
+            // 
+            this.toolStripSeparator8.Name = "toolStripSeparator8";
+            this.toolStripSeparator8.Size = new System.Drawing.Size(178, 6);
+            // 
+            // importJsonToolStripMenuItem
+            // 
+            this.importJsonToolStripMenuItem.Name = "importJsonToolStripMenuItem";
+            this.importJsonToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
+            this.importJsonToolStripMenuItem.Text = "Import Json";
+            this.importJsonToolStripMenuItem.Click += new System.EventHandler(this.ImportJsonToolStripMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -1583,6 +1599,8 @@
         private System.Windows.Forms.ToolStripMenuItem exportToolStripMenuItem1;
         private System.Windows.Forms.NotifyIcon Trayicon;
         private System.Windows.Forms.ToolStripMenuItem rMFormatToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator8;
+        private System.Windows.Forms.ToolStripMenuItem importJsonToolStripMenuItem;
     }
 }
 
