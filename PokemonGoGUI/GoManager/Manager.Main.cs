@@ -82,6 +82,10 @@ namespace PokemonGoGUI.GoManager
             AccountState = AccountState.Conecting;
 
             MethodResult result = await _client.DoLogin(this);
+
+            if (result == null)
+                Stop();
+
             LogCaller(new LoggerEventArgs(result.Message, LoggerTypes.Debug));
 
             if (!result.Success)
