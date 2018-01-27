@@ -376,7 +376,7 @@ namespace PokemonGoGUI
 
                 if (!manager.IsRunning)
                 {
-                    manager.RemoveProxy();
+                    manager.Stop();
                     manager.RemoveScheduler();
 
                     manager.OnLog -= Manager_OnLog;

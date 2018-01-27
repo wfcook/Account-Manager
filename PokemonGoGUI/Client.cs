@@ -41,7 +41,6 @@ namespace PokemonGoGUI
         private DeviceWrapper ClientDeviceWrapper;
         public Manager ClientManager;
         private string RessourcesFolder;
-        private event EventHandler<int> OnPokehashSleeping;
         private /*static maybe */readonly CancellationTokenSource CancellationTokenSource = new CancellationTokenSource();
 
         public Client()
@@ -125,9 +124,6 @@ namespace PokemonGoGUI
                     //Configuration.IgnoreHashVersion = true;
                     VersionStr = Configuration.Hasher.PokemonVersion;
                     AppVersion = Configuration.Hasher.AppVersion;
-                    // TODO: Revise sleeping
-                    // Used on Windows phone background app
-                    //((PokeHashHasher)Configuration.Hasher).PokehashSleeping += OnPokehashSleeping;
                 }
                 // */
 
@@ -184,8 +180,6 @@ namespace PokemonGoGUI
 
                             if (ClientManager.UserSettings.StopAtMinAccountState == AccountState.Flagged)
                             {
-                                //Remove proxy
-                                ClientManager.RemoveProxy();
                                 ClientManager.Stop();
 
                                 msgStr = "The account is flagged.";
@@ -196,10 +190,6 @@ namespace PokemonGoGUI
                         {
                             ClientManager.AccountState = AccountState.PermanentBan;
                             ClientManager.LogCaller(new LoggerEventArgs("The account is banned.", LoggerTypes.FatalError));
-
-                            //Remove proxy
-                            ClientManager.RemoveProxy();
-
                             ClientManager.Stop();
 
                             msgStr = "The account is banned.";
@@ -241,9 +231,6 @@ namespace PokemonGoGUI
                 {
                     if (ClientSession.State == SessionState.TemporalBanned)
                     {
-                        //Remove proxy
-                        ClientManager.RemoveProxy();
-
                         ClientManager.Stop();
 
                         msgStr = ex.Message;
@@ -262,12 +249,8 @@ namespace PokemonGoGUI
                 catch (AccountNotVerifiedException) // anvex
                 {
                     ClientManager.Stop();
-                    ClientManager.RemoveProxy();
-
                     ClientManager.LogCaller(new LoggerEventArgs("Account not verified. Stopping ...", LoggerTypes.Warning));
-
                     ClientManager.AccountState = Enums.AccountState.NotVerified;
-
                     msgStr = "Account not verified.";
                 }
                 catch (WebException wex)
@@ -334,8 +317,6 @@ namespace PokemonGoGUI
                 {
                     //Puts stopping log before other log.
                     ClientManager.Stop();
-                    ClientManager.RemoveProxy();
-
                     ClientManager.LogCaller(new LoggerEventArgs("Invalid credentials or account lockout. Stopping bot...", LoggerTypes.Warning, icex));
 
                     msgStr = "Username or password incorrect";
@@ -372,8 +353,6 @@ namespace PokemonGoGUI
                 catch (GoogleLoginException glex)
                 {
                     ClientManager.Stop();
-                    ClientManager.RemoveProxy();
-
                     ClientManager.LogCaller(new LoggerEventArgs(glex.Message, LoggerTypes.Warning));
 
                     msgStr = "Failed to login";
@@ -382,14 +361,13 @@ namespace PokemonGoGUI
                 {
                     //ClientManager.AccountState = AccountState.TemporalBan;
                     ClientManager.Stop();
-                    ClientManager.RemoveProxy();
                     msgStr = "Argument Null Exception.";
                 }
                 catch (PokeHashException phex)
                 {
                     ClientManager.AccountState = AccountState.HashIssues;
                     msgStr = "Hash issues";
-                    ClientManager.LogCaller(new LoggerEventArgs("Hash issues", LoggerTypes.FatalError, phex));
+                    ClientManager.LogCaller(new LoggerEventArgs("Hash issues", LoggerTypes.Warning, phex));
                 }
                 catch (Exception ex)
                 {
@@ -428,7 +406,7 @@ namespace PokemonGoGUI
 
             try
             {
-                File.WriteAllText(filename, Serializer.ToJson(data));
+                Task.Run(() => File.WriteAllText(filename, Serializer.ToJson(data)));
             }
             catch (Exception)
             {
@@ -445,7 +423,7 @@ namespace PokemonGoGUI
 
             try
             {
-                File.WriteAllText(filename, Serializer.ToJson(data));
+                Task.Run(() => File.WriteAllText(filename, Serializer.ToJson(data)));
             }
             catch (Exception)
             {
@@ -462,7 +440,7 @@ namespace PokemonGoGUI
 
             try
             {
-                File.WriteAllText(filename, Serializer.ToJson(data));
+                Task.Run(() =>  File.WriteAllText(filename, Serializer.ToJson(data)));
             }
             catch (Exception)
             {
@@ -479,17 +457,12 @@ namespace PokemonGoGUI
 
             try
             {
-                File.WriteAllText(filename, Serializer.ToJson(data));
+                Task.Run(() => File.WriteAllText(filename, Serializer.ToJson(data)));
             }
             catch (Exception)
             {
                 ClientManager.LogCaller(new LoggerEventArgs("LocalConfigVersion could not be saved sucessfully", LoggerTypes.Warning));
             }
-        }
-
-        private async void PokehashSleeping(object sender, int sleepTime)
-        {
-            await Task.Delay(sleepTime);
         }
 
         private void SessionMapUpdate(object sender, EventArgs e)

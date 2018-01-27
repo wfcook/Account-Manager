@@ -179,10 +179,7 @@ namespace PokemonGoGUI.GoManager
             {
                 LogCaller(new LoggerEventArgs("Failed to update location", LoggerTypes.Exception, ex));
 
-                return new MethodResult
-                {
-                    Message = "Failed to update location"
-                };
+                return new MethodResult();
             }
         }
 

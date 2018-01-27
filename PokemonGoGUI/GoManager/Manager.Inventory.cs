@@ -238,13 +238,13 @@ namespace PokemonGoGUI.GoManager
               return;
             }
 
-            foreach (var item in _client.ClientSession.Player.Inventory.InventoryItems)
-                AddRemoveOrUpdateItem(item);
-
             LogCaller(new LoggerEventArgs($"Updating inventory. Items to load: {type}", LoggerTypes.Debug));
 
             try
             {
+                foreach (var item in _client.ClientSession.Player.Inventory.InventoryItems)
+                    AddRemoveOrUpdateItem(item);
+
                 switch (type)
                 {
                     case InventoryRefresh.All:
