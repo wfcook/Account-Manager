@@ -30,7 +30,7 @@ using static POGOProtos.Networking.Envelopes.Signature.Types;
 
 namespace PokemonGoGUI
 {
-    public class Client: IDisposable
+    public class Client : IDisposable
     {
         public ProxyEx Proxy;
         public Version VersionStr;
@@ -41,7 +41,7 @@ namespace PokemonGoGUI
         private DeviceWrapper ClientDeviceWrapper;
         public Manager ClientManager;
         private string RessourcesFolder;
-        private /*static maybe */readonly CancellationTokenSource CancellationTokenSource = new CancellationTokenSource();
+        private CancellationTokenSource CancellationTokenSource;
 
         public Client()
         {
@@ -76,6 +76,7 @@ namespace PokemonGoGUI
             if (ClientSession.State != SessionState.Stopped)
                 ClientSession.Shutdown();
 
+            ClientSession.Dispose();
             Dispose();
         }
 
@@ -100,19 +101,21 @@ namespace PokemonGoGUI
 
             ClientManager.LogCaller(new LoggerEventArgs(message, logtype));
         }
+
         public async Task<MethodResult<bool>> DoLogin(Manager manager)
         {
             SetSettings(manager);
             // TODO: see how do this only once better.
+            CancellationTokenSource = new CancellationTokenSource();
             try
             {
                 return await Task.Run(async () =>
                 {
                     if (!(Configuration.Hasher is PokeHashHasher))
                     {
-                    // By default Configuration.Hasher is LegacyHasher type  (see Configuration.cs in the pogolib source code)
-                    // -> So this comparation only will run once.
-                    if (ClientManager.UserSettings.UseOnlyOneKey)
+                        // By default Configuration.Hasher is LegacyHasher type  (see Configuration.cs in the pogolib source code)
+                        // -> So this comparation only will run once.
+                        if (ClientManager.UserSettings.UseOnlyOneKey)
                         {
                             Configuration.Hasher = new PokeHashHasher(ClientManager.UserSettings.AuthAPIKey);
                             Configuration.HasherUrl = ClientManager.UserSettings.HashHost;
@@ -120,18 +123,18 @@ namespace PokemonGoGUI
                         }
                         else
                         {
-                        //Need valid keys but this send all
-                        Configuration.Hasher = new PokeHashHasher(ClientManager.UserSettings.HashKeys.ToArray());
+                            //Need valid keys but this send all
+                            Configuration.Hasher = new PokeHashHasher(ClientManager.UserSettings.HashKeys.ToArray());
                         }
 
-                    // TODO: make this configurable. To avoid bans (may be with a checkbox in hash keys tab).
-                    //Configuration.IgnoreHashVersion = true;
-                    VersionStr = Configuration.Hasher.PokemonVersion;
+                        // TODO: make this configurable. To avoid bans (may be with a checkbox in hash keys tab).
+                        //Configuration.IgnoreHashVersion = true;
+                        VersionStr = Configuration.Hasher.PokemonVersion;
                         AppVersion = Configuration.Hasher.AppVersion;
                     }
-                // */
+                    // */
 
-                ILoginProvider loginProvider;
+                    ILoginProvider loginProvider;
 
                     switch (ClientManager.UserSettings.AuthType)
                     {
@@ -147,9 +150,9 @@ namespace PokemonGoGUI
 
                     ClientSession = await GetSession(loginProvider, ClientManager.UserSettings.Latitude, ClientManager.UserSettings.Longitude, true);
 
-                // Send initial requests and start HeartbeatDispatcher.
-                // This makes sure that the initial heartbeat request finishes and the "session.Map.Cells" contains stuff.
-                var msgStr = "Session couldn't start up.";
+                    // Send initial requests and start HeartbeatDispatcher.
+                    // This makes sure that the initial heartbeat request finishes and the "session.Map.Cells" contains stuff.
+                    var msgStr = "Session couldn't start up.";
                     LoggedIn = false;
                     try
                     {
@@ -214,11 +217,11 @@ namespace PokemonGoGUI
                         ClientManager.LogCaller(new LoggerEventArgs($"API {ex.Message}, this account is maybe banned ...", LoggerTypes.Warning));
                     }
                     catch (InvalidPlatformException)// ex
-                {
+                    {
                         ClientManager.LogCaller(new LoggerEventArgs("Invalid Platform or token session refresh, continue  ...", LoggerTypes.Warning));
                     }
                     catch (SessionInvalidatedException)// ex
-                {
+                    {
                         ClientManager.LogCaller(new LoggerEventArgs("Session Invalidated or token session refresh, continue ...", LoggerTypes.Warning));
                     }
                     catch (SessionUnknowException)
@@ -226,9 +229,10 @@ namespace PokemonGoGUI
                         ClientManager.AccountState = AccountState.Unknown;
                         msgStr = "Skipping request. Restarting ...";
                     }
-                    catch (ArgumentOutOfRangeException)
+                    catch (ArgumentOutOfRangeException ex)
                     {
                         ClientManager.AccountState = AccountState.Unknown;
+                        ClientManager.LogCaller(new LoggerEventArgs("Skipping request", LoggerTypes.Exception, ex));
                         msgStr = "Skipping request";
                     }
                     catch (SessionStateException ex)
@@ -243,7 +247,7 @@ namespace PokemonGoGUI
                             ClientManager.LogCaller(new LoggerEventArgs(ex.Message, LoggerTypes.Warning));
                     }
                     catch (PtcLoginException) // poex
-                {
+                    {
                         ClientManager.Stop();
 
                         ClientManager.LogCaller(new LoggerEventArgs("Ptc server offline. Please try again later.", LoggerTypes.Warning));
@@ -251,7 +255,7 @@ namespace PokemonGoGUI
                         msgStr = "Ptc server offline.";
                     }
                     catch (AccountNotVerifiedException) // anvex
-                {
+                    {
                         ClientManager.Stop();
                         ClientManager.LogCaller(new LoggerEventArgs("Account not verified. Stopping ...", LoggerTypes.Warning));
                         ClientManager.AccountState = Enums.AccountState.NotVerified;
@@ -302,7 +306,7 @@ namespace PokemonGoGUI
                         msgStr = "Failed to login due to request error";
                     }
                     catch (TaskCanceledException) // tce
-                {
+                    {
                         ClientManager.Stop();
 
                         if (String.IsNullOrEmpty(ClientManager.Proxy))
@@ -319,14 +323,14 @@ namespace PokemonGoGUI
                     }
                     catch (InvalidCredentialsException icex)
                     {
-                    //Puts stopping log before other log.
-                    ClientManager.Stop();
+                        //Puts stopping log before other log.
+                        ClientManager.Stop();
                         ClientManager.LogCaller(new LoggerEventArgs("Invalid credentials or account lockout. Stopping bot...", LoggerTypes.Warning, icex));
 
                         msgStr = "Username or password incorrect";
                     }
                     catch (IPBannedException) // ipex
-                {
+                    {
                         if (ClientManager.UserSettings.StopOnIPBan)
                         {
                             ClientManager.Stop();
@@ -361,10 +365,11 @@ namespace PokemonGoGUI
 
                         msgStr = "Failed to login";
                     }
-                    catch (ArgumentNullException) // anex
-                {
-                    //ClientManager.AccountState = AccountState.TemporalBan;
-                    ClientManager.Stop();
+                    catch (ArgumentNullException ex) // anex
+                    {
+                        //ClientManager.AccountState = AccountState.TemporalBan;
+                        ClientManager.LogCaller(new LoggerEventArgs(ex.Message, LoggerTypes.Warning));
+                        ClientManager.Stop();
                         msgStr = "Argument Null Exception.";
                     }
                     catch (PokeHashException phex)
@@ -376,9 +381,9 @@ namespace PokemonGoGUI
                     catch (Exception ex)
                     {
                         ClientManager.Stop();
-                    //RemoveProxy();
+                        //RemoveProxy();
 
-                    ClientManager.LogCaller(new LoggerEventArgs("Failed to login", LoggerTypes.Exception, ex));
+                        ClientManager.LogCaller(new LoggerEventArgs("Failed to login", LoggerTypes.Exception, ex));
 
                         msgStr = "Failed to login";
                     }
@@ -453,7 +458,7 @@ namespace PokemonGoGUI
 
             try
             {
-                Task.Run(() =>  File.WriteAllText(filename, Serializer.ToJson(data)));
+                Task.Run(() => File.WriteAllText(filename, Serializer.ToJson(data)));
             }
             catch (Exception)
             {
@@ -480,7 +485,7 @@ namespace PokemonGoGUI
 
         private void SessionMapUpdate(object sender, EventArgs e)
         {
-            // Update Map
+            //Map Update
         }
 
         public void SessionOnCaptchaReceived(object sender, CaptchaEventArgs e)
@@ -493,13 +498,8 @@ namespace PokemonGoGUI
 
             ClientManager.LogCaller(new LoggerEventArgs("Bot paused VerifyChallenge...", LoggerTypes.Captcha));
 
-            bool solved = false;
-            //int retries = 1;
+            bool solved = ClientManager.CaptchaSolver.SolveCaptcha(this, e.CaptchaUrl).Result;
 
-            //while (retries-- > 0 && !solved)
-            //{
-            solved = ClientManager.CaptchaSolver.SolveCaptcha(this, e.CaptchaUrl).Result;
-            //}
             if (solved)
             {
                 ClientManager.LogCaller(new LoggerEventArgs("Unpausing bot Challenge finished...", LoggerTypes.Captcha));
@@ -554,7 +554,8 @@ namespace PokemonGoGUI
             {
                 {"11.1.0", "CFNetwork/889.3 Darwin/17.2.0"},
                 {"11.2.0", "CFNetwork/893.10 Darwin/17.3.0"},
-                {"11.2.5", "CFNetwork/893.14.2 Darwin/17.4.0"}
+                {"11.2.5", "CFNetwork/893.14.2 Darwin/17.4.0"},
+                {"11.3.0", "CFNetwork/897.1 Darwin/17.5.0"}
             };
 
             ClientDeviceWrapper = new DeviceWrapper
@@ -655,7 +656,6 @@ namespace PokemonGoGUI
                     // TODO: supprimer l'état managé (objets managés).
                     if (CancellationTokenSource != null)
                     {
-                        ClientManager.Stop();
                         CancellationTokenSource.Dispose();
                         return;
                     }

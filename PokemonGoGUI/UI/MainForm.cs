@@ -124,7 +124,10 @@ namespace PokemonGoGUI
 
         private void RefreshManager(Manager manager)
         {
-            //Update logs
+            //Update Main
+            if (!manager.IsRunning)
+                return;
+
             if (fastObjectListViewMain.IsDisposed || fastObjectListViewMain.Disposing)
             {
                 return;

@@ -581,29 +581,10 @@ namespace PokemonGoGUI.GoManager
                                 MethodResult nearbyPokemonResponse = await CatchNeabyPokemon();
                                 await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
-                            }
-                            else
-                            {
-                                LogCaller(new LoggerEventArgs("You don't have any pokeball catching pokemon will be disabled during " + UserSettings.DisableCatchDelay.ToString(CultureInfo.InvariantCulture) + " minutes.", LoggerTypes.Info));
-                                CatchDisabled = true;
-                                TimeAutoCatch = DateTime.Now.AddMinutes(UserSettings.DisableCatchDelay);
-                            }
-
-                            if (RemainingPokeballs() > 0)
-                            {
                                 //Catch incense pokemon
                                 MethodResult incensePokemonResponse = await CatchInsencePokemon();
                                 await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
-                            }
-                            else
-                            {
-                                LogCaller(new LoggerEventArgs("You don't have any pokeball catching pokemon will be disabled during " + UserSettings.DisableCatchDelay.ToString(CultureInfo.InvariantCulture) + " minutes.", LoggerTypes.Info));
-                                CatchDisabled = true;
-                                TimeAutoCatch = DateTime.Now.AddMinutes(UserSettings.DisableCatchDelay);
-                            }
 
-                            if (RemainingPokeballs() > 0)
-                            {
                                 //Catch lured pokemon
                                 MethodResult luredPokemonResponse = await CatchLuredPokemon(pokestop);
                                 await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
@@ -722,7 +703,7 @@ namespace PokemonGoGUI.GoManager
                                         }
                                         else
                                         {
-                                            if (currentFailedStops > 5)
+                                            if (currentFailedStops > 10)
                                             {
                                                 Stop();
                                             }
@@ -745,7 +726,7 @@ namespace PokemonGoGUI.GoManager
                                     }
                                     else
                                     {
-                                        if (currentFailedStops > 5)
+                                        if (currentFailedStops > 10)
                                         {
                                             Stop();
                                         }

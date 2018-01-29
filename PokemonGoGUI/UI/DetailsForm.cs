@@ -183,7 +183,9 @@ namespace PokemonGoGUI.UI
 
         private void _manager_OnLog(object sender, LoggerEventArgs e)
         {
-            //Update logs
+            if (!_manager.IsRunning)
+                return;
+                
             if (fastObjectListViewLogs.IsDisposed || fastObjectListViewLogs.Disposing)
             {
                 return;
@@ -668,9 +670,6 @@ namespace PokemonGoGUI.UI
             {
                 return;
             }
-
-            //BuddyPokemon _oldbuddy = _manager.PlayerData?.BuddyPokemon;
-            //BuddyPokemon oldbuddy = _oldbuddy ?? new BuddyPokemon();
 
             contextMenuStripPokemonDetails.Enabled = false;
 
