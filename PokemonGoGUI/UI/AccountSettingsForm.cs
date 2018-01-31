@@ -586,6 +586,66 @@ namespace PokemonGoGUI.UI
             fastObjectListViewCatch.RefreshSelectedObjects();
         }
 
+        private void TrueUsePinaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var tSMI = sender as ToolStripMenuItem;
+
+            if (tSMI == null)
+            {
+                return;
+            }
+
+            var checkType = (CheckType)Int32.Parse(tSMI.Tag.ToString());
+
+            foreach (CatchSetting cSetting in fastObjectListViewCatch.SelectedObjects)
+            {
+                if (checkType == CheckType.Toggle)
+                {
+                    cSetting.UsePinap = !cSetting.UsePinap;
+                }
+                else if (checkType == CheckType.True)
+                {
+                    cSetting.UsePinap = true;
+                }
+                else
+                {
+                    cSetting.UsePinap = false;
+                }
+            }
+
+            fastObjectListViewCatch.RefreshSelectedObjects();
+        }
+
+        private void TrueLocalSnipeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var tSMI = sender as ToolStripMenuItem;
+
+            if (tSMI == null)
+            {
+                return;
+            }
+
+            var checkType = (CheckType)Int32.Parse(tSMI.Tag.ToString());
+
+            foreach (CatchSetting cSetting in fastObjectListViewCatch.SelectedObjects)
+            {
+                if (checkType == CheckType.Toggle)
+                {
+                    cSetting.Snipe = !cSetting.Snipe;
+                }
+                else if (checkType == CheckType.True)
+                {
+                    cSetting.Snipe = true;
+                }
+                else
+                {
+                    cSetting.Snipe = false;
+                }
+            }
+
+            fastObjectListViewCatch.RefreshSelectedObjects();
+        }
+
         private void RestoreDefaultsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             DialogResult result = MessageBox.Show("Reset defaults?", "Confirmation", MessageBoxButtons.YesNoCancel);
@@ -651,7 +711,7 @@ namespace PokemonGoGUI.UI
             fastObjectListViewEvolve.SetObjects(_manager.UserSettings.EvolveSettings);
         }
 
-        private void TrueToolStripMenuItem1_Click(object sender, EventArgs e)
+        private void TrueEvoleToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var tSMI = sender as ToolStripMenuItem;
 
@@ -721,7 +781,7 @@ namespace PokemonGoGUI.UI
 
         #region Upgrade
 
-        private void TrueToolStripMenuItemUpgrade_Click(object sender, EventArgs e)
+        private void TrueUpgradeToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var tSMI = sender as ToolStripMenuItem;
 
@@ -812,6 +872,7 @@ namespace PokemonGoGUI.UI
 
                 if (result.Success)
                 {
+                    SaveSettings();
                     MessageBox.Show("Config exported", "Info");
                 }
             }
@@ -865,17 +926,6 @@ namespace PokemonGoGUI.UI
         private void AccountSettingsForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             DialogResult = DialogResult.OK;
-        }
-
-        void SetUsePinapToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (fastObjectListViewCatch.SelectedObjects == null)
-                return;
-
-            foreach (CatchSetting cSetting in fastObjectListViewCatch.SelectedObjects)
-                cSetting.UsePinap = !cSetting.UsePinap;
-
-            fastObjectListViewCatch.RefreshSelectedObjects();
         }
 
         private void CbTeam_TextChanged(object sender, EventArgs e)

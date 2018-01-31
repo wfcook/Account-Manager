@@ -569,7 +569,7 @@ namespace PokemonGoGUI.GoManager
                             }
                         }
 
-                        // NOTE: not an "else" we could enabled catch in this time 
+                        // NOTE: not an "else" we could enabled catch in this time
                         if (!CatchDisabled)
                         {
                             var remainingBalls = RemainingPokeballs();
@@ -587,6 +587,10 @@ namespace PokemonGoGUI.GoManager
 
                                 //Catch lured pokemon
                                 MethodResult luredPokemonResponse = await CatchLuredPokemon(pokestop);
+                                await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
+
+                                //Check sniping NearyPokemon
+                                await SnipeAllNearyPokemon();
                                 await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
                             }
                             else
@@ -1080,6 +1084,44 @@ namespace PokemonGoGUI.GoManager
             TotalPokeStopExp = 0;
             Tracker.Values.Clear();
             Tracker.CalculatedTrackingHours();
+        }
+
+        private async Task<MethodResult> RepeatAction(Func<Task<MethodResult>> action, int tries)
+        {
+            MethodResult result = new MethodResult();
+
+            for (int i = 0; i < tries; i++)
+            {
+                result = await action();
+
+                if (result.Success)
+                {
+                    return result;
+                }
+
+                await Task.Delay(1000);
+            }
+
+            return result;
+        }
+
+        private async Task<MethodResult<T>> RepeatAction<T>(Func<Task<MethodResult<T>>> action, int tries)
+        {
+            MethodResult<T> result = new MethodResult<T>();
+
+            for (int i = 0; i < tries; i++)
+            {
+                result = await action();
+
+                if (result.Success)
+                {
+                    return result;
+                }
+
+                await Task.Delay(1000);
+            }
+
+            return result;
         }
     }
 }

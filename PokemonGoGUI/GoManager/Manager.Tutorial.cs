@@ -34,7 +34,7 @@ namespace PokemonGoGUI.GoManager
 
             if (!completedTutorials.Contains(TutorialState.LegalScreen))
             {
-                await MarkTutorialsComplete(new[] { TutorialState.AccountCreation, TutorialState.LegalScreen });
+                await MarkTutorialsComplete(new[] { TutorialState.LegalScreen });
                 await GetPlayer();
             }
             await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
@@ -43,7 +43,7 @@ namespace PokemonGoGUI.GoManager
             {
                 await SetPlayerAvatar();
                 await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
-                await MarkTutorialsComplete(new[] { TutorialState.AvatarSelection });
+                await MarkTutorialsComplete(new[] { TutorialState.AccountCreation, TutorialState.AvatarSelection });
                 await GetPlayerProfile();
             }
             else
@@ -145,7 +145,8 @@ namespace PokemonGoGUI.GoManager
             markTutorialCompleteResponse = MarkTutorialCompleteResponse.Parser.ParseFrom(response);
             LogCaller(new LoggerEventArgs("Tutorial completion request wasn't successful", LoggerTypes.Success));
 
-            _client.ClientSession.Player.Data = markTutorialCompleteResponse.PlayerData;
+            // not nedded pogolib set this auto
+            //_client.ClientSession.Player.Data = markTutorialCompleteResponse.PlayerData;
 
             return new MethodResult
             {

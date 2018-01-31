@@ -143,7 +143,6 @@ namespace PokemonGoGUI.GoManager
 
         private async Task<MethodResult> UpdateLocation(GeoCoordinate location)
         {
-            await Task.Delay(0);
             try
             {
                 var previousLocation = new GeoCoordinate(_client.ClientSession.Player.Latitude, _client.ClientSession.Player.Longitude);
@@ -159,10 +158,13 @@ namespace PokemonGoGUI.GoManager
                     };
                 }
 
-                _client.ClientSession.Player.SetCoordinates(location.Latitude, location.Longitude);
+                var moveTo = new GeoCoordinate(location.Latitude, location.Longitude);
+
+                await Task.Run(() => _client.ClientSession.Player.SetCoordinates(moveTo));
                 
                 UserSettings.Latitude = _client.ClientSession.Player.Latitude;
                 UserSettings.Longitude = _client.ClientSession.Player.Longitude;
+                UserSettings.Altitude = _client.ClientSession.Player.Altitude;
 
                 //string message = String.Format("Location updated to {0}, {1}. Distance: {2:0.00}m", location.Latitude, location.Longitude, distance);
                 string message = String.Format("Location distance: {0:0.00}m",  distance);

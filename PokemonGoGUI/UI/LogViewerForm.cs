@@ -1,4 +1,5 @@
-﻿using PokemonGoGUI.Extensions;
+﻿using PokemonGoGUI.Enums;
+using PokemonGoGUI.Extensions;
 using PokemonGoGUI.GoManager.Models;
 using System;
 using System.Collections.Generic;

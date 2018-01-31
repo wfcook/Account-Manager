@@ -23,6 +23,7 @@
         AwardedBadges,
         HatchedEggs,
         Upgrade,
-        LevelUp
+        LevelUp,
+        Snipe
     };
 }

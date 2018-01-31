@@ -88,6 +88,8 @@ namespace PokemonGoGUI.GoManager.Models
                     return Color.Aqua;
                 case LoggerTypes.LevelUp:
                     return Color.Gold;
+                case LoggerTypes.Snipe:
+                    return Color.Cyan;
             }
             return SystemColors.WindowText;
         }

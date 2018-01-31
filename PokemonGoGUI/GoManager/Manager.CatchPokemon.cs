@@ -260,9 +260,8 @@ namespace PokemonGoGUI.GoManager
                                 else
                                 {
                                     bool isHighProbability = probability > 0.65;
-                                    var catchSettings = UserSettings.CatchSettings.FirstOrDefault(x => x.Id == eResponse.PokemonData.PokemonId);
-                                    var usePinap = catchSettings != null && catchSettings.UsePinap;
-                                    if (isHighProbability && usePinap)
+                                    var catchSettings = UserSettings.CatchSettings.FirstOrDefault(x => x.Id == eResponse.PokemonData.PokemonId);                                    
+                                    if (isHighProbability && catchSettings.UsePinap)
                                     {
                                         await UseBerry(fortData.LureInfo.EncounterId, fortData.Id, ItemId.ItemPinapBerry);
                                         berryUsed = true;
@@ -497,7 +496,7 @@ namespace PokemonGoGUI.GoManager
         }
 
         //Catch encountered pokemon
-        private async Task<MethodResult> CatchPokemon(dynamic eResponse, MapPokemon mapPokemon)
+        private async Task<MethodResult> CatchPokemon(dynamic eResponse, MapPokemon mapPokemon, bool snipped = false)
         {
             PokemonData _encounteredPokemon = null;
             long _unixTimeStamp = 0;
@@ -514,7 +513,7 @@ namespace PokemonGoGUI.GoManager
                                 + eResponse.WildPokemon?.TimeTillHiddenMs;
                 _spawnPointId = eResponse.WildPokemon?.SpawnPointId;
                 _encounterId = eResponse.WildPokemon?.EncounterId;
-                _pokemonType = "Normal";
+                _pokemonType = snipped ? "Snipe Normal" : "Normal";
             }
             // Calling from CatchIncensePokemon
             else if (eResponse is IncenseEncounterResponse &&
@@ -524,11 +523,12 @@ namespace PokemonGoGUI.GoManager
                 _unixTimeStamp = mapPokemon.ExpirationTimestampMs;
                 _spawnPointId = mapPokemon.SpawnPointId;
                 _encounterId = mapPokemon.EncounterId;
-                _pokemonType = "Incense";
+                _pokemonType = snipped ? "Snipe Incense" : "Incense";
             }
 
             CatchPokemonResponse catchPokemonResponse = null;
             int attemptCount = 1;
+            bool berryUsed = false;
 
             do
             {
@@ -549,28 +549,36 @@ namespace PokemonGoGUI.GoManager
                     };
                 }
 
-                bool isLowProbability = probability < 0.40;
-                bool isHighCp = _encounteredPokemon.Cp > 800;
-                bool isHighPerfection = CalculateIVPerfection(_encounteredPokemon) > 95;
-
                 if (UserSettings.UseBerries)
                 {
-                    if ((isLowProbability && isHighCp) || isHighPerfection)
-                    {
-                        await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+                    bool isLowProbability = probability < 0.40;
+                    bool isHighCp = _encounteredPokemon.Cp > 800;
+                    bool isHighPerfection = CalculateIVPerfection(_encounteredPokemon) > 95;
 
-                        await UseBerry(mapPokemon, ItemId.ItemRazzBerry);
-                    }
-                    else
+                    if (!berryUsed)
                     {
-                        bool isHighProbability = probability > 0.65;
-                        if (isHighProbability)
-                            await UseBerry(mapPokemon, ItemId.ItemPinapBerry);
-                        else if (new Random().Next(0, 100) < 50)
+                        if ((isLowProbability && isHighCp) || isHighPerfection)
                         {
-                            // IF we dont use razz neither use pinap, then we will use nanab randomly the 50% of times.
-                            await UseBerry(mapPokemon, ItemId.ItemNanabBerry);
+                            await UseBerry(mapPokemon, ItemId.ItemRazzBerry);
+                            berryUsed = true;
                         }
+                        else
+                        {
+                            bool isHighProbability = probability > 0.65;
+                            var catchSettings = UserSettings.CatchSettings.FirstOrDefault(x => x.Id == _encounteredPokemon.PokemonId);
+                            if (isHighProbability && catchSettings.UsePinap)
+                            {
+                                await UseBerry(mapPokemon, ItemId.ItemPinapBerry);
+                                berryUsed = true;
+                            }
+                            else if (new Random().Next(0, 100) < 50)
+                            {
+                                // IF we dont use razz neither use pinap, then we will use nanab randomly the 50% of times.
+                                await UseBerry(mapPokemon, ItemId.ItemNanabBerry);
+                                berryUsed = true;
+                            }
+                        }
+                        await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
                     }
                 }
 
@@ -678,7 +686,7 @@ namespace PokemonGoGUI.GoManager
                             }
                         }
 
-                        LogCaller(new LoggerEventArgs(String.Format("[{0}] Pokemon Caught. {1}. Exp {2}. Candy: {3}. Attempt #{4}. Ball: {5}", _pokemonType, pokemon, expGained, candyGained, attemptCount, pokeBallName), LoggerTypes.Success));
+                        LogCaller(new LoggerEventArgs(String.Format("[{0}] Pokemon Caught. {1}. Exp {2}. Candy: {3}. Attempt #{4}. Ball: {5}", _pokemonType, pokemon, expGained, candyGained, attemptCount, pokeBallName), snipped ? LoggerTypes.Snipe : LoggerTypes.Success));
 
                         //Pokemon.Add(_encounteredPokemon);
                         UpdateInventory(InventoryRefresh.Pokemon);
@@ -697,23 +705,24 @@ namespace PokemonGoGUI.GoManager
             return new MethodResult();
         }
 
-        private bool PokemonWithinCatchSettings(PokemonId pokemondId)
+        private bool PokemonWithinCatchSettings(PokemonId pokemonId)
         {
-            CatchSetting catchSettings = UserSettings.CatchSettings.FirstOrDefault(x => x.Id == pokemondId);
+            CatchSetting catchSettings = UserSettings.CatchSettings.FirstOrDefault(x => x.Id == pokemonId);
 
             if (catchSettings == null)
             {
-                LogCaller(new LoggerEventArgs(String.Format("Failed to find catch setting for {0}. Attempting to catch", pokemondId), LoggerTypes.Warning));
+                LogCaller(new LoggerEventArgs(String.Format("Failed to find catch setting for {0}. Attempting to catch", pokemonId), LoggerTypes.Warning));
 
+                return false;
+            }
+
+            if (catchSettings.Catch)
+            {
                 return true;
             }
 
-            if (!catchSettings.Catch)
-            {
-                LogCaller(new LoggerEventArgs(String.Format("Skipping catching {0}", pokemondId), LoggerTypes.Info));
-            }
-
-            return catchSettings.Catch;
+            LogCaller(new LoggerEventArgs(String.Format("Skipping catching {0}", pokemonId), LoggerTypes.Info));
+            return false;
         }
 
         private bool PokemonWithinCatchSettings(MapPokemon pokemon)

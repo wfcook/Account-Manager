@@ -260,7 +260,8 @@ namespace PokemonGoGUI.GoManager
 
             LogCaller(new LoggerEventArgs($"Set player Team completion request wasn't successful. Team: {team.ToString()}", LoggerTypes.Success));
 
-            _client.ClientSession.Player.Data = setPlayerTeamResponse.PlayerData;
+            // not nedded pogolib set this auto
+            //_client.ClientSession.Player.Data = setPlayerTeamResponse.PlayerData;
 
             return new MethodResult
             {

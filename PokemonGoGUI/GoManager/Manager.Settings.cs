@@ -321,7 +321,7 @@ namespace PokemonGoGUI.GoManager
                 return new MethodResult
                 {
                     Success = true
-                };
+                };               
             }
             catch (Exception ex)
             {

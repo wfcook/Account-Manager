@@ -12,7 +12,7 @@ namespace PokemonGoGUI.GoManager
 {
     public partial class Manager
     {
-        public MethodResult<List<MapPokemon>> GetCatchablePokemon()
+        private MethodResult<List<MapPokemon>> GetCatchablePokemon()
         {
             if (_client.ClientSession.Map.Cells.Count == 0 || _client.ClientSession.Map == null)
             {
@@ -32,7 +32,7 @@ namespace PokemonGoGUI.GoManager
             };
         }
 
-        public MethodResult<List<FortData>> GetPokeStops()
+        private MethodResult<List<FortData>> GetPokeStops()
         {
             if (_client.ClientSession.Map.Cells.Count == 0 || _client.ClientSession.Map == null)
             {

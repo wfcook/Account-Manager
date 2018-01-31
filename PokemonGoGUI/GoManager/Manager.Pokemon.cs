@@ -1,7 +1,6 @@
 ﻿using Google.Protobuf;
 using POGOProtos.Data;
 using POGOProtos.Enums;
-using POGOProtos.Inventory;
 using POGOProtos.Networking.Requests;
 using POGOProtos.Networking.Requests.Messages;
 using POGOProtos.Networking.Responses;

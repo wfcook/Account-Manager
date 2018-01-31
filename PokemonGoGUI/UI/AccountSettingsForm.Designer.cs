@@ -214,14 +214,22 @@
             this.olvColumnCatchId = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnCatchName = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnCatch = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.olvColumnPinap = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnUsePinap = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnSnipe = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.contextMenuStripCatching = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.setCatchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.trueToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.falseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toggleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.restoreDefaultsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.setUsePinapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.setUsePinapToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.trueToolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
+            this.falseToolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toggleToolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
+            this.setLocalSnipeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.trueToolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
+            this.falseToolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toggleToolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
             this.tabPageTransfer = new System.Windows.Forms.TabPage();
             this.fastObjectListViewTransfer = new BrightIdeasSoftware.FastObjectListView();
             this.olvColumnTransferId = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
@@ -245,6 +253,7 @@
             this.falseToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.toggleToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.restoreDefaultsToolStripMenuItemUpgrade = new System.Windows.Forms.ToolStripMenuItem();
+            this.olvColumnPinap = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.toolTipProxy = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipMinAccountState = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipHumanizeThrows = new System.Windows.Forms.ToolTip(this.components);
@@ -2342,7 +2351,7 @@
             this.trueToolStripMenuItem1.Size = new System.Drawing.Size(130, 26);
             this.trueToolStripMenuItem1.Tag = "1";
             this.trueToolStripMenuItem1.Text = "True";
-            this.trueToolStripMenuItem1.Click += new System.EventHandler(this.TrueToolStripMenuItem1_Click);
+            this.trueToolStripMenuItem1.Click += new System.EventHandler(this.TrueEvoleToolStripMenuItem_Click);
             // 
             // falseToolStripMenuItem1
             // 
@@ -2350,7 +2359,7 @@
             this.falseToolStripMenuItem1.Size = new System.Drawing.Size(130, 26);
             this.falseToolStripMenuItem1.Tag = "0";
             this.falseToolStripMenuItem1.Text = "False";
-            this.falseToolStripMenuItem1.Click += new System.EventHandler(this.TrueToolStripMenuItem1_Click);
+            this.falseToolStripMenuItem1.Click += new System.EventHandler(this.TrueEvoleToolStripMenuItem_Click);
             // 
             // toggleToolStripMenuItem1
             // 
@@ -2358,7 +2367,7 @@
             this.toggleToolStripMenuItem1.Size = new System.Drawing.Size(130, 26);
             this.toggleToolStripMenuItem1.Tag = "2";
             this.toggleToolStripMenuItem1.Text = "Toggle";
-            this.toggleToolStripMenuItem1.Click += new System.EventHandler(this.TrueToolStripMenuItem1_Click);
+            this.toggleToolStripMenuItem1.Click += new System.EventHandler(this.TrueEvoleToolStripMenuItem_Click);
             // 
             // editCPToolStripMenuItem
             // 
@@ -2390,12 +2399,15 @@
             this.fastObjectListViewCatch.AllColumns.Add(this.olvColumnCatchId);
             this.fastObjectListViewCatch.AllColumns.Add(this.olvColumnCatchName);
             this.fastObjectListViewCatch.AllColumns.Add(this.olvColumnCatch);
+            this.fastObjectListViewCatch.AllColumns.Add(this.olvColumnUsePinap);
+            this.fastObjectListViewCatch.AllColumns.Add(this.olvColumnSnipe);
             this.fastObjectListViewCatch.CellEditUseWholeCell = false;
             this.fastObjectListViewCatch.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.olvColumnCatchId,
             this.olvColumnCatchName,
             this.olvColumnCatch,
-            this.olvColumnPinap});
+            this.olvColumnUsePinap,
+            this.olvColumnSnipe});
             this.fastObjectListViewCatch.ContextMenuStrip = this.contextMenuStripCatching;
             this.fastObjectListViewCatch.Cursor = System.Windows.Forms.Cursors.Default;
             this.fastObjectListViewCatch.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -2425,21 +2437,28 @@
             this.olvColumnCatch.AspectName = "Catch";
             this.olvColumnCatch.Text = "Catch";
             // 
-            // olvColumnPinap
+            // olvColumnUsePinap
             // 
-            this.olvColumnPinap.AspectName = "UsePinap";
-            this.olvColumnPinap.Text = "Use Pinap";
-            this.olvColumnPinap.Width = 70;
+            this.olvColumnUsePinap.AspectName = "UsePinap";
+            this.olvColumnUsePinap.Text = "Use Pinap";
+            this.olvColumnUsePinap.Width = 83;
+            // 
+            // olvColumnSnipe
+            // 
+            this.olvColumnSnipe.AspectName = "Snipe";
+            this.olvColumnSnipe.Text = "Local Snipe";
+            this.olvColumnSnipe.Width = 87;
             // 
             // contextMenuStripCatching
             // 
             this.contextMenuStripCatching.ImageScalingSize = new System.Drawing.Size(22, 22);
             this.contextMenuStripCatching.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.setCatchToolStripMenuItem,
-            this.restoreDefaultsToolStripMenuItem,
-            this.setUsePinapToolStripMenuItem});
+            this.setUsePinapToolStripMenuItem1,
+            this.setLocalSnipeToolStripMenuItem,
+            this.restoreDefaultsToolStripMenuItem});
             this.contextMenuStripCatching.Name = "contextMenuStripCatching";
-            this.contextMenuStripCatching.Size = new System.Drawing.Size(194, 76);
+            this.contextMenuStripCatching.Size = new System.Drawing.Size(188, 128);
             // 
             // setCatchToolStripMenuItem
             // 
@@ -2448,7 +2467,8 @@
             this.falseToolStripMenuItem,
             this.toggleToolStripMenuItem});
             this.setCatchToolStripMenuItem.Name = "setCatchToolStripMenuItem";
-            this.setCatchToolStripMenuItem.Size = new System.Drawing.Size(193, 24);
+            this.setCatchToolStripMenuItem.Size = new System.Drawing.Size(187, 24);
+            this.setCatchToolStripMenuItem.Tag = "0";
             this.setCatchToolStripMenuItem.Text = "Set Catch";
             // 
             // trueToolStripMenuItem
@@ -2478,16 +2498,79 @@
             // restoreDefaultsToolStripMenuItem
             // 
             this.restoreDefaultsToolStripMenuItem.Name = "restoreDefaultsToolStripMenuItem";
-            this.restoreDefaultsToolStripMenuItem.Size = new System.Drawing.Size(193, 24);
+            this.restoreDefaultsToolStripMenuItem.Size = new System.Drawing.Size(187, 24);
             this.restoreDefaultsToolStripMenuItem.Text = "Restore Defaults";
             this.restoreDefaultsToolStripMenuItem.Click += new System.EventHandler(this.RestoreDefaultsToolStripMenuItem_Click);
             // 
-            // setUsePinapToolStripMenuItem
+            // setUsePinapToolStripMenuItem1
             // 
-            this.setUsePinapToolStripMenuItem.Name = "setUsePinapToolStripMenuItem";
-            this.setUsePinapToolStripMenuItem.Size = new System.Drawing.Size(193, 24);
-            this.setUsePinapToolStripMenuItem.Text = "Toggle Use Pinap";
-            this.setUsePinapToolStripMenuItem.Click += new System.EventHandler(this.SetUsePinapToolStripMenuItem_Click);
+            this.setUsePinapToolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.trueToolStripMenuItem3,
+            this.falseToolStripMenuItem3,
+            this.toggleToolStripMenuItem3});
+            this.setUsePinapToolStripMenuItem1.Name = "setUsePinapToolStripMenuItem1";
+            this.setUsePinapToolStripMenuItem1.Size = new System.Drawing.Size(187, 24);
+            this.setUsePinapToolStripMenuItem1.Tag = "1";
+            this.setUsePinapToolStripMenuItem1.Text = "Set Use Pinap";
+            // 
+            // trueToolStripMenuItem3
+            // 
+            this.trueToolStripMenuItem3.Name = "trueToolStripMenuItem3";
+            this.trueToolStripMenuItem3.Size = new System.Drawing.Size(181, 26);
+            this.trueToolStripMenuItem3.Tag = "1";
+            this.trueToolStripMenuItem3.Text = "True";
+            this.trueToolStripMenuItem3.Click += new System.EventHandler(this.TrueUsePinaToolStripMenuItem_Click);
+            // 
+            // falseToolStripMenuItem3
+            // 
+            this.falseToolStripMenuItem3.Name = "falseToolStripMenuItem3";
+            this.falseToolStripMenuItem3.Size = new System.Drawing.Size(181, 26);
+            this.falseToolStripMenuItem3.Tag = "0";
+            this.falseToolStripMenuItem3.Text = "False";
+            this.falseToolStripMenuItem3.Click += new System.EventHandler(this.TrueUsePinaToolStripMenuItem_Click);
+            // 
+            // toggleToolStripMenuItem3
+            // 
+            this.toggleToolStripMenuItem3.Name = "toggleToolStripMenuItem3";
+            this.toggleToolStripMenuItem3.Size = new System.Drawing.Size(181, 26);
+            this.toggleToolStripMenuItem3.Tag = "3";
+            this.toggleToolStripMenuItem3.Text = "Toggle";
+            this.toggleToolStripMenuItem3.Click += new System.EventHandler(this.TrueUsePinaToolStripMenuItem_Click);
+            // 
+            // setLocalSnipeToolStripMenuItem
+            // 
+            this.setLocalSnipeToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.trueToolStripMenuItem4,
+            this.falseToolStripMenuItem4,
+            this.toggleToolStripMenuItem4});
+            this.setLocalSnipeToolStripMenuItem.Name = "setLocalSnipeToolStripMenuItem";
+            this.setLocalSnipeToolStripMenuItem.Size = new System.Drawing.Size(187, 24);
+            this.setLocalSnipeToolStripMenuItem.Tag = "2";
+            this.setLocalSnipeToolStripMenuItem.Text = "Set Local Snipe";
+            // 
+            // trueToolStripMenuItem4
+            // 
+            this.trueToolStripMenuItem4.Name = "trueToolStripMenuItem4";
+            this.trueToolStripMenuItem4.Size = new System.Drawing.Size(181, 26);
+            this.trueToolStripMenuItem4.Tag = "1";
+            this.trueToolStripMenuItem4.Text = "True";
+            this.trueToolStripMenuItem4.Click += new System.EventHandler(this.TrueLocalSnipeToolStripMenuItem_Click);
+            // 
+            // falseToolStripMenuItem4
+            // 
+            this.falseToolStripMenuItem4.Name = "falseToolStripMenuItem4";
+            this.falseToolStripMenuItem4.Size = new System.Drawing.Size(181, 26);
+            this.falseToolStripMenuItem4.Tag = "0";
+            this.falseToolStripMenuItem4.Text = "False";
+            this.falseToolStripMenuItem4.Click += new System.EventHandler(this.TrueLocalSnipeToolStripMenuItem_Click);
+            // 
+            // toggleToolStripMenuItem4
+            // 
+            this.toggleToolStripMenuItem4.Name = "toggleToolStripMenuItem4";
+            this.toggleToolStripMenuItem4.Size = new System.Drawing.Size(181, 26);
+            this.toggleToolStripMenuItem4.Tag = "2";
+            this.toggleToolStripMenuItem4.Text = "Toggle";
+            this.toggleToolStripMenuItem4.Click += new System.EventHandler(this.TrueLocalSnipeToolStripMenuItem_Click);
             // 
             // tabPageTransfer
             // 
@@ -2670,7 +2753,7 @@
             this.trueToolStripMenuItem2.Size = new System.Drawing.Size(130, 26);
             this.trueToolStripMenuItem2.Tag = "1";
             this.trueToolStripMenuItem2.Text = "True";
-            this.trueToolStripMenuItem2.Click += new System.EventHandler(this.TrueToolStripMenuItemUpgrade_Click);
+            this.trueToolStripMenuItem2.Click += new System.EventHandler(this.TrueUpgradeToolStripMenuItem_Click);
             // 
             // falseToolStripMenuItem2
             // 
@@ -2678,7 +2761,7 @@
             this.falseToolStripMenuItem2.Size = new System.Drawing.Size(130, 26);
             this.falseToolStripMenuItem2.Tag = "0";
             this.falseToolStripMenuItem2.Text = "False";
-            this.falseToolStripMenuItem2.Click += new System.EventHandler(this.TrueToolStripMenuItemUpgrade_Click);
+            this.falseToolStripMenuItem2.Click += new System.EventHandler(this.TrueUpgradeToolStripMenuItem_Click);
             // 
             // toggleToolStripMenuItem2
             // 
@@ -2686,7 +2769,7 @@
             this.toggleToolStripMenuItem2.Size = new System.Drawing.Size(130, 26);
             this.toggleToolStripMenuItem2.Tag = "3";
             this.toggleToolStripMenuItem2.Text = "Toggle";
-            this.toggleToolStripMenuItem2.Click += new System.EventHandler(this.TrueToolStripMenuItemUpgrade_Click);
+            this.toggleToolStripMenuItem2.Click += new System.EventHandler(this.TrueUpgradeToolStripMenuItem_Click);
             // 
             // restoreDefaultsToolStripMenuItemUpgrade
             // 
@@ -2694,6 +2777,13 @@
             this.restoreDefaultsToolStripMenuItemUpgrade.Size = new System.Drawing.Size(187, 24);
             this.restoreDefaultsToolStripMenuItemUpgrade.Text = "Restore Defaults";
             this.restoreDefaultsToolStripMenuItemUpgrade.Click += new System.EventHandler(this.RestoreDefaultsToolStripMenuItemUpgrade_Click);
+            // 
+            // olvColumnPinap
+            // 
+            this.olvColumnPinap.AspectName = "UsePinap";
+            this.olvColumnPinap.DisplayIndex = 3;
+            this.olvColumnPinap.Text = "Use Pinap";
+            this.olvColumnPinap.Width = 70;
             // 
             // AccountSettingsForm
             // 
@@ -2935,7 +3025,6 @@
         private BrightIdeasSoftware.OLVColumn olvColumnPinap;
         private System.Windows.Forms.CheckBox checkBoxShufflePokestops;
         private System.Windows.Forms.CheckBox checkBoxGetARBonus;
-        private System.Windows.Forms.ToolStripMenuItem setUsePinapToolStripMenuItem;
         private System.Windows.Forms.CheckBox checkBoxTransferAtOnce;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label label2;
@@ -2989,5 +3078,15 @@
         private System.Windows.Forms.ToolStripMenuItem falseToolStripMenuItem2;
         private System.Windows.Forms.ToolStripMenuItem toggleToolStripMenuItem2;
         private System.Windows.Forms.CheckBox checkBoxUpgradePokemons;
+        private BrightIdeasSoftware.OLVColumn olvColumnUsePinap;
+        private BrightIdeasSoftware.OLVColumn olvColumnSnipe;
+        private System.Windows.Forms.ToolStripMenuItem setUsePinapToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem trueToolStripMenuItem3;
+        private System.Windows.Forms.ToolStripMenuItem falseToolStripMenuItem3;
+        private System.Windows.Forms.ToolStripMenuItem toggleToolStripMenuItem3;
+        private System.Windows.Forms.ToolStripMenuItem setLocalSnipeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem trueToolStripMenuItem4;
+        private System.Windows.Forms.ToolStripMenuItem falseToolStripMenuItem4;
+        private System.Windows.Forms.ToolStripMenuItem toggleToolStripMenuItem4;
     }
 }
