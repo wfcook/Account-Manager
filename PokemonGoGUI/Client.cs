@@ -372,19 +372,25 @@ namespace PokemonGoGUI
                         ClientManager.Stop();
                         msgStr = "Argument Null Exception.";
                     }
-                    catch (PokeHashException phex)
+                    catch (PokeHashException ex)
                     {
-                        ClientManager.AccountState = AccountState.HashIssues;
-                        msgStr = "Hash issues";
-                        ClientManager.LogCaller(new LoggerEventArgs("Hash issues", LoggerTypes.Warning, phex));
+                        if (ex.Message.Equals("Hash API server might be down."))
+                        {
+                            ClientManager.AccountState = AccountState.HashIssues;
+                            msgStr = ex.Message;
+                            ClientManager.Stop();
+                        }
+                        else
+                        {
+                            ClientManager.AccountState = AccountState.HashIssues;
+                            msgStr = "Hash issues";
+                            ClientManager.LogCaller(new LoggerEventArgs("Hash issues", LoggerTypes.Warning, ex));
+                        }
                     }
                     catch (Exception ex)
                     {
                         ClientManager.Stop();
-                        //RemoveProxy();
-
                         ClientManager.LogCaller(new LoggerEventArgs("Failed to login", LoggerTypes.Exception, ex));
-
                         msgStr = "Failed to login";
                     }
 

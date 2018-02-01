@@ -101,11 +101,11 @@ namespace PokemonGoGUI.GoManager
                 {
                     AccountState = AccountState.Good;
                 }
-            }
 
-            if (CurrentProxy != null)
-            {
-                ProxyHandler.ResetFailCounter(CurrentProxy);
+                if (CurrentProxy != null)
+                {
+                    ProxyHandler.ResetFailCounter(CurrentProxy);
+                }
             }
 
             return result;
@@ -891,9 +891,18 @@ namespace PokemonGoGUI.GoManager
                 }
                 catch (PokeHashException ex)
                 {
-                    AccountState = AccountState.HashIssues;
-                    LogCaller(new LoggerEventArgs($"Hash service exception occured, continue ...", LoggerTypes.Warning, ex));
-                    continue;
+                    if (ex.Message.Equals("Hash API server might be down."))
+                    {
+                        AccountState = AccountState.HashIssues;
+                        LogCaller(new LoggerEventArgs(ex.Message, LoggerTypes.FatalError));
+                        Stop();
+                    }
+                    else
+                    {
+                        AccountState = AccountState.HashIssues;
+                        LogCaller(new LoggerEventArgs($"Hash service exception occured, continue ...", LoggerTypes.Warning, ex));
+                        continue;
+                    }
                 }
                 catch (SessionUnknowException ex)
                 {
