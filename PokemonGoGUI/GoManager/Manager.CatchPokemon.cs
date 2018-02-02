@@ -20,7 +20,7 @@ namespace PokemonGoGUI.GoManager
 {
     public partial class Manager
     {
-        private async Task<MethodResult> CatchInsencePokemon()
+        public async Task<MethodResult> CatchInsencePokemon()
         {
             if (!UserSettings.CatchPokemon)
             {
@@ -80,7 +80,7 @@ namespace PokemonGoGUI.GoManager
             };
         }
 
-        private async Task<MethodResult> CatchNeabyPokemon()
+        public async Task<MethodResult> CatchNeabyPokemon()
         {
             if (!UserSettings.CatchPokemon)
             {
@@ -503,6 +503,8 @@ namespace PokemonGoGUI.GoManager
             ulong _encounterId = 0;
             string _spawnPointId = null;
             string _pokemonType = null;
+            //Default catch success
+            LoggerTypes _loggerType = LoggerTypes.Success;
 
             // Calling from CatchNormalPokemon
             if (eResponse is EncounterResponse &&
@@ -513,7 +515,7 @@ namespace PokemonGoGUI.GoManager
                                 + eResponse.WildPokemon?.TimeTillHiddenMs;
                 _spawnPointId = eResponse.WildPokemon?.SpawnPointId;
                 _encounterId = eResponse.WildPokemon?.EncounterId;
-                _pokemonType = snipped ? "Snipe Normal" : "Normal";
+                _pokemonType = "Normal";
             }
             // Calling from CatchIncensePokemon
             else if (eResponse is IncenseEncounterResponse &&
@@ -523,7 +525,14 @@ namespace PokemonGoGUI.GoManager
                 _unixTimeStamp = mapPokemon.ExpirationTimestampMs;
                 _spawnPointId = mapPokemon.SpawnPointId;
                 _encounterId = mapPokemon.EncounterId;
-                _pokemonType = snipped ? "Snipe Incense" : "Incense";
+                _pokemonType = "Incense";                
+            }
+
+            if (_encounterId == _lastPokeSniperId || snipped)
+            {
+                _pokemonType = "Local Snipe: " + _pokemonType;
+                _loggerType = LoggerTypes.Snipe;
+                AlreadySnipped = true;
             }
 
             CatchPokemonResponse catchPokemonResponse = null;
@@ -532,7 +541,7 @@ namespace PokemonGoGUI.GoManager
 
             do
             {
-                if (mapPokemon == null)
+                if (_encounteredPokemon == null)
                     return new MethodResult();
 
                 //Uses lowest capture probability
@@ -686,7 +695,7 @@ namespace PokemonGoGUI.GoManager
                             }
                         }
 
-                        LogCaller(new LoggerEventArgs(String.Format("[{0}] Pokemon Caught. {1}. Exp {2}. Candy: {3}. Attempt #{4}. Ball: {5}", _pokemonType, pokemon, expGained, candyGained, attemptCount, pokeBallName), snipped ? LoggerTypes.Snipe : LoggerTypes.Success));
+                        LogCaller(new LoggerEventArgs(String.Format("[{0}] Pokemon Caught. {1}. Exp {2}. Candy: {3}. Attempt #{4}. Ball: {5}", _pokemonType, pokemon, expGained, candyGained, attemptCount, pokeBallName), _loggerType));
 
                         //Pokemon.Add(_encounteredPokemon);
                         UpdateInventory(InventoryRefresh.Pokemon);

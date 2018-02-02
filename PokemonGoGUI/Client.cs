@@ -492,6 +492,14 @@ namespace PokemonGoGUI
         private void SessionMapUpdate(object sender, EventArgs e)
         {
             //Map Update
+            if (ClientManager.ModeSnipe && ClientManager.Balls > 5 /*Bot need balls for snippe*/)
+            {
+                //Catch nearby pokemon
+                ClientManager.CatchNeabyPokemon().Wait();
+
+                //Catch incense pokemon
+                ClientManager.CatchInsencePokemon().Wait();
+            }
         }
 
         public void SessionOnCaptchaReceived(object sender, CaptchaEventArgs e)
@@ -665,7 +673,7 @@ namespace PokemonGoGUI
                         CancellationTokenSource.Dispose();
                         return;
                     }
-                    ClientManager.LogCaller(new LoggerEventArgs("Session closed!", LoggerTypes.Warning));
+                    ClientManager.LogCaller(new LoggerEventArgs("Session closed!", LoggerTypes.FatalError));
                 }
 
                 // TODO: libérer les ressources non managées (objets non managés) et remplacer un finaliseur ci-dessous.

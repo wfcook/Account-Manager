@@ -113,6 +113,14 @@ namespace PokemonGoGUI.GoManager
 
         public MethodResult Start()
         {
+            if (IsRunning || AccountState == AccountState.Conecting)
+            {
+                return new MethodResult
+                {
+                    Message = "Bot already running"
+                };
+            }
+
             //Fixing a bug on my part
             if (Tracker == null)
             {
@@ -120,14 +128,6 @@ namespace PokemonGoGUI.GoManager
             }
 
             ServicePointManager.DefaultConnectionLimit = Int32.MaxValue;
-
-            if (IsRunning)
-            {
-                return new MethodResult
-                {
-                    Message = "Bot already running"
-                };
-            }
 
             if (State != BotState.Stopped)
             {
@@ -590,7 +590,7 @@ namespace PokemonGoGUI.GoManager
                                 await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
                                 //Check sniping NearyPokemon
-                                await SnipeAllNearyPokemon();
+                                await SnipeAllNearyPokemon(remainingBalls);
                                 await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
                             }
                             else

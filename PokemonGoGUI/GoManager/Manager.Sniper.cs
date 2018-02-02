@@ -16,7 +16,11 @@ namespace PokemonGoGUI.GoManager
 {
     public partial class Manager
     {
-        private ulong _lastPokeSniperId = 0;
+        private ulong _lastPokeSniperId  = 0;
+
+        public bool ModeSnipe { get; private set; } = false;
+        public int Balls { get; private set; } = 0;
+        public bool AlreadySnipped = false;
 
         private MethodResult<List<NearbyPokemon>> RequestPokeSniperRares()
         {
@@ -45,7 +49,7 @@ namespace PokemonGoGUI.GoManager
             };
         }
         
-        public async Task<MethodResult> SnipeAllNearyPokemon()
+        public async Task<MethodResult> SnipeAllNearyPokemon(int balls)
         {
             MethodResult<List<NearbyPokemon>> pokeSniperResult = RequestPokeSniperRares();
 
@@ -57,10 +61,10 @@ namespace PokemonGoGUI.GoManager
                 };
             }
 
-            List<NearbyPokemon> pokemonToSnipe = pokeSniperResult.Data.Where(x => x.EncounterId != _lastPokeSniperId && UserSettings.CatchSettings.FirstOrDefault(p => p.Id == x.PokemonId).Snipe && x.DistanceInMeters < UserSettings.MaxTravelDistance).ToList();
-            //_lastPokeSniperId = pokeSniperResult.Data.OrderByDescending(x => x.EncounterId).First().EncounterId;
+            List<NearbyPokemon> pokemonToSnipe = pokeSniperResult.Data.Where(x => x.EncounterId != _lastPokeSniperId && UserSettings.CatchSettings.FirstOrDefault(p => p.Id == x.PokemonId).Snipe && x.DistanceInMeters < UserSettings.MaxTravelDistance).OrderBy(x => x.DistanceInMeters).ToList();
+            //_lastPokeSniperId = pokemonToSnipe.FirstOrDefault().EncounterId;
 
-            if(pokemonToSnipe.Count == 0) 
+            if (pokemonToSnipe.Count == 0) 
             {
                 LogCaller(new LoggerEventArgs("No pokemon to snipe within catch settings", LoggerTypes.Info));
 
@@ -75,7 +79,10 @@ namespace PokemonGoGUI.GoManager
             await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
             //Long running, so can't let this continue
-            while (pokemonToSnipe.Any() && IsRunning)
+            ModeSnipe = true;
+            Balls = balls;
+
+            while (pokemonToSnipe.Any() && IsRunning && !AlreadySnipped)
             {
                 NearbyPokemon nearbyPokemon = pokemonToSnipe.First();
                 pokemonToSnipe.Remove(nearbyPokemon);
@@ -84,9 +91,11 @@ namespace PokemonGoGUI.GoManager
                 var fortNearby = forts.Where(x => x.Id == nearbyPokemon.FortId).FirstOrDefault();
 
                 if (fortNearby == null)
-                { 
+                {
                     continue;
                 }
+
+                _lastPokeSniperId = nearbyPokemon.EncounterId;
 
                 GeoCoordinate coords = new GeoCoordinate
                 {
@@ -94,15 +103,16 @@ namespace PokemonGoGUI.GoManager
                     Longitude = fortNearby.Longitude
                 };
 
-                var captureSnipe = await CaptureSnipePokemon(coords.Latitude, coords.Longitude, nearbyPokemon.PokemonId);
-
-                if (captureSnipe.Success)
-                    _lastPokeSniperId = nearbyPokemon.EncounterId;
+                await CaptureSnipePokemon(coords.Latitude, coords.Longitude, nearbyPokemon.PokemonId);
 
                 await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
-                pokemonToSnipe = pokemonToSnipe.Where(x => UserSettings.CatchSettings.FirstOrDefault(p => p.Id == x.PokemonId).Snipe && fortNearby.CooldownCompleteTimestampMs >= DateTime.Now.AddSeconds(30).ToUnixTime()).ToList();
+                pokemonToSnipe = pokemonToSnipe.Where(x => UserSettings.CatchSettings.FirstOrDefault(p => p.Id == x.PokemonId).Snipe && fortNearby.CooldownCompleteTimestampMs >= DateTime.Now.AddSeconds(30).ToUnixTime()).OrderBy(x => x.DistanceInMeters).ToList();
             }
+
+            ModeSnipe = false;
+            Balls = 0;
+            AlreadySnipped = false;
 
             return new MethodResult
             {
@@ -147,15 +157,15 @@ namespace PokemonGoGUI.GoManager
 
             if(pokemonToSnipe == null)
             {
-                if (retries > 0)
+                if (retries > 0 && !AlreadySnipped)
                 {
-                    LogCaller(new LoggerEventArgs(String.Format("Snipe Pokemon {0} not found. Retries #{1}", pokemon, retries), LoggerTypes.Info));
+                    LogCaller(new LoggerEventArgs(String.Format("Snipe Pokemon {0} not found, or already catched. Retries #{1}", pokemon, retries), LoggerTypes.Info));
                     retries--;
-                    await Task.Delay(800);
+                    await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
                     goto retry;
                 }
 
-                LogCaller(new LoggerEventArgs(String.Format("Snipe Pokemon {0} not found. Possible despawn. Going back to original location", pokemon), LoggerTypes.Warning));
+                LogCaller(new LoggerEventArgs(String.Format("Snipe Pokemon {0} not found. Possible despawn, or already catched . Going back to original location", pokemon), LoggerTypes.Info));
 
                 //await UpdateLocation(originalLocation);
                 await GoToLocation(originalLocation);
@@ -171,7 +181,7 @@ namespace PokemonGoGUI.GoManager
 
             if (!eResponseResult.Success)
             {
-                LogCaller(new LoggerEventArgs("Snipe failed to encounter pokemon. Going back to original location", LoggerTypes.Warning));
+                LogCaller(new LoggerEventArgs(String.Format("Snipe failed to encounter pokemon {0}. Going back to original location, or already catched", pokemon), LoggerTypes.Info));
 
                 //Failed, update location back
                 //await UpdateLocation(originalLocation);
@@ -185,6 +195,7 @@ namespace PokemonGoGUI.GoManager
 
             //Update location back
             //MethodResult locationResult = await RepeatAction(() => UpdateLocation(originalLocation), 2);
+            
             MethodResult locationResult = await RepeatAction(() => GoToLocation(originalLocation), 2);
 
             if (!locationResult.Success)
