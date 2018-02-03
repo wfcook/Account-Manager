@@ -79,12 +79,12 @@ namespace PokemonGoGUI.GoManager
             await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
             //Long running, so can't let this continue
-            ModeSnipe = true;
-            Balls = RemainingPokeballs();
-            AlreadySnipped = false;
-
             while (pokemonToSnipe.Any() && IsRunning && !AlreadySnipped)
             {
+                ModeSnipe = true;
+                Balls = RemainingPokeballs();
+                AlreadySnipped = false;
+
                 NearbyPokemon nearbyPokemon = pokemonToSnipe.First();
                 pokemonToSnipe.Remove(nearbyPokemon);
 
