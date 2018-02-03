@@ -495,8 +495,6 @@ namespace PokemonGoGUI.GoManager
 
                     var defaultLocation = new GeoCoordinate(_client.ClientSession.Player.Latitude, _client.ClientSession.Player.Longitude);
 
-                    //var pokestopsToFarm = new Queue<FortData>(pokestops.Data);
-
                     int currentFailedStops = 0;
 
                     while (PokestopsToFarm.Any())
