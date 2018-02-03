@@ -19,6 +19,7 @@ using System.Windows.Forms;
 using POGOLib.Official.Exceptions;
 using PokemonGoGUI.Captcha;
 using POGOLib.Official.Extensions;
+using POGOLib.Official.Net;
 
 namespace PokemonGoGUI.GoManager
 {
@@ -189,30 +190,32 @@ namespace PokemonGoGUI.GoManager
 
         public void Pause()
         {
-            if (!IsRunning)
+            if (!IsRunning || _client?.ClientSession?.State == SessionState.Stopped)
             {
                 return;
             }
 
             _pauser.Reset();
             _runningStopwatch.Stop();
-            //_client.ClientSession.Pause();
+            _client.ClientSession.Pause();
 
             LogCaller(new LoggerEventArgs("Pausing bot ...", LoggerTypes.Info));
 
             State = BotState.Pausing;
         }
 
-        public void UnPause()
+        public async void UnPause()
         {
-            if (!IsRunning)
+            if (!IsRunning || _client?.ClientSession?.State == SessionState.Stopped)
             {
                 return;
             }
 
             _pauser.Set();
             _runningStopwatch.Start();
-            //await _client.ClientSession.ResumeAsync();
+
+            if (_client.ClientSession.State == SessionState.Paused)
+                await _client.ClientSession.ResumeAsync();
 
             LogCaller(new LoggerEventArgs("Unpausing bot ...", LoggerTypes.Info));
 
@@ -233,7 +236,7 @@ namespace PokemonGoGUI.GoManager
 
         private bool WaitPaused()
         {
-            if (_isPaused)
+            if (_isPaused || (_client?.ClientSession?.State == SessionState.Paused && _client.CaptchaSolved))
             {
                 LogCaller(new LoggerEventArgs("Bot paused", LoggerTypes.Info));
 
@@ -991,7 +994,8 @@ namespace PokemonGoGUI.GoManager
             LogCaller(new LoggerEventArgs("Bot stopping. Please wait for actions to complete ...", LoggerTypes.Info));
 
             //Remove proxy
-            RemoveProxy();
+            if (UserSettings.AutoRemoveOnStop)
+                RemoveProxy();
 
             _pauser.Set();
             _runningStopwatch.Stop();

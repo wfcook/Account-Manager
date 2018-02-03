@@ -32,7 +32,6 @@ namespace PokemonGoGUI
 {
     public class Client : IDisposable
     {
-        public ProxyEx Proxy;
         public Version VersionStr;
         public uint AppVersion;
         public Session ClientSession;
@@ -42,6 +41,7 @@ namespace PokemonGoGUI
         public Manager ClientManager;
         private string RessourcesFolder;
         private CancellationTokenSource CancellationTokenSource;
+        public bool CaptchaSolved = false;
 
         public Client()
         {
@@ -142,7 +142,7 @@ namespace PokemonGoGUI
                             loginProvider = new GoogleLoginProvider(ClientManager.UserSettings.Username, ClientManager.UserSettings.Password);
                             break;
                         case AuthType.Ptc:
-                            loginProvider = new PtcLoginProvider(ClientManager.UserSettings.Username, ClientManager.UserSettings.Password, Proxy.AsWebProxy());
+                            loginProvider = new PtcLoginProvider(ClientManager.UserSettings.Username, ClientManager.UserSettings.Password, ClientManager.UserSettings.Proxy.AsWebProxy());
                             break;
                         default:
                             throw new ArgumentException("Login provider must be either \"google\" or \"ptc\".");
@@ -512,15 +512,16 @@ namespace PokemonGoGUI
 
             ClientManager.LogCaller(new LoggerEventArgs("Bot paused VerifyChallenge...", LoggerTypes.Captcha));
 
-            bool solved = ClientManager.CaptchaSolver.SolveCaptcha(this, e.CaptchaUrl).Result;
+            CaptchaSolved = ClientManager.CaptchaSolver.SolveCaptcha(this, e.CaptchaUrl).Result;
 
-            if (solved)
+            if (CaptchaSolved)
             {
                 ClientManager.LogCaller(new LoggerEventArgs("Unpausing bot Challenge finished...", LoggerTypes.Captcha));
                 ClientManager.AccountState = accountState;
                 return;
             }
 
+            CaptchaSolved = false;
             ClientManager.Stop();
         }
 
@@ -556,13 +557,7 @@ namespace PokemonGoGUI
         {
             ClientManager = manager;
 
-            Proxy = new ProxyEx
-            {
-                Address = ClientManager.UserSettings.ProxyIP,
-                Port = ClientManager.UserSettings.ProxyPort,
-                Username = ClientManager.UserSettings.ProxyUsername,
-                Password = ClientManager.UserSettings.ProxyPassword
-            };
+            CaptchaSolved = false;
 
             Dictionary<string, string> Header = new Dictionary<string, string>()
             {
@@ -586,7 +581,7 @@ namespace PokemonGoGUI
                     FirmwareBrand = ClientManager.UserSettings.FirmwareBrand,
                     FirmwareType = ClientManager.UserSettings.FirmwareType
                 },
-                Proxy = Proxy.AsWebProxy()
+                Proxy = ClientManager.UserSettings.Proxy.AsWebProxy()
             };
 
             PlayerLocale = new GetPlayerMessage.Types.PlayerLocale
