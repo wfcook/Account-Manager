@@ -2332,13 +2332,17 @@ namespace PokemonGoGUI
             try
             {
                 IEnumerable<Manager> selectedManagers = Serializer.FromJson<List<Manager>>(File.ReadAllText(fileName));
-
+                int count = selectedManagers.Count();
                 foreach (Manager manager in selectedManagers)
                 {
+                    if (_managers.Contains(manager))
+                        count--;
                     AddManager(manager);
                 }
 
-                MessageBox.Show(String.Format("Successfully imported."));
+                fastObjectListViewMain.SetObjects(_managers);
+
+                MessageBox.Show(String.Format("Successfully imported {0}/{1}.", count, selectedManagers.Count()));
             }
             catch (Exception ex)
             {
