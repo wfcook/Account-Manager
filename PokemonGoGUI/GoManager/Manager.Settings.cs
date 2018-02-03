@@ -310,6 +310,16 @@ namespace PokemonGoGUI.GoManager
                     userSettings.CaptchaSolutionAPIKey = String.Empty;
                     userSettings.CaptchaSolutionsSecretKey = String.Empty;
                     userSettings.AntiCaptchaAPIKey = String.Empty;
+                    userSettings.AllowManualCaptchaResolve = true;
+                    userSettings.Enable2Captcha = false;
+                    userSettings.EnableCaptchaSolutions = false;
+                    userSettings.EnableAntiCaptcha = false;
+                    // gyms
+                    userSettings.DefaultTeam = "Neutral";
+                    userSettings.SpinGyms = false;
+                    userSettings.GoOnlyToGyms = false;
+                    userSettings.DeployPokemon = false;
+                    //
                 }
 
                 string data = JsonConvert.SerializeObject(userSettings, Formatting.Indented);
