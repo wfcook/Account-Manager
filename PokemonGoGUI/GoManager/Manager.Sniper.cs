@@ -122,12 +122,18 @@ namespace PokemonGoGUI.GoManager
 
         private async Task<MethodResult> CaptureSnipePokemon(double latitude, double longitude, PokemonId pokemon)
         {
-            LogCaller(new LoggerEventArgs(String.Format("Sniping {0} at location {1}, {2}", pokemon, latitude, longitude), LoggerTypes.Snipe));
+            var currentLocation = new GeoCoordinate(_client.ClientSession.Player.Latitude, _client.ClientSession.Player.Longitude);
+            var fortLocation = new GeoCoordinate(latitude, longitude);
 
-            GeoCoordinate originalLocation = new GeoCoordinate(_client.ClientSession.Player.Latitude, _client.ClientSession.Player.Longitude, _client.ClientSession.Player.Altitude);
+            double distance = CalculateDistanceInMeters(currentLocation, fortLocation);
+            LogCaller(new LoggerEventArgs(String.Format("Going to sniping {0} at location {1}, {2}. Distance {3:0.00}m", pokemon, latitude, longitude, distance), LoggerTypes.Snipe));
+
+            // Not nedded this runs on local pos.../
+            //GeoCoordinate originalLocation = new GeoCoordinate(_client.ClientSession.Player.Latitude, _client.ClientSession.Player.Longitude, _client.ClientSession.Player.Altitude);
 
             //Update location           
             //MethodResult result = await UpdateLocation(new GeoCoordinate(latitude, longitude));
+
             //Update location           
             MethodResult result = await GoToLocation(new GeoCoordinate(latitude, longitude));           
 
@@ -136,9 +142,9 @@ namespace PokemonGoGUI.GoManager
                 return result;
             }
 
-            await Task.Delay(10000);
+            await Task.Delay(10000); //wait for pogolib refreshmapobjects
 
-            int retries = 3;
+            int retries = 0;
 
             //Get catchable pokemon
             retry:
@@ -157,7 +163,7 @@ namespace PokemonGoGUI.GoManager
 
             if(pokemonToSnipe == null)
             {
-                if (retries > 0 && !AlreadySnipped)
+                if (retries >= 3 && !AlreadySnipped)
                 {
                     LogCaller(new LoggerEventArgs(String.Format("Snipe Pokemon {0} not found, or already catched. Retries #{1}", pokemon, retries), LoggerTypes.Info));
                     retries--;
@@ -165,10 +171,13 @@ namespace PokemonGoGUI.GoManager
                     goto retry;
                 }
 
-                LogCaller(new LoggerEventArgs(String.Format("Snipe Pokemon {0} not found. Possible despawn, or already catched . Going back to original location", pokemon), LoggerTypes.Info));
+                //LogCaller(new LoggerEventArgs(String.Format("Snipe Pokemon {0} not found. Possible despawn, or already catched. Going back to original location", pokemon), LoggerTypes.Info));
+                LogCaller(new LoggerEventArgs(String.Format("Snipe Pokemon {0} not found. Possible despawn, or already catched.", pokemon), LoggerTypes.Info));
 
                 //await UpdateLocation(originalLocation);
-                await GoToLocation(originalLocation);
+
+                // Not nedded this runs on local pos.../
+                //await GoToLocation(originalLocation);
 
                 return new MethodResult
                 {
@@ -181,11 +190,14 @@ namespace PokemonGoGUI.GoManager
 
             if (!eResponseResult.Success)
             {
-                LogCaller(new LoggerEventArgs(String.Format("Snipe failed to encounter pokemon {0}. Going back to original location, or already catched", pokemon), LoggerTypes.Info));
+                //LogCaller(new LoggerEventArgs(String.Format("Snipe failed to encounter pokemon {0}. Going back to original location, or already catched", pokemon), LoggerTypes.Info));
+                LogCaller(new LoggerEventArgs(String.Format("Snipe failed to encounter pokemon {0}, or already catched", pokemon), LoggerTypes.Info));
 
                 //Failed, update location back
                 //await UpdateLocation(originalLocation);
-                await GoToLocation(originalLocation);
+
+                // Not nedded this runs on local pos.../
+                //await GoToLocation(originalLocation);
 
                 return new MethodResult
                 {
@@ -195,18 +207,58 @@ namespace PokemonGoGUI.GoManager
 
             //Update location back
             //MethodResult locationResult = await RepeatAction(() => UpdateLocation(originalLocation), 2);
-            
-            MethodResult locationResult = await RepeatAction(() => GoToLocation(originalLocation), 2);
+
+            // Not nedded this runs on local pos.../
+            /*MethodResult locationResult = await RepeatAction(() => GoToLocation(originalLocation), 2);
 
             if (!locationResult.Success)
             {
                 return locationResult;
             }
+            */
 
             //Catch pokemon
             MethodResult catchResult = await CatchPokemon(eResponseResult.Data, pokemonToSnipe, true); //Handles logging
 
             return catchResult;
+        }
+
+        private async Task<MethodResult> RepeatAction(Func<Task<MethodResult>> action, int tries)
+        {
+            MethodResult result = new MethodResult();
+
+            for (int i = 0; i < tries; i++)
+            {
+                result = await action();
+
+                if (result.Success)
+                {
+                    return result;
+                }
+
+                await Task.Delay(1000);
+            }
+
+            return result;
+        }
+
+        private async Task<MethodResult<T>> RepeatAction<T>(Func<Task<MethodResult<T>>> action, int tries)
+        {
+            MethodResult<T> result = new MethodResult<T>();
+
+            for (int i = 0; i < tries; i++)
+            {
+                result = await action();
+
+                if (result.Success)
+                {
+                    return result;
+                }
+
+                await Task.Delay(1000);
+            }
+
+            return result;
         }
     }
 }

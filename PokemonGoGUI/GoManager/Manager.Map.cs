@@ -12,6 +12,8 @@ namespace PokemonGoGUI.GoManager
 {
     public partial class Manager
     {
+        private Queue<FortData> PokestopsToFarm = new Queue<FortData>();
+
         private MethodResult<List<MapPokemon>> GetCatchablePokemon()
         {
             if (_client.ClientSession.Map.Cells.Count == 0 || _client.ClientSession.Map == null)
@@ -32,11 +34,11 @@ namespace PokemonGoGUI.GoManager
             };
         }
 
-        private MethodResult<List<FortData>> GetPokeStops()
+        public MethodResult GetPokeStops()
         {
             if (_client.ClientSession.Map.Cells.Count == 0 || _client.ClientSession.Map == null)
             {
-                return new MethodResult<List<FortData>>();
+                return new MethodResult();
             }
 
             var forts = _client.ClientSession.Map.Cells.SelectMany(x => x.Forts);
@@ -44,7 +46,7 @@ namespace PokemonGoGUI.GoManager
             var fortData = new List<FortData>();
 
             if (!forts.Any()) {
-                return new MethodResult<List<FortData>> {
+                return new MethodResult {
                     Message = "No pokestop data found. Potential temp IP ban or bad location",
                 };
             }
@@ -71,11 +73,9 @@ namespace PokemonGoGUI.GoManager
 
             if (fortData.Count == 0)
             {
-                return new MethodResult<List<FortData>>
+                return new MethodResult
                 {
-                    Data = fortData,
                     Message = "No searchable pokestops found within range",
-                    Success = true
                 };
             }
 
@@ -86,9 +86,10 @@ namespace PokemonGoGUI.GoManager
                 fortData = fortData.OrderBy(x => CalculateDistanceInMeters(_client.ClientSession.Player.Latitude, _client.ClientSession.Player.Longitude, x.Latitude, x.Longitude)).ToList();
             }
 
-            return new MethodResult<List<FortData>>
+            PokestopsToFarm = new Queue<FortData>(fortData);
+
+            return new MethodResult
             {
-                Data = fortData,
                 Message = "Success",
                 Success = true
             };

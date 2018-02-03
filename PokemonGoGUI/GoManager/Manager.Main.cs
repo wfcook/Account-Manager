@@ -461,7 +461,7 @@ namespace PokemonGoGUI.GoManager
                     //Get pokestops
                     LogCaller(new LoggerEventArgs("getting pokestops...", LoggerTypes.Debug));
 
-                    MethodResult<List<FortData>> pokestops = GetPokeStops();
+                    MethodResult pokestops = GetPokeStops();
 
                     if (!pokestops.Success)
                     {
@@ -470,7 +470,7 @@ namespace PokemonGoGUI.GoManager
                     }
 
                     int pokeStopNumber = 1;
-                    int totalStops = pokestops.Data.Count;
+                    int totalStops = PokestopsToFarm.Count; //pokestops.Data.Count;
 
                     if (totalStops == 0)
                     {
@@ -495,11 +495,11 @@ namespace PokemonGoGUI.GoManager
 
                     var defaultLocation = new GeoCoordinate(_client.ClientSession.Player.Latitude, _client.ClientSession.Player.Longitude);
 
-                    var pokestopsToFarm = new Queue<FortData>(pokestops.Data);
+                    //var pokestopsToFarm = new Queue<FortData>(pokestops.Data);
 
                     int currentFailedStops = 0;
 
-                    while (pokestopsToFarm.Any())
+                    while (PokestopsToFarm.Any())
                     {
                         // In each iteration of the loop we store the current level
                         int prevLevel = Level;
@@ -514,7 +514,7 @@ namespace PokemonGoGUI.GoManager
                             Stop();
                         }
 
-                        FortData pokestop = pokestopsToFarm.Dequeue();
+                        FortData pokestop = PokestopsToFarm.Dequeue();
                         LogCaller(new LoggerEventArgs("Fort Dequeued: " + pokestop.Id, LoggerTypes.Debug));
 
                         if (pokestop.Type == FortType.Checkpoint && UserSettings.GoOnlyToGyms)
@@ -585,8 +585,12 @@ namespace PokemonGoGUI.GoManager
                                 await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
                                 //Check sniping NearyPokemon
-                                await SnipeAllNearyPokemon(remainingBalls);
-                                await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
+                                MethodResult Snipe = await SnipeAllNearyPokemon(remainingBalls);
+                                if (Snipe.Success)
+                                {
+                                    await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
+                                    continue;
+                                }
                             }
                             else
                             {
@@ -1134,44 +1138,6 @@ namespace PokemonGoGUI.GoManager
             TotalPokeStopExp = 0;
             Tracker.Values.Clear();
             Tracker.CalculatedTrackingHours();
-        }
-
-        private async Task<MethodResult> RepeatAction(Func<Task<MethodResult>> action, int tries)
-        {
-            MethodResult result = new MethodResult();
-
-            for (int i = 0; i < tries; i++)
-            {
-                result = await action();
-
-                if (result.Success)
-                {
-                    return result;
-                }
-
-                await Task.Delay(1000);
-            }
-
-            return result;
-        }
-
-        private async Task<MethodResult<T>> RepeatAction<T>(Func<Task<MethodResult<T>>> action, int tries)
-        {
-            MethodResult<T> result = new MethodResult<T>();
-
-            for (int i = 0; i < tries; i++)
-            {
-                result = await action();
-
-                if (result.Success)
-                {
-                    return result;
-                }
-
-                await Task.Delay(1000);
-            }
-
-            return result;
         }
     }
 }
