@@ -410,23 +410,6 @@ namespace PokemonGoGUI.GoManager
 
                             await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
                         }
-
-
-                        if (!PlayerData.TutorialState.Contains(TutorialState.PokestopTutorial))
-                        {
-                            result = await MarkTutorialsComplete(new[] { TutorialState.PokestopTutorial, TutorialState.PokemonBerry, TutorialState.UseItem });
-
-                            if (!result.Success)
-                            {
-                                LogCaller(new LoggerEventArgs("Failed. Marking pokestop, pokemonberry, useitem, pokemoncapture tutorials completed..", LoggerTypes.Warning));
-
-                                Stop();
-                            }
-
-                            LogCaller(new LoggerEventArgs("Marking pokestop, pokemonberry, useitem, pokemoncapture tutorials completed.", LoggerTypes.Success));
-
-                            await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
-                        }
                     }
 
                     _failedInventoryReponses = 0;
@@ -673,6 +656,35 @@ namespace PokemonGoGUI.GoManager
                                                         }
                                                     }
                                                 }
+
+                                                //First spin gym after complet tuto
+                                                var gyminfo = await GymGetInfo(pokestop);
+                                                if (gyminfo.Success)
+                                                    LogCaller(new LoggerEventArgs("Gym Name: " + gyminfo.Data.Name, LoggerTypes.Info));
+
+                                                MethodResult spingym = await SearchPokestop(pokestop);
+
+                                                //OutOfRange will show up as a success
+                                                if (spingym.Success)
+                                                {
+                                                    currentFailedStops = 0;
+                                                    //Try to deploy, full gym is 6 now
+                                                    if (gyminfo.Data.GymStatusAndDefenders.GymDefender.Count < 6)
+                                                    {
+                                                        //Checks team color if same of player or Neutral
+                                                        if (pokestop.OwnedByTeam == PlayerData.Team || pokestop.OwnedByTeam == TeamColor.Neutral)
+                                                        {
+                                                            //Check if config as deploy actived
+                                                            if (UserSettings.DeployPokemon)
+                                                            {
+                                                                //Try to deploy
+                                                                await GymDeploy(pokestop);
+                                                            }
+                                                        }
+                                                    }
+                                                    //Here try to attack gym not released yet
+                                                    //
+                                                }
                                             }
                                         }
                                     }
@@ -717,6 +729,22 @@ namespace PokemonGoGUI.GoManager
                                 }
                                 else
                                 {
+                                    if (!PlayerData.TutorialState.Contains(TutorialState.PokestopTutorial))
+                                    {
+                                        result = await MarkTutorialsComplete(new[] { TutorialState.PokestopTutorial, TutorialState.PokemonBerry, TutorialState.UseItem });
+
+                                        if (!result.Success)
+                                        {
+                                            LogCaller(new LoggerEventArgs("Failed. Marking pokestop, pokemonberry, useitem, pokemoncapture tutorials completed..", LoggerTypes.Warning));
+
+                                            Stop();
+                                        }
+
+                                        LogCaller(new LoggerEventArgs("Marking pokestop, pokemonberry, useitem, pokemoncapture tutorials completed.", LoggerTypes.Success));
+
+                                        await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
+                                    }
+
                                     var fortDetails = await FortDetails(pokestop);
                                     if (fortDetails.Success)
                                         LogCaller(new LoggerEventArgs("Fort Name: " + fortDetails.Data.Name, LoggerTypes.Info));

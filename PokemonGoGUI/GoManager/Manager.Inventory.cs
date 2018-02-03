@@ -417,7 +417,7 @@ namespace PokemonGoGUI.GoManager
                 }
             }
 
-            if (Items.FirstOrDefault(x => x.ItemId == item) == null)
+            if (Items.FirstOrDefault(x => x.ItemId == item).Count == 0)
                 return new MethodResult();
 
             var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
