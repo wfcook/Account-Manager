@@ -155,8 +155,10 @@ namespace PokemonGoGUI.Captcha
                     return false;
                 }
 
-                if (client?.ClientSession?.State == SessionState.Paused)
-                    await client.ClientSession.ResumeAsync();
+                //TODO: May be this have bug...
+                //if (client.ClientSession.State == SessionState.Paused)
+                //    await client.ClientSession.ResumeAsync();
+                //
 
                 client.ClientManager.LogCaller(new LoggerEventArgs($"(CAPTCHA) Great!!! Captcha has been by passed", LoggerTypes.Success));
                 return verifyChallengeResponse.Success;

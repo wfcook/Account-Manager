@@ -122,14 +122,6 @@ namespace PokemonGoGUI.GoManager
                 };
             }
 
-            //Fixing a bug on my part
-            if (Tracker == null)
-            {
-                Tracker = new Tracker();
-            }
-
-            ServicePointManager.DefaultConnectionLimit = Int32.MaxValue;
-
             if (State != BotState.Stopped)
             {
                 return new MethodResult
@@ -137,6 +129,16 @@ namespace PokemonGoGUI.GoManager
                     Message = "Please wait for bot to fully stop"
                 };
             }
+
+            State = BotState.Starting;
+
+            //Fixing a bug on my part
+            if (Tracker == null)
+            {
+                Tracker = new Tracker();
+            }
+
+            ServicePointManager.DefaultConnectionLimit = Int32.MaxValue;
 
             if (!_wasAutoRestarted)
             {
@@ -150,8 +152,6 @@ namespace PokemonGoGUI.GoManager
             _autoRestart = false;
             //_wasAutoRestarted = false;
             _rand = new Random();
-
-            State = BotState.Starting;
 
             var t = new Thread(RunningThread)
             {
@@ -190,23 +190,23 @@ namespace PokemonGoGUI.GoManager
 
         public void Pause()
         {
-            if (!IsRunning || _client?.ClientSession?.State == SessionState.Stopped)
+            if (!IsRunning || State == BotState.Pausing || State == BotState.Paused)
             {
                 return;
             }
 
             _pauser.Reset();
             _runningStopwatch.Stop();
-            _client.ClientSession.Pause();
+            //_client.ClientSession.Pause();
 
             LogCaller(new LoggerEventArgs("Pausing bot ...", LoggerTypes.Info));
 
             State = BotState.Pausing;
         }
 
-        public async void UnPause()
+        public void UnPause()
         {
-            if (!IsRunning || _client?.ClientSession?.State == SessionState.Stopped)
+            if (!IsRunning || State != BotState.Paused)
             {
                 return;
             }
@@ -214,8 +214,8 @@ namespace PokemonGoGUI.GoManager
             _pauser.Set();
             _runningStopwatch.Start();
 
-            if (_client.ClientSession.State == SessionState.Paused)
-                await _client.ClientSession.ResumeAsync();
+            //if (_client.ClientSession.State == SessionState.Paused)
+            //    await _client.ClientSession.ResumeAsync();
 
             LogCaller(new LoggerEventArgs("Unpausing bot ...", LoggerTypes.Info));
 
@@ -236,12 +236,21 @@ namespace PokemonGoGUI.GoManager
 
         private bool WaitPaused()
         {
-            if (_isPaused || (_client?.ClientSession?.State == SessionState.Paused && _client.CaptchaSolved))
+            if (_isPaused)
             {
                 LogCaller(new LoggerEventArgs("Bot paused", LoggerTypes.Info));
 
                 State = BotState.Paused;
                 _pauser.WaitOne();
+
+                return true;
+            }
+
+            if (_client?.ClientSession?.State == SessionState.Paused)
+            {
+                LogCaller(new LoggerEventArgs("Bot paused", LoggerTypes.Info));
+
+                State = BotState.Paused;
 
                 return true;
             }

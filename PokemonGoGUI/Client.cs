@@ -41,7 +41,6 @@ namespace PokemonGoGUI
         public Manager ClientManager;
         private string RessourcesFolder;
         private CancellationTokenSource CancellationTokenSource;
-        public bool CaptchaSolved = false;
 
         public Client()
         {
@@ -512,16 +511,15 @@ namespace PokemonGoGUI
 
             ClientManager.LogCaller(new LoggerEventArgs("Bot paused VerifyChallenge...", LoggerTypes.Captcha));
 
-            CaptchaSolved = ClientManager.CaptchaSolver.SolveCaptcha(this, e.CaptchaUrl).Result;
+            bool solved = ClientManager.CaptchaSolver.SolveCaptcha(this, e.CaptchaUrl).Result;
 
-            if (CaptchaSolved)
+            if (solved)
             {
                 ClientManager.LogCaller(new LoggerEventArgs("Unpausing bot Challenge finished...", LoggerTypes.Captcha));
                 ClientManager.AccountState = accountState;
                 return;
             }
 
-            CaptchaSolved = false;
             ClientManager.Stop();
         }
 
@@ -556,8 +554,6 @@ namespace PokemonGoGUI
         public void SetSettings(Manager manager)
         {
             ClientManager = manager;
-
-            CaptchaSolved = false;
 
             Dictionary<string, string> Header = new Dictionary<string, string>()
             {
