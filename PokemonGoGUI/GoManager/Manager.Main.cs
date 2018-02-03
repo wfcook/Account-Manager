@@ -583,7 +583,7 @@ namespace PokemonGoGUI.GoManager
                                 await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
 
                                 //Check sniping NearyPokemon
-                                MethodResult Snipe = await SnipeAllNearyPokemon(remainingBalls);
+                                MethodResult Snipe = await SnipeAllNearyPokemon();
                                 if (Snipe.Success)
                                 {
                                     await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));

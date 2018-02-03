@@ -528,6 +528,9 @@ namespace PokemonGoGUI.GoManager
                 _pokemonType = "Incense";                
             }
 
+            if (AlreadySnipped && _encounterId == _lastPokeSniperId)
+                return new MethodResult();
+
             if (_encounterId == _lastPokeSniperId || snipped)
             {
                 _pokemonType = "Local Snipe: " + _pokemonType;

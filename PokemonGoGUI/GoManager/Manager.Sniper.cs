@@ -20,7 +20,7 @@ namespace PokemonGoGUI.GoManager
 
         public bool ModeSnipe { get; private set; } = false;
         public int Balls { get; private set; } = 0;
-        public bool AlreadySnipped = false;
+        private bool AlreadySnipped { get; set; } = false;
 
         private MethodResult<List<NearbyPokemon>> RequestPokeSniperRares()
         {
@@ -49,7 +49,7 @@ namespace PokemonGoGUI.GoManager
             };
         }
         
-        public async Task<MethodResult> SnipeAllNearyPokemon(int balls)
+        public async Task<MethodResult> SnipeAllNearyPokemon()
         {
             MethodResult<List<NearbyPokemon>> pokeSniperResult = RequestPokeSniperRares();
 
@@ -80,7 +80,8 @@ namespace PokemonGoGUI.GoManager
 
             //Long running, so can't let this continue
             ModeSnipe = true;
-            Balls = balls;
+            Balls = RemainingPokeballs();
+            AlreadySnipped = false;
 
             while (pokemonToSnipe.Any() && IsRunning && !AlreadySnipped)
             {
@@ -219,6 +220,9 @@ namespace PokemonGoGUI.GoManager
 
             //Catch pokemon
             MethodResult catchResult = await CatchPokemon(eResponseResult.Data, pokemonToSnipe, true); //Handles logging
+
+            if (catchResult.Success)
+                AlreadySnipped = true;
 
             return catchResult;
         }
