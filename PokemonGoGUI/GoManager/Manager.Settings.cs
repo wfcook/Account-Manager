@@ -56,7 +56,6 @@ namespace PokemonGoGUI.GoManager
                 Pokemon = Pokemon.Select(x => new PokemonDataExportModel(x, CalculateIVPerfection(x))).ToList(),
                 Items = Items.Select(x => new ItemDataExportModel(x)).ToList(),
                 Eggs = Eggs.Select(x => new EggDataExportModel(x)).ToList(),
-                UserSettings = UserSettings,
                 ExportTime = DateTime.Now
             };
 

@@ -2353,6 +2353,73 @@ namespace PokemonGoGUI
                 MessageBox.Show(String.Format("Failed to open to file. Ex: {0}", ex.Message));
             }
         }
-        #endregion
+
+        private void ExportGMModelToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string fileName = String.Empty;
+            var exportModels = new List<AccountExportModel>();
+
+            DialogResult dialogResult = MessageBox.Show("Update details before exporting?", "Update details", MessageBoxButtons.YesNoCancel);
+
+            if (dialogResult == DialogResult.Cancel)
+            {
+                return;
+            }
+
+            using (var sfd = new SaveFileDialog())
+            {
+                sfd.Filter = "Json Files (*.json)|*.json|All Files (*.*)|*.*";
+
+                if (sfd.ShowDialog() == DialogResult.OK)
+                {
+                    fileName = sfd.FileName;
+                }
+                else
+                {
+                    return;
+                }
+            }
+
+            var options = new ParallelOptions
+            {
+                MaxDegreeOfParallelism = 10
+            };
+
+            IEnumerable<Manager> selectedManagers = fastObjectListViewMain.SelectedObjects.Cast<Manager>();
+
+            Task.Run(() =>
+            {
+                Parallel.ForEach(selectedManagers, options, (manager) =>
+                {
+                    if (dialogResult == DialogResult.Yes)
+                    {
+                        manager.UpdateDetails().Wait();
+                    }
+
+                    MethodResult<AccountExportModel> result = manager.GetAccountExport();
+
+                    if (!result.Success)
+                    {
+                        return;
+                    }
+
+                    exportModels.Add(result.Data);
+                });
+            });
+
+            try
+            {
+                string data = JsonConvert.SerializeObject(exportModels, Formatting.None);
+
+                File.WriteAllText(fileName, data);
+
+                MessageBox.Show(String.Format("Successfully exported {0} of {1} accounts", exportModels.Count, fastObjectListViewMain.SelectedObjects.Count));
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(String.Format("Failed to save to file. Ex: {0}", ex.Message));
+            }
+        }
+        #endregion 
     }
 }

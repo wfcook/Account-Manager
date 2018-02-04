@@ -27,10 +27,11 @@ namespace PokemonGoGUI.Models
         public List<EggDataExportModel> Eggs { get; set; }
         [JsonProperty("exportTime")]
         public DateTime ExportTime { get; set; }
-        [JsonProperty("userSettings")]
-        public Settings UserSettings { get; set; }
 
-        public AccountExportModel() { }
+        public AccountExportModel()
+        {
+            ExportTime = DateTime.Now;
+        }
     }
 
     public class PokedexEntryExportModel
