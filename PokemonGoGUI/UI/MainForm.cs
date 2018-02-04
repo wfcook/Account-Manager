@@ -879,16 +879,16 @@ namespace PokemonGoGUI
                         e.SubItem.ForeColor = Color.Aqua;
                         break;
                     case BotState.Stopping:
-                        e.SubItem.ForeColor = Color.OrangeRed;
+                        e.SubItem.ForeColor = Color.Orange;
                         break;
                     case BotState.Stopped:
                         e.SubItem.ForeColor = Color.Red;
                         break;
                     case BotState.Paused:
-                        e.SubItem.ForeColor = Color.MediumAquamarine;
+                        e.SubItem.ForeColor = Color.Yellow;
                         break;
                     case BotState.Pausing:
-                        e.SubItem.ForeColor = Color.MediumAquamarine;
+                        e.SubItem.ForeColor = Color.YellowGreen;
                         break;
                 }
             }
