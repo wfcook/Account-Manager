@@ -675,6 +675,8 @@ namespace PokemonGoGUI.GoManager
                                                 var gyminfo = await GymGetInfo(pokestop);
                                                 if (gyminfo.Success)
                                                     LogCaller(new LoggerEventArgs("Gym Name: " + gyminfo.Data.Name, LoggerTypes.Info));
+                                                else
+                                                    continue;
 
                                                 MethodResult spingym = await SearchPokestop(pokestop);
 
@@ -707,6 +709,8 @@ namespace PokemonGoGUI.GoManager
                                         var gyminfo = await GymGetInfo(pokestop);
                                         if (gyminfo.Success)
                                             LogCaller(new LoggerEventArgs("Gym Name: " + gyminfo.Data.Name, LoggerTypes.Info));
+                                        else
+                                            continue;
 
                                         MethodResult spingym = await SearchPokestop(pokestop);
 
@@ -762,6 +766,8 @@ namespace PokemonGoGUI.GoManager
                                     var fortDetails = await FortDetails(pokestop);
                                     if (fortDetails.Success)
                                         LogCaller(new LoggerEventArgs("Fort Name: " + fortDetails.Data.Name, LoggerTypes.Info));
+                                    else
+                                        continue;
 
                                     MethodResult searchResult = await SearchPokestop(pokestop);
 
