@@ -418,6 +418,9 @@ namespace PokemonGoGUI.GoManager
                 }
             }
 
+            if (AlreadySnipped && mapPokemon.EncounterId == _lastPokeSniperId)
+                return new MethodResult<EncounterResponse>();
+
             var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
                 RequestType = RequestType.Encounter,
@@ -527,9 +530,6 @@ namespace PokemonGoGUI.GoManager
                 _encounterId = mapPokemon.EncounterId;
                 _pokemonType = "Incense";                
             }
-
-            if (AlreadySnipped && _encounterId == _lastPokeSniperId)
-                return new MethodResult();
 
             if (_encounterId == _lastPokeSniperId || snipped)
             {

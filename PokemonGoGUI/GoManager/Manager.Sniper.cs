@@ -34,7 +34,7 @@ namespace PokemonGoGUI.GoManager
 
             if (newNearbyPokemons.Count == 0)
             {
-                LogCaller(new LoggerEventArgs("Local sniper return no pokemon to snipe", LoggerTypes.Snipe));
+                LogCaller(new LoggerEventArgs("Local sniper return no pokemon to snipe", LoggerTypes.Info));
 
                 return new MethodResult<List<NearbyPokemon>>
                 {
