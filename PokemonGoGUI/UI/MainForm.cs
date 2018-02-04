@@ -2354,7 +2354,7 @@ namespace PokemonGoGUI
             }
         }
 
-        private void ExportGMModelToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void ExportGMModelToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string fileName = String.Empty;
             var exportModels = new List<AccountExportModel>();
@@ -2387,7 +2387,7 @@ namespace PokemonGoGUI
 
             IEnumerable<Manager> selectedManagers = fastObjectListViewMain.SelectedObjects.Cast<Manager>();
 
-            Task.Run(() =>
+            await Task.Run(() =>
             {
                 Parallel.ForEach(selectedManagers, options, (manager) =>
                 {
