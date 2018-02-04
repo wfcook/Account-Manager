@@ -491,16 +491,39 @@ namespace PokemonGoGUI
         private void SessionMapUpdate(object sender, EventArgs e)
         {
             //Map Update
-            if (ClientManager.ModeSnipe && ClientManager.Balls > 5 /*Bot need balls for snippe*/)
+            try
             {
-                //Get for new pokestops
-                ClientManager.GetPokeStops();
+                if (ClientManager.ModeSnipe && ClientManager.Balls > 5 /*Bot need balls for snippe*/)
+                {
+                    //Get for new pokestops
+                    ClientManager.GetPokeStops();
 
-                //Catch nearby pokemon
-                ClientManager.CatchNeabyPokemon().Wait();
+                    //Catch nearby pokemon
+                    ClientManager.CatchNeabyPokemon().Wait();
 
-                //Catch incense pokemon
-                ClientManager.CatchInsencePokemon().Wait();
+                    //Catch incense pokemon
+                    ClientManager.CatchInsencePokemon().Wait();
+                }
+            }
+            catch (SessionStateException ex)
+            {
+                ClientManager.LogCaller(new LoggerEventArgs("Snipe.", LoggerTypes.Warning, ex));
+            }
+            catch (SessionInvalidatedException ex)
+            {
+                ClientManager.LogCaller(new LoggerEventArgs("Snipe.", LoggerTypes.Warning, ex));
+            }
+            catch (SessionUnknowException ex)
+            {
+                ClientManager.LogCaller(new LoggerEventArgs("Snipe.", LoggerTypes.Warning, ex));
+            }
+            catch (InvalidPlatformException ex)
+            {
+                ClientManager.LogCaller(new LoggerEventArgs("Snipe.", LoggerTypes.Warning, ex));
+            }
+            catch (Exception ex)
+            {
+                ClientManager.LogCaller(new LoggerEventArgs("Snipe.", LoggerTypes.Warning, ex));
             }
         }
 
