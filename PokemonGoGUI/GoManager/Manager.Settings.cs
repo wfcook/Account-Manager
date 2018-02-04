@@ -314,6 +314,7 @@ namespace PokemonGoGUI.GoManager
                     userSettings.Enable2Captcha = false;
                     userSettings.EnableCaptchaSolutions = false;
                     userSettings.EnableAntiCaptcha = false;
+                    userSettings.ShowDebugLogs = false;
                     // gyms
                     userSettings.DefaultTeam = "Neutral";
                     userSettings.SpinGyms = false;
