@@ -2046,7 +2046,7 @@ namespace PokemonGoGUI
 
         private void DeleteToolStripMenuItem3_Click(object sender, EventArgs e)
         {
-            foreach (var hashkey in fastObjectListViewHashKeys.SelectedObjects)
+            foreach (var hashkey in fastObjectListViewHashKeys.SelectedObjects.Cast<HashKey>())
             {
                 _hashKeys.Remove(hashkey as HashKey);
             }
@@ -2088,12 +2088,16 @@ namespace PokemonGoGUI
 
         private void TestKeyToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            foreach (HashKey key in fastObjectListViewHashKeys.SelectedObjects)
+            foreach (HashKey key in fastObjectListViewHashKeys.SelectedObjects.Cast<HashKey>())
             {
                 HashKey tested = TestHashKey(key);
                 if (!tested.IsValide)
                     MessageBox.Show("HashKey " + tested.Key + " :" + tested.KeyInfo + ", Please remove this key of HashKeys tab.");
+                _hashKeys.Remove(key);
+                _hashKeys.Add(tested);
             }
+
+            fastObjectListViewHashKeys.SetObjects(_hashKeys);
         }
 
         private void FastObjectListViewHashKeys_FormatCell(object sender, BrightIdeasSoftware.FormatCellEventArgs e)
@@ -2215,6 +2219,7 @@ namespace PokemonGoGUI
             };
 
             string mode = null;
+
             try
             {
                 var client = new HttpClient();
@@ -2309,7 +2314,6 @@ namespace PokemonGoGUI
                 MessageBox.Show(String.Format("Failed to import usernames. Ex: {0}", ex.Message));
             }
         }
-        #endregion
 
         private void ImportJsonToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -2349,5 +2353,6 @@ namespace PokemonGoGUI
                 MessageBox.Show(String.Format("Failed to open to file. Ex: {0}", ex.Message));
             }
         }
+        #endregion
     }
 }
