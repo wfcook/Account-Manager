@@ -84,7 +84,6 @@ namespace PokemonGoGUI.UI
 
             olvColumnPokemonCandy.AspectGetter = delegate (object pokemon)
             {
-
                 if (!_manager.PokemonCandy.Any())
                 {
                     return 0;
@@ -100,10 +99,12 @@ namespace PokemonGoGUI.UI
                 Candy family = _manager.PokemonCandy.FirstOrDefault(y => y.FamilyId == settings.FamilyId);
 
                 return family == null ? 0 : family.Candy_;
-
             };
 
-            olvColumnPokemonName.AspectGetter = (pokemon) => (pokemon as PokemonData).PokemonId.ToString();
+            olvColumnPokemonName.AspectGetter = delegate (object pokemon)
+            {
+               return String.IsNullOrEmpty((pokemon as PokemonData).Nickname) ? (pokemon as PokemonData).PokemonId.ToString() : (pokemon as PokemonData).Nickname;
+            };
 
             olvColumnPrimaryMove.AspectGetter = (pokemon) => ((PokemonMove)(pokemon as PokemonData).Move1).ToString().Replace("Fast", "");
 
@@ -682,6 +683,28 @@ namespace PokemonGoGUI.UI
             fastObjectListViewPokemon.SetObjects(_manager.Pokemon);
 
             MessageBox.Show("Finished set a buddy pokemon");
+        }
+
+        private async void RenameToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DialogResult result = MessageBox.Show(String.Format("Are you sure you want to rename {0} pokemon(s)?", fastObjectListViewPokemon.SelectedObjects.Cast<PokemonData>().Count()), "Confirmation", MessageBoxButtons.YesNo);
+
+            if (result != DialogResult.Yes)
+            {
+                return;
+            }
+
+            contextMenuStripPokemonDetails.Enabled = false;
+
+            MethodResult managerResult = await _manager.RenamePokemon(fastObjectListViewPokemon.SelectedObjects.Cast<PokemonData>());
+
+            DisplayDetails();
+
+            contextMenuStripPokemonDetails.Enabled = true;
+
+            fastObjectListViewPokemon.SetObjects(_manager.Pokemon);
+
+            MessageBox.Show("Finished to rename pokemon(s)");
         }
     }
 }

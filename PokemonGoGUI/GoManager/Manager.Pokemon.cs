@@ -488,7 +488,66 @@ namespace PokemonGoGUI.GoManager
                         pokemon.PokemonId,
                         pokemon.Cp,
                         CalculateIVPerfection(pokemon), message),
-                    LoggerTypes.Info));
+                    LoggerTypes.Success));
+
+                UpdateInventory(InventoryRefresh.Pokemon);
+
+                await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+
+                return new MethodResult
+                {
+                    Success = true
+                };
+            }
+            return new MethodResult();
+        }
+
+        public async Task<MethodResult> RenamePokemon(IEnumerable<PokemonData> pokemonToRename)
+        {
+            foreach (PokemonData pokemon in pokemonToRename)
+            {
+                string input = Prompt.ShowDialog($"New nickname for {pokemon.PokemonId.ToString()}", "Rename");
+
+                if (String.IsNullOrEmpty(input))
+                {
+                    input = String.Empty;
+                }
+
+                if (input == pokemon.Nickname)
+                {
+                    continue;
+                }               
+
+                if (!_client.LoggedIn)
+                {
+                    MethodResult result = await AcLogin();
+
+                    if (!result.Success)
+                    {
+                        return result;
+                    }
+                }
+
+                var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
+                {
+                    RequestType = RequestType.NicknamePokemon,
+                    RequestMessage = new NicknamePokemonMessage
+                    {
+                        PokemonId = pokemon.Id,
+                        Nickname = input
+                    }.ToByteString()
+                });
+
+                if (response == null)
+                    return new MethodResult();
+
+                NicknamePokemonResponse nicknamePokemonResponse = null;
+
+                nicknamePokemonResponse = NicknamePokemonResponse.Parser.ParseFrom(response);
+                LogCaller(new LoggerEventArgs(
+                    String.Format("Successully  renamed: {0} to: {1}.",
+                        pokemon.PokemonId,
+                        String.IsNullOrEmpty(input) ? $"Default [{pokemon.PokemonId.ToString()}]" : input), LoggerTypes.Success));
 
                 UpdateInventory(InventoryRefresh.Pokemon);
 

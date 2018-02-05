@@ -31,6 +31,8 @@
             this.components = new System.ComponentModel.Container();
             this.tabControlMain = new System.Windows.Forms.TabControl();
             this.tabPageStats = new System.Windows.Forms.TabPage();
+            this.labelPokeCoins = new System.Windows.Forms.Label();
+            this.label19 = new System.Windows.Forms.Label();
             this.labelPokemonBuddy = new System.Windows.Forms.Label();
             this.label17 = new System.Windows.Forms.Label();
             this.labelDeployedPokemons = new System.Windows.Forms.Label();
@@ -129,8 +131,7 @@
             this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copyStackTraceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.label19 = new System.Windows.Forms.Label();
-            this.labelPokeCoins = new System.Windows.Forms.Label();
+            this.renameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControlMain.SuspendLayout();
             this.tabPageStats.SuspendLayout();
             this.tabPagePokedex.SuspendLayout();
@@ -217,6 +218,24 @@
             this.tabPageStats.TabIndex = 0;
             this.tabPageStats.Text = "Stats";
             this.tabPageStats.UseVisualStyleBackColor = true;
+            // 
+            // labelPokeCoins
+            // 
+            this.labelPokeCoins.AutoSize = true;
+            this.labelPokeCoins.Location = new System.Drawing.Point(173, 330);
+            this.labelPokeCoins.Name = "labelPokeCoins";
+            this.labelPokeCoins.Size = new System.Drawing.Size(16, 17);
+            this.labelPokeCoins.TabIndex = 11;
+            this.labelPokeCoins.Text = "0";
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(66, 330);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(79, 17);
+            this.label19.TabIndex = 10;
+            this.label19.Text = "PokeCoins:";
             // 
             // labelPokemonBuddy
             // 
@@ -782,11 +801,12 @@
             this.upgradeToolStripMenuItem,
             this.evolveToolStripMenuItem,
             this.transferToolStripMenuItem,
+            this.renameToolStripMenuItem,
             this.showFutureTransfersToolStripMenuItem,
             this.toolStripSeparator1,
             this.setABuddyToolStripMenuItem});
             this.contextMenuStripPokemonDetails.Name = "contextMenuStripPokemonDetails";
-            this.contextMenuStripPokemonDetails.Size = new System.Drawing.Size(218, 154);
+            this.contextMenuStripPokemonDetails.Size = new System.Drawing.Size(218, 206);
             // 
             // favoriteToolStripMenuItem
             // 
@@ -1109,23 +1129,12 @@
             this.exportToolStripMenuItem.Text = "Export";
             this.exportToolStripMenuItem.Click += new System.EventHandler(this.ExportToolStripMenuItem_Click);
             // 
-            // label19
+            // renameToolStripMenuItem
             // 
-            this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(66, 330);
-            this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(79, 17);
-            this.label19.TabIndex = 10;
-            this.label19.Text = "PokeCoins:";
-            // 
-            // labelPokeCoins
-            // 
-            this.labelPokeCoins.AutoSize = true;
-            this.labelPokeCoins.Location = new System.Drawing.Point(173, 330);
-            this.labelPokeCoins.Name = "labelPokeCoins";
-            this.labelPokeCoins.Size = new System.Drawing.Size(16, 17);
-            this.labelPokeCoins.TabIndex = 11;
-            this.labelPokeCoins.Text = "0";
+            this.renameToolStripMenuItem.Name = "renameToolStripMenuItem";
+            this.renameToolStripMenuItem.Size = new System.Drawing.Size(217, 24);
+            this.renameToolStripMenuItem.Text = "Rename";
+            this.renameToolStripMenuItem.Click += new System.EventHandler(this.RenameToolStripMenuItem_Click);
             // 
             // DetailsForm
             // 
@@ -1265,5 +1274,6 @@
         private System.Windows.Forms.ToolStripMenuItem setABuddyToolStripMenuItem;
         private System.Windows.Forms.Label labelPokeCoins;
         private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.ToolStripMenuItem renameToolStripMenuItem;
     }
 }
