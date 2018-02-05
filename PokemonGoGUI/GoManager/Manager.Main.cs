@@ -701,10 +701,19 @@ namespace PokemonGoGUI.GoManager
                                                     //Here try to attack gym not released yet
                                                     //
                                                 }
+                                                else
+                                                {
+                                                    if (currentFailedStops > 10)
+                                                    {
+                                                        Stop();
+                                                    }
+                                                    ++currentFailedStops;
+                                                }
+
                                             }
                                         }
                                     }
-                                    else
+                                    else if (PlayerData.TutorialState.Contains(TutorialState.GymTutorial))
                                     {
                                         var gyminfo = await GymGetInfo(pokestop);
                                         if (gyminfo.Success)
