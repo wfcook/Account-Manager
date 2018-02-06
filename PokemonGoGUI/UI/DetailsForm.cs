@@ -68,7 +68,11 @@ namespace PokemonGoGUI.UI
 
             olvColumnPokemonId.AspectGetter = (pokemon) => (int)(pokemon as PokemonData).PokemonId;
 
-            olvColumnPokemonFavorite.AspectGetter = (pokemon) => (pokemon as PokemonData).Favorite == 1;
+            olvColumnPokemonFavorite.AspectGetter = (pokemon) => (pokemon as PokemonData).Favorite == 1; 
+
+            olvColumnPokemonShiny.AspectGetter = (pokemon) => (pokemon as PokemonData).PokemonDisplay.Shiny;
+
+            olvColumnPokemonGender.AspectGetter = (pokemon) => (pokemon as PokemonData).PokemonDisplay.Gender;
 
             olvColumnPokemonRarity.AspectGetter = delegate (object pokemon)
             {
@@ -120,6 +124,16 @@ namespace PokemonGoGUI.UI
                 double settings = Manager.CalculateIVPerfection(pokemon as PokemonData);
                 string sDouble = String.Format("{0:0.00}", settings);
                 return double.Parse(sDouble);
+            };
+
+            olvColumnPokemonHeight.AspectGetter = delegate (object pokemon)
+            {
+                return String.Format("{0:0.00}m", (pokemon as PokemonData).HeightM);
+            };
+
+            olvColumnPokemonWeight.AspectGetter = delegate (object pokemon)
+            {
+                return String.Format("{0:0.00}Kg", (pokemon as PokemonData).WeightKg);
             };
 
             #endregion
@@ -307,7 +321,20 @@ namespace PokemonGoGUI.UI
         {
             var pokemonData = (PokemonData)e.Model;
 
-            if (e.Column == olvColumnPokemonCandy)
+            if (e.Column == olvColumnPokemonName)
+            {
+                bool fav = (bool)olvColumnPokemonFavorite.GetValue(pokemonData);
+                bool bubby = _manager?.PlayerData?.BuddyPokemon?.Id == pokemonData.Id == true;
+                if (fav)
+                {
+                    e.SubItem.ForeColor = Color.Gold;
+                }
+                else if (bubby)
+                {
+                    e.SubItem.ForeColor = Color.Blue;
+                }
+            }
+            else if (e.Column == olvColumnPokemonCandy)
             {
                 int candy = (int)olvColumnPokemonCandy.GetValue(pokemonData);
                 int candyToEvolve = (int)olvColumnCandyToEvolve.GetValue(pokemonData);
