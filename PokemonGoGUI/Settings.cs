@@ -79,8 +79,10 @@ namespace PokemonGoGUI
         public bool IncubateEggs { get; set; }
         public int MaxLevel { get; set; }
         public bool SPF { get; set; }
-        
+
         public double SearchFortBelowPercent { get; set; }
+        public int CatchPokemonDayLimit { get; set; }
+        public int SpinPokestopsDayLimit { get; set; }
         public double ForceEvolveAbovePercent { get; set; }
         public bool StopOnAPIUpdate { get; set; }
 
@@ -181,6 +183,8 @@ namespace PokemonGoGUI
             MaxFailBeforeReset = 3;
             StopOnIPBan = true;
             SearchFortBelowPercent = 1000;
+            CatchPokemonDayLimit = 500;
+            SpinPokestopsDayLimit = 700;
             ForceEvolveAbovePercent = 1000;
             StopOnAPIUpdate = true;
             SpinGyms = true;

@@ -258,6 +258,10 @@
             this.toolTipMinAccountState = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipHumanizeThrows = new System.Windows.Forms.ToolTip(this.components);
             this.checkBoxAutoFavShiny = new System.Windows.Forms.CheckBox();
+            this.label48 = new System.Windows.Forms.Label();
+            this.numericUpDownPokemonsDayLimit = new System.Windows.Forms.NumericUpDown();
+            this.label52 = new System.Windows.Forms.Label();
+            this.numericUpDownStopsDayLimit = new System.Windows.Forms.NumericUpDown();
             this.tabControlMain.SuspendLayout();
             this.tabPageDetails.SuspendLayout();
             this.tabControlSettings.SuspendLayout();
@@ -303,6 +307,8 @@
             this.tabPageUpgrade.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewUpgrade)).BeginInit();
             this.contextMenuStripUpgrade.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownPokemonsDayLimit)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownStopsDayLimit)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControlMain
@@ -462,7 +468,11 @@
             // 
             // tabPageActions
             // 
+            this.tabPageActions.Controls.Add(this.numericUpDownStopsDayLimit);
+            this.tabPageActions.Controls.Add(this.label52);
+            this.tabPageActions.Controls.Add(this.numericUpDownPokemonsDayLimit);
             this.tabPageActions.Controls.Add(this.checkBoxGoToGymsOnly);
+            this.tabPageActions.Controls.Add(this.label48);
             this.tabPageActions.Controls.Add(this.label47);
             this.tabPageActions.Controls.Add(this.cbTeam);
             this.tabPageActions.Controls.Add(this.checkBoxCompleteTutorial);
@@ -560,7 +570,7 @@
             this.groupBoxPlayerActions.Margin = new System.Windows.Forms.Padding(4);
             this.groupBoxPlayerActions.Name = "groupBoxPlayerActions";
             this.groupBoxPlayerActions.Padding = new System.Windows.Forms.Padding(4);
-            this.groupBoxPlayerActions.Size = new System.Drawing.Size(319, 430);
+            this.groupBoxPlayerActions.Size = new System.Drawing.Size(319, 426);
             this.groupBoxPlayerActions.TabIndex = 73;
             this.groupBoxPlayerActions.TabStop = false;
             this.groupBoxPlayerActions.Text = "Player Actions";
@@ -568,7 +578,7 @@
             // checkBoxUpgradePokemons
             // 
             this.checkBoxUpgradePokemons.AutoSize = true;
-            this.checkBoxUpgradePokemons.Location = new System.Drawing.Point(15, 234);
+            this.checkBoxUpgradePokemons.Location = new System.Drawing.Point(15, 125);
             this.checkBoxUpgradePokemons.Name = "checkBoxUpgradePokemons";
             this.checkBoxUpgradePokemons.Size = new System.Drawing.Size(155, 21);
             this.checkBoxUpgradePokemons.TabIndex = 78;
@@ -776,7 +786,7 @@
             // checkBoxIncubateEggs
             // 
             this.checkBoxIncubateEggs.AutoSize = true;
-            this.checkBoxIncubateEggs.Location = new System.Drawing.Point(15, 126);
+            this.checkBoxIncubateEggs.Location = new System.Drawing.Point(175, 125);
             this.checkBoxIncubateEggs.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.checkBoxIncubateEggs.Name = "checkBoxIncubateEggs";
             this.checkBoxIncubateEggs.Size = new System.Drawing.Size(120, 21);
@@ -2790,12 +2800,56 @@
             // checkBoxAutoFavShiny
             // 
             this.checkBoxAutoFavShiny.AutoSize = true;
-            this.checkBoxAutoFavShiny.Location = new System.Drawing.Point(15, 383);
+            this.checkBoxAutoFavShiny.Location = new System.Drawing.Point(15, 234);
             this.checkBoxAutoFavShiny.Name = "checkBoxAutoFavShiny";
             this.checkBoxAutoFavShiny.Size = new System.Drawing.Size(201, 21);
             this.checkBoxAutoFavShiny.TabIndex = 78;
             this.checkBoxAutoFavShiny.Text = "Auto Favorit shiny on catch";
             this.checkBoxAutoFavShiny.UseVisualStyleBackColor = true;
+            // 
+            // label48
+            // 
+            this.label48.AutoSize = true;
+            this.label48.Location = new System.Drawing.Point(333, 275);
+            this.label48.Name = "label48";
+            this.label48.Size = new System.Drawing.Size(169, 17);
+            this.label48.TabIndex = 78;
+            this.label48.Text = "Catch Pokemons day limit";
+            // 
+            // numericUpDownPokemonsDayLimit
+            // 
+            this.numericUpDownPokemonsDayLimit.Location = new System.Drawing.Point(521, 272);
+            this.numericUpDownPokemonsDayLimit.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.numericUpDownPokemonsDayLimit.Maximum = new decimal(new int[] {
+            1000000,
+            0,
+            0,
+            0});
+            this.numericUpDownPokemonsDayLimit.Name = "numericUpDownPokemonsDayLimit";
+            this.numericUpDownPokemonsDayLimit.Size = new System.Drawing.Size(77, 22);
+            this.numericUpDownPokemonsDayLimit.TabIndex = 79;
+            // 
+            // label52
+            // 
+            this.label52.AutoSize = true;
+            this.label52.Location = new System.Drawing.Point(333, 300);
+            this.label52.Name = "label52";
+            this.label52.Size = new System.Drawing.Size(161, 17);
+            this.label52.TabIndex = 80;
+            this.label52.Text = "Spin Pokestops day limit";
+            // 
+            // numericUpDownStopsDayLimit
+            // 
+            this.numericUpDownStopsDayLimit.Location = new System.Drawing.Point(521, 298);
+            this.numericUpDownStopsDayLimit.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.numericUpDownStopsDayLimit.Maximum = new decimal(new int[] {
+            1000000,
+            0,
+            0,
+            0});
+            this.numericUpDownStopsDayLimit.Name = "numericUpDownStopsDayLimit";
+            this.numericUpDownStopsDayLimit.Size = new System.Drawing.Size(77, 22);
+            this.numericUpDownStopsDayLimit.TabIndex = 81;
             // 
             // AccountSettingsForm
             // 
@@ -2866,6 +2920,8 @@
             this.tabPageUpgrade.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewUpgrade)).EndInit();
             this.contextMenuStripUpgrade.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownPokemonsDayLimit)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownStopsDayLimit)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -3101,5 +3157,9 @@
         private System.Windows.Forms.ToolStripMenuItem falseToolStripMenuItem4;
         private System.Windows.Forms.ToolStripMenuItem toggleToolStripMenuItem4;
         private System.Windows.Forms.CheckBox checkBoxAutoFavShiny;
+        private System.Windows.Forms.NumericUpDown numericUpDownPokemonsDayLimit;
+        private System.Windows.Forms.Label label48;
+        private System.Windows.Forms.NumericUpDown numericUpDownStopsDayLimit;
+        private System.Windows.Forms.Label label52;
     }
 }

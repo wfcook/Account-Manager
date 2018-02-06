@@ -20,6 +20,15 @@ namespace PokemonGoGUI.GoManager
             if (pokestop == null)
                 return new MethodResult();
 
+            if (Tracker.PokestopsFarmed >= UserSettings.SpinPokestopsDayLimit)
+            {
+                LogCaller(new LoggerEventArgs("Pokestops limit actived", LoggerTypes.Info));
+                return new MethodResult
+                {
+                    Message = "Limit actived"
+                };
+            }
+
             FortSearchResponse fortResponse = null;
             const int maxFortAttempts = 5;
 

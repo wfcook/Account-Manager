@@ -137,6 +137,8 @@ namespace PokemonGoGUI.UI
             checkBoxRemoveOnStop.Checked = settings.AutoRemoveOnStop;
             checkBoxClaimLevelUp.Checked = settings.ClaimLevelUpRewards;
             numericUpDownSearchFortBelow.Value = new Decimal(settings.SearchFortBelowPercent);
+            numericUpDownPokemonsDayLimit.Value = new Decimal(settings.CatchPokemonDayLimit);
+            numericUpDownStopsDayLimit.Value = new Decimal(settings.SpinPokestopsDayLimit);
             numericUpDownForceEvolveAbove.Value = new Decimal(settings.ForceEvolveAbovePercent);
             checkBoxStopOnAPIUpdate.Checked = settings.StopOnAPIUpdate;
 
@@ -376,6 +378,8 @@ namespace PokemonGoGUI.UI
             userSettings.CatchPokemon = checkBoxCatchPokemon.Checked;
             userSettings.StopAtMinAccountState = (AccountState)comboBoxMinAccountState.SelectedItem;
             userSettings.SearchFortBelowPercent = (double)numericUpDownSearchFortBelow.Value;
+            userSettings.CatchPokemonDayLimit = (int)numericUpDownPokemonsDayLimit.Value;
+            userSettings.SpinPokestopsDayLimit = (int)numericUpDownStopsDayLimit.Value;
             userSettings.ForceEvolveAbovePercent = (double)numericUpDownForceEvolveAbove.Value;
             userSettings.ClaimLevelUpRewards = checkBoxClaimLevelUp.Checked;
             userSettings.StopOnAPIUpdate = checkBoxStopOnAPIUpdate.Checked;

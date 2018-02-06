@@ -30,6 +30,15 @@ namespace PokemonGoGUI.GoManager
                 };
             }
 
+            if (Tracker.PokemonCaught >= UserSettings.CatchPokemonDayLimit)
+            {
+                LogCaller(new LoggerEventArgs("Catch pokemon limit actived", LoggerTypes.Info));
+                return new MethodResult
+                {
+                    Message = "Limit actived"
+                };
+            }
+
             if (FilledPokemonStorage() >= 100)
             {
                 return new MethodResult
@@ -87,6 +96,15 @@ namespace PokemonGoGUI.GoManager
                 return new MethodResult
                 {
                     Message = "Catching pokemon disabled"
+                };
+            }
+
+            if (Tracker.PokemonCaught >= UserSettings.CatchPokemonDayLimit)
+            {
+                LogCaller(new LoggerEventArgs("Catch pokemon limit actived", LoggerTypes.Info));
+                return new MethodResult
+                {
+                    Message ="Limit actived"
                 };
             }
 
@@ -159,6 +177,15 @@ namespace PokemonGoGUI.GoManager
                 return new MethodResult
                 {
                     Message = "Catching pokemon disabled"
+                };
+            }
+
+            if (Tracker.PokemonCaught >= UserSettings.CatchPokemonDayLimit)
+            {
+                LogCaller(new LoggerEventArgs("Catch pokemon limit actived", LoggerTypes.Info));
+                return new MethodResult
+                {
+                    Message = "Limit actived"
                 };
             }
 
