@@ -358,6 +358,14 @@ namespace PokemonGoGUI.GoManager
 
                                 LogCaller(new LoggerEventArgs(String.Format("[Lured] Pokemon Caught. {0}. Exp {1}. Candy {2}. Attempt #{3}. Ball: {4}", pokemon, expGained, candyGained, attemptCount, pokeBallName), LoggerTypes.Success));
 
+                                //Auto favorit shiny
+                                if (UserSettings.AutoFavoritShiny && eResponse.PokemonData.PokemonDisplay.Shiny)
+                                {
+                                    LogCaller(new LoggerEventArgs(String.Format("[{0}] Pokemon shiny. Auto favorit this pokemon.", eResponse.PokemonData.PokemonId.ToString()), LoggerTypes.Info));
+                                    await FavoritePokemon(new List<PokemonData> { eResponse.PokemonData }, true);
+                                    await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+                                }
+
                                 //Pokemon.Add(eResponse.PokemonData);
                                 UpdateInventory(InventoryRefresh.Pokemon);
 
@@ -645,7 +653,7 @@ namespace PokemonGoGUI.GoManager
 
                 catchPokemonResponse = CatchPokemonResponse.Parser.ParseFrom(catchresponse);
 
-                string pokemon = String.Format("Name: {0}, CP: {1}, IV: {2:0.00}%", mapPokemon.PokemonId, _encounteredPokemon.Cp, CalculateIVPerfection(_encounteredPokemon));
+                string pokemon = String.Format("Name: {0}, CP: {1}, IV: {2:0.00}%", _encounteredPokemon.PokemonId.ToString(), _encounteredPokemon.Cp, CalculateIVPerfection(_encounteredPokemon));
                 string pokeBallName = pokeBall.ToString().Replace("Item", "");
 
                 switch (catchPokemonResponse.Status)
@@ -688,10 +696,10 @@ namespace PokemonGoGUI.GoManager
                         //_expGained += expGained;
 
                         //NOTE: To be sure that we don't repeat this encounter, we will delete it from the cell
-                        var cell = _client.ClientSession.Map.Cells.FirstOrDefault(x => x.CatchablePokemons.FirstOrDefault(y => y.EncounterId == mapPokemon.EncounterId) != null);
+                        var cell = _client.ClientSession.Map.Cells.FirstOrDefault(x => x.CatchablePokemons.FirstOrDefault(y => y.EncounterId == _encounterId) != null);
                         if (cell != null)
                         {
-                            var mapPokemonFound = cell.CatchablePokemons.FirstOrDefault(y => y.EncounterId == mapPokemon.EncounterId);
+                            var mapPokemonFound = cell.CatchablePokemons.FirstOrDefault(y => y.EncounterId ==_encounterId);
                             if (mapPokemonFound != null)
                             {
                                 cell.CatchablePokemons.Remove(mapPokemonFound);
@@ -699,6 +707,14 @@ namespace PokemonGoGUI.GoManager
                         }
 
                         LogCaller(new LoggerEventArgs(String.Format("[{0}] Pokemon Caught. {1}. Exp {2}. Candy: {3}. Attempt #{4}. Ball: {5}", _pokemonType, pokemon, expGained, candyGained, attemptCount, pokeBallName), _loggerType));
+
+                        //Auto favorit shiny
+                        if (UserSettings.AutoFavoritShiny && _encounteredPokemon.PokemonDisplay.Shiny)
+                        {
+                            LogCaller(new LoggerEventArgs(String.Format("[{0}] Pokemon shiny. Auto favorit this pokemon.", _encounteredPokemon.PokemonId.ToString()), LoggerTypes.Info));
+                            await FavoritePokemon(new List<PokemonData> { _encounteredPokemon }, true);
+                            await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
+                        }
 
                         //Pokemon.Add(_encounteredPokemon);
                         UpdateInventory(InventoryRefresh.Pokemon);

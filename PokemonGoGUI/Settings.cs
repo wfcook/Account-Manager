@@ -52,6 +52,7 @@ namespace PokemonGoGUI
         public int AutoCaptchaRetries { get; set; }
         public string TwoCaptchaAPIKey { get; set; }
 
+        public bool AutoFavoritShiny { get; set; }
         public bool UseIncense { get; set; }
         public string DefaultTeam { get; set; }
         public double DisableCatchDelay { get; set; }
@@ -207,6 +208,7 @@ namespace PokemonGoGUI
             DefaultTeam = "Neutral";
             ShowDebugLogs = false;
             GoOnlyToGyms = false;
+            AutoFavoritShiny = true;
         }
 
         public void LoadCatchSettings()

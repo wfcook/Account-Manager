@@ -226,6 +226,7 @@ namespace PokemonGoGUI.UI
             AutoCaptchaTimeout.Text = settings.AutoCaptchaTimeout.ToString();
             AutoCaptchaRetries.Text = settings.AutoCaptchaRetries.ToString();
             TwoCaptchaAPIKey.Text = settings.TwoCaptchaAPIKey;
+            checkBoxAutoFavShiny.Checked = settings.AutoFavoritShiny;
 
             //Location time zones
             var zones = new TimeZoneIds().GetTimeZoneIds();
@@ -502,6 +503,7 @@ namespace PokemonGoGUI.UI
             userSettings.DefaultTeam = (string)cbTeam.SelectedItem ?? "Neutral";
             userSettings.GoOnlyToGyms = checkBoxGoToGymsOnly.Checked;
             userSettings.UpgradePokemon = checkBoxUpgradePokemons.Checked;
+            userSettings.AutoFavoritShiny = checkBoxAutoFavShiny.Checked;
 
             return true;
         }

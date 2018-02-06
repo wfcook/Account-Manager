@@ -221,7 +221,6 @@
             this.trueToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.falseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toggleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.restoreDefaultsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.setUsePinapToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.trueToolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
             this.falseToolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
@@ -230,6 +229,7 @@
             this.trueToolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
             this.falseToolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
             this.toggleToolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
+            this.restoreDefaultsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabPageTransfer = new System.Windows.Forms.TabPage();
             this.fastObjectListViewTransfer = new BrightIdeasSoftware.FastObjectListView();
             this.olvColumnTransferId = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
@@ -257,6 +257,7 @@
             this.toolTipProxy = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipMinAccountState = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipHumanizeThrows = new System.Windows.Forms.ToolTip(this.components);
+            this.checkBoxAutoFavShiny = new System.Windows.Forms.CheckBox();
             this.tabControlMain.SuspendLayout();
             this.tabPageDetails.SuspendLayout();
             this.tabControlSettings.SuspendLayout();
@@ -532,6 +533,7 @@
             // 
             // groupBoxPlayerActions
             // 
+            this.groupBoxPlayerActions.Controls.Add(this.checkBoxAutoFavShiny);
             this.groupBoxPlayerActions.Controls.Add(this.checkBoxUpgradePokemons);
             this.groupBoxPlayerActions.Controls.Add(this.cbUseIncense);
             this.groupBoxPlayerActions.Controls.Add(this.numericUpDownDisableCatchDelay);
@@ -558,7 +560,7 @@
             this.groupBoxPlayerActions.Margin = new System.Windows.Forms.Padding(4);
             this.groupBoxPlayerActions.Name = "groupBoxPlayerActions";
             this.groupBoxPlayerActions.Padding = new System.Windows.Forms.Padding(4);
-            this.groupBoxPlayerActions.Size = new System.Drawing.Size(319, 414);
+            this.groupBoxPlayerActions.Size = new System.Drawing.Size(319, 430);
             this.groupBoxPlayerActions.TabIndex = 73;
             this.groupBoxPlayerActions.TabStop = false;
             this.groupBoxPlayerActions.Text = "Player Actions";
@@ -576,7 +578,7 @@
             // cbUseIncense
             // 
             this.cbUseIncense.AutoSize = true;
-            this.cbUseIncense.Location = new System.Drawing.Point(15, 383);
+            this.cbUseIncense.Location = new System.Drawing.Point(15, 180);
             this.cbUseIncense.Name = "cbUseIncense";
             this.cbUseIncense.Size = new System.Drawing.Size(176, 21);
             this.cbUseIncense.TabIndex = 75;
@@ -763,7 +765,7 @@
             // checkBoxUseLuckyEgg
             // 
             this.checkBoxUseLuckyEgg.AutoSize = true;
-            this.checkBoxUseLuckyEgg.Location = new System.Drawing.Point(15, 180);
+            this.checkBoxUseLuckyEgg.Location = new System.Drawing.Point(175, 100);
             this.checkBoxUseLuckyEgg.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.checkBoxUseLuckyEgg.Name = "checkBoxUseLuckyEgg";
             this.checkBoxUseLuckyEgg.Size = new System.Drawing.Size(125, 21);
@@ -2458,7 +2460,7 @@
             this.setLocalSnipeToolStripMenuItem,
             this.restoreDefaultsToolStripMenuItem});
             this.contextMenuStripCatching.Name = "contextMenuStripCatching";
-            this.contextMenuStripCatching.Size = new System.Drawing.Size(188, 128);
+            this.contextMenuStripCatching.Size = new System.Drawing.Size(188, 100);
             // 
             // setCatchToolStripMenuItem
             // 
@@ -2495,13 +2497,6 @@
             this.toggleToolStripMenuItem.Text = "Toggle";
             this.toggleToolStripMenuItem.Click += new System.EventHandler(this.TrueToolStripMenuItem_Click);
             // 
-            // restoreDefaultsToolStripMenuItem
-            // 
-            this.restoreDefaultsToolStripMenuItem.Name = "restoreDefaultsToolStripMenuItem";
-            this.restoreDefaultsToolStripMenuItem.Size = new System.Drawing.Size(187, 24);
-            this.restoreDefaultsToolStripMenuItem.Text = "Restore Defaults";
-            this.restoreDefaultsToolStripMenuItem.Click += new System.EventHandler(this.RestoreDefaultsToolStripMenuItem_Click);
-            // 
             // setUsePinapToolStripMenuItem1
             // 
             this.setUsePinapToolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -2516,7 +2511,7 @@
             // trueToolStripMenuItem3
             // 
             this.trueToolStripMenuItem3.Name = "trueToolStripMenuItem3";
-            this.trueToolStripMenuItem3.Size = new System.Drawing.Size(181, 26);
+            this.trueToolStripMenuItem3.Size = new System.Drawing.Size(130, 26);
             this.trueToolStripMenuItem3.Tag = "1";
             this.trueToolStripMenuItem3.Text = "True";
             this.trueToolStripMenuItem3.Click += new System.EventHandler(this.TrueUsePinaToolStripMenuItem_Click);
@@ -2524,7 +2519,7 @@
             // falseToolStripMenuItem3
             // 
             this.falseToolStripMenuItem3.Name = "falseToolStripMenuItem3";
-            this.falseToolStripMenuItem3.Size = new System.Drawing.Size(181, 26);
+            this.falseToolStripMenuItem3.Size = new System.Drawing.Size(130, 26);
             this.falseToolStripMenuItem3.Tag = "0";
             this.falseToolStripMenuItem3.Text = "False";
             this.falseToolStripMenuItem3.Click += new System.EventHandler(this.TrueUsePinaToolStripMenuItem_Click);
@@ -2532,7 +2527,7 @@
             // toggleToolStripMenuItem3
             // 
             this.toggleToolStripMenuItem3.Name = "toggleToolStripMenuItem3";
-            this.toggleToolStripMenuItem3.Size = new System.Drawing.Size(181, 26);
+            this.toggleToolStripMenuItem3.Size = new System.Drawing.Size(130, 26);
             this.toggleToolStripMenuItem3.Tag = "3";
             this.toggleToolStripMenuItem3.Text = "Toggle";
             this.toggleToolStripMenuItem3.Click += new System.EventHandler(this.TrueUsePinaToolStripMenuItem_Click);
@@ -2551,7 +2546,7 @@
             // trueToolStripMenuItem4
             // 
             this.trueToolStripMenuItem4.Name = "trueToolStripMenuItem4";
-            this.trueToolStripMenuItem4.Size = new System.Drawing.Size(181, 26);
+            this.trueToolStripMenuItem4.Size = new System.Drawing.Size(130, 26);
             this.trueToolStripMenuItem4.Tag = "1";
             this.trueToolStripMenuItem4.Text = "True";
             this.trueToolStripMenuItem4.Click += new System.EventHandler(this.TrueLocalSnipeToolStripMenuItem_Click);
@@ -2559,7 +2554,7 @@
             // falseToolStripMenuItem4
             // 
             this.falseToolStripMenuItem4.Name = "falseToolStripMenuItem4";
-            this.falseToolStripMenuItem4.Size = new System.Drawing.Size(181, 26);
+            this.falseToolStripMenuItem4.Size = new System.Drawing.Size(130, 26);
             this.falseToolStripMenuItem4.Tag = "0";
             this.falseToolStripMenuItem4.Text = "False";
             this.falseToolStripMenuItem4.Click += new System.EventHandler(this.TrueLocalSnipeToolStripMenuItem_Click);
@@ -2567,10 +2562,17 @@
             // toggleToolStripMenuItem4
             // 
             this.toggleToolStripMenuItem4.Name = "toggleToolStripMenuItem4";
-            this.toggleToolStripMenuItem4.Size = new System.Drawing.Size(181, 26);
+            this.toggleToolStripMenuItem4.Size = new System.Drawing.Size(130, 26);
             this.toggleToolStripMenuItem4.Tag = "2";
             this.toggleToolStripMenuItem4.Text = "Toggle";
             this.toggleToolStripMenuItem4.Click += new System.EventHandler(this.TrueLocalSnipeToolStripMenuItem_Click);
+            // 
+            // restoreDefaultsToolStripMenuItem
+            // 
+            this.restoreDefaultsToolStripMenuItem.Name = "restoreDefaultsToolStripMenuItem";
+            this.restoreDefaultsToolStripMenuItem.Size = new System.Drawing.Size(187, 24);
+            this.restoreDefaultsToolStripMenuItem.Text = "Restore Defaults";
+            this.restoreDefaultsToolStripMenuItem.Click += new System.EventHandler(this.RestoreDefaultsToolStripMenuItem_Click);
             // 
             // tabPageTransfer
             // 
@@ -2784,6 +2786,16 @@
             this.olvColumnPinap.DisplayIndex = 3;
             this.olvColumnPinap.Text = "Use Pinap";
             this.olvColumnPinap.Width = 70;
+            // 
+            // checkBoxAutoFavShiny
+            // 
+            this.checkBoxAutoFavShiny.AutoSize = true;
+            this.checkBoxAutoFavShiny.Location = new System.Drawing.Point(15, 383);
+            this.checkBoxAutoFavShiny.Name = "checkBoxAutoFavShiny";
+            this.checkBoxAutoFavShiny.Size = new System.Drawing.Size(201, 21);
+            this.checkBoxAutoFavShiny.TabIndex = 78;
+            this.checkBoxAutoFavShiny.Text = "Auto Favorit shiny on catch";
+            this.checkBoxAutoFavShiny.UseVisualStyleBackColor = true;
             // 
             // AccountSettingsForm
             // 
@@ -3088,5 +3100,6 @@
         private System.Windows.Forms.ToolStripMenuItem trueToolStripMenuItem4;
         private System.Windows.Forms.ToolStripMenuItem falseToolStripMenuItem4;
         private System.Windows.Forms.ToolStripMenuItem toggleToolStripMenuItem4;
+        private System.Windows.Forms.CheckBox checkBoxAutoFavShiny;
     }
 }
