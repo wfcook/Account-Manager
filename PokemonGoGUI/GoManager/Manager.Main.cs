@@ -815,7 +815,8 @@ namespace PokemonGoGUI.GoManager
                         if (IsRunning && ((pokeStopNumber > 4 && pokeStopNumber % 10 == 0) || pokeStopNumber == 1))
                         {
                             // clean account state
-                            AccountState = AccountState.Good;
+                            if (AccountState != AccountState.Flagged)
+                                AccountState = AccountState.Good;
 
                             MethodResult echoResult = await CheckReauthentication();
 
