@@ -101,6 +101,9 @@ namespace PokemonGoGUI.GoManager
                             continue;
                     }
                 }
+
+                UpdateInventory(InventoryRefresh.Pokemon);
+
                 return new MethodResult
                 {
                     Success = true
@@ -176,6 +179,8 @@ namespace PokemonGoGUI.GoManager
                             releasePokemonResponse.Result), LoggerTypes.Warning));
                         break;
                 }
+
+                UpdateInventory(InventoryRefresh.Pokemon);
 
                 return new MethodResult
                 {
