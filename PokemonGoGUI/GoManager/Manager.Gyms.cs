@@ -825,6 +825,15 @@ namespace PokemonGoGUI.GoManager
                 }
             }
 
+            if (Tracker.PokestopsFarmed >= UserSettings.SpinPokestopsDayLimit)
+            {
+                LogCaller(new LoggerEventArgs("Spin Gym limit actived", LoggerTypes.Info));
+                return new MethodResult<GymGetInfoResponse>
+                {
+                    Message = "Limit actived"
+                };
+            }
+
             var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
                 RequestType = RequestType.GymGetInfo,
