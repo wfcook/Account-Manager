@@ -977,8 +977,8 @@ namespace PokemonGoGUI.GoManager
                     else
                     {
                         AccountState = AccountState.HashIssues;
-                        LogCaller(new LoggerEventArgs($"Hash service exception occured. Restarting ...", LoggerTypes.Warning, ex));
-                        Restart();// continue;
+                        LogCaller(new LoggerEventArgs($"Hash service exception occured. Continue ...", LoggerTypes.Warning, ex));
+                        continue;
                     }
                 }
                 catch (SessionUnknowException ex)
