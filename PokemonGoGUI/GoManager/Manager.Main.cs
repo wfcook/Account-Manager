@@ -925,6 +925,12 @@ namespace PokemonGoGUI.GoManager
                                 //Break out of pokestop loop to test for ip ban
                                 break;
                         }
+
+                        if (Tracker.PokemonCaught >= UserSettings.CatchPokemonDayLimit && Tracker.PokestopsFarmed >= UserSettings.SpinPokestopsDayLimit)
+                        {
+                            LogCaller(new LoggerEventArgs("Daily limits reached. Stoping ...", LoggerTypes.Warning));
+                            Stop();
+                        }
                     }
                 }
                 catch (StackOverflowException ex)
@@ -953,18 +959,18 @@ namespace PokemonGoGUI.GoManager
                 }
                 catch (APIBadRequestException ex)
                 {
-                    LogCaller(new LoggerEventArgs("API Bad Request. Restarting ...", LoggerTypes.Warning, ex));
-                    Restart();
+                    LogCaller(new LoggerEventArgs("API Bad Request. Continue ...", LoggerTypes.Warning, ex));
+                    continue;
                 }
                 catch (InvalidPlatformException ex)
                 {
-                    LogCaller(new LoggerEventArgs("Invalid Platform or token session refresh. Restarting  ...", LoggerTypes.Warning, ex));
-                    Restart();
+                    LogCaller(new LoggerEventArgs("Invalid Platform or token session refresh. Continue  ...", LoggerTypes.Warning, ex));
+                    continue;
                 }
                 catch (SessionInvalidatedException ex)
                 {
-                    LogCaller(new LoggerEventArgs("Session Invalidated or token session refresh. Restarting ...", LoggerTypes.Warning, ex));
-                    Restart();
+                    LogCaller(new LoggerEventArgs("Session Invalidated or token session refresh. Continue ...", LoggerTypes.Warning, ex));
+                    continue;
                 }
                 catch (PokeHashException ex)
                 {
