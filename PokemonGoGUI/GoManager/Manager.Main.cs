@@ -36,7 +36,7 @@ namespace PokemonGoGUI.GoManager
         private bool _potentialPokemonBan = false;
         private const int _fleeingPokemonUntilBan = 3;
         private bool _potentialPokeStopBan = false;
-        /*private int _failedPokestopResponse = 0;*/
+        private int _failedPokestopResponse = 0;
         private bool _autoRestart = false;
         private bool _wasAutoRestarted = false;
         private ManualResetEvent _pauser = new ManualResetEvent(true);
@@ -818,11 +818,15 @@ namespace PokemonGoGUI.GoManager
                             break;
                         }
 
+                        //Check account client session state
+                        if (AccountState != AccountState.CaptchaReceived && (_client.ClientSession.State == SessionState.Paused || _client.ClientSession.State == SessionState.Stopped))
+                            await _client.ClientSession.ResumeAsync();
+
                         // evolve, transfer, etc on first and every 10 stops
                         if (IsRunning && ((pokeStopNumber > 4 && pokeStopNumber % 10 == 0) || pokeStopNumber == 1))
                         {
                             // clean account state
-                            if (AccountState != AccountState.Flagged)
+                            if (AccountState != AccountState.Flagged || AccountState != AccountState.SoftBan)
                                 AccountState = AccountState.Good;
 
                             MethodResult echoResult = await CheckReauthentication();
@@ -910,8 +914,16 @@ namespace PokemonGoGUI.GoManager
 
                         if (_potentialPokeStopBan)
                         {
-                            //Break out of pokestop loop to test for ip ban
-                            break;
+                            if (_failedPokestopResponse >= 10)
+                            {
+                                AccountState = AccountState.SoftBan;
+                                _failedPokestopResponse = 0;
+                                LogCaller(new LoggerEventArgs("Potential PokeStop SoftBan or daily limit reached. Stoping ...", LoggerTypes.Warning));
+                                Stop();
+                            }
+                            else
+                                //Break out of pokestop loop to test for ip ban
+                                break;
                         }
                     }
                 }
@@ -941,18 +953,18 @@ namespace PokemonGoGUI.GoManager
                 }
                 catch (APIBadRequestException ex)
                 {
-                    LogCaller(new LoggerEventArgs("API Bad Request, continue ...", LoggerTypes.Warning, ex));
-                    continue;
+                    LogCaller(new LoggerEventArgs("API Bad Request. Restarting ...", LoggerTypes.Warning, ex));
+                    Restart();
                 }
                 catch (InvalidPlatformException ex)
                 {
-                    LogCaller(new LoggerEventArgs("Invalid Platform or token session refresh, continue  ...", LoggerTypes.Warning, ex));
-                    continue;
+                    LogCaller(new LoggerEventArgs("Invalid Platform or token session refresh. Restarting  ...", LoggerTypes.Warning, ex));
+                    Restart();
                 }
                 catch (SessionInvalidatedException ex)
                 {
-                    LogCaller(new LoggerEventArgs("Session Invalidated or token session refresh, continue ...", LoggerTypes.Warning, ex));
-                    continue;
+                    LogCaller(new LoggerEventArgs("Session Invalidated or token session refresh. Restarting ...", LoggerTypes.Warning, ex));
+                    Restart();
                 }
                 catch (PokeHashException ex)
                 {
@@ -965,8 +977,8 @@ namespace PokemonGoGUI.GoManager
                     else
                     {
                         AccountState = AccountState.HashIssues;
-                        LogCaller(new LoggerEventArgs($"Hash service exception occured, continue ...", LoggerTypes.Warning, ex));
-                        continue;
+                        LogCaller(new LoggerEventArgs($"Hash service exception occured. Restarting ...", LoggerTypes.Warning, ex));
+                        Restart();// continue;
                     }
                 }
                 catch (SessionUnknowException ex)

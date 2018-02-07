@@ -105,7 +105,7 @@ namespace PokemonGoGUI.GoManager
                                         if (AccountState == AccountState.SoftBan)
                                         {
                                             _potentialPokemonBan = false;
-                                            _potentialPokemonBan = false;
+                                            _potentialPokeStopBan = true;
                                         }
 
                                         if (AccountState != AccountState.SoftBan)
@@ -113,11 +113,11 @@ namespace PokemonGoGUI.GoManager
                                             //Only occurs when out of range is found
                                             if (fortResponse.ExperienceAwarded == 0)
                                             {
-                                                LogCaller(new LoggerEventArgs("Pokemon fleeing and failing to grab stops. Potential pokemon & pokestop ban.", LoggerTypes.Warning));
+                                                LogCaller(new LoggerEventArgs("Pokemon fleeing and failing to grab stops. Potential pokemon & pokestop ban or daily limit reached.", LoggerTypes.Warning));
                                             }
                                             else
                                             {
-                                                LogCaller(new LoggerEventArgs("Pokemon fleeing, yet grabbing stops. Potential pokemon ban.", LoggerTypes.Warning));
+                                                LogCaller(new LoggerEventArgs("Pokemon fleeing, yet grabbing stops. Potential pokemon ban or daily limit reached.", LoggerTypes.Warning));
                                             }
                                         }
 
@@ -126,7 +126,7 @@ namespace PokemonGoGUI.GoManager
                                             LogCaller(new LoggerEventArgs("Auto stopping bot ...", LoggerTypes.Info));
 
                                             Stop();
-                                        }
+                                        }                                       
 
                                         return new MethodResult
                                         {
@@ -137,12 +137,13 @@ namespace PokemonGoGUI.GoManager
                             }
                             else //This error should never happen normally, so assume temp ban
                             {
-                                //_potentialPokeStopBan = true;
-                                //_proxyIssue = true;
+                                _potentialPokeStopBan = true;
+                                _proxyIssue = true;
                                 //Display error only on first notice
-                                LogCaller(new LoggerEventArgs("Pokestop out of range. Potential temp pokestop ban or IP ban", LoggerTypes.Warning));
+                                LogCaller(new LoggerEventArgs("Pokestop out of range. Potential temp pokestop ban or IP ban or daily limit reached.", LoggerTypes.Warning));
                             }
 
+                            _failedPokestopResponse++;
                             //Let it continue down
                             continue;
                         case FortSearchResponse.Types.Result.PoiInaccessible:
