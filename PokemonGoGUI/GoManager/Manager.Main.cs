@@ -570,24 +570,31 @@ namespace PokemonGoGUI.GoManager
 
                             if (remainingBalls > 0)
                             {
-                                //Catch nearby pokemon
-                                MethodResult nearbyPokemonResponse = await CatchNeabyPokemon();
-                                await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
-
-                                //Catch incense pokemon
-                                MethodResult incensePokemonResponse = await CatchInsencePokemon();
-                                await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
-
-                                //Catch lured pokemon
-                                MethodResult luredPokemonResponse = await CatchLuredPokemon(pokestop);
-                                await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
-
-                                //Check sniping NearyPokemon
-                                MethodResult Snipe = await SnipeAllNearyPokemon();
-                                if (Snipe.Success)
+                                if (PlayerData.MaxPokemonStorage > Pokemon.Count)
                                 {
+                                    //Catch nearby pokemon
+                                    MethodResult nearbyPokemonResponse = await CatchNeabyPokemon();
                                     await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
-                                    continue;
+
+                                    //Catch incense pokemon
+                                    MethodResult incensePokemonResponse = await CatchInsencePokemon();
+                                    await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
+
+                                    //Catch lured pokemon
+                                    MethodResult luredPokemonResponse = await CatchLuredPokemon(pokestop);
+                                    await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
+
+                                    //Check sniping NearyPokemon
+                                    MethodResult Snipe = await SnipeAllNearyPokemon();
+                                    if (Snipe.Success)
+                                    {
+                                        await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
+                                        continue;
+                                    }
+                                }
+                                else
+                                {
+                                    LogCaller(new LoggerEventArgs("You inventory pokemon storage is full please transfer some pokemons.", LoggerTypes.Warning));
                                 }
                             }
                             else
