@@ -816,5 +816,8 @@ namespace PokemonGoGUI.GoManager
                 Success = true
             };
         }
+
+        //List pokemon shadowban
+        private static HashSet<int> _commonShadowIDs = new HashSet<int> { 16, 19, 23, 27, 29, 32, 43, 46, 52, 54, 60, 69, 77, 81, 98, 118, 120, 129, 177, 183, 187, 191, 194, 209, 218, 293, 304, 320, 325, 339 };
     }
 }
