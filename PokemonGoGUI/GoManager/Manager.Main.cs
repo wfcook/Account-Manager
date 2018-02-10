@@ -461,7 +461,7 @@ namespace PokemonGoGUI.GoManager
                     //Get pokestops
                     LogCaller(new LoggerEventArgs("getting pokestops...", LoggerTypes.Debug));
 
-                    MethodResult pokestops = GetPokeStops();
+                    MethodResult<List<FortData>> pokestops = GetPokeStops();
 
                     if (!pokestops.Success)
                     {
@@ -470,7 +470,7 @@ namespace PokemonGoGUI.GoManager
                     }
 
                     int pokeStopNumber = 1;
-                    int totalStops = PokestopsToFarm.Count; //pokestops.Data.Count;
+                    int totalStops = pokestops.Data.Count;
 
                     if (totalStops == 0)
                     {
@@ -497,7 +497,9 @@ namespace PokemonGoGUI.GoManager
 
                     int currentFailedStops = 0;
 
-                    while (PokestopsToFarm.Any())
+                    var pokestopsToFarm = new Queue<FortData>(pokestops.Data);
+
+                    while (pokestopsToFarm.Any())
                     {
                         // In each iteration of the loop we store the current level
                         int prevLevel = Level;
@@ -512,7 +514,7 @@ namespace PokemonGoGUI.GoManager
                             Stop();
                         }
 
-                        FortData pokestop = PokestopsToFarm.Dequeue();
+                        FortData pokestop = pokestopsToFarm.Dequeue();
                         LogCaller(new LoggerEventArgs("Fort Dequeued: " + pokestop.Id, LoggerTypes.Debug));
 
                         if (pokestop.Type == FortType.Checkpoint && UserSettings.GoOnlyToGyms)

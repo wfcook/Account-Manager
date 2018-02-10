@@ -83,6 +83,7 @@ namespace PokemonGoGUI
         public double SearchFortBelowPercent { get; set; }
         public int CatchPokemonDayLimit { get; set; }
         public int SpinPokestopsDayLimit { get; set; }
+        public bool SnipeAllPokemonsNoInPokedex { get; set; }
         public double ForceEvolveAbovePercent { get; set; }
         public bool StopOnAPIUpdate { get; set; }
 
@@ -213,6 +214,7 @@ namespace PokemonGoGUI
             ShowDebugLogs = false;
             GoOnlyToGyms = false;
             AutoFavoritShiny = true;
+            SnipeAllPokemonsNoInPokedex = true;
         }
 
         public void LoadCatchSettings()

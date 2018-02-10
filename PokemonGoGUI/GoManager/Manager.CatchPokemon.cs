@@ -62,12 +62,15 @@ namespace PokemonGoGUI.GoManager
                 return new MethodResult();
             }
 
-            if (RemainingPokeballs() < 1)
+            if (!CatchDisabled)
             {
-                LogCaller(new LoggerEventArgs("You don't have any pokeball catching pokemon will be disabled during " + UserSettings.DisableCatchDelay.ToString(CultureInfo.InvariantCulture) + " minutes.", LoggerTypes.Info));
-                CatchDisabled = true;
-                TimeAutoCatch = DateTime.Now.AddMinutes(UserSettings.DisableCatchDelay);
-                return new MethodResult();
+                if (RemainingPokeballs() < 1)
+                {
+                    LogCaller(new LoggerEventArgs("You don't have any pokeball catching pokemon will be disabled during " + UserSettings.DisableCatchDelay.ToString(CultureInfo.InvariantCulture) + " minutes.", LoggerTypes.Info));
+                    CatchDisabled = true;
+                    TimeAutoCatch = DateTime.Now.AddMinutes(UserSettings.DisableCatchDelay);
+                    return new MethodResult();
+                }
             }
 
             MethodResult<IncenseEncounterResponse> result = await EncounterIncensePokemon(iResponse.Data);
@@ -226,6 +229,17 @@ namespace PokemonGoGUI.GoManager
                 if (!result.Success)
                 {
                     return result;
+                }
+            }
+
+            if (!CatchDisabled)
+            {
+                if (RemainingPokeballs() < 1)
+                {
+                    LogCaller(new LoggerEventArgs("You don't have any pokeball catching pokemon (Lured) will be disabled during " + UserSettings.DisableCatchDelay.ToString(CultureInfo.InvariantCulture) + " minutes.", LoggerTypes.Info));
+                    CatchDisabled = true;
+                    TimeAutoCatch = DateTime.Now.AddMinutes(UserSettings.DisableCatchDelay);
+                    return new MethodResult();
                 }
             }
 
@@ -536,6 +550,17 @@ namespace PokemonGoGUI.GoManager
         //Catch encountered pokemon
         private async Task<MethodResult> CatchPokemon(dynamic eResponse, MapPokemon mapPokemon, bool snipped = false)
         {
+            if (!CatchDisabled)
+            {
+                if (RemainingPokeballs() < 1)
+                {
+                    LogCaller(new LoggerEventArgs("You don't have any pokeball catching pokemon will be disabled during " + UserSettings.DisableCatchDelay.ToString(CultureInfo.InvariantCulture) + " minutes.", LoggerTypes.Info));
+                    CatchDisabled = true;
+                    TimeAutoCatch = DateTime.Now.AddMinutes(UserSettings.DisableCatchDelay);
+                    return new MethodResult();
+                }
+            }
+
             PokemonData _encounteredPokemon = null;
             long _unixTimeStamp = 0;
             ulong _encounterId = 0;

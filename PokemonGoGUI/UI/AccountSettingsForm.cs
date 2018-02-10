@@ -229,6 +229,7 @@ namespace PokemonGoGUI.UI
             AutoCaptchaRetries.Text = settings.AutoCaptchaRetries.ToString();
             TwoCaptchaAPIKey.Text = settings.TwoCaptchaAPIKey;
             checkBoxAutoFavShiny.Checked = settings.AutoFavoritShiny;
+            checkBoxSniperNoInPokedex.Checked = settings.SnipeAllPokemonsNoInPokedex;
 
             //Location time zones
             var zones = new TimeZoneIds().GetTimeZoneIds();
@@ -508,6 +509,7 @@ namespace PokemonGoGUI.UI
             userSettings.GoOnlyToGyms = checkBoxGoToGymsOnly.Checked;
             userSettings.UpgradePokemon = checkBoxUpgradePokemons.Checked;
             userSettings.AutoFavoritShiny = checkBoxAutoFavShiny.Checked;
+            userSettings.SnipeAllPokemonsNoInPokedex = checkBoxSniperNoInPokedex.Checked;
 
             return true;
         }

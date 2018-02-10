@@ -42,11 +42,16 @@
             this.label3 = new System.Windows.Forms.Label();
             this.labelUsername = new System.Windows.Forms.Label();
             this.tabPageActions = new System.Windows.Forms.TabPage();
+            this.numericUpDownStopsDayLimit = new System.Windows.Forms.NumericUpDown();
+            this.label52 = new System.Windows.Forms.Label();
+            this.numericUpDownPokemonsDayLimit = new System.Windows.Forms.NumericUpDown();
             this.checkBoxGoToGymsOnly = new System.Windows.Forms.CheckBox();
+            this.label48 = new System.Windows.Forms.Label();
             this.label47 = new System.Windows.Forms.Label();
             this.cbTeam = new System.Windows.Forms.ComboBox();
             this.checkBoxCompleteTutorial = new System.Windows.Forms.CheckBox();
             this.groupBoxPlayerActions = new System.Windows.Forms.GroupBox();
+            this.checkBoxAutoFavShiny = new System.Windows.Forms.CheckBox();
             this.checkBoxUpgradePokemons = new System.Windows.Forms.CheckBox();
             this.cbUseIncense = new System.Windows.Forms.CheckBox();
             this.numericUpDownDisableCatchDelay = new System.Windows.Forms.NumericUpDown();
@@ -257,17 +262,15 @@
             this.toolTipProxy = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipMinAccountState = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipHumanizeThrows = new System.Windows.Forms.ToolTip(this.components);
-            this.checkBoxAutoFavShiny = new System.Windows.Forms.CheckBox();
-            this.label48 = new System.Windows.Forms.Label();
-            this.numericUpDownPokemonsDayLimit = new System.Windows.Forms.NumericUpDown();
-            this.label52 = new System.Windows.Forms.Label();
-            this.numericUpDownStopsDayLimit = new System.Windows.Forms.NumericUpDown();
+            this.checkBoxSniperNoInPokedex = new System.Windows.Forms.CheckBox();
             this.tabControlMain.SuspendLayout();
             this.tabPageDetails.SuspendLayout();
             this.tabControlSettings.SuspendLayout();
             this.tabPageSettingsGeneral.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownMaxLogs)).BeginInit();
             this.tabPageActions.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownStopsDayLimit)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownPokemonsDayLimit)).BeginInit();
             this.groupBoxPlayerActions.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDisableCatchDelay)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownForceEvolveAbove)).BeginInit();
@@ -307,8 +310,6 @@
             this.tabPageUpgrade.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewUpgrade)).BeginInit();
             this.contextMenuStripUpgrade.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownPokemonsDayLimit)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownStopsDayLimit)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControlMain
@@ -501,6 +502,41 @@
             this.tabPageActions.Text = "Actions";
             this.tabPageActions.UseVisualStyleBackColor = true;
             // 
+            // numericUpDownStopsDayLimit
+            // 
+            this.numericUpDownStopsDayLimit.Location = new System.Drawing.Point(521, 298);
+            this.numericUpDownStopsDayLimit.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.numericUpDownStopsDayLimit.Maximum = new decimal(new int[] {
+            1000000,
+            0,
+            0,
+            0});
+            this.numericUpDownStopsDayLimit.Name = "numericUpDownStopsDayLimit";
+            this.numericUpDownStopsDayLimit.Size = new System.Drawing.Size(77, 22);
+            this.numericUpDownStopsDayLimit.TabIndex = 81;
+            // 
+            // label52
+            // 
+            this.label52.AutoSize = true;
+            this.label52.Location = new System.Drawing.Point(333, 300);
+            this.label52.Name = "label52";
+            this.label52.Size = new System.Drawing.Size(161, 17);
+            this.label52.TabIndex = 80;
+            this.label52.Text = "Spin Pokestops day limit";
+            // 
+            // numericUpDownPokemonsDayLimit
+            // 
+            this.numericUpDownPokemonsDayLimit.Location = new System.Drawing.Point(521, 272);
+            this.numericUpDownPokemonsDayLimit.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.numericUpDownPokemonsDayLimit.Maximum = new decimal(new int[] {
+            1000000,
+            0,
+            0,
+            0});
+            this.numericUpDownPokemonsDayLimit.Name = "numericUpDownPokemonsDayLimit";
+            this.numericUpDownPokemonsDayLimit.Size = new System.Drawing.Size(77, 22);
+            this.numericUpDownPokemonsDayLimit.TabIndex = 79;
+            // 
             // checkBoxGoToGymsOnly
             // 
             this.checkBoxGoToGymsOnly.AutoSize = true;
@@ -510,6 +546,15 @@
             this.checkBoxGoToGymsOnly.TabIndex = 77;
             this.checkBoxGoToGymsOnly.Text = "Go to Gyms Only";
             this.checkBoxGoToGymsOnly.UseVisualStyleBackColor = true;
+            // 
+            // label48
+            // 
+            this.label48.AutoSize = true;
+            this.label48.Location = new System.Drawing.Point(333, 275);
+            this.label48.Name = "label48";
+            this.label48.Size = new System.Drawing.Size(169, 17);
+            this.label48.TabIndex = 78;
+            this.label48.Text = "Catch Pokemons day limit";
             // 
             // label47
             // 
@@ -543,6 +588,7 @@
             // 
             // groupBoxPlayerActions
             // 
+            this.groupBoxPlayerActions.Controls.Add(this.checkBoxSniperNoInPokedex);
             this.groupBoxPlayerActions.Controls.Add(this.checkBoxAutoFavShiny);
             this.groupBoxPlayerActions.Controls.Add(this.checkBoxUpgradePokemons);
             this.groupBoxPlayerActions.Controls.Add(this.cbUseIncense);
@@ -574,6 +620,16 @@
             this.groupBoxPlayerActions.TabIndex = 73;
             this.groupBoxPlayerActions.TabStop = false;
             this.groupBoxPlayerActions.Text = "Player Actions";
+            // 
+            // checkBoxAutoFavShiny
+            // 
+            this.checkBoxAutoFavShiny.AutoSize = true;
+            this.checkBoxAutoFavShiny.Location = new System.Drawing.Point(15, 234);
+            this.checkBoxAutoFavShiny.Name = "checkBoxAutoFavShiny";
+            this.checkBoxAutoFavShiny.Size = new System.Drawing.Size(201, 21);
+            this.checkBoxAutoFavShiny.TabIndex = 78;
+            this.checkBoxAutoFavShiny.Text = "Auto Favorit shiny on catch";
+            this.checkBoxAutoFavShiny.UseVisualStyleBackColor = true;
             // 
             // checkBoxUpgradePokemons
             // 
@@ -2797,59 +2853,15 @@
             this.olvColumnPinap.Text = "Use Pinap";
             this.olvColumnPinap.Width = 70;
             // 
-            // checkBoxAutoFavShiny
+            // checkBoxSniperNoInPokedex
             // 
-            this.checkBoxAutoFavShiny.AutoSize = true;
-            this.checkBoxAutoFavShiny.Location = new System.Drawing.Point(15, 234);
-            this.checkBoxAutoFavShiny.Name = "checkBoxAutoFavShiny";
-            this.checkBoxAutoFavShiny.Size = new System.Drawing.Size(201, 21);
-            this.checkBoxAutoFavShiny.TabIndex = 78;
-            this.checkBoxAutoFavShiny.Text = "Auto Favorit shiny on catch";
-            this.checkBoxAutoFavShiny.UseVisualStyleBackColor = true;
-            // 
-            // label48
-            // 
-            this.label48.AutoSize = true;
-            this.label48.Location = new System.Drawing.Point(333, 275);
-            this.label48.Name = "label48";
-            this.label48.Size = new System.Drawing.Size(169, 17);
-            this.label48.TabIndex = 78;
-            this.label48.Text = "Catch Pokemons day limit";
-            // 
-            // numericUpDownPokemonsDayLimit
-            // 
-            this.numericUpDownPokemonsDayLimit.Location = new System.Drawing.Point(521, 272);
-            this.numericUpDownPokemonsDayLimit.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.numericUpDownPokemonsDayLimit.Maximum = new decimal(new int[] {
-            1000000,
-            0,
-            0,
-            0});
-            this.numericUpDownPokemonsDayLimit.Name = "numericUpDownPokemonsDayLimit";
-            this.numericUpDownPokemonsDayLimit.Size = new System.Drawing.Size(77, 22);
-            this.numericUpDownPokemonsDayLimit.TabIndex = 79;
-            // 
-            // label52
-            // 
-            this.label52.AutoSize = true;
-            this.label52.Location = new System.Drawing.Point(333, 300);
-            this.label52.Name = "label52";
-            this.label52.Size = new System.Drawing.Size(161, 17);
-            this.label52.TabIndex = 80;
-            this.label52.Text = "Spin Pokestops day limit";
-            // 
-            // numericUpDownStopsDayLimit
-            // 
-            this.numericUpDownStopsDayLimit.Location = new System.Drawing.Point(521, 298);
-            this.numericUpDownStopsDayLimit.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.numericUpDownStopsDayLimit.Maximum = new decimal(new int[] {
-            1000000,
-            0,
-            0,
-            0});
-            this.numericUpDownStopsDayLimit.Name = "numericUpDownStopsDayLimit";
-            this.numericUpDownStopsDayLimit.Size = new System.Drawing.Size(77, 22);
-            this.numericUpDownStopsDayLimit.TabIndex = 81;
+            this.checkBoxSniperNoInPokedex.AutoSize = true;
+            this.checkBoxSniperNoInPokedex.Location = new System.Drawing.Point(15, 383);
+            this.checkBoxSniperNoInPokedex.Name = "checkBoxSniperNoInPokedex";
+            this.checkBoxSniperNoInPokedex.Size = new System.Drawing.Size(245, 21);
+            this.checkBoxSniperNoInPokedex.TabIndex = 82;
+            this.checkBoxSniperNoInPokedex.Text = "Snipe all pokemons no in pokedex";
+            this.checkBoxSniperNoInPokedex.UseVisualStyleBackColor = true;
             // 
             // AccountSettingsForm
             // 
@@ -2872,6 +2884,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownMaxLogs)).EndInit();
             this.tabPageActions.ResumeLayout(false);
             this.tabPageActions.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownStopsDayLimit)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownPokemonsDayLimit)).EndInit();
             this.groupBoxPlayerActions.ResumeLayout(false);
             this.groupBoxPlayerActions.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDisableCatchDelay)).EndInit();
@@ -2920,8 +2934,6 @@
             this.tabPageUpgrade.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.fastObjectListViewUpgrade)).EndInit();
             this.contextMenuStripUpgrade.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownPokemonsDayLimit)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownStopsDayLimit)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -3161,5 +3173,6 @@
         private System.Windows.Forms.Label label48;
         private System.Windows.Forms.NumericUpDown numericUpDownStopsDayLimit;
         private System.Windows.Forms.Label label52;
+        private System.Windows.Forms.CheckBox checkBoxSniperNoInPokedex;
     }
 }

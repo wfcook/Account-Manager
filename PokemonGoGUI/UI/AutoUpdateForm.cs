@@ -71,7 +71,7 @@ namespace PokemonGoGUI.UI
                 Client.DownloadProgressChanged -= Client_DownloadProgressChanged;
                 Close();
             }
-                return true;
+            return true;
         }
 
         private void Client_DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)

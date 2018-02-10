@@ -19,11 +19,11 @@ namespace PokemonGoGUI.Extensions
 {
     public class VersionCheckState
     {
-        public const string VersionUri = "https://raw.githubusercontent.com/Furtif/GoManager/master/PokemonGoGUI/Properties/AssemblyInfo.cs";
+        public const string VersionUri = "https://raw.githubusercontent.com/Furtif/Account-Manager/master/PokemonGoGUI/Properties/AssemblyInfo.cs";
 
-        public const string RemoteReleaseUrl = "https://github.com/Furtif/GoManager/releases/download/v";
+        public const string RemoteReleaseUrl = "https://github.com/Furtif/Account-Manager/releases/download/v";
 
-        public const string ChangelogUri = "https://raw.githubusercontent.com/Furtif/GoManager/master/CHANGELOG.md";
+        public const string ChangelogUri = "https://raw.githubusercontent.com/Furtif/Account-Manager/master/CHANGELOG.md";
 
         public static Version RemoteVersion;
 
@@ -40,7 +40,7 @@ namespace PokemonGoGUI.Extensions
             var baseDir = Directory.GetCurrentDirectory();
             var downloadFilePath = Path.Combine(baseDir, zipName);
             var tempPath = Path.Combine(baseDir, "tmp");
-            var extractedDir = Path.Combine(tempPath, "Goman");
+            var extractedDir = Path.Combine(tempPath, "ACM");
             var destinationDir = baseDir + Path.DirectorySeparatorChar;
             bool updated = false;
             AutoUpdateForm autoUpdateForm = new AutoUpdateForm()

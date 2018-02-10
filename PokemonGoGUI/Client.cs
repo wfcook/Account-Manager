@@ -496,7 +496,7 @@ namespace PokemonGoGUI
                 if (ClientManager.ModeSnipe && ClientManager.Balls > 5 /*Bot need balls for snippe*/)
                 {
                     //Get for new pokestops
-                    ClientManager.GetPokeStops();
+                    //ClientManager.GetPokeStops();
 
                     //Catch nearby pokemon
                     ClientManager.CatchNeabyPokemon().Wait();
