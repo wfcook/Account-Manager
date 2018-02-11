@@ -961,18 +961,18 @@ namespace PokemonGoGUI.GoManager
                 }
                 catch (APIBadRequestException ex)
                 {
-                    LogCaller(new LoggerEventArgs("API Bad Request. Continue ...", LoggerTypes.Warning, ex));
-                    continue;
+                    LogCaller(new LoggerEventArgs("API Bad Request. Restarting ...", LoggerTypes.Warning, ex));
+                    //continue;
                 }
                 catch (InvalidPlatformException ex)
                 {
-                    LogCaller(new LoggerEventArgs("Invalid Platform or token session refresh. Continue  ...", LoggerTypes.Warning, ex));
-                    continue;
+                    LogCaller(new LoggerEventArgs("Invalid Platform or token session refresh. Restarting  ...", LoggerTypes.Warning, ex));
+                    //continue;
                 }
                 catch (SessionInvalidatedException ex)
                 {
-                    LogCaller(new LoggerEventArgs("Session Invalidated or token session refresh. Continue ...", LoggerTypes.Warning, ex));
-                    continue;
+                    LogCaller(new LoggerEventArgs("Session Invalidated or token session refresh. Restarting ...", LoggerTypes.Warning, ex));
+                    //continue;
                 }
                 catch (PokeHashException ex)
                 {
@@ -985,21 +985,21 @@ namespace PokemonGoGUI.GoManager
                     else
                     {
                         AccountState = AccountState.HashIssues;
-                        LogCaller(new LoggerEventArgs($"Hash service exception occured. Continue ...", LoggerTypes.Warning, ex));
-                        continue;
+                        LogCaller(new LoggerEventArgs($"Hash service exception occured. Restarting ...", LoggerTypes.Warning, ex));
+                        //continue;
                     }
                 }
                 catch (SessionUnknowException ex)
                 {
                     AccountState = AccountState.Unknown;
                     LogCaller(new LoggerEventArgs("Skipping request. Restarting ...", LoggerTypes.Exception, ex));
-                    Restart();
+                    //Restart();
                 }
                 catch (ArgumentOutOfRangeException ex)
                 {
                     AccountState = AccountState.Unknown;
                     LogCaller(new LoggerEventArgs("Skipping request. Restarting ...", LoggerTypes.Exception, ex));
-                    Restart();
+                    //Restart();
                 }
                 catch (SessionStateException ex)
                 {
@@ -1012,7 +1012,7 @@ namespace PokemonGoGUI.GoManager
                 catch (Exception ex)
                 {
                     LogCaller(new LoggerEventArgs("Unknown exception occured. Restarting ...", LoggerTypes.Exception, ex));
-                    Restart();
+                    //Restart();
                 }
 
                 #endregion
