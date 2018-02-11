@@ -171,7 +171,6 @@ namespace PokemonGoGUI.GoManager
                 return new MethodResult
                 {
                     Message = "No lure on pokestop",
-                    Success = true
                 };
             }
 
@@ -197,16 +196,12 @@ namespace PokemonGoGUI.GoManager
                 return new MethodResult
                 {
                     Message = "No lured pokemon",
-                    Success = true
                 };
             }
 
             if (!PokemonWithinCatchSettings(fortData.LureInfo.ActivePokemonId))
             {
-                return new MethodResult
-                {
-                    Success = true
-                };
+                return new MethodResult();
             }
 
             MethodResult catchResult = await CatchPokemon(fortData);
