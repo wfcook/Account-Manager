@@ -64,7 +64,7 @@ namespace PokemonGoGUI.GoManager
                             break;
                         case FortSearchResponse.Types.Result.InCooldownPeriod:
                             LogCaller(new LoggerEventArgs(String.Format("Failed to search {0}. Response: {1}", fort, fortResponse.Result), LoggerTypes.Warning));
-                            break;
+                            continue;
                         case FortSearchResponse.Types.Result.InventoryFull:
                             LogCaller(new LoggerEventArgs(String.Format("Failed to search {0}. Response: {1}", fort, fortResponse.Result), LoggerTypes.Warning));
                             break;
