@@ -591,6 +591,7 @@ namespace PokemonGoGUI.GoManager
                                     if (Snipe.Success)
                                     {
                                         await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
+                                        pokestopsToFarm.Clear();
                                         continue;
                                     }
                                 }
