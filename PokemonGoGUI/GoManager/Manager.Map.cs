@@ -1,5 +1,7 @@
-﻿using POGOLib.Official.Extensions;
+﻿using Google.Protobuf.Collections;
+using POGOLib.Official.Extensions;
 using POGOProtos.Inventory.Item;
+using POGOProtos.Map;
 using POGOProtos.Map.Fort;
 using POGOProtos.Map.Pokemon;
 using PokemonGoGUI.Extensions;
@@ -12,17 +14,21 @@ namespace PokemonGoGUI.GoManager
 {
     public partial class Manager
     {
-       private MethodResult<List<MapPokemon>> GetCatchablePokemon()
+        private RepeatedField<MapCell> repeatedFieldMapCells = new RepeatedField<MapCell>();
+
+        private MethodResult<List<MapPokemon>> GetCatchablePokemon()
         {
-            if (_client.ClientSession.Map.Cells.Count == 0 || _client.ClientSession.Map == null)
+            if (_client.ClientSession.Map.Cells.Count == 0 || _client.ClientSession.Map == null || repeatedFieldMapCells == _client.ClientSession.Map.Cells)
             {
                 return new MethodResult<List<MapPokemon>>();
             }
 
-            var cells = _client.ClientSession.Map.Cells;
+            repeatedFieldMapCells = (repeatedFieldMapCells != _client.ClientSession.Map.Cells) ? _client.ClientSession.Map.Cells : repeatedFieldMapCells;
+
+            //var cells = _client.ClientSession.Map.Cells;
 
             //         Where(PokemonWithinCatchSettings) <-- Unneeded, will be filtered after.
-            List<MapPokemon> newCatchablePokemons = cells.SelectMany(x => x.CatchablePokemons).ToList();
+            List<MapPokemon> newCatchablePokemons = repeatedFieldMapCells.SelectMany(x => x.CatchablePokemons).ToList();
 
             return new MethodResult<List<MapPokemon>>
             {
@@ -34,20 +40,22 @@ namespace PokemonGoGUI.GoManager
 
         private MethodResult<List<FortData>> GetPokeStops()
         {
-            if (_client.ClientSession.Map.Cells.Count == 0 || _client.ClientSession.Map == null)
+            if (_client.ClientSession.Map.Cells.Count == 0 || _client.ClientSession.Map == null || repeatedFieldMapCells == _client.ClientSession.Map.Cells)
             {
                 return new MethodResult<List<FortData>>();
             }
 
-            var forts = _client.ClientSession.Map.Cells.SelectMany(x => x.Forts);
+            repeatedFieldMapCells = (repeatedFieldMapCells != _client.ClientSession.Map.Cells) ? _client.ClientSession.Map.Cells : repeatedFieldMapCells;
 
-            var fortData = new List<FortData>();
+            var forts = repeatedFieldMapCells.SelectMany(x => x.Forts);
 
             if (!forts.Any()) {
                 return new MethodResult<List<FortData>> {
                     Message = "No pokestop data found. Potential temp IP ban or bad location",
                 };
             }
+
+            var fortData = new List<FortData>();
 
             foreach (FortData fort in forts)
             {
@@ -94,14 +102,17 @@ namespace PokemonGoGUI.GoManager
 
         private MethodResult<List<FortData>> GetGyms()
         {
-            if (_client.ClientSession.Map.Cells.Count == 0 || _client.ClientSession.Map == null)
+            if (_client.ClientSession.Map.Cells.Count == 0 || _client.ClientSession.Map == null || repeatedFieldMapCells == _client.ClientSession.Map.Cells)
             {
                 return new MethodResult<List<FortData>>();
             }
 
-            var forts = _client.ClientSession.Map.Cells.SelectMany(x => x.Forts).Where(y => y.Type == FortType.Gym);
+            repeatedFieldMapCells = (repeatedFieldMapCells != _client.ClientSession.Map.Cells) ? _client.ClientSession.Map.Cells : repeatedFieldMapCells;
+
+            var forts = repeatedFieldMapCells.SelectMany(x => x.Forts).Where(y => y.Type == FortType.Gym);
 
             var fortData = new List<FortData>();
+
             foreach (FortData fort in forts)
             {
 
