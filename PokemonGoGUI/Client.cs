@@ -617,7 +617,13 @@ namespace PokemonGoGUI
         private void SaveAccessToken(AccessToken accessToken)
         {
             var fileName = Path.Combine(Directory.GetCurrentDirectory(), "Cache", $"{accessToken.Uid}.json");
-            File.WriteAllText(fileName, JsonConvert.SerializeObject(accessToken, Formatting.Indented));
+
+            var content = JsonConvert.SerializeObject(accessToken, Formatting.Indented);
+
+            if (content != null)
+            {
+                File.WriteAllText(fileName, JsonConvert.SerializeObject(accessToken, Formatting.Indented));
+            }
         }
 
         /// <summary>
