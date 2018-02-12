@@ -622,7 +622,7 @@ namespace PokemonGoGUI
 
             if (content != null)
             {
-                File.WriteAllText(fileName, JsonConvert.SerializeObject(accessToken, Formatting.Indented));
+                File.WriteAllText(fileName, content);
             }
         }
 
