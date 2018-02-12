@@ -41,6 +41,7 @@ namespace PokemonGoGUI
         public Manager ClientManager;
         private string RessourcesFolder;
         private CancellationTokenSource CancellationTokenSource;
+        private ILoginProvider LoginProvider;
 
         public Client()
         {
@@ -128,26 +129,26 @@ namespace PokemonGoGUI
 
                         // TODO: make this configurable. To avoid bans (may be with a checkbox in hash keys tab).
                         //Configuration.IgnoreHashVersion = true;
+                        //int rand = new Random().Next(1000);
+                        //Configuration.ThrottleDifference = rand;
                         VersionStr = Configuration.Hasher.PokemonVersion;
                         AppVersion = Configuration.Hasher.AppVersion;
                     }
                     // */
 
-                    ILoginProvider loginProvider;
-
                     switch (ClientManager.UserSettings.AuthType)
                     {
                         case AuthType.Google:
-                            loginProvider = new GoogleLoginProvider(ClientManager.UserSettings.Username, ClientManager.UserSettings.Password);
+                            LoginProvider = new GoogleLoginProvider(ClientManager.UserSettings.Username, ClientManager.UserSettings.Password);
                             break;
                         case AuthType.Ptc:
-                            loginProvider = new PtcLoginProvider(ClientManager.UserSettings.Username, ClientManager.UserSettings.Password, ClientManager.UserSettings.Proxy.AsWebProxy());
+                            LoginProvider = new PtcLoginProvider(ClientManager.UserSettings.Username, ClientManager.UserSettings.Password, ClientManager.UserSettings.Proxy.AsWebProxy());
                             break;
                         default:
                             throw new ArgumentException("Login provider must be either \"google\" or \"ptc\".");
                     }
 
-                    ClientSession = await GetSession(loginProvider, ClientManager.UserSettings.Latitude, ClientManager.UserSettings.Longitude, true);
+                    ClientSession = await GetSession(LoginProvider, ClientManager.UserSettings.Latitude, ClientManager.UserSettings.Longitude, true);
 
                     // Send initial requests and start HeartbeatDispatcher.
                     // This makes sure that the initial heartbeat request finishes and the "session.Map.Cells" contains stuff.
@@ -373,18 +374,9 @@ namespace PokemonGoGUI
                     }
                     catch (PokeHashException ex)
                     {
-                        if (ex.Message.Equals("Hash API server might be down."))
-                        {
-                            ClientManager.AccountState = AccountState.HashIssues;
-                            msgStr = ex.Message;
-                            ClientManager.Stop();
-                        }
-                        else
-                        {
-                            ClientManager.AccountState = AccountState.HashIssues;
-                            msgStr = "Hash issues";
-                            ClientManager.LogCaller(new LoggerEventArgs("Hash issues", LoggerTypes.Warning, ex));
-                        }
+                        ClientManager.AccountState = AccountState.HashIssues;
+                        msgStr = "Hash issues";
+                        ClientManager.LogCaller(new LoggerEventArgs("Hash issues", LoggerTypes.Warning, ex));
                     }
                     catch (Exception ex)
                     {
@@ -617,7 +609,7 @@ namespace PokemonGoGUI
         private void SaveAccessToken(AccessToken accessToken)
         {
             var fileName = Path.Combine(Directory.GetCurrentDirectory(), "Cache", $"{accessToken.Uid}.json");
-            File.WriteAllText(fileName, JsonConvert.SerializeObject(ClientSession.AccessToken, Formatting.Indented));
+            File.WriteAllText(fileName, JsonConvert.SerializeObject(accessToken, Formatting.Indented));
         }
 
         /// <summary>
@@ -629,6 +621,8 @@ namespace PokemonGoGUI
         /// <param name="mayCache">Can we cache the <see cref="AccessToken" /> to a local file?</param>
         private async Task<Session> GetSession(ILoginProvider loginProvider, double initLat, double initLong, bool mayCache = false)
         {
+            LoginProvider = loginProvider;
+
             var cacheDir = Path.Combine(Directory.GetCurrentDirectory(), "Cache");
             var fileName = Path.Combine(cacheDir, $"{loginProvider.UserId}-{loginProvider.ProviderId}.json");
             if (mayCache)
@@ -673,6 +667,14 @@ namespace PokemonGoGUI
             filename = RessourcesFolder + ClientManager.UserSettings.DeviceId + "_LCV.json";
             if (File.Exists(filename))
                 session.Templates.LocalConfigVersion = Serializer.FromJson<DownloadRemoteConfigVersionResponse>(File.ReadAllText(filename));
+        }
+
+        public void CleanLocalAccesToken()
+        {
+            var cacheDir = Path.Combine(Directory.GetCurrentDirectory(), "Cache");
+            var fileName = Path.Combine(cacheDir, $"{LoginProvider.UserId}-{LoginProvider.ProviderId}.json");
+            if (File.Exists(fileName))
+                File.Delete(fileName);
         }
 
         #region IDisposable Support

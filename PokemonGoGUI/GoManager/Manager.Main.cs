@@ -977,18 +977,9 @@ namespace PokemonGoGUI.GoManager
                 }
                 catch (PokeHashException ex)
                 {
-                    if (ex.Message.Equals("Hash API server might be down."))
-                    {
-                        AccountState = AccountState.HashIssues;
-                        LogCaller(new LoggerEventArgs(ex.Message, LoggerTypes.FatalError));
-                        Stop();
-                    }
-                    else
-                    {
                         AccountState = AccountState.HashIssues;
                         LogCaller(new LoggerEventArgs($"Hash service exception occured. Restarting ...", LoggerTypes.Warning, ex));
                         //continue;
-                    }
                 }
                 catch (SessionUnknowException ex)
                 {
@@ -1007,8 +998,8 @@ namespace PokemonGoGUI.GoManager
                     AccountState = AccountState.Unknown;
                     LogCaller(new LoggerEventArgs(ex.Message, LoggerTypes.Exception, ex));
                     LogCaller(new LoggerEventArgs("Maybe clean data if DownloadRessources if set true.", LoggerTypes.Debug));
-                    //Maybe clean data if DownloadRessources if set true.
-                    Stop();
+                    _client.CleanLocalAccesToken();
+                    //Stop();
                 }
                 catch (Exception ex)
                 {

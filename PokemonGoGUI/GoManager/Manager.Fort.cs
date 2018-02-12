@@ -60,7 +60,8 @@ namespace PokemonGoGUI.GoManager
                     switch (fortResponse.Result)
                     {
                         case FortSearchResponse.Types.Result.ExceededDailyLimit:
-                            LogCaller(new LoggerEventArgs(String.Format("Failed to search {0}. Response: {1}", fort, fortResponse.Result), LoggerTypes.Warning));
+                            LogCaller(new LoggerEventArgs(String.Format("Failed to search {0}. Response: {1}. Stoping ...", fort, fortResponse.Result), LoggerTypes.Warning));
+                            Stop();
                             break;
                         case FortSearchResponse.Types.Result.InCooldownPeriod:
                             LogCaller(new LoggerEventArgs(String.Format("Failed to search {0}. Response: {1}", fort, fortResponse.Result), LoggerTypes.Warning));
