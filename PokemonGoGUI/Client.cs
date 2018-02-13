@@ -485,7 +485,7 @@ namespace PokemonGoGUI
             //Map Update
             try
             {
-                if (ClientManager.ModeSnipe && ClientManager.Balls > 5 /*Bot need balls for snippe*/)
+                if (ClientManager.ModeSnipe && ClientManager.RemainingPokeballs() > 5 /*Bot need balls for snippe*/)
                 {
                     //Get for new pokestops
                     //ClientManager.GetPokeStops();
