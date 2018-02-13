@@ -418,7 +418,7 @@ namespace PokemonGoGUI.GoManager
                         ++attemptCount;
 
                         await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
-                    } while (catchPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchMissed || catchPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchEscape || catchPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchFlee);
+                    } while (catchPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchMissed || catchPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchEscape);
                     break;
                 case DiskEncounterResponse.Types.Result.EncounterAlreadyFinished:
                     return new MethodResult
@@ -770,7 +770,7 @@ namespace PokemonGoGUI.GoManager
                 ++attemptCount;
 
                 await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
-            } while (catchPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchMissed || catchPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchEscape || catchPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchFlee);
+            } while (catchPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchMissed || catchPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchEscape);
             return new MethodResult();
         }
 
