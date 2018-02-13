@@ -2181,20 +2181,12 @@ namespace PokemonGoGUI
                 }
             }
 
-            var options = new ParallelOptions
-            {
-                MaxDegreeOfParallelism = 10
-            };
-
             IEnumerable<HashKey> selectedKeys = fastObjectListViewHashKeys.SelectedObjects.Cast<HashKey>();
 
-            Task.Run(() =>
+            foreach (var key in selectedKeys)
             {
-                Parallel.ForEach(selectedKeys, options, (HashKey) =>
-                {
-                    keysToExport.Add(HashKey);
-                });
-            });
+                keysToExport.Add(key);
+            }
 
             try
             {
