@@ -96,7 +96,7 @@ namespace PokemonGoGUI.GoManager
                                         //Already pokestop banned
                                         if (AccountState == AccountState.SoftBan)
                                         {
-                                            _potentialPokemonBan = false;
+                                            _potentialPokemonBan = true;
                                             _potentialPokeStopBan = true;
                                         }
 
@@ -129,8 +129,8 @@ namespace PokemonGoGUI.GoManager
                             }
                             else //This error should never happen normally, so assume temp ban
                             {
-                                _potentialPokeStopBan = true;
-                                _proxyIssue = true;
+                                //_potentialPokeStopBan = true;
+                                //_proxyIssue = true;
                                 //Display error only on first notice
                                 LogCaller(new LoggerEventArgs("Pokestop out of range. Potential temp pokestop ban or IP ban or daily limit reached.", LoggerTypes.Warning));
                             }

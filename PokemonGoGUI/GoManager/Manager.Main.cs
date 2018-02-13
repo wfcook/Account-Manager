@@ -997,7 +997,7 @@ namespace PokemonGoGUI.GoManager
                 {
                     AccountState = AccountState.Unknown;
                     LogCaller(new LoggerEventArgs(ex.Message, LoggerTypes.Exception, ex));
-                    LogCaller(new LoggerEventArgs("Maybe clean data if DownloadRessources if set true.", LoggerTypes.Debug));
+                    //LogCaller(new LoggerEventArgs("Maybe clean data if DownloadRessources if set true.", LoggerTypes.Debug));
                     _client.CleanLocalAccesToken();
                     //Stop();
                 }
