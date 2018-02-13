@@ -47,6 +47,17 @@ namespace PokemonGoGUI.GoManager
                 };
             }
 
+            if (!CatchDisabled)
+            {
+                if (RemainingPokeballs() < 1)
+                {
+                    LogCaller(new LoggerEventArgs("You don't have any pokeball catching (Lure) pokemon will be disabled during " + UserSettings.DisableCatchDelay.ToString(CultureInfo.InvariantCulture) + " minutes.", LoggerTypes.Info));
+                    CatchDisabled = true;
+                    TimeAutoCatch = DateTime.Now.AddMinutes(UserSettings.DisableCatchDelay);
+                    return new MethodResult();
+                }
+            }
+
             MethodResult<MapPokemon> iResponse = await GetIncensePokemons();
 
             if (!iResponse.Success)
@@ -172,6 +183,17 @@ namespace PokemonGoGUI.GoManager
                 };
             }
 
+            if (!CatchDisabled)
+            {
+                if (RemainingPokeballs() < 1)
+                {
+                    LogCaller(new LoggerEventArgs("You don't have any pokeball catching (Lure) pokemon will be disabled during " + UserSettings.DisableCatchDelay.ToString(CultureInfo.InvariantCulture) + " minutes.", LoggerTypes.Info));
+                    CatchDisabled = true;
+                    TimeAutoCatch = DateTime.Now.AddMinutes(UserSettings.DisableCatchDelay);
+                    return new MethodResult();
+                }
+            }
+
             if (fortData.LureInfo.ActivePokemonId == PokemonId.Missingno)
             {
                 return new MethodResult
@@ -208,6 +230,17 @@ namespace PokemonGoGUI.GoManager
                 }
             }
 
+            if (!CatchDisabled)
+            {
+                if (RemainingPokeballs() < 1)
+                {
+                    LogCaller(new LoggerEventArgs("You don't have any pokeball catching (Lure) pokemon will be disabled during " + UserSettings.DisableCatchDelay.ToString(CultureInfo.InvariantCulture) + " minutes.", LoggerTypes.Info));
+                    CatchDisabled = true;
+                    TimeAutoCatch = DateTime.Now.AddMinutes(UserSettings.DisableCatchDelay);
+                    return new MethodResult();
+                }
+            }
+
             var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
                 RequestType = RequestType.DiskEncounter,
@@ -236,19 +269,20 @@ namespace PokemonGoGUI.GoManager
 
                     do
                     {
+                        if (!CatchDisabled)
+                        {
+                            if (RemainingPokeballs() < 1)
+                            {
+                                LogCaller(new LoggerEventArgs("You don't have any pokeball catching (Lure) pokemon will be disabled during " + UserSettings.DisableCatchDelay.ToString(CultureInfo.InvariantCulture) + " minutes.", LoggerTypes.Info));
+                                CatchDisabled = true;
+                                TimeAutoCatch = DateTime.Now.AddMinutes(UserSettings.DisableCatchDelay);
+                                return new MethodResult();
+                            }
+                        }
+
                         //Uses lowest capture probability
                         float probability = eResponse.CaptureProbability.CaptureProbability_[0];
                         ItemId pokeBall = GetBestBall(eResponse.PokemonData);
-
-                        if (pokeBall == ItemId.ItemUnknown)
-                        {
-                            LogCaller(new LoggerEventArgs("No pokeballs remaining (lure)", LoggerTypes.Warning));
-
-                            return new MethodResult
-                            {
-                                Message = "No pokeballs remaining"
-                            };
-                        }
 
                         if (UserSettings.UseBerries)
                         {
@@ -384,7 +418,7 @@ namespace PokemonGoGUI.GoManager
                         ++attemptCount;
 
                         await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
-                    } while (catchPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchMissed || catchPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchEscape);
+                    } while (catchPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchMissed || catchPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchEscape || catchPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchFlee);
                     break;
                 case DiskEncounterResponse.Types.Result.EncounterAlreadyFinished:
                     return new MethodResult
@@ -526,17 +560,6 @@ namespace PokemonGoGUI.GoManager
         //Catch encountered pokemon
         private async Task<MethodResult> CatchPokemon(dynamic eResponse, MapPokemon mapPokemon, bool snipped = false)
         {
-            if (!CatchDisabled)
-            {
-                if (RemainingPokeballs() < 1)
-                {
-                    LogCaller(new LoggerEventArgs("You don't have any pokeball catching pokemon will be disabled during " + UserSettings.DisableCatchDelay.ToString(CultureInfo.InvariantCulture) + " minutes.", LoggerTypes.Info));
-                    CatchDisabled = true;
-                    TimeAutoCatch = DateTime.Now.AddMinutes(UserSettings.DisableCatchDelay);
-                    return new MethodResult();
-                }
-            }
-
             PokemonData _encounteredPokemon = null;
             long _unixTimeStamp = 0;
             ulong _encounterId = 0;
@@ -583,19 +606,20 @@ namespace PokemonGoGUI.GoManager
                 if (_encounteredPokemon == null)
                     return new MethodResult();
 
+                if (!CatchDisabled)
+                {
+                    if (RemainingPokeballs() < 1)
+                    {
+                        LogCaller(new LoggerEventArgs("You don't have any pokeball catching pokemon will be disabled during " + UserSettings.DisableCatchDelay.ToString(CultureInfo.InvariantCulture) + " minutes.", LoggerTypes.Info));
+                        CatchDisabled = true;
+                        TimeAutoCatch = DateTime.Now.AddMinutes(UserSettings.DisableCatchDelay);
+                        return new MethodResult();
+                    }
+                }
+
                 //Uses lowest capture probability
                 float probability = eResponse.CaptureProbability.CaptureProbability_[0];
                 ItemId pokeBall = GetBestBall(_encounteredPokemon);
-
-                if (pokeBall == ItemId.ItemUnknown)
-                {
-                    LogCaller(new LoggerEventArgs("No pokeballs remaining (encounter)", LoggerTypes.Warning));
-
-                    return new MethodResult
-                    {
-                        Message = "No pokeballs remaining"
-                    };
-                }
 
                 if (UserSettings.UseBerries)
                 {
@@ -723,17 +747,6 @@ namespace PokemonGoGUI.GoManager
 
                         //_expGained += expGained;
 
-                        //NOTE: To be sure that we don't repeat this encounter, we will delete it from the cell
-                        var cell = _client.ClientSession.Map.Cells.FirstOrDefault(x => x.CatchablePokemons.FirstOrDefault(y => y.EncounterId == _encounterId) != null);
-                        if (cell != null)
-                        {
-                            var mapPokemonFound = cell.CatchablePokemons.FirstOrDefault(y => y.EncounterId ==_encounterId);
-                            if (mapPokemonFound != null)
-                            {
-                                cell.CatchablePokemons.Remove(mapPokemonFound);
-                            }
-                        }
-
                         LogCaller(new LoggerEventArgs(String.Format("[{0}] Pokemon Caught. {1}. Exp {2}. Candy: {3}. Attempt #{4}. Ball: {5}", _pokemonType, pokemon, expGained, candyGained, attemptCount, pokeBallName), _loggerType));
 
                         //Auto favorit shiny
@@ -757,12 +770,15 @@ namespace PokemonGoGUI.GoManager
                 ++attemptCount;
 
                 await Task.Delay(CalculateDelay(UserSettings.DelayBetweenPlayerActions, UserSettings.PlayerActionDelayRandom));
-            } while (catchPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchMissed || catchPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchEscape);
+            } while (catchPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchMissed || catchPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchEscape || catchPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchFlee);
             return new MethodResult();
         }
 
         private bool PokemonWithinCatchSettings(PokemonId pokemonId)
         {
+            if (pokemonId == PokemonId.Missingno)
+                return false;
+
             CatchSetting catchSettings = UserSettings.CatchSettings.FirstOrDefault(x => x.Id == pokemonId);
 
             if (catchSettings == null)
@@ -783,26 +799,29 @@ namespace PokemonGoGUI.GoManager
 
         private bool PokemonWithinCatchSettings(MapPokemon pokemon)
         {
+            if (pokemon == null || pokemon.PokemonId == PokemonId.Missingno)
+                return false;
+
             CatchSetting catchSettings = UserSettings?.CatchSettings.FirstOrDefault(x => x.Id == pokemon.PokemonId);
 
             if (catchSettings == null)
             {
                 LogCaller(new LoggerEventArgs(String.Format("Failed to find catch setting for {0}. Attempting to catch", pokemon.PokemonId), LoggerTypes.Warning));
+                return false;
+            }
 
+            if (catchSettings.Catch)
+            {
                 return true;
             }
 
-            if (!catchSettings.Catch)
-            {
-                LogCaller(new LoggerEventArgs(String.Format("Skipping catching {0}", pokemon.PokemonId), LoggerTypes.Info));
-            }
-
-            return catchSettings.Catch;
+            LogCaller(new LoggerEventArgs(String.Format("Skipping catching {0}", pokemon.PokemonId.ToString()), LoggerTypes.Info));
+            return false;
         }
 
         private ItemId GetBestBall(PokemonData pokemonData)
         {
-            if (Items == null)
+            if (Items == null || pokemonData == null || pokemonData.PokemonId == PokemonId.Missingno)
             {
                 return ItemId.ItemUnknown;
             }
@@ -971,7 +990,6 @@ namespace PokemonGoGUI.GoManager
                     return new MethodResult<IncenseEncounterResponse>();
                 }
             }
-
 
             var response = await _client.ClientSession.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
