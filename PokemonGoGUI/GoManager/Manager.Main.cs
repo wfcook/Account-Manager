@@ -951,6 +951,10 @@ namespace PokemonGoGUI.GoManager
                     LogCaller(new LoggerEventArgs(ex.Message, LoggerTypes.FatalError));
                     Stop();
                 }
+                catch (TaskCanceledException ex)
+                {
+                    LogCaller(new LoggerEventArgs("TaskCanceledException. Restarting ...", LoggerTypes.Warning, ex));
+                }
                 catch (HashVersionMismatchException ex)
                 {
                     AccountState = AccountState.Unknown;
