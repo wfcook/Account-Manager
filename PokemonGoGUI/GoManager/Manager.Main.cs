@@ -499,6 +499,18 @@ namespace PokemonGoGUI.GoManager
 
                     var pokestopsToFarm = new Queue<FortData>(pokestops.Data);
 
+                    if (UserSettings.GoOnlyToGyms)
+                    {
+                        MethodResult<List<FortData>> gyms = GetGyms();
+
+                        if (!gyms.Success)
+                        {
+                            await Task.Delay(failedWaitTime);
+                            continue;
+                        }
+                        pokestopsToFarm = new Queue<FortData>(gyms.Data);
+                    }
+
                     while (pokestopsToFarm.Any())
                     {
                         // In each iteration of the loop we store the current level
@@ -516,9 +528,6 @@ namespace PokemonGoGUI.GoManager
 
                         FortData pokestop = pokestopsToFarm.Dequeue();
                         LogCaller(new LoggerEventArgs("Fort Dequeued: " + pokestop.Id, LoggerTypes.Debug));
-
-                        if (pokestop.Type == FortType.Checkpoint && UserSettings.GoOnlyToGyms)
-                            continue;
 
                         var currentLocation = new GeoCoordinate(_client.ClientSession.Player.Latitude, _client.ClientSession.Player.Longitude);
                         var fortLocation = new GeoCoordinate(pokestop.Latitude, pokestop.Longitude);

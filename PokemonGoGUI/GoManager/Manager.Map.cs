@@ -1,4 +1,5 @@
 ﻿using Google.Protobuf.Collections;
+using POGOLib.Official.Exceptions;
 using POGOLib.Official.Extensions;
 using POGOProtos.Inventory.Item;
 using POGOProtos.Map;
@@ -18,9 +19,9 @@ namespace PokemonGoGUI.GoManager
 
         private MethodResult<List<MapPokemon>> GetCatchablePokemon()
         {
-            if (_client.ClientSession.Map.Cells.Count == 0 || _client.ClientSession.Map == null || repeatedFieldMapCells == _client.ClientSession.Map.Cells)
+            if (_client.ClientSession.Map.Cells.Count == 0 || _client.ClientSession.Map == null)
             {
-                return new MethodResult<List<MapPokemon>>();
+                throw new SessionStateException("Not cells.");
             }
 
             repeatedFieldMapCells = (repeatedFieldMapCells != _client.ClientSession.Map.Cells) ? _client.ClientSession.Map.Cells : repeatedFieldMapCells;
@@ -40,9 +41,9 @@ namespace PokemonGoGUI.GoManager
 
         private MethodResult<List<FortData>> GetPokeStops()
         {
-            if (_client.ClientSession.Map.Cells.Count == 0 || _client.ClientSession.Map == null || repeatedFieldMapCells == _client.ClientSession.Map.Cells)
+            if (_client.ClientSession.Map.Cells.Count == 0 || _client.ClientSession.Map == null)
             {
-                return new MethodResult<List<FortData>>();
+                throw new SessionStateException("Not cells.");
             }
 
             repeatedFieldMapCells = (repeatedFieldMapCells != _client.ClientSession.Map.Cells) ? _client.ClientSession.Map.Cells : repeatedFieldMapCells;
@@ -102,9 +103,9 @@ namespace PokemonGoGUI.GoManager
 
         private MethodResult<List<FortData>> GetGyms()
         {
-            if (_client.ClientSession.Map.Cells.Count == 0 || _client.ClientSession.Map == null || repeatedFieldMapCells == _client.ClientSession.Map.Cells)
+            if (_client.ClientSession.Map.Cells.Count == 0 || _client.ClientSession.Map == null)
             {
-                return new MethodResult<List<FortData>>();
+                throw new SessionStateException("Not cells.");
             }
 
             repeatedFieldMapCells = (repeatedFieldMapCells != _client.ClientSession.Map.Cells) ? _client.ClientSession.Map.Cells : repeatedFieldMapCells;
@@ -115,6 +116,10 @@ namespace PokemonGoGUI.GoManager
 
             foreach (FortData fort in forts)
             {
+                if (fort.CooldownCompleteTimestampMs >= DateTime.UtcNow.ToUnixTime())
+                {
+                    continue;
+                }
 
                 var defaultLocation = new GeoCoordinate(_client.ClientSession.Player.Latitude, _client.ClientSession.Player.Longitude);
                 var fortLocation = new GeoCoordinate(fort.Latitude, fort.Longitude);
