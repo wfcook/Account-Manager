@@ -951,10 +951,6 @@ namespace PokemonGoGUI.GoManager
                     LogCaller(new LoggerEventArgs(ex.Message, LoggerTypes.FatalError));
                     Stop();
                 }
-                catch (TaskCanceledException ex)
-                {
-                    LogCaller(new LoggerEventArgs("TaskCanceledException. Restarting ...", LoggerTypes.Warning, ex));
-                }
                 catch (HashVersionMismatchException ex)
                 {
                     AccountState = AccountState.Unknown;
@@ -973,51 +969,46 @@ namespace PokemonGoGUI.GoManager
                     LogCaller(new LoggerEventArgs(ex.Message, LoggerTypes.FatalError));
                     Stop();
                 }
+                catch (TaskCanceledException ex)
+                {
+                    LogCaller(new LoggerEventArgs("TaskCanceledException. Restarting ...", LoggerTypes.Warning, ex));
+                }
                 catch (APIBadRequestException ex)
                 {
                     LogCaller(new LoggerEventArgs("API Bad Request. Restarting ...", LoggerTypes.Warning, ex));
-                    //continue;
                 }
                 catch (InvalidPlatformException ex)
                 {
                     LogCaller(new LoggerEventArgs("Invalid Platform or token session refresh. Restarting  ...", LoggerTypes.Warning, ex));
-                    //continue;
                 }
                 catch (SessionInvalidatedException ex)
                 {
                     LogCaller(new LoggerEventArgs("Session Invalidated or token session refresh. Restarting ...", LoggerTypes.Warning, ex));
-                    //continue;
                 }
                 catch (PokeHashException ex)
                 {
-                        AccountState = AccountState.HashIssues;
-                        LogCaller(new LoggerEventArgs($"Hash service exception occured. Restarting ...", LoggerTypes.Warning, ex));
-                        //continue;
+                    AccountState = AccountState.HashIssues;
+                    LogCaller(new LoggerEventArgs($"Hash service exception occured. Restarting ...", LoggerTypes.Warning, ex));
                 }
                 catch (SessionUnknowException ex)
                 {
                     AccountState = AccountState.Unknown;
                     LogCaller(new LoggerEventArgs("Skipping request. Restarting ...", LoggerTypes.Exception, ex));
-                    //Restart();
                 }
                 catch (ArgumentOutOfRangeException ex)
                 {
                     AccountState = AccountState.Unknown;
                     LogCaller(new LoggerEventArgs("Skipping request. Restarting ...", LoggerTypes.Exception, ex));
-                    //Restart();
                 }
                 catch (SessionStateException ex)
                 {
                     AccountState = AccountState.Unknown;
-                    LogCaller(new LoggerEventArgs(ex.Message, LoggerTypes.Exception, ex));
-                    //LogCaller(new LoggerEventArgs("Maybe clean data if DownloadRessources if set true.", LoggerTypes.Debug));
+                    LogCaller(new LoggerEventArgs("SessionStateException. Restarting ...", LoggerTypes.Exception, ex));
                     _client.CleanLocalAccesToken();
-                    //Stop();
                 }
                 catch (Exception ex)
                 {
                     LogCaller(new LoggerEventArgs("Unknown exception occured. Restarting ...", LoggerTypes.Exception, ex));
-                    //Restart();
                 }
 
                 #endregion
