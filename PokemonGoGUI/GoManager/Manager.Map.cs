@@ -42,7 +42,7 @@ namespace PokemonGoGUI.GoManager
                 throw new SessionStateException("Not cells.");
             }
 
-            var forts = _client.ClientSession.Map.GetFortsSortedByDistance();
+            var forts = _client.ClientSession.Map.Cells.SelectMany(p => p.Forts);//.GetFortsSortedByDistance();
 
             if (!forts.Any()) {
                 return new MethodResult<List<FortData>> {
