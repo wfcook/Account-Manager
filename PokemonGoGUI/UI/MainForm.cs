@@ -30,7 +30,7 @@ namespace PokemonGoGUI
         private List<HashKey> _hashKeys = new List<HashKey>();
         private bool _spf = false;
         private bool _showStartup = true;
-        private bool _autoupdate = true;
+        private bool _autoupdate = false;
         private readonly string _saveFile = "data";
         private string _versionNumber = $"v{Assembly.GetExecutingAssembly().GetName().Version} - Forked GoManager Version";
 
