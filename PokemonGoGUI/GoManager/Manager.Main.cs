@@ -461,7 +461,7 @@ namespace PokemonGoGUI.GoManager
                     //Get pokestops
                     LogCaller(new LoggerEventArgs("getting pokestops...", LoggerTypes.Debug));
 
-                    MethodResult<List<FortData>> pokestops = GetPokeStops();
+                    MethodResult<List<FortData>> pokestops = GetAllForts();
 
                     if (!pokestops.Success)
                     {
@@ -499,18 +499,6 @@ namespace PokemonGoGUI.GoManager
 
                     var pokestopsToFarm = new Queue<FortData>(pokestops.Data);
 
-                    if (UserSettings.GoOnlyToGyms)
-                    {
-                        MethodResult<List<FortData>> gyms = GetGyms();
-
-                        if (!gyms.Success)
-                        {
-                            await Task.Delay(failedWaitTime);
-                            continue;
-                        }
-                        pokestopsToFarm = new Queue<FortData>(gyms.Data);
-                    }
-
                     while (pokestopsToFarm.Any())
                     {
                         // In each iteration of the loop we store the current level
@@ -528,6 +516,9 @@ namespace PokemonGoGUI.GoManager
 
                         FortData pokestop = pokestopsToFarm.Dequeue();
                         LogCaller(new LoggerEventArgs("Fort Dequeued: " + pokestop.Id, LoggerTypes.Debug));
+
+                        if (UserSettings.GoOnlyToGyms && pokestop.Type != FortType.Gym)
+                            continue;
 
                         var currentLocation = new GeoCoordinate(_client.ClientSession.Player.Latitude, _client.ClientSession.Player.Longitude);
                         var fortLocation = new GeoCoordinate(pokestop.Latitude, pokestop.Longitude);
@@ -600,7 +591,8 @@ namespace PokemonGoGUI.GoManager
                                     if (Snipe.Success)
                                     {
                                         await Task.Delay(CalculateDelay(UserSettings.GeneralDelay, UserSettings.GeneralDelayRandom));
-                                        //pokestopsToFarm.Clear();
+                                        pokestopsToFarm.Clear();
+                                        pokestopsToFarm = new Queue<FortData>(GetAllForts().Data);
                                         continue;
                                     }
                                 }
@@ -971,7 +963,13 @@ namespace PokemonGoGUI.GoManager
                 }
                 catch (TaskCanceledException ex)
                 {
+                    AccountState = AccountState.Unknown;
                     LogCaller(new LoggerEventArgs("TaskCanceledException. Restarting ...", LoggerTypes.Warning, ex));
+                }
+                catch (OperationCanceledException ex)
+                {
+                    AccountState = AccountState.Unknown;
+                    LogCaller(new LoggerEventArgs("OperationCanceledException. Restarting ...", LoggerTypes.Warning, ex));
                 }
                 catch (APIBadRequestException ex)
                 {

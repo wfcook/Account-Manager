@@ -23,7 +23,7 @@ namespace PokemonGoGUI.GoManager
 
             foreach (var pokToTranfer in pokemonsToTransfer)
             {
-                if (!CanTransferPokemon(pokToTranfer))
+                if (!CanTransferOrEvolePokemon(pokToTranfer))
                     LogCaller(new LoggerEventArgs(String.Format("Skipped {0}, this pokemon cant not be transfered maybe is a favorit, is deployed or is a buddy pokemon.", pokToTranfer.PokemonId), LoggerTypes.Info));
                 else
                     pokemonToTransfer.Add(pokToTranfer);
@@ -697,14 +697,14 @@ namespace PokemonGoGUI.GoManager
         }
         */
 
-        private bool CanTransferPokemon(PokemonData pokemon)
+        private bool CanTransferOrEvolePokemon(PokemonData pokemon, bool allmodes = false)
         {
             // Can't transfer pokemon in gyms.
             if (!string.IsNullOrEmpty(pokemon.DeployedFortId))
                 return false;
 
             // Can't transfer buddy pokemon
-            var buddy = PlayerData.BuddyPokemon;
+            var buddy = PlayerData?.BuddyPokemon;
             if (buddy != null && buddy.Id == pokemon.Id)
                 return false;
 
