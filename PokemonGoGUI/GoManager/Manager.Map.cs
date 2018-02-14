@@ -15,8 +15,6 @@ namespace PokemonGoGUI.GoManager
 {
     public partial class Manager
     {
-        private RepeatedField<MapCell> repeatedFieldMapCells = new RepeatedField<MapCell>();
-
         private MethodResult<List<MapPokemon>> GetCatchablePokemon()
         {
             if (_client.ClientSession.Map.Cells.Count == 0 || _client.ClientSession.Map == null)
@@ -24,12 +22,10 @@ namespace PokemonGoGUI.GoManager
                 throw new SessionStateException("Not cells.");
             }
 
-            repeatedFieldMapCells = (repeatedFieldMapCells != _client.ClientSession.Map.Cells) ? _client.ClientSession.Map.Cells : repeatedFieldMapCells;
-
             //var cells = _client.ClientSession.Map.Cells;
 
             //         Where(PokemonWithinCatchSettings) <-- Unneeded, will be filtered after.
-            List<MapPokemon> newCatchablePokemons = repeatedFieldMapCells.SelectMany(x => x.CatchablePokemons).ToList();
+            List<MapPokemon> newCatchablePokemons = _client.ClientSession.Map.Cells.SelectMany(x => x.CatchablePokemons).ToList();
 
             return new MethodResult<List<MapPokemon>>
             {
@@ -39,16 +35,14 @@ namespace PokemonGoGUI.GoManager
             };
         }
 
-        private MethodResult<List<FortData>> GetPokeStops()
+        private MethodResult<List<FortData>> GetAllForts()
         {
             if (_client.ClientSession.Map.Cells.Count == 0 || _client.ClientSession.Map == null)
             {
                 throw new SessionStateException("Not cells.");
             }
 
-            repeatedFieldMapCells = (repeatedFieldMapCells != _client.ClientSession.Map.Cells) ? _client.ClientSession.Map.Cells : repeatedFieldMapCells;
-
-            var forts = repeatedFieldMapCells.SelectMany(x => x.Forts);
+            var forts = _client.ClientSession.Map.GetFortsSortedByDistance();
 
             if (!forts.Any()) {
                 return new MethodResult<List<FortData>> {
@@ -98,47 +92,6 @@ namespace PokemonGoGUI.GoManager
                 Message = "Success",
                 Success = true,
                 Data = fortData
-            };
-        }
-
-        private MethodResult<List<FortData>> GetGyms()
-        {
-            if (_client.ClientSession.Map.Cells.Count == 0 || _client.ClientSession.Map == null)
-            {
-                throw new SessionStateException("Not cells.");
-            }
-
-            repeatedFieldMapCells = (repeatedFieldMapCells != _client.ClientSession.Map.Cells) ? _client.ClientSession.Map.Cells : repeatedFieldMapCells;
-
-            var forts = repeatedFieldMapCells.SelectMany(x => x.Forts).Where(y => y.Type == FortType.Gym);
-
-            var fortData = new List<FortData>();
-
-            foreach (FortData fort in forts)
-            {
-                if (fort.CooldownCompleteTimestampMs >= DateTime.UtcNow.ToUnixTime())
-                {
-                    continue;
-                }
-
-                var defaultLocation = new GeoCoordinate(_client.ClientSession.Player.Latitude, _client.ClientSession.Player.Longitude);
-                var fortLocation = new GeoCoordinate(fort.Latitude, fort.Longitude);
-
-                double distance = CalculateDistanceInMeters(defaultLocation, fortLocation);
-
-                if (distance > UserSettings.MaxTravelDistance)
-                {
-                    continue;
-                }
-
-                fortData.Add(fort);
-            }
-
-            return new MethodResult<List<FortData>>
-            {
-                Data = fortData,
-                Message = "Success",
-                Success = true
             };
         }
 

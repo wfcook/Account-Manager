@@ -273,7 +273,10 @@ namespace PokemonGoGUI.GoManager
 
                 foreach (PokemonData pData in pokemonGroupToEvolve.Take(maxPokemon))
                 {
-                    pokemonToEvolve.Add(pData);
+                    if (!CanTransferOrEvolePokemon(pData))
+                        LogCaller(new LoggerEventArgs(String.Format("Skipped {0}, this pokemon cant not be transfered maybe is a favorit, is deployed or is a buddy pokemon.", pData.PokemonId), LoggerTypes.Info));
+                    else
+                        pokemonToEvolve.Add(pData);
                 }
             }
 

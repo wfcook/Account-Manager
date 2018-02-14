@@ -868,6 +868,28 @@ namespace PokemonGoGUI
                         break;
                 }
             }
+            else if (e.Column == olvColumnPokemonCaught)
+            {
+                if (manager.Tracker.PokemonCaught + 100 >= manager.UserSettings.CatchPokemonDayLimit)
+                {
+                    e.SubItem.ForeColor = Color.Orange;
+                }
+                if (manager.Tracker.PokemonCaught >= manager.UserSettings.CatchPokemonDayLimit)
+                {
+                    e.SubItem.ForeColor = Color.Red;
+                }
+            }
+            else if (e.Column == olvColumnPokestopsFarmed)
+            {
+                if (manager.Tracker.PokestopsFarmed + 100 >= manager.UserSettings.SpinPokestopsDayLimit)
+                {
+                    e.SubItem.ForeColor = Color.Orange;
+                }
+                if (manager.Tracker.PokestopsFarmed >= manager.UserSettings.SpinPokestopsDayLimit)
+                {
+                    e.SubItem.ForeColor = Color.Red;
+                }
+            }
             else if (e.Column == olvColumnBotState)
             {
                 switch (manager.State)

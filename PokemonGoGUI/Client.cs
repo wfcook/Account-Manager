@@ -307,6 +307,7 @@ namespace PokemonGoGUI
                     }
                     catch (TaskCanceledException) // tce
                     {
+                        ClientManager.AccountState = AccountState.Unknown;
                         ClientManager.Stop();
 
                         if (String.IsNullOrEmpty(ClientManager.Proxy))
@@ -320,6 +321,11 @@ namespace PokemonGoGUI
                         }
 
                         msgStr = "Login request has timed out";
+                    }
+                    catch (OperationCanceledException ex)
+                    {
+                        ClientManager.AccountState = AccountState.Unknown;
+                        msgStr = $"OperationCanceledException. {ex}";
                     }
                     catch (InvalidCredentialsException icex)
                     {
@@ -634,9 +640,9 @@ namespace PokemonGoGUI
                 {
                     var accessToken = JsonConvert.DeserializeObject<AccessToken>(File.ReadAllText(fileName));
 
-                    if (!accessToken.IsExpired)
+                    if (accessToken != null || !string.IsNullOrEmpty(accessToken.Token) || !accessToken.IsExpired)
                     {
-                        var sess = Login.GetSession(loginProvider, accessToken, initLat, initLong, ClientDeviceWrapper, PlayerLocale);
+                        var sess = await Login.GetSession(loginProvider, accessToken, initLat, initLong, ClientDeviceWrapper, PlayerLocale);
                         LoadResources(sess);
                         return sess;
                     }
